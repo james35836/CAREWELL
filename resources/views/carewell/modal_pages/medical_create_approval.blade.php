@@ -15,7 +15,7 @@ $(function ()
 		</div>
 		<div class="col-md-4 form-content form-group">
 			<select class="form-control select2 get-member-info" style="width: 100%;">
-                <option selected="selected">Select Member</option>
+                <option selected="selected">Select Member SAMPLE</option>
 				@foreach($_member as $member)
 				<option value="{{$member->member_id}}">{{$member->member_first_name." ".$member->member_middle_name." ".$member->member_last_name}}</option>
 				@endforeach
