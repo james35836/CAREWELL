@@ -212,8 +212,8 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="/settings/plan"><i class="fa fa-circle-o"></i> CREATE PLAN</a></li>
-            <li><a href="advanced.html"><i class="fa fa-user-md "></i> CREATE PROVIDER</a></li>
+            <li><a href="/settings/plan"><i class="fa fa-tasks "></i> CREATE PLAN</a></li>
+            <li><a href="/settings/provider"><i class="fa fa-user-md "></i> CREATE PROVIDER</a></li>
             <li class="active"><a href="editors.html"><i class="fa fa-circle-o"></i> Editors</a></li>
           </ul>
         </li>

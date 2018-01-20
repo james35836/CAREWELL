@@ -98,7 +98,7 @@ Route::get('/settings/plan/create_plan', 				'CarewellController@settings_plan_c
 Route::post('/settings/plan/create_plan/submit', 		'CarewellController@settings_plan_create_plan_submit');
 Route::get('/settings/plan/plan_details/{availment_plan_id}', 	'CarewellController@settings_plan_details');
 
-
+Route::get('/settings/provider', 				    		'CarewellController@settings_provider');
 
 /*MAINTENANCE*/
 Route::get('/developer/maintenance', 				    'MaintenanceController@developer_maintenance');

@@ -1,79 +1,156 @@
 @extends('carewell.layout.layout')
 @section('content')
-<div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <h1>
-        Text Editors
-        <small>Advanced form element</small>
-      </h1>
-      <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li><a href="#">Forms</a></li>
-        <li class="active">Editors</li>
-      </ol>
-    </section>
+@include('carewell.modals.medical_center_modals')
 
-    <!-- Main content -->
-    <section class="content">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="box box-info">
-            <div class="box-header">
-              <h3 class="box-title">CK Editor
-                <small>Advanced and full of features</small>
-              </h3>
-              <!-- tools box -->
-              <div class="pull-right box-tools">
-                <button type="button" class="btn btn-info btn-sm" data-widget="collapse" data-toggle="tooltip"
-                        title="Collapse">
-                  <i class="fa fa-minus"></i></button>
-                <button type="button" class="btn btn-info btn-sm" data-widget="remove" data-toggle="tooltip"
-                        title="Remove">
-                  <i class="fa fa-times"></i></button>
-              </div>
-              <!-- /. tools -->
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body pad">
-              <form>
-                    <textarea id="editor1" name="editor1" rows="10" cols="80">
-                                            This is my textarea to be replaced with CKEditor.
-                    </textarea>
-              </form>
-            </div>
-          </div>
-          <!-- /.box -->
-
-          <div class="box">
-            <div class="box-header">
-              <h3 class="box-title">Bootstrap WYSIHTML5
-                <small>Simple and fast</small>
-              </h3>
-              <!-- tools box -->
-              <div class="pull-right box-tools">
-                <button type="button" class="btn btn-default btn-sm" data-widget="collapse" data-toggle="tooltip"
-                        title="Collapse">
-                  <i class="fa fa-minus"></i></button>
-                <button type="button" class="btn btn-default btn-sm" data-widget="remove" data-toggle="tooltip"
-                        title="Remove">
-                  <i class="fa fa-times"></i></button>
-              </div>
-              <!-- /. tools -->
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body pad">
-              <form>
-                <textarea class="textarea" placeholder="Place some text here"
-                          style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
-              </form>
-            </div>
-          </div>
-        </div>
-        <!-- /.col-->
+  <div class="container">
+    <div class="row">
+      <div class=" col-md-2 col-xs-6 pull-left">
+        <select class="form-control">
+          <option>SELECT COMPANY</option>
+        </select>
       </div>
-      <!-- ./row -->
-    </section>
-    <!-- /.content -->
+      <div class=" col-md-2 col-xs-6 pull-right">
+        {{-- <button type="button" class="btn btn-primary  pop-up-lg button-lg" data-modalname="CREATE APPROVAL" data-link='/medical/create_approval'><i class="fa fa-plus btn-icon"></i>CREATE APPROVAL</button> --}}
+         <button type="button" class="btn btn-primary create-approval button-lg"><i class="fa fa-plus btn-icon"></i>CREATE APPROVAL</button> 
+      </div>
+      
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="box">
+          <div class="box-header">
+            <h3 class="box-title">Period List</h3>
+            <div class="box-tools">
+              <div class="input-group input-group-sm" style="width: 150px;">
+                <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
+                <div class="input-group-btn">
+                  <button type="submit" class="btn btn-default"><i class="fa fa-search" ></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- /.box-header -->
+          <div class="box-body table-responsive no-padding">
+            <table class="table table-hover table-bordered">
+              <tr>
+                <th>APPROVAL ID</th>
+                <th>Universal ID/th>
+                <th>Carewell ID</th>
+                <th>Member Name</th>
+                <th>Company</th>
+                <th>Provider</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+              <tr>
+                <td>CAL 01</td>
+                <td>DEC-NOV</td>
+                <td>DEC-NOV</td>
+                <td>DIGIMA</td>
+                <td>DEC-NOV</td>
+                <td>DEC-NOV</td>
+                <td><span class="label label-success">active</span></td>
+                <td><span class="label label-success pop-up-lg action-span" data-modalname="APPROVAL DETAILS" data-link="/medical/approval/details">view details</span></td>
+              </tr>
+              <tr>
+                <td>CAL 01</td>
+                <td>DEC-NOV</td>
+                <td>DEC-NOV</td>
+                <td>DIGIMA</td>
+                <td>DEC-NOV</td>
+                <td>DEC-NOV</td>
+                <td><span class="label label-success">active</span></td>
+                <td><span class="label label-success">view details</span></td>
+              </tr>
+              <tr>
+                <td>CAL 01</td>
+                <td>DEC-NOV</td>
+                <td>DEC-NOV</td>
+                <td>DIGIMA</td>
+                <td>DEC-NOV</td>
+                <td>DEC-NOV</td>
+                <td><span class="label label-success">active</span></td>
+                <td><span class="label label-success">view details</span></td>
+              </tr>
+              <tr>
+                <td>CAL 01</td>
+                <td>DEC-NOV</td>
+                <td>DEC-NOV</td>
+                <td>DIGIMA</td>
+                <td>DEC-NOV</td>
+                <td>DEC-NOV</td>
+                <td><span class="label label-success">active</span></td>
+                <td><span class="label label-success">view details</span></td>
+              </tr>
+              <tr>
+                <td>CAL 01</td>
+                <td>DEC-NOV</td>
+                <td>DEC-NOV</td>
+                <td>DIGIMA</td>
+                <td>DEC-NOV</td>
+                <td>DEC-NOV</td>
+                <td><span class="label label-success">active</span></td>
+                <td><span class="label label-success">view details</span></td>
+              </tr>
+
+              <tr>
+                <td>CAL 01</td>
+                <td>DEC-NOV</td>
+                <td>DEC-NOV</td>
+                <td>DIGIMA</td>
+                <td>DEC-NOV</td>
+                <td>DEC-NOV</td>
+                <td><span class="label label-success">active</span></td>
+                <td><span class="label label-success">view details</span></td>
+              </tr>
+              <tr>
+                <td>CAL 01</td>
+                <td>DEC-NOV</td>
+                <td>DEC-NOV</td>
+                <td>DIGIMA</td>
+                <td>DEC-NOV</td>
+                <td>DEC-NOV</td>
+                <td><span class="label label-success">active</span></td>
+                <td><span class="label label-success">view details</span></td>
+              </tr>
+              <tr>
+                <td>CAL 01</td>
+                <td>DEC-NOV</td>
+                <td>DEC-NOV</td>
+                <td>DIGIMA</td>
+                <td>DEC-NOV</td>
+                <td>DEC-NOV</td>
+                <td><span class="label label-success">active</span></td>
+                <td><span class="label label-success">view details</span></td>
+              </tr>
+
+              <tr>
+                <td>CAL 01</td>
+                <td>DEC-NOV</td>
+                <td>DEC-NOV</td>
+                <td>DIGIMA</td>
+                <td>DEC-NOV</td>
+                <td>DEC-NOV</td>
+                <td><span class="label label-success">active</span></td>
+                <td><span class="label label-success">view details</span></td>
+              </tr>
+            </table>
+          </div>
+          <!-- /.box-body -->
+          <div class="box-footer clearfix">
+          <ul class="pagination pagination-sm no-margin pull-right">
+            <li><a href="#">&laquo;</a></li>
+            <li><a href="#">1</a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">&raquo;</a></li>
+          </ul>
+        </div>
+        </div>
+        <!-- /.box -->
+      </div>
+    </div>
   </div>
+
+
 @endsection

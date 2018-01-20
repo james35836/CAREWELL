@@ -32,6 +32,9 @@ use App\Http\Model\TblAvailmentTagModel;
 
 use App\Http\Model\TblPaymentModeModel;
 
+use App\Http\Model\TblProviderModel;
+
+
 use App\Http\Controllers\StaticFunctionController;
 
 
@@ -769,6 +772,16 @@ class CarewellController extends Controller
     // dd($data);
     $data['availment_plan'] = TblAvailmentPlanModel::where('availment_plan_id',$availment_plan_id)->first();
     return view('carewell.modal_pages.settings_plan_details',$data);
+  }
+
+  public function settings_provider()
+  {
+    $data['page'] = 'Provider Settings';
+    $data['user'] = $this->global();
+
+    $data['_provider'] = TblProviderModel::paginate(10);
+
+    return view('carewell.pages.settings_provider',$data);
   }
 
 

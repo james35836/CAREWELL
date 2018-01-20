@@ -58,8 +58,7 @@ $(function ()
 	</div>
 	<div class="form-holder">
 		<div class="pull-right multiple-button-holder">
-			<button type="button" class="btn btn-success btn-sm  pop-up-import-member col-xs-6" data-modalname="IMPORT MEMBER" data-link="/member/import_member"><i class="fa fa-upload btn-icon"></i> OPEN PAYMENT HISTORY</button>
-			<button type="button" class="btn btn-warning btn-sm pop-up-md col-xs-6" data-modalname="TRANSACTION DETAILS" data-link="/member/transaction_details"><i class="fa fa-info btn-icon"></i> OPEN AVAILMENT HISTORY</button>
+			<button type="button" data-member_id="{{$member_info->member_id}}" class="btn btn-warning button-lg medical-transaction-details" ><i class="fa fa-upload btn-icon"></i> TRANSACTION DETAILS</button>
 		</div>
 	</div>
 </div>
