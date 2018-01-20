@@ -1,0 +1,63 @@
+var user_center 	= new user_center();
+var formData   		= new FormData();
+
+function user_center()
+{
+	init();
+
+	function init()
+	{
+		ready_document();
+
+	}
+
+	function ready_document()
+	{
+		$(document).ready(function()
+		{
+            trigger();
+			user_view_profile();
+			
+         });
+
+	}
+	function trigger()
+	{
+		$(document).on('click','.btn-close-billing',function()
+		{
+			$('.user-modal').modal('hide');
+			$(".user-modal-body").html("<p style='text-align:center'>RELOAD THE PAGE</p>");
+			
+		});
+	} 
+	
+	function user_view_profile()
+	{
+		
+        $(document).on('click','.view-profile',function() 
+		{
+			$('.user-modal').modal('show');
+			$('.user-ajax-loader').show();
+			$('.user-modal-body-content').hide();
+			$('.user-modal-title').html('PROFILE');
+			$.ajax({
+				headers: {
+				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				},
+				url:'/user/view_profile',
+				method: "get",
+                success: function(data)
+				{
+					setTimeout(function()
+					{
+						$('.user-ajax-loader').hide();
+						$('.user-modal-body-content').show();
+						$('.user-modal-body-content').html(data);
+                    }, 1000);
+				}
+			});
+
+		});
+    }
+    
+}

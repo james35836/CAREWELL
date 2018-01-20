@@ -1,0 +1,156 @@
+@extends('carewell.layout.layout')
+@section('content')
+@include('carewell.modals.medical_center_modals')
+
+  <div class="container">
+    <div class="row">
+      <div class=" col-md-2 col-xs-6 pull-left">
+        <select class="form-control">
+          <option>SELECT COMPANY</option>
+        </select>
+      </div>
+      <div class=" col-md-2 col-xs-6 pull-right">
+        {{-- <button type="button" class="btn btn-primary  pop-up-lg button-lg" data-modalname="CREATE APPROVAL" data-link='/medical/create_approval'><i class="fa fa-plus btn-icon"></i>CREATE APPROVAL</button> --}}
+         <button type="button" class="btn btn-primary create-approval button-lg"><i class="fa fa-plus btn-icon"></i>CREATE APPROVAL</button> 
+      </div>
+      
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="box">
+          <div class="box-header">
+            <h3 class="box-title">Period List</h3>
+            <div class="box-tools">
+              <div class="input-group input-group-sm" style="width: 150px;">
+                <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
+                <div class="input-group-btn">
+                  <button type="submit" class="btn btn-default"><i class="fa fa-search" ></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- /.box-header -->
+          <div class="box-body table-responsive no-padding">
+            <table class="table table-hover table-bordered">
+              <tr>
+                <th>APPROVAL ID</th>
+                <th>Universal ID/th>
+                <th>Carewell ID</th>
+                <th>Member Name</th>
+                <th>Company</th>
+                <th>Provider</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+              <tr>
+                <td>CAL 01</td>
+                <td>DEC-NOV</td>
+                <td>DEC-NOV</td>
+                <td>DIGIMA</td>
+                <td>DEC-NOV</td>
+                <td>DEC-NOV</td>
+                <td><span class="label label-success">active</span></td>
+                <td><span class="label label-success pop-up-lg action-span" data-modalname="APPROVAL DETAILS" data-link="/medical/approval/details">view details</span></td>
+              </tr>
+              <tr>
+                <td>CAL 01</td>
+                <td>DEC-NOV</td>
+                <td>DEC-NOV</td>
+                <td>DIGIMA</td>
+                <td>DEC-NOV</td>
+                <td>DEC-NOV</td>
+                <td><span class="label label-success">active</span></td>
+                <td><span class="label label-success">view details</span></td>
+              </tr>
+              <tr>
+                <td>CAL 01</td>
+                <td>DEC-NOV</td>
+                <td>DEC-NOV</td>
+                <td>DIGIMA</td>
+                <td>DEC-NOV</td>
+                <td>DEC-NOV</td>
+                <td><span class="label label-success">active</span></td>
+                <td><span class="label label-success">view details</span></td>
+              </tr>
+              <tr>
+                <td>CAL 01</td>
+                <td>DEC-NOV</td>
+                <td>DEC-NOV</td>
+                <td>DIGIMA</td>
+                <td>DEC-NOV</td>
+                <td>DEC-NOV</td>
+                <td><span class="label label-success">active</span></td>
+                <td><span class="label label-success">view details</span></td>
+              </tr>
+              <tr>
+                <td>CAL 01</td>
+                <td>DEC-NOV</td>
+                <td>DEC-NOV</td>
+                <td>DIGIMA</td>
+                <td>DEC-NOV</td>
+                <td>DEC-NOV</td>
+                <td><span class="label label-success">active</span></td>
+                <td><span class="label label-success">view details</span></td>
+              </tr>
+
+              <tr>
+                <td>CAL 01</td>
+                <td>DEC-NOV</td>
+                <td>DEC-NOV</td>
+                <td>DIGIMA</td>
+                <td>DEC-NOV</td>
+                <td>DEC-NOV</td>
+                <td><span class="label label-success">active</span></td>
+                <td><span class="label label-success">view details</span></td>
+              </tr>
+              <tr>
+                <td>CAL 01</td>
+                <td>DEC-NOV</td>
+                <td>DEC-NOV</td>
+                <td>DIGIMA</td>
+                <td>DEC-NOV</td>
+                <td>DEC-NOV</td>
+                <td><span class="label label-success">active</span></td>
+                <td><span class="label label-success">view details</span></td>
+              </tr>
+              <tr>
+                <td>CAL 01</td>
+                <td>DEC-NOV</td>
+                <td>DEC-NOV</td>
+                <td>DIGIMA</td>
+                <td>DEC-NOV</td>
+                <td>DEC-NOV</td>
+                <td><span class="label label-success">active</span></td>
+                <td><span class="label label-success">view details</span></td>
+              </tr>
+
+              <tr>
+                <td>CAL 01</td>
+                <td>DEC-NOV</td>
+                <td>DEC-NOV</td>
+                <td>DIGIMA</td>
+                <td>DEC-NOV</td>
+                <td>DEC-NOV</td>
+                <td><span class="label label-success">active</span></td>
+                <td><span class="label label-success">view details</span></td>
+              </tr>
+            </table>
+          </div>
+          <!-- /.box-body -->
+          <div class="box-footer clearfix">
+          <ul class="pagination pagination-sm no-margin pull-right">
+            <li><a href="#">&laquo;</a></li>
+            <li><a href="#">1</a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">&raquo;</a></li>
+          </ul>
+        </div>
+        </div>
+        <!-- /.box -->
+      </div>
+    </div>
+  </div>
+
+
+@endsection

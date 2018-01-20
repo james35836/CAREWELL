@@ -1,0 +1,265 @@
+/* FRONT */
+@media screen and (max-width: 480px) 
+{
+    .front-image
+    {
+    	background-color: #2b495f;
+	   	width:100%;
+	   	background-repeat: no-repeat;
+	   	background-size: 100%;
+	   	
+    }
+    .carewell-logo
+	{
+		max-width:200px;
+		img 
+		{
+			max-width:100%;
+			
+		}
+	}
+
+}
+@media screen and (min-width: 481px) 
+{
+    .front-image
+	{
+	   background-image: url("/images/front/front-image.jpg");
+	   width:100%;
+	   background-repeat: no-repeat;
+	   background-size: 100%;
+	   // overflow-y:hidden;
+	}
+	.carewell-logo
+	{
+		max-width:200px;
+		img 
+		{
+			max-width:100%;
+
+		}
+	}
+
+}
+.welcome-login
+{
+	font-size: 25px;
+    text-align: center;
+    margin-bottom: 25px;
+    font-weight: 300;
+    a 
+    {
+    	color:#777777;
+    }
+}
+.front-text
+{
+	text-align:center;
+}
+.front-button
+{
+	text-align:center;
+	padding:5px 20px 5px 20px;
+}
+/* MODALS */
+.modal-top
+{
+	margin-top:50px;
+	.box-holder
+	{
+		border: 1px solid gray;
+	    margin:0.5em;
+	    .box-globals
+	    {
+	    	border: 1px solid gray;
+		    margin: 3px;
+		    .form-holder
+			{
+				margin-top:5px;
+				.form-content
+				{
+					margin-top:5px;
+					margin-bottom: 5px;
+				}
+				.multiple-button-holder
+				{
+					margin: 14px;
+				}
+				.type-of-availment-padding
+				{
+					padding:33px;
+					.availment-container
+					{
+						margin-bottom:10px;
+						.availment-box
+						{
+							.parent-availment
+							{
+
+							}
+							.child-availment
+							{
+								padding-left:40px;
+							}
+						}
+					}
+					
+				}
+			}
+			.company-tab
+		    {
+		    	width:25%;
+		    	text-align: center;
+		    	font-weight: bold;
+		    	color:#111;
+		    	a
+		    	{
+		    		color:#111;
+		    	}
+		    }
+	    }
+	    .menu-holder
+	    {
+	    	padding: 43px;
+	    	.menu-content
+			{
+				.import-icons
+				{
+				  font-size: 37px;
+				}
+			}
+	    }
+	    
+	  
+	}
+	
+	.modal-body-import
+	{
+	    padding: 10px 50px 10px 50px;
+	    visibility: show;
+	    position:relative;
+	    .ajax-loader-import
+		{
+		  display:none;
+		  text-align: center; 
+		  padding:50px;
+
+		}
+		.menu-content
+		{
+			.import-icons
+			{
+			  font-size: 37px;
+			}
+		}
+			
+	}
+}
+/* SPAN */
+.action-span
+{
+	cursor:pointer;
+}
+
+/* BUTTON */
+.top-button
+{
+	
+    margin:0.5em;
+    position:relative;
+
+}
+.btn-icon
+{
+	margin-right: 6px;
+}
+
+.button-lg
+{
+	width: 100%;
+    margin:10px 0px 10px 0px;
+    overflow:hidden;
+}
+.button-lgs
+{
+	width: 100%;
+    margin-bottom: 10px;
+}
+.button-md
+{
+	width: 100%;
+    margin-bottom: 10px;
+}
+.button-padding
+{
+	padding:10px;
+}
+.button-margin
+{
+	padding:5px;
+}
+.checkbox-margin
+{
+	margin-right:10px;
+}
+
+//wag paki alaman
+.btn-group 
+{  
+    white-space: nowrap;              
+}
+.btn-group .btn 
+{  
+    float: none;
+    display: inline-block;
+}
+.btn + .dropdown-toggle 
+{ 
+    margin-left: -4px;
+}
+
+.table-responsive 
+{
+  overflow-y: visible !important;
+}
+//nakamamatay
+.top-label
+{
+	vertical-align: middle;
+	font-weight:bold;
+	font-size: 21px;
+	margin: 10px 0px 10px 0px;
+}
+.form-content-details
+{
+	vertical-align: middle;
+	font-weight:bold;
+	font-size: 13px;
+	margin: 10px 0px 10px 0px;
+}
+
+@media (min-width: 992px)
+{
+	.modal-lg 
+	{
+    width: 1050px !important;
+	}
+}
+
+@media (min-width: 768px)
+{
+	.modal-md {
+    width: 901px !important;
+    margin: 30px auto;
+}
+}
+.modal-bottom
+{
+	    margin-top: 150px;
+}
+
+
+
+
+	
+
