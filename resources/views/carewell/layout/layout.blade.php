@@ -6,8 +6,30 @@
     <title>Carewell |  {{$page}}</title>
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <script src="/globals/global-cdn-ajax-offline.js"></script>
-    @include('plugin.top')
+    <!-- TOP -->
+    <link rel="stylesheet" href="/assets/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/bower_components/jvectormap/jquery-jvectormap.css">
+    <link rel="stylesheet" href="/assets/bower_components/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/assets/bower_components/Ionicons/css/ionicons.min.css">
+    <link rel="stylesheet" href="/assets/bower_components/bootstrap-daterangepicker/daterangepicker.css">
+    <link rel="stylesheet" href="/assets/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
+    <link rel="stylesheet" href="/assets/bower_components/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css">
+    <link rel="stylesheet" href="/assets/bower_components/select2/dist/css/select2.min.css">
+    
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+    
+    <link rel="stylesheet" href="/assets/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
+    <link rel="stylesheet" href="/assets/plugins/iCheck/all.css">
+    <link rel="stylesheet" href="/assets/plugins/timepicker/bootstrap-timepicker.min.css">
+    
+    <link rel="stylesheet" href="/assets/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="/assets/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="/assets/css/globals.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!-- TOASTR -->
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet">
+
     <script>
     $( function() {
       $( "#datepicker" ).datepicker();
@@ -163,11 +185,7 @@
             <i class="fa fa-dashboard"></i> <span>DASHBOARD</span>
           </a>
         </li>
-        <li>
-          <a href="/admin">
-            <i class="fa fa-universal-access" aria-hidden="true"></i><span>ADMIN PANEL</span>
-          </a>
-        </li>
+        
         <li>
           <a href="/company">
             <i class="fa fa-building-o"></i> <span>COMPANY CENTER</span>
@@ -178,19 +196,24 @@
             <i class="fa fa-user"></i> <span>MEMBER CENTER</span>
           </a>
         </li>
+        <li >
+          <a href="/hospital">
+            <i class="fa fa-hospital-o"></i> <span>PROVIDER CENTER</span>
+          </a>
+        </li>
+        <li>
+          <a href="/member">
+            <i class="fa fa-user-md"></i> <span>DOCTOR CENTER</span>
+          </a>
+        </li>
         <li>
           <a href="/billing">
-            <i class="fa fa-credit-card"></i> <span>BILLING and COLLECTION</span>
+            <i class="fa fa-credit-card"></i> <span>BILLING CENTER</span>
           </a>
         </li>
         <li >
           <a href="/medical">
             <i class="fa fa-medkit"></i> <span>MEDICAL REPRESENTATIVE</span>
-          </a>
-        </li>
-        <li >
-          <a href="/hospital">
-            <i class="fa fa-hospital-o"></i> <span>HOSPITAL CENTER</span>
           </a>
         </li>
         <li >
@@ -212,6 +235,7 @@
             </span>
           </a>
           <ul class="treeview-menu">
+            <li><a href="/admin"><i class="fa fa-universal-access"></i>ADMIN PANEL</a></li>
             <li><a href="/settings/plan"><i class="fa fa-tasks "></i> CREATE PLAN</a></li>
             <li><a href="/settings/provider"><i class="fa fa-user-md "></i> CREATE PROVIDER</a></li>
             <li class="active"><a href="editors.html"><i class="fa fa-circle-o"></i> Editors</a></li>

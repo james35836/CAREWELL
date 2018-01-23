@@ -20,15 +20,10 @@
 		<div class="col-md-3 form-content">
 			<label>Company Name</label>
 		</div>
-		<div class="col-md-3 form-content">
+		<div class="col-md-9 form-content">
 			<input type="text" id="company_name"  class="form-control"/>
 		</div>
-		<div class="col-md-3 form-content">
-			<label>Company Code</label>
-		</div>
-		<div class="col-md-3 form-content">
-			<input type="text" id="company_code" class="form-control"/>
-		</div>
+		
 	</div>
 	<div class="form-holder">
 		<div class="col-md-3 form-content">
@@ -83,7 +78,7 @@
 					<label>Contract Number</label>
 				</div>
 				<div class="col-md-3 form-content">
-					<input type="text" id="contract_number" class="form-control"/>
+					<input type="text" id="contract_number" class="form-control" disabled/>
 				</div>
 				<div class="col-md-3 form-content">
 					<label>Mode of Payment</label>
@@ -142,11 +137,8 @@
 			</div>
 			<div class="col-md-9 form-holder jobsite-form " style="padding:0% 5% 0% 15%;">
 				<!-- JOBSITE FORM -->
-				<div class=' form-content'>
-					<input type='text' name='jobsite[]' class='form-control'/>
-				</div>
+				
 			</div>
 		</div>
 	</div>
 </div>
-  

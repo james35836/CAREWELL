@@ -27,6 +27,7 @@
             <tr>
               <th>Company Code</th>
               <th>Company Name</th>
+              <th>Coverage PLan</th>
               <th>Contract Number</th>
               <th>Date Created</th>
               <th>Status</th>
@@ -36,6 +37,11 @@
             <tr>
               <td>{{$company->company_code}}</td>
               <td>{{$company->company_name}}</td>
+              <td>
+                @foreach($company->coverage_plan as $coverage_plan)
+                <span class="label label-default">{{$coverage_plan->availment_plan_name}}</span>
+                @endforeach
+              </td>
               <td>{{$company->contract_number}}</td>
               <td>{{date("F j, Y",strtotime($company->company_date_created))}}</td>
               <td>

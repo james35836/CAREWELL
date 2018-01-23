@@ -79,7 +79,12 @@ class CarewellController extends Controller
     $data['user']             = $this->global();
     $data['_company']         = TblCompanyModel::Company()->paginate(10);
     $data['_availment_plan']  = TblAvailmentPlanModel::get();
-    
+    foreach ($data['_company'] as $key => $company) 
+    {
+      $data['_company'][$key]['coverage_plan']    = TblCompanyCoveragePlanModel::where('company_id',$company->company_id)
+                                                    ->join('tbl_availment_plan','tbl_availment_plan.availment_plan_id','=','tbl_company_coverage_plan.availment_plan_id')
+                                                    ->get();
+    }
   	return view('carewell.pages.company_center',$data);
   }
   public function company_details($company_id)
