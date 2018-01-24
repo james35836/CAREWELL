@@ -35,6 +35,8 @@ use App\Http\Model\TblPaymentModeModel;
 use App\Http\Model\TblProviderModel;
 use App\Http\Model\TblDoctorModel;
 
+use App\Http\Model\TblScheduleOfBenefitsModel;
+
 
 use App\Http\Controllers\StaticFunctionController;
 
@@ -550,8 +552,14 @@ class CarewellController extends Controller
   }
   public function create_doctor()
   {
+
     $data['_provider'] = TblProviderModel::get();
     return view('carewell.modal_pages.doctor_create',$data);
+  }
+  public function import_doctor()
+  {
+    $data['_provider'] = TblProviderModel::get();
+    return view('carewell.modal_pages.doctor_import',$data);
   }
   /*BILLING*/
   public function billing()
@@ -757,12 +765,15 @@ class CarewellController extends Controller
   public function medical_create_approval()
   {
     $data['_member']  = TblMemberModel::get();
+    $data['_provider'] = TblProviderModel::get();
+    $data['_availment'] = TblAvailmentModel::where('availment_parent_id',0)->get();
     return view('carewell.modal_pages.medical_create_approval',$data);
   }
   public function medical_create_approval_get_info($member_id)
   {
     $data['member_info']  =  TblMemberModel::where('tbl_member.member_id',$member_id)->Member()->first();
-    $data['_member']        = TblMemberModel::get();
+    $data['_member']      = TblMemberModel::get();
+    $data['_provider']    = TblProviderModel::get();
     foreach ($data['_member'] as $key => $member) 
     {
       $data['_member'][$key]['display_name'] =  $member['member_first_name']." ".$member['member_middle_name']." ".$member['member_last_name'];
@@ -840,6 +851,26 @@ class CarewellController extends Controller
     $data['_provider'] = TblProviderModel::paginate(10);
 
     return view('carewell.pages.settings_provider',$data);
+  }
+
+  public function settings_coverage_plan()
+  {
+    $data['page'] = 'Coverage PLan';
+    $data['user'] = $this->global();
+
+    $data['_availment_plan'] = TblAvailmentPlanModel::paginate(10);
+
+    return view('carewell.pages.settings_coverage_plan',$data);
+  }
+  public function settings_coverage_plan_create()
+  {
+    $data['_benefits'] = TblScheduleOfBenefitsModel::where('benefits_parent_id',0)->get();
+    foreach ($data['_benefits'] as $key => $benefits) 
+    {
+      $data['_benefits'][$key]['child_benefits'] =  TblScheduleOfBenefitsModel::where('benefits_parent_id',$benefits->benefits_id)->get();
+    }
+    // dd($data);
+    return view('carewell.modal_pages.settings_create_coverage_plan',$data);
   }
 
 

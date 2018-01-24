@@ -1,7 +1,15 @@
 @extends('carewell.layout.layout')
 @section('content')
 @include('carewell.modals.medical_center_modals')
-
+<style type="text/css">
+  .approval-modal 
+  { 
+    overflow-y:scroll ;
+  }
+</style>
+<script>
+  
+</script>
   <div class="container">
     <div class="row">
       <div class=" col-md-2 col-xs-6 pull-left">
@@ -10,8 +18,7 @@
         </select>
       </div>
       <div class=" col-md-2 col-xs-6 pull-right">
-        {{-- <button type="button" class="btn btn-primary  pop-up-lg button-lg" data-modalname="CREATE APPROVAL" data-link='/medical/create_approval'><i class="fa fa-plus btn-icon"></i>CREATE APPROVAL</button> --}}
-         <button type="button" class="btn btn-primary create-approval button-lg"><i class="fa fa-plus btn-icon"></i>CREATE APPROVAL</button> 
+        <button type="button" class="btn btn-primary create-approval button-lg"><i class="fa fa-plus btn-icon"></i>CREATE APPROVAL</button> 
       </div>
       
     </div>

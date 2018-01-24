@@ -70,8 +70,9 @@ Route::get('/provider/provider_details/{provider_id}', 	'CarewellController@prov
 /*DOCTOR*/
 Route::get('/doctor', 									'CarewellController@doctor');
 Route::get('/doctor/create_doctor', 					'CarewellController@create_doctor');
-Route::get('/doctor1', 									'CarewellController@doctor');
+Route::get('/doctor/import_doctor', 					'CarewellController@import_doctor');
 Route::get('/doctor1fg', 									'CarewellController@doctor');
+
 
 
 
@@ -110,7 +111,12 @@ Route::get('/settings/plan/create_plan', 				'CarewellController@settings_plan_c
 Route::post('/settings/plan/create_plan/submit', 		'CarewellController@settings_plan_create_plan_submit');
 Route::get('/settings/plan/plan_details/{availment_plan_id}', 	'CarewellController@settings_plan_details');
 
-Route::get('/settings/provider', 				    		'CarewellController@settings_provider');
+Route::get('/settings/provider', 				    	'CarewellController@settings_provider');
+
+Route::get('/settings/coverage', 				    	'CarewellController@settings_coverage_plan');
+Route::get('/settings/coverage/create_plan', 			'CarewellController@settings_coverage_plan_create');
+
+
 
 /*MAINTENANCE*/
 Route::get('/developer/maintenance', 				    'MaintenanceController@developer_maintenance');

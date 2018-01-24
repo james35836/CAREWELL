@@ -365,6 +365,148 @@ class MaintenanceController extends Controller
             
             DB::table('tbl_user_info')->insert($user_info);
         }
+        
+        if (DB::table('tbl_schedule_of_benefits')->count() <= 0) 
+        {
+            $benefits[0]["benefits_id"]    = 1;
+            $benefits[0]["benefits_name"]   = "Required to the PHILHEALTH";
+            $benefits[0]["benefits_parent_id"]    = 0;
+            $benefits[0]["member_id"]    = 0;
+            
+            $benefits[1]["benefits_id"]    = 2;
+            $benefits[1]["benefits_name"]   = "Room and Board";
+            $benefits[1]["benefits_parent_id"]    = 1;
+            $benefits[1]["member_id"]    = 0;
+
+            $benefits[2]["benefits_id"]    = 3;
+            $benefits[2]["benefits_name"]   = "Emergency Accredited Hospital";
+            $benefits[2]["benefits_parent_id"]    = 1;
+            $benefits[2]["member_id"]    = 0;
+
+            $benefits[3]["benefits_id"]    = 4;
+            $benefits[3]["benefits_name"]   = "Prescribed Take Home Medicine";
+            $benefits[3]["benefits_parent_id"]    = 1;
+            $benefits[3]["member_id"]    = 0;
+
+            $benefits[4]["benefits_id"]    = 5;
+            $benefits[4]["benefits_name"]   = "Out Patient";
+            $benefits[4]["benefits_parent_id"]    = 0;
+            $benefits[4]["member_id"]    = 0;
+
+            $benefits[5]["benefits_id"]    = 6;
+            $benefits[5]["benefits_name"]   = "Consultation Accredited Medical Hospital";
+            $benefits[5]["benefits_parent_id"]    = 5;
+            $benefits[5]["member_id"]    = 0;
+
+            $benefits[6]["benefits_id"]    = 7;
+            $benefits[6]["benefits_name"]   = "Laboratory and Drug Test";
+            $benefits[6]["benefits_parent_id"]    = 5;
+            $benefits[6]["member_id"]    = 0;
+
+            $benefits[7]["benefits_id"]    = 8;
+            $benefits[7]["benefits_name"]   = "Effective Something";
+            $benefits[7]["benefits_parent_id"]    = 5;
+            $benefits[7]["member_id"]    = 0;
+
+            $benefits[8]["benefits_id"]    = 9;
+            $benefits[8]["benefits_name"]   = "Medico Legal Cases";
+            $benefits[8]["benefits_parent_id"]    = 5;
+            $benefits[8]["member_id"]    = 0;
+
+            $benefits[9]["benefits_id"]    = 10;
+            $benefits[9]["benefits_name"]   = "DENTAL";
+            $benefits[9]["benefits_parent_id"]    = 0;
+            $benefits[9]["member_id"]    = 0;
+
+            $benefits[10]["benefits_id"]    = 11;
+            $benefits[10]["benefits_name"]   = "Shape Tooth Extract";
+            $benefits[10]["benefits_parent_id"]    = 10;
+            $benefits[10]["member_id"]    = 0;
+
+            $benefits[11]["benefits_id"]    = 12;
+            $benefits[11]["benefits_name"]   = "Prophylaxis";
+            $benefits[11]["benefits_parent_id"]    = 10;
+            $benefits[11]["member_id"]    = 0;
+
+            $benefits[12]["benefits_id"]    = 13;
+            $benefits[12]["benefits_name"]   = "Temporary Pasta";
+            $benefits[12]["benefits_parent_id"]    = 10;
+            $benefits[12]["member_id"]    = 0;
+            
+            $benefits[13]["benefits_id"]    = 14;
+            $benefits[13]["benefits_name"]   = "Consultation to Dentist";
+            $benefits[13]["benefits_parent_id"]    = 10;
+            $benefits[13]["member_id"]    = 0;
+
+            $benefits[14]["benefits_id"]    = 15;
+            $benefits[14]["benefits_name"]   = "Annual Physical Examination";
+            $benefits[14]["benefits_parent_id"]    = 0;
+            $benefits[14]["member_id"]    = 0;
+
+            $benefits[15]["benefits_id"]    = 16;
+            $benefits[15]["benefits_name"]   = "Chest X-ray,UBC,Urinalysis";
+            $benefits[15]["benefits_parent_id"]    = 15;
+            $benefits[15]["member_id"]    = 0;
+
+            $benefits[16]["benefits_id"]    = 17;
+            $benefits[16]["benefits_name"]   = "Re-Exixting ILLNESS";
+            $benefits[16]["benefits_parent_id"]    = 0;
+            $benefits[16]["member_id"]    = 0;
+
+            $benefits[17]["benefits_id"]    = 18;
+            $benefits[17]["benefits_name"]   = "Death Benefit";
+            $benefits[17]["benefits_parent_id"]    = 0;
+            $benefits[17]["member_id"]    = 0;
+
+            $benefits[18]["benefits_id"]    = 19;
+            $benefits[18]["benefits_name"]   = "Natural Death";
+            $benefits[18]["benefits_parent_id"]    = 18;
+            $benefits[18]["member_id"]    = 0;
+
+            $benefits[19]["benefits_id"]    = 20;
+            $benefits[19]["benefits_name"]   = "Accidental Death";
+            $benefits[19]["benefits_parent_id"]    = 18;
+            $benefits[19]["member_id"]    = 0;
+
+            $benefits[20]["benefits_id"]    = 21;
+            $benefits[20]["benefits_name"]   = "Motorcycle Accident";
+            $benefits[20]["benefits_parent_id"]    = 0;
+            $benefits[20]["member_id"]    = 0;
+
+            $benefits[21]["benefits_id"]    = 22;
+            $benefits[21]["benefits_name"]   = "Medical";
+            $benefits[21]["benefits_parent_id"]    = 21;
+            $benefits[21]["member_id"]    = 0;
+
+            $benefits[22]["benefits_id"]    = 23;
+            $benefits[22]["benefits_name"]   = "Death";
+            $benefits[22]["benefits_parent_id"]    = 21;
+            $benefits[22]["member_id"]    = 0;
+
+            $benefits[23]["benefits_id"]    = 24;
+            $benefits[23]["benefits_name"]   = "Emergency Non-Accredited Hospital";
+            $benefits[23]["benefits_parent_id"]    = 1;
+            $benefits[23]["member_id"]    = 0;
+
+            $benefits[24]["benefits_id"]    = 25;
+            $benefits[24]["benefits_name"]   = "Non-Emergency Non-Accredited Hospital";
+            $benefits[24]["benefits_parent_id"]    = 1;
+            $benefits[24]["member_id"]    = 0;
+
+            $benefits[25]["benefits_id"]    = 26;
+            $benefits[25]["benefits_name"]   = "Non-Emergency Accredited Hospital";
+            $benefits[25]["benefits_parent_id"]    = 1;
+            $benefits[25]["member_id"]    = 0;
+
+            DB::table('tbl_schedule_of_benefits')->insert($benefits);
+        }
+
+
+
+
+
+
+
     }
 
 }

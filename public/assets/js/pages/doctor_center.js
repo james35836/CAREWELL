@@ -34,7 +34,7 @@ function doctor_center()
 			$('.doctor-modal').modal('show');
 			$('.doctor-ajax-loader').show();
 			$('.doctor-modal-body-content').hide();
-			$('.doctor-modal-title').html('CREATE MEMBER');
+			$('.doctor-modal-title').html('CREATE DOCTOR');
 			$(".doctor-modal-footer").html("<button type='button' class='btn btn-default pull-left btn-close-import' data-dismiss='modal'>Close</button><button type='button' class='btn btn-primary pull-right' >Save Changes</button>");
 			$.ajax({
 				headers: {
@@ -143,27 +143,29 @@ function doctor_center()
 	}
 	function import_doctor()
 	{
-		$(document).on('click','.import-member',function() 
+		$(document).on('click','.import-doctor',function() 
 		{
-			$('.member-modal').modal('show');
-			$('.member-ajax-loader').show();
-			$('.member-modal-body-content').hide();
-			$('.member-modal-title').html('IMPORT MEMBER');
-			$(".member-modal-footer").html("<button type='button' class='btn btn-default pull-left btn-close-import' data-dismiss='modal'>Close</button>");
+			$('.doctor-modal').modal('show');
+			$('.modal-dialog').removeClass('modal-lg');
+			$('.modal-dialog').addClass('modal-import-sm');
+			$('.doctor-ajax-loader').show();
+			$('.doctor-modal-body-content').hide();
+			$('.doctor-modal-title').html('IMPORT DOCTOR');
+			$(".doctor-modal-footer").html("<button type='button' class='btn btn-default pull-left btn-close-import' data-dismiss='modal'>Close</button>");
 			
 			$.ajax({
 				headers: {
 				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 				},
-				url:'/member/import_member',
+				url:'/doctor/import_doctor',
 				method: "get",
                 success: function(data)
 				{
 					setTimeout(function()
 					{
-						$('.member-ajax-loader').hide();
-						$('.member-modal-body-content').show();
-						$('.member-modal-body-content').html(data);
+						$('.doctor-ajax-loader').hide();
+						$('.doctor-modal-body-content').show();
+						$('.doctor-modal-body-content').html(data);
                     }, 1000);
 				}
 			});

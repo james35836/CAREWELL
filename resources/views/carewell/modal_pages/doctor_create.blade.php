@@ -1,12 +1,21 @@
 <script>  
 	$(document).ready(function() {  
-	    $(".addDependent").on("click", function() {  
-	    	$(".appendDependent").append("<div class='form-holder'><div class='col-md-3 form-content'><label>Dependent Full Name</label></div><div class='col-md-9 form-content'><input type='text' class='form-control'/></div></div><div class='form-holder' ><div class='col-md-3 form-content'><label>Birthdate</label></div><div class='col-md-3 form-content'><input type='text' class='form-control'/></div><div class='col-md-3 form-content'><label>Relationship</label></div><div class='col-md-3 form-content'><input type='text' class='form-control'/></div></div>");  
+	    $(".add-specialization").on("click", function() { 
+	    	
+
+
+	    	$(".specialization-form").append('<div class="specialization-count" style="margin-top: 20px;"><select class="form-control"><option>Allergist or Immunologist</option><option>Anesthesiologist</option><option>Cardiologist</option><option>Dermatologist</option><option>Gastroenterologist</option><option>Hematologist/Oncologist</option><option>Internal Medicine Physician</option><option>Nephrologist</option><option>Neurologist</option><option>Neurosurgeon</option><option>Obstetrician</option><option>Gynecologist</option><option>Nurse-Midwifery</option><option>Occupational Medicine Physician</option><option>Ophthalmologist</option><option>Oral and Maxillofacial Surgeon</option><option>Orthopaedic Surgeon</option><option>Otolaryngologist (Head and Neck Surgeon)</option><option>Pathologist</option><option>Pediatrician</option><option>Plastic Surgeon</option><option>Podiatrist</option><option>Psychiatrist</option><option>Pulmonary Medicine Physician</option><option>Radiation Onconlogist</option><option>Diagnostic Radiologist</option><option>Rheumatologist</option><option>Urologist</option></select></div>');  
+	    
 	    });  
-	    $(".removeDependent").on("click", function() {  
-	        $(".appendDependent").children().last().remove();  
+	    $(".remove-specialization").on("click", function() { 
+	    	if( $(".specialization-count").length!=1)
+			{
+	        	$(".specialization-form").children().last().remove();  
+	    	}
 	    });  
 	}); 
+
+	
 	$(function () 
 	{
 		//select2
@@ -15,6 +24,7 @@
 		$('.datepicker').datepicker({
 		autoclose: true
 		})
+
 	})
 </script>  
 <div class="row box-globals">
@@ -44,11 +54,8 @@
 		</div>
 		<div class="col-md-4 form-content">
 			<select class="form-control">
-				<option>SINGLE</option>
-				<option>MARIED</option>
-				<option>MARIED</option>
-				<option>MARIED</option>
-				<option>MARIED</option>
+				<option>MALE</option>
+				<option>FEMALE</option>
 			</select>
 		</div>
 	</div>
@@ -71,121 +78,57 @@
 		<div class="col-md-2 form-content">
 			<label>Address</label>
 		</div>
-		<div class="col-md-4 form-content">
-			<input type="text" class="form-control"/>
+		<div class="col-md-10 form-content">
+			<textarea class="form-control" name="" id="" cols="30" rows="3"></textarea>
 		</div>
+	</div>
+	<div class="row form-holder">
+		<div class="col-md-4 pull-right form-content">
+			<div class="btn-group">
+			  <button type="button" class="btn btn-primary add-specialization"><i  class="fa fa-plus btn-icon"></i> Specialization</button>
+			  <button type="button" class="btn btn-danger remove-specialization"><i  class="fa fa-minus btn-icon"></i> Specialization</button>
+			</div>
+		</div>
+	</div>
+	<div class="form-holder">
 		<div class="col-md-2 form-content">
 			<label>Specialization</label>
 		</div>
-		<div class="col-md-4 form-content">
-			<select class="form-control">
-				<option>SINGLE</option>
-				<option>MARIED</option>
-				<option>MARIED</option>
-				<option>MARIED</option>
-				<option>MARIED</option>
-			</select>
+		<div class="col-md-10 form-content specialization-form">
+			<div class="specialization-count style="margin-top: 0px;">
+				<select class="form-control">
+					<option>Allergist or Immunologist</option>
+					<option>Anesthesiologist</option>
+					<option>Cardiologist</option>
+					<option>Dermatologist</option>
+					<option>Gastroenterologist</option>
+					<option>Hematologist/Oncologist</option>
+					<option>Internal Medicine Physician</option>
+					<option>Nephrologist</option>
+					<option>Neurologist</option>
+					<option>Neurosurgeon</option>
+					<option>Obstetrician</option>
+					<option>Gynecologist</option>
+					<option>Nurse-Midwifery</option>
+					<option>Occupational Medicine Physician</option>
+					<option>Ophthalmologist</option>
+					<option>Oral and Maxillofacial Surgeon</option>
+					<option>Orthopaedic Surgeon</option>
+					<option>Otolaryngologist (Head and Neck Surgeon)</option>
+					<option>Pathologist</option>
+					<option>Pediatrician</option>
+					<option>Plastic Surgeon</option>
+					<option>Podiatrist</option>
+					<option>Psychiatrist</option>
+					<option>Pulmonary Medicine Physician</option>
+					<option>Radiation Onconlogist</option>
+					<option>Diagnostic Radiologist</option>
+					<option>Rheumatologist</option>
+					<option>Urologist</option>
+				</select>
+			</div>
+			
 		</div>
-		
-	</div>
-</div>
-<div class="row box-globals">
-	<div class="form-holder">
-		<div class="col-md-3 form-content">
-			<label>Dependent Full Name</label>
-		</div>
-		<div class="col-md-9 form-content">
-			<input type="text" class="form-control"/>
-		</div>
-	</div>
-	<div class="form-holder" >
-		<div class="col-md-3 form-content">
-			<label>Birthdate</label>
-		</div>
-		<div class="col-md-3 form-content">
-			<input type="text" class="form-control"/>
-		</div>
-		<div class="col-md-3 form-content">
-			<label>Relationship</label>
-		</div>
-		<div class="col-md-3 form-content">
-			<input type="text" class="form-control"/>
-		</div>
-	</div>
-	<div class="appendDependent">
-		
-	</div>
-	<div class="form-holder">
-		<div class="form-content" style="text-align: center;margin-top:3px;">
-			<button type="button" class="btn btn-primary addDependent" style="margin-top: 8px;"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>
-		</div>
-	</div>
-</div>
-<div class="row box-globals">
-	<div class="form-holder">
-		<div class="col-md-3 form-content">
-			<label>Phil-Health Number</label>
-		</div>
-		<div class="col-md-3 form-content">
-			<input type="text" class="form-control"/>
-		</div>
-		<div class="col-md-3 form-content">
-			<label>SSS Number</label>
-		</div>
-		<div class="col-md-3 form-content">
-			<input type="text" class="form-control"/>
-		</div>
-	</div>
-	<div class="form-holder">
-		<div class="col-md-3 form-content">
-			<label>Tin Number</label>
-		</div>
-		<div class="col-md-3 form-content">
-			<input type="text" class="form-control"/>
-		</div>
-		<div class="col-md-3 form-content">
-			<label>HDMF</label>
-		</div>
-		<div class="col-md-3 form-content">
-			<input type="text" class="form-control"/>
-		</div>
-	</div>
-</div>
-<div class="row box-globals">
-	<div class="form-holder">
-		<div class="col-md-3 form-content">
-			<label>Carewell ID Number</label>
-		</div>
-		<div class="col-md-3 form-content">
-			<input type="text" class="form-control"/>
-		</div>
-		<div class="col-md-3 form-content">
-			<label>Coverage Plan</label>
-		</div>
-		<div class="col-md-3 form-content">
-			<select class="form-control">
-				<option>PLAN 300</option>
-			</select>
-		</div>
-	</div>
-	<div class="form-holder">
-		<div class="col-md-3 form-content">
-			<label>Company</label>
-		</div>
-		<div class="col-md-9 form-content">
-			<select class="form-control">
-				<option>DIGIMA</option>
-			</select>
-		</div>
-	</div>
-	<div class="form-holder">
-		<div class="col-md-3 form-content">
-			<label>Status</label>
-		</div>
-		<div class="col-md-9 form-content">
-			<select class="form-control">
-				<option>ACTIVE</option>
-			</select>
-		</div>
-	</div>
+    </div>
+    
 </div>

@@ -326,7 +326,7 @@
 {{-- <script src="/assets/js/pages/payable_center.js"></script>
 <script src="/assets/js/pages/report_center.js"></script> --}}
 <script src="/assets/js/pages/settings_center.js"></script>
-
+<script src="/assets/js/pages/settings_coverage.js"></script>
 
 
 <!-- SCRIPT -->

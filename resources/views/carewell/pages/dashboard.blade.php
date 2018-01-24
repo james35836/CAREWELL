@@ -26,7 +26,7 @@ function date_time(id)
   {
   s = "0"+s;
   }
-  result = ''+days[day]+' '+months[month]+' '+d+', '+year+'<br><br><p class="clock-time"> '+h+':'+m+':'+s+"</p>";
+  result = ''+days[day]+'<br> '+months[month]+' '+d+', '+year+'<br><p class="clock-time"> '+h+':'+m+':'+s+"</p>";
   document.getElementById(id).innerHTML = result;
   setTimeout('date_time("'+id+'");','1000');
   return true;
@@ -74,7 +74,7 @@ function date_time(id)
   <div class="col-md-3 col-sm-6 col-xs-12">
     <div class="info-box">
       <span class="info-box-icon bg-yellow"><i class="ion ion-clock"></i></span>
-      <div class="info-box-content">
+      <div class="info-box-content" style="text-align: center;">
         <span id="date_time" class="clock-font"></span>
         <script type="text/javascript">window.onload = date_time('date_time');</script>
       </div>
