@@ -36,7 +36,7 @@ Route::get('/user/view_profile', 						'UserController@user_view_profile');
 /*DASHBOARD*/
 Route::get('/dashboard', 								'CarewellController@dashboard');
 /*ADMIN*/
-Route::get('/admin', 								    'AdminController@admin_center');
+Route::get('/settings/admin', 							'AdminController@admin_center');
 Route::get('/admin/create_user', 						'AdminController@admin_create_user');
 // Route::get('/admin', 								    'AdminController@admin');
 // Route::get('/admin', 								    'AdminController@admin');
@@ -59,6 +59,19 @@ Route::get('/member/download_template/{company_id}', 	'CarewellController@member
 Route::get('/member/import_member', 					'CarewellController@member_import_member');
 Route::post('/member/import_member/submit', 			'CarewellController@member_import_member_submit');
 
+/*PROVIDER*/
+Route::get('/provider', 								'CarewellController@provider');
+Route::get('/provider/create_provider', 				'CarewellController@provider_create');
+Route::post('/provider/create_provider/submit', 		'CarewellController@provider_create_submit');
+
+Route::get('/provider/provider_details/{provider_id}', 	'CarewellController@provider_details');
+
+
+/*DOCTOR*/
+Route::get('/doctor', 									'CarewellController@doctor');
+Route::get('/doctor/create_doctor', 					'CarewellController@create_doctor');
+Route::get('/doctor1', 									'CarewellController@doctor');
+Route::get('/doctor1fg', 									'CarewellController@doctor');
 
 
 
@@ -86,8 +99,7 @@ Route::get('/medical/create_approval/{member_id}', 		'CarewellController@medical
 
 Route::get('/medical/approval/details', 				'CarewellController@medical_approval_details');
 
-/*HOSPITAL*/
-Route::get('/hospital', 								'CarewellController@hospital');
+
 /*PAYABLE*/
 Route::get('/payable', 									'CarewellController@payable');
 /*REPORTS*/

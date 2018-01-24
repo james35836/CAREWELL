@@ -1,6 +1,6 @@
 @extends('carewell.layout.layout')
 @section('content')
-@include('carewell.modals.member_center_modals')
+@include('carewell.modals.doctor_center_modals')
 <div class="container">
   <div class="row">
     <div class=" col-md-2 col-xs-6 pull-left">
@@ -11,11 +11,11 @@
     <div class=" col-md-2 col-xs-6 pull-right">
       <div class="dropdown">
         <button class="btn btn-primary button-lg dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <i class="fa fa-plus btn-icon "></i>CREATE MEMBER
+        <i class="fa fa-plus btn-icon "></i>CREATE DOCTOR
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <button type="button" class="btn btn-link  create-member"><i class="fa   fa-pencil-square btn-icon" ></i>CREATE MANUALLY</button>
-          <button type="button" class="btn btn-link   import-member"><i class="fa fa-file-excel-o btn-icon" ></i>IMPORT EXCEL</button>
+          <button type="button" class="btn btn-link  create-doctor"><i class="fa   fa-pencil-square btn-icon" ></i>CREATE MANUALLY</button>
+          <button type="button" class="btn btn-link   import-doctor"><i class="fa fa-file-excel-o btn-icon" ></i>IMPORT EXCEL</button>
         </div>
       </div>
     </div>
@@ -25,7 +25,7 @@
     <div class="col-xs-12">
       <div class="box">
         <div class="box-header">
-          <h3 class="box-title">Member List</h3>
+          <h3 class="box-title">Doctor's List</h3>
           <div class="box-tools">
             <div class="input-group input-group-sm" style="width: 150px;">
               <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
@@ -39,28 +39,28 @@
         <div class="box-body table-responsive no-padding">
           <table class="table table-hover table-bordered">
             <tr>
-              <th>Universal ID</th>
-              <th>Member Name</th>
-              <th>Carewell ID</th>
-              <th>Company</th>
-              <th>Status</th>
-              <th>Date Membered</th>
-              <th>Action</th>
+              <th>DOCTOR ID</th>
+              <th>NAME</th>
+              <th>GENDER</th>
+              <th>CONTACT EMAIL</th>
+              <th>CONTACT NUMBER</th>
+              <th>DATE CREATED</th>
+              <th>ACTION</th>
             </tr>
-            @foreach($_member as $member)
+            @foreach($_doctor as $doctor)
             <tr>
-              <td>{{$member->member_universal_id}}</td>
-              <td>{{$member->member_first_name}} {{$member->member_last_name}}</td>
-              <td>{{$member->member_company_carewell_id}}</td>
-              <td>{{$member->company_name}}</td>
+              <td>{{$doctor->member_universal_id}}</td>
+              <td>{{$doctor->member_first_name}} {{$doctor->member_last_name}}</td>
+              <td>{{$doctor->member_company_carewell_id}}</td>
+              <td>{{$doctor->company_name}}</td>
               <td>
-                @if($member->member_company_status=='active')
+                @if($doctor->member_company_status=='active')
                 <span class="label label-success">active</span>
                 @else
                 <span class="label label-danger">inactive</span>
                 @endif
               </td>
-              <td>{{date("F j, Y",strtotime($member->member_date_created))}}</td>
+              <td>{{date("F j, Y",strtotime($doctor->member_date_created))}}</td>
               <td>
                 <div class="btn-group">
                   <button type="button" class="btn btn-danger">Action</button>
@@ -69,7 +69,7 @@
                   <span class="sr-only">Toggle Dropdown</span>
                   </button>
                   <ul class="dropdown-menu" role="menu" style="position: absolute !important;">
-                    <li><button type="button" data-id="{{$member->member_id}}" class="btn btn-link view-member-details"><i class="fa fa-eye btn-icon"></i>  View Member</button></li>
+                    <li><button type="button" data-id="{{$doctor->member_id}}" class="btn btn-link view-member-details"><i class="fa fa-eye btn-icon"></i>  View Member</button></li>
                     <li><button type="button" class="btn btn-link"><i class="fa fa-trash btn-icon"></i> Archived Member</button></li>
                   </ul>
                 </div>
@@ -81,7 +81,7 @@
           </table>
         </div>
         <div class="box-footer clearfix">
-          @include('globals.pagination', ['paginator' => $_member])
+          @include('globals.pagination', ['paginator' => $_doctor])
         </div>
       </div>
     </div>

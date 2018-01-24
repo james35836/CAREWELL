@@ -33,6 +33,7 @@ use App\Http\Model\TblAvailmentTagModel;
 use App\Http\Model\TblPaymentModeModel;
 
 use App\Http\Model\TblProviderModel;
+use App\Http\Model\TblDoctorModel;
 
 
 use App\Http\Controllers\StaticFunctionController;
@@ -494,6 +495,64 @@ class CarewellController extends Controller
           }
   }
   
+
+  /*PROVIDER*/
+  public function provider()
+  {
+    $data['page']       = 'Network Provider';
+    $data['user']       = $this->global();
+    $data['_provider']  = TblProviderModel::paginate(10);
+    return view('carewell.pages.provider_center',$data);
+  }
+  public function provider_create()
+  {
+    return view('carewell.modal_pages.provider_create_provider');
+  }
+
+  public function provider_create_submit(Request $request)
+  {
+    if($request->agreed_value=="checked")
+    {
+      $provider_billing_name = $request->provider_name;
+    }
+    else
+    {
+      $provider_billing_name = "BILLING NAME";
+    }
+    $providerData = new TblProviderModel;
+    $providerData->provider_name            = $request->provider_name;
+    $providerData->provider_billing_name    = $provider_billing_name;
+    $providerData->provider_contact_person  = $request->provider_contact_person;
+    $providerData->provider_contact_number  = $request->provider_contact_number;
+    $providerData->provider_mobile_number   = $request->provider_mobile_number;
+    $providerData->provider_contact_email   = $request->provider_contact_email;
+    $providerData->provider_address         = $request->provider_zip.", ".$request->provider_street.", ".$request->provider_city.", ".$request->provider_country;
+    $providerData->provider_created         = Carbon::now();
+    $providerData->save();
+
+    return "<div class='alert alert-success' style='text-align: center;'>Provider Added Successfully!</div>";    
+
+  }
+  public function provider_details(Request $request,$provider_id)
+  {
+    $data['provider_details'] = TblProviderModel::where('provider_id',$provider_id)->first();
+    return view('carewell.modal_pages.provider_details',$data);
+  }
+
+  /*DOCTOR*/
+  public function doctor(Request $request)
+  {
+    $data['page']       = 'Doctor';
+    $data['user']       = $this->global();
+    $data['_doctor']  = TblDoctorModel::paginate(10);
+    return view('carewell.pages.doctor_center',$data);
+
+  }
+  public function create_doctor()
+  {
+    $data['_provider'] = TblProviderModel::get();
+    return view('carewell.modal_pages.doctor_create',$data);
+  }
   /*BILLING*/
   public function billing()
   {
@@ -715,13 +774,7 @@ class CarewellController extends Controller
     return view('carewell.modal_pages.medical_approval_details');
   }
 
-  /*HOSPITAL*/
-  public function hospital()
-  {
-  	$data['page'] = 'Hospital';
-    $data['user'] = $this->global();
-  	return view('carewell.pages.hospital_center',$data);
-  }
+  
 
   /*PAYABLE*/
   public function payable()

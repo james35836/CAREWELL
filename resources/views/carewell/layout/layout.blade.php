@@ -15,16 +15,15 @@
     <link rel="stylesheet" href="/assets/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
     <link rel="stylesheet" href="/assets/bower_components/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css">
     <link rel="stylesheet" href="/assets/bower_components/select2/dist/css/select2.min.css">
-    
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
-    
     <link rel="stylesheet" href="/assets/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
     <link rel="stylesheet" href="/assets/plugins/iCheck/all.css">
     <link rel="stylesheet" href="/assets/plugins/timepicker/bootstrap-timepicker.min.css">
-    
     <link rel="stylesheet" href="/assets/css/skins/_all-skins.min.css">
     <link rel="stylesheet" href="/assets/css/AdminLTE.min.css">
     <link rel="stylesheet" href="/assets/css/globals.css">
+    <!-- FONT -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+    <!-- AJAX -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <!-- TOASTR -->
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
@@ -197,12 +196,12 @@
           </a>
         </li>
         <li >
-          <a href="/hospital">
+          <a href="/provider">
             <i class="fa fa-hospital-o"></i> <span>PROVIDER CENTER</span>
           </a>
         </li>
         <li>
-          <a href="/member">
+          <a href="/doctor">
             <i class="fa fa-user-md"></i> <span>DOCTOR CENTER</span>
           </a>
         </li>
@@ -235,10 +234,11 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="/admin"><i class="fa fa-universal-access"></i>ADMIN PANEL</a></li>
+            <li><a href="/settings/admin"><i class="fa fa-universal-access"></i>ADMIN PANEL</a></li>
+            <li><a href="/settings/coverage"><i class="fa fa-circle-o"></i>COVERAGE PLAN</a></li>
             <li><a href="/settings/plan"><i class="fa fa-tasks "></i> CREATE PLAN</a></li>
             <li><a href="/settings/provider"><i class="fa fa-user-md "></i> CREATE PROVIDER</a></li>
-            <li class="active"><a href="editors.html"><i class="fa fa-circle-o"></i> Editors</a></li>
+            <li><a href="editors.html"><i class="fa fa-circle-o"></i> Editors</a></li>
           </ul>
         </li>
       </ul>
@@ -285,13 +285,33 @@
   </footer>
   <!-- Control Sidebar -->
   @include('plugin.control_sidebar')
-  
   <!-- /.control-sidebar -->
-  <!-- Add the sidebar's background. This div must be placed immediately after the control sidebar -->
   <div class="control-sidebar-bg"></div>
 </div>
-{{-- <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js"></script> --}}
-@include('plugin.bottom')
+<!-- BOTTOM -->
+<!-- BOWER -->
+<script src="/assets/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="/assets/bower_components/chart.js/Chart.js"></script>
+<script src="/assets/bower_components/jquery-sparkline/dist/jquery.sparkline.min.js"></script>
+<script src="/assets/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/assets/bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+<script src="/assets/bower_components/fastclick/lib/fastclick.js"></script>
+<script src="/assets/bower_components/select2/dist/js/select2.full.min.js"></script>
+<script src="/assets/bower_components/moment/min/moment.min.js"></script>
+<script src="/assets/bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
+<script src="/assets/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<script src="/assets/bower_components/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js"></script>
+<!-- PLUGINS -->
+<script src="/assets/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
+<script src="/assets/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+<script src="/assets/plugins/timepicker/bootstrap-timepicker.min.js"></script>
+<script src="/assets/plugins/input-mask/jquery.inputmask.js"></script>
+<script src="/assets/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+<script src="/assets/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+<script src="/assets/plugins/iCheck/icheck.min.js"></script>
+<!-- ADMINLTE -->
+<script src="/assets/js/adminlte.min.js"></script>
+<script src="/assets/js/demo.js"></script>
 <!-- PAGES -->
 <script src="/assets/js/pages/user_center.js"></script>
 <script src="/assets/js/pages/globals.js"></script>
@@ -301,8 +321,9 @@
 <script src="/assets/js/pages/member_center.js"></script>
 <script src="/assets/js/pages/billing_center.js"></script>
 <script src="/assets/js/pages/medical_center.js"></script>
-{{-- <script src="/assets/js/pages/hospital_center.js"></script>
-<script src="/assets/js/pages/payable_center.js"></script>
+<script src="/assets/js/pages/provider_center.js"></script>
+<script src="/assets/js/pages/doctor_center.js"></script>
+{{-- <script src="/assets/js/pages/payable_center.js"></script>
 <script src="/assets/js/pages/report_center.js"></script> --}}
 <script src="/assets/js/pages/settings_center.js"></script>
 

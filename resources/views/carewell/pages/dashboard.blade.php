@@ -1,5 +1,6 @@
 @extends('carewell.layout.layout')
 @section('content')
+
 <script>
 function date_time(id)
 {
@@ -25,12 +26,20 @@ function date_time(id)
   {
   s = "0"+s;
   }
-  result = ''+months[month]+' '+d+' '+year+'<br> '+days[day]+'<br> '+h+':'+m+':'+s;
+  result = ''+days[day]+' '+months[month]+' '+d+', '+year+'<br><br><p class="clock-time"> '+h+':'+m+':'+s+"</p>";
   document.getElementById(id).innerHTML = result;
   setTimeout('date_time("'+id+'");','1000');
   return true;
 }
 </script>
+<style>
+.clock-time
+{
+  font-weight: bold;
+  font-size: 20px;
+  text-align: center;
+}
+</style>
 <!-- Info boxes -->
 <div class="row">
   <div class="col-md-3 col-sm-6 col-xs-12">
@@ -58,6 +67,7 @@ function date_time(id)
       <div class="info-box-content">
         <span class="info-box-text">NETWORK PROVIDER</span>
         <span class="info-box-number">760</span>
+
       </div>
     </div>
   </div>
