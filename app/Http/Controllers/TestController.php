@@ -14,6 +14,7 @@ use DB;
 
 
 
+
 class TestController extends Controller
 {
   public function global()
@@ -58,6 +59,22 @@ class TestController extends Controller
   public function sample()
   {
     return view('sample');
+  }
+  public function sample_submit(Request $request)
+  {
+
+    dd($request->all());
+    // foreach($request->name as $key=>$data)
+    // {
+    //   print_r($data ." ".$request->gen[$key]);
+    // }
+    // foreach($request->procedure_id as $key=>$data)
+    // {
+    //   print_r($data ." ".$request->procedure_availed_amount[$key]." ".$request->procedure_availed_remarks[$key]);
+    // }
+    // return "james";
+    
+
   }
 	public function testing_excel()
   {

@@ -41,16 +41,17 @@
             <table class="table table-hover table-bordered">
               <tr>
                 <th>APPROVAL ID</th>
-                <th>Universal ID/th>
-                <th>Carewell ID</th>
-                <th>Member Name</th>
-                <th>Company</th>
-                <th>Provider</th>
-                <th>Status</th>
-                <th>Action</th>
+                <th>UNIVERSAL ID</th>
+                <th>CAREWELL ID</th>
+                <th>PATIENT NAME</th>
+                <th>COMPANY</th>
+                <th>PROVIDER</th>
+                <th>STATUS</th>
+                <th>ACTION</th>
               </tr>
+              @foreach($_approval as $approval)
               <tr>
-                <td>CAL 01</td>
+                <td>{{$approval->approval_id}}</td>
                 <td>DEC-NOV</td>
                 <td>DEC-NOV</td>
                 <td>DIGIMA</td>
@@ -59,88 +60,8 @@
                 <td><span class="label label-success">active</span></td>
                 <td><span class="label label-success pop-up-lg action-span" data-modalname="APPROVAL DETAILS" data-link="/medical/approval/details">view details</span></td>
               </tr>
-              <tr>
-                <td>CAL 01</td>
-                <td>DEC-NOV</td>
-                <td>DEC-NOV</td>
-                <td>DIGIMA</td>
-                <td>DEC-NOV</td>
-                <td>DEC-NOV</td>
-                <td><span class="label label-success">active</span></td>
-                <td><span class="label label-success">view details</span></td>
-              </tr>
-              <tr>
-                <td>CAL 01</td>
-                <td>DEC-NOV</td>
-                <td>DEC-NOV</td>
-                <td>DIGIMA</td>
-                <td>DEC-NOV</td>
-                <td>DEC-NOV</td>
-                <td><span class="label label-success">active</span></td>
-                <td><span class="label label-success">view details</span></td>
-              </tr>
-              <tr>
-                <td>CAL 01</td>
-                <td>DEC-NOV</td>
-                <td>DEC-NOV</td>
-                <td>DIGIMA</td>
-                <td>DEC-NOV</td>
-                <td>DEC-NOV</td>
-                <td><span class="label label-success">active</span></td>
-                <td><span class="label label-success">view details</span></td>
-              </tr>
-              <tr>
-                <td>CAL 01</td>
-                <td>DEC-NOV</td>
-                <td>DEC-NOV</td>
-                <td>DIGIMA</td>
-                <td>DEC-NOV</td>
-                <td>DEC-NOV</td>
-                <td><span class="label label-success">active</span></td>
-                <td><span class="label label-success">view details</span></td>
-              </tr>
-
-              <tr>
-                <td>CAL 01</td>
-                <td>DEC-NOV</td>
-                <td>DEC-NOV</td>
-                <td>DIGIMA</td>
-                <td>DEC-NOV</td>
-                <td>DEC-NOV</td>
-                <td><span class="label label-success">active</span></td>
-                <td><span class="label label-success">view details</span></td>
-              </tr>
-              <tr>
-                <td>CAL 01</td>
-                <td>DEC-NOV</td>
-                <td>DEC-NOV</td>
-                <td>DIGIMA</td>
-                <td>DEC-NOV</td>
-                <td>DEC-NOV</td>
-                <td><span class="label label-success">active</span></td>
-                <td><span class="label label-success">view details</span></td>
-              </tr>
-              <tr>
-                <td>CAL 01</td>
-                <td>DEC-NOV</td>
-                <td>DEC-NOV</td>
-                <td>DIGIMA</td>
-                <td>DEC-NOV</td>
-                <td>DEC-NOV</td>
-                <td><span class="label label-success">active</span></td>
-                <td><span class="label label-success">view details</span></td>
-              </tr>
-
-              <tr>
-                <td>CAL 01</td>
-                <td>DEC-NOV</td>
-                <td>DEC-NOV</td>
-                <td>DIGIMA</td>
-                <td>DEC-NOV</td>
-                <td>DEC-NOV</td>
-                <td><span class="label label-success">active</span></td>
-                <td><span class="label label-success">view details</span></td>
-              </tr>
+              @endforeach
+              
             </table>
           </div>
           <!-- /.box-body -->

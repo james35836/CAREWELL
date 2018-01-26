@@ -18,6 +18,7 @@ Route::get('/testing', 					    			'TestController@testing');
 Route::get('/testing_excel', 			    			'TestController@testing_excel');
 Route::get('/testing_excel2', 			    			'TestController@testing_excel2');
 Route::get('/sample',									'TestController@sample');	
+Route::post('/samples',									'TestController@sample_submit');
 
 /*LOGIN*/
 Route::get('/', 										'FrontController@login');
@@ -71,7 +72,7 @@ Route::get('/provider/provider_details/{provider_id}', 	'CarewellController@prov
 Route::get('/doctor', 									'CarewellController@doctor');
 Route::get('/doctor/create_doctor', 					'CarewellController@create_doctor');
 Route::get('/doctor/import_doctor', 					'CarewellController@import_doctor');
-Route::get('/doctor1fg', 									'CarewellController@doctor');
+Route::post('/doctor/create_doctor/submit', 			'CarewellController@create_doctor_submit');
 
 
 
@@ -95,7 +96,10 @@ Route::get('/billing/billing/statement', 			    'CarewellController@billing_bill
 /*MEDICAL*/
 Route::get('/medical', 									'CarewellController@medical');
 Route::get('/medical/create_approval', 					'CarewellController@medical_create_approval');
-Route::get('/medical/create_approval/{member_id}', 		'CarewellController@medical_create_approval_get_info');
+Route::get('/medical/create_approval/member/{member_id}','CarewellController@medical_create_approval_member_info');
+Route::get('/medical/create_approval/availment/{availment_id}','CarewellController@medical_create_approval_availment_info');
+Route::get('/medical/create_approval/doctor/{provider_id}','CarewellController@medical_create_approval_doctor_info');
+Route::post('/medical/create_approval/submit',			'CarewellController@medical_create_approval_submit');
 
 
 Route::get('/medical/approval/details', 				'CarewellController@medical_approval_details');

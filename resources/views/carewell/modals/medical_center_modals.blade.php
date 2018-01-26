@@ -14,7 +14,8 @@
         </div>
       </div>
       <div class="modal-footer modal-footer-cal">
-        <button type="button" class="btn btn-default pull-left " data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary create-approval-confirm">Create Approval</button>
       </div>
     </div>
   </div>

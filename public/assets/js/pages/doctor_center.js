@@ -1,6 +1,8 @@
 var doctor_center 	= new doctor_center();
 var formData   		= new FormData();
 var ajaxData 		= [];
+var value			= 0;
+var message			= "";
 
 function doctor_center()
 {
@@ -16,9 +18,13 @@ function doctor_center()
 	{
 		$(document).ready(function()
 		{
+			checking_null_validation(value,message);
             export_doctor_template();
-            import_doctor();
+            
             create_doctor();
+            create_doctor_confirm();
+            create_doctor_submit();
+            import_doctor();
             import_doctor_confirm();
 			import_doctor_submit();
 			view_doctor_details();
@@ -27,6 +33,19 @@ function doctor_center()
          });
 
 	}
+	function checking_null_validation(value,message)
+	{
+		if(value=="0")
+		{
+			return "null";
+		}
+		else if(value=="")
+		{
+			toastr.error(message+' cannot be null.', 'Something went wrong!', {timeOut: 3000})
+			return "";
+		}
+    }
+
 	function create_doctor()
 	{
 		$(document).on('click','.create-doctor',function()
@@ -35,7 +54,6 @@ function doctor_center()
 			$('.doctor-ajax-loader').show();
 			$('.doctor-modal-body-content').hide();
 			$('.doctor-modal-title').html('CREATE DOCTOR');
-			$(".doctor-modal-footer").html("<button type='button' class='btn btn-default pull-left btn-close-import' data-dismiss='modal'>Close</button><button type='button' class='btn btn-primary pull-right' >Save Changes</button>");
 			$.ajax({
 				headers: {
 				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -53,6 +71,96 @@ function doctor_center()
 				}
 			});
 			
+		});
+	}
+	function create_doctor_confirm()
+	{
+		$(document).on('click','.create-doctor-confirm',function()
+		{
+			$('select[name="specialization_name"] option:selected').each(function() 
+			{
+				ajaxData.push(this.value);
+
+			});
+			if(document.getElementById('provider_id').value=="Select Provider")
+			{
+				toastr.error('Please select provider.', 'Something went wrong!', {timeOut: 3000})
+			}
+			else if(checking_null_validation(document.getElementById('doctor_number').value,"DOCTOR NUMBER")=="")
+			{}	
+			else if(checking_null_validation(document.getElementById('doctor_first_name').value,"FIRST NAME")=="")
+			{}	
+			else if(checking_null_validation(document.getElementById('doctor_middle_name').value,"MIDDLE NAME")=="")
+			{}
+			else if(checking_null_validation(document.getElementById('doctor_last_name').value,"LAST NAME")=="")
+			{}
+			else if(checking_null_validation(document.getElementById('doctor_gender').value,"GENDER")=="")
+			{}
+			else if(checking_null_validation(document.getElementById('doctor_birthdate').value,"BIRTHDATE")=="")
+			{}
+			else if(checking_null_validation(document.getElementById('doctor_contact_number').value,"CONTACT NUMBER")=="")
+			{}
+			else if(checking_null_validation(document.getElementById('doctor_email_address').value,"EMAIL ADDRESS")=="")
+			{}
+			else if(checking_null_validation(document.getElementById('doctor_address').value,"ADDRESS")=="")
+			{}
+			else if(ajaxData.length==0)
+			{
+				toastr.error('Please select specialization at least one.', 'Something went wrong!', {timeOut: 3000})
+			}
+			else
+			{
+				$('.confirm-title').html('Are you sure you want to add this DOCTOR?');
+				$('.confirm-modal').modal('show');
+				$('.global-submit').addClass('create-doctor-submit'); 
+				for(var i = 0; i < ajaxData.length; i++) 
+				{
+				    formData.append('ajaxData[]', ajaxData[i]);
+				}
+				formData.append("doctor_number", 			document.getElementById('doctor_number').value);
+	            formData.append("doctor_first_name", 		document.getElementById('doctor_first_name').value);
+	            formData.append("doctor_middle_name", 		document.getElementById('doctor_middle_name').value);
+	            formData.append("doctor_last_name", 		document.getElementById('doctor_last_name').value);
+	            formData.append("doctor_gender", 			document.getElementById('doctor_gender').value);
+	            formData.append("doctor_birthdate", 		document.getElementById('doctor_birthdate').value);
+	            formData.append("doctor_contact_number", 	document.getElementById('doctor_contact_number').value);
+	            formData.append("doctor_email_address", 	document.getElementById('doctor_email_address').value);
+	            formData.append("doctor_address", 			document.getElementById('doctor_address').value);
+	            formData.append("provider_id", 				document.getElementById('provider_id').value);
+	         
+			}
+		});
+	}
+	function create_doctor_submit()
+	{
+		$(document).on('click','.create-doctor-submit',function() 
+		{
+			
+            $('.confirm-modal').modal('hide');
+            $(".doctor-modal-body").html("<div class='doctor-ajax-loader' style='display:none;text-align: center; padding:50px;'><img src='/assets/loader/loading.gif'/></div");
+            $('.doctor-ajax-loader').show();
+            
+            $.ajax({
+				headers: {
+				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				},
+				url:'/doctor/create_doctor/submit',
+				method: "POST",
+                data: formData,
+                contentType: false,
+                cache: false,
+                processData: false,
+                success: function(data)
+				{
+					setTimeout(function()
+					{
+						$('.modal-dialog').removeClass('modal-lg');
+						$('.modal-dialog').addClass('modal-sm');
+					    $(".doctor-modal-body").html(data);
+					    $(".doctor-modal-footer").html("<button type='button' class='btn btn-default pull-left btn-close-lg' style='text-align:center' data-dismiss='modal'>Close</button>");
+					}, 1000);
+				}
+			});
 		});
 	}
 	function view_doctor_details()

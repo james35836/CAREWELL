@@ -275,10 +275,17 @@
 table
 {
 	text-align:center !important;
+	overflow-x: scroll !important;
+    
 }
 th 
 {
 	text-align:center !important;
+
+}
+td 
+{
+	min-width:170px !important;
 }
 
 

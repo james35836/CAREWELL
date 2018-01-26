@@ -500,6 +500,35 @@ class MaintenanceController extends Controller
 
             DB::table('tbl_schedule_of_benefits')->insert($benefits);
         }
+        if (DB::table('tbl_procedure')->count() <= 0) 
+        {
+            $procedure[0]["procedure_id"]       = 1;
+            $procedure[0]["procedure_name"]     = "Sakit sa tiyan";
+            $procedure[0]["procedure_amount"]   = 2870;
+            $procedure[0]["procedure_created"]  = Carbon::now();
+            
+            $procedure[1]["procedure_id"]       = 2;
+            $procedure[1]["procedure_name"]     = "sakit sa puso";
+            $procedure[1]["procedure_amount"]   = 5571;
+            $procedure[1]["procedure_created"]  = Carbon::now();
+
+            $procedure[2]["procedure_id"]       = 3;
+            $procedure[2]["procedure_name"]     = "sakit sa baga";
+            $procedure[2]["procedure_amount"]   = 1;
+            $procedure[2]["procedure_created"]  = Carbon::now();
+
+            $procedure[3]["procedure_id"]       = 4;
+            $procedure[3]["procedure_name"]     = "sakit sa ulo";
+            $procedure[3]["procedure_amount"]   = 851;
+            $procedure[3]["procedure_created"]  = Carbon::now();
+
+            $procedure[4]["procedure_id"]       = 5;
+            $procedure[4]["procedure_name"]     = "sakit sa katawan";
+            $procedure[4]["procedure_amount"]   = 875870;
+            $procedure[4]["procedure_created"]  = Carbon::now();
+
+            DB::table('tbl_procedure')->insert($procedure);
+        }
 
 
 

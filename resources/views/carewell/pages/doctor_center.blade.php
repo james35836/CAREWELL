@@ -40,27 +40,33 @@
           <table class="table table-hover table-bordered">
             <tr>
               <th>DOCTOR ID</th>
+              <th>PROVIDER</th>
               <th>NAME</th>
+              <th>SPECIALIZATION</th>
               <th>GENDER</th>
               <th>CONTACT EMAIL</th>
               <th>CONTACT NUMBER</th>
               <th>DATE CREATED</th>
+              <th>STATUS</th>
               <th>ACTION</th>
             </tr>
             @foreach($_doctor as $doctor)
             <tr>
-              <td>{{$doctor->member_universal_id}}</td>
-              <td>{{$doctor->member_first_name}} {{$doctor->member_last_name}}</td>
-              <td>{{$doctor->member_company_carewell_id}}</td>
-              <td>{{$doctor->company_name}}</td>
+              <td>{{sprintf("%05d",$doctor->doctor_id)}}</td>
+              <td>{{$doctor->provider_name}}</td>
+              <td>{{$doctor->doctor_first_name}} {{$doctor->doctor_last_name}}</td>
               <td>
-                @if($doctor->member_company_status=='active')
-                <span class="label label-success">active</span>
-                @else
-                <span class="label label-danger">inactive</span>
-                @endif
+                @foreach($doctor->specialization as $specialization)
+                  <span class="label label-default">{{$specialization->specialization_name}}</span>
+                @endforeach
               </td>
-              <td>{{date("F j, Y",strtotime($doctor->member_date_created))}}</td>
+              <td>{{$doctor->doctor_gender}}</td>
+              <td>{{$doctor->doctor_email_address}}</td>
+              <td>{{$doctor->doctor_contact_number}}</td>
+              <td>{{date("F j, Y",strtotime($doctor->doctor_created))}}</td>
+              <td>
+                <span class="label label-success">active</span>
+              </td>
               <td>
                 <div class="btn-group">
                   <button type="button" class="btn btn-danger">Action</button>
@@ -69,7 +75,7 @@
                   <span class="sr-only">Toggle Dropdown</span>
                   </button>
                   <ul class="dropdown-menu" role="menu" style="position: absolute !important;">
-                    <li><button type="button" data-id="{{$doctor->member_id}}" class="btn btn-link view-member-details"><i class="fa fa-eye btn-icon"></i>  View Member</button></li>
+                    <li><button type="button" data-id="{{$doctor->doctor_id}}" class="btn btn-link view-member-details"><i class="fa fa-eye btn-icon"></i>  View Member</button></li>
                     <li><button type="button" class="btn btn-link"><i class="fa fa-trash btn-icon"></i> Archived Member</button></li>
                   </ul>
                 </div>

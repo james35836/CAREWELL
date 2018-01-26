@@ -33,7 +33,17 @@ use App\Http\Model\TblAvailmentTagModel;
 use App\Http\Model\TblPaymentModeModel;
 
 use App\Http\Model\TblProviderModel;
+
 use App\Http\Model\TblDoctorModel;
+use App\Http\Model\TblDoctorSpecializationModel;
+use App\Http\Model\TblDoctorProviderModel;
+
+use App\Http\Model\TblApprovalModel;
+
+use App\Http\Model\TblProcedureModel;
+use App\http\Model\TblProcedureAvailedModel;
+
+
 
 use App\Http\Model\TblScheduleOfBenefitsModel;
 
@@ -546,7 +556,11 @@ class CarewellController extends Controller
   {
     $data['page']       = 'Doctor';
     $data['user']       = $this->global();
-    $data['_doctor']  = TblDoctorModel::paginate(10);
+    $data['_doctor']    = TblDoctorModel::Doctor()->paginate(10);
+    foreach ($data['_doctor'] as $key => $doctor) 
+    {
+      $data['_doctor'][$key]['specialization'] =  TblDoctorSpecializationModel::where('doctor_id',$doctor->doctor_id)->get();
+    }
     return view('carewell.pages.doctor_center',$data);
 
   }
@@ -555,6 +569,39 @@ class CarewellController extends Controller
 
     $data['_provider'] = TblProviderModel::get();
     return view('carewell.modal_pages.doctor_create',$data);
+  }
+  public function create_doctor_submit(Request $request)
+  {
+
+    $doctorData = new TblDoctorModel;
+    $doctorData->doctor_number          = $request->doctor_number;
+    $doctorData->doctor_first_name      = $request->doctor_first_name;
+    $doctorData->doctor_middle_name     = $request->doctor_middle_name;
+    $doctorData->doctor_last_name       = $request->doctor_last_name;
+    $doctorData->doctor_gender          = $request->doctor_gender;
+    $doctorData->doctor_birthdate       = $request->doctor_birthdate;
+    $doctorData->doctor_contact_number  = $request->doctor_contact_number;
+    $doctorData->doctor_email_address   = $request->doctor_email_address;
+    $doctorData->doctor_address         = $request->doctor_address;
+    $doctorData->doctor_created         = Carbon::now();
+    $doctorData->save();
+
+    $providerData = new TblDoctorProviderModel;
+    $providerData->provider_id          = $request->provider_id;
+    $providerData->doctor_id            = $doctorData->doctor_id;
+    $providerData->save();
+
+    foreach($request->ajaxData as $specialization)
+    {
+      $specializationData = new TblDoctorSpecializationModel;
+      $specializationData->specialization_name  = $specialization;
+      $specializationData->doctor_id            = $doctorData->doctor_id;
+      $specializationData->save();
+    }
+    if($doctorData->save())
+    {
+      return "<div class='alert alert-success' style='text-align: center;'>Doctor Added Successfully!</div>";    
+    }
   }
   public function import_doctor()
   {
@@ -724,12 +771,8 @@ class CarewellController extends Controller
                           TblCompanyCalMemberModel::insert($cal_member);
                           
                           $count++;
-                        
                     }
-                    
                }    
-
-               
                if($count == 0)
                {
                     $message = '<center><b><span class="color-gray">There is nothing to insert</span></b></center>';
@@ -760,25 +803,68 @@ class CarewellController extends Controller
   {
   	$data['page'] = 'Medical';
     $data['user'] = $this->global();
+    $data['_approval'] = TblApprovalModel::get();
   	return view('carewell.pages.medical_representative',$data);
   }
   public function medical_create_approval()
   {
-    $data['_member']  = TblMemberModel::get();
-    $data['_provider'] = TblProviderModel::get();
+    $data['_member']    = TblMemberModel::get();
+    $data['_provider']  = TblProviderModel::get();
     $data['_availment'] = TblAvailmentModel::where('availment_parent_id',0)->get();
+    $data['_procedure'] = TblProcedureModel::get();
+    $data['_doctor']    = TblDoctorModel::get();
     return view('carewell.modal_pages.medical_create_approval',$data);
   }
-  public function medical_create_approval_get_info($member_id)
+  public function medical_create_approval_member_info($member_id)
   {
-    $data['member_info']  =  TblMemberModel::where('tbl_member.member_id',$member_id)->Member()->first();
+    $data['member_info']  = TblMemberModel::where('tbl_member.member_id',$member_id)->Member()->first();
     $data['_member']      = TblMemberModel::get();
-    $data['_provider']    = TblProviderModel::get();
     foreach ($data['_member'] as $key => $member) 
     {
       $data['_member'][$key]['display_name'] =  $member['member_first_name']." ".$member['member_middle_name']." ".$member['member_last_name'];
     }
-    return view('carewell.modal_pages.medical_create_approval_info',$data);
+    
+    return view('carewell.modal_pages.medical_create_approval_member',$data);
+  }
+  public function medical_create_approval_availment_info($availment_id)
+  {
+    $data['_procedure']   = TblProcedureModel::get();
+    return view('carewell.modal_pages.medical_create_approval_availment',$data);
+  }
+  public function medical_create_approval_doctor_info($provider_id)
+  {
+    $data['_procedure']   = TblProcedureModel::get();
+    $data['_doctor']      = TblDoctorModel::get();
+    return view('carewell.modal_pages.medical_create_approval_availment',$data);
+  }
+  public function medical_create_approval_submit(Request $request)
+  {
+    $data['user'] = $this->global();
+    $approvalData = new TblApprovalModel;
+    $approvalData->approval_complaint         = $request->approval_complaint;
+    $approvalData->approval_initial_diagnosis = $request->approval_initial_diagnosis;
+    $approvalData->approval_final_diagnosis   = $request->approval_final_diagnosis;
+    $approvalData->approval_created           = Carbon::now();
+    $approvalData->availment_id               = $request->availment_id;
+    $approvalData->provider_id                = $request->provider_id;
+    $approvalData->member_id                  = $request->member_id;
+    $approvalData->user_id                    = $data['user']->user_id;
+    $approvalData->save();
+
+    foreach($request->procedure_id as $key=>$data)
+    {
+      $availedData = new TblProcedureAvailedModel;
+      $availedData->procedure_availed_amount              = $request->procedure_availed_amount[$key];
+      $availedData->procedure_availed_remarks             = $request->procedure_availed_remarks[$key];
+      $availedData->procedure_availed_philhealth_charity  = $request->procedure_availed_philhealth_charity[$key];
+      $availedData->procedure_availed_charge_to_patient   = $request->procedure_availed_charge_to_patient[$key];
+      $availedData->procedure_availed_disapproved         = $request->procedure_availed_disapproved[$key];
+      $availedData->procedure_availed_charge_to_carewell  = $request->procedure_availed_charge_to_carewell[$key];
+      $availedData->procedure_id                          = $request->procedure_id[$key];
+      $availedData->approval_id                           = $approvalData->provider_id;
+      $availedData->save();
+    }
+    
   }
   public function medical_approval_details()
   {

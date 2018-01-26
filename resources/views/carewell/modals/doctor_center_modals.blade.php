@@ -16,7 +16,7 @@
       </div>
       <div class="modal-footer doctor-modal-footer">
         <button type="button" class="btn btn-default pull-left " data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary pull-right ">Save Changes</button>
+        <button type="button" class="btn btn-primary pull-right create-doctor-confirm">Save Changes</button>
       </div>
     </div>
   </div>
