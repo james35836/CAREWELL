@@ -18,11 +18,6 @@
 	})
 </script>  
 <div class="row box-globals">
-	<div class="col-md-4 pull-right">
-		<button type="button" class="btn btn-primary pop-up-md button-lg" data-modalname="TRANSACTION DETAILS" data-link="/member/transaction_details"><i class="fa fa-info btn-icon"></i> TRANSACTION DETAILS</button>
-	</div>
-</div>
-<div class="row box-globals">
 	<div class="form-holder">
 		<div class="col-md-2 form-content">
 			<label>Last Name</label>

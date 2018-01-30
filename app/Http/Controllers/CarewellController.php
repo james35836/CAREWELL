@@ -42,6 +42,7 @@ use App\Http\Model\TblApprovalModel;
 
 use App\Http\Model\TblProcedureModel;
 use App\http\Model\TblProcedureAvailedModel;
+use App\Http\Model\TblProcedureDoctorModel;
 
 
 
@@ -81,8 +82,15 @@ class CarewellController extends Controller
   /*DASHBOARD*/
   public function dashboard()
   {
-  	$data['page'] = 'Dashboard';
-    $data['user'] = $this->global();
+  	$data['page']         = 'Dashboard';
+    $data['user']         = $this->global();
+    $data['company']      = TblCompanyModel::where('archived',0)->count();
+    $data['member']       = TblMemberModel::where('archived',0)->count();
+    $data['provider']     = TblProviderModel::where('archived',0)->count();
+    $data['_approval']    = TblApprovalModel::where('tbl_approval.archived',0)
+                            ->join('tbl_member','tbl_member.member_id','=','tbl_approval.member_id')
+                            ->orderBy('approval_created','ASC')
+                            ->get();
     return view('carewell.pages.dashboard',$data);
   }
   /*COMPANY*/
@@ -214,6 +222,10 @@ class CarewellController extends Controller
                                 ->join('tbl_company_cal','tbl_company_cal.cal_id','=','tbl_company_cal_member.cal_id')
                                 ->join('tbl_company','tbl_company.company_id','=','tbl_company_cal.cal_company_id')
                                 ->paginate(10);
+    $data['_approval']        = TblApprovalModel::where('tbl_approval.member_id',$member_id)
+                                ->join('tbl_provider','tbl_provider.provider_id','=','tbl_approval.provider_id')
+                                ->join('tbl_member','tbl_member.member_id','=','tbl_approval.member_id')
+                                ->get();
 
     return view('carewell.modal_pages.member_transaction_details',$data);
   }
@@ -803,7 +815,11 @@ class CarewellController extends Controller
   {
   	$data['page'] = 'Medical';
     $data['user'] = $this->global();
-    $data['_approval'] = TblApprovalModel::get();
+    $data['_approval'] = TblApprovalModel::join('tbl_provider','tbl_provider.provider_id','=','tbl_approval.provider_id')
+                          ->join('tbl_member','tbl_member.member_id','=','tbl_approval.member_id')
+                          ->join('tbl_member_company','tbl_member_company.member_id','tbl_member.member_id')
+                          ->join('tbl_company','tbl_company.company_id','tbl_member_company.company_id')
+                          ->paginate(10);
   	return view('carewell.pages.medical_representative',$data);
   }
   public function medical_create_approval()
@@ -835,12 +851,24 @@ class CarewellController extends Controller
   {
     $data['_procedure']   = TblProcedureModel::get();
     $data['_doctor']      = TblDoctorModel::get();
-    return view('carewell.modal_pages.medical_create_approval_availment',$data);
+    return view('carewell.modal_pages.medical_create_approval_doctor',$data);
   }
   public function medical_create_approval_submit(Request $request)
   {
+    $approval_count                                  =  TblApprovalModel::count();
+    if($approval_count==null||$approval_count==0)
+    {
+      $approvalLastId                               =  1;
+    }
+    else
+    {
+      $approval                                      =  TblApprovalModel::orderBy('approval_id','DESC')->first();
+      $approvalLastId                               =  $approval->approval_id+1;
+    }
+    
     $data['user'] = $this->global();
     $approvalData = new TblApprovalModel;
+    $approvalData->approval_number            = 'APP-'.str_replace(["-", "–"], "",date("m-y")).'-'.sprintf("%05d",$approvalLastId);
     $approvalData->approval_complaint         = $request->approval_complaint;
     $approvalData->approval_initial_diagnosis = $request->approval_initial_diagnosis;
     $approvalData->approval_final_diagnosis   = $request->approval_final_diagnosis;
@@ -861,14 +889,57 @@ class CarewellController extends Controller
       $availedData->procedure_availed_disapproved         = $request->procedure_availed_disapproved[$key];
       $availedData->procedure_availed_charge_to_carewell  = $request->procedure_availed_charge_to_carewell[$key];
       $availedData->procedure_id                          = $request->procedure_id[$key];
-      $availedData->approval_id                           = $approvalData->provider_id;
+      $availedData->approval_id                           = $approvalData->approval_id;
       $availedData->save();
     }
     
+    foreach($request->doctor_id as $key=>$data)
+    {
+      $doctorData = new TblProcedureDoctorModel;
+      $doctorData->procedure_doctor_actual_pf_charges    = $request->procedure_doctor_actual_pf_charges[$key];
+      $doctorData->procedure_doctor_rate_r_vs            = $request->procedure_doctor_rate_r_vs[$key];
+      $doctorData->procedure_doctor_philhealth_charity   = $request->procedure_doctor_philhealth_charity[$key];
+      $doctorData->procedure_doctor_charge_to_patient   = $request->procedure_doctor_charge_to_patient[$key];
+      $doctorData->procedure_doctor_disapproved          = $request->procedure_doctor_disapproved[$key];
+      $doctorData->procedure_doctor_charge_to_carewell   = $request->procedure_doctor_charge_to_carewell[$key];
+      $doctorData->procedure_id                          = $request->doctor_procedure_id[$key];
+      $doctorData->doctor_id                             = $request->doctor_id[$key];
+      $doctorData->approval_id                           = $approvalData->approval_id;
+      $doctorData->save();
+    }
+    if($approvalData->save()&&$availedData->save()&&$doctorData->save())
+    {
+      return "<div class='alert alert-success' style='text-align: center;'>Company Added Successfully!</div>";
+    }
+    else
+    {
+      return "<div class='alert alert-danger' style='text-align: center;'>Something went wrong!</div>";
+    }
+    
   }
-  public function medical_approval_details()
+  public function medical_view_approval_details($approval_id)
   {
-    return view('carewell.modal_pages.medical_approval_details');
+    $data['_member']    = TblMemberModel::get();
+    $data['_provider']  = TblProviderModel::get();
+    $data['_availment'] = TblAvailmentModel::where('availment_parent_id',0)->get();
+    $data['_procedure'] = TblProcedureModel::get();
+    $data['_doctor']    = TblDoctorModel::get();
+    $data['approval_details']  = TblApprovalModel::where('tbl_approval.approval_id',$approval_id)
+                                ->join('tbl_provider','tbl_provider.provider_id','=','tbl_approval.provider_id')
+                                ->join('tbl_availment','tbl_availment.availment_id','=','tbl_approval.availment_id')
+                                ->join('tbl_user_info','tbl_user_info.user_id','tbl_approval.user_id')
+                                ->join('tbl_member','tbl_member.member_id','=','tbl_approval.member_id')
+                                ->join('tbl_member_company','tbl_member_company.member_id','tbl_member.member_id')
+                                ->join('tbl_company','tbl_company.company_id','tbl_member_company.company_id')
+                                ->first();
+    $data['_availed']   = TblProcedureAvailedModel::where('tbl_procedure_availed.approval_id',$approval_id)
+                                ->join('tbl_procedure','tbl_procedure.procedure_id','=','tbl_procedure_availed.procedure_id')
+                                ->get();
+    $data['_doctor_assigned']   = TblProcedureDoctorModel::where('tbl_procedure_doctor.approval_id',$approval_id)
+                                ->join('tbl_procedure','tbl_procedure.procedure_id','=','tbl_procedure_doctor.procedure_id')
+                                ->join('tbl_doctor','tbl_doctor.doctor_id','=','tbl_procedure_doctor.doctor_id')
+                                ->get();
+    return view('carewell.modal_pages.medical_approval_details',$data);
   }
 
   

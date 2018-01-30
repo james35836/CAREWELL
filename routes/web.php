@@ -100,9 +100,8 @@ Route::get('/medical/create_approval/member/{member_id}','CarewellController@med
 Route::get('/medical/create_approval/availment/{availment_id}','CarewellController@medical_create_approval_availment_info');
 Route::get('/medical/create_approval/doctor/{provider_id}','CarewellController@medical_create_approval_doctor_info');
 Route::post('/medical/create_approval/submit',			'CarewellController@medical_create_approval_submit');
+Route::get('/medical/approval_details/{approval_id}','CarewellController@medical_view_approval_details');
 
-
-Route::get('/medical/approval/details', 				'CarewellController@medical_approval_details');
 
 
 /*PAYABLE*/

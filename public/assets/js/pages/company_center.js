@@ -86,6 +86,7 @@ function company_center()
 	{
 		$(document).on('click','.create-company-confirm',function() 
 		{
+			// alert(document.getElementById('company_contact_person').value);
 			$('input[name="availment_plan"]:checked').each(function() 
 			{
 				availmentData.push(this.value);
@@ -146,7 +147,7 @@ function company_center()
 				$('.global-submit').addClass('create-company-submit'); 
 
 				formData.append("company_name", 			document.getElementById('company_name').value);
-	            formData.append("company_code", 			document.getElementById('company_code').value);
+	            
 	            formData.append("company_contact_person", 	document.getElementById('company_contact_person').value);
 	            formData.append("company_phone_number", 	document.getElementById('company_phone_number').value);
 	            formData.append("company_address", 			document.getElementById('company_address').value);

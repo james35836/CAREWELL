@@ -120,109 +120,111 @@
 	</div>
 </div>
 <div class="row box-globals" style="min-height: 300px;">
-	<ul class="nav nav-tabs">
-		<li class="active company-tab"><a data-toggle="tab" href="#company">Company Details</a></li>
-		<li class="company-tab"><a data-toggle="tab" href="#dependent">Dependent</a></li>
-		<li class="company-tab"><a data-toggle="tab" href="#government">Government Cards</a></li>
-	</ul>
-	<div class="tab-content">
-		<div id="company" class="tab-pane fade in active">
-			<div class="box-body table-responsive no-padding">
-				<table class="table table-hover table-bordered">
-					<tr>
-						<th>Carewell ID</th>
-						<th>Company Name</th>
-						<th>Jobsite</th>
-						<th>Status</th>
-						<th>Action</th>
-					</tr>
-					@foreach($_member_company as $member_company)
-					<tr>
-						<td>{{$member_company->member_company_carewell_id}}</td>
-						<td>{{$member_company->company_name}}</td>
-						<td>{{$member_company->jobsite_name}}</td>
-						<td><span class="label label-success">active</span></td>
-						<td>
-							<div class="btn-group">
-								<button type="button" class="btn btn-danger btn-sm">Action</button>
-								<button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
-								<span class="caret"></span>
-								<span class="sr-only">Toggle Dropdown</span>
-								</button>
-								<ul class="dropdown-menu" role="menu" style="position: absolute !important;">
-									<li><button type="button" data-id="{{$member_company->member_id}}" class="btn btn-link view-member-details">View</button></li>
-									<li><button type="button" class="btn btn-link"> Archived</button></li>
-								</ul>
-							</div>
-						</td>
-					</tr>
-					@endforeach
-					<tr style="height:70px;">
-					</tr>
-				</table>
-			</div>
-        </div>
-		<div id="dependent" class="tab-pane fade">
-			<div class="box-body table-responsive no-padding">
-				<table class="table table-hover table-bordered">
-					<tr>
-						<th>Dependent Name</th>
-						<th>Ralationship</th>
-						<th>Birthdate</th>
-						<th>Action</th>
-					</tr>
-					@foreach($_member_dependent as $member_dependent)
-					<tr>
-						<td>{{$member_dependent->member_dependent_full_name}}</td>
-						<td>{{$member_dependent->member_dependent_relationship}}</td>
-						<td>{{date("F j, Y",strtotime($member_dependent->member_dependent_birthdate))}}</td>
-						<td>
-							<div class="btn-group">
-								<button type="button" class="btn btn-danger btn-sm">Action</button>
-								<button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
-								<span class="caret"></span>
-								<span class="sr-only">Toggle Dropdown</span>
-								</button>
-								<ul class="dropdown-menu" role="menu" style="position: absolute !important;">
-									<li><button type="button" data-id="{{$member_dependent->member_id}}" class="btn btn-link view-member-details">View Member</button></li>
-									<li><button type="button" class="btn btn-link">Update Member</button></li>
-								</ul>
-							</div>
-						</td>
-					</tr>
-					@endforeach
-					<tr style="height:70px;">
-					</tr>
-				</table>
-			</div>
-		</div>
-		<div id="government" class="tab-pane fade">
-			<div class="form-holder">
-				<div class="col-md-2 form-content">
-					<label>PHIL-HEALTH </label>
+	<div class="nav-tabs-custom">
+		<ul class="nav nav-tabs">
+			<li class="active my-tab"><a data-toggle="tab" href="#company">Company Details</a></li>
+			<li class="my-tab"><a data-toggle="tab" href="#dependent">Dependent</a></li>
+			<li class="my-tab"><a data-toggle="tab" href="#government">Government Cards</a></li>
+		</ul>
+		<div class="tab-content">
+			<div id="company" class="tab-pane fade in active">
+				<div class="box-body table-responsive no-padding">
+					<table class="table table-hover table-bordered">
+						<tr>
+							<th>Carewell ID</th>
+							<th>Company Name</th>
+							<th>Jobsite</th>
+							<th>Status</th>
+							<th>Action</th>
+						</tr>
+						@foreach($_member_company as $member_company)
+						<tr>
+							<td>{{$member_company->member_company_carewell_id}}</td>
+							<td>{{$member_company->company_name}}</td>
+							<td>{{$member_company->jobsite_name}}</td>
+							<td><span class="label label-success">active</span></td>
+							<td>
+								<div class="btn-group">
+									<button type="button" class="btn btn-danger btn-sm">Action</button>
+									<button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+									<span class="caret"></span>
+									<span class="sr-only">Toggle Dropdown</span>
+									</button>
+									<ul class="dropdown-menu" role="menu" style="position: absolute !important;">
+										<li><button type="button" data-id="{{$member_company->member_id}}" class="btn btn-link view-member-details">View</button></li>
+										<li><button type="button" class="btn btn-link"> Archived</button></li>
+									</ul>
+								</div>
+							</td>
+						</tr>
+						@endforeach
+						<tr style="height:70px;">
+						</tr>
+					</table>
 				</div>
-				<div class="col-md-4 form-content">
-					<input type="text" class="form-control" value="{{$member_government->member_government_card_philhealth}}"/>
-				</div>
-				<div class="col-md-2 form-content">
-					<label>SSS </label>
-				</div>
-				<div class="col-md-4 form-content">
-					<input type="text" class="form-control" value="{{$member_government->member_government_card_sss}}"/>
+	        </div>
+			<div id="dependent" class="tab-pane fade">
+				<div class="box-body table-responsive no-padding">
+					<table class="table table-hover table-bordered">
+						<tr>
+							<th>Dependent Name</th>
+							<th>Ralationship</th>
+							<th>Birthdate</th>
+							<th>Action</th>
+						</tr>
+						@foreach($_member_dependent as $member_dependent)
+						<tr>
+							<td>{{$member_dependent->member_dependent_full_name}}</td>
+							<td>{{$member_dependent->member_dependent_relationship}}</td>
+							<td>{{date("F j, Y",strtotime($member_dependent->member_dependent_birthdate))}}</td>
+							<td>
+								<div class="btn-group">
+									<button type="button" class="btn btn-danger btn-sm">Action</button>
+									<button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+									<span class="caret"></span>
+									<span class="sr-only">Toggle Dropdown</span>
+									</button>
+									<ul class="dropdown-menu" role="menu" style="position: absolute !important;">
+										<li><button type="button" data-id="{{$member_dependent->member_id}}" class="btn btn-link view-member-details">View Member</button></li>
+										<li><button type="button" class="btn btn-link">Update Member</button></li>
+									</ul>
+								</div>
+							</td>
+						</tr>
+						@endforeach
+						<tr style="height:70px;">
+						</tr>
+					</table>
 				</div>
 			</div>
-			<div class="form-holder">
-				<div class="col-md-2 form-content">
-					<label>TIN </label>
+			<div id="government" class="tab-pane fade">
+				<div class="form-holder">
+					<div class="col-md-2 form-content">
+						<label>PHIL-HEALTH </label>
+					</div>
+					<div class="col-md-4 form-content">
+						<input type="text" class="form-control" value="{{$member_government->member_government_card_philhealth}}"/>
+					</div>
+					<div class="col-md-2 form-content">
+						<label>SSS </label>
+					</div>
+					<div class="col-md-4 form-content">
+						<input type="text" class="form-control" value="{{$member_government->member_government_card_sss}}"/>
+					</div>
 				</div>
-				<div class="col-md-4 form-content">
-					<input type="text" class="form-control" value="{{$member_government->member_government_card_tin}}"/>
-				</div>
-				<div class="col-md-2 form-content">
-					<label>HDMF </label>
-				</div>
-				<div class="col-md-4 form-content">
-					<input type="text" class="form-control" value="{{$member_government->member_government_card_hdmf}}"/>
+				<div class="form-holder">
+					<div class="col-md-2 form-content">
+						<label>TIN </label>
+					</div>
+					<div class="col-md-4 form-content">
+						<input type="text" class="form-control" value="{{$member_government->member_government_card_tin}}"/>
+					</div>
+					<div class="col-md-2 form-content">
+						<label>HDMF </label>
+					</div>
+					<div class="col-md-4 form-content">
+						<input type="text" class="form-control" value="{{$member_government->member_government_card_hdmf}}"/>
+					</div>
 				</div>
 			</div>
 		</div>

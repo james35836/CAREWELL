@@ -26,7 +26,7 @@
       <div class="col-xs-12">
         <div class="box">
           <div class="box-header">
-            <h3 class="box-title">Period List</h3>
+            <h3 class="box-title">APPROVAL LIST</h3>
             <div class="box-tools">
               <div class="input-group input-group-sm" style="width: 150px;">
                 <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
@@ -40,7 +40,7 @@
           <div class="box-body table-responsive no-padding">
             <table class="table table-hover table-bordered">
               <tr>
-                <th>APPROVAL ID</th>
+                <th>APPROVAL #</th>
                 <th>UNIVERSAL ID</th>
                 <th>CAREWELL ID</th>
                 <th>PATIENT NAME</th>
@@ -51,31 +51,36 @@
               </tr>
               @foreach($_approval as $approval)
               <tr>
-                <td>{{$approval->approval_id}}</td>
-                <td>DEC-NOV</td>
-                <td>DEC-NOV</td>
-                <td>DIGIMA</td>
-                <td>DEC-NOV</td>
-                <td>DEC-NOV</td>
+                <td>{{$approval->approval_number}}</td>
+                <td>{{$approval->member_universal_id}}</td>
+                <td>{{$approval->member_company_carewell_id}}</td>
+                <td>{{$approval->member_first_name." ".$approval->member_last_name }}</td>
+                <td>{{$approval->company_name}}</td>
+                <td>{{$approval->provider_name}}</td>
                 <td><span class="label label-success">active</span></td>
-                <td><span class="label label-success pop-up-lg action-span" data-modalname="APPROVAL DETAILS" data-link="/medical/approval/details">view details</span></td>
+                <td>
+                  <div class="btn-group">
+                  <button type="button" class="btn btn-danger">Action</button>
+                  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                  <span class="caret"></span>
+                  <span class="sr-only">Toggle Dropdown</span>
+                  </button>
+                  <ul class="dropdown-menu" role="menu" style="position: absolute !important;">
+                    <li><button type="button" data-approval_id="{{$approval->approval_id}}" class="btn btn-link view-approval-details"><i class="fa fa-eye btn-icon"></i>  View Approval</button></li>
+                    <li><button type="button" class="btn btn-link"><i class="fa fa-trash btn-icon"></i> Archived Approval</button></li>
+                  </ul>
+                </div>
+                </td>
               </tr>
               @endforeach
-              
+              <tr style="height:70px;">
+              </tr>
             </table>
           </div>
-          <!-- /.box-body -->
           <div class="box-footer clearfix">
-          <ul class="pagination pagination-sm no-margin pull-right">
-            <li><a href="#">&laquo;</a></li>
-            <li><a href="#">1</a></li>
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">&raquo;</a></li>
-          </ul>
+            @include('globals.pagination', ['paginator' => $_approval])
+          </div>
         </div>
-        </div>
-        <!-- /.box -->
       </div>
     </div>
   </div>

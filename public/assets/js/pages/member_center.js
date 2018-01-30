@@ -23,6 +23,7 @@ function member_center()
 			import_member_submit();
 			view_member_details();
 			view_member_transaction_details();
+			view_member_approval_details();
 			trigger();
          });
 
@@ -112,6 +113,36 @@ function member_center()
                     }, 1000);
 				}
 			});
+		});
+	}
+	function view_member_approval_details()
+	{
+		$(document).on('click','.view-member-approval-details',function()
+		{
+			$('.member-action2-modal').modal('show');
+			$('.member-action2-ajax-loader').show();
+			$('.member-action2-modal-body-content').hide();
+			$('.member-action2-modal-title').html('APPROVAL DETAILS');
+			$(".member-action2-modal-footer").html("<button type='button' class='btn btn-default pull-left btn-close-import' data-dismiss='modal'>Close</button><button type='button' class='btn btn-primary pull-right' >Save Changes</button>");
+			var approval_id = $(this).data('approval_id');
+			$.ajax({
+				headers: {
+				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				},
+
+				url:'/medical/approval_details/'+approval_id,
+				method: "get",
+                success: function(data)
+				{
+					setTimeout(function()
+					{
+						$('.member-action2-ajax-loader').hide();
+						$('.member-action2-modal-body-content').show();
+						$('.member-action2-modal-body-content').html(data);
+                    }, 1000);
+				}
+			});
+			
 		});
 	}
 	

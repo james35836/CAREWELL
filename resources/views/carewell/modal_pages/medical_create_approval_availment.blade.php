@@ -1,6 +1,15 @@
-
+<div class=" form-holder">
+	<div class="pull-right">
+		<div class="btn-group">
+		  <button type="button" class="btn btn-primary add-procedure-availed"><i class="fa fa-plus"></i></button>
+		  <button type="button" class="btn btn-danger remove-procedure-availed"><i class="fa fa-minus"></i></button>
+		</div>
+	</div>
+</div>
+<div class="row form-holder">
+</div>
 <div class="table-responsive no-padding">
-	<table class="table table-hover table-bordered procedure-form" style="display: inline !important;">
+	<table class="table table-hover table-bordered procedure-availed-form" style="display: inline !important;">
 		<thead>
 			<tr>
 				<th>PROCEDURE/LABORATORY</th>

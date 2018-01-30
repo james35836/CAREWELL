@@ -107,18 +107,11 @@
 					
 				}
 			}
-			.company-tab
+			.my-tab
 		    {
-		    	width:25%;
+		    	width: 180px;
 		    	text-align: center;
 		    	font-weight: bold;
-		    	color:#111;
-		    	background-color:#b2b2bb;
-		    	a
-		    	{
-		    		color:#111;
-		    	}
-
 		    }
 	    }
 	    .menu-holder
@@ -223,7 +216,11 @@
 
 .table-responsive 
 {
-  overflow-y: visible !important;
+  	overflow-y: visible !important;
+  	td 
+	{
+		min-width:120px !important;
+	}
 }
 //nakamamatay
 .top-label
@@ -266,16 +263,11 @@
 	    margin-top: 150px;
 }
 
-.active a 
-{
 
-  background-color: #e4e2e2 !important;
-
-}
 table
 {
 	text-align:center !important;
-	overflow-x: scroll !important;
+	// overflow-x: scroll !important;
     
 }
 th 
@@ -283,10 +275,11 @@ th
 	text-align:center !important;
 
 }
-td 
+.table-min-height
 {
-	min-width:170px !important;
+	min-height:250px;
 }
+
 
 
 

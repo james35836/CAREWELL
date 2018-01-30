@@ -17,16 +17,29 @@ function medical_center()
 	{
 		$(document).ready(function()
 		{
+			trigger();
+			checking_null_validation(value,message);
             create_approval();
             create_approval_get_info();
             create_approval_confirm();
             create_approval_submit();
             medical_transaction_details();
-            checking_null_validation(value,message);
+            approval_details();
+            
 
 		});
 
 	}
+	function trigger()
+	{
+		$(document).on('click','.medical-btn-close',function()
+		{
+			$('.approval-modal').modal('hide');
+			$(".approval-modal-body").html("<p style='text-align:center'>RELOAD THE PAGE</p>");
+			
+		});
+		
+	} 
 	function checking_null_validation(value,message)
 	{
 		if(value=="0")
@@ -125,29 +138,39 @@ function medical_center()
     }
     function create_approval_confirm()
 	{
-		$(document).on('click','.create-approval-confirm1',function() 
+		$(document).on('click','.create-approval-confirm',function() 
 		{
-
+			$('.confirm-title').html('Are you sure you want to add this approval?');
+			$('.confirm-modal').modal('show');
+			$('.global-submit').addClass('create-approval-submit'); 
+			ajaxData = $(".member-submit-form,.approval-submit-form,.procedure-availed-submit-form,.procedure-doctor-submit-form").serialize();
 			
 		});
 	}
 	function create_approval_submit()
 	{
-		$(document).on('click','.create-approval-confirm',function() 
+		$(document).on('click','.create-approval-submit',function() 
 	    {
-	      
+	    	$('.confirm-modal').modal('hide');
+            $(".approval-modal-body").html("<div class='approval-ajax-loader' style='display:none;text-align: center; padding:50px;'><img src='/assets/loader/loading.gif'/></div");
+            $('.approval-ajax-loader').show();
 	        $.ajax({
 	          	headers: {
 	              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 	        	},
 		        url:'/medical/create_approval/submit',
 		        method: "POST",
-		        data: $(".member-submit-form,.procedure-availed-submit-form,.approval-submit-form").serialize(),
+		        data: ajaxData,
 		        dataType:"text",
 		        success: function(data)
 		        {
-		            
-		             $('#insertDoctor').html(data);
+		            setTimeout(function()
+					{
+						$('.modal-dialog').removeClass('modal-lg');
+						$('.modal-dialog').addClass('modal-sm');
+					    $(".approval-modal-body").html(data);
+					    $(".approval-modal-footer").html("<button type='button' class='btn btn-default pull-left medical-btn-close' style='text-align:center' data-dismiss='modal'>Close</button>");
+					}, 1000);
 		           
 		        }
 	        });
@@ -184,4 +207,33 @@ function medical_center()
 		});
 	
 	}
+	function approval_details()
+	{
+		$(document).on('click','.view-approval-details',function()
+		{
+			$('.approval-modal').modal('show');
+			$('.approval-ajax-loader').show();
+			$('.approval-modal-body-content').hide();
+			$('.approval-modal-title').html('APPROVAL DETAILS');
+			$(".approval-modal-footer").html("<button type='button' class='btn btn-default pull-left member-modal-close'>Close</button><button type='button' class='btn btn-primary pull-right' >Save Changes</button>");
+            var approval_id = $(this).data('approval_id');
+			$.ajax({
+				headers: {
+				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				},
+
+				url:'/medical/approval_details/'+approval_id,
+				method: "get",
+                success: function(data)
+				{
+					setTimeout(function()
+					{
+						$('.approval-ajax-loader').hide();
+						$('.approval-modal-body-content').show();
+						$('.approval-modal-body-content').html(data);
+                    }, 1000);
+				}
+			});
+		});
+	} 
 }

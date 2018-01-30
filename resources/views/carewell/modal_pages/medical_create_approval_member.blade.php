@@ -1,4 +1,3 @@
-
 <div class="form-holder">
 	<div class="col-md-2 form-content">
 		<label>Name</label>

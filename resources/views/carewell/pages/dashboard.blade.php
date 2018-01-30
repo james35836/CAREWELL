@@ -1,43 +1,42 @@
 @extends('carewell.layout.layout')
 @section('content')
-
 <script>
 function date_time(id)
 {
-  date = new Date;
-  year = date.getFullYear();
-  month = date.getMonth();
-  months = new Array('January', 'February', 'March', 'April', 'May', 'June', 'Jully', 'August', 'September', 'October', 'November', 'December');
-  d = date.getDate();
-  day = date.getDay();
-  days = new Array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
-  h = date.getHours();
-  if(h<10)
-  {
-  h = "0"+h;
-  }
-  m = date.getMinutes();
-  if(m<10)
-  {
-  m = "0"+m;
-  }
-  s = date.getSeconds();
-  if(s<10)
-  {
-  s = "0"+s;
-  }
-  result = ''+days[day]+'<br> '+months[month]+' '+d+', '+year+'<br><p class="clock-time"> '+h+':'+m+':'+s+"</p>";
-  document.getElementById(id).innerHTML = result;
-  setTimeout('date_time("'+id+'");','1000');
-  return true;
+date = new Date;
+year = date.getFullYear();
+month = date.getMonth();
+months = new Array('January', 'February', 'March', 'April', 'May', 'June', 'Jully', 'August', 'September', 'October', 'November', 'December');
+d = date.getDate();
+day = date.getDay();
+days = new Array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
+h = date.getHours();
+if(h<10)
+{
+h = "0"+h;
+}
+m = date.getMinutes();
+if(m<10)
+{
+m = "0"+m;
+}
+s = date.getSeconds();
+if(s<10)
+{
+s = "0"+s;
+}
+result = ''+days[day]+'<br> '+months[month]+' '+d+', '+year+'<br><p class="clock-time"> '+h+':'+m+':'+s+"</p>";
+document.getElementById(id).innerHTML = result;
+setTimeout('date_time("'+id+'");','1000');
+return true;
 }
 </script>
 <style>
 .clock-time
 {
-  font-weight: bold;
-  font-size: 20px;
-  text-align: center;
+font-weight: bold;
+font-size: 20px;
+text-align: center;
 }
 </style>
 <!-- Info boxes -->
@@ -47,7 +46,7 @@ function date_time(id)
       <span class="info-box-icon bg-aqua"><i class="fa fa-users"></i></span>
       <div class="info-box-content">
         <span class="info-box-text">MEMBER</span>
-        <span class="info-box-number">90<small>%</small></span>
+        <span class="info-box-number"  style="padding-top: 20px;">{{$member}}</span>
       </div>
     </div>
   </div>
@@ -56,7 +55,7 @@ function date_time(id)
       <span class="info-box-icon bg-red"><i class="fa fa-building"></i></span>
       <div class="info-box-content">
         <span class="info-box-text">COMPANY</span>
-        <span class="info-box-number">41,410</span>
+        <span class="info-box-number" style="padding-top: 20px;">{{$company}}</span>
       </div>
     </div>
   </div>
@@ -66,8 +65,7 @@ function date_time(id)
       <span class="info-box-icon bg-green"><i class="ion ion-ios-medkit"></i></span>
       <div class="info-box-content">
         <span class="info-box-text">NETWORK PROVIDER</span>
-        <span class="info-box-number">760</span>
-
+        <span class="info-box-number" style="padding-top: 20px;">{{$provider}}</span>
       </div>
     </div>
   </div>
@@ -110,45 +108,37 @@ function date_time(id)
               <strong>STATISTIC</strong>
             </p>
             <div class="chart">
-              <!-- Sales Chart Canvas -->
-              <canvas id="salesChart" style="height: 180px;"></canvas>
+              <canvas id="salesChart" style="height: 200px;"></canvas>
             </div>
-            <!-- /.chart-responsive -->
           </div>
-          <!-- /.col -->
-          <div class="col-md-4">
-            <p class="text-center">
-              <strong>LATEST INQUIRY</strong>
-            </p>
-            <div class="progress-group">
-              <span class="progress-text">Add Products to Cart</span>
-              <span class="progress-number"><b>160</b>/200</span>
-            </div>
-            <!-- /.progress-group -->
-            <div class="progress-group">
-              <span class="progress-text">Complete Purchase</span>
-              <span class="progress-number"><b>310</b>/400</span>
-              <div class="progress sm">
-                <div class="progress-bar progress-bar-red" style="width: 80%"></div>
+          <div class="col-md-4" >
+            
+              <div class="box-header with-border">
+                <h3 class="box-title">LATEST INQUIRY</h3>
               </div>
-            </div>
-            <!-- /.progress-group -->
-            <div class="progress-group">
-              <span class="progress-text">Visit Premium Page</span>
-              <span class="progress-number"><b>480</b>/800</span>
-              <div class="progress sm">
-                <div class="progress-bar progress-bar-green" style="width: 80%"></div>
+              <!-- /.box-header -->
+              <div class="box-body" style="max-height: 200px;overflow-x: hidden;overflow-y: scroll;">
+                <table class="table table-bordered">
+                  <thead>
+                  <tr>
+                    <th >APPROVAL #</th>
+                    <th>MEMBER NAME</th>
+                    <th style="width: 40px">ACTION</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  @foreach($_approval as $approval)
+                  <tr>
+                    <td style="width: 147px !important;">{{$approval->approval_number}}</td>
+                    <td>{{$approval->member_first_name." ".$approval->member_last_name}}</td>
+                    <td><button class="btn btn-link" data-approval_id="{{$approval->approval_id}}">view</button></td>
+                  </tr>
+                  @endforeach
+                  </tbody>
+                  
+                </table>
               </div>
-            </div>
-            <!-- /.progress-group -->
-            <div class="progress-group">
-              <span class="progress-text">Send Inquiries</span>
-              <span class="progress-number"><b>250</b>/500</span>
-              <div class="progress sm">
-                <div class="progress-bar progress-bar-yellow" style="width: 80%"></div>
-              </div>
-            </div>
-            <!-- /.progress-group -->
+            
           </div>
           <!-- /.col -->
         </div>
