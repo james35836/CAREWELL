@@ -32,13 +32,13 @@
           <table class="table table-hover table-bordered">
             <tr>
               <th>CAL #</th>
-              <th>Company</th>
-              <th>Period Month</th>
-              <th>Date Coverage</th>
-              <th>Payment Period</th>
-              <th>Status</th>
-              <th>Date Created</th>
-              <th>Action</th>
+              <th>COMPANY</th>
+              <th>PERIOD MONTH</th>
+              <th>DATE COVERAGE</th>
+              <th>PAYMENT PERIOD</th>
+              <th>STATUS</th>
+              <th>DATE CREATED</th>
+              <th>ACTION</th>
             </tr>
             @foreach($_cal_company as $cal_company)
             <tr>

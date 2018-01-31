@@ -61,10 +61,8 @@
 		<div class="col-md-4 form-content">
 			<select class="form-control">
 				<option>{{$member_details->member_gender}}</option>
-				<option>MARIED</option>
-				<option>MARIED</option>
-				<option>MARIED</option>
-				<option>MARIED</option>
+				<option>MALE</option>
+				<option>FEMALE</option>
 			</select>
 		</div>
 		<div class="col-md-2 form-content">
@@ -73,9 +71,11 @@
 		<div class="col-md-4 form-content">
 			<select class="form-control">
 				<option>{{$member_details->member_marital_status}}</option>
-				<option>MARIED</option>
 				<option>SINGLE</option>
+				<option>MARRIED</option>
+				<option>DIVORCED</option>
 				<option>SEPARATED</option>
+				<option>WIDOWED</option>
 			</select>
 		</div>
 		
@@ -127,7 +127,7 @@
 			<li class="my-tab"><a data-toggle="tab" href="#government">Government Cards</a></li>
 		</ul>
 		<div class="tab-content">
-			<div id="company" class="tab-pane fade in active">
+			<div id="company" class="row tab-pane fade in active table-min-height">
 				<div class="box-body table-responsive no-padding">
 					<table class="table table-hover table-bordered">
 						<tr>
@@ -163,7 +163,7 @@
 					</table>
 				</div>
 	        </div>
-			<div id="dependent" class="tab-pane fade">
+			<div id="dependent" class="row tab-pane fade table-min-height">
 				<div class="box-body table-responsive no-padding">
 					<table class="table table-hover table-bordered">
 						<tr>
@@ -197,7 +197,7 @@
 					</table>
 				</div>
 			</div>
-			<div id="government" class="tab-pane fade">
+			<div id="government" class="row tab-pane fade table-min-height">
 				<div class="form-holder">
 					<div class="col-md-2 form-content">
 						<label>PHIL-HEALTH </label>

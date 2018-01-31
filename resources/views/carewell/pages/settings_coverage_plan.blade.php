@@ -11,7 +11,7 @@
     <div class="col-xs-12">
       <div class="box">
         <div class="box-header">
-          <h3 class="box-title">Coverage Plan List</h3>
+          <h3 class="box-title">COVERAGE PLAN LIST</h3>
           <div class="box-tools">
             <div class="input-group input-group-sm" style="width: 150px;">
               <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
@@ -25,11 +25,11 @@
         <div class="box-body table-responsive no-padding">
           <table class="table table-hover table-bordered">
             <tr>
-              <th>Plan ID</th>
-              <th>Plan Name</th>
-              <th>Plan Price</th>
-              <th>Plan Status</th>
-              <th>Action</th>
+              <th>PLAN ID</th>
+              <th>PLAN NAME</th>
+              <th>PLAN PRICE</th>
+              <th>STATUS</th>
+              <th>ACTION</th>
             </tr>
             @foreach($_availment_plan as $availment_plan)
             <tr>

@@ -39,13 +39,13 @@
         <div class="box-body table-responsive no-padding">
           <table class="table table-hover table-bordered">
             <tr>
-              <th>Universal ID</th>
-              <th>Member Name</th>
-              <th>Carewell ID</th>
-              <th>Company</th>
-              <th>Status</th>
-              <th>Date Membered</th>
-              <th>Action</th>
+              <th>UNIVERSAL ID</th>
+              <th>FULL NAME</th>
+              <th>CAREWELL ID</th>
+              <th>COMPANY</th>
+              <th>STATUS</th>
+              <th>DATE ADDED</th>
+              <th>ACTION</th>
             </tr>
             @foreach($_member as $member)
             <tr>

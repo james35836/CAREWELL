@@ -31,14 +31,14 @@
         <div class="box-body table-responsive no-padding">
           <table class="table table-hover table-bordered">
             <tr>
-              <th>User ID</th>
-              <th>ID Number</th>
-              <th>Full Name</th>
-              <th>Email</th>
-              <th>Gender</th>
-              <th>Status</th>
-              <th>Date Added</th>
-              <th>Action</th>
+              <th>USER ID</th>
+              <th>ID NUMBER</th>
+              <th>FULL NAME</th>
+              <th>EMAIL</th>
+              <th>GENDER</th>
+              <th>STATUS</th>
+              <th>DATE ADDED</th>
+              <th>ACTION</th>
             </tr>
             @foreach($_user as $user)
             <tr>

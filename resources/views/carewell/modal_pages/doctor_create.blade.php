@@ -121,7 +121,7 @@
 		<div class="col-md-10 form-content specialization-form">
 			<div class="specialization-count" style="margin-top: 0px;" >
 				<select class="form-control" name="specialization_name" id="specialization_name">
-					<option value="1">Allergist or Immunologist</option>
+					<option>Allergist or Immunologist</option>
 					<option>Anesthesiologist</option>
 					<option>Cardiologist</option>
 					<option>Dermatologist</option>

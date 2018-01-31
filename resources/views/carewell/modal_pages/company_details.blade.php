@@ -6,11 +6,31 @@ radioClass   : 'iradio_minimal-blue'
 })
 //append
 $(document).ready(function() {
-$(".addJobsite").on("click", function() {
-$(".jobsite-form").append("<div class=' form-content'><input type='text' name='jobsite[]' class='form-control'/></div>");
+	$(".addJobsite").on("click", function()
+	{
+		$(".jobsite-form").append("<div class=' form-content'><input type='text' name='jobsite[]' class='form-control'/></div>");
+	});
+	$(".removeJobsite").on("click", function()
+	{
+		$(".jobsite-form").children().last().remove();
+	});
+	$(".addTrunk").on("click", function()
+	{
+		$(".trunk-form").append("<div class=' form-content'><input type='text' name='trunk[]' class='form-control'/></div>");
+	});
+	$(".removeTrunk").on("click", function()
+	{
+		$(".trunk-form").children().last().remove();
+	});
+	$(".add-coverage").on("click", function() {
+	
+	$(".coverage-form").append('<div class="coverage-count" style="margin-top: 5px;" ><select class="form-control" name="coverage_plan" id="coverage_plan">@foreach($_availment_plan as $availment_plan)<option value="{{$availment_plan->availment_plan_id}}">{{$availment_plan->availment_plan_name}}</option>@endforeach</select></div>');
+	
 });
-$(".removeJobsite").on("click", function() {
-$(".jobsite-form").children().last().remove();
+$(".remove-coverage").on("click", function() {
+	
+	$(".coverage-form").children().last().remove();
+	
 });
 });
 </script>
@@ -18,7 +38,7 @@ $(".jobsite-form").children().last().remove();
 	<div class="form-holder">
 		
 		<div class="col-md-4 form-content pull-right top-label">
-			<label>Company Code : {{$company_details->company_code}}</label>
+			<label>COMPANY CODE : {{$company_details->company_code}}</label>
 		</div>
 		
 	</div>
@@ -28,14 +48,16 @@ $(".jobsite-form").children().last().remove();
 		<div class="col-md-3 form-content">
 			<label>Company Name</label>
 		</div>
-		<div class="col-md-3 form-content">
+		<div class="col-md-9 form-content">
 			<input type="text" id="company_name" value="{{$company_details->company_name}}"  class="form-control"/>
 		</div>
+	</div>
+	<div class="form-holder">
 		<div class="col-md-3 form-content">
-			<label>Company Code</label>
+			<label>Company Email Address</label>
 		</div>
-		<div class="col-md-3 form-content">
-			<input type="text" id="company_code" value="{{$company_details->company_code}}" class="form-control"/>
+		<div class="col-md-9 form-content">
+			<input type="text" id="company_email_address" value="{{$company_details->company_email_address}}" class="form-control"/>
 		</div>
 	</div>
 	<div class="form-holder">
@@ -54,37 +76,41 @@ $(".jobsite-form").children().last().remove();
 	</div>
 	<div class="form-holder">
 		<div class="col-md-3 form-content">
-			<label>Company Address</label>
+			<label>Company ZipCode</label>
 		</div>
-		<div class="col-md-9 form-content">
-			<input type="text" id="company_address" value="{{$company_details->company_address}}" class="form-control"/>
+		<div class="col-md-3 form-content">
+			<input type="text" id="company_zipcode" value="{{$company_details->company_zipcode}}" class="form-control"/>
+		</div>
+		<div class="col-md-3 form-content">
+			<label>Company Street</label>
+		</div>
+		<div class="col-md-3 form-content">
+			<input type="text" id="company_street" value="{{$company_details->company_street}}" class="form-control"/>
 		</div>
 	</div>
 	<div class="form-holder">
 		<div class="col-md-3 form-content">
-			<label>Company Email Address</label>
+			<label>Company City/Town</label>
 		</div>
-		<div class="col-md-9 form-content">
-			<input type="text" id="company_email_address" value="{{$company_details->company_email_address}}" class="form-control"/>
-		</div>
-	</div>
-	<div class="form-holder">
 		<div class="col-md-3 form-content">
-			<label>Company Trunk Line</label>
+			<input type="text" id="company_city" value="{{$company_details->company_city}}" class="form-control"/>
 		</div>
-		<div class="col-md-9 form-content">
-			<input type="text" id="company_trunk_line" value="{{$company_details->company_trunk_line}}" class="form-control"/>
+		<div class="col-md-3 form-content">
+			<label>Company Country</label>
+		</div>
+		<div class="col-md-3 form-content">
+			<input type="text" id="company_country" value="{{$company_details->company_country}}" class="form-control"/>
 		</div>
 	</div>
-	<hr>
 </div>
 <div class="row box-globals" >
 	<!-- Custom Tabs -->
 	<div class="nav-tabs-custom">
 		<ul class="nav nav-tabs">
-			<li class="active my-tab"><a data-toggle="tab" href="#contract">Contract Details</a></li>
-			<li class="my-tab"><a data-toggle="tab" href="#coverage">Coverage Plan</a></li>
-			<li class="my-tab"><a data-toggle="tab" href="#jobsite">Jobsite</a></li>
+			<li class="active my-tab"><a data-toggle="tab" href="#contract">CONTRACT</a></li>
+			<li class="my-tab"><a data-toggle="tab" href="#coverage">COVERAGE PLAN</a></li>
+			<li class="my-tab"><a data-toggle="tab" href="#trunk">TRUNK LINE</a></li>
+			<li class="my-tab"><a data-toggle="tab" href="#jobsite">DEPLOYMENT</a></li>
 		</ul>
 		<div class="tab-content" >
 			<div id="contract" class="row tab-pane fade in active table-min-height">
@@ -128,42 +154,127 @@ $(".jobsite-form").children().last().remove();
 					</div>
 					<div class="col-md-9 form-content">
 						<div class="col-md-6">
-							<a href="{{$company_contract->contract_image}}" target="_blank">
-								<img src="{{$company_contract->contract_image}}" class="img-thumbnail" alt="Contract Image">
-							</a>
+							<a href="{{$company_contract->contract_image}}" target="_blank">VIEW CONTRACT IMAGE</a>
 						</div>
 						<div class="col-md-6">
-							<a href="{{$company_contract->contract_schedule_of_benifits_image}}" target="_blank">
-								<img src="{{$company_contract->contract_schedule_of_benifits_image}}" class="img-thumbnail" alt="Schedule Of Benifit Image">
-							</a>
+							<a href="{{$company_contract->contract_schedule_of_benifits_image}}" target="_blank">VIEW SCHEDULE OF BENEFITS IMAGE</a>
 						</div>
 					</div>
 				</div>
 			</div>
 			<div id="coverage" class="row tab-pane fade table-min-height">
+				<div class="row form-holder">
+					<div class="col-md-3 pull-right form-content">
+						<div class="btn-group">
+							<button type="button" class="btn btn-primary add-coverage"><i  class="fa fa-plus btn-icon"></i> PLAN</button>
+							<button type="button" class="btn btn-danger remove-coverage"><i  class="fa fa-minus btn-icon"></i> PLAN</button>
+						</div>
+					</div>
+				</div>
 				<div class="form-holder">
 					<div class="col-md-3 form-content">
-						<label>Coverage Plan</label>
+						
 					</div>
-					<div class="col-md-9 form-content">
-						@foreach($_availment_plan as $availment_plan)
-						<div class="col-md-4 form-content">
-							<input type="checkbox" name="availment_plan" class="minimal"  value="{{$availment_plan->availment_plan_id}}" checked>
-							<label>{{$availment_plan->availment_plan_name}}</label>
+					<div class="col-md-9 form-content coverage-form">
+						
+					</div>
+				</div>
+				<div class="col-md-12 form-holder">
+					
+					<div class=" box-body table-responsive no-padding">
+						<table class="table table-hover table-bordered">
+							<tr>
+								<th>ID</th>
+								<th>COVERAGE PLAN NAME</th>
+								<th>Status</th>
+								<th>Action</th>
+							</tr>
+							@foreach($_company_availment_plan as $coverage_plan)
+							<tr>
+								<td>{{$coverage_plan->availment_plan_id}}</td>
+								<td>{{$coverage_plan->availment_plan_name}}</td>
+								<td><span class="label label-success">Active</span></td>
+								<td>
+									<div class="btn-group">
+										<button type="button" class="btn btn-danger btn-sm">Action</button>
+										<button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+										<span class="caret"></span>
+										<span class="sr-only">Toggle Dropdown</span>
+										</button>
+										<ul class="dropdown-menu" role="menu" style="position: absolute !important;">
+											<li><button type="button" data-id="{{$coverage_plan->availment_plan_id}}" class="btn btn-link view-member-details">View Member</button></li>
+											<li><button type="button" class="btn btn-link">Update Member</button></li>
+										</ul>
+									</div>
+								</td>
+							</tr>
+							@endforeach
+							<tr style="height:70px;">
+							</tr>
+						</table>
+					</div>
+					
+				</div>
+				
+			</div>
+			<div id="trunk" class="row tab-pane fade table-min-height" >
+				<div class="row form-holder">
+					<div class="col-md-4 pull-right">
+						<div class="btn-group">
+							<button type="button" class="btn btn-primary addTrunk"><i  class="fa fa-plus btn-icon"></i> TRUNK LINE</button>
+							<button type="button" class="btn btn-danger removeTrunk"><i  class="fa fa-minus btn-icon"></i> TRUNK LINE</button>
 						</div>
-						@endforeach
 					</div>
+				</div>
+				<div class="col-md-2 form-holder">
+				</div>
+				<div class="col-md-9 form-holder trunk-form " >
+					<!-- TRUNK FORM -->
+					
+				</div>
+				<div class="col-md-12 form-holder">
+					<div class=" box-body table-responsive no-padding">
+						<table class="table table-hover table-bordered">
+							<tr>
+								<th>ID</th>
+								<th>TRUNKLINE  NUMBER</th>
+								<th>STATUS</th>
+								<th>ACTION</th>
+							</tr>
+							@foreach($_company_trunkline as $company_trunkline)
+							<tr>
+								<td>{{$company_trunkline->trunkline_id}}</td>
+								<td>{{$company_trunkline->trunkline_number}}</td>
+								<td><span class="label label-success">Active</span></td>
+								<td>
+									<div class="btn-group">
+										<button type="button" class="btn btn-danger btn-sm">Action</button>
+										<button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+										<span class="caret"></span>
+										<span class="sr-only">Toggle Dropdown</span>
+										</button>
+										<ul class="dropdown-menu" role="menu" style="position: absolute !important;">
+											<li><button type="button" data-id="{{$company_trunkline->trunkline_id}}" class="btn btn-link view-member-details">View Member</button></li>
+											<li><button type="button" class="btn btn-link">Update Member</button></li>
+										</ul>
+									</div>
+								</td>
+							</tr>
+							@endforeach
+							<tr style="height:70px;">
+							</tr>
+						</table>
+					</div>
+					
 				</div>
 			</div>
 			<!-- /.tab-pane -->
 			<div id="jobsite" class="row tab-pane fade table-min-height">
 				<div class="row form-holder">
 					<div class="col-md-4 pull-right">
-						<div class="col-xs-6">
-							<button class="btn btn-primary addJobsite"><i class="fa fa-plus btn-icon"></i>Add New</button>
-						</div>
-						<div class="col-xs-6">
-							<button class="btn btn-danger removeJobsite"><i class="fa fa-trash btn-icon"></i>Remove </button>
+						<div class="btn-group">
+							<button type="button" class="btn btn-primary addJobsite"><i  class="fa fa-plus btn-icon"></i> DEPLOYMENT</button>
+							<button type="button" class="btn btn-danger removeJobsite"><i  class="fa fa-minus btn-icon"></i> DEPLOYMENT</button>
 						</div>
 					</div>
 				</div>

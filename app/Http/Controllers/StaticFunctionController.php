@@ -28,7 +28,34 @@ use App\Http\Model\TblPaymentModeModel;
 
 class StaticFunctionController extends Controller
 {
-  
+  public function getCompanyCoveragePlan(Request $request)
+  {
+    if($request->ajax())
+    {
+        $data['_coveragePlan']  = TblCompanyCoveragePlanModel::where('tbl_company_coverage_plan.company_id',$request->company_id)
+                        ->join('tbl_availment_plan','tbl_availment_plan.availment_plan_id','=','tbl_company_coverage_plan.availment_plan_id')
+                        ->get();
+        $data['_coveragePlanList'] = '<option>COVERAGE PLAN';
+        foreach($data['_coveragePlan'] as $coveragePlan)
+        {
+            $data['_coveragePlanList']     .= '<option value='.$coveragePlan->availment_plan_id.'>'.$coveragePlan->availment_plan_name;
+        }
+        return $data['_coveragePlanList'];
+    }
+  }
+  public function getCompanyJobsite(Request $request)
+  {
+    if($request->ajax())
+    {
+        $data['_jobsite']  = TblCompanyJobsiteModel::where('company_id',$request->company_id)->get();
+        $data['jobsiteList'] = '<option>DEPLOYMENT';
+        foreach($data['_jobsite'] as $jobsite)
+        {
+            $data['jobsiteList']     .= '<option value='.$jobsite->jobsite_id.'>'.$jobsite->jobsite_name;
+        }
+        return $data['jobsiteList'];
+    }
+  }
 
   public static function James($number)
   {
@@ -89,7 +116,7 @@ class StaticFunctionController extends Controller
         break;
 
       case 'company':
-        $id = TblCompanyModel::where('company_name', $str_name)->value('company_id');
+        $id = TblCompanyModel::where('company_code', $str_name)->value('company_id');
         break;
 
      

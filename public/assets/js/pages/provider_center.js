@@ -23,7 +23,7 @@ function provider_center()
             create_provider();
             create_provider_confirm();
             create_provider_submit();
-            checking_null_validation(value);
+            checking_null_validation(value,message);
             trigger();
             view_provider_details();
 			
@@ -44,7 +44,7 @@ function provider_center()
 			
 		});
 	} 
-	function checking_null_validation(value)
+	function checking_null_validation(value,message)
 	{
 		if(value=="0")
 		{
@@ -52,11 +52,10 @@ function provider_center()
 		}
 		else if(value=="")
 		{
+			toastr.error(message+' cannot be null.', 'Something went wrong!', {timeOut: 3000})
 			return "";
 		}
-
-
-	}
+    }
 
 	function create_provider()
 	{
@@ -89,42 +88,40 @@ function provider_center()
 	{
 		$(document).on('click','.create-provider-confirm',function() 
 		{
-			if(checking_null_validation(document.getElementById('provider_name').value)=="")
-			{
-				toastr.error('PROVIDER NAME cannot be null.', 'Something went wrong!', {timeOut: 3000})
-			}	
-			else if(checking_null_validation(document.getElementById('provider_contact_person').value)=="")
-			{
-				toastr.error('PROVIDER CONTACT PERSON cannot be null.', 'Something went wrong!', {timeOut: 3000})
-			}	
-			else if(checking_null_validation(document.getElementById('provider_contact_number').value)=="")
-			{
-				toastr.error('PROVIDER PHONE NUMBER cannot be null.', 'Something went wrong!', {timeOut: 3000})
-			}
-			else if(checking_null_validation(document.getElementById('provider_mobile_number').value)=="")
-			{
-				toastr.error('PROVIDER MOBILE NUMBER cannot be null.', 'Something went wrong!', {timeOut: 3000})
-			}
-			else if(checking_null_validation(document.getElementById('provider_contact_email').value)=="")
-			{
-				toastr.error('PROVIDER EMAIL ADDRESS cannot be null.', 'Something went wrong!', {timeOut: 3000})
-			}
-			else if(checking_null_validation(document.getElementById('provider_street').value)=="")
-			{
-				toastr.error(' STREET cannot be null.', 'Something went wrong!', {timeOut: 3000})
-			}
-			else if(checking_null_validation(document.getElementById('provider_city').value)=="")
-			{
-				toastr.error('CITY cannot be null.', 'Something went wrong!', {timeOut: 3000})
-			}
-			else if(checking_null_validation(document.getElementById('provider_zip').value)=="")
-			{
-				toastr.error('ZIP cannot be null.', 'Something went wrong!', {timeOut: 3000})
-			}
-			else if(checking_null_validation(document.getElementById('provider_country').value)=="")
-			{
-				toastr.error('COUNTRY cannot be null.', 'Something went wrong!', {timeOut: 3000})
-			}
+			if(checking_null_validation(document.getElementById('provider_name').value,"PROVIDER NAME")=="")
+			{}	
+			else if(checking_null_validation(document.getElementById('provider_contact_person').value,"PROVIDER CONTACT PERSON")=="")
+			{}	
+			else if(checking_null_validation(document.getElementById('provider_contact_number').value,"PROVIDER PHONE NUMBER")=="")
+			{}
+			else if(checking_null_validation(document.getElementById('provider_mobile_number').value,"PROVIDER MOBILE NUMBER")=="")
+			{}
+			else if(checking_null_validation(document.getElementById('provider_contact_email').value,"PROVIDER EMAIL ADDRESS")=="")
+			{}
+			else if(checking_null_validation(document.getElementById('provider_street').value,"STREET")=="")
+			{}
+			else if(checking_null_validation(document.getElementById('provider_city').value,"CITY")=="")
+			{}
+			else if(checking_null_validation(document.getElementById('provider_zip').value,"ZIP")=="")
+			{}
+			else if(checking_null_validation(document.getElementById('provider_country').value,"COUNTRY")=="")
+			{}
+			else if(checking_null_validation(document.getElementById('provider_billing_name').value,"BILLING NAME")=="")
+			{}	
+			else if(checking_null_validation(document.getElementById('provider_billing_email').value,"BILLING EMAIL")=="")
+			{}
+			else if(checking_null_validation(document.getElementById('provider_billing_telephone').value,"BILLING TELEPHONE")=="")
+			{}
+			else if(checking_null_validation(document.getElementById('provider_billing_mobile').value,"BILLING MOBILE")=="")
+			{}
+			else if(checking_null_validation(document.getElementById('provider_billing_zipcode').value,"BILLING ZIP ")=="")
+			{}
+			else if(checking_null_validation(document.getElementById('provider_billing_street').value,"BILLING STREET")=="")
+			{}
+			else if(checking_null_validation(document.getElementById('provider_billing_city').value,"BILLING  CITY")=="")
+			{}
+			else if(checking_null_validation(document.getElementById('provider_billing_country').value," BILLING COUNTRY")=="")
+			{}
 			else
 			{
 
@@ -151,6 +148,14 @@ function provider_center()
 	            formData.append("provider_zip", 			document.getElementById('provider_zip').value);
 	            formData.append("provider_country", 		document.getElementById('provider_country').value);
 	            
+	            formData.append("provider_billing_name", 	document.getElementById('provider_billing_name').value);
+	            formData.append("provider_billing_email", 	document.getElementById('provider_billing_email').value);
+	            formData.append("provider_billing_telephone",document.getElementById('provider_billing_telephone').value);
+	            formData.append("provider_billing_mobile",  document.getElementById('provider_billing_mobile').value);
+	            formData.append("provider_billing_zipcode", document.getElementById('provider_billing_zipcode').value);
+	            formData.append("provider_billing_street", 	document.getElementById('provider_billing_street').value);
+	            formData.append("provider_billing_city", 	document.getElementById('provider_billing_city').value);
+	            formData.append("provider_billing_country", document.getElementById('provider_billing_country').value);
 	            
 			}
 		});

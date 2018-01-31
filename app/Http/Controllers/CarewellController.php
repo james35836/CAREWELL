@@ -16,6 +16,7 @@ use App\Http\Model\TblCompanyCoveragePlanModel;
 use App\Http\Model\TblCompanyJobsiteModel;
 use App\Http\Model\TblCompanyCalModel;
 use App\Http\Model\TblCompanyCalMemberModel;
+use App\Http\Model\TblCompanyTrunklineModel;
 
 
 
@@ -26,6 +27,7 @@ use App\Http\Model\TblMemberDependentModel;
 use App\Http\Model\TblMemberGovernmentCardModel;
 
 
+
 use App\Http\Model\TblAvailmentModel;
 use App\Http\Model\TblAvailmentPlanModel;
 use App\Http\Model\TblAvailmentTagModel;
@@ -33,6 +35,7 @@ use App\Http\Model\TblAvailmentTagModel;
 use App\Http\Model\TblPaymentModeModel;
 
 use App\Http\Model\TblProviderModel;
+use App\Http\Model\TblProviderBillingModel;
 
 use App\Http\Model\TblDoctorModel;
 use App\Http\Model\TblDoctorSpecializationModel;
@@ -89,7 +92,7 @@ class CarewellController extends Controller
     $data['provider']     = TblProviderModel::where('archived',0)->count();
     $data['_approval']    = TblApprovalModel::where('tbl_approval.archived',0)
                             ->join('tbl_member','tbl_member.member_id','=','tbl_approval.member_id')
-                            ->orderBy('approval_created','ASC')
+                            ->orderBy('approval_created','DESC')
                             ->get();
     return view('carewell.pages.dashboard',$data);
   }
@@ -114,7 +117,10 @@ class CarewellController extends Controller
     $data['_payment_mode']            = TblPaymentModeModel::get();
     $data['company_details']          = TblCompanyModel::where('company_id',$company_id)->first();
     $data['_company_jobsite']         = TblCompanyJobsiteModel::where('company_id',$company_id)->get();
-    $data['_company_availment_plan']  = TblCompanyJobsiteModel::where('company_id',$company_id)->get();
+    $data['_company_trunkline']       = TblCompanyTrunklineModel::where('company_id',$company_id)->get();
+    $data['_company_availment_plan']  = TblCompanyCoveragePlanModel::where('company_id',$company_id)
+                                        ->join('tbl_availment_plan','tbl_availment_plan.availment_plan_id','=','tbl_company_coverage_plan.availment_plan_id')
+                                        ->get();
     $data['company_contract']        = TblCompanyContractModel::where('company_id',$company_id)->first();
 
     return view('carewell.modal_pages.company_details',$data);
@@ -147,8 +153,10 @@ class CarewellController extends Controller
         $companyData->company_contact_person  = $request->company_contact_person;
         $companyData->company_email_address   = $request->company_email_address;
         $companyData->company_phone_number    = $request->company_phone_number;
-        $companyData->company_address         = $request->company_address;
-        $companyData->company_trunk_line      = $request->company_trunk_line;
+        $companyData->company_zipcode         = $request->company_zipcode;
+        $companyData->company_street          = $request->company_street;
+        $companyData->company_city            = $request->company_city;
+        $companyData->company_country         = $request->company_country;
         $companyData->company_status          = 'active';
         $companyData->company_date_created    = Carbon::now();
         $companyData->company_parent_id      = 0;
@@ -163,7 +171,7 @@ class CarewellController extends Controller
 
         $contractData = new TblCompanyContractModel;
         $contractData->contract_number          = sprintf("%05d",$companyLastId);
-        $contractData->contract_mode_of_payment = $request->company_address;
+        $contractData->contract_mode_of_payment = $request->contract_mode_of_payment;
         $contractData->contract_image           = '/contract/'.$fileContractRef.'';
         $contractData->contract_schedule_of_benifits_image = '/schedule_of_benifits/'.$fileScheduleRef.'';
         $contractData->contract_date_created    = Carbon::now();
@@ -185,6 +193,13 @@ class CarewellController extends Controller
           $jobsiteData->company_id    = $companyData->company_id;
           $jobsiteData->save();
         }
+        foreach($request->trunkData as $trunk)
+        {
+          $trunkData                  = new TblCompanyTrunklineModel;
+          $trunkData->trunkline_number= $trunk;
+          $trunkData->company_id      = $companyData->company_id;
+          $trunkData->save();
+        }
         
 
      return "<div class='alert alert-success' style='text-align: center;'>Company Added Successfully!</div>";
@@ -200,8 +215,79 @@ class CarewellController extends Controller
   }
   public function member_create_member()
   {
+    $data['_company'] = TblCompanyModel::where('archived',0)->get();
+    return view('carewell.modal_pages.member_create_member',$data);
+  }
+  public function member_create_member_submit(Request $request)
+  {
+    $companyData = TblCompanyModel::where('company_id',$request->company_id)->first();
 
-    return view('carewell.modal_pages.member_create_member');
+    $memberData = new TblMemberModel;
+    $memberData->member_first_name          = $request->member_first_name;
+    $memberData->member_middle_name         = $request->member_middle_name;
+    $memberData->member_last_name           = $request->member_last_name;
+    $memberData->member_birthdate           = $request->member_birthdate;
+    $memberData->member_gender              = $request->member_gender;
+    $memberData->member_marital_status      = $request->member_marital_status;
+    $memberData->member_monther_maiden_name = $request->member_monther_maiden_name;
+    $memberData->member_permanet_address    = $request->member_permanet_address;
+    $memberData->member_present_address     = $request->member_present_address;
+    $memberData->member_contact_number      = $request->member_contact_number;
+    $memberData->member_email_address       = $request->member_email_address;
+    $memberData->member_date_created        = Carbon::now();
+    $memberData->member_universal_id        = "UNIVERSAL ID";
+    $memberData->save();
+
+    $display_name                       =   $request->member_first_name." ".$request->member_middle_name." ".$request->member_last_name;
+    $member_id                          =   $memberData->member_id;
+    $update['member_universal_id']      =   StaticFunctionController::initials($display_name)."-".str_replace(' ','',preg_replace('/[^a-z0-9\s]/i', '', $request->member_birthdate))."-".sprintf("%05d",$member_id);
+                                            TblMemberModel::where('member_id',$member_id)->update($update);
+    foreach($request->member_dependent_full_name as $key=>$data)
+    {
+      $dependentData = new TblMemberDependentModel;
+      $dependentData->member_dependent_full_name    = $request->member_dependent_full_name[$key];
+      $dependentData->member_dependent_birthdate    = $request->member_dependent_birthdate[$key];
+      $dependentData->member_dependent_relationship = $request->member_dependent_relationship[$key];
+      $dependentData->member_id                     = $memberData->member_id;
+      $dependentData->save();
+    }
+
+    $governmentData = new TblMemberGovernmentCardModel;
+    $governmentData->member_government_card_philhealth  = $request->member_government_card_philhealth;
+    $governmentData->member_government_card_sss         = $request->member_government_card_sss;
+    $governmentData->member_government_card_tin         = $request->member_government_card_tin;
+    $governmentData->member_government_card_hdmf        = $request->member_government_card_hdmf;
+    $governmentData->member_id                          = $memberData->member_id;
+    $governmentData->save();
+    
+    $member_company_count = TblMemberCompanyModel::count();
+    if($member_company_count==null||$member_company_count==0)
+    {
+      $member_company_data = 1;
+    }
+    else
+    {
+      $member_company = TblMemberCompanyModel::orderBy('member_company_id','DESC')->first();
+      $member_company_data = $member_company->member_company_id + 1;
+    }
+    
+    $companyMemberData = new TblMemberCompanyModel;
+    $companyMemberData->member_company_carewell_id      = $companyData->company_code."-".date("my")."-".sprintf("%05d",$member_company_data);
+    $companyMemberData->member_company_employee_number  = $request->member_company_employee_number;
+    $companyMemberData->member_company_status           = "active";
+    $companyMemberData->availment_plan_id               = $request->availment_plan_id;
+    $companyMemberData->jobsite_id                      = $request->jobsite_id;
+    $companyMemberData->member_id                       = $memberData->member_id;
+    $companyMemberData->company_id                      = $request->company_id;
+    $companyMemberData->save();
+    if($memberData->save())
+    {
+      return "<div class='alert alert-success' style='text-align: center;'>Member Added Successfully!</div>";
+    }
+    else
+    {
+      return "<div class='alert alert-danger' style='text-align: center;'>Something went wrong!</div>";
+    }
   }
   public function member_view_details($member_id)
   {
@@ -236,14 +322,14 @@ class CarewellController extends Controller
     return view('carewell.modal_pages.member_import',$data);
     
   }
-  public function member_download_template($company_id)
+  public function member_download_template($company_id,$number)
   {
-        $excels['number_of_rows'] =   10;
+        $excels['number_of_rows'] =   $number;
         $excels['company_id']     =   $company_id;
         $company_template         =   TblCompanyModel::where('company_id',$company_id)->first();
-        $excels['company_name']   =   $company_template->company_name;
-        $excels['data'] = ['COMPANY','MEMBER LAST NAME','MEMBER FIRST NAME','MEMBER MIDDLE NAME','MEMBER BIRTHDATE','MEMBER GENDER','MEMBER MARITAL STATUS','MEMBER MONTHER MAIDEN NAME','MEMBER PERMANENT ADDRESS','MEMBER PRESENT ADDRESS','MEMBER CONTACT NUMBER','MEMBER EMAIL ADDRESS','MEMBER JOBSITE','MEMBER DEPENDENT FULL NAME','MEMBER DEPENDENT BIRTHDATE','MEMBER DEPENDENT RELATIONSHIP','AVAILMENT PLAN NAME','MEMBER GOVERNMENT CARD PHILHEALTH','MEMBER GOVERNMENT CARD SSS','MEMBER GOVERNMENT CARD TIN','MEMBER GOVERNMENT CARD HDMF'];
-         Excel::create('CAREWELL - '.$company_template->company_name.' - TEMPLATE', function($excel) use ($excels) 
+        $excels['company_code']   =   $company_template->company_code;
+        $excels['data']           =   ['COMPANY CODE','EMPLOYEE NUMBER','MEMBER LAST NAME','MEMBER FIRST NAME','MEMBER MIDDLE NAME','MEMBER BIRTHDATE','MEMBER JOBSITE','AVAILMENT PLAN NAME'];
+         Excel::create('CAREWELL '.$company_template->company_name.' TEMPLATE', function($excel) use ($excels) 
          {
 
             $excel->sheet('template', function($sheet) use ($excels) 
@@ -256,32 +342,10 @@ class CarewellController extends Controller
               for($row = 1, $rowcell = 2; $row <= $number_of_rows; $row++, $rowcell++)
               {
                   /* COMPANY ROW */
-                  $sheet->setCellValue('A'.$rowcell, $excels['company_name']);
+                  $sheet->setCellValue('A'.$rowcell, $excels['company_code']);
               
-                  /* GENDER ROW */
-                  $gender_cell = $sheet->getCell('F'.$rowcell)->getDataValidation();
-                  $gender_cell->setType(\PHPExcel_Cell_DataValidation::TYPE_LIST);
-                  $gender_cell->setErrorStyle(\PHPExcel_Cell_DataValidation::STYLE_INFORMATION);
-                  $gender_cell->setAllowBlank(false);
-                  $gender_cell->setShowInputMessage(true);
-                  $gender_cell->setShowErrorMessage(true);
-                  $gender_cell->setShowDropDown(true);
-                  $gender_cell->setErrorTitle('Input error');
-                  $gender_cell->setError('Value is not in list.');
-                  $gender_cell->setFormula1('gender');
-                  /* MARITAL STATUS ROW */
-                  $marital_cell = $sheet->getCell('G'.$rowcell)->getDataValidation();
-                  $marital_cell->setType(\PHPExcel_Cell_DataValidation::TYPE_LIST);
-                  $marital_cell->setErrorStyle(\PHPExcel_Cell_DataValidation::STYLE_INFORMATION);
-                  $marital_cell->setAllowBlank(false);
-                  $marital_cell->setShowInputMessage(true);
-                  $marital_cell->setShowErrorMessage(true);
-                  $marital_cell->setShowDropDown(true);
-                  $marital_cell->setErrorTitle('Input error');
-                  $marital_cell->setError('Value is not in list.');
-                  $marital_cell->setFormula1('marital');
                   /* DEPLOYMENT*/
-                  $deployment_cell = $sheet->getCell('M'.$rowcell)->getDataValidation();
+                  $deployment_cell = $sheet->getCell('G'.$rowcell)->getDataValidation();
                   $deployment_cell->setType(\PHPExcel_Cell_DataValidation::TYPE_LIST);
                   $deployment_cell->setErrorStyle(\PHPExcel_Cell_DataValidation::STYLE_INFORMATION);
                   $deployment_cell->setAllowBlank(false);
@@ -291,19 +355,9 @@ class CarewellController extends Controller
                   $deployment_cell->setErrorTitle('Input error');
                   $deployment_cell->setError('Value is not in list.');
                   $deployment_cell->setFormula1('deployment');
-                  /* Dependent Relationship*/
-                  $relation_cell = $sheet->getCell('P'.$rowcell)->getDataValidation();
-                  $relation_cell->setType(\PHPExcel_Cell_DataValidation::TYPE_LIST);
-                  $relation_cell->setErrorStyle(\PHPExcel_Cell_DataValidation::STYLE_INFORMATION);
-                  $relation_cell->setAllowBlank(false);
-                  $relation_cell->setShowInputMessage(true);
-                  $relation_cell->setShowErrorMessage(true);
-                  $relation_cell->setShowDropDown(true);
-                  $relation_cell->setErrorTitle('Input error');
-                  $relation_cell->setError('Value is not in list.');
-                  $relation_cell->setFormula1('dependent_relationship');
+                  
                   /* AVAILMENT*/
-                  $availment_cell = $sheet->getCell('Q'.$rowcell)->getDataValidation();
+                  $availment_cell = $sheet->getCell('H'.$rowcell)->getDataValidation();
                   $availment_cell->setType(\PHPExcel_Cell_DataValidation::TYPE_LIST);
                   $availment_cell->setErrorStyle(\PHPExcel_Cell_DataValidation::STYLE_INFORMATION);
                   $availment_cell->setAllowBlank(false);
@@ -319,36 +373,12 @@ class CarewellController extends Controller
           /* DATA VALIDATION (REFERENCE FOR DROPDOWN LIST) */
           $excel->sheet('reference', function($sheet) use($excels) 
           {
-              $company_id = $excels['company_id'];
-              $_company          = TblCompanyModel::get();
-
-              $_jobsite          = TblCompanyJobsiteModel::where('company_id',$company_id)->get();
-              $_availment        = TblCompanyCoveragePlanModel::where('company_id',$company_id)
+              $company_id       = $excels['company_id'];
+              $_company         = TblCompanyModel::get();
+              $_jobsite         = TblCompanyJobsiteModel::where('company_id',$company_id)->get();
+              $_availment       = TblCompanyCoveragePlanModel::where('company_id',$company_id)
                                   ->join('tbl_availment_plan','tbl_availment_plan.availment_plan_id','=','tbl_company_coverage_plan.availment_plan_id')
                                   ->get();
-
-              /* COMPANY/CLIENT REFERENCES */
-              // $sheet->SetCellValue("A1", "Client");
-              // $client_number = 2;
-              // foreach($_company as $company)
-              // {
-              //     $sheet->SetCellValue("A".$client_number, $company->company_name);
-              //     $client_number++;
-              // }
-              // $client_number--;
-              
-
-
-              /* GENDER REFERENCE */
-              $sheet->SetCellValue("B1", "Gender");
-              $sheet->SetCellValue("B2", "male");
-              $sheet->SetCellValue("B3", "female");
-
-              /* MARITAL REFERENCE */
-              $sheet->SetCellValue("C1", "Marital Status");
-              $sheet->SetCellValue("C2", "Single");
-              $sheet->SetCellValue("C3", "Maried");
-
               /* DEPLOYMENT REFERENCES */
               $sheet->SetCellValue("D1", "Deployment");
               $job_number = 2;
@@ -358,17 +388,6 @@ class CarewellController extends Controller
                   $job_number++;
               }
               $job_number--;
-
-              /* Relationship REFERENCE */
-              $sheet->SetCellValue("E1", "relationship");
-              $sheet->SetCellValue("E2", "Father");
-              $sheet->SetCellValue("E3", "Mother");
-              $sheet->SetCellValue("E4", "Asawa");
-              $sheet->SetCellValue("E5", "Kabit");
-              $sheet->SetCellValue("E6", "Mother");
-              $sheet->SetCellValue("E7", "Mother");
-              $sheet->SetCellValue("E8", "Mother");
-
               /* AVAILMENT REFERENCES */
               $sheet->SetCellValue("F1", "availment");
               $availment_number = 2;
@@ -378,33 +397,13 @@ class CarewellController extends Controller
                   $availment_number++;
               }
               $availment_number--;
-
-              // $sheet->_parent->addNamedRange(
-              //     new \PHPExcel_NamedRange(
-              //     'client', $sheet, 'A2:A'.$client_number
-              //     )
-              // );
-              
-              $sheet->_parent->addNamedRange(
-                  new \PHPExcel_NamedRange(
-                  'gender', $sheet, 'B2:B3'
-                  )
-              );
-              $sheet->_parent->addNamedRange(
-                  new \PHPExcel_NamedRange(
-                  'marital', $sheet, 'C2:C3'
-                  )
-              );
+              /*DEPLOYMENT*/
               $sheet->_parent->addNamedRange(
                   new \PHPExcel_NamedRange(
                   'deployment', $sheet, 'D2:D'.$job_number
                   )
               );
-              $sheet->_parent->addNamedRange(
-                  new \PHPExcel_NamedRange(
-                  'dependent_relationship', $sheet, 'E2:E8'
-                  )
-              );
+              /*AVAILMENT*/
               $sheet->_parent->addNamedRange(
                   new \PHPExcel_NamedRange(
                   'availment', $sheet, 'F2:F'.$availment_number
@@ -419,104 +418,93 @@ class CarewellController extends Controller
   {
     $file   = $request->file('importMemberFile')->getRealPath();
     $_data  = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->all();
-    $company_id = $request->company_id;
-    $companyData = TblCompanyModel::where('company_id',$company_id)->first();
+    
     $first  = $_data[0]; 
-          if(isset($first['company']))
-          {    
-               $count = 0;
-               foreach($_data as $data)
-               {
-                    $count_member = TblMemberModel::where('member_first_name',StaticFunctionController::nullableToString($data['member_first_name']))
-                                                  ->where('member_last_name', StaticFunctionController::nullableToString($data['member_last_name']))
-                                                  ->where('member_middle_name',StaticFunctionController::nullableToString($data['member_middle_name']))
-                                                  ->where('member_email_address',StaticFunctionController::nullableToString($data['member_email_address']))
-                                                  ->count();
-                    if($count_member == 0 && $data['member_birthdate']!=null)
-                    {
-                        
-                          $member['member_first_name']        =   StaticFunctionController::nullableToString($data['member_first_name']);
-                          $member['member_middle_name']       =   StaticFunctionController::nullableToString($data['member_middle_name']);
-                          $member['member_last_name']         =   StaticFunctionController::nullableToString($data['member_last_name']);
-                          $member['member_birthdate']         =   date_format($data['member_birthdate'],"d-m-Y");  
-                          $member['member_gender']            =   StaticFunctionController::nullableToString($data['member_gender']);
-                          $member['member_marital_status']    =   StaticFunctionController::nullableToString($data['member_marital_status']);
-                          $member['member_monther_maiden_name'] = StaticFunctionController::nullableToString($data['member_monther_maiden_name']);
-                          $member['member_permanet_address']  =   StaticFunctionController::nullableToString($data['member_permanent_address']);
-                          $member['member_present_address']   =   StaticFunctionController::nullableToString($data['member_present_address']);
-                          $member['member_contact_number']    =   StaticFunctionController::nullableToString($data['member_contact_number']);
-                          $member['member_email_address']     =   StaticFunctionController::nullableToString($data['member_email_address']);
-                          $member['member_date_created']      =   Carbon::now();
-                          $member['member_universal_id']      =   'UNIVERSAL ID';
+      if(isset($first['company_code'])&&isset($first['member_last_name']))
+      {    
+        $count = 0;
+        foreach($_data as $data)
+        {
+          $companyID   = StaticFunctionController::getid($data['company_code'], 'company');
+          $companyData = TblCompanyModel::where('company_id',$companyID)->first();
 
-                          if(StaticFunctionController::getid($data['company'], 'company') != null )
-                          {
-
-                          $display_name                       =   $member['member_first_name']." ".$member['member_middle_name']." ".$member['member_last_name'];
-                          $member_id                          =   TblMemberModel::insertGetId($member);
-                          $update['member_universal_id']      =   StaticFunctionController::initials($display_name)."-".str_replace(' ','',preg_replace('/[^a-z0-9\s]/i', '', $member['member_birthdate']))."-".sprintf("%05d",$member_id);
-                                                                  TblMemberModel::where('member_id',$member_id)->update($update);
-
-                          $dependent['member_dependent_full_name']        =   StaticFunctionController::nullableToString($data['member_dependent_full_name']);
-                          $dependent['member_dependent_birthdate']        =   date_format($data['member_dependent_birthdate'],"d-m-Y");  
-                          $dependent['member_dependent_relationship']     =   StaticFunctionController::nullableToString($data['member_dependent_relationship']);
-                          $dependent['member_id']       =   $member_id;
-
-                          TblMemberDependentModel::insert($dependent);
-
-                          $government['member_government_card_philhealth'] =   StaticFunctionController::nullableToString($data['member_government_card_philhealth']);
-                          $government['member_government_card_sss']        =   StaticFunctionController::nullableToString($data['member_government_card_sss']);
-                          $government['member_government_card_tin']        =   StaticFunctionController::nullableToString($data['member_government_card_tin']);
-                          $government['member_government_card_hdmf']       =   StaticFunctionController::nullableToString($data['member_government_card_hdmf']);
-                          $government['member_id']       =   $member_id;
-                          
-                          TblMemberGovernmentCardModel::insert($government);
-
-                          
-                          $member_company_count = TblMemberCompanyModel::count();
-                          if($member_company_count==null||$member_company_count==0)
-                          {
-                            $member_company_data = 1;
-                          }
-                          else
-                          {
-                            $member_company = TblMemberCompanyModel::orderBy('member_company_id','DESC')->first();
-                            $member_company_data = $member_company->member_company_id + 1;
-                          }
-                          $company['member_company_carewell_id']  =  $companyData->company_code."-".date("my")."-".sprintf("%05d",$member_company_data);
-                          $company['member_company_status']       =   "active";
-                          $company['availment_plan_id']           =   StaticFunctionController::getid($data['availment_plan_name'], 'availment');
-                          $company['jobsite_id']                  =   StaticFunctionController::getid($data['member_jobsite'], 'jobsite');
-                          $company['member_id']                   =   $member_id;
-                          $company['company_id']                  =   $companyData->company_id;
-                          TblMemberCompanyModel::insert($company);
-                            
-                            $count++;
-                        }
-                    }
-                    
-               }    
-
-               
-               if($count == 0)
-               {
-                    $message = '<center><b><span class="color-gray">There is nothing to insert</span></b></center>';
-                    
-               }
-               else
-               {
-                  $message = '<center><b><span class="color-green">'.$count.' Employee/s has been inserted.</span></b></center>';
-               }
-               
-
-
-               return $message;
-          }
-          else
+          $count_member = TblMemberModel::where('member_first_name',StaticFunctionController::nullableToString($data['member_first_name']))
+                          ->where('member_last_name', StaticFunctionController::nullableToString($data['member_last_name']))
+                          ->where('member_middle_name',StaticFunctionController::nullableToString($data['member_middle_name']))
+                          ->count();
+          if($count_member == 0 && $data['member_birthdate']!=null&&StaticFunctionController::getid($data['company_code'], 'company') != null )
           {
-               return '<center><b><span class="color-red">Wrong file Format</span></b></center>';
-               
+            $member['member_first_name']        =   StaticFunctionController::nullableToString($data['member_first_name']);
+            $member['member_middle_name']       =   StaticFunctionController::nullableToString($data['member_middle_name']);
+            $member['member_last_name']         =   StaticFunctionController::nullableToString($data['member_last_name']);
+            $member['member_birthdate']         =   date_format($data['member_birthdate'],"d-m-Y");  
+            $member['member_gender']            =   "N/A";
+            $member['member_marital_status']    =   "N/A";
+            $member['member_mother_maiden_name']= "N/A";
+            $member['member_permanet_address']  =   "N/A";
+            $member['member_present_address']   =   "N/A";
+            $member['member_contact_number']    =   "N/A";
+            $member['member_email_address']     =   "N/A";
+            $member['member_date_created']      =   Carbon::now();
+            $member['member_universal_id']      =   'UNIVERSAL ID';
+
+            $member_id                          =   TblMemberModel::insertGetId($member);
+            $display_name                       =   $member['member_first_name']." ".$member['member_middle_name']." ".$member['member_last_name'];
+            $update['member_universal_id']      =   StaticFunctionController::initials($display_name)."-".str_replace(' ','',preg_replace('/[^a-z0-9\s]/i', '', $member['member_birthdate']))."-".sprintf("%05d",$member_id);
+                                                    TblMemberModel::where('member_id',$member_id)->update($update);
+
+            // $dependent['member_dependent_full_name']        =   StaticFunctionController::nullableToString($data['member_dependent_full_name']);
+            // $dependent['member_dependent_birthdate']        =   date_format($data['member_dependent_birthdate'],"d-m-Y");  
+            // $dependent['member_dependent_relationship']     =   StaticFunctionController::nullableToString($data['member_dependent_relationship']);
+            // $dependent['member_id']       =   $member_id;
+
+            // TblMemberDependentModel::insert($dependent);
+
+            $government['member_government_card_philhealth'] =   "N/A";
+            $government['member_government_card_sss']        =   "N/A";
+            $government['member_government_card_tin']        =   "N/A";
+            $government['member_government_card_hdmf']       =   "N/A";
+            $government['member_id']                         =   $member_id;
+              
+            TblMemberGovernmentCardModel::insert($government);
+
+            $member_company_count = TblMemberCompanyModel::count();
+            if($member_company_count==null||$member_company_count==0)
+            {
+              $member_company_data = 1;
+            }
+            else
+            {
+              $member_company = TblMemberCompanyModel::orderBy('member_company_id','DESC')->first();
+              $member_company_data = $member_company->member_company_id + 1;
+            }
+            $company['member_company_carewell_id']    =  $companyData->company_code."-".date("my")."-".sprintf("%05d",$member_company_data);
+            $company['member_company_status']         =   "active";
+            $company['member_company_employee_number']=   StaticFunctionController::nullableToString($data['employee_number']);
+            $company['availment_plan_id']             =   StaticFunctionController::getid($data['availment_plan_name'], 'availment');
+            $company['jobsite_id']                    =   StaticFunctionController::getid($data['member_jobsite'], 'jobsite');
+            $company['member_id']                     =   $member_id;
+            $company['company_id']                    =   $companyID;
+            TblMemberCompanyModel::insert($company);
+              
+            $count++;
           }
+        }    
+
+        if($count == 0)
+        {
+          $message = '<center><b><span class="color-gray">There is nothing to insert</span></b></center>';
+        }
+        else
+        {
+          $message = '<center><b><span class="color-green">'.$count.' Employee/s has been inserted.</span></b></center>';
+        }
+        return $message;
+      }
+      else
+      {
+        return '<center><b><span class="color-red">Wrong file Format</span></b></center>';
+      }
   }
   
 
@@ -541,7 +529,7 @@ class CarewellController extends Controller
     }
     else
     {
-      $provider_billing_name = "BILLING NAME";
+      $provider_billing_name = $request->provider_billing_name;
     }
     $providerData = new TblProviderModel;
     $providerData->provider_name            = $request->provider_name;
@@ -550,16 +538,51 @@ class CarewellController extends Controller
     $providerData->provider_contact_number  = $request->provider_contact_number;
     $providerData->provider_mobile_number   = $request->provider_mobile_number;
     $providerData->provider_contact_email   = $request->provider_contact_email;
-    $providerData->provider_address         = $request->provider_zip.", ".$request->provider_street.", ".$request->provider_city.", ".$request->provider_country;
+    $providerData->provider_zip             = $request->provider_zip;
+    $providerData->provider_street          = $request->provider_street;
+    $providerData->provider_city            = $request->provider_city;
+    $providerData->provider_country         = $request->provider_country;
     $providerData->provider_created         = Carbon::now();
     $providerData->save();
 
-    return "<div class='alert alert-success' style='text-align: center;'>Provider Added Successfully!</div>";    
+    $billingData = new TblProviderBillingModel;
+    $billingData->provider_billing_name     = $request->provider_billing_name;
+    $billingData->provider_billing_email    = $request->provider_billing_email;
+    $billingData->provider_billing_telephone= $request->provider_billing_telephone;
+    $billingData->provider_billing_mobile   = $request->provider_billing_mobile;
+    $billingData->provider_billing_zipcode  = $request->provider_billing_zipcode;
+    $billingData->provider_billing_street   = $request->provider_billing_street;
+    $billingData->provider_billing_city     = $request->provider_billing_city;
+    $billingData->provider_billing_country  = $request->provider_billing_country;
+    $billingData->provider_id               = $providerData->provider_id;
+    $billingData->save();
+
+
+    if($providerData->save())
+    {
+      return "<div class='alert alert-success' style='text-align: center;'>Provider Added Successfully!</div>";    
+    }
+    else
+    {
+      return "error";
+    }
+    
 
   }
   public function provider_details(Request $request,$provider_id)
   {
-    $data['provider_details'] = TblProviderModel::where('provider_id',$provider_id)->first();
+    $data['provider_details'] = TblProviderModel::where('tbl_provider.provider_id',$provider_id)
+                              ->join('tbl_provider_billing','tbl_provider_billing.provider_id','=','tbl_provider.provider_id')
+                              ->first();
+    $data['_provider_doctor']  = TblDoctorProviderModel::where('tbl_doctor_provider.provider_id',$provider_id)
+                              ->join('tbl_provider','tbl_provider.provider_id','=','tbl_doctor_provider.provider_id')
+                              ->join('tbl_doctor','tbl_doctor.doctor_id','=','tbl_doctor_provider.doctor_id')
+                              ->get();
+    foreach ($data['_provider_doctor'] as $key => $doctor) 
+    {
+      $data['_provider_doctor'][$key]['doctor_specialization'] =  TblDoctorSpecializationModel::where('doctor_id',$doctor->doctor_id)->get();
+    }
+
     return view('carewell.modal_pages.provider_details',$data);
   }
 

@@ -3,6 +3,7 @@ var formData   		= new FormData();
 var ajaxData 		= [];
 var availmentData 	= [];
 var check_null 		= [];
+var trunkData		= [];
 var value="0";
 var message="";
 
@@ -25,7 +26,7 @@ function company_center()
             create_company_submit();
             action_view_company_details();
 			trigger();
-			checking_null_validation(value);
+			checking_null_validation(value,message);
 
 
          });
@@ -41,7 +42,7 @@ function company_center()
 			
 		});
 	} 
-	function checking_null_validation(value)
+	function checking_null_validation(value,message)
 	{
 		if(value=="0")
 		{
@@ -49,6 +50,7 @@ function company_center()
 		}
 		else if(value=="")
 		{
+			toastr.error(message+' cannot be null.', 'Something went wrong!', {timeOut: 3000})
 			return "";
 		}
 
@@ -86,59 +88,56 @@ function company_center()
 	{
 		$(document).on('click','.create-company-confirm',function() 
 		{
-			// alert(document.getElementById('company_contact_person').value);
-			$('input[name="availment_plan"]:checked').each(function() 
+			$('select[name="coverage_plan"] option:selected').each(function() 
 			{
 				availmentData.push(this.value);
+
 			});
 			$('input[name="jobsite[]"]').each(function()
             {
             	ajaxData.push(this.value);
             });
-
-			if(checking_null_validation(document.getElementById('company_name').value)=="")
-			{
-				toastr.error('COMPANY NAME cannot be null.', 'Something went wrong!', {timeOut: 5000})
-			}	
-			else if(checking_null_validation(document.getElementById('company_contact_person').value)=="")
-			{
-				toastr.error('COMPANY CONTACT PERSON cannot be null.', 'Something went wrong!', {timeOut: 5000})
-			}	
-			else if(checking_null_validation(document.getElementById('company_phone_number').value)=="")
-			{
-				toastr.error('COMPANY PHONE NUMBER cannot be null.', 'Something went wrong!', {timeOut: 5000})
-			}
-			else if(checking_null_validation(document.getElementById('company_address').value)=="")
-			{
-				toastr.error('COMPANY ADDRESS cannot be null.', 'Something went wrong!', {timeOut: 5000})
-			}
-			else if(checking_null_validation(document.getElementById('company_email_address').value)=="")
-			{
-				toastr.error('COMPANY EMAIL ADDRESS cannot be null.', 'Something went wrong!', {timeOut: 5000})
-			}
-			else if(checking_null_validation(document.getElementById('company_trunk_line').value)=="")
-			{
-				toastr.error('COMPANY TRUNK LINE cannot be null.', 'Something went wrong!', {timeOut: 5000})
-			}
-			else if(checking_null_validation(document.getElementById('contract_mode_of_payment').value)=="")
-			{
-				toastr.error('MODE OF PAYMENT cannot be null.', 'Something went wrong!', {timeOut: 5000})
-			}
+            $('input[name="trunk[]"]').each(function()
+            {
+            	trunkData.push(this.value);
+            });
+            if(checking_null_validation(document.getElementById('company_name').value,"COMPANY NAME")=="")
+			{}	
+		    else if(checking_null_validation(document.getElementById('company_email_address').value,"COMPANY EMAIL ADDRESS")=="")
+			{}
+			else if(checking_null_validation(document.getElementById('company_contact_person').value,"COMPANY CONTACT PERSON")=="")
+			{}	
+			else if(checking_null_validation(document.getElementById('company_phone_number').value,"PHONE NUMBER")=="")
+			{}
+			else if(checking_null_validation(document.getElementById('company_zipcode').value,"COMPANY ZIPCODE")=="")
+			{}
+			else if(checking_null_validation(document.getElementById('company_street').value,"COMPANY STREET")=="")
+			{}
+		    else if(checking_null_validation(document.getElementById('company_city').value,"COMPANY CITY")=="")
+			{}
+		    else if(checking_null_validation(document.getElementById('company_country').value,"COMPANY COUNTRY")=="")
+			{}
+			else if(checking_null_validation(document.getElementById('contract_mode_of_payment').value,"MODE OF PAYMENT")=="")
+			{}
 			else if(document.getElementById('contract_image').files.length == 0)
 			{
-				toastr.error('CONTRACT IMAGE cannot be null.', 'Something went wrong!', {timeOut: 5000})
+				toastr.error(' cannot be null.', 'Something went wrong!', {timeOut: 3000})
 			}
 			else if(document.getElementById('contract_schedule_of_benifits_image').files.length == 0)
 			{
-				toastr.error('BENIFITS IMAGE cannot be null.', 'Something went wrong!', {timeOut: 5000})
+				toastr.error('BENIFITS IMAGE cannot be null.', 'Something went wrong!', {timeOut: 3000})
 			}
 			else if(ajaxData.length == 0)
 			{
-				toastr.error('Please add JOBSITE at least one.', 'Something went wrong!', {timeOut: 5000})
+				toastr.error('Please add JOBSITE at least one.', 'Something went wrong!', {timeOut: 3000})
 			}
 			else if(availmentData.length == 0)
 			{
-				toastr.error('Please select PLAN at least one.', 'Something went wrong!', {timeOut: 5000})
+				toastr.error('Please select PLAN at least one.', 'Something went wrong!', {timeOut: 3000})
+			}
+			else if(trunkData.length == 0)
+			{
+				toastr.error('Please add TRUNKLINE at least one.', 'Something went wrong!', {timeOut: 3000})
 			}
 			else
 			{
@@ -147,12 +146,13 @@ function company_center()
 				$('.global-submit').addClass('create-company-submit'); 
 
 				formData.append("company_name", 			document.getElementById('company_name').value);
-	            
+	            formData.append("company_email_address", 	document.getElementById('company_email_address').value);
 	            formData.append("company_contact_person", 	document.getElementById('company_contact_person').value);
 	            formData.append("company_phone_number", 	document.getElementById('company_phone_number').value);
-	            formData.append("company_address", 			document.getElementById('company_address').value);
-	            formData.append("company_email_address", 	document.getElementById('company_email_address').value);
-	            formData.append("company_trunk_line", 		document.getElementById('company_trunk_line').value);
+	            formData.append("company_zipcode", 			document.getElementById('company_zipcode').value);
+	            formData.append("company_street", 			document.getElementById('company_street').value);
+	            formData.append("company_city", 			document.getElementById('company_city').value);
+	            formData.append("company_country", 			document.getElementById('company_country').value);
 	            
 	            formData.append("contract_mode_of_payment", document.getElementById('contract_mode_of_payment').value);
 	            formData.append("contract", 				document.getElementById('contract_image').files[0]);
@@ -161,6 +161,10 @@ function company_center()
 	            for (var i = 0; i < ajaxData.length; i++) 
 				{
 				    formData.append('ajaxData[]', ajaxData[i]);
+				}
+				for (var i = 0; i < trunkData.length; i++) 
+				{
+				    formData.append('trunkData[]', trunkData[i]);
 				}
 
 				for (var j = 0; j < availmentData.length; j++) 

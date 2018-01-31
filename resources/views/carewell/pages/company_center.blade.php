@@ -25,13 +25,13 @@
         <div class="box-body table-responsive no-padding">
           <table class="table table-hover table-bordered">
             <tr>
-              <th>Company Code</th>
-              <th>Company Name</th>
-              <th>Coverage PLan</th>
-              <th>Contract Number</th>
-              <th>Date Created</th>
-              <th>Status</th>
-              <th>Action</th>
+              <th>COMPANY CODE</th>
+              <th>COMPANY NAME</th>
+              <th>COVERAGE PLAN</th>
+              <th>CONTRACT NUMBER</th>
+              <th>DATE CREATED</th>
+              <th>STATUS</th>
+              <th>ACTION</th>
             </tr>
             @foreach($_company as $company)
             <tr>

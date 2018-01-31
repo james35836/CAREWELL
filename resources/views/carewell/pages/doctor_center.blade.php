@@ -5,7 +5,7 @@
   <div class="row">
     <div class=" col-md-2 col-xs-6 pull-left">
       <select class="form-control">
-        <option>SELECT COMPANY</option>
+        <option>SELECT PROVIDER</option>
       </select>
     </div>
     <div class=" col-md-2 col-xs-6 pull-right">
@@ -25,7 +25,7 @@
     <div class="col-xs-12">
       <div class="box">
         <div class="box-header">
-          <h3 class="box-title">Doctor's List</h3>
+          <h3 class="box-title">DOCTOR's LIST</h3>
           <div class="box-tools">
             <div class="input-group input-group-sm" style="width: 150px;">
               <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
@@ -43,10 +43,7 @@
               <th>PROVIDER</th>
               <th>NAME</th>
               <th>SPECIALIZATION</th>
-              <th>GENDER</th>
-              <th>CONTACT EMAIL</th>
-              <th>CONTACT NUMBER</th>
-              <th>DATE CREATED</th>
+              <th>DATE ADDED</th>
               <th>STATUS</th>
               <th>ACTION</th>
             </tr>
@@ -60,9 +57,6 @@
                   <span class="label label-default">{{$specialization->specialization_name}}</span>
                 @endforeach
               </td>
-              <td>{{$doctor->doctor_gender}}</td>
-              <td>{{$doctor->doctor_email_address}}</td>
-              <td>{{$doctor->doctor_contact_number}}</td>
               <td>{{date("F j, Y",strtotime($doctor->doctor_created))}}</td>
               <td>
                 <span class="label label-success">active</span>

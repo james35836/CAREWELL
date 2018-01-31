@@ -20,6 +20,8 @@ Route::get('/testing_excel2', 			    			'TestController@testing_excel2');
 Route::get('/sample',									'TestController@sample');	
 Route::post('/samples',									'TestController@sample_submit');
 
+Route::get('/export_pdf',									'TestController@export_pdf');
+
 /*LOGIN*/
 Route::get('/', 										'FrontController@login');
 Route::get('/login', 									'FrontController@login');
@@ -30,7 +32,10 @@ Route::get('/logout', 									'FrontController@logout');
 
 
 Route::get('/register', 								'FrontController@register');
+/*STATIC CONTROLLER*/
 
+Route::any('/get/company_coverage_plan', 				'StaticFunctionController@getCompanyCoveragePlan');
+Route::any('/get/company_jobsite', 						'StaticFunctionController@getCompanyJobsite');
 
 /*USER*/
 Route::get('/user/view_profile', 						'UserController@user_view_profile');
@@ -54,9 +59,11 @@ Route::post('/company/create_company/submit', 			'CarewellController@company_cre
 /*MEMBER*/
 Route::get('/member', 									'CarewellController@member');
 Route::get('/member/create_member', 					'CarewellController@member_create_member');
+Route::post('/member/create_member/submit', 			'CarewellController@member_create_member_submit');
+
 Route::get('/member/view_member_details/{member_id}', 	'CarewellController@member_view_details');
 Route::get('/member/transaction_details/{member_id}',   'CarewellController@member_transaction_details');
-Route::get('/member/download_template/{company_id}', 	'CarewellController@member_download_template');
+Route::get('/member/download_template/{company_id}/{number}', 	'CarewellController@member_download_template');
 Route::get('/member/import_member', 					'CarewellController@member_import_member');
 Route::post('/member/import_member/submit', 			'CarewellController@member_import_member_submit');
 

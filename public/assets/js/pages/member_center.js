@@ -1,6 +1,8 @@
 var member_center 	= new member_center();
 var formData   		= new FormData();
 var ajaxData 		= [];
+var value           = 0;
+var message         = "";
 
 function member_center()
 {
@@ -16,9 +18,12 @@ function member_center()
 	{
 		$(document).ready(function()
 		{
+			checking_null_validation(value,message);
             export_template();
             import_member();
             create_member();
+            create_member_confirm();
+            create_member_submit();
             import_member_confirm();
 			import_member_submit();
 			view_member_details();
@@ -28,6 +33,18 @@ function member_center()
          });
 
 	}
+	function checking_null_validation(value,message)
+	{
+		if(value=="0")
+		{
+			return "null";
+		}
+		else if(value=="")
+		{
+			toastr.error(message+' cannot be null.', 'Something went wrong!', {timeOut: 3000})
+			return "";
+		}
+    }
 	function create_member()
 	{
 		$(document).on('click','.create-member',function()
@@ -36,7 +53,6 @@ function member_center()
 			$('.member-ajax-loader').show();
 			$('.member-modal-body-content').hide();
 			$('.member-modal-title').html('CREATE MEMBER');
-			$(".member-modal-footer").html("<button type='button' class='btn btn-default pull-left btn-close-import' data-dismiss='modal'>Close</button><button type='button' class='btn btn-primary pull-right' >Save Changes</button>");
 			$.ajax({
 				headers: {
 				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -55,7 +71,134 @@ function member_center()
 			});
 			
 		});
+		$(document).on('change','.select_company',function()
+		{
+			var company_id = $(this).val();
+			
+			document.getElementById("availment_plan_id").disabled = false;
+			$.ajax({
+				headers: {
+				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				},
+				type:'POST',
+				url:'/get/company_coverage_plan',
+				data:{company_id:company_id},
+				dataType:'text',
+				success:function(data)
+				{
+					$('.coverage-plan-show').html(data);
+				}
+			});
+			
+		});
+		$(document).on('change','.coverage-plan-show',function()
+		{
+			var company_id = $('.select_company').val();
+			
+			document.getElementById("jobsite_id").disabled = false;
+			$.ajax({
+				headers: {
+				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				},
+				type:'POST',
+				url:'/get/company_jobsite',
+				data:{company_id:company_id},
+				dataType:'text',
+				success:function(data)
+				{
+					$('.jobsite-show').html(data);
+				}
+			});
+			
+		});
 	}
+	function create_member_confirm()
+	{
+		$(document).on('click','.create-member-confirm',function()
+		{
+			
+			if(checking_null_validation(document.getElementById('member_first_name').value,"FIRST NAME")=="")
+			{}
+		    else if(checking_null_validation(document.getElementById('member_middle_name').value,"MIDDLE NAME")=="")
+			{}
+			else if(checking_null_validation(document.getElementById('member_last_name').value,"LAST NAME")=="")
+			{}
+			else if(document.getElementById('member_gender').value=="SELECT GENDER")
+			{
+				toastr.error('Please select GENDER.', 'Something went wrong!', {timeOut: 3000})
+			}
+		    else if(document.getElementById('member_marital_status').value=="SELECT STATUS")
+			{
+				toastr.error('Please select STATUS.', 'Something went wrong!', {timeOut: 3000})
+			}
+		    else if(checking_null_validation(document.getElementById('member_monther_maiden_name').value,"MOTHER MAIDEN NAME")=="")
+			{}
+			else if(checking_null_validation(document.getElementById('member_birthdate').value,"BIRTHDATE")=="")
+			{}
+			else if(checking_null_validation(document.getElementById('member_contact_number').value,"CONTACT NUMBER")=="")
+			{}
+			else if(checking_null_validation(document.getElementById('member_email_address').value,"EMAIL ADDRESS")=="")
+			{}
+			else if(checking_null_validation(document.getElementById('member_permanet_address').value,"PERMANENT ADDRESS")=="")
+			{}
+		    else if(checking_null_validation(document.getElementById('member_present_address').value,"PRESENT ADDRESS")=="")
+			{}
+			else if(checking_null_validation(document.getElementById('member_company_employee_number').value,"EMPLOYEE NUMBER")=="")
+			{}
+			else if(document.getElementById('company_id').value=="SELECT COMPANY")
+			{
+				toastr.error('Please select COMPANY.', 'Something went wrong!', {timeOut: 3000})
+			}
+			else if(document.getElementById('availment_plan_id').value=="COVERAGE PLAN")
+			{
+				toastr.error('Please select PLAN.', 'Something went wrong!', {timeOut: 3000})
+			}
+			else if(document.getElementById('jobsite_id').value=="DEPLOYMENT")
+			{
+				toastr.error('Please select DEPLOYMENT.', 'Something went wrong!', {timeOut: 3000})
+			}
+		
+			else
+			{
+				$('.confirm-title').html('Are you sure you want to add this MEMBER?');
+				$('.confirm-modal').modal('show');
+				$('.global-submit').addClass('create-member-submit'); 
+				
+				ajaxData = $(".member-company-form,.member-dependent-form,.member-information-form,.member-government-form").serialize(); 
+	   		}
+		});
+
+	}
+    function create_member_submit()
+    { 	
+    	$(document).on('click','.create-member-submit',function() 
+	    {
+	    	$('.confirm-modal').modal('hide');
+            $(".member-modal-body").html("<div class='member-ajax-loader' style='display:none;text-align: center; padding:50px;'><img src='/assets/loader/loading.gif'/></div");
+            $('.member-ajax-loader').show();
+	        $.ajax({
+	          	headers: {
+	              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+	        	},
+		        url:'/member/create_member/submit',
+		        method: "POST",
+		        data: ajaxData,
+		        dataType:"text",
+		        success: function(data)
+		        {
+		            setTimeout(function()
+					{
+						$('.modal-dialog').removeClass('modal-lg');
+						$('.modal-dialog').addClass('modal-sm');
+					    $(".member-modal-body").html(data);
+					    $(".member-modal-footer").html("<button type='button' class='btn btn-default pull-left medical-btn-close' style='text-align:center' data-dismiss='modal'>Close</button>");
+					}, 1000);
+		           
+		        }
+	        });
+	     });
+
+    }
 	function view_member_details()
 	{
 		$(document).on('click','.view-member-details',function()
@@ -165,10 +308,40 @@ function member_center()
 	}
 	function export_template()
 	{
-		$(document).on('change','.import-company-select',function()
+
+		$(document).on('change','.import-number-select',function()
+		{
+			var company_id = $('.import-member-company-select').val();
+			var number     = $(this).val();
+			
+			if(company_id!='SELECT COMPANY'&&number!='SELECT NUMBER ROWS')
+			{
+				
+				$('.download-link').attr('href', '/member/download_template/'+company_id+'/'+number);
+				document.getElementById('memberDownloadTemplate').disabled= false;
+			}
+			else
+			{
+				document.getElementById('memberDownloadTemplate').disabled= true;
+			}
+			
+		});
+		$(document).on('change','.import-member-company-select',function()
 		{
 			var company_id = $(this).val();
-			$('.download-link').attr('href', '/member/download_template/'+company_id);
+			var number     = $('.import-number-select').val();
+			
+			
+			if(number!='SELECT NUMBER ROWS'&&company_id!='SELECT COMPANY')
+			{
+				
+				$('.download-link').attr('href', '/member/download_template/'+company_id+'/'+number);
+				document.getElementById('memberDownloadTemplate').disabled= false;
+			}
+			else
+			{
+				document.getElementById('memberDownloadTemplate').disabled= true;
+			}
 			
 		});
 	}
@@ -179,6 +352,8 @@ function member_center()
 			$('.member-modal').modal('show');
 			$('.member-ajax-loader').show();
 			$('.member-modal-body-content').hide();
+			$('.modal-dialog').removeClass('modal-lg');
+			$('.modal-dialog').addClass('modal-import');
 			$('.member-modal-title').html('IMPORT MEMBER');
 			$(".member-modal-footer").html("<button type='button' class='btn btn-default pull-left btn-close-import' data-dismiss='modal'>Close</button>");
 			
