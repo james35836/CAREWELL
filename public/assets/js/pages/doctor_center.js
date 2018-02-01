@@ -165,28 +165,28 @@ function doctor_center()
 	}
 	function view_doctor_details()
 	{
-		$(document).on('click','.view-member-details',function()
+		$(document).on('click','.view-doctor-details',function()
 		{
-			$('.member-modal').modal('show');
-			$('.member-ajax-loader').show();
-			$('.member-modal-body-content').hide();
-			$('.member-modal-title').html('MEMBER DETAILS');
-			$(".member-modal-footer").html("<button type='button' class='btn btn-default pull-left btn-close-import' data-dismiss='modal'>Close</button><button type='button' class='btn btn-primary pull-right' >Save Changes</button>");
-			var member_id = $(this).data('id');
+			$('.doctor-modal').modal('show');
+			$('.doctor-ajax-loader').show();
+			$('.doctor-modal-body-content').hide();
+			$('.doctor-modal-title').html('DOCTOR DETAILS');
+			$(".doctor-modal-footer").html("<button type='button' class='btn btn-default pull-left btn-close-import' data-dismiss='modal'>Close</button><button type='button' class='btn btn-primary pull-right' >Save Changes</button>");
+			var doctor_id = $(this).data('doctor_id');
 			$.ajax({
 				headers: {
 				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 				},
 
-				url:'/member/view_member_details/'+member_id,
+				url:'/doctor/view_doctor_details/'+doctor_id,
 				method: "get",
                 success: function(data)
 				{
 					setTimeout(function()
 					{
-						$('.member-ajax-loader').hide();
-						$('.member-modal-body-content').show();
-						$('.member-modal-body-content').html(data);
+						$('.doctor-ajax-loader').hide();
+						$('.doctor-modal-body-content').show();
+						$('.doctor-modal-body-content').html(data);
                     }, 1000);
 				}
 			});

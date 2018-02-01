@@ -45,6 +45,7 @@ function billing_center()
         $(document).on('click','.create-cal',function() 
 		{
 			$('.billing-modal').modal('show');
+			$('.modal-dialog').removeClass().addClass('modal-dialog modal-lg');
 			$('.billing-ajax-loader').show();
 			$('.billing-modal-body-content').hide();
 			$('.billing-modal-title').html('CREATE PLAN');
@@ -74,6 +75,7 @@ function billing_center()
 
 			$('.confirm-title').html('Are you sure you want to add this CAL?');
 			$('.confirm-modal').modal('show');
+			$('.modal-dialog').removeClass().addClass('modal-dialog modal-lg');
 			$('.global-submit').addClass('create-cal-submit'); 
 
 			formData.append("cal_company_id", 			document.getElementById('cal_company_id').value);
@@ -110,8 +112,7 @@ function billing_center()
 				{
 					setTimeout(function()
 					{
-						$('.modal-dialog').removeClass('modal-lg');
-						$('.modal-dialog').addClass('modal-sm');
+						$('.modal-dialog').removeClass().addClass('modal-dialog modal-sm');
 					    $(".billing-modal-body").html(data);
 					    $(".billing-modal-footer").html("<button type='button' class='btn btn-default pull-left btn-close-billing' style='text-align:center' data-dismiss='modal'>Close</button>");
 					}, 1000);
@@ -124,6 +125,7 @@ function billing_center()
 		$(document).on('click','.cal-view-details',function() 
 		{
 			$('.billing-modal').modal('show');
+			$('.modal-dialog').removeClass().addClass('modal-dialog modal-lg');
 			$('.billing-ajax-loader').show();
 			$('.billing-modal-body-content').hide();
 			$('.billing-modal-title').html('CAL DETAILS');
@@ -162,6 +164,7 @@ function billing_center()
 		$(document).on('click','.import-cal-members',function() 
 		{
 			$('.billing-action-modal').modal('show');
+			$('.modal-dialog').removeClass().addClass('modal-dialog modal-import');
 			$('.billing-action-ajax-loader').show();
 			$('.billing-action-modal-body-content').hide();
 			$('.billing-action-modal-title').html('IMPORT CAL MEMBERS');
@@ -192,6 +195,7 @@ function billing_center()
 		$(document).on('click','.import-cal-member-confirm',function() 
 		{
 			$('.confirm-title').html('Are you sure you want to import this FILE?');
+			$('.modal-dialog').removeClass().addClass('modal-dialog modal-sm');
 			$('.confirm-modal').modal('show');
 			$('.global-submit').addClass('import-cal-member-submit'); 
 			
@@ -223,8 +227,7 @@ function billing_center()
 				{
 					setTimeout(function()
 					{
-						$('.billing-action-modal-dialog').removeClass('modal-lg');
-						$('.billing-action-modal-dialog').addClass('modal-sm');
+						$('.modal-dialog').removeClass().addClass('modal-dialog modal-sm');
 						$('.billing-action-ajax-loader').hide();
 						$('.billing-action-modal-body-content').show();
 					    $(".billing-action-modal-body-content").html(data);

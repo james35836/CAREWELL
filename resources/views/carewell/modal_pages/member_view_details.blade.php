@@ -1,20 +1,35 @@
 <script>
-	$(document).ready(function() {
-	$(".addDependent").on("click", function() {
-		$(".appendDependent").append("<div class='form-holder'><div class='col-md-3 form-content'><label>Dependent Full Name</label></div><div class='col-md-9 form-content'><input type='text' class='form-control'/></div></div><div class='form-holder' ><div class='col-md-3 form-content'><label>Birthdate</label></div><div class='col-md-3 form-content'><input type='text' class='form-control'/></div><div class='col-md-3 form-content'><label>Relationship</label></div><div class='col-md-3 form-content'><input type='text' class='form-control'/></div></div>");
-	});
-	$(".removeDependent").on("click", function() {
-	$(".appendDependent").children().last().remove();
-	});
+	$(document).ready(function() 
+	{
+		$(document).on("click",".addDependent", function() 
+		{
+			$(".dependent-form").append('<tr><td><input type="text" name="member_dependent_full_name[]" id="member_dependent_full_name" class="form-control"/></td><td><input type="text" name="member_dependent_birthdate[]" id="member_dependent_birthdate[]" class="date-picker form-control datepicker"/></td><td><select  name="member_dependent_relationship[]" id="member_dependent_relationship[]" class="form-control"><option>FATHER</option><option>MOTHER</option><option>CHILD</option><option>SPOUSE</option><option>UNCLE</option><option>AUNT</option><option>BROTHER</option><option>SISTER</option><option>GRANDFATHER</option><option>GRANDMOTHER</option><option>NEPHEW</option><option>NIECE</option><option>COUSIN</option></select></td></tr>');
+		});
+		$(document).on("click",".removeDependent", function() 
+		{
+			if ($(".dependent-form tr").length >2)
+			{
+				$(".dependent-form tr:last").remove();
+			}
+			else
+			{
+				toastr.error('You cannot remove all rows.', 'Something went wrong!', {timeOut: 3000})
+			}
+			
+		});
 	});
 	$(function ()
 	{
 		//select2
 		$('.select2').select2()
 		//Date picker
-		$('.datepicker').datepicker({
-		autoclose: true
-		})
+		
+		$("body").on("click", ".datepicker", function(){
+
+	        $(this).datepicker();
+	        $(this).datepicker("show");
+	        
+	    });
 	})
 </script>
 <div class="row box-globals">
@@ -26,98 +41,97 @@
 	</div>
 </div>
 <div class="row box-globals">
-	<div class="form-holder">
-		<div class="col-md-2 form-content">
-			<label>Last Name</label>
+	<form class="member-information-form" method="post">
+		<div class="form-holder">
+			<div class="col-md-2 form-content">
+				<label>Last Name</label>
+			</div>
+			<div class="col-md-4 form-content">
+				<input type="text" value="{{$member_details->member_last_name}}" name="member_last_name" id="member_last_name" class="form-control" required/>
+			</div>
+			<div class="col-md-2 form-content">
+				<label>First Name</label>
+			</div>
+			<div class="col-md-4 form-content">
+				<input type="text" value="{{$member_details->member_first_name}}" name="member_first_name" id="member_first_name" class="form-control"/>
+			</div>
 		</div>
-		<div class="col-md-4 form-content">
-			<input type="text" class="form-control" value="{{$member_details->member_last_name}}"/>
+		<div class="form-holder">
+			<div class="col-md-2 form-content">
+				<label>Middle Name</label>
+			</div>
+			<div class="col-md-4 form-content">
+				<input type="text"  value="{{$member_details->member_middle_name}}" name="member_middle_name" id="member_middle_name" class="form-control"/>
+			</div>
+			<div class="col-md-2 form-content">
+				<label>Birthdate</label>
+			</div>
+			<div class="col-md-4 form-content">
+				<input type="text" value="{{$member_details->member_birthdate}}" name="member_birthdate" id="member_birthdate" class="form-control datepicker"/>
+			</div>
 		</div>
-		<div class="col-md-2 form-content">
-			<label>First Name</label>
+		<div class="form-holder">
+			<div class="col-md-2 form-content">
+				<label>Gender</label>
+			</div>
+			<div class="col-md-4 form-content">
+				<select name="member_gender" id="member_gender" class="form-control">
+					<option>{{$member_details->member_gender}}</option>
+					<option>MALE</option>
+					<option>FEMALE</option>
+				</select>
+			</div>
+			<div class="col-md-2 form-content">
+				<label>Marital Status</label>
+			</div>
+			<div class="col-md-4 form-content">
+				<select name="member_marital_status" id="member_marital_status" class="form-control">
+					<option>{{$member_details->member_marital_status}}</option>
+					<option>SINGLE</option>
+					<option>MARRIED</option>
+					<option>DIVORCED</option>
+					<option>SEPARATED</option>
+					<option>WIDOWED</option>
+				</select>
+			</div>
 		</div>
-		<div class="col-md-4 form-content">
-			<input type="text" class="form-control" value="{{$member_details->member_first_name}}"/>
+		<div class="form-holder">
+			<div class="col-md-2 form-content">
+				<label>Email Address</label>
+			</div>
+			<div class="col-md-4 form-content">
+				<input type="text" value="{{$member_details->member_email_address}}" name="member_email_address" id="member_email_address" class="form-control"/>
+			</div>
+			<div class="col-md-2 form-content">
+				<label>Contact Number</label>
+			</div>
+			<div class="col-md-4 form-content">
+				<input type="text"  value="{{$member_details->member_contact_number}}" name="member_contact_number" id="member_contact_number" class="form-control"/>
+			</div>
 		</div>
-	</div>
-	<div class="form-holder">
-		<div class="col-md-2 form-content">
-			<label>Middle Name</label>
+		<div class="form-holder">
+			<div class="col-md-2 form-content">
+				<label>Mother Maiden Name</label>
+			</div>
+			<div class="col-md-10 form-content">
+				<input type="text" value="{{$member_details->member_mother_maiden_name}}" name="member_monther_maiden_name" id="member_monther_maiden_name" class="form-control"/>
+			</div>
 		</div>
-		<div class="col-md-4 form-content">
-			<input type="text" class="form-control" value="{{$member_details->member_middle_name}}"/>
+		<div class="form-holder">
+			<div class="col-md-2 form-content">
+				<label>Permanent Address</label>
+			</div>
+			<div class="col-md-4 form-content">
+				<textarea  id="member_permanet_address" name="member_permanet_address" class="form-control" cols="30" rows="3">{{$member_details->member_permanet_address}}</textarea>
+			</div>
+			<div class="col-md-2 form-content">
+				<label>Present Address</label>
+			</div>
+			<div class="col-md-4 form-content">
+				<textarea  id="member_present_address" name="member_present_address" class="form-control" cols="30" rows="3">{{$member_details->member_present_address}}</textarea>
+			</div>
 		</div>
-		<div class="col-md-2 form-content">
-			<label>Birthdate</label>
-		</div>
-		<div class="col-md-4 form-content">
-			<input type="text" class="form-control datepicker" value="{{$member_details->member_birthdate}}"/>
-		</div>
-	</div>
-	<div class="form-holder">
-		<div class="col-md-2 form-content">
-			<label>Gender</label>
-		</div>
-		<div class="col-md-4 form-content">
-			<select class="form-control">
-				<option>{{$member_details->member_gender}}</option>
-				<option>MALE</option>
-				<option>FEMALE</option>
-			</select>
-		</div>
-		<div class="col-md-2 form-content">
-			<label>Marital Status</label>
-		</div>
-		<div class="col-md-4 form-content">
-			<select class="form-control">
-				<option>{{$member_details->member_marital_status}}</option>
-				<option>SINGLE</option>
-				<option>MARRIED</option>
-				<option>DIVORCED</option>
-				<option>SEPARATED</option>
-				<option>WIDOWED</option>
-			</select>
-		</div>
-		
-	</div>
-	<div class="form-holder">
-		<div class="col-md-3 form-content">
-			<label>Mother's Maiden Name</label>
-		</div>
-		<div class="col-md-9 form-content">
-			<input type="text" class="form-control" value="{{$member_details->member_monther_maiden_name}}"/>
-		</div>
-	</div>
-	<div class="form-holder">
-		<div class="col-md-3 form-content">
-			<label>Permanent Address</label>
-		</div>
-		<div class="col-md-9 form-content">
-			<input type="text" class="form-control" value="{{$member_details->member_permanet_address}}"/>
-		</div>
-	</div>
-	<div class="form-holder">
-		<div class="col-md-3 form-content">
-			<label>Present Address</label>
-		</div>
-		<div class="col-md-9 form-content">
-			<input type="text" class="form-control" value="{{$member_details->member_present_address}}"/>
-		</div>
-	</div>
-	<div class="form-holder">
-		<div class="col-md-3 form-content">
-			<label>Email Address</label>
-		</div>
-		<div class="col-md-3 form-content">
-			<input type="text" class="form-control" value="{{$member_details->member_email_address}}"/>
-		</div>
-		<div class="col-md-3 form-content">
-			<label>Contact Number</label>
-		</div>
-		<div class="col-md-3 form-content">
-			<input type="text" class="form-control" value="{{$member_details->member_contact_number}}"/>
-		</div>
-	</div>
+	</form>
 </div>
 <div class="row box-globals" style="min-height: 300px;">
 	<div class="nav-tabs-custom">
@@ -131,16 +145,20 @@
 				<div class="box-body table-responsive no-padding">
 					<table class="table table-hover table-bordered">
 						<tr>
-							<th>Carewell ID</th>
-							<th>Company Name</th>
-							<th>Jobsite</th>
-							<th>Status</th>
-							<th>Action</th>
+							<th>CAREWELL ID</th>
+							<th>COMPANY NAME</th>
+							<th>EMPLOYEE ID</th>
+							<th>COVERAGE PLAN</th>
+							<th>JOBSITE</th>
+							<th>STATUS</th>
+							<th>ACTION</th>
 						</tr>
 						@foreach($_member_company as $member_company)
 						<tr>
 							<td>{{$member_company->member_company_carewell_id}}</td>
 							<td>{{$member_company->company_name}}</td>
+							<td>{{$member_company->member_company_employee_number}}</td>
+							<td>{{$member_company->availment_plan_name}}</td>
 							<td>{{$member_company->jobsite_name}}</td>
 							<td><span class="label label-success">active</span></td>
 							<td>

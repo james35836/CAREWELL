@@ -67,7 +67,7 @@ class StaticFunctionController extends Controller
 
       if($data == null && $output == 'string')
       {
-           $data = '';
+           $data = 'N/A';
       }
       else if($data == null && $output == 'int')
       {
@@ -103,7 +103,7 @@ class StaticFunctionController extends Controller
         $id = TblCompanyJobsiteModel::where('jobsite_name', $str_name)->value('jobsite_id');
         if($id == null)
         {
-          $id = 420;
+          $id = 35836;
         }
         break;
 
@@ -111,7 +111,7 @@ class StaticFunctionController extends Controller
         $id = TblAvailmentPlanModel::where('availment_plan_name', $str_name)->value('availment_plan_id');
         if($id == null)
         {
-          $id = 420;
+          $id = 1;
         }
         break;
 

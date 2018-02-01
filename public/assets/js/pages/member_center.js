@@ -50,6 +50,7 @@ function member_center()
 		$(document).on('click','.create-member',function()
 		{
 			$('.member-modal').modal('show');
+			$('.modal-dialog').removeClass().addClass('modal-dialog modal-lg');
 			$('.member-ajax-loader').show();
 			$('.member-modal-body-content').hide();
 			$('.member-modal-title').html('CREATE MEMBER');
@@ -161,6 +162,7 @@ function member_center()
 			else
 			{
 				$('.confirm-title').html('Are you sure you want to add this MEMBER?');
+				$('.modal-dialog').removeClass().addClass('modal-dialog modal-sm');
 				$('.confirm-modal').modal('show');
 				$('.global-submit').addClass('create-member-submit'); 
 				
@@ -204,6 +206,7 @@ function member_center()
 		$(document).on('click','.view-member-details',function()
 		{
 			$('.member-modal').modal('show');
+			$('.modal-dialog').removeClass().addClass('modal-dialog modal-lg');
 			$('.member-ajax-loader').show();
 			$('.member-modal-body-content').hide();
 			$('.member-modal-title').html('MEMBER DETAILS');
@@ -352,8 +355,7 @@ function member_center()
 			$('.member-modal').modal('show');
 			$('.member-ajax-loader').show();
 			$('.member-modal-body-content').hide();
-			$('.modal-dialog').removeClass('modal-lg');
-			$('.modal-dialog').addClass('modal-import');
+			$('.modal-dialog').removeClass().addClass('modal-dialog modal-import');
 			$('.member-modal-title').html('IMPORT MEMBER');
 			$(".member-modal-footer").html("<button type='button' class='btn btn-default pull-left btn-close-import' data-dismiss='modal'>Close</button>");
 			

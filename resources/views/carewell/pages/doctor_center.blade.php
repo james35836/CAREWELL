@@ -69,7 +69,7 @@
                   <span class="sr-only">Toggle Dropdown</span>
                   </button>
                   <ul class="dropdown-menu" role="menu" style="position: absolute !important;">
-                    <li><button type="button" data-id="{{$doctor->doctor_id}}" class="btn btn-link view-member-details"><i class="fa fa-eye btn-icon"></i>  View Member</button></li>
+                    <li><button type="button" data-doctor_id="{{$doctor->doctor_id}}" class="btn btn-link view-doctor-details"><i class="fa fa-eye btn-icon"></i>  View Member</button></li>
                     <li><button type="button" class="btn btn-link"><i class="fa fa-trash btn-icon"></i> Archived Member</button></li>
                   </ul>
                 </div>

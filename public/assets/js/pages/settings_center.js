@@ -1,4 +1,4 @@
-var settings_center 	= new settings_center();
+var settings_center = new settings_center();
 var formData   		= new FormData();
 var ajaxData 		= [];
 
@@ -71,7 +71,7 @@ function settings_center()
 		{
 			$('.confirm-title').html('Are you sure you want to create this PLAN?');
 								$('.confirm-modal').modal('show');
-								$('.global-submit').addClass('create-plan-submit');					
+								$('.global-submit').addClass('create-plans-submit');					
 			
 			formData.availment_plan_name 	=  document.getElementById('availment_plan_name').value;
 			formData.availment_plan_price 	=  document.getElementById('availment_plan_price').value;
@@ -85,7 +85,7 @@ function settings_center()
 	
 	function create_plan_submit()
 	{
-		$(document).on('click','.create-plan-submit',function() 
+		$(document).on('click','.create-plans-submit',function() 
 		{
 			$('.confirm-modal').modal('hide');
             $(".plan-modal-body").html("<div class='plan-ajax-loader' style='display:none;text-align: center; padding:50px;'><img src='/assets/loader/loading.gif'/></div");

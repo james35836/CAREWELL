@@ -119,9 +119,12 @@ class CarewellController extends Controller
     $data['_company_jobsite']         = TblCompanyJobsiteModel::where('company_id',$company_id)->get();
     $data['_company_trunkline']       = TblCompanyTrunklineModel::where('company_id',$company_id)->get();
     $data['_company_availment_plan']  = TblCompanyCoveragePlanModel::where('company_id',$company_id)
-                                        ->join('tbl_availment_plan','tbl_availment_plan.availment_plan_id','=','tbl_company_coverage_plan.availment_plan_id')
-                                        ->get();
-    $data['company_contract']        = TblCompanyContractModel::where('company_id',$company_id)->first();
+                                      ->join('tbl_availment_plan','tbl_availment_plan.availment_plan_id','=','tbl_company_coverage_plan.availment_plan_id')
+                                      ->get();
+    $data['_company_member']          = TblMemberCompanyModel::where('tbl_member_company.company_id',$company_id)
+                                      ->join('tbl_member','tbl_member.member_id','=','tbl_member_company.member_id')
+                                      ->get();
+    $data['company_contract']         = TblCompanyContractModel::where('company_id',$company_id)->first();
 
     return view('carewell.modal_pages.company_details',$data);
 
@@ -229,7 +232,7 @@ class CarewellController extends Controller
     $memberData->member_birthdate           = $request->member_birthdate;
     $memberData->member_gender              = $request->member_gender;
     $memberData->member_marital_status      = $request->member_marital_status;
-    $memberData->member_monther_maiden_name = $request->member_monther_maiden_name;
+    $memberData->member_mother_maiden_name  = $request->member_monther_maiden_name;
     $memberData->member_permanet_address    = $request->member_permanet_address;
     $memberData->member_present_address     = $request->member_present_address;
     $memberData->member_contact_number      = $request->member_contact_number;
@@ -295,9 +298,10 @@ class CarewellController extends Controller
     $data['_member_dependent'] = TblMemberDependentModel::where('member_id',$member_id)->get();
     $data['member_government'] = TblMemberGovernmentCardModel::where('member_id',$member_id)->first();
     $data['_member_company']    = TblMemberCompanyModel::where('member_id',$member_id)
-                                 ->join('tbl_company','tbl_company.company_id','=','tbl_member_company.company_id')
-                                 ->join('tbl_company_jobsite','tbl_company_jobsite.jobsite_id','=','tbl_member_company.jobsite_id')
-                                 ->get();
+                                ->join('tbl_company','tbl_company.company_id','=','tbl_member_company.company_id')
+                                ->join('tbl_company_jobsite','tbl_company_jobsite.jobsite_id','=','tbl_member_company.jobsite_id')
+                                ->join('tbl_availment_plan','tbl_availment_plan.availment_plan_id','=','tbl_member_company.availment_plan_id')
+                                ->get();
 
     return view('carewell.modal_pages.member_view_details',$data);
   }
@@ -440,7 +444,7 @@ class CarewellController extends Controller
             $member['member_birthdate']         =   date_format($data['member_birthdate'],"d-m-Y");  
             $member['member_gender']            =   "N/A";
             $member['member_marital_status']    =   "N/A";
-            $member['member_mother_maiden_name']= "N/A";
+            $member['member_mother_maiden_name']=   "N/A";
             $member['member_permanet_address']  =   "N/A";
             $member['member_present_address']   =   "N/A";
             $member['member_contact_number']    =   "N/A";
@@ -453,12 +457,11 @@ class CarewellController extends Controller
             $update['member_universal_id']      =   StaticFunctionController::initials($display_name)."-".str_replace(' ','',preg_replace('/[^a-z0-9\s]/i', '', $member['member_birthdate']))."-".sprintf("%05d",$member_id);
                                                     TblMemberModel::where('member_id',$member_id)->update($update);
 
-            // $dependent['member_dependent_full_name']        =   StaticFunctionController::nullableToString($data['member_dependent_full_name']);
-            // $dependent['member_dependent_birthdate']        =   date_format($data['member_dependent_birthdate'],"d-m-Y");  
-            // $dependent['member_dependent_relationship']     =   StaticFunctionController::nullableToString($data['member_dependent_relationship']);
-            // $dependent['member_id']       =   $member_id;
-
-            // TblMemberDependentModel::insert($dependent);
+            $dependent['member_dependent_full_name']    =   "N/A";
+            $dependent['member_dependent_birthdate']    =   "N/A";
+            $dependent['member_dependent_relationship'] =   "N/A";
+            $dependent['member_id']                     =   $member_id;
+            TblMemberDependentModel::insert($dependent);
 
             $government['member_government_card_philhealth'] =   "N/A";
             $government['member_government_card_sss']        =   "N/A";
@@ -601,9 +604,19 @@ class CarewellController extends Controller
   }
   public function create_doctor()
   {
-
     $data['_provider'] = TblProviderModel::get();
     return view('carewell.modal_pages.doctor_create',$data);
+  }
+  public function doctor_view_details(Request $request,$doctor_id)
+  {
+    $data['_provider']              = TblProviderModel::get();
+    $data['doctor_details']         = TblDoctorModel::where('doctor_id',$doctor_id)->first();
+    $data['_doctor_specialization'] = TblDoctorSpecializationModel::where('doctor_id',$doctor_id)->get();
+    $data['_doctor_provider']       = TblDoctorProviderModel::where('tbl_doctor_provider.doctor_id',$doctor_id)
+                                    ->join('tbl_provider','tbl_provider.provider_id','=','tbl_doctor_provider.provider_id')
+                                    ->get();
+
+    return view('carewell.modal_pages.doctor_details',$data);
   }
   public function create_doctor_submit(Request $request)
   {
@@ -1005,13 +1018,14 @@ class CarewellController extends Controller
     $availmentPlanData->availment_plan_created=   Carbon::now();
     $availmentPlanData->save();
 
-    print_r($request->james);
     foreach($request->ajaxData as $key=> $availment_id)
     {
-      $ins['availment_id']      = $availment_id;
-      $ins['availment_plan_id'] = $availmentPlanData->availment_plan_id;
-      $ins['availment_type_coverage_amount']  =   '155222';
-      TblAvailmentTagModel::insert($ins);
+
+      $availmentTagData = new TblAvailmentTagModel;
+      $availmentTagData->availment_id                   =   $availment_id;
+      $availmentTagData->availment_plan_id              =   $availmentPlanData->availment_plan_id;
+      $availmentTagData->availment_type_coverage_amount =   '1400';
+      $availmentTagData->save();
     }
     return "<div class='alert alert-success' style='text-align: center;'>Company Added Successfully!</div>";
   }

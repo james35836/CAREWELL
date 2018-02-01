@@ -111,6 +111,7 @@ $(".remove-coverage").on("click", function() {
 			<li class="my-tab"><a data-toggle="tab" href="#coverage">COVERAGE PLAN</a></li>
 			<li class="my-tab"><a data-toggle="tab" href="#trunk">TRUNK LINE</a></li>
 			<li class="my-tab"><a data-toggle="tab" href="#jobsite">DEPLOYMENT</a></li>
+			<li class="my-tab"><a data-toggle="tab" href="#member">MEMBER's LIST</a></li>
 		</ul>
 		<div class="tab-content" >
 			<div id="contract" class="row tab-pane fade in active table-min-height">
@@ -313,6 +314,47 @@ $(".remove-coverage").on("click", function() {
 					</div>
 				</div>
 				<div class="form-holder jobsite-form " style="padding:0% 5% 0% 5%;">
+				</div>
+			</div>
+			<div id="member" class="row tab-pane fade table-min-height" >
+				<div class="col-md-12 form-holder">
+					<div class=" box-body table-responsive no-padding">
+						<table class="table table-hover table-bordered">
+							<tr>
+								<th>UNIVERSAL ID</th>
+								<th>CAREWELL ID</th>
+								<th>EMPLOYEE NUMBER</th>
+								<th>MEMBER NAME</th>
+								<th>STATUS</th>
+								<th>ACTION</th>
+							</tr>
+							@foreach($_company_member as $company_member)
+							<tr>
+								<td>{{$company_member->member_universal_id}}</td>
+								<td>{{$company_member->member_company_carewell_id}}</td>
+								<td>{{$company_member->member_company_employee_number}}</td>
+								<td>{{$company_member->member_first_name." ".$company_member->member_last_name}}</td>
+								<td><span class="label label-success">Active</span></td>
+								<td>
+									<div class="btn-group">
+										<button type="button" class="btn btn-danger btn-sm">Action</button>
+										<button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+										<span class="caret"></span>
+										<span class="sr-only">Toggle Dropdown</span>
+										</button>
+										<ul class="dropdown-menu" role="menu" style="position: absolute !important;">
+											<li><button type="button" data-id="{{$company_member->trunkline_id}}" class="btn btn-link view-member-details">View Member</button></li>
+											<li><button type="button" class="btn btn-link">Update Member</button></li>
+										</ul>
+									</div>
+								</td>
+							</tr>
+							@endforeach
+							<tr style="height:70px;">
+							</tr>
+						</table>
+					</div>
+					
 				</div>
 			</div>
 		</div>

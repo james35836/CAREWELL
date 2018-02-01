@@ -529,6 +529,14 @@ class MaintenanceController extends Controller
 
             DB::table('tbl_procedure')->insert($procedure);
         }
+        if (DB::table('tbl_jobsite')->count() <= 0) 
+        {
+            $job[0]["jobsite_id"]       = 35836;
+            $job[0]["jobsite_name"]     = "Sakit sa tiyan";
+            $job[0]["company_id"]       = 35836;
+            DB::table('tbl_jobsite')->insert($job);
+        }
+
 
 
 
