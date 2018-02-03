@@ -1,5 +1,4 @@
 <div class=" menu-holder">
- 
   <div class="row menu-content">
     <div class="col-md-6">
       <select name=""  class="form-control import-element import-member-company-select" id="companyID">
@@ -37,7 +36,6 @@
         <option >220</option>
       </select>
     </div>
-    
   </div>
   <div class="row menu-content">
     <div class="col-md-1 center">
@@ -49,7 +47,6 @@
       </a>
     </div>
   </div>
-
   <div class="row  menu-content">
     <div class="col-md-1 ">
       <i class="fa fa-search import-icons import-element" aria-hidden="true"></i>

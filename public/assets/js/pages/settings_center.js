@@ -2,6 +2,26 @@ var settings_center = new settings_center();
 var formData   		= new FormData();
 var ajaxData 		= [];
 
+var modals 			= '<div  class="modal fade modal-top confirm-modal" id="" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">'
+						  +'<div class="confirm-modal-dialog modal-dialog modal-sm">'
+						    +'<div class="modal-content">'
+						      +'<div class="modal-header">'
+						        +'<button type="button" class="close" data-dismiss="modal" aria-label="Close">'
+						        +'<span aria-hidden="true">&times;</span></button>'
+						        +'<h4 class="modal-title confirm-modal-title"></h4>'
+						      +'</div>'
+						      
+						      +'<div class="modal-body modal-body-sm">'
+						        +'<input type="hidden" class="link"/>'
+						      +'</div>'
+						      +'<div class="modal-footer">'
+						        +'<button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancel</button>'
+						        +'<button type="button" class="btn btn-primary confirm-submit">Save</button>'
+						      +'</div>'
+						    +'</div>'
+						  +'</div>'
+						+'</div>';
+
 function settings_center()
 {
 	init();
@@ -69,10 +89,13 @@ function settings_center()
 	{
 		$(document).on('click','.plan-confirm',function() 
 		{
-			$('.confirm-title').html('Are you sure you want to create this PLAN?');
-								$('.confirm-modal').modal('show');
-								$('.global-submit').addClass('create-plans-submit');					
-			
+			$('.confirm-modal').remove();
+			$('.append-modal').append(modals);
+            $('.confirm-modal-dialog').removeClass().addClass('modal-dialog modal-sm');
+			$('.confirm-modal-title').html('Are you sure you want to create this PLAN?');
+			$('.confirm-submit').addClass('create-plans-submit');
+			$('.confirm-modal').modal('show');
+
 			formData.availment_plan_name 	=  document.getElementById('availment_plan_name').value;
 			formData.availment_plan_price 	=  document.getElementById('availment_plan_price').value;
 

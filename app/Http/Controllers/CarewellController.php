@@ -53,7 +53,7 @@ use App\Http\Model\TblScheduleOfBenefitsModel;
 
 
 use App\Http\Controllers\StaticFunctionController;
-
+use App\Http\Controllers\ActiveAuthController;
 
 
 
@@ -69,15 +69,18 @@ use Crypt;
 
 
 
-class CarewellController extends Controller
+class CarewellController extends ActiveAuthController
 {
+  
   /*STATIC DATA*/
   public static function global()
   {
     $user_info = TblUserInfoModel::where('tbl_user_info.user_id',session('user_id'))
                 ->join('tbl_user','tbl_user.user_id','=','tbl_user_info.user_id')
                 ->first();
+
     return $user_info;
+
   }
 
   
@@ -655,6 +658,121 @@ class CarewellController extends Controller
   {
     $data['_provider'] = TblProviderModel::get();
     return view('carewell.modal_pages.doctor_import',$data);
+  }
+  public function doctor_download_template($provider_id,$number)
+  {
+    $excels['number_of_rows'] =   $number;
+    $excels['provider_id']    =   $provider_id;
+    $provider_template         =   TblProviderModel::where('provider_id',$provider_id)->first();
+    $excels['provider_name']   =   $provider_template->provider_name;
+    $excels['data']           =   ['PROVIDER NAME','DOCTOR NUMBER','DOCTOR LAST NAME','DOCTOR FIRST NAME','DOCTOR MIDDLE NAME','DOCTOR GENDER','DOCTOR BIRTHDATE','DOCTOR CONTACT NUMBER','DOCTOR EMAIL ADDRESS','DOCTOR ADDRESS','DOCTOR SPECIALIZATION'];
+    Excel::create('CAREWELL '.$provider_template->provider_name.' PROVIDER TEMPLATE', function($excel) use ($excels) 
+    {
+      $excel->sheet('template', function($sheet) use ($excels) 
+      {
+        $data = $excels['data'];
+        $number_of_rows = $excels['number_of_rows'];
+        $sheet->fromArray($data, null, 'A1', false, false);
+        $sheet->freezeFirstRow();
+
+        for($row = 1, $rowcell = 2; $row <= $number_of_rows; $row++, $rowcell++)
+        {
+            /* PROVIDER ROW */
+            $sheet->setCellValue('A'.$rowcell, $excels['provider_name']);
+        
+            /* GENDER*/
+            $gender_cell = $sheet->getCell('F'.$rowcell)->getDataValidation();
+            $gender_cell->setType(\PHPExcel_Cell_DataValidation::TYPE_LIST);
+            $gender_cell->setErrorStyle(\PHPExcel_Cell_DataValidation::STYLE_INFORMATION);
+            $gender_cell->setAllowBlank(false);
+            $gender_cell->setShowInputMessage(true);
+            $gender_cell->setShowErrorMessage(true);
+            $gender_cell->setShowDropDown(true);
+            $gender_cell->setErrorTitle('Input error');
+            $gender_cell->setError('Value is not in list.');
+            $gender_cell->setFormula1('gender');
+        }
+      });
+      /* DATA VALIDATION (REFERENCE FOR DROPDOWN LIST) */
+      $excel->sheet('reference', function($sheet) use($excels) 
+      {
+        $provider_id       = $excels['provider_id'];
+        
+        /* GENDER REFERENCES */
+        $sheet->SetCellValue("F1", "gender");
+        $sheet->SetCellValue("F2", 'MALE');
+        $sheet->SetCellValue("F3", 'FEMALE');
+        
+        /*GENDER*/
+        $sheet->_parent->addNamedRange(
+            new \PHPExcel_NamedRange(
+            'gender', $sheet, 'F2:F3'
+            )
+        );
+      });
+    })->download('xlsx');
+  }
+  public function doctor_import_doctor_submit(Request $request)
+  {
+    $file   = $request->file('importDoctorFile')->getRealPath();
+    $_data  = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->all();
+    
+    $first  = $_data[0]; 
+      if(isset($first['provider_name'])&&isset($first['doctor_last_name']))
+      {    
+        $count = 0;
+        foreach($_data as $data)
+        {
+          $providerID   = StaticFunctionController::getid($data['provider_name'], 'provider');
+          $providerData = TblProviderModel::where('provider_id',$providerID)->first();
+
+          $count_doctor = TblDoctorModel::where('doctor_first_name',StaticFunctionController::nullableToString($data['doctor_first_name']))
+                          ->where('doctor_last_name', StaticFunctionController::nullableToString($data['doctor_last_name']))
+                          ->where('doctor_middle_name',StaticFunctionController::nullableToString($data['doctor_middle_name']))
+                          ->count();
+          if($count_doctor == 0 && $data['doctor_birthdate']!=null&&StaticFunctionController::getid($data['provider_name'], 'provider') != null )
+          {
+            $doctor['doctor_number']            =   StaticFunctionController::nullableToString($data['doctor_number']);
+            $doctor['doctor_first_name']        =   StaticFunctionController::nullableToString($data['doctor_first_name']);
+            $doctor['doctor_middle_name']       =   StaticFunctionController::nullableToString($data['doctor_middle_name']);
+            $doctor['doctor_last_name']         =   StaticFunctionController::nullableToString($data['doctor_last_name']);
+            $doctor['doctor_birthdate']         =   date_format($data['doctor_birthdate'],"d-m-Y");  
+            $doctor['doctor_gender']            =   StaticFunctionController::nullableToString($data['doctor_gender']);
+            $doctor['doctor_address']           =   StaticFunctionController::nullableToString($data['doctor_address']);
+            $doctor['doctor_contact_number']    =   StaticFunctionController::nullableToString($data['doctor_contact_number']);
+            $doctor['doctor_email_address']     =   StaticFunctionController::nullableToString($data['doctor_email_address']);
+            $doctor['doctor_created']           =   Carbon::now();
+           
+            $doctor_id                          =   TblDoctorModel::insertGetId($doctor);
+            
+
+            $specialization['specialization_name']  =   StaticFunctionController::nullableToString($data['doctor_email_address']);
+            $specialization['doctor_id']            =   $doctor_id ;
+            TblDoctorSpecializationModel::insert($specialization);
+
+            $doctorProviderData['provider_id']         = $providerID;
+            $doctorProviderData['doctor_id']           = $doctor_id;
+            TblDoctorProviderModel::insert($doctorProviderData);
+
+            $count++;
+          }
+        }    
+
+        if($count == 0)
+        {
+          $message = '<center><b><span class="color-gray">There is nothing to insert</span></b></center>';
+        }
+        else
+        {
+          $message = '<center><b><span class="color-green">'.$count.' Member/s has been inserted.</span></b></center>';
+        }
+        return $message;
+      }
+      else
+      {
+        return '<center><b><span class="color-red">Wrong file Format</span></b></center>';
+      }
+
   }
   /*BILLING*/
   public function billing()

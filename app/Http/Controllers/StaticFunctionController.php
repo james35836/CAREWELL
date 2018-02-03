@@ -25,6 +25,8 @@ use App\Http\Model\TblAvailmentTagModel;
 
 use App\Http\Model\TblPaymentModeModel;
 
+use App\http\Model\TblProviderModel;
+
 
 class StaticFunctionController extends Controller
 {
@@ -103,7 +105,7 @@ class StaticFunctionController extends Controller
         $id = TblCompanyJobsiteModel::where('jobsite_name', $str_name)->value('jobsite_id');
         if($id == null)
         {
-          $id = 35836;
+          $id = 1;
         }
         break;
 
@@ -117,6 +119,18 @@ class StaticFunctionController extends Controller
 
       case 'company':
         $id = TblCompanyModel::where('company_code', $str_name)->value('company_id');
+        if($id == null)
+        {
+          $id = 1;
+        }
+        break;
+
+      case 'provider':
+        $id = TblProviderModel::where('provider_name', $str_name)->value('provider_id');
+        if($id == null)
+        {
+          $id = 1;
+        }
         break;
 
      

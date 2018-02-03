@@ -3,6 +3,26 @@ var formData   		= new FormData();
 var value			= 0;
 var message			= "";
 
+var modals 			= '<div  class="modal fade modal-top confirm-modal" id="" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">'
+						  +'<div class="confirm-modal-dialog modal-dialog modal-sm">'
+						    +'<div class="modal-content">'
+						      +'<div class="modal-header">'
+						        +'<button type="button" class="close" data-dismiss="modal" aria-label="Close">'
+						        +'<span aria-hidden="true">&times;</span></button>'
+						        +'<h4 class="modal-title confirm-modal-title"></h4>'
+						      +'</div>'
+						      
+						      +'<div class="modal-body modal-body-sm">'
+						        +'<input type="hidden" class="link"/>'
+						      +'</div>'
+						      +'<div class="modal-footer">'
+						        +'<button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancel</button>'
+						        +'<button type="button" class="btn btn-primary confirm-submit">Save</button>'
+						      +'</div>'
+						    +'</div>'
+						  +'</div>'
+						+'</div>';
+
 function medical_center()
 {
 	init();
@@ -26,10 +46,13 @@ function medical_center()
             medical_transaction_details();
             approval_details();
             
+            
+            
 
 		});
 
 	}
+	
 	function trigger()
 	{
 		$(document).on('click','.medical-btn-close',function()
@@ -140,9 +163,13 @@ function medical_center()
 	{
 		$(document).on('click','.create-approval-confirm',function() 
 		{
-			$('.confirm-title').html('Are you sure you want to add this approval?');
+			$('.confirm-modal').remove();
+			$('.append-modal').append(modals);
+            $('.confirm-modal-dialog').removeClass().addClass('modal-dialog modal-sm');
+			$('.confirm-modal-title').html('Are you sure you want to add this approval?');
+			$('.confirm-submit').addClass('create-approval-submit');
 			$('.confirm-modal').modal('show');
-			$('.global-submit').addClass('create-approval-submit'); 
+
 			ajaxData = $(".member-submit-form,.approval-submit-form,.procedure-availed-submit-form,.procedure-doctor-submit-form").serialize();
 			
 		});

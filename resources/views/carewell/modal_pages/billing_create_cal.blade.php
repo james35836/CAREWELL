@@ -8,13 +8,12 @@ autoclose: true
 })
 })
 </script>
-
 <div class=" row box-globals">
   <div class="form-holder">
-    <div class="col-md-3 form-content">
+    <div class="col-md-2 form-content">
       <label>Company Name</label>
     </div>
-    <div class="col-md-9 form-content">
+    <div class="col-md-4 form-content">
       <select name="" id="cal_company_id" class="form-control">
         <option value="company" >SELECT NAME</option>
         @foreach($_company as $company)
@@ -22,78 +21,10 @@ autoclose: true
         @endforeach
       </select>
     </div>
-    
-  </div>
-  <div class="form-holder">
-    <div class="col-md-6 form-content">
-      <label>Revenue Period Month</label>
-    </div>
-    <div class="col-md-6 form-content">
-      <label>Revenue Period Year</label>
-    </div>
-  </div>
-  <div class="form-holder">
-    <div class="col-md-6 form-content">
-      <input type="text" class="form-control datepicker" id="cal_reveneu_period_month"/>
-    </div>
-    <div class="col-md-6 form-content">
-      <input type="text" class="form-control datepicker" id="cal_reveneu_period_year"/>
-    </div>
-  </div>
-  <div class="form-holder">
-    <div class="col-md-6 form-content">
-      <label>Revenue Period</label>
-    </div>
-    <div class="col-md-6 form-content">
-      <label>Revenue Period Count</label>
-    </div>
-  </div>
-  <div class="form-holder">
-    <div class="col-md-6 form-content">
-      <select name="" id="cal_reveneu_period" class="form-control">
-        <option value="semi" >SEMI-MONTHLY</option>
-      </select>
-    </div>
-    <div class="col-md-6 form-content">
-      <select name="" id="cal_reveneu_period_count" class="form-control">
-        <option value="first" >FIRST-PERIOD</option>
-      </select>
-    </div>
-  </div>
-  <div class="form-holder">
-    <div class="col-md-6 form-content">
-      <label>Coverage Period Start</label>
-    </div>
-    <div class="col-md-6 form-content">
-      <label>Coverage Period End</label>
-    </div>
-  </div>
-  <div class="form-holder">
-    <div class="col-md-6 form-content">
-      <div class="input-group date">
-        <div class="input-group-addon">
-          <i class="fa fa-calendar"></i>
-        </div>
-        <input type="text" class="form-control pull-right datepicker" id="cal_company_period_start">
-      </div>
-    </div>
-    <div class="col-md-6 form-content">
-      <div class="input-group date">
-        <div class="input-group-addon">
-          <i class="fa fa-calendar"></i>
-        </div>
-        <input type="text" class="form-control pull-right datepicker" id="cal_company_period_end">
-      </div>
-    </div>
-  </div>
-  <div class="form-holder">
-    <div class="col-md-12 form-content">
+    <div class="col-md-2 form-content">
       <label>Payment Date</label>
     </div>
-    
-  </div>
-  <div class="form-holder">
-    <div class="col-md-6 form-content">
+    <div class="col-md-4 form-content">
       <div class="input-group date">
         <div class="input-group-addon">
           <i class="fa fa-calendar"></i>
@@ -101,8 +32,101 @@ autoclose: true
         <input type="text" class="form-control pull-right datepicker" id="cal_payment_date">
       </div>
     </div>
-    <div class="col-md-6 form-content">
-      <button type="button" class="btn btn-primary pull-right create-cal-confirm" >Create Cal</button>
+  </div>
+  <div class="form-holder">
+    <div class="col-md-2 form-content">
+      <label>Revenue  Month</label>
+    </div>
+    <div class="col-md-4 form-content">
+      <select name="" id="cal_reveneu_period_month" class="form-control">
+        <option >JANUARY</option>
+        <option >FEBRUARY</option>
+        <option >MARCH</option>
+        <option >APRIL</option>
+        <option >MAY</option>
+        <option >JUNE</option>
+        <option >JULY</option>
+        <option >AUGUST</option>
+        <option >SEPTEMBER</option>
+        <option >OCTOBER</option>
+        <option >NOVEMBER</option>
+        <option >DECEMBER</option>
+      </select>
+    </div>
+    <div class="col-md-2 form-content">
+      <label>Revenue  Year</label>
+    </div>
+    <div class="col-md-4 form-content">
+      <select name="" id="cal_reveneu_period_year" class="form-control">
+        <option >2015</option>
+        <option >2016</option>
+        <option >2017</option>
+        <option >2018</option>
+        <option >2019</option>
+        <option >2020</option>
+        <option >2021</option>
+        <option >2022</option>
+        <option >2023</option>
+        <option >2024</option>
+        <option >2025</option>
+        <option >2026</option>
+        <option >2027</option>
+        <option >2028</option>
+        <option >2029</option>
+        <option >2030</option>
+        <option >2031</option>
+        <option >2032</option>
+        <option >2033</option>
+        <option >2034</option>
+        <option >2035</option>
+        <option >2036</option>
+        <option >2037</option>
+        <option >2038</option>
+        <option >2039</option>
+        <option >2040</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-holder">
+    <div class="col-md-2 form-content">
+      <label>Revenue Period</label>
+    </div>
+    <div class="col-md-4 form-content">
+      <select name="" id="cal_reveneu_period" class="form-control">
+        <option value="semi" >SEMI-MONTHLY</option>
+      </select>
+    </div>
+    <div class="col-md-2 form-content">
+      <label>Revenue  Count</label>
+    </div>
+    <div class="col-md-4 form-content">
+      <select name="" id="cal_reveneu_period_count" class="form-control">
+        <option value="first" >FIRST-PERIOD</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-holder">
+    <div class="col-md-2 form-content">
+      <label>Coverage  Start</label>
+    </div>
+    <div class="col-md-4 form-content">
+      <div class="input-group date">
+        <div class="input-group-addon">
+          <i class="fa fa-calendar"></i>
+        </div>
+        <input type="text" class="form-control pull-right datepicker" id="cal_company_period_start">
+      </div>
+    </div>
+    <div class="col-md-2 form-content">
+      <label>Coverage  End</label>
+    </div>
+    <div class="col-md-4 form-content">
+      <div class="input-group date">
+        <div class="input-group-addon">
+          <i class="fa fa-calendar"></i>
+        </div>
+        <input type="text" class="form-control pull-right datepicker" id="cal_company_period_end">
+      </div>
     </div>
   </div>
 </div>

@@ -279,6 +279,8 @@ $(".remove-coverage").on("click", function() {
 						</div>
 					</div>
 				</div>
+				<div class="form-holder jobsite-form " style="padding:0% 5% 0% 5%;">
+				</div>
 				<div class=" form-holder">
 					<div class=" box-body table-responsive no-padding">
 						<table class="table table-hover table-bordered">
@@ -313,8 +315,7 @@ $(".remove-coverage").on("click", function() {
 						</table>
 					</div>
 				</div>
-				<div class="form-holder jobsite-form " style="padding:0% 5% 0% 5%;">
-				</div>
+				
 			</div>
 			<div id="member" class="row tab-pane fade table-min-height" >
 				<div class="col-md-12 form-holder">

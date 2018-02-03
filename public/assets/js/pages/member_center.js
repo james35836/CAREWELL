@@ -4,6 +4,26 @@ var ajaxData 		= [];
 var value           = 0;
 var message         = "";
 
+var modals 			= '<div  class="modal fade modal-top confirm-modal" id="" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">'
+						  +'<div class="confirm-modal-dialog modal-dialog modal-sm">'
+						    +'<div class="modal-content">'
+						      +'<div class="modal-header">'
+						        +'<button type="button" class="close" data-dismiss="modal" aria-label="Close">'
+						        +'<span aria-hidden="true">&times;</span></button>'
+						        +'<h4 class="modal-title confirm-modal-title"></h4>'
+						      +'</div>'
+						      
+						      +'<div class="modal-body modal-body-sm">'
+						        +'<input type="hidden" class="link"/>'
+						      +'</div>'
+						      +'<div class="modal-footer">'
+						        +'<button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancel</button>'
+						        +'<button type="button" class="btn btn-primary confirm-submit">Save</button>'
+						      +'</div>'
+						    +'</div>'
+						  +'</div>'
+						+'</div>';
+
 function member_center()
 {
 	init();
@@ -42,7 +62,7 @@ function member_center()
 		else if(value=="")
 		{
 			toastr.error(message+' cannot be null.', 'Something went wrong!', {timeOut: 3000})
-			return "";
+			return "2";
 		}
     }
 	function create_member()
@@ -161,10 +181,12 @@ function member_center()
 		
 			else
 			{
-				$('.confirm-title').html('Are you sure you want to add this MEMBER?');
-				$('.modal-dialog').removeClass().addClass('modal-dialog modal-sm');
+				$('.confirm-modal').remove();
+				$('.append-modal').append(modals);
+	            $('.confirm-modal-dialog').removeClass().addClass('modal-dialog modal-sm');
+				$('.confirm-modal-title').html('Are you sure you want to add this MEMBER?');
+				$('.confirm-submit').addClass('create-member-submit'); 
 				$('.confirm-modal').modal('show');
-				$('.global-submit').addClass('create-member-submit'); 
 				
 				ajaxData = $(".member-company-form,.member-dependent-form,.member-information-form,.member-government-form").serialize(); 
 	   		}
@@ -382,9 +404,12 @@ function member_center()
 	{
 		$(document).on('click','.import-member-confirm',function() 
 		{
-			$('.confirm-title').html('Are you sure you want to import this file?');
+			$('.confirm-modal').remove();
+			$('.append-modal').append(modals);
+            $('.confirm-modal-dialog').removeClass().addClass('modal-dialog modal-sm');
+			$('.confirm-modal-title').html('Are you sure you want to import this file?');
 			$('.confirm-modal').modal('show');
-			$('.global-submit').addClass('import-member-submit');
+			$('.confirm-submit').addClass('import-member-submit');
 			formData.append("company_id", 			document.getElementById('companyID').value);
 			formData.append("importMemberFile", document.getElementById('importMemberFile').files[0]);
 		});

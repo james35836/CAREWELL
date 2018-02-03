@@ -4,6 +4,26 @@ var ajaxData 		= [];
 var value			= 0;
 var message			= "";
 
+var modals 			= '<div  class="modal fade modal-top confirm-modal" id="" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">'
+						  +'<div class="confirm-modal-dialog modal-dialog modal-sm">'
+						    +'<div class="modal-content">'
+						      +'<div class="modal-header">'
+						        +'<button type="button" class="close" data-dismiss="modal" aria-label="Close">'
+						        +'<span aria-hidden="true">&times;</span></button>'
+						        +'<h4 class="modal-title confirm-modal-title"></h4>'
+						      +'</div>'
+						      
+						      +'<div class="modal-body modal-body-sm">'
+						        +'<input type="hidden" class="link"/>'
+						      +'</div>'
+						      +'<div class="modal-footer">'
+						        +'<button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancel</button>'
+						        +'<button type="button" class="btn btn-primary confirm-submit">Save</button>'
+						      +'</div>'
+						    +'</div>'
+						  +'</div>'
+						+'</div>';
+
 function doctor_center()
 {
 	init();
@@ -54,6 +74,7 @@ function doctor_center()
 			$('.doctor-ajax-loader').show();
 			$('.doctor-modal-body-content').hide();
 			$('.doctor-modal-title').html('CREATE DOCTOR');
+			$('.modal-dialog').removeClass().addClass('modal-dialog modal-lg');
 			$.ajax({
 				headers: {
 				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -110,9 +131,13 @@ function doctor_center()
 			}
 			else
 			{
-				$('.confirm-title').html('Are you sure you want to add this DOCTOR?');
+				$('.confirm-modal').remove();
+				$('.append-modal').append(modals);
+	            $('.confirm-modal-dialog').removeClass().addClass('modal-dialog modal-sm');
+				$('.confirm-modal-title').html('Are you sure you want to add this DOCTOR?');
+				$('.confirm-submit').addClass('create-doctor-submit'); 
 				$('.confirm-modal').modal('show');
-				$('.global-submit').addClass('create-doctor-submit'); 
+
 				for(var i = 0; i < ajaxData.length; i++) 
 				{
 				    formData.append('ajaxData[]', ajaxData[i]);
@@ -229,8 +254,7 @@ function doctor_center()
 		$(document).on('click','.btn-close-import',function()
 		{
 			$('.member-modal').modal('hide');
-			$('.modal-dialog').removeClass('modal-sm');
-			$('.modal-dialog').addClass('modal-md');
+			$('.modal-dialog').removeClass().addClass('modal-dialog modal-md');
 			$('.confirm-modal-import').removeClass('import-member-submit');
 		});
 		$(document).on('click','.member-action-modal-close',function()
@@ -242,10 +266,39 @@ function doctor_center()
 	}
 	function export_doctor_template()
 	{
-		$(document).on('change','.import-company-select',function()
+		$(document).on('change','.import-doctor-number-select',function()
 		{
-			var company_id = $(this).val();
-			$('.download-link').attr('href', '/member/download_template/'+company_id);
+			var provider_id = $('.import-provider-select').val();
+			var number     = $(this).val();
+			
+			
+			if(provider_id!='SELECT PROVIDER'&&number!='SELECT NUMBER ROWS')
+			{
+				$('.download-link').attr('href', '/doctor/download_template/'+provider_id+'/'+number);
+				document.getElementById('doctorDownloadTemplate').disabled= false;
+			}
+			else
+			{
+				document.getElementById('doctorDownloadTemplate').disabled= true;
+			}
+			
+		});
+		$(document).on('change','.import-provider-select',function()
+		{
+			var provider_id = $(this).val();
+			var number     = $('.import-doctor-number-select').val();
+			
+			
+			if(number!='SELECT NUMBER ROWS'&&provider_id!='SELECT PROVIDER')
+			{
+				
+				$('.download-link').attr('href', '/doctor/download_template/'+provider_id+'/'+number);
+				document.getElementById('doctorDownloadTemplate').disabled= false;
+			}
+			else
+			{
+				document.getElementById('doctorDownloadTemplate').disabled= true;
+			}
 			
 		});
 	}
@@ -254,8 +307,7 @@ function doctor_center()
 		$(document).on('click','.import-doctor',function() 
 		{
 			$('.doctor-modal').modal('show');
-			$('.modal-dialog').removeClass('modal-lg');
-			$('.modal-dialog').addClass('modal-import-sm');
+			$('.modal-dialog').removeClass().addClass('modal-dialog modal-import');
 			$('.doctor-ajax-loader').show();
 			$('.doctor-modal-body-content').hide();
 			$('.doctor-modal-title').html('IMPORT DOCTOR');
@@ -282,30 +334,33 @@ function doctor_center()
     }
     function import_doctor_confirm()
 	{
-		$(document).on('click','.import-member-confirm',function() 
+		$(document).on('click','.import-doctor-confirm',function() 
 		{
-			$('.confirm-title').html('Are you sure you want to import this file?');
+			$('.confirm-modal').remove();
+			$('.append-modal').append(modals);
+            $('.confirm-modal-dialog').removeClass().addClass('modal-dialog modal-sm');
+			$('.confirm-modal-title').html('Are you sure you want to import this file?');
+			$('.confirm-submit').addClass('import-doctor-submit');
 			$('.confirm-modal').modal('show');
-			$('.global-submit').addClass('import-member-submit');
-			formData.append("company_id", 			document.getElementById('companyID').value);
-			formData.append("importMemberFile", document.getElementById('importMemberFile').files[0]);
+
+			formData.append("importDoctorFile", document.getElementById('importDoctorFile').files[0]);
 		});
 	}
 	
 	function import_doctor_submit()
 	{
-		$(document).on('click','.import-member-submit',function() 
+		$(document).on('click','.import-doctor-submit',function() 
 		{
 			$('.confirm-modal').modal('hide');
-            $('.member-ajax-loader').show();
-            $('.import-member-action').hide();
-            $('.member-modal-body-content').hide();
+            $('.doctor-ajax-loader').show();
+            $('.import-doctor-action').hide();
+            $('.doctor-modal-body-content').hide();
             
             $.ajax({
 				headers: {
 				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 				},
-				url:'/member/import_member/submit',
+				url:'/doctor/import_doctor/submit',
 				method: "POST",
                 data: formData,
                 contentType: false,
@@ -317,10 +372,10 @@ function doctor_center()
 					{
 						$('.modal-dialog').removeClass('modal-lg');
 						$('.modal-dialog').addClass('modal-sm');
-						$('.member-ajax-loader').hide();
-						$('.member-modal-body-content').show();
-					    $(".member-modal-body-content").html(data);
-					    $(".member-modal-footer").html("<button type='button' class='btn btn-default pull-left btn-close-import' data-dismiss='modal'>Close</button>");
+						$('.doctor-ajax-loader').hide();
+						$('.doctor-modal-body-content').show();
+					    $(".doctor-modal-body-content").html(data);
+					    $(".doctor-modal-footer").html("<button type='button' class='btn btn-default pull-left btn-close-import' data-dismiss='modal'>Close</button>");
 					}, 1000);
 				}
 			});

@@ -13,7 +13,7 @@
   <div class="container">
     <div class="row">
       <div class=" col-md-2 col-xs-6 pull-left">
-        <select class="form-control">
+        <select class="form-control ">
           <option>SELECT COMPANY</option>
         </select>
       </div>
@@ -26,7 +26,7 @@
       <div class="col-xs-12">
         <div class="box">
           <div class="box-header">
-            <h3 class="box-title">APPROVAL LIST</h3>
+            <h3 class="box-title medical-btn-sample">APPROVAL LIST</h3>
             <div class="box-tools">
               <div class="input-group input-group-sm" style="width: 150px;">
                 <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">

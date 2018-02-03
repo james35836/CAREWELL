@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\InActiveAuthController;
 use App\Http\Model\TblUserModel;
 use Redirect;
 use Session;
@@ -60,7 +61,7 @@ class FrontController extends Controller
   }
   public function logout()
   {
-    Session::forget('active_user_login');
+    Session::forget('active');
     Session::flash('error', 'Session Expired');
     return Redirect::to('/login');
   }

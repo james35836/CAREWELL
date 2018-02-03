@@ -6,13 +6,14 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Http\Model\TblUserModel;
+use App\Http\Controllers\ActiveAuthController;
 use Redirect;
 use Session;
 use Crypt;
 
 use App\Http\Controllers\StaticFunctionController;
 
-class AdminController extends Controller
+class AdminController extends ActiveAuthController
 {
   public function admin_center()
   {

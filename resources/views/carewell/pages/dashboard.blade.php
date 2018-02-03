@@ -40,12 +40,15 @@ text-align: center;
 }
 </style>
 <!-- Info boxes -->
+<div class="row" class="append-modals">
+
+</div>
 <div class="row">
   <div class="col-md-3 col-sm-6 col-xs-12">
     <div class="info-box">
       <span class="info-box-icon bg-aqua"><i class="fa fa-users"></i></span>
       <div class="info-box-content">
-        <span class="info-box-text">MEMBER</span>
+        <span class="info-box-text modals-ko">MEMBER</span>
         <span class="info-box-number"  style="padding-top: 20px;">{{$member}}</span>
       </div>
     </div>
@@ -110,6 +113,7 @@ text-align: center;
             <div class="chart">
               <canvas id="salesChart" style="height: 200px;"></canvas>
             </div>
+            
           </div>
           <div class="col-md-4" >
             
@@ -131,7 +135,7 @@ text-align: center;
                   <tr>
                     <td style="width: 147px !important;">{{$approval->approval_number}}</td>
                     <td>{{$approval->member_first_name." ".$approval->member_last_name}}</td>
-                    <td><button class="btn btn-link" data-approval_id="{{$approval->approval_id}}">view</button></td>
+                    <td><button class="btn btn-link latest-approval" data-approval_id="{{$approval->approval_id}}">view</button></td>
                   </tr>
                   @endforeach
                   </tbody>

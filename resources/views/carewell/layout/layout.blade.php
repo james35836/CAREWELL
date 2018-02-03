@@ -125,7 +125,7 @@
                   <small>Member since {{date("F j, Y",strtotime($user->user_created))}}</small>
                 </p>
               </li>
-              <!-- Menu Body -->
+              {{-- <!-- Menu Body -->
               <li class="user-body">
                 <div class="row">
                   <div class="col-xs-4 text-center">
@@ -139,7 +139,7 @@
                   </div>
                 </div>
                 <!-- /.row -->
-              </li>
+              </li> --}}
               <!-- Menu Footer-->
               <li class="user-footer">
                 <div class="pull-left">
@@ -271,8 +271,9 @@
       @include('carewell.modals.modal-sm')
       @include('carewell.modals.modal-import-member') --}}
       @include('carewell.modals.user_center_modals')
-      @include('carewell.modals.confirm-modal')
-      
+      {{-- @include('carewell.modals.confirm-modal') --}}
+      <div class="append-modal">
+      </div>
     </section>
     <!-- /.content -->
   </div>
@@ -315,6 +316,7 @@
 <!-- PAGES -->
 <script src="/assets/js/pages/user_center.js"></script>
 <script src="/assets/js/pages/globals.js"></script>
+<script src="/assets/js/pages/dashboardv2.js"></script>
 <script src="/assets/js/pages/dashboard.js"></script>
 <script src="/assets/js/pages/admin_center.js"></script>
 <script src="/assets/js/pages/company_center.js"></script>
@@ -323,8 +325,8 @@
 <script src="/assets/js/pages/medical_center.js"></script>
 <script src="/assets/js/pages/provider_center.js"></script>
 <script src="/assets/js/pages/doctor_center.js"></script>
-{{-- <script src="/assets/js/pages/payable_center.js"></script>
-<script src="/assets/js/pages/report_center.js"></script> --}}
+<script src="/assets/js/pages/payable_center.js"></script>
+{{-- <script src="/assets/js/pages/report_center.js"></script> --}}
 <script src="/assets/js/pages/settings_center.js"></script>
 <script src="/assets/js/pages/settings_coverage.js"></script>
 

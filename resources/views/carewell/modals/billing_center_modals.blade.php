@@ -15,6 +15,7 @@
       </div>
       <div class="modal-footer billing-modal-footer">
         <button type="button" class="btn btn-default pull-left " data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary pull-right create-cal-confirm" >Create Cal</button>
       </div>
     </div>
   </div>

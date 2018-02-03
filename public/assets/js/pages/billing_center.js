@@ -1,6 +1,26 @@
 var billing_center 	= new billing_center();
 var formData   		= new FormData();
 
+var modals 			= '<div  class="modal fade modal-top confirm-modal" id="" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">'
+						  +'<div class="confirm-modal-dialog modal-dialog modal-sm">'
+						    +'<div class="modal-content">'
+						      +'<div class="modal-header">'
+						        +'<button type="button" class="close" data-dismiss="modal" aria-label="Close">'
+						        +'<span aria-hidden="true">&times;</span></button>'
+						        +'<h4 class="modal-title confirm-modal-title"></h4>'
+						      +'</div>'
+						      
+						      +'<div class="modal-body modal-body-sm">'
+						        +'<input type="hidden" class="link"/>'
+						      +'</div>'
+						      +'<div class="modal-footer">'
+						        +'<button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancel</button>'
+						        +'<button type="button" class="btn btn-primary confirm-submit">Save</button>'
+						      +'</div>'
+						    +'</div>'
+						  +'</div>'
+						+'</div>';
+
 function billing_center()
 {
 	init();
@@ -72,11 +92,12 @@ function billing_center()
 	{
 		$(document).on('click','.create-cal-confirm',function() 
 		{
-
-			$('.confirm-title').html('Are you sure you want to add this CAL?');
+			$('.confirm-modal').remove();
+			$('.append-modal').append(modals);
+            $('.confirm-modal-dialog').removeClass().addClass('modal-dialog modal-sm');
+			$('.confirm-modal-title').html('Are you sure you want to add this CAL?');
+			$('.confirm-submit').addClass('create-cal-submit');
 			$('.confirm-modal').modal('show');
-			$('.modal-dialog').removeClass().addClass('modal-dialog modal-lg');
-			$('.global-submit').addClass('create-cal-submit'); 
 
 			formData.append("cal_company_id", 			document.getElementById('cal_company_id').value);
             formData.append("cal_reveneu_period_month", document.getElementById('cal_reveneu_period_month').value);
@@ -194,10 +215,13 @@ function billing_center()
 	{
 		$(document).on('click','.import-cal-member-confirm',function() 
 		{
-			$('.confirm-title').html('Are you sure you want to import this FILE?');
-			$('.modal-dialog').removeClass().addClass('modal-dialog modal-sm');
+			$('.confirm-modal').remove();
+			$('.append-modal').append(modals);
+            $('.confirm-modal-dialog').removeClass().addClass('modal-dialog modal-sm');
+			$('.confirm-modal-title').html('Are you sure you want to import this FILE?');
+			$('.confirm-submit').addClass('import-cal-member-submit');
 			$('.confirm-modal').modal('show');
-			$('.global-submit').addClass('import-cal-member-submit'); 
+
 			
 			formData.append("company_id", 			$(this).data('cal_company_id'));
 			formData.append("cal_id", 				$(this).data('cal_cal_id'));

@@ -80,9 +80,10 @@ Route::get('/doctor', 									'CarewellController@doctor');
 Route::get('/doctor/create_doctor', 					'CarewellController@create_doctor');
 Route::get('/doctor/import_doctor', 					'CarewellController@import_doctor');
 Route::post('/doctor/create_doctor/submit', 			'CarewellController@create_doctor_submit');
-
 Route::get('/doctor/view_doctor_details/{doctor_id}', 	'CarewellController@doctor_view_details');
 
+Route::get('/doctor/download_template/{provider_id}/{number}', 	'CarewellController@doctor_download_template');
+Route::post('/doctor/import_doctor/submit', 			'CarewellController@doctor_import_doctor_submit');
 
 
 

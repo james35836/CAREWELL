@@ -1,4 +1,4 @@
-var admin_center 	= new admin_center();
+var payable_center = new payable_center();
 var formData   		= new FormData();
 var ajaxData 		= [];
 
@@ -22,7 +22,7 @@ var modals 			= '<div  class="modal fade modal-top confirm-modal" id="" tabindex
 						  +'</div>'
 						+'</div>';
 
-function admin_center()
+function payable_center()
 {
 	init();
 
@@ -36,51 +36,47 @@ function admin_center()
 	{
 		$(document).ready(function()
 		{
-			trigger();
-            create_user();
-            
+			
+			create_payable();
 			
          });
 
 	}
-
-	function trigger()
+	
+	
+	
+	function create_payable()
 	{
-		$(document).on('click','.btn-close-lg',function()
-		{
-			$('.admin-modal').modal('hide');
-			$(".admin-modal-body").html();
-			
-		});
-	} 
 
-	function create_user()
-	{
-		$(document).on('click','.create-user',function() 
+		$(document).on('click','.create-payable',function() 
 		{
-			$('.admin-modal').modal('show');
-			$('.modal-dialog').removeClass().addClass('modal-dialog modal-lg');
-			$('.admin-modal-title').html('CREATE USER');
-			$('.admin-ajax-loader').show();
-			$('.admin-modal-body-content').hide();
+			$('.plan-modal').modal('show');
+			$('.plan-ajax-loader').show();
+			$('.plan-modal-body-content').hide();
+			$('.plan-modal-title').html('CREATE PLAN');
 			$.ajax({
 				headers: {
 				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 				},
-				url:'/admin/create_user',
+				url:'/settings/plan/create_plan',
 				method: "get",
                 success: function(data)
 				{
 					setTimeout(function()
 					{
-						$('.admin-ajax-loader').hide();
-						$('.admin-modal-body-content').show();
-						$('.admin-modal-body-content').html(data);
+						$('.plan-ajax-loader').hide();
+						$('.plan-modal-body-content').show();
+						$('.plan-modal-body-content').html(data);
                     }, 1000);
 				}
 			});
 
 		});
-	}
-	
+    }
+    
 }
+
+
+
+
+

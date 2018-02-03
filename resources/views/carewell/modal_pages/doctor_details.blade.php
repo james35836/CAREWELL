@@ -7,10 +7,7 @@
 		
 	});
 	$(".remove-specialization").on("click", function() {
-		if( $(".specialization-count").length!=1)
-			{
 		$(".specialization-form").children().last().remove();
-		}
 	});
 	$(".add-provider").on("click", function() {
 		
@@ -18,10 +15,7 @@
 		
 	});
 	$(".remove-provider").on("click", function() {
-		if( $(".provider-count").length!=1)
-			{
 		$(".provider-form").children().last().remove();
-		}
 	});
 	});
 	

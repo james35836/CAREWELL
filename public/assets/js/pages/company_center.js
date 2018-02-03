@@ -7,6 +7,26 @@ var trunkData		= [];
 var value="0";
 var message="";
 
+var modals 			= '<div  class="modal fade modal-top confirm-modal" id="" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">'
+						  +'<div class="confirm-modal-dialog modal-dialog modal-sm">'
+						    +'<div class="modal-content">'
+						      +'<div class="modal-header">'
+						        +'<button type="button" class="close" data-dismiss="modal" aria-label="Close">'
+						        +'<span aria-hidden="true">&times;</span></button>'
+						        +'<h4 class="modal-title confirm-modal-title"></h4>'
+						      +'</div>'
+						      
+						      +'<div class="modal-body modal-body-sm">'
+						        +'<input type="hidden" class="link"/>'
+						      +'</div>'
+						      +'<div class="modal-footer">'
+						        +'<button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancel</button>'
+						        +'<button type="button" class="btn btn-primary confirm-submit">Save</button>'
+						      +'</div>'
+						    +'</div>'
+						  +'</div>'
+						+'</div>';
+
 function company_center()
 {
 	init();
@@ -141,9 +161,12 @@ function company_center()
 			}
 			else
 			{
-				$('.confirm-title').html('Are you sure you want to add this company?');
+				$('.confirm-modal').remove();
+				$('.append-modal').append(modals);
+	            $('.confirm-modal-dialog').removeClass().addClass('modal-dialog modal-sm');
+				$('.confirm-modal-title').html('Are you sure you want to add this company?');
+				$('.confirm-submit').addClass('create-company-submit');
 				$('.confirm-modal').modal('show');
-				$('.global-submit').addClass('create-company-submit'); 
 
 				formData.append("company_name", 			document.getElementById('company_name').value);
 	            formData.append("company_email_address", 	document.getElementById('company_email_address').value);
@@ -211,6 +234,7 @@ function company_center()
 	{
 		$(document).on('click','.view-company-details',function() 
 		{
+
 			$('.company-modal').modal('show');
 			$('.company-modal-title').html('COMPANY DETAILS');
 			$('.company-ajax-loader').show();
