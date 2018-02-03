@@ -1,6 +1,6 @@
 @extends('carewell.layout.layout')
 @section('content')
-@include('carewell.modals.medical_center_modals')
+@include('carewell.modals.payable_center_modals')
 <div class="container">
   <div class="row">
     <div class=" col-md-2 col-xs-6 pull-right">

@@ -168,6 +168,46 @@ $(document).ready(function() {
 			<!-- INSERT HERE -->
 		</form>
 	</div>
+	<div class="form-holder">
+		<div class="col-md-2 form-content">
+			<label>TOTAL AMOUNT</label>
+		</div>
+		<div class="col-md-4 form-content">
+			<input type="text" class="form-control" disabled/>
+		</div>
+		<div class="col-md-2 form-content">
+			<label>TOTAL PHIL/CHA SWA</label>
+		</div>
+		<div class="col-md-4 form-content">
+			<input type="text" class="form-control" disabled/>
+		</div>
+	</div>
+	<div class="form-holder">
+		<div class="col-md-2 form-content">
+			<label>C/O PATIENT/DA</label>
+		</div>
+		<div class="col-md-4 form-content">
+			<input type="text" class="form-control" disabled/>
+		</div>
+		<div class="col-md-2 form-content">
+			<label>C/O CAREWELL</label>
+		</div>
+		<div class="col-md-4 form-content">
+			<input type="text" class="form-control" disabled/>
+		</div>
+	</div>
+	<div class="form-holder">
+		<div class="col-md-6">
+		</div>
+		<div class="col-md-2 form-content">
+			<label>TOTAL</label>
+		</div>
+		<div class="col-md-4 form-content">
+			<input type="text" class="form-control" disabled/>
+		</div>
+		
+		
+	</div>
 </div>
 <div class="row box-globals">
 	<div class="row form-holder">

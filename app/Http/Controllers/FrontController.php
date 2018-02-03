@@ -14,10 +14,16 @@ use Crypt;
 
 class FrontController extends Controller
 {
-  
-
+  public static function allow_logged_out_users_only()
+  {
+    if(session("active"))
+    {
+      return Redirect::to("/dashboard")->send();
+    }
+  }
   public function login()
   {
+    Self::allow_logged_out_users_only();
   	$data['page'] = 'Login';
   	return view('front.pages.login',$data);
   }
@@ -34,7 +40,16 @@ class FrontController extends Controller
         {
           Session::put('active','active_user_login');
           Session::put('user_id',$validate_login->user_id);
-          return Redirect::to('/dashboard');
+          if($validate_login->archived==0)
+          {
+            return Redirect::to('/dashboard');
+          }
+          else
+          {
+            Session::flash('error', 'Your account has been deactivated.');
+            return Redirect::to('/login');
+          }
+          
         }
         else
         {
@@ -56,6 +71,7 @@ class FrontController extends Controller
   }
   public function register()
   {
+    Self::allow_logged_out_users_only();
     $data['page'] = 'Register';
     return view('front.pages.register',$data);
   }

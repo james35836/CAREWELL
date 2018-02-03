@@ -35,21 +35,13 @@ function user_center()
 	{
 		$(document).ready(function()
 		{
-            trigger();
+            
 			user_view_profile();
 			
          });
 
 	}
-	function trigger()
-	{
-		$(document).on('click','.btn-close-billing',function()
-		{
-			$('.user-modal').modal('hide');
-			$(".user-modal-body").html("<p style='text-align:center'>RELOAD THE PAGE</p>");
-			
-		});
-	} 
+	
 	
 	function user_view_profile()
 	{

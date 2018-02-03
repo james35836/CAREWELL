@@ -36,7 +36,97 @@ class MaintenanceController extends Controller
       }
 	public function developer_maintenance()
       {
-     
+            
+
+        if (DB::table('tbl_specialization')->count() <= 0) 
+        {
+            $specialization[0]["specialization_id"]    = 1;
+            $specialization[0]["specialization_name"]   = "Allergist or Immunologist";
+            
+            $specialization[1]["specialization_id"]    = 2;
+            $specialization[1]["specialization_name"]   = "Anesthesiologist";
+
+            $specialization[2]["specialization_id"]    = 3;
+            $specialization[2]["specialization_name"]   = "Cardiologist";
+
+            $specialization[3]["specialization_id"]    = 4;
+            $specialization[3]["specialization_name"]   = "Dermatologist";
+
+            $specialization[4]["specialization_id"]    = 5;
+            $specialization[4]["specialization_name"]   = "Gastroenterologist";
+
+            $specialization[5]["specialization_id"]    = 6;
+            $specialization[5]["specialization_name"]   = "Hematologist/Oncologist";
+
+            $specialization[6]["specialization_id"]    = 7;
+            $specialization[6]["specialization_name"]   = "Internal Medicine Physician";
+
+            $specialization[7]["specialization_id"]    = 8;
+            $specialization[7]["specialization_name"]   = "Nephrologist";
+
+            $specialization[8]["specialization_id"]    = 9;
+            $specialization[8]["specialization_name"]   = "Neurologist";
+                              
+            $specialization[9]["specialization_id"]    = 10;
+            $specialization[9]["specialization_name"]   = "Neurosurgeon";
+
+            $specialization[10]["specialization_id"]    = 11;
+            $specialization[10]["specialization_name"]   = "Obstetrician";
+
+            $specialization[11]["specialization_id"]    = 12;
+            $specialization[11]["specialization_name"]   = "Gynecologist";
+
+            $specialization[12]["specialization_id"]    = 13;
+            $specialization[12]["specialization_name"]   = "Nurse-Midwifery";
+            
+            $specialization[13]["specialization_id"]    = 14;
+            $specialization[13]["specialization_name"]   = "Occupational Medicine Physician";
+
+            $specialization[14]["specialization_id"]    = 15;
+            $specialization[14]["specialization_name"]   = "Ophthalmologist";
+            
+            $specialization[15]["specialization_id"]    = 16;
+            $specialization[15]["specialization_name"]   = "Oral and Maxillofacial Surgeon";
+
+            $specialization[16]["specialization_id"]    = 17;
+            $specialization[16]["specialization_name"]   = "Orthopaedic Surgeon";
+
+            $specialization[17]["specialization_id"]    = 18;
+            $specialization[17]["specialization_name"]   = "Otolaryngologist (Head and Neck Surgeon)";
+
+            $specialization[18]["specialization_id"]    = 19;
+            $specialization[18]["specialization_name"]   = "Pathologist";
+
+            $specialization[19]["specialization_id"]    = 20;
+            $specialization[19]["specialization_name"]   = "Pediatrician";
+
+            $specialization[20]["specialization_id"]    = 21;
+            $specialization[20]["specialization_name"]   = "Plastic Surgeon";
+
+            $specialization[21]["specialization_id"]    = 22;
+            $specialization[21]["specialization_name"]   = "Podiatrist"; 
+
+            $specialization[22]["specialization_id"]    = 23;
+            $specialization[22]["specialization_name"]   = "Psychiatrist"; 
+
+            $specialization[23]["specialization_id"]    = 24;
+            $specialization[23]["specialization_name"]   = "Pulmonary Medicine Physician";
+
+            $specialization[24]["specialization_id"]    = 25;
+            $specialization[24]["specialization_name"]   = "Radiation Onconlogist";
+
+            $specialization[25]["specialization_id"]    = 26;
+            $specialization[25]["specialization_name"]   = "Diagnostic Radiologist";
+
+            $specialization[26]["specialization_id"]    = 27;
+            $specialization[26]["specialization_name"]   = "Rheumatologist";
+
+            $specialization[27]["specialization_id"]    = 28;
+            $specialization[27]["specialization_name"]   = "Urologist";
+
+            
+            DB::table('tbl_specialization')->insert($specialization);
+        }
         if (DB::table('tbl_availment')->count() <= 0) 
         {
             $insert[0]["availment_id"]    = 1;
@@ -347,7 +437,7 @@ class MaintenanceController extends Controller
             $user[0]["user_id"]           = 1;
             $user[0]["user_email"]        = "carewelladmin@admin.com";
             $user[0]["user_password"]     = Crypt::encrypt('carewelladmin');
-            $user[0]["user_access_level"] = 1;
+            $user[0]["user_position"] = "ADMIN";
             
             DB::table('tbl_user')->insert($user);
 
@@ -529,13 +619,13 @@ class MaintenanceController extends Controller
 
             DB::table('tbl_procedure')->insert($procedure);
         }
-        if (DB::table('tbl_jobsite')->count() <= 0) 
-        {
-            $job[0]["jobsite_id"]       = 35836;
-            $job[0]["jobsite_name"]     = "Sakit sa tiyan";
-            $job[0]["company_id"]       = 35836;
-            DB::table('tbl_jobsite')->insert($job);
-        }
+        // if (DB::table('tbl_jobsite')->count() <= 0) 
+        // {
+        //     $job[0]["jobsite_id"]       = 35836;
+        //     $job[0]["jobsite_name"]     = "Sakit sa tiyan";
+        //     $job[0]["company_id"]       = 35836;
+        //     DB::table('tbl_jobsite')->insert($job);
+        // }
 
 
 

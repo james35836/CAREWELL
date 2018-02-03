@@ -50,23 +50,23 @@ function payable_center()
 
 		$(document).on('click','.create-payable',function() 
 		{
-			$('.plan-modal').modal('show');
-			$('.plan-ajax-loader').show();
-			$('.plan-modal-body-content').hide();
-			$('.plan-modal-title').html('CREATE PLAN');
+			$('.payable-modal').modal('show');
+			$('.payable-ajax-loader').show();
+			$('.payable-modal-body-content').hide();
+			$('.payable-modal-title').html('CREATE PAYABLE');
 			$.ajax({
 				headers: {
 				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 				},
-				url:'/settings/plan/create_plan',
+				url:'/payable/create_payable',
 				method: "get",
                 success: function(data)
 				{
 					setTimeout(function()
 					{
-						$('.plan-ajax-loader').hide();
-						$('.plan-modal-body-content').show();
-						$('.plan-modal-body-content').html(data);
+						$('.payable-ajax-loader').hide();
+						$('.payable-modal-body-content').show();
+						$('.payable-modal-body-content').html(data);
                     }, 1000);
 				}
 			});

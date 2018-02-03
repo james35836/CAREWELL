@@ -89,7 +89,7 @@
 		
 		<div class="col-md-7 form-content">
 			<select id="user_access_level" class="form-control">
-				<option>{{$user->user_access_level}}</option>
+				<option>{{$user->user_position}}</option>
 				<option disabled>ROLE</option>
 				<option>ADMIN</option>
 				<option>MED-REP</option>

@@ -44,6 +44,12 @@ Route::get('/dashboard', 								'CarewellController@dashboard');
 /*ADMIN*/
 Route::get('/settings/admin', 							'AdminController@admin_center');
 Route::get('/admin/create_user', 						'AdminController@admin_create_user');
+Route::POST('/admin/create_user/submit', 				'AdminController@admin_create_user_submit');
+
+
+Route::get('/admin/view_user_deatils/{user_id}', 		'AdminController@admin_view_user_deatils');
+
+
 // Route::get('/admin', 								    'AdminController@admin');
 // Route::get('/admin', 								    'AdminController@admin');
 /*COMPANY*/
@@ -116,6 +122,10 @@ Route::get('/medical/approval_details/{approval_id}','CarewellController@medical
 
 /*PAYABLE*/
 Route::get('/payable', 									'CarewellController@payable');
+Route::get('/payable/create_payable', 					'CarewellController@payable_create');
+
+
+
 /*REPORTS*/
 Route::get('/reports', 									'CarewellController@reports');
 /*SETTINGS*/

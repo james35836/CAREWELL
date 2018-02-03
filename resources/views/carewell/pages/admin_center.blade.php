@@ -11,7 +11,6 @@
     <div class=" col-md-2 col-xs-6 pull-right">
       <button class="btn btn-primary button-lg create-user" type="button" ><i class="fa fa-plus btn-icon "></i>CREATE USER</button>
     </div>
-    
   </div>
   <div class="row">
     <div class="col-xs-12">
@@ -40,15 +39,15 @@
               <th>DATE ADDED</th>
               <th>ACTION</th>
             </tr>
-            @foreach($_user as $user)
+            @foreach($_user_data as $user_data)
             <tr>
-              <td>{{$user->user_id}}</td>
-              <td>{{$user->user_id_number}}</td>
-              <td>{{$user->user_first_name." ".$user->user_last_name}}</td>
-              <td>{{$user->user_email}}</td>
-              <td>{{$user->user_gender}}</td>
+              <td>{{$user_data->user_id}}</td>
+              <td>{{$user_data->user_id_number}}</td>
+              <td>{{$user_data->user_first_name." ".$user_data->user_last_name}}</td>
+              <td>{{$user_data->user_email}}</td>
+              <td>{{$user_data->user_gender}}</td>
               <td><span class="label label-success">active</span></td>
-              <td>{{date("F j, Y",strtotime($user->user_created))}}</td>
+              <td>{{date("F j, Y",strtotime($user_data->user_created))}}</td>
               <td>
                 <div class="btn-group">
                   <button type="button" class="btn btn-danger">Action</button>
@@ -57,7 +56,7 @@
                   <span class="sr-only">Toggle Dropdown</span>
                   </button>
                   <ul class="dropdown-menu" role="menu" style="position: absolute !important;">
-                    <li><button type="button" data-id="{{$user->user_id}}" class="btn btn-link view-member-details"><i class="fa fa-eye btn-icon"></i>  View</button></li>
+                    <li><button type="button" data-user_id="{{$user_data->user_id}}" class="btn btn-link view-user-details"><i class="fa fa-eye btn-icon"></i>  View</button></li>
                     <li><button type="button" class="btn btn-link"><i class="fa fa-trash btn-icon"></i> Archived </button></li>
                   </ul>
                 </div>
@@ -69,7 +68,7 @@
         </table>
       </div>
       <div class="box-footer clearfix">
-        @include('globals.pagination', ['paginator' => $_user])
+        @include('globals.pagination', ['paginator' => $_user_data])
       </div>
     </div>
   </div>

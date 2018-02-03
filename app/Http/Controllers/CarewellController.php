@@ -40,6 +40,7 @@ use App\Http\Model\TblProviderBillingModel;
 use App\Http\Model\TblDoctorModel;
 use App\Http\Model\TblDoctorSpecializationModel;
 use App\Http\Model\TblDoctorProviderModel;
+use App\Http\Model\TblSpecializationModel;
 
 use App\Http\Model\TblApprovalModel;
 
@@ -607,7 +608,8 @@ class CarewellController extends ActiveAuthController
   }
   public function create_doctor()
   {
-    $data['_provider'] = TblProviderModel::get();
+    $data['_provider'] = TblProviderModel::where('archived',0)->get();
+    $data['_specialization'] = TblSpecializationModel::get();
     return view('carewell.modal_pages.doctor_create',$data);
   }
   public function doctor_view_details(Request $request,$doctor_id)
@@ -1104,6 +1106,18 @@ class CarewellController extends ActiveAuthController
   	$data['page'] = 'Payable';
     $data['user'] = $this->global();
   	return view('carewell.pages.payable',$data);
+  }
+
+  public function payable_create()
+  {
+
+    $data['_provider']  = TblProviderModel::where('archived',0)->get();
+    $data['_approval'] = TblApprovalModel::join('tbl_provider','tbl_provider.provider_id','=','tbl_approval.provider_id')
+                          ->join('tbl_member','tbl_member.member_id','=','tbl_approval.member_id')
+                          ->join('tbl_member_company','tbl_member_company.member_id','tbl_member.member_id')
+                          ->join('tbl_company','tbl_company.company_id','tbl_member_company.company_id')
+                          ->paginate(10);
+    return view('carewell.modal_pages.payable_create',$data);
   }
   public function reports()
   {

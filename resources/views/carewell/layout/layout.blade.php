@@ -121,7 +121,7 @@
                 <img src="/images/img/user2-160x160.jpg" class="img-circle" alt="User Image">
                 <p>
                   {{$user->user_first_name." ".$user->user_last_name}}
-                  <small>Web Developer</small>
+                  <small>CAREWELL {{$user->user_position}}</small>
                   <small>Member since {{date("F j, Y",strtotime($user->user_created))}}</small>
                 </p>
               </li>

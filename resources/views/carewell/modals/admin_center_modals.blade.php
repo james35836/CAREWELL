@@ -16,7 +16,7 @@
       </div>
       <div class="modal-footer admin-modal-footer">
         <button type="button" class="btn btn-default pull-left " data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary admin-confirm">Save</button>
+        <button type="button" class="btn btn-primary create-user-confirm">CREATE USER</button>
         
       </div>
     </div>
