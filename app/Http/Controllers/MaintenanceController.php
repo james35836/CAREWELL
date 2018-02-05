@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Http\Model\TblUserModel;
+use App\Http\Model\TblUserInfoModel;
 use App\Http\Model\TblCompanyModel;
 use App\Http\Model\TblCompanyContractModel;
 use App\Http\Model\TblCompanyJobsiteModel;
@@ -36,7 +37,8 @@ class MaintenanceController extends Controller
       }
 	public function developer_maintenance()
       {
-            
+         $up['user_profile']  = '/profile/sam.jpg';
+         TblUserInfoModel::where('user_info_id',1)->update($up);  
 
         if (DB::table('tbl_specialization')->count() <= 0) 
         {

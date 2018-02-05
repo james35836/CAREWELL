@@ -53,7 +53,7 @@ class AdminController extends ActiveAuthController
       $userData->save();
 
       $userInfoData = new TblUserInfoModel;
-      $userInfoData->user_profile         = '/images/profile/default_profile.jpg';
+      $userInfoData->user_profile         = '/profile/default_profile.jpg';
       $userInfoData->user_first_name      = $request->user_first_name;
       $userInfoData->user_middle_name     = $request->user_middle_name;
       $userInfoData->user_last_name       = $request->user_last_name;
