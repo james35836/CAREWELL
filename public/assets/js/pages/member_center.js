@@ -228,7 +228,7 @@ function member_center()
 		$(document).on('click','.view-member-details',function()
 		{
 			$('.member-modal').modal('show');
-			$('.modal-dialog').removeClass().addClass('modal-dialog modal-lg');
+			$('.member-modal-dialog').removeClass('modal-sm modal-md').addClass('modal-dialog modal-lg');
 			$('.member-ajax-loader').show();
 			$('.member-modal-body-content').hide();
 			$('.member-modal-title').html('MEMBER DETAILS');
@@ -259,6 +259,7 @@ function member_center()
 		{
 			var member_id = $(this).data('transaction_member_id');
 			$('.member-action-modal').modal('show');
+			$('.member-action-modal-dialog').removeClass('modal-lg modal-sm').addClass('modal-md');
 			$('.member-action-ajax-loader').show();
 			$('.member-action-modal-body-content').hide();
 			$('.member-action-modal-title').html('MEMBER TRANSACTION DETAILS');

@@ -6,6 +6,9 @@
     <div class=" col-md-2  col-xs-6 pull-left">
       <select class="form-control">
         <option>SELECT COMPANY</option>
+        @foreach($_company as $company)
+        <option value="{{$company->company_id}}">{{$company->company_name}}</option>
+        @endforeach
       </select>
     </div>
     <div class=" col-md-2 pull-right">

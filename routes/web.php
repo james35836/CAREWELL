@@ -37,6 +37,9 @@ Route::get('/register', 								'FrontController@register');
 Route::any('/get/company_coverage_plan', 				'StaticFunctionController@getCompanyCoveragePlan');
 Route::any('/get/company_jobsite', 						'StaticFunctionController@getCompanyJobsite');
 
+Route::any('/get/procedure_amount', 					'StaticFunctionController@getProcedureAmount');
+
+
 /*USER*/
 Route::get('/user/view_profile', 						'UserController@user_view_profile');
 /*DASHBOARD*/

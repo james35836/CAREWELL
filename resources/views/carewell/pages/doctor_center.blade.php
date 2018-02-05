@@ -4,13 +4,16 @@
 <div class="container">
   <div class="row">
     <div class=" col-md-2 col-xs-6 pull-left">
-      <select class="form-control">
+      <select class="form-control top-element">
         <option>SELECT PROVIDER</option>
+        @foreach($_provider as $provider)
+        <option value="{{$provider->provider_id}}">{{$provider->provider_name}}</option>
+        @endforeach
       </select>
     </div>
     <div class=" col-md-2 col-xs-6 pull-right">
       <div class="dropdown">
-        <button class="btn btn-primary button-lg dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <button class="btn btn-primary top-element dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <i class="fa fa-plus btn-icon "></i>CREATE DOCTOR
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -50,7 +53,11 @@
             @foreach($_doctor as $doctor)
             <tr>
               <td>{{sprintf("%05d",$doctor->doctor_id)}}</td>
-              <td>{{$doctor->provider_name}}</td>
+              <td>
+                @foreach($doctor->provider as  $provider)
+                <span class="label label-default">{{$provider->provider_name}}</span>
+                @endforeach
+              </td>
               <td>{{$doctor->doctor_first_name}} {{$doctor->doctor_last_name}}</td>
               <td>
                 @foreach($doctor->specialization as $specialization)

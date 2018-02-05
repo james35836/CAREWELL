@@ -155,7 +155,7 @@ class CarewellController extends ActiveAuthController
         }
         
         $companyData = new TblCompanyModel;
-        $companyData->company_code            = $companyLastId;
+        $companyData->company_code            = StaticFunctionController::updateReferenceNumber('company');
         $companyData->company_name            = $request->company_name;
         $companyData->company_contact_person  = $request->company_contact_person;
         $companyData->company_email_address   = $request->company_email_address;
@@ -177,7 +177,7 @@ class CarewellController extends ActiveAuthController
         $fileSchedule->move('schedule_of_benifits',$fileScheduleRef );
 
         $contractData = new TblCompanyContractModel;
-        $contractData->contract_number          = sprintf("%05d",$companyLastId);
+        $contractData->contract_number          = StaticFunctionController::updateReferenceNumber('contract');
         $contractData->contract_mode_of_payment = $request->contract_mode_of_payment;
         $contractData->contract_image           = '/contract/'.$fileContractRef.'';
         $contractData->contract_schedule_of_benifits_image = '/schedule_of_benifits/'.$fileScheduleRef.'';
@@ -215,9 +215,10 @@ class CarewellController extends ActiveAuthController
   /*MEMBER*/
   public function member()
   {
-  	$data['page'] = 'Member';
-    $data['user'] = $this->global();
-    $data['_member']  =  TblMemberModel::Member()->paginate(10);
+  	$data['page']     = 'Member';
+    $data['user']     = $this->global();
+    $data['_company'] = TblCompanyModel::where('archived',0)->get();
+    $data['_member']  = TblMemberModel::Member()->paginate(10);
   	return view('carewell.pages.member_center',$data);
   }
   public function member_create_member()
@@ -279,7 +280,7 @@ class CarewellController extends ActiveAuthController
     }
     
     $companyMemberData = new TblMemberCompanyModel;
-    $companyMemberData->member_company_carewell_id      = $companyData->company_code."-".date("my")."-".sprintf("%05d",$member_company_data);
+    $companyMemberData->member_company_carewell_id      = StaticFunctionController::generateCarewellId($companyData->company_code);
     $companyMemberData->member_company_employee_number  = $request->member_company_employee_number;
     $companyMemberData->member_company_status           = "active";
     $companyMemberData->availment_plan_id               = $request->availment_plan_id;
@@ -521,6 +522,18 @@ class CarewellController extends ActiveAuthController
     $data['page']       = 'Network Provider';
     $data['user']       = $this->global();
     $data['_provider']  = TblProviderModel::paginate(10);
+    foreach($data['_provider'] as $key=> $provider)
+    {
+      if($provider->provider_check=="checked")
+      {
+        $data['_provider'][$key]['provider_billing_name'] =  $provider->provider_name;
+      }
+      else
+      {
+        $billing = TblProviderBillingModel::where('provider_id',$provider->provider_id)->first();
+        $data['_provider'][$key]['provider_billing_name'] =  $billing->provider_billing_name;
+      }
+    }
     return view('carewell.pages.provider_center',$data);
   }
   public function provider_create()
@@ -530,17 +543,10 @@ class CarewellController extends ActiveAuthController
 
   public function provider_create_submit(Request $request)
   {
-    if($request->agreed_value=="checked")
-    {
-      $provider_billing_name = $request->provider_name;
-    }
-    else
-    {
-      $provider_billing_name = $request->provider_billing_name;
-    }
+    
     $providerData = new TblProviderModel;
     $providerData->provider_name            = $request->provider_name;
-    $providerData->provider_billing_name    = $provider_billing_name;
+    $providerData->provider_check           = $request->provider_check;
     $providerData->provider_contact_person  = $request->provider_contact_person;
     $providerData->provider_contact_number  = $request->provider_contact_number;
     $providerData->provider_mobile_number   = $request->provider_mobile_number;
@@ -598,10 +604,16 @@ class CarewellController extends ActiveAuthController
   {
     $data['page']       = 'Doctor';
     $data['user']       = $this->global();
-    $data['_doctor']    = TblDoctorModel::Doctor()->paginate(10);
+    $data['_provider']  = TblProviderModel::where('archived',0)->get();
+    $data['_doctor']    = TblDoctorModel::paginate(10);
     foreach ($data['_doctor'] as $key => $doctor) 
     {
-      $data['_doctor'][$key]['specialization'] =  TblDoctorSpecializationModel::where('doctor_id',$doctor->doctor_id)->get();
+      $data['_doctor'][$key]['specialization']  =  TblDoctorSpecializationModel::where('doctor_id',$doctor->doctor_id)
+                                                ->join('tbl_specialization','tbl_specialization.specialization_id','=','tbl_doctor_specialization.specialization_id')
+                                                ->get();
+      $data['_doctor'][$key]['provider']  =  TblDoctorProviderModel::where('doctor_id',$doctor->doctor_id)
+                                                ->join('tbl_provider','tbl_provider.provider_id','=','tbl_doctor_provider.provider_id')
+                                                ->get();
     }
     return view('carewell.pages.doctor_center',$data);
 
@@ -626,8 +638,10 @@ class CarewellController extends ActiveAuthController
   public function create_doctor_submit(Request $request)
   {
 
+    
+
     $doctorData = new TblDoctorModel;
-    $doctorData->doctor_number          = $request->doctor_number;
+    $doctorData->doctor_number          = StaticFunctionController::updateReferenceNumber('doctor');
     $doctorData->doctor_first_name      = $request->doctor_first_name;
     $doctorData->doctor_middle_name     = $request->doctor_middle_name;
     $doctorData->doctor_last_name       = $request->doctor_last_name;
@@ -639,16 +653,21 @@ class CarewellController extends ActiveAuthController
     $doctorData->doctor_created         = Carbon::now();
     $doctorData->save();
 
-    $providerData = new TblDoctorProviderModel;
-    $providerData->provider_id          = $request->provider_id;
-    $providerData->doctor_id            = $doctorData->doctor_id;
-    $providerData->save();
+    
 
-    foreach($request->ajaxData as $specialization)
+    foreach($request->providerData as $provider)
+    {
+      $providerData = new TblDoctorProviderModel;
+      $providerData->provider_id          = $provider;
+      $providerData->doctor_id            = $doctorData->doctor_id;
+      $providerData->save();
+    }
+
+    foreach($request->specialData as $specialization)
     {
       $specializationData = new TblDoctorSpecializationModel;
-      $specializationData->specialization_name  = $specialization;
-      $specializationData->doctor_id            = $doctorData->doctor_id;
+      $specializationData->specialization_id = $specialization;
+      $specializationData->doctor_id         = $doctorData->doctor_id;
       $specializationData->save();
     }
     if($doctorData->save())
@@ -782,8 +801,8 @@ class CarewellController extends ActiveAuthController
   	$data['page']         = 'Billing';
     $data['user']         = $this->global();
     $data['_cal_company'] = TblCompanyCalModel::join('tbl_company','tbl_company.company_id','=','tbl_company_cal.cal_company_id')->paginate(10);
-    $data['_company']     = TblCompanyModel::get();
-  	return view('carewell.pages.billing_and_collection',$data);
+    $data['_company']     = TblCompanyModel::where('archived',0)->get();
+  	return view('carewell.pages.billing_center',$data);
   }
   public function billing_create_cal()
   {
@@ -969,14 +988,15 @@ class CarewellController extends ActiveAuthController
   /*MEDICAL*/
   public function medical()
   {
-  	$data['page'] = 'Medical';
-    $data['user'] = $this->global();
-    $data['_approval'] = TblApprovalModel::join('tbl_provider','tbl_provider.provider_id','=','tbl_approval.provider_id')
+  	$data['page']       = 'Medical';
+    $data['_company']   = TblCompanyModel::where('archived',0)->get();
+    $data['user']       = $this->global();
+    $data['_approval']  = TblApprovalModel::join('tbl_provider','tbl_provider.provider_id','=','tbl_approval.provider_id')
                           ->join('tbl_member','tbl_member.member_id','=','tbl_approval.member_id')
                           ->join('tbl_member_company','tbl_member_company.member_id','tbl_member.member_id')
                           ->join('tbl_company','tbl_company.company_id','tbl_member_company.company_id')
                           ->paginate(10);
-  	return view('carewell.pages.medical_representative',$data);
+  	return view('carewell.pages.medical_center',$data);
   }
   public function medical_create_approval()
   {

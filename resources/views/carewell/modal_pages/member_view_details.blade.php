@@ -142,6 +142,11 @@
 		</ul>
 		<div class="tab-content">
 			<div id="company" class="row tab-pane fade in active table-min-height">
+				<div class="row ">
+			    <div class=" col-md-3 pull-right">
+			      <button type="button" class="btn btn-primary  button-lg create-company"><i class="fa fa-plus btn-icon "></i>CREATE ADJUSTMENT</button>
+			    </div>
+			  </div>
 				<div class="box-body table-responsive no-padding">
 					<table class="table table-hover table-bordered">
 						<tr>
@@ -169,8 +174,7 @@
 									<span class="sr-only">Toggle Dropdown</span>
 									</button>
 									<ul class="dropdown-menu" role="menu" style="position: absolute !important;">
-										<li><button type="button" data-id="{{$member_company->member_id}}" class="btn btn-link view-member-details">View</button></li>
-										<li><button type="button" class="btn btn-link"> Archived</button></li>
+										<li><button type="button" data-id="{{$member_company->member_id}}" class="btn btn-link"> Archived</button></li>
 									</ul>
 								</div>
 							</td>

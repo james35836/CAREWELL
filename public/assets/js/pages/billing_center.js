@@ -65,10 +65,10 @@ function billing_center()
         $(document).on('click','.create-cal',function() 
 		{
 			$('.billing-modal').modal('show');
-			$('.modal-dialog').removeClass().addClass('modal-dialog modal-lg');
+			$('.modal-dialog').removeClass('modal-md modal-sm').addClass('modal-dialog modal-lg');
 			$('.billing-ajax-loader').show();
 			$('.billing-modal-body-content').hide();
-			$('.billing-modal-title').html('CREATE PLAN');
+			$('.billing-modal-title').html('CREATE CAL');
 			$.ajax({
 				headers: {
 				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -133,7 +133,7 @@ function billing_center()
 				{
 					setTimeout(function()
 					{
-						$('.modal-dialog').removeClass().addClass('modal-dialog modal-sm');
+						$('.modal-dialog').removeClass('modal-md modal-lg').addClass('modal-sm');
 					    $(".billing-modal-body").html(data);
 					    $(".billing-modal-footer").html("<button type='button' class='btn btn-default pull-left btn-close-billing' style='text-align:center' data-dismiss='modal'>Close</button>");
 					}, 1000);
@@ -146,7 +146,7 @@ function billing_center()
 		$(document).on('click','.cal-view-details',function() 
 		{
 			$('.billing-modal').modal('show');
-			$('.modal-dialog').removeClass().addClass('modal-dialog modal-lg');
+			$('.modal-dialog').removeClass('modal-md modal-sm').addClass('modal-lg');
 			$('.billing-ajax-loader').show();
 			$('.billing-modal-body-content').hide();
 			$('.billing-modal-title').html('CAL DETAILS');
@@ -182,10 +182,11 @@ function billing_center()
 	}
 	function import_cal_members()
 	{
-		$(document).on('click','.import-cal-members',function() 
+
+		$(document).on('click','.import-cal-memberss',function() 
 		{
 			$('.billing-action-modal').modal('show');
-			$('.modal-dialog').removeClass().addClass('modal-dialog modal-import');
+			// $('.billing-action-modal-dialogs').removeClass();
 			$('.billing-action-ajax-loader').show();
 			$('.billing-action-modal-body-content').hide();
 			$('.billing-action-modal-title').html('IMPORT CAL MEMBERS');

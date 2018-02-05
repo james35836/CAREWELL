@@ -1,5 +1,5 @@
-<script>  
-	$(function () 
+<script>
+	$(function ()
 	{
 		//select2
 		$('.select2').select2()
@@ -8,7 +8,83 @@
 		autoclose: true
 		})
 	})
-</script> 
+	$(document).ready(function() {
+
+    
+    var readURL = function(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('.profile-pic').attr('src', e.target.result);
+            }
+    
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    
+
+    $(".file-upload").on('change', function(){
+        readURL(this);
+    });
+    
+    $(".upload-button").on('click', function() {
+       $(".file-upload").click();
+    });
+});
+</script>
+<style>
+.upload-button {
+    padding: 10px;
+    border-radius: 30px;
+    display: block;
+    float: left;
+}
+
+.profile-pic {
+    max-width: 250px;
+    max-height: 250px;
+    display: block;
+}
+
+.file-upload {
+    display: none !important;
+}
+</style>
+
+<div class="row box-globals">
+	<div class="form-holder">
+		<div class=" col-md-6">
+			<div class="col-md-12 form-content">
+				<img class="profile-pic" src="{{$user->user_profile}}" />
+				<input class="file-upload" type="file" accept="image/*"/>
+			</div>
+			<div class="col-md-12 form-content">
+				<div class="upload-button 	btn btn-primary">Upload New Profile</div>
+			</div>
+		</div>
+		<div class=" col-md-6">
+			<div class="col-md-12 form-content">
+				<label>USER ACCESS LEVEL</label>
+			</div>
+			
+			<div class="col-md-12 form-content">
+				<select id="user_position" class="form-control">
+					<option>{{$user->user_position}}</option>
+					<option disabled>ROLE</option>
+					<option>ADMIN</option>
+					<option>MED-REP</option>
+					<option>BILLING</option>
+					<option>ENCODER</option>
+					<option>ACCOUNTING</option>
+				</select>
+			</div>
+		</div>
+		
+		
+		
+	</div>
+</div>
 <div class="row box-globals">
 	<div class="form-holder">
 		<div class="col-md-2 form-content">
@@ -23,6 +99,7 @@
 		<div class="col-md-4 form-content">
 			<input type="text" id="user_first_name" value="{{$user->user_first_name}}" class="form-control"/>
 		</div>
+		
 	</div>
 	<div class="form-holder">
 		<div class="col-md-2 form-content">
@@ -79,25 +156,4 @@
 			<textarea id="user_address" class="form-control" rows="5">{{$user->user_address}}</textarea>
 		</div>
 	</div>
-</div>
-
-<div class="row box-globals">
-	<div class="form-holder">
-		<div class="col-md-5 form-content">
-			<label>USER ACCESS LEVEL</label>
-		</div>
-		
-		<div class="col-md-7 form-content">
-			<select id="user_access_level" class="form-control">
-				<option>{{$user->user_position}}</option>
-				<option disabled>ROLE</option>
-				<option>ADMIN</option>
-				<option>MED-REP</option>
-				<option>BILLING</option>
-				<option>ENCODER</option>
-				<option>ACCOUNTING</option>
-			</select>
-		</div>
-	</div>
-	
 </div>

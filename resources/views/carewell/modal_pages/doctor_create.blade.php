@@ -1,12 +1,20 @@
 <script>
 	
 	$(document).ready(function() {
-	$('#selectAllDomainList').click (function () {
+	$('#selectAllSpecializationList').click (function () {
 	     var checkedStatus = this.checked;
 	    $('.specialization-table  tr').find('td:first :checkbox').each(function () {
 	        $(this).prop('checked', checkedStatus);
 	     });
 	});
+	$('#selectAllProviderList').click (function () {
+	     var checkedStatus = this.checked;
+	    $('.provider-table  tr').find('td:first :checkbox').each(function () {
+	        $(this).prop('checked', checkedStatus);
+	     });
+	});
+
+	
 
 
 	$(".add-specialization").on("click", function() {
@@ -33,25 +41,6 @@
 	})
 </script>
 <div class="row box-globals">
-	<div class="form-holder">
-		<div class="col-md-2 form-content">
-			<label>PROVIDER</label>
-		</div>
-		<div class="col-md-4 form-content">
-			<select class="form-control" id="provider_id">
-				<option>Select Provider</option>
-				@foreach($_provider as $provider)
-				<option value="{{$provider->provider_id}}">{{$provider->provider_name}}</option>
-				@endforeach
-			</select>
-		</div>
-		<div class="col-md-2 form-content">
-			<label>Doctor Number</label>
-		</div>
-		<div class="col-md-4 form-content">
-			<input type="text" class="form-control" id="doctor_number"/>
-		</div>
-	</div>
 	<div class="form-holder">
 		<div class="col-md-2 form-content">
 			<label>Last Name</label>
@@ -112,55 +101,6 @@
 			<textarea class="form-control" name="" id="doctor_address" cols="30" rows="3"></textarea>
 		</div>
 	</div>
-	<div class="row form-holder">
-		<div class="col-md-4 pull-right form-content">
-			<div class="btn-group">
-				<button type="button" class="btn btn-primary add-specialization"><i  class="fa fa-plus btn-icon"></i> Specialization</button>
-				<button type="button" class="btn btn-danger remove-specialization"><i  class="fa fa-minus btn-icon"></i> Specialization</button>
-			</div>
-		</div>
-	</div>
-	<div class="form-holder">
-		<div class="col-md-2 form-content">
-			<label>Specialization</label>
-		</div>
-		<div class="col-md-10 form-content specialization-form">
-			<div class="specialization-count" style="margin-top: 0px;" >
-				<select class="form-control" name="specialization_name" id="specialization_name">
-					<option>Allergist or Immunologist</option>
-					<option>Anesthesiologist</option>
-					<option>Cardiologist</option>
-					<option>Dermatologist</option>
-					<option>Gastroenterologist</option>
-					<option>Hematologist/Oncologist</option>
-					<option>Internal Medicine Physician</option>
-					<option>Nephrologist</option>
-					<option>Neurologist</option>
-					<option>Neurosurgeon</option>
-					<option>Obstetrician</option>
-					<option>Gynecologist</option>
-					<option>Nurse-Midwifery</option>
-					<option>Occupational Medicine Physician</option>
-					<option>Ophthalmologist</option>
-					<option>Oral and Maxillofacial Surgeon</option>
-					<option>Orthopaedic Surgeon</option>
-					<option>Otolaryngologist (Head and Neck Surgeon)</option>
-					<option>Pathologist</option>
-					<option>Pediatrician</option>
-					<option>Plastic Surgeon</option>
-					<option>Podiatrist</option>
-					<option>Psychiatrist</option>
-					<option>Pulmonary Medicine Physician</option>
-					<option>Radiation Onconlogist</option>
-					<option>Diagnostic Radiologist</option>
-					<option>Rheumatologist</option>
-					<option>Urologist</option>
-				</select>
-			</div>
-			
-		</div>
-	</div>
-	
 </div>
 <div class="row box-globals" >
 	<!-- Custom Tabs -->
@@ -174,12 +114,12 @@
 				<div class="box-body table-responsive no-padding">
 					<table class="table table-hover table-bordered specialization-table">
 						<tr>
-							<th><input type="checkbox" id="selectAllDomainList"></th>
+							<th><input type="checkbox" id="selectAllSpecializationList"></th>
 							<th>SPECIALIZATION NAME</th>
 						</tr>
 						@foreach($_specialization as $specialization)
 						<tr>
-							<td><input type="checkbox" value="{{$specialization->specialization_id}}" name="specialization_name"></td>
+							<td><input type="checkbox" name="specialization_id" value="{{$specialization->specialization_id}}" name="specialization_name"></td>
 							<td>{{$specialization->specialization_name}}</td>
 						</tr>
 						@endforeach
@@ -188,16 +128,14 @@
 			</div>
 			<div id="provider" class="row tab-pane fade table-min-height" >
 				<div class="box-body table-responsive no-padding">
-					<table class="table table-hover table-bordered">
+					<table class="table table-hover table-bordered provider-table">
 						<tr>
-							<th><input type="checkbox"></th>
-							<th>PROVIDER ID</th>
+							<th><input type="checkbox" id="selectAllProviderList"></th>
 							<th>PROVIDER NAME</th>
 						</tr>
 						@foreach($_provider as $provider)
 						<tr>
-							<td><input type="checkbox"></td>
-							<td>{{$provider->provider_id}}</td>
+							<td><input type="checkbox" name="provider_id" value="{{$provider->provider_id}}"></td>
 							<td>{{$provider->provider_name}}</td>
 						</tr>
 						@endforeach

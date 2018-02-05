@@ -21,7 +21,7 @@
   </div>
 </div>
 <div class="modal fade modal-top billing-action-modal" role="dialog">
-  <div class="modal-dialog modal-md billing-action-modal-dialog">
+  <div class="modal-dialog modal-import billing-action-modal-dialogs">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>

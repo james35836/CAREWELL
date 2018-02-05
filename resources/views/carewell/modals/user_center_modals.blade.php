@@ -6,7 +6,7 @@
         <h4 class="modal-title user-modal-title"></h4>
       </div>
       <div class="modal-body user-modal-body">
-        <div class="user-ajax-loader" style="display:none;text-align: center; padding:50px;"">
+        <div class="user-ajax-loader" style="display:none;text-align: center; padding:50px;">
           <img src="/assets/loader/loading.gif"/>
         </div>
 

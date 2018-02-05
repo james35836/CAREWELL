@@ -3,6 +3,8 @@ var formData   		= new FormData();
 var ajaxData 		= [];
 var value			= 0;
 var message			= "";
+var specialData 	= [];
+var providerData	= [];
 
 var modals 			= '<div  class="modal fade modal-top confirm-modal" id="" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">'
 						  +'<div class="confirm-modal-dialog modal-dialog modal-sm">'
@@ -98,18 +100,16 @@ function doctor_center()
 	{
 		$(document).on('click','.create-doctor-confirm',function()
 		{
-			$('select[name="specialization_name"] option:selected').each(function() 
+			
+			$('input[name="provider_id"]:checked').each(function() 
 			{
-				ajaxData.push(this.value);
-
+				providerData.push(this.value);
 			});
-			if(document.getElementById('provider_id').value=="Select Provider")
+			$('input[name="specialization_id"]:checked').each(function() 
 			{
-				toastr.error('Please select provider.', 'Something went wrong!', {timeOut: 3000})
-			}
-			else if(checking_null_validation(document.getElementById('doctor_number').value,"DOCTOR NUMBER")=="")
-			{}	
-			else if(checking_null_validation(document.getElementById('doctor_first_name').value,"FIRST NAME")=="")
+				specialData.push(this.value);
+			});
+			if(checking_null_validation(document.getElementById('doctor_first_name').value,"FIRST NAME")=="")
 			{}	
 			else if(checking_null_validation(document.getElementById('doctor_middle_name').value,"MIDDLE NAME")=="")
 			{}
@@ -125,9 +125,13 @@ function doctor_center()
 			{}
 			else if(checking_null_validation(document.getElementById('doctor_address').value,"ADDRESS")=="")
 			{}
-			else if(ajaxData.length==0)
+			else if(providerData.length==0)
 			{
-				toastr.error('Please select specialization at least one.', 'Something went wrong!', {timeOut: 3000})
+				toastr.error('Please select PROVIDER at least one.', 'Something went wrong!', {timeOut: 3000})
+			}
+			else if(specialData.length==0)
+			{
+				toastr.error('Please select SPECIALIZATION at least one.', 'Something went wrong!', {timeOut: 3000})
 			}
 			else
 			{
@@ -138,12 +142,15 @@ function doctor_center()
 				$('.confirm-submit').addClass('create-doctor-submit'); 
 				$('.confirm-modal').modal('show');
 
-				for(var i = 0; i < ajaxData.length; i++) 
+				for(var i = 0; i < providerData.length; i++) 
 				{
-				    formData.append('ajaxData[]', ajaxData[i]);
+				    formData.append('providerData[]', providerData[i]);
 				}
-				formData.append("doctor_number", 			document.getElementById('doctor_number').value);
-	            formData.append("doctor_first_name", 		document.getElementById('doctor_first_name').value);
+				for(var i = 0; i < specialData.length; i++) 
+				{
+				    formData.append('specialData[]', specialData[i]);
+				}
+				formData.append("doctor_first_name", 		document.getElementById('doctor_first_name').value);
 	            formData.append("doctor_middle_name", 		document.getElementById('doctor_middle_name').value);
 	            formData.append("doctor_last_name", 		document.getElementById('doctor_last_name').value);
 	            formData.append("doctor_gender", 			document.getElementById('doctor_gender').value);
@@ -151,8 +158,7 @@ function doctor_center()
 	            formData.append("doctor_contact_number", 	document.getElementById('doctor_contact_number').value);
 	            formData.append("doctor_email_address", 	document.getElementById('doctor_email_address').value);
 	            formData.append("doctor_address", 			document.getElementById('doctor_address').value);
-	            formData.append("provider_id", 				document.getElementById('provider_id').value);
-	         
+	            
 			}
 		});
 	}

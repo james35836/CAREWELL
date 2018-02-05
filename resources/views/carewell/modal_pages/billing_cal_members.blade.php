@@ -1,7 +1,7 @@
 
 	<div class=" row box-globals">
 		<div class=" col-md-4 pull-right">
-			<button type="button" data-member_company_id="{{$company_id}}" data-member_cal_id="{{$cal_id}}" class="btn btn-primary import-cal-members  button-lg" ><i class="fa fa-plus btn-icon"></i>IMPORT MEMBER</button>
+			<button type="button" data-member_company_id="{{$company_id}}" data-member_cal_id="{{$cal_id}}" class="btn btn-primary import-cal-memberss  button-lg" ><i class="fa fa-plus btn-icon"></i>IMPORT MEMBER</button>
 		</div>
 	</div>
 	<div class="row box-globals">

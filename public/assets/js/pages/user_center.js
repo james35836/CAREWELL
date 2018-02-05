@@ -21,6 +21,9 @@ var modals 			= '<div  class="modal fade modal-top confirm-modal" id="" tabindex
 						  +'</div>'
 						+'</div>';
 
+
+
+
 function user_center()
 {
 	init();
@@ -48,10 +51,22 @@ function user_center()
 		
         $(document).on('click','.view-profile',function() 
 		{
-			$('.user-modal').modal('show');
-			$('.user-ajax-loader').show();
-			$('.user-modal-body-content').hide();
-			$('.user-modal-title').html('PROFILE');
+			$('.approval-modal').remove();
+            $(".append-modal").append(globalModals);
+			$('.global-modal').removeClass().addClass('modal fade modal-top approval-modal');
+			$('.global-modal-dialog').removeClass().addClass('modal-dialog modal-lg');
+			$('.global-modal-content').removeClass().addClass('modal-content');
+			$('.global-modal-header').removeClass().addClass('modal-header');
+			$('.global-modal-title').html(' PROFILE DETAILS');
+			$('.global-modal-title').removeClass().addClass('modal-title second');
+			$('.global-modal-body').removeClass().addClass('modal-body');
+			$('.approval-modal').modal('show');
+			$('.global-ajax-loader').show();
+            $('.global-modal-body-content').hide();
+            $('.global-modal-footer').hide();
+            
+
+			
 			$.ajax({
 				headers: {
 				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -62,9 +77,10 @@ function user_center()
 				{
 					setTimeout(function()
 					{
-						$('.user-ajax-loader').hide();
-						$('.user-modal-body-content').show();
-						$('.user-modal-body-content').html(data);
+						$('.global-ajax-loader').hide().removeClass().addClass('.modal-loader');
+						$('.global-modal-body-content').show().html(data).removeClass().addClass('row box-holder  modal-body-content');
+						$('.global-modal-footer').show().removeClass().addClass('modal-footer');
+                    	$('.global-footer-button').html('SAVE PROFILE').removeClass().addClass('btn btn-primary');
                     }, 1000);
 				}
 			});

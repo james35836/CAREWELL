@@ -24,7 +24,7 @@
 		<tbody>
 			<tr>
 				<td>
-					<select class="form-control select2" name="procedure_id[]">
+					<select class="form-control select2 get-procedure-amount" name="procedure_id[]">
 						<option>Select Procedure</option>
 						@foreach($_procedure as $procedure)
 						<option value="{{$procedure->procedure_id}}">{{$procedure->procedure_name}}</option>

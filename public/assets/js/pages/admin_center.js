@@ -66,7 +66,6 @@ function admin_center()
 	{
 		$(document).on('click','.create-user',function() 
 		{
-			alert();
 			$('.admin-modal').modal('show');
 			$('.modal-dialog').removeClass().addClass('modal-dialog modal-lg');
 			$('.admin-modal-title').html('CREATE USER');

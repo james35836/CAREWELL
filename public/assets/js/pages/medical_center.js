@@ -157,6 +157,23 @@ function medical_center()
 			});
 			
 		});
+		$(document).on('change','.get-procedure-amount',function() 
+		{
+			var procedure_id 	= $(this).val();
+			$.ajax({
+				headers: {
+				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				},
+				url:'/get/procedure_amount',
+				data:{procedure_id: procedure_id},
+				method: "POST",
+                success: function(data)
+				{
+					$('#procedure_availed_amount').val(data);
+				}
+			});
+			
+		});
 
     }
     function create_approval_confirm()

@@ -4,15 +4,9 @@
 
   <div class="container">
     <div class="row">
-      <div class=" col-md-2 col-xs-6 pull-left">
-        <select class="form-control">
-          <option>SELECT COMPANY</option>
-        </select>
-      </div>
       <div class=" col-md-2 col-xs-6 pull-right">
-        <button type="button" class="btn btn-primary create-provider button-lg"><i class="fa fa-plus btn-icon"></i>CREATE PROVIDER</button> 
+        <button type="button" class="btn btn-primary create-provider top-element"><i class="fa fa-plus btn-icon"></i>CREATE PROVIDER</button> 
       </div>
-      
     </div>
     <div class="row">
       <div class="col-xs-12">

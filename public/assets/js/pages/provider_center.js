@@ -153,11 +153,11 @@ function provider_center()
 
 				if ($('#provider_name_agreed').is(':checked')) 
 				{
-					formData.append("agreed_value", 			'checked');
+					formData.append("provider_check", 			'checked');
 				}
 				else
 				{
-					formData.append("agreed_value", 			'notchecked');
+					formData.append("provider_check", 			'notchecked');
 				}
 
 				formData.append("provider_name", 			document.getElementById('provider_name').value);

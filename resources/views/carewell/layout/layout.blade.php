@@ -112,13 +112,13 @@
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <img src="/images/img/user2-160x160.jpg" class="user-image" alt="User Image">
+              <img src="{{$user->user_profile}}" class="user-image" alt="User Image">
               <span class="hidden-xs">{{$user->user_first_name." ".$user->user_last_name}}</span>
             </a>
             <ul class="dropdown-menu">
               <!-- User image -->
               <li class="user-header">
-                <img src="/images/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                <img src="{{$user->user_profile}}" class="img-circle" alt="User Image">
                 <p>
                   {{$user->user_first_name." ".$user->user_last_name}}
                   <small>CAREWELL {{$user->user_position}}</small>
@@ -164,7 +164,7 @@
     <section class="sidebar">
       <div class="user-panel">
         <div class="pull-left image">
-          <img src="/images/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+          <img src="{{$user->user_profile}}" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
           <p>{{$user->user_first_name." ".$user->user_last_name}}</p>
@@ -237,8 +237,6 @@
             <li><a href="/settings/admin"><i class="fa fa-universal-access"></i>ADMIN PANEL</a></li>
             <li><a href="/settings/coverage"><i class="fa fa-circle-o"></i>COVERAGE PLAN</a></li>
             <li><a href="/settings/plan"><i class="fa fa-tasks "></i> CREATE PLAN</a></li>
-            <li><a href="/settings/provider"><i class="fa fa-user-md "></i> CREATE PROVIDER</a></li>
-            <li><a href="editors.html"><i class="fa fa-circle-o"></i> Editors</a></li>
           </ul>
         </li>
       </ul>
@@ -341,7 +339,11 @@
       autoclose: true
     })
  })
-
+$('.modal').on('hidden.bs.modal', function (e) {
+    if($('.modal').hasClass('in')) {
+    $('body').addClass('modal-open');
+    }    
+});
  
 </script>
 </body>
