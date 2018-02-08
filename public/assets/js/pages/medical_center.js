@@ -1,4 +1,4 @@
-var medical_center 	= new medical_center();
+var availment_center 	= new availment_center();
 var formData   		= new FormData();
 var value			= 0;
 var message			= "";
@@ -23,7 +23,7 @@ var modals 			= '<div  class="modal fade modal-top confirm-modal" id="" tabindex
 						  +'</div>'
 						+'</div>';
 
-function medical_center()
+function availment_center()
 {
 	init();
 
@@ -43,7 +43,7 @@ function medical_center()
             create_approval_get_info();
             create_approval_confirm();
             create_approval_submit();
-            medical_transaction_details();
+            availment_transaction_details();
             approval_details();
             
             
@@ -55,7 +55,7 @@ function medical_center()
 	
 	function trigger()
 	{
-		$(document).on('click','.medical-btn-close',function()
+		$(document).on('click','.availment-btn-close',function()
 		{
 			$('.approval-modal').modal('hide');
 			$(".approval-modal-body").html("<p style='text-align:center'>RELOAD THE PAGE</p>");
@@ -90,7 +90,7 @@ function medical_center()
 				headers: {
 				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 				},
-				url:'/medical/create_approval',
+				url:'/availment/create_approval',
 				method: "get",
                 success: function(data)
 				{
@@ -116,7 +116,7 @@ function medical_center()
 				headers: {
 				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 				},
-				url:'/medical/create_approval/member/'+member_id,
+				url:'/availment/create_approval/member/'+member_id,
 				method: "get",
                 success: function(data)
 				{
@@ -132,7 +132,7 @@ function medical_center()
 				headers: {
 				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 				},
-				url:'/medical/create_approval/availment/'+availment_id,
+				url:'/availment/create_approval/availment/'+availment_id,
 				method: "get",
                 success: function(data)
 				{
@@ -148,7 +148,7 @@ function medical_center()
 				headers: {
 				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 				},
-				url:'/medical/create_approval/doctor/'+provider_id,
+				url:'/availment/create_approval/doctor/'+provider_id,
 				method: "get",
                 success: function(data)
 				{
@@ -202,7 +202,7 @@ function medical_center()
 	          	headers: {
 	              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 	        	},
-		        url:'/medical/create_approval/submit',
+		        url:'/availment/create_approval/submit',
 		        method: "POST",
 		        data: ajaxData,
 		        dataType:"text",
@@ -213,17 +213,17 @@ function medical_center()
 						$('.modal-dialog').removeClass('modal-lg');
 						$('.modal-dialog').addClass('modal-sm');
 					    $(".approval-modal-body").html(data);
-					    $(".approval-modal-footer").html("<button type='button' class='btn btn-default pull-left medical-btn-close' style='text-align:center' data-dismiss='modal'>Close</button>");
+					    $(".approval-modal-footer").html("<button type='button' class='btn btn-default pull-left availment-btn-close' style='text-align:center' data-dismiss='modal'>Close</button>");
 					}, 1000);
 		           
 		        }
 	        });
 	     });
 	}
-	function medical_transaction_details()
+	function availment_transaction_details()
 	{
 	
-		$(document).on('click','.medical-transaction-details',function()
+		$(document).on('click','.availment-transaction-details',function()
 		{
 			$('.approval-action-modal').modal('show');
 			$('.approval-action-ajax-loader').show();
@@ -266,7 +266,7 @@ function medical_center()
 				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 				},
 
-				url:'/medical/approval_details/'+approval_id,
+				url:'/availment/approval_details/'+approval_id,
 				method: "get",
                 success: function(data)
 				{

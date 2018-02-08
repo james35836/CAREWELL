@@ -131,13 +131,13 @@ text-align: center;
                   </tr>
                   </thead>
                   <tbody>
-                  @foreach($_approval as $approval)
+                  {{-- @foreach($_approval as $approval)
                   <tr>
                     <td style="width: 147px !important;">{{$approval->approval_number}}</td>
                     <td>{{$approval->member_first_name." ".$approval->member_last_name}}</td>
                     <td><button class="btn btn-link latest-approval" data-approval_id="{{$approval->approval_id}}">view</button></td>
                   </tr>
-                  @endforeach
+                  @endforeach --}}
                   </tbody>
                   
                 </table>

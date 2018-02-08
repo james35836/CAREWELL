@@ -43,9 +43,9 @@ function doctor_center()
 			checking_null_validation(value,message);
             export_doctor_template();
             
-            create_doctor();
-            create_doctor_confirm();
-            create_doctor_submit();
+            add_doctor();
+            add_doctor_confirm();
+            add_doctor_submit();
             import_doctor();
             import_doctor_confirm();
 			import_doctor_submit();
@@ -68,37 +68,50 @@ function doctor_center()
 		}
     }
 
-	function create_doctor()
+	function add_doctor()
 	{
-		$(document).on('click','.create-doctor',function()
+		$("body").on('click','.add-doctor',function()
 		{
+			$('.doctor-modal').remove();
+            $(".append-modal").append(globalModals);
+			$('.global-modal').removeClass().addClass('modal fade modal-top doctor-modal');
+			$('.global-modal-dialog').removeClass().addClass('modal-dialog modal-lg');
+			$('.global-modal-content').removeClass().addClass('modal-content');
+			$('.global-modal-header').removeClass().addClass('modal-header');
+			$('.global-modal-title').html('ADD DOCTOR');
+			$('.global-modal-title').removeClass().addClass('modal-title second');
+			$('.global-modal-body').removeClass().addClass('modal-body');
 			$('.doctor-modal').modal('show');
-			$('.doctor-ajax-loader').show();
-			$('.doctor-modal-body-content').hide();
-			$('.doctor-modal-title').html('CREATE DOCTOR');
-			$('.modal-dialog').removeClass().addClass('modal-dialog modal-lg');
+			$('.global-ajax-loader').show();
+            $('.global-modal-body-content').hide();
+            $('.global-modal-footer').hide();
+            var approval_id = $(this).data('approval_id');
+
 			$.ajax({
 				headers: {
 				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 				},
-				url:'/doctor/create_doctor',
+
+				url:'/doctor/add_doctor',
 				method: "get",
                 success: function(data)
-				{
+                {
 					setTimeout(function()
 					{
-						$('.doctor-ajax-loader').hide();
-						$('.doctor-modal-body-content').show();
-						$('.doctor-modal-body-content').html(data);
+						$('.global-ajax-loader').hide().removeClass().addClass('.modal-loader');
+						$('.global-modal-body-content').show().html(data).removeClass().addClass('row box-holder  modal-body-content');
+						$('.global-modal-footer').show().removeClass().addClass('modal-footer');
+                    	$('.global-footer-button').html('CREATE PLAN').removeClass().addClass('btn btn-primary');
                     }, 1000);
 				}
 			});
-			
 		});
+
+		
 	}
-	function create_doctor_confirm()
+	function add_doctor_confirm()
 	{
-		$(document).on('click','.create-doctor-confirm',function()
+		$(document).on('click','.add-doctor-confirm',function()
 		{
 			
 			$('input[name="provider_id"]:checked').each(function() 
@@ -139,7 +152,7 @@ function doctor_center()
 				$('.append-modal').append(modals);
 	            $('.confirm-modal-dialog').removeClass().addClass('modal-dialog modal-sm');
 				$('.confirm-modal-title').html('Are you sure you want to add this DOCTOR?');
-				$('.confirm-submit').addClass('create-doctor-submit'); 
+				$('.confirm-submit').addClass('add-doctor-submit'); 
 				$('.confirm-modal').modal('show');
 
 				for(var i = 0; i < providerData.length; i++) 
@@ -162,9 +175,9 @@ function doctor_center()
 			}
 		});
 	}
-	function create_doctor_submit()
+	function add_doctor_submit()
 	{
-		$(document).on('click','.create-doctor-submit',function() 
+		$(document).on('click','.add-doctor-submit',function() 
 		{
 			
             $('.confirm-modal').modal('hide');
@@ -175,7 +188,7 @@ function doctor_center()
 				headers: {
 				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 				},
-				url:'/doctor/create_doctor/submit',
+				url:'/doctor/add_doctor/submit',
 				method: "POST",
                 data: formData,
                 contentType: false,
@@ -310,32 +323,41 @@ function doctor_center()
 	}
 	function import_doctor()
 	{
-		$(document).on('click','.import-doctor',function() 
+		$("body").on('click','.import-doctor',function()
 		{
+			$('.doctor-modal').remove();
+            $(".append-modal").append(globalModals);
+			$('.global-modal').removeClass().addClass('modal fade modal-top doctor-modal');
+			$('.global-modal-dialog').removeClass().addClass('modal-dialog modal-import');
+			$('.global-modal-content').removeClass().addClass('modal-content');
+			$('.global-modal-header').removeClass().addClass('modal-header');
+			$('.global-modal-title').html('IMPORT DOCTOR');
+			$('.global-modal-title').removeClass().addClass('modal-title second');
+			$('.global-modal-body').removeClass().addClass('modal-body');
 			$('.doctor-modal').modal('show');
-			$('.modal-dialog').removeClass().addClass('modal-dialog modal-import');
-			$('.doctor-ajax-loader').show();
-			$('.doctor-modal-body-content').hide();
-			$('.doctor-modal-title').html('IMPORT DOCTOR');
-			$(".doctor-modal-footer").html("<button type='button' class='btn btn-default pull-left btn-close-import' data-dismiss='modal'>Close</button>");
-			
+			$('.global-ajax-loader').show();
+            $('.global-modal-body-content').hide();
+            $('.global-modal-footer').hide();
+            var approval_id = $(this).data('approval_id');
+
 			$.ajax({
 				headers: {
 				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 				},
+
 				url:'/doctor/import_doctor',
 				method: "get",
                 success: function(data)
-				{
+                {
 					setTimeout(function()
 					{
-						$('.doctor-ajax-loader').hide();
-						$('.doctor-modal-body-content').show();
-						$('.doctor-modal-body-content').html(data);
+						$('.global-ajax-loader').hide().removeClass().addClass('.modal-loader');
+						$('.global-modal-body-content').show().html(data).removeClass().addClass('row box-holder  modal-body-content');
+						$('.global-modal-footer').show().removeClass().addClass('modal-footer');
+                    	$('.global-footer-button').remove();
                     }, 1000);
 				}
 			});
-
 		});
     }
     function import_doctor_confirm()

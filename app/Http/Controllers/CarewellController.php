@@ -14,10 +14,12 @@ use App\Http\Model\TblCompanyModel;
 use App\Http\Model\TblCompanyContractModel;
 use App\Http\Model\TblCompanyCoveragePlanModel;
 use App\Http\Model\TblCompanyJobsiteModel;
-use App\Http\Model\TblCompanyCalModel;
-use App\Http\Model\TblCompanyCalMemberModel;
-use App\Http\Model\TblCompanyTrunklineModel;
 
+use App\Http\Model\TblCalModel;
+use App\Http\Model\TblCalMemberModel;
+
+use App\Http\Model\TblCoveragePlanModel;
+use App\Http\Model\TblCoveragePlanTagModel;
 
 
 use App\Http\Model\TblMemberModel;
@@ -31,6 +33,8 @@ use App\Http\Model\TblMemberGovernmentCardModel;
 use App\Http\Model\TblAvailmentModel;
 use App\Http\Model\TblAvailmentPlanModel;
 use App\Http\Model\TblAvailmentTagModel;
+use App\Http\Model\TblAvailmentChargesModel;
+
 
 use App\Http\Model\TblPaymentModeModel;
 
@@ -94,10 +98,10 @@ class CarewellController extends ActiveAuthController
     $data['company']      = TblCompanyModel::where('archived',0)->count();
     $data['member']       = TblMemberModel::where('archived',0)->count();
     $data['provider']     = TblProviderModel::where('archived',0)->count();
-    $data['_approval']    = TblApprovalModel::where('tbl_approval.archived',0)
-                            ->join('tbl_member','tbl_member.member_id','=','tbl_approval.member_id')
-                            ->orderBy('approval_created','DESC')
-                            ->get();
+    // $data['_approval']    = TblApprovalModel::where('tbl_approval.archived',0)
+    //                         ->join('tbl_member','tbl_member.member_id','=','tbl_approval.member_id')
+    //                         ->orderBy('approval_created','DESC')
+    //                         ->get();
     return view('carewell.pages.dashboard',$data);
   }
   /*COMPANY*/
@@ -106,7 +110,6 @@ class CarewellController extends ActiveAuthController
   	$data['page']             = 'Company';
     $data['user']             = $this->global();
     $data['_company']         = TblCompanyModel::Company()->paginate(10);
-    $data['_availment_plan']  = TblAvailmentPlanModel::get();
     foreach ($data['_company'] as $key => $company) 
     {
       $data['_company'][$key]['coverage_plan']    = TblCompanyCoveragePlanModel::where('company_id',$company->company_id)
@@ -135,7 +138,7 @@ class CarewellController extends ActiveAuthController
   }
   public function company_create_company()
   {
-    $data['_availment_plan'] = TblAvailmentPlanModel::get();
+    $data['_coverage_plan']   = TblCoveragePlanModel::where('archived',0)->get();
     $data['_payment_mode']    = TblPaymentModeModel::get();
     return view('carewell.modal_pages.company_create_company',$data);
   }
@@ -618,7 +621,7 @@ class CarewellController extends ActiveAuthController
     return view('carewell.pages.doctor_center',$data);
 
   }
-  public function create_doctor()
+  public function add_doctor()
   {
     $data['_provider'] = TblProviderModel::where('archived',0)->get();
     $data['_specialization'] = TblSpecializationModel::get();
@@ -635,7 +638,7 @@ class CarewellController extends ActiveAuthController
 
     return view('carewell.modal_pages.doctor_details',$data);
   }
-  public function create_doctor_submit(Request $request)
+  public function add_doctor_submit(Request $request)
   {
 
     
@@ -800,14 +803,15 @@ class CarewellController extends ActiveAuthController
   {
   	$data['page']         = 'Billing';
     $data['user']         = $this->global();
-    $data['_cal_company'] = TblCompanyCalModel::join('tbl_company','tbl_company.company_id','=','tbl_company_cal.cal_company_id')->paginate(10);
+    $data['_cal_company'] = TblCalModel::join('tbl_company','tbl_company.company_id','=','tbl_cal.company_id')->paginate(10);
     $data['_company']     = TblCompanyModel::where('archived',0)->get();
   	return view('carewell.pages.billing_center',$data);
   }
   public function billing_create_cal()
   {
     $data['_company']     = TblCompanyModel::get();
-    $data['_cal_company'] = TblCompanyCalModel::get();
+    $data['_cal_company'] = TblCalModel::get();
+    $data['_period']      = TblPaymentModeModel::get();
     return view('carewell.modal_pages.billing_create_cal',$data);
   }
   public function billing_create_cal_submit(Request $request)
@@ -1204,19 +1208,72 @@ class CarewellController extends ActiveAuthController
     $data['page'] = 'Coverage PLan';
     $data['user'] = $this->global();
 
-    $data['_availment_plan'] = TblAvailmentPlanModel::paginate(10);
+    $data['_coverage_plan'] = TblCoveragePlanModel::paginate(10);
 
     return view('carewell.pages.settings_coverage_plan',$data);
   }
   public function settings_coverage_plan_create()
   {
-    $data['_benefits'] = TblScheduleOfBenefitsModel::where('benefits_parent_id',0)->get();
-    foreach ($data['_benefits'] as $key => $benefits) 
+    $data['_availment'] = TblAvailmentModel::where('availment_parent_id',0)->get();
+    foreach ($data['_availment'] as $key => $availment) 
     {
-      $data['_benefits'][$key]['child_benefits'] =  TblScheduleOfBenefitsModel::where('benefits_parent_id',$benefits->benefits_id)->get();
+      $data['_availment'][$key]['child_availment']    =  TblAvailmentModel::where('availment_parent_id',$availment->availment_id)->get();
+      $data['_availment'][$key]['availment_charges']  =  TblAvailmentChargesModel::where('archived',0)->get();
     }
-    // dd($data);
-    return view('carewell.modal_pages.settings_create_coverage_plan',$data);
+    return view('carewell.modal_pages.settings_coverage_plan_create',$data);
+  }
+  public function settings_coverage_plan_create_submit(Request $request)
+  {
+    $coverageData = new TblCoveragePlanModel;
+    $coverageData->coverage_name                = $request->coverage_name;
+    $coverageData->coverage_patient_confinement = $request->coverage_patient_confinement;
+    $coverageData->coverage_maximum_benefit     = $request->coverage_maximum_benefit;
+    $coverageData->coverage_case_handling       = $request->coverage_case_handling;
+    $coverageData->coverage_age_bracket         = $request->coverage_age_bracket;
+    $coverageData->coverage_monthly_premium     = $request->coverage_monthly_premium;
+    $coverageData->coverage_created             = Carbon::now();
+    $coverageData->save();
+   
+
+    foreach($request->child_availment as $key=>$data)
+    {
+      if($data!=0)
+      {
+        $coverageTagData = new TblCoveragePlanTagModel;
+        $coverageTagData->availment_charges_id    = $request->child_availment_charges[$key];
+        $coverageTagData->availment_id            = $request->child_availment[$key];
+        $coverageTagData->coverage_plan_id        = $coverageData->coverage_plan_id;
+        $coverageTagData->save();
+      }
+      
+    }
+    foreach($request->parent_availment as $parent_availment)
+    {
+      $parentTagData = new TblCoveragePlanTagModel;
+      $parentTagData->availment_charges_id    = 0;
+      $parentTagData->availment_id            = $parent_availment;
+      $parentTagData->coverage_plan_id        = $coverageData->coverage_plan_id;
+      $parentTagData->save();
+    }
+    if($coverageData->save())
+    {
+      return "<div class='alert alert-success' style='text-align: center;'>Coverage Added Successfully!</div>";
+    }
+  }
+  public function settings_coverage_plan_details($coverage_plan_id)
+  {
+    $data['coverage_plan_details']  = TblCoveragePlanModel::where('coverage_plan_id',$coverage_plan_id)->first();
+    $data['_coverage_plan_covered'] = TblCoveragePlanTagModel::where('coverage_plan_id',$coverage_plan_id)
+                                    ->join('tbl_availment','tbl_availment.availment_id','=','tbl_coverage_plan_tag.availment_id')
+                                    ->get();
+    foreach($data['_coverage_plan_covered'] as $key=>$coverage_plan_covered)
+    {
+      $data['_coverage_plan_covered'][$key]['child_plan_item']    =  TblCoveragePlanTagModel::where('availment_parent_id',$coverage_plan_covered->availment_id)->where('coverage_plan_id',$coverage_plan_id)->CoveragePlanTag($coverage_plan_id)->get();
+      $data['_coverage_plan_covered'][$key]['child_availment']    =  TblAvailmentModel::where('availment_parent_id',$coverage_plan_covered->availment_id)->get();
+      $data['_coverage_plan_covered'][$key]['availment_charges']  =  TblAvailmentChargesModel::where('archived',0)->get();
+    }
+    return view('carewell.modal_pages.settings_coverage_plan_details',$data);
+
   }
 
 

@@ -14,10 +14,10 @@
     <div class=" col-md-2 col-xs-6 pull-right">
       <div class="dropdown">
         <button class="btn btn-primary top-element dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <i class="fa fa-plus btn-icon "></i>CREATE DOCTOR
+        <i class="fa fa-plus btn-icon "></i>ADD DOCTOR
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <button type="button" class="btn btn-link  create-doctor"><i class="fa   fa-pencil-square btn-icon" ></i>CREATE MANUALLY</button>
+          <button type="button" class="btn btn-link  add-doctor"><i class="fa   fa-pencil-square btn-icon" ></i>ADD MANUALLY</button>
           <button type="button" class="btn btn-link   import-doctor"><i class="fa fa-file-excel-o btn-icon" ></i>IMPORT EXCEL</button>
         </div>
       </div>

@@ -87,20 +87,7 @@
 		</div>
 		
 	</div>
-	<div class="form-holder">
-		<div class="col-md-2 form-content">
-			<label>Birthdate</label>
-		</div>
-		<div class="col-md-4 form-content">
-			<input type="text" class="form-control datepicker" id="doctor_birthdate"/>
-		</div>
-		<div class="col-md-2 form-content">
-			<label>Address</label>
-		</div>
-		<div class="col-md-4 form-content">
-			<textarea class="form-control" name="" id="doctor_address" cols="30" rows="3"></textarea>
-		</div>
-	</div>
+	
 </div>
 <div class="row box-globals" >
 	<!-- Custom Tabs -->

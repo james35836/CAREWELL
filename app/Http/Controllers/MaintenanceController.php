@@ -35,6 +35,35 @@ class MaintenanceController extends Controller
             DB::table('tbl_member_payment')->truncate();
             
       }
+      public function developer_credential()
+      {
+            if (DB::table('tbl_user')->count() <= 0) 
+            {
+                  $user[0]["user_id"]           = 1;
+                  $user[0]["user_email"]        = "carewelladmin@admin.com";
+                  $user[0]["user_password"]     = Crypt::encrypt('carewelladmin');
+                  $user[0]["user_position"]     = "ADMIN";
+            
+                  DB::table('tbl_user')->insert($user);
+            }
+            if (DB::table('tbl_user_info')->count() <= 0) 
+            {
+                  $user_info[0]["user_info_id"]       = 1;
+                  $user_info[0]["user_profile"]       = '/profile/default_profile.jpg';
+                  $user_info[0]["user_first_name"]    = "CAREWELL";
+                  $user_info[0]["user_middle_name"]   = "HMO";
+                  $user_info[0]["user_last_name"]     = "ADMIN";
+                  $user_info[0]["user_gender"]        = "NOT AVAILABLE";
+                  $user_info[0]["user_birthdate"]     = "NOT AVAILABLE";
+                  $user_info[0]["user_contact_number"]= "NOT AVAILABLE";
+                  $user_info[0]["user_number"]     = "NOT AVAILABLE";
+                  $user_info[0]["user_address"]       = "NOT AVAILABLE";
+                  $user_info[0]["user_created"]       = Carbon::now();
+                  $user_info[0]["user_id"]            = 1;
+                  
+                  DB::table('tbl_user_info')->insert($user_info);
+            }
+      }
 	public function developer_maintenance()
       {
          $up['user_profile']  = '/profile/sam.jpg';
@@ -164,12 +193,12 @@ class MaintenanceController extends Controller
             $insert[7]["availment_parent_id"]    = 1;
 
             $insert[8]["availment_id"]    = 9;
-            $insert[8]["availment_name"]   = "Outpatient Services";
-            $insert[8]["availment_parent_id"]    = 0;
+            $insert[8]["availment_name"]   = "dfgdfg";
+            $insert[8]["availment_parent_id"]    = 1;
 
             $insert[9]["availment_id"]    = 10;
-            $insert[9]["availment_name"]   = "Consultation";
-            $insert[9]["availment_parent_id"]    = 9;
+            $insert[9]["availment_name"]   = "Outpatient Services(consultation)";
+            $insert[9]["availment_parent_id"]    = 0;
 
             $insert[10]["availment_id"]    = 11;
             $insert[10]["availment_name"]   = "No Limit";
@@ -192,8 +221,8 @@ class MaintenanceController extends Controller
             $insert[14]["availment_parent_id"]    = 10;
 
             $insert[15]["availment_id"]    = 16;
-            $insert[15]["availment_name"]   = "Laboratory";
-            $insert[15]["availment_parent_id"]    = 9;
+            $insert[15]["availment_name"]   = "Outpatient Services(Laboratory)";
+            $insert[15]["availment_parent_id"]    = 0;
 
             $insert[16]["availment_id"]    = 17;
             $insert[16]["availment_name"]   = "No Limit";
@@ -433,194 +462,192 @@ class MaintenanceController extends Controller
 
             DB::table('tbl_payment_mode')->insert($payment);
         }
-        if (DB::table('tbl_user_info')->count() <= 0 && DB::table('tbl_user')->count() <= 0) 
+        if (DB::table('tbl_availment_charges')->count() <= 0) 
         {
+            $charges[0]["availment_charges_id"]    = 1;
+            $charges[0]["availment_charges_name"]   = "CHARGE TO MBL";
             
-            $user[0]["user_id"]           = 1;
-            $user[0]["user_email"]        = "carewelladmin@admin.com";
-            $user[0]["user_password"]     = Crypt::encrypt('carewelladmin');
-            $user[0]["user_position"] = "ADMIN";
+            $charges[1]["availment_charges_id"]    = 2;
+            $charges[1]["availment_charges_name"]   = "OPEN WARD";
             
-            DB::table('tbl_user')->insert($user);
+            $charges[2]["availment_charges_id"]    = 3;
+            $charges[2]["availment_charges_name"]   = "COVERED 80%";
+            
 
-            $user_info[0]["user_info_id"]       = 1;
-            $user_info[0]["user_first_name"]    = "CAREWELL";
-            $user_info[0]["user_middle_name"]   = "HMO";
-            $user_info[0]["user_last_name"]     = "ADMIN";
-            $user_info[0]["user_gender"]        = "NOT AVAILABLE";
-            $user_info[0]["user_birthdate"]     = "NOT AVAILABLE";
-            $user_info[0]["user_contact_number"]= "NOT AVAILABLE";
-            $user_info[0]["user_id_number"]     = "NOT AVAILABLE";
-            $user_info[0]["user_address"]       = "NOT AVAILABLE";
-            $user_info[0]["user_created"]       = Carbon::now();
-            $user_info[0]["user_id"]            = 1;
+            $charges[3]["availment_charges_id"]    = 4;
+            $charges[3]["availment_charges_name"]   = "60,000/CONFINEMENT";
             
-            DB::table('tbl_user_info')->insert($user_info);
+
+            $charges[4]["availment_charges_id"]    = 5;
+            $charges[4]["availment_charges_name"]   = "COVERED";
+            
+
+            DB::table('tbl_availment_charges')->insert($charges);
         }
         
-        if (DB::table('tbl_schedule_of_benefits')->count() <= 0) 
-        {
-            $benefits[0]["benefits_id"]    = 1;
-            $benefits[0]["benefits_name"]   = "Required to the PHILHEALTH";
-            $benefits[0]["benefits_parent_id"]    = 0;
-            $benefits[0]["member_id"]    = 0;
+        // if (DB::table('tbl_schedule_of_benefits')->count() <= 0) 
+        // {
+        //     $benefits[0]["benefits_id"]    = 1;
+        //     $benefits[0]["benefits_name"]   = "Required to the PHILHEALTH";
+        //     $benefits[0]["benefits_parent_id"]    = 0;
+        //     $benefits[0]["member_id"]    = 0;
             
-            $benefits[1]["benefits_id"]    = 2;
-            $benefits[1]["benefits_name"]   = "Room and Board";
-            $benefits[1]["benefits_parent_id"]    = 1;
-            $benefits[1]["member_id"]    = 0;
+        //     $benefits[1]["benefits_id"]    = 2;
+        //     $benefits[1]["benefits_name"]   = "Room and Board";
+        //     $benefits[1]["benefits_parent_id"]    = 1;
+        //     $benefits[1]["member_id"]    = 0;
 
-            $benefits[2]["benefits_id"]    = 3;
-            $benefits[2]["benefits_name"]   = "Emergency Accredited Hospital";
-            $benefits[2]["benefits_parent_id"]    = 1;
-            $benefits[2]["member_id"]    = 0;
+        //     $benefits[2]["benefits_id"]    = 3;
+        //     $benefits[2]["benefits_name"]   = "Emergency Accredited Hospital";
+        //     $benefits[2]["benefits_parent_id"]    = 1;
+        //     $benefits[2]["member_id"]    = 0;
 
-            $benefits[3]["benefits_id"]    = 4;
-            $benefits[3]["benefits_name"]   = "Prescribed Take Home Medicine";
-            $benefits[3]["benefits_parent_id"]    = 1;
-            $benefits[3]["member_id"]    = 0;
+        //     $benefits[3]["benefits_id"]    = 4;
+        //     $benefits[3]["benefits_name"]   = "Prescribed Take Home Medicine";
+        //     $benefits[3]["benefits_parent_id"]    = 1;
+        //     $benefits[3]["member_id"]    = 0;
 
-            $benefits[4]["benefits_id"]    = 5;
-            $benefits[4]["benefits_name"]   = "Out Patient";
-            $benefits[4]["benefits_parent_id"]    = 0;
-            $benefits[4]["member_id"]    = 0;
+        //     $benefits[4]["benefits_id"]    = 5;
+        //     $benefits[4]["benefits_name"]   = "Out Patient";
+        //     $benefits[4]["benefits_parent_id"]    = 0;
+        //     $benefits[4]["member_id"]    = 0;
 
-            $benefits[5]["benefits_id"]    = 6;
-            $benefits[5]["benefits_name"]   = "Consultation Accredited Medical Hospital";
-            $benefits[5]["benefits_parent_id"]    = 5;
-            $benefits[5]["member_id"]    = 0;
+        //     $benefits[5]["benefits_id"]    = 6;
+        //     $benefits[5]["benefits_name"]   = "Consultation Accredited Medical Hospital";
+        //     $benefits[5]["benefits_parent_id"]    = 5;
+        //     $benefits[5]["member_id"]    = 0;
 
-            $benefits[6]["benefits_id"]    = 7;
-            $benefits[6]["benefits_name"]   = "Laboratory and Drug Test";
-            $benefits[6]["benefits_parent_id"]    = 5;
-            $benefits[6]["member_id"]    = 0;
+        //     $benefits[6]["benefits_id"]    = 7;
+        //     $benefits[6]["benefits_name"]   = "Laboratory and Drug Test";
+        //     $benefits[6]["benefits_parent_id"]    = 5;
+        //     $benefits[6]["member_id"]    = 0;
 
-            $benefits[7]["benefits_id"]    = 8;
-            $benefits[7]["benefits_name"]   = "Effective Something";
-            $benefits[7]["benefits_parent_id"]    = 5;
-            $benefits[7]["member_id"]    = 0;
+        //     $benefits[7]["benefits_id"]    = 8;
+        //     $benefits[7]["benefits_name"]   = "Effective Something";
+        //     $benefits[7]["benefits_parent_id"]    = 5;
+        //     $benefits[7]["member_id"]    = 0;
 
-            $benefits[8]["benefits_id"]    = 9;
-            $benefits[8]["benefits_name"]   = "Medico Legal Cases";
-            $benefits[8]["benefits_parent_id"]    = 5;
-            $benefits[8]["member_id"]    = 0;
+        //     $benefits[8]["benefits_id"]    = 9;
+        //     $benefits[8]["benefits_name"]   = "Medico Legal Cases";
+        //     $benefits[8]["benefits_parent_id"]    = 5;
+        //     $benefits[8]["member_id"]    = 0;
 
-            $benefits[9]["benefits_id"]    = 10;
-            $benefits[9]["benefits_name"]   = "DENTAL";
-            $benefits[9]["benefits_parent_id"]    = 0;
-            $benefits[9]["member_id"]    = 0;
+        //     $benefits[9]["benefits_id"]    = 10;
+        //     $benefits[9]["benefits_name"]   = "DENTAL";
+        //     $benefits[9]["benefits_parent_id"]    = 0;
+        //     $benefits[9]["member_id"]    = 0;
 
-            $benefits[10]["benefits_id"]    = 11;
-            $benefits[10]["benefits_name"]   = "Shape Tooth Extract";
-            $benefits[10]["benefits_parent_id"]    = 10;
-            $benefits[10]["member_id"]    = 0;
+        //     $benefits[10]["benefits_id"]    = 11;
+        //     $benefits[10]["benefits_name"]   = "Shape Tooth Extract";
+        //     $benefits[10]["benefits_parent_id"]    = 10;
+        //     $benefits[10]["member_id"]    = 0;
 
-            $benefits[11]["benefits_id"]    = 12;
-            $benefits[11]["benefits_name"]   = "Prophylaxis";
-            $benefits[11]["benefits_parent_id"]    = 10;
-            $benefits[11]["member_id"]    = 0;
+        //     $benefits[11]["benefits_id"]    = 12;
+        //     $benefits[11]["benefits_name"]   = "Prophylaxis";
+        //     $benefits[11]["benefits_parent_id"]    = 10;
+        //     $benefits[11]["member_id"]    = 0;
 
-            $benefits[12]["benefits_id"]    = 13;
-            $benefits[12]["benefits_name"]   = "Temporary Pasta";
-            $benefits[12]["benefits_parent_id"]    = 10;
-            $benefits[12]["member_id"]    = 0;
+        //     $benefits[12]["benefits_id"]    = 13;
+        //     $benefits[12]["benefits_name"]   = "Temporary Pasta";
+        //     $benefits[12]["benefits_parent_id"]    = 10;
+        //     $benefits[12]["member_id"]    = 0;
             
-            $benefits[13]["benefits_id"]    = 14;
-            $benefits[13]["benefits_name"]   = "Consultation to Dentist";
-            $benefits[13]["benefits_parent_id"]    = 10;
-            $benefits[13]["member_id"]    = 0;
+        //     $benefits[13]["benefits_id"]    = 14;
+        //     $benefits[13]["benefits_name"]   = "Consultation to Dentist";
+        //     $benefits[13]["benefits_parent_id"]    = 10;
+        //     $benefits[13]["member_id"]    = 0;
 
-            $benefits[14]["benefits_id"]    = 15;
-            $benefits[14]["benefits_name"]   = "Annual Physical Examination";
-            $benefits[14]["benefits_parent_id"]    = 0;
-            $benefits[14]["member_id"]    = 0;
+        //     $benefits[14]["benefits_id"]    = 15;
+        //     $benefits[14]["benefits_name"]   = "Annual Physical Examination";
+        //     $benefits[14]["benefits_parent_id"]    = 0;
+        //     $benefits[14]["member_id"]    = 0;
 
-            $benefits[15]["benefits_id"]    = 16;
-            $benefits[15]["benefits_name"]   = "Chest X-ray,UBC,Urinalysis";
-            $benefits[15]["benefits_parent_id"]    = 15;
-            $benefits[15]["member_id"]    = 0;
+        //     $benefits[15]["benefits_id"]    = 16;
+        //     $benefits[15]["benefits_name"]   = "Chest X-ray,UBC,Urinalysis";
+        //     $benefits[15]["benefits_parent_id"]    = 15;
+        //     $benefits[15]["member_id"]    = 0;
 
-            $benefits[16]["benefits_id"]    = 17;
-            $benefits[16]["benefits_name"]   = "Re-Exixting ILLNESS";
-            $benefits[16]["benefits_parent_id"]    = 0;
-            $benefits[16]["member_id"]    = 0;
+        //     $benefits[16]["benefits_id"]    = 17;
+        //     $benefits[16]["benefits_name"]   = "Re-Exixting ILLNESS";
+        //     $benefits[16]["benefits_parent_id"]    = 0;
+        //     $benefits[16]["member_id"]    = 0;
 
-            $benefits[17]["benefits_id"]    = 18;
-            $benefits[17]["benefits_name"]   = "Death Benefit";
-            $benefits[17]["benefits_parent_id"]    = 0;
-            $benefits[17]["member_id"]    = 0;
+        //     $benefits[17]["benefits_id"]    = 18;
+        //     $benefits[17]["benefits_name"]   = "Death Benefit";
+        //     $benefits[17]["benefits_parent_id"]    = 0;
+        //     $benefits[17]["member_id"]    = 0;
 
-            $benefits[18]["benefits_id"]    = 19;
-            $benefits[18]["benefits_name"]   = "Natural Death";
-            $benefits[18]["benefits_parent_id"]    = 18;
-            $benefits[18]["member_id"]    = 0;
+        //     $benefits[18]["benefits_id"]    = 19;
+        //     $benefits[18]["benefits_name"]   = "Natural Death";
+        //     $benefits[18]["benefits_parent_id"]    = 18;
+        //     $benefits[18]["member_id"]    = 0;
 
-            $benefits[19]["benefits_id"]    = 20;
-            $benefits[19]["benefits_name"]   = "Accidental Death";
-            $benefits[19]["benefits_parent_id"]    = 18;
-            $benefits[19]["member_id"]    = 0;
+        //     $benefits[19]["benefits_id"]    = 20;
+        //     $benefits[19]["benefits_name"]   = "Accidental Death";
+        //     $benefits[19]["benefits_parent_id"]    = 18;
+        //     $benefits[19]["member_id"]    = 0;
 
-            $benefits[20]["benefits_id"]    = 21;
-            $benefits[20]["benefits_name"]   = "Motorcycle Accident";
-            $benefits[20]["benefits_parent_id"]    = 0;
-            $benefits[20]["member_id"]    = 0;
+        //     $benefits[20]["benefits_id"]    = 21;
+        //     $benefits[20]["benefits_name"]   = "Motorcycle Accident";
+        //     $benefits[20]["benefits_parent_id"]    = 0;
+        //     $benefits[20]["member_id"]    = 0;
 
-            $benefits[21]["benefits_id"]    = 22;
-            $benefits[21]["benefits_name"]   = "Medical";
-            $benefits[21]["benefits_parent_id"]    = 21;
-            $benefits[21]["member_id"]    = 0;
+        //     $benefits[21]["benefits_id"]    = 22;
+        //     $benefits[21]["benefits_name"]   = "Medical";
+        //     $benefits[21]["benefits_parent_id"]    = 21;
+        //     $benefits[21]["member_id"]    = 0;
 
-            $benefits[22]["benefits_id"]    = 23;
-            $benefits[22]["benefits_name"]   = "Death";
-            $benefits[22]["benefits_parent_id"]    = 21;
-            $benefits[22]["member_id"]    = 0;
+        //     $benefits[22]["benefits_id"]    = 23;
+        //     $benefits[22]["benefits_name"]   = "Death";
+        //     $benefits[22]["benefits_parent_id"]    = 21;
+        //     $benefits[22]["member_id"]    = 0;
 
-            $benefits[23]["benefits_id"]    = 24;
-            $benefits[23]["benefits_name"]   = "Emergency Non-Accredited Hospital";
-            $benefits[23]["benefits_parent_id"]    = 1;
-            $benefits[23]["member_id"]    = 0;
+        //     $benefits[23]["benefits_id"]    = 24;
+        //     $benefits[23]["benefits_name"]   = "Emergency Non-Accredited Hospital";
+        //     $benefits[23]["benefits_parent_id"]    = 1;
+        //     $benefits[23]["member_id"]    = 0;
 
-            $benefits[24]["benefits_id"]    = 25;
-            $benefits[24]["benefits_name"]   = "Non-Emergency Non-Accredited Hospital";
-            $benefits[24]["benefits_parent_id"]    = 1;
-            $benefits[24]["member_id"]    = 0;
+        //     $benefits[24]["benefits_id"]    = 25;
+        //     $benefits[24]["benefits_name"]   = "Non-Emergency Non-Accredited Hospital";
+        //     $benefits[24]["benefits_parent_id"]    = 1;
+        //     $benefits[24]["member_id"]    = 0;
 
-            $benefits[25]["benefits_id"]    = 26;
-            $benefits[25]["benefits_name"]   = "Non-Emergency Accredited Hospital";
-            $benefits[25]["benefits_parent_id"]    = 1;
-            $benefits[25]["member_id"]    = 0;
+        //     $benefits[25]["benefits_id"]    = 26;
+        //     $benefits[25]["benefits_name"]   = "Non-Emergency Accredited Hospital";
+        //     $benefits[25]["benefits_parent_id"]    = 1;
+        //     $benefits[25]["member_id"]    = 0;
 
-            DB::table('tbl_schedule_of_benefits')->insert($benefits);
-        }
-        if (DB::table('tbl_procedure')->count() <= 0) 
-        {
-            $procedure[0]["procedure_id"]       = 1;
-            $procedure[0]["procedure_name"]     = "Sakit sa tiyan";
-            $procedure[0]["procedure_amount"]   = 2870;
-            $procedure[0]["procedure_created"]  = Carbon::now();
+        //     DB::table('tbl_schedule_of_benefits')->insert($benefits);
+        // }
+        // if (DB::table('tbl_procedure')->count() <= 0) 
+        // {
+        //     $procedure[0]["procedure_id"]       = 1;
+        //     $procedure[0]["procedure_name"]     = "Sakit sa tiyan";
+        //     $procedure[0]["procedure_amount"]   = 2870;
+        //     $procedure[0]["procedure_created"]  = Carbon::now();
             
-            $procedure[1]["procedure_id"]       = 2;
-            $procedure[1]["procedure_name"]     = "sakit sa puso";
-            $procedure[1]["procedure_amount"]   = 5571;
-            $procedure[1]["procedure_created"]  = Carbon::now();
+        //     $procedure[1]["procedure_id"]       = 2;
+        //     $procedure[1]["procedure_name"]     = "sakit sa puso";
+        //     $procedure[1]["procedure_amount"]   = 5571;
+        //     $procedure[1]["procedure_created"]  = Carbon::now();
 
-            $procedure[2]["procedure_id"]       = 3;
-            $procedure[2]["procedure_name"]     = "sakit sa baga";
-            $procedure[2]["procedure_amount"]   = 1;
-            $procedure[2]["procedure_created"]  = Carbon::now();
+        //     $procedure[2]["procedure_id"]       = 3;
+        //     $procedure[2]["procedure_name"]     = "sakit sa baga";
+        //     $procedure[2]["procedure_amount"]   = 1;
+        //     $procedure[2]["procedure_created"]  = Carbon::now();
 
-            $procedure[3]["procedure_id"]       = 4;
-            $procedure[3]["procedure_name"]     = "sakit sa ulo";
-            $procedure[3]["procedure_amount"]   = 851;
-            $procedure[3]["procedure_created"]  = Carbon::now();
+        //     $procedure[3]["procedure_id"]       = 4;
+        //     $procedure[3]["procedure_name"]     = "sakit sa ulo";
+        //     $procedure[3]["procedure_amount"]   = 851;
+        //     $procedure[3]["procedure_created"]  = Carbon::now();
 
-            $procedure[4]["procedure_id"]       = 5;
-            $procedure[4]["procedure_name"]     = "sakit sa katawan";
-            $procedure[4]["procedure_amount"]   = 875870;
-            $procedure[4]["procedure_created"]  = Carbon::now();
+        //     $procedure[4]["procedure_id"]       = 5;
+        //     $procedure[4]["procedure_name"]     = "sakit sa katawan";
+        //     $procedure[4]["procedure_amount"]   = 875870;
+        //     $procedure[4]["procedure_created"]  = Carbon::now();
 
-            DB::table('tbl_procedure')->insert($procedure);
-        }
+        //     DB::table('tbl_procedure')->insert($procedure);
+        // }
         // if (DB::table('tbl_jobsite')->count() <= 0) 
         // {
         //     $job[0]["jobsite_id"]       = 35836;

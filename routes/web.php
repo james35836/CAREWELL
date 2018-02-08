@@ -86,9 +86,9 @@ Route::get('/provider/provider_details/{provider_id}', 	'CarewellController@prov
 
 /*DOCTOR*/
 Route::get('/doctor', 									'CarewellController@doctor');
-Route::get('/doctor/create_doctor', 					'CarewellController@create_doctor');
+Route::get('/doctor/add_doctor', 					'CarewellController@add_doctor');
 Route::get('/doctor/import_doctor', 					'CarewellController@import_doctor');
-Route::post('/doctor/create_doctor/submit', 			'CarewellController@create_doctor_submit');
+Route::post('/doctor/add_doctor/submit', 			'CarewellController@add_doctor_submit');
 Route::get('/doctor/view_doctor_details/{doctor_id}', 	'CarewellController@doctor_view_details');
 
 Route::get('/doctor/download_template/{provider_id}/{number}', 	'CarewellController@doctor_download_template');
@@ -113,13 +113,13 @@ Route::get('/billing/billing/statement', 			    'CarewellController@billing_bill
 
 
 /*MEDICAL*/
-Route::get('/medical', 									'CarewellController@medical');
-Route::get('/medical/create_approval', 					'CarewellController@medical_create_approval');
-Route::get('/medical/create_approval/member/{member_id}','CarewellController@medical_create_approval_member_info');
-Route::get('/medical/create_approval/availment/{availment_id}','CarewellController@medical_create_approval_availment_info');
-Route::get('/medical/create_approval/doctor/{provider_id}','CarewellController@medical_create_approval_doctor_info');
-Route::post('/medical/create_approval/submit',			'CarewellController@medical_create_approval_submit');
-Route::get('/medical/approval_details/{approval_id}','CarewellController@medical_view_approval_details');
+Route::get('/availment', 									'CarewellController@availment');
+Route::get('/availment/create_approval', 					'CarewellController@availment_create_approval');
+Route::get('/availment/create_approval/member/{member_id}','CarewellController@availment_create_approval_member_info');
+Route::get('/availment/create_approval/availment/{availment_id}','CarewellController@availment_create_approval_availment_info');
+Route::get('/availment/create_approval/doctor/{provider_id}','CarewellController@availment_create_approval_doctor_info');
+Route::post('/availment/create_approval/submit',			'CarewellController@availment_create_approval_submit');
+Route::get('/availment/approval_details/{approval_id}','CarewellController@availment_view_approval_details');
 
 
 
@@ -141,12 +141,15 @@ Route::get('/settings/provider', 				    	'CarewellController@settings_provider'
 
 Route::get('/settings/coverage', 				    	'CarewellController@settings_coverage_plan');
 Route::get('/settings/coverage/create_plan', 			'CarewellController@settings_coverage_plan_create');
+Route::post('/settings/coverage/create_plan_submit', 	'CarewellController@settings_coverage_plan_create_submit');
+Route::get('/settings/coverage/plan_details/{coverage_plan_id}', 			'CarewellController@settings_coverage_plan_details');
 
 
 
 /*MAINTENANCE*/
 Route::get('/developer/maintenance', 				    'MaintenanceController@developer_maintenance');
-Route::get('/developer/truncate', 				    'MaintenanceController@developer_truncate');
+Route::get('/developer/truncate', 				    	'MaintenanceController@developer_truncate');
+Route::get('/developer/credential', 				    'MaintenanceController@developer_credential');
 
 
 

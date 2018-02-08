@@ -93,7 +93,9 @@ autoclose: true
     </div>
     <div class="col-md-4 form-content">
       <select name="" id="cal_reveneu_period" class="form-control">
-        <option value="semi" >SEMI-MONTHLY</option>
+        @foreach($_period as $period)
+        <option >{{$period->payment_mode_name}}</option>
+        @endforeach
       </select>
     </div>
     <div class="col-md-2 form-content">

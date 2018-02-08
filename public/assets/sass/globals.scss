@@ -244,11 +244,17 @@
 	{
     	width: 1050px !important;
 	}
-	.modal-import-sm
-	{
-		width: 500px !important;
-	}
+	
 }
+
+@media (min-width: 992px)
+{
+	.modal-add-option 
+	{
+    	width: 500px !important;
+	}
+	
+}   
 
 @media (min-width: 768px)
 {

@@ -6,94 +6,136 @@ radioClass   : 'iradio_minimal-blue'
 })
 //append
 $(document).ready(function() {
-	$(".addJobsite").on("click", function() 
+	
+	$('body').on("click",".add-contact", function()
 	{
-		$(".jobsite-form").append("<div class=' form-content'><input type='text' name='jobsite[]' class='form-control'/></div>");
+		$('.contact-form-element:first').clone().appendTo('.contact-number-form');
 	});
-	$(".removeJobsite").on("click", function() 
+	$('body').on("click",".remove-contact", function()
 	{
-		$(".jobsite-form").children().last().remove();
-	});
-	$(".addTrunk").on("click", function() 
-	{
-		$(".trunk-form").append("<div class=' form-content'><input type='text' name='trunk[]' class='form-control'/></div>");
-	});
-	$(".removeTrunk").on("click", function() 
-	{
-		$(".trunk-form").children().last().remove();
-	});
-	$(".add-coverage").on("click", function() { 
-    	
-    	$(".coverage-form").append('<div class="coverage-count" style="margin-top: 5px;" ><select class="form-control" name="coverage_plan" id="coverage_plan">@foreach($_availment_plan as $availment_plan)<option value="{{$availment_plan->availment_plan_id}}">{{$availment_plan->availment_plan_name}}</option>@endforeach</select></div>');  
-    	
-    });  
-    $(".remove-coverage").on("click", function() { 
-    	if( $(".coverage-count").length!=1)
+		if($('.contact-form-element').length==1)
 		{
-        	$(".coverage-form").children().last().remove();  
-    	}
-    });  
+			toastr.error('You cannot remove all rows.', 'Something went wrong!', {timeOut: 3000})
+		}
+		else
+		{
+			$(this).closest(".contact-form-element").remove();
+		}
+	});
+	$('body').on("click",".add-deployment", function()
+	{
+		$('.deployment-form-element:first').clone().appendTo('.deployment-number-form');
+	});
+	$('body').on("click",".remove-deployment", function()
+	{
+		if($('.deployment-form-element').length==1)
+		{
+			toastr.error('You cannot remove all rows.', 'Something went wrong!', {timeOut: 3000})
+		}
+		else
+		{
+			$(this).closest(".deployment-form-element").remove();
+		}
+	});
+	$('body').on("click",".add-coverage", function()
+	{
+		$('.coverage-plan-element:first').clone().appendTo('.coverage-plan-form');
+	});
+	$('body').on("click",".remove-coverage", function()
+	{
+		if($('.coverage-plan-element').length==1)
+		{
+			toastr.error('You cannot remove all rows.', 'Something went wrong!', {timeOut: 3000})
+		}
+		else
+		{
+			$(this).closest(".coverage-plan-element").remove();
+		}
+	});
+	$('body').on("click",".add-Benifit", function()
+	{
+		$('.Benifit-element:first').clone().appendTo('.Benifit-form');
+	});
+	$('body').on("click",".remove-Benifit", function()
+	{
+		if($('.Benifit-element').length==1)
+		{
+			toastr.error('You cannot remove all rows.', 'Something went wrong!', {timeOut: 3000})
+		}
+		else
+		{
+			$(this).closest(".Benifit-element").remove();
+		}
+	});
+	$('body').on("click",".add-contract", function()
+	{
+		$('.contract-element:first').clone().appendTo('.contract-form');
+	});
+	$('body').on("click",".remove-contract", function()
+	{
+		if($('.contract-element').length==1)
+		{
+			toastr.error('You cannot remove all rows.', 'Something went wrong!', {timeOut: 3000})
+		}
+		else
+		{
+			$(this).closest(".contract-element").remove();
+		}
+	});
+
+	
 });
 </script>
 <div class="row box-globals">
 	<div class="form-holder">
-		<div class="col-md-3 form-content">
+		<div class="col-md-2 form-content">
 			<label>Company Name</label>
 		</div>
-		<div class="col-md-9 form-content">
+		<div class="col-md-10 form-content">
 			<input type="text" id="company_name"  class="form-control"/>
 		</div>
 	</div>
 	<div class="form-holder">
-		<div class="col-md-3 form-content">
-			<label>Company Email Address</label>
+		<div class="col-md-2 form-content">
+			<label>Email Address</label>
 		</div>
-		<div class="col-md-9 form-content">
+		<div class="col-md-4 form-content">
 			<input type="text" id="company_email_address" class="form-control"/>
 		</div>
-	</div>
-	<div class="form-holder">
-		<div class="col-md-3 form-content">
-			<label>Company Contact Person</label>
+		<div class="col-md-2 form-content">
+			<label>Contact Person</label>
 		</div>
-		<div class="col-md-3 form-content">
+		<div class="col-md-4 form-content">
 			<input type="text" id="company_contact_person" class="form-control"/>
 		</div>
-		<div class="col-md-3 form-content">
-			<label>Company Contact Number</label>
-		</div>
-		<div class="col-md-3 form-content">
-			<input type="text" id="company_phone_number" class="form-control"/>
-		</div>
 	</div>
 	<div class="form-holder">
-		<div class="col-md-3 form-content">
-			<label>Company ZipCode</label>
+		<div class="col-md-2 form-content">
+			<label>Company Address</label>
 		</div>
-		<div class="col-md-3 form-content">
-			<input type="text" id="company_zipcode" class="form-control"/>
+		<div class="col-md-10 form-content">
+			<textarea class="form-control" rows="5" cols="10"></textarea>
 		</div>
-		<div class="col-md-3 form-content">
-			<label>Company Street</label>
+		
+	</div>
+	<div class="form-holder ">
+		<div class="col-md-2 form-content">
+			<label>Contact Number</label>
 		</div>
-		<div class="col-md-3 form-content">
-			<input type="text" id="company_street" class="form-control"/>
+		<div class="col-md-10 contact-number-form">
+			<div class=" form-content contact-form-element">
+				<div class="input-group">
+					<input type="text" id="contract_number" class="contract_number form-control"/>
+					<span class="input-group-btn">
+						<button class="btn btn-primary add-contact" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span> </button>
+						<button class="btn btn-danger remove-contact" type="button" tabindex="-1"><span class="fa fa-minus-circle" aria-hidden="true"></span> </button>
+					</span>
+				</div>
+			</div>
+			
 		</div>
 	</div>
-	<div class="form-holder">
-		<div class="col-md-3 form-content">
-			<label>Company City/Town</label>
-		</div>
-		<div class="col-md-3 form-content">
-			<input type="text" id="company_city" class="form-control"/>
-		</div>
-		<div class="col-md-3 form-content">
-			<label>Company Country</label>
-		</div>
-		<div class="col-md-3 form-content">
-			<input type="text" id="company_country" class="form-control"/>
-		</div>
-	</div>
+	
 	
 </div>
 <div class="row box-globals" >
@@ -101,7 +143,6 @@ $(document).ready(function() {
 	<div class="nav-tabs-custom">
 		<ul class="nav nav-tabs">
 			<li class="active my-tab"><a data-toggle="tab" href="#contract">CONTRACT DETAILS</a></li>
-			<li class="my-tab"><a data-toggle="tab" href="#trunk">TRUNK LINE</a></li>
 			<li class="my-tab"><a data-toggle="tab" href="#deployment">DEPLOYMENT</a></li>
 		</ul>
 		<div class="tab-content" >
@@ -125,83 +166,80 @@ $(document).ready(function() {
 						</select>
 					</div>
 				</div>
-				<div class="form-holder">
-					<div class="col-md-3 form-content">
-						<label>Contract</label>
+				<div class="form-holder ">
+					<div class="col-md-2 form-content">
+						<label>Contract Image</label>
 					</div>
-					<div class="col-md-3 form-content">
-						<input type="file" name="contract_image" id="contract_image" class="form-control convoFile"/>
+					<div class="col-md-10 contract-form">
+						<div class=" form-content contract-element">
+							<div class="input-group">
+								<input type="file" name="contract_image" id="contract_image" class="form-control convoFile"/>
+								<span class="input-group-btn">
+									<button class="btn btn-primary add-contract" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span> </button>
+									<button class="btn btn-danger remove-contract" type="button" tabindex="-1"><span class="fa fa-minus-circle" aria-hidden="true"></span> </button>
+								</span>
+							</div>
+						</div>
 					</div>
-					<div class="col-md-3 form-content">
+				</div>
+				<div class="form-holder ">
+					<div class="col-md-2 form-content">
 						<label>Schedule of Benifit</label>
 					</div>
-					<div class="col-md-3 form-content">
-						<input type="file" id="contract_schedule_of_benifits_image" class="form-control"/>
-					</div>
-				</div>
-				<div class="row form-holder">
-					<div class="col-md-3 pull-right form-content">
-						<div class="btn-group">
-							<button type="button" class="btn btn-primary add-coverage"><i  class="fa fa-plus btn-icon"></i> PLAN</button>
-							<button type="button" class="btn btn-danger remove-coverage"><i  class="fa fa-minus btn-icon"></i> PLAN</button>
+					<div class="col-md-10 Benifit-form">
+						<div class=" form-content Benifit-element">
+							<div class="input-group">
+								<input type="file" id="contract_schedule_of_benifits_image" class="form-control"/>
+								<span class="input-group-btn">
+									<button class="btn btn-primary add-Benifit" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span> </button>
+									<button class="btn btn-danger remove-Benifit" type="button" tabindex="-1"><span class="fa fa-minus-circle" aria-hidden="true"></span> </button>
+								</span>
+							</div>
 						</div>
 					</div>
 				</div>
-				<div class="form-holder">
-					<div class="col-md-3 form-content">
+				<div class="form-holder ">
+					<div class="col-md-2 form-content">
 						<label>Coverage Plan</label>
 					</div>
-					<div class="col-md-9 form-content coverage-form">
-						<div class="coverage-count" style="margin-top: 0px;" >
-							<select class="form-control" name="coverage_plan" id="coverage_plan">
-								<option>SELECT COVERAGE</option>
-								@foreach($_availment_plan as $availment_plan)
-								<option value="{{$availment_plan->availment_plan_id}}">{{$availment_plan->availment_plan_name}}</option>
-								@endforeach
-							</select>
+					<div class="col-md-10 coverage-plan-form">
+						<div class=" form-content coverage-plan-element">
+							
+							<div class="input-group">
+								<select class="form-control" name="coverage_plan" id="coverage_plan">
+									<option>SELECT COVERAGE</option>
+									@foreach($_coverage_plan as $coverage_plan)
+									<option value="{{$coverage_plan->coverage_plan_id}}">{{$coverage_plan->coverage_name}}</option>
+									@endforeach
+								</select>
+								<span class="input-group-btn">
+									<button class="btn btn-primary add-coverage" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span> </button>
+									<button class="btn btn-danger remove-coverage" type="button" tabindex="-1"><span class="fa fa-minus-circle" aria-hidden="true"></span> </button>
+								</span>
+							</div>
 						</div>
-					</div>
-				</div>
-				
-			</div>
-			<div id="trunk" class="row tab-pane fade table-min-height" >
-				<div class="row form-holder">
-					<div class="col-md-4 pull-right">
-						<div class="btn-group">
-							<button type="button" class="btn btn-primary addTrunk"><i  class="fa fa-plus btn-icon"></i> TRUNK LINE</button>
-							<button type="button" class="btn btn-danger removeTrunk"><i  class="fa fa-minus btn-icon"></i> TRUNK LINE</button>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-2 form-holder">
-					<label>TRUNK LINE</label>
-				</div>
-				<div class="col-md-9 form-holder trunk-form " >
-					<!-- TRUNK FORM -->
-					<div class=' form-content'>
-						<input type='text' name='trunk[]' class='form-control'/>
 					</div>
 				</div>
 			</div>
 			<div id="deployment" class="row tab-pane fade table-min-height" >
-				<div class="row form-holder">
-					<div class="col-md-4 pull-right">
-						<div class="btn-group">
-							<button type="button" class="btn btn-primary addJobsite"><i  class="fa fa-plus btn-icon"></i> DEPLOYMENT</button>
-							<button type="button" class="btn btn-danger removeJobsite"><i  class="fa fa-minus btn-icon"></i> DEPLOYMENT</button>
+				<div class="form-holder ">
+					<div class="col-md-2 form-content">
+						<label>DEPLOYMENT</label>
+					</div>
+					<div class="col-md-10 deployment-number-form">
+						<div class=" form-content deployment-form-element">
+							<div class="input-group">
+								<input type="text" id="contract_number" class="contract_number form-control"/>
+								<span class="input-group-btn">
+									<button class="btn btn-primary add-deployment" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span> </button>
+									<button class="btn btn-danger remove-deployment" type="button" tabindex="-1"><span class="fa fa-minus-circle" aria-hidden="true"></span> </button>
+								</span>
+							</div>
 						</div>
 					</div>
 				</div>
-				<div class="col-md-2 form-holder">
-					<label>DEPLOYMENT</label>
-				</div>
-				<div class="col-md-9 form-holder jobsite-form ">
-					<!-- JOBSITE FORM -->
-					<div class=' form-content'>
-						<input type='text' name='jobsite[]' class='form-control'/>
-					</div>
-				</div>
 			</div>
+			
 		</div>
 	</div>
 </div>

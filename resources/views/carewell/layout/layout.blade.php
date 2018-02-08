@@ -211,8 +211,8 @@
           </a>
         </li>
         <li >
-          <a href="/medical">
-            <i class="fa fa-medkit"></i> <span>MEDICAL REPRESENTATIVE</span>
+          <a href="/availment">
+            <i class="fa fa-medkit"></i> <span>AVAILMENT CENTER</span>
           </a>
         </li>
         <li >
@@ -339,7 +339,7 @@
       autoclose: true
     })
  })
-$('.modal').on('hidden.bs.modal', function (e) {
+$('body').on('hidden.bs.modal', function (e) {
     if($('.modal').hasClass('in')) {
     $('body').addClass('modal-open');
     }    

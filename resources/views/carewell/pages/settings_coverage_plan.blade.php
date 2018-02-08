@@ -4,7 +4,7 @@
 <div class="container">
   <div class="row">
     <div class=" col-md-2 pull-right">
-      <button type="button" class="btn btn-primary  create-plan button-lg"><i class="fa fa-plus btn-icon"></i>CREATE NEW PLAN</button>
+      <button type="button" class="btn btn-primary  create-coverage-plan button-lg"><i class="fa fa-plus btn-icon"></i>CREATE NEW PLAN</button>
     </div>
   </div>
   <div class="row">
@@ -27,17 +27,24 @@
             <tr>
               <th>PLAN ID</th>
               <th>PLAN NAME</th>
-              <th>PLAN PRICE</th>
+              <th>PLAN CONFINEMENT</th>
+              <th>PLAN MAX BENEFIT</th>
+              <th>PLAN CASE HANDLING</th>
+              <th>PLAN AGE BRACKET</th>
+              <th>PLAN MONTHLY PREMIUM</th>
               <th>STATUS</th>
               <th>ACTION</th>
             </tr>
-            @foreach($_availment_plan as $availment_plan)
+            @foreach($_coverage_plan as $coverage_plan)
             <tr>
-              <td>{{$availment_plan->availment_plan_id}}</td>
-              <td>{{$availment_plan->availment_plan_name}}</td>
-              <td>{{$availment_plan->availment_plan_price}}</td>
+              <td>{{$coverage_plan->coverage_plan_id}}</td>
+              <td>{{$coverage_plan->coverage_name}}</td>
+              <td>{{$coverage_plan->coverage_patient_confinement}}</td>
+              <td>{{$coverage_plan->coverage_maximum_benefit}}</td>
+              <td>{{$coverage_plan->coverage_case_handling}}</td>
+              <td>{{$coverage_plan->coverage_age_bracket}}</td>
+              <td>{{$coverage_plan->coverage_monthly_premium}}</td>
               <td><span class="label label-success">Active</span></td>
-              {{-- <td><span class="label label-success pop-up-lg button-lg" data-modalname="PLAN DETAILS" data-link="/settings/plan/plan_details/{{$availment_plan->availment_plan_id}}" data-clickable="update-plan">View Plan Details</span></td> --}}
               <td>
                 <div class="btn-group">
                   <button type="button" class="btn btn-danger">Action</button>
@@ -46,8 +53,8 @@
                   <span class="sr-only">Toggle Dropdown</span>
                   </button>
                   <ul class="dropdown-menu" role="menu" style="position: absolute !important;">
-                    <li><button type="button" data-id="{{$availment_plan->availment_plan_id}}" class="btn btn-link view-member-details"><i class="fa fa-eye btn-icon"></i>  View Member</button></li>
-                    <li><button type="button" class="btn btn-link"><i class="fa fa-trash btn-icon"></i> Archived Member</button></li>
+                    <li><button type="button" data-coverage_plan_id="{{$coverage_plan->coverage_plan_id}}" class="btn btn-link coverage-plan-details"><i class="fa fa-eye btn-icon"></i>  View Plan</button></li>
+                    <li><button type="button" class="btn btn-link"><i class="fa fa-trash btn-icon"></i> Archived Plan</button></li>
                   </ul>
                 </div>
               </td>
@@ -58,7 +65,7 @@
           </table>
         </div>
         <div class="box-footer clearfix">
-          @include('globals.pagination', ['paginator' => $_availment_plan])
+          @include('globals.pagination', ['paginator' => $_coverage_plan])
         </div>
       </div>
     </div>

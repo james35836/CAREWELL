@@ -29,9 +29,8 @@
           <button type="submit" class=" btn btn-primary btn-block btn-flat">Sign In</button>
         </div>
       </div>
-      <div class="row front-text">
-        <a href="#">I forgot my password</a><br>
-        <a href="/register" class="text-center">Register a new membership</a>
+      <div class="row front-text" style="padding:10px;">
+        <a href="#" >I forgot my password</a><br>
       </div>
     </form>
   </div>

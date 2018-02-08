@@ -411,8 +411,7 @@ function member_center()
 			$('.confirm-modal-title').html('Are you sure you want to import this file?');
 			$('.confirm-modal').modal('show');
 			$('.confirm-submit').addClass('import-member-submit');
-			formData.append("company_id", 			document.getElementById('companyID').value);
-			formData.append("importMemberFile", document.getElementById('importMemberFile').files[0]);
+			ajaxData = $(".member-submit-form,.approval-submit-form,.procedure-availed-submit-form,.procedure-doctor-submit-form").serialize();
 		});
 	}
 	
