@@ -1,5 +1,10 @@
-var globals = new globals();
-var serializeData = [];
+var globals 		= new globals();
+var formData   	  	= new FormData();
+var serializeData 	= [];
+var ajaxData 		= [];
+var value			= "0";
+var message			= "";
+
 var confirmModals 			= '<div  class="modal fade modal-top confirm-modal" id="" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">'
 						  +'<div class="confirm-modal-dialog modal-dialog modal-sm">'
 						    +'<div class="modal-content">'

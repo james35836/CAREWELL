@@ -2,21 +2,18 @@
 	
 	$(document).ready(function() {
 	$('#selectAllSpecializationList').click (function () {
-	     var checkedStatus = this.checked;
-	    $('.specialization-table  tr').find('td:first :checkbox').each(function () {
-	        $(this).prop('checked', checkedStatus);
-	     });
+	var checkedStatus = this.checked;
+	$('.specialization-table  tr').find('td:first :checkbox').each(function () {
+	$(this).prop('checked', checkedStatus);
+	});
 	});
 	$('#selectAllProviderList').click (function () {
-	     var checkedStatus = this.checked;
-	    $('.provider-table  tr').find('td:first :checkbox').each(function () {
-	        $(this).prop('checked', checkedStatus);
-	     });
+	var checkedStatus = this.checked;
+	$('.provider-table  tr').find('td:first :checkbox').each(function () {
+	$(this).prop('checked', checkedStatus);
 	});
-
+	});
 	
-
-
 	$(".add-specialization").on("click", function() {
 		
 		$(".specialization-form").append('<div class="specialization-count" style="margin-top: 20px;"><select name="specialization_name" class="form-control"><option>Allergist or Immunologist</option><option>Anesthesiologist</option><option>Cardiologist</option><option>Dermatologist</option><option>Gastroenterologist</option><option>Hematologist/Oncologist</option><option>Internal Medicine Physician</option><option>Nephrologist</option><option>Neurologist</option><option>Neurosurgeon</option><option>Obstetrician</option><option>Gynecologist</option><option>Nurse-Midwifery</option><option>Occupational Medicine Physician</option><option>Ophthalmologist</option><option>Oral and Maxillofacial Surgeon</option><option>Orthopaedic Surgeon</option><option>Otolaryngologist (Head and Neck Surgeon)</option><option>Pathologist</option><option>Pediatrician</option><option>Plastic Surgeon</option><option>Podiatrist</option><option>Psychiatrist</option><option>Pulmonary Medicine Physician</option><option>Radiation Onconlogist</option><option>Diagnostic Radiologist</option><option>Rheumatologist</option><option>Urologist</option></select></div>');
@@ -33,6 +30,8 @@
 	$(function ()
 	{
 		//select2
+		
+		$('.select3').select2()
 		$('.select2').select2()
 		//Date picker
 		$('.datepicker').datepicker({
@@ -101,32 +100,58 @@
 				<div class="box-body table-responsive no-padding">
 					<table class="table table-hover table-bordered specialization-table">
 						<tr>
-							<th><input type="checkbox" id="selectAllSpecializationList"></th>
 							<th>SPECIALIZATION NAME</th>
+							<th></th>
 						</tr>
-						@foreach($_specialization as $specialization)
-						<tr>
-							<td><input type="checkbox" name="specialization_id" value="{{$specialization->specialization_id}}" name="specialization_name"></td>
-							<td>{{$specialization->specialization_name}}</td>
+						<tr class="table-row">
+							<td class="col-md-9">
+								<div class="input-group">
+									<select name="child_availment_charges[]" class="form-control select2 ">
+										@foreach($_specialization as $specialization)
+										<option value="{{$specialization->specialization_id}}">{{$specialization->specialization_name}}</option>
+										@endforeach
+									</select>
+									<span class="input-group-btn">
+										<button class="btn btn-secondary add-new-option" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span> ADD ITEM</button>
+									</span>
+								</div>
+							</td>
+							<td class="col-md-3 last-td">
+								<div class="btn-group" role="group" aria-label="Basic example">
+									<button type="button" class="btn btn-primary btn-sm add-row"><i class="fa fa-plus-circle"></i></button>
+									<button type="button" class="btn btn-danger btn-sm remove-row"><i class="fa fa-minus-circle"></i></button>
+								</div>
+							</td>
 						</tr>
-						@endforeach
 					</table>
 				</div>
 			</div>
 			<div id="provider" class="row tab-pane fade table-min-height" >
 				<div class="box-body table-responsive no-padding">
-					<table class="table table-hover table-bordered provider-table">
+					<table class="table table-hover table-bordered specialization-table">
 						<tr>
-							<th><input type="checkbox" id="selectAllProviderList"></th>
 							<th>PROVIDER NAME</th>
+							<th></th>
 						</tr>
-						@foreach($_provider as $provider)
-						<tr>
-							<td><input type="checkbox" name="provider_id" value="{{$provider->provider_id}}"></td>
-							<td>{{$provider->provider_name}}</td>
-						</tr>
-						@endforeach
-						<tr style="height:70px;">
+						<tr class="table-row">
+							<td class="col-md-9">
+								<div class="input-group">
+									<select name="child_availment_charges[]" class="form-control ">
+										@foreach($_provider as $provider)
+										<option value="{{$provider->provider_id}}">{{$provider->provider_name}}</option>
+										@endforeach
+									</select>
+									<span class="input-group-btn">
+										<button class="btn btn-secondary add-new-option" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span> ADD ITEM</button>
+									</span>
+								</div>
+							</td>
+							<td class="col-md-3 last-td">
+								<div class="btn-group" role="group" aria-label="Basic example">
+									<button type="button" class="btn btn-primary btn-sm add-row"><i class="fa fa-plus-circle"></i></button>
+									<button type="button" class="btn btn-danger btn-sm remove-row"><i class="fa fa-minus-circle"></i></button>
+								</div>
+							</td>
 						</tr>
 					</table>
 				</div>

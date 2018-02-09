@@ -28,9 +28,9 @@
               <tr>
                 <th>PROVIDER NUMBER</th>
                 <th>PROVIDER NAME</th>
-                <th>BILLING NAME</th>
+                <th>PAYEE</th>
                 <th>STATUS</th>
-                <th>DATE CREATED</th>
+                <th>DATE ADDED</th>
                 <th>ACTION</th>
               </tr>
               @foreach($_provider as $provider)
@@ -48,8 +48,8 @@
                   <span class="sr-only">Toggle Dropdown</span>
                   </button>
                   <ul class="dropdown-menu" role="menu" style="position: absolute !important;">
-                    <li><button type="button" data-provider_id="{{$provider->provider_id}}" class="btn btn-link view-provider-details"><i class="fa fa-eye btn-icon"></i>  View </button></li>
-                    <li><button type="button" class="btn btn-link"><i class="fa fa-trash btn-icon"></i> Archived </button></li>
+                    <li><button type="button" data-provider_id="{{$provider->provider_id}}" class="btn btn-link view-provider-details"><i class="fa fa-eye btn-icon"></i>  View Provider</button></li>
+                    <li><button type="button" class="btn btn-link"><i class="fa fa-trash btn-icon"></i> Archived Provider</button></li>
                   </ul>
                 </div>
                 </td>

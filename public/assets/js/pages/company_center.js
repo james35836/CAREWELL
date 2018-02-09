@@ -81,9 +81,7 @@ function company_center()
 			$('.global-ajax-loader').show();
             $('.global-modal-body-content').hide();
             $('.global-modal-footer').hide();
-            var approval_id = $(this).data('approval_id');
-
-			$.ajax({
+            $.ajax({
 				headers: {
 				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 				},
@@ -247,11 +245,20 @@ function company_center()
 		$(document).on('click','.view-company-details',function() 
 		{
 
-			$('.company-modal').modal('show');
-			$('.company-modal-title').html('COMPANY DETAILS');
-			$('.company-ajax-loader').show();
-			$('.company-modal-body-content').hide();
-			var company_id = $(this).data('id');
+			$('.company-details-modal').remove();
+            $(".append-modal").append(globalModals);
+			$('.global-modal').removeClass().addClass('modal fade modal-top company-details-modal');
+			$('.global-modal-dialog').removeClass().addClass('company-details-modal-dialog modal-dialog modal-lg');
+			$('.global-modal-content').removeClass().addClass('modal-content');
+			$('.global-modal-header').removeClass().addClass('modal-header');
+			$('.global-modal-title').html('CREATE COVERAGE PLAN');
+			$('.global-modal-title').removeClass().addClass('modal-title');
+			$('.global-modal-body').removeClass().addClass('modal-body company-details-modal-body');
+			$('.company-details-modal').modal('show');
+			$('.global-ajax-loader').show();
+            $('.global-modal-body-content').hide();
+            $('.global-modal-footer').hide();
+            var company_id = $(this).data('company_id');
 			$.ajax({
 				headers: {
 				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -262,9 +269,10 @@ function company_center()
 				{
 					setTimeout(function()
 					{
-						$('.company-ajax-loader').hide();
-						$('.company-modal-body-content').show();
-						$('.company-modal-body-content').html(data);
+						$('.global-ajax-loader').hide().removeClass().addClass('.modal-loader company-details-ajax-loader');
+						$('.global-modal-body-content').show().removeClass().addClass('row box-holder  modal-body-content').html(data);
+						$('.global-modal-footer').show().removeClass().addClass('modal-footer company-details-modal-footer');
+                    	$('.global-footer-button').html('SAVE CHANGES').removeClass().addClass('btn btn-primary company-details-confirm');
                     }, 1000);
 				}
 			});

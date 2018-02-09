@@ -6,32 +6,83 @@ radioClass   : 'iradio_minimal-blue'
 })
 //append
 $(document).ready(function() {
-	$(".addJobsite").on("click", function()
-	{
-		$(".jobsite-form").append("<div class=' form-content'><input type='text' name='jobsite[]' class='form-control'/></div>");
-	});
-	$(".removeJobsite").on("click", function()
-	{
-		$(".jobsite-form").children().last().remove();
-	});
-	$(".addTrunk").on("click", function()
-	{
-		$(".trunk-form").append("<div class=' form-content'><input type='text' name='trunk[]' class='form-control'/></div>");
-	});
-	$(".removeTrunk").on("click", function()
-	{
-		$(".trunk-form").children().last().remove();
-	});
-	$(".add-coverage").on("click", function() {
 	
-	$(".coverage-form").append('<div class="coverage-count" style="margin-top: 5px;" ><select class="form-control" name="coverage_plan" id="coverage_plan">@foreach($_availment_plan as $availment_plan)<option value="{{$availment_plan->availment_plan_id}}">{{$availment_plan->availment_plan_name}}</option>@endforeach</select></div>');
+	$('body').on("click",".add-contact", function()
+	{
+		$('.contact-form-element:first').clone().appendTo('.contact-number-form');
+	});
+	$('body').on("click",".remove-contact", function()
+	{
+		if($('.contact-form-element').length==1)
+		{
+			toastr.error('You cannot remove all rows.', 'Something went wrong!', {timeOut: 3000})
+		}
+		else
+		{
+			$(this).closest(".contact-form-element").remove();
+		}
+	});
+	$('body').on("click",".add-deployment", function()
+	{
+		$(this).closest(".deployment-form-element").clone().appendTo('.deployment-number-form');
+	});
+	$('body').on("click",".remove-deployment", function()
+	{
+		if($('.deployment-form-element').length==1)
+		{
+			toastr.error('You cannot remove all rows.', 'Something went wrong!', {timeOut: 3000})
+		}
+		else
+		{
+			$(this).closest(".deployment-form-element").remove();
+		}
+	});
+	$('body').on("click",".add-coverage", function()
+	{
+		$(this).closest(".coverage-plan-element").clone().appendTo('.coverage-plan-form');
+	});
+	$('body').on("click",".remove-coverage", function()
+	{
+		if($('.coverage-plan-element').length==1)
+		{
+			toastr.error('You cannot remove all rows.', 'Something went wrong!', {timeOut: 3000})
+		}
+		else
+		{
+			$(this).closest(".coverage-plan-element").remove();
+		}
+	});
+	$('body').on("click",".add-Benifit", function()
+	{
+		$(this).closest(".Benifit-element").clone().appendTo('.Benifit-form');
+	});
+	$('body').on("click",".remove-Benifit", function()
+	{
+		if($('.Benifit-element').length==1)
+		{
+			toastr.error('You cannot remove all rows.', 'Something went wrong!', {timeOut: 3000})
+		}
+		else
+		{
+			$(this).closest(".Benifit-element").remove();
+		}
+	});
+	$('body').on("click",".add-contract", function()
+	{
+		$(this).closest(".contract-element").clone().appendTo('.contract-form');
+	});
+	$('body').on("click",".remove-contract", function()
+	{
+		if($('.contract-element').length==1)
+		{
+			toastr.error('You cannot remove all rows.', 'Something went wrong!', {timeOut: 3000})
+		}
+		else
+		{
+			$(this).closest(".contract-element").remove();
+		}
+	});
 	
-});
-$(".remove-coverage").on("click", function() {
-	
-	$(".coverage-form").children().last().remove();
-	
-});
 });
 </script>
 <div class="row box-globals">

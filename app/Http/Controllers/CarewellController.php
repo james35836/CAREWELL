@@ -148,7 +148,7 @@ class CarewellController extends ActiveAuthController
 
     $data['_coverage_plan']   = TblCoveragePlanModel::where('archived',0)->get();
     $data['_payment_mode']    = TblPaymentModeModel::get();
-    return view('carewell.modal_pages.company_create_company',$data);
+    return view('carewell.modal_pages.company_create',$data);
   }
   public function company_create_company_submit(Request $request)
   {
@@ -529,24 +529,12 @@ class CarewellController extends ActiveAuthController
   {
     $data['page']       = 'Network Provider';
     $data['user']       = $this->global();
-    $data['_provider']  = TblProviderModel::paginate(10);
-    foreach($data['_provider'] as $key=> $provider)
-    {
-      if($provider->provider_check=="checked")
-      {
-        $data['_provider'][$key]['provider_billing_name'] =  $provider->provider_name;
-      }
-      else
-      {
-        $billing = TblProviderBillingModel::where('provider_id',$provider->provider_id)->first();
-        $data['_provider'][$key]['provider_billing_name'] =  $billing->provider_billing_name;
-      }
-    }
+    $data['_provider']  = TblProviderModel::where('archived',0)->paginate(10);
     return view('carewell.pages.provider_center',$data);
   }
   public function provider_create()
   {
-    return view('carewell.modal_pages.provider_create_provider');
+    return view('carewell.modal_pages.provider_create');
   }
 
   public function provider_create_submit(Request $request)
@@ -554,30 +542,13 @@ class CarewellController extends ActiveAuthController
     
     $providerData = new TblProviderModel;
     $providerData->provider_name            = $request->provider_name;
-    $providerData->provider_check           = $request->provider_check;
     $providerData->provider_contact_person  = $request->provider_contact_person;
-    $providerData->provider_contact_number  = $request->provider_contact_number;
+    $providerData->provider_telephone_number= $request->provider_telephone_number;
     $providerData->provider_mobile_number   = $request->provider_mobile_number;
     $providerData->provider_contact_email   = $request->provider_contact_email;
-    $providerData->provider_zip             = $request->provider_zip;
-    $providerData->provider_street          = $request->provider_street;
-    $providerData->provider_city            = $request->provider_city;
-    $providerData->provider_country         = $request->provider_country;
+    $providerData->provider_address         = $request->provider_address;
     $providerData->provider_created         = Carbon::now();
     $providerData->save();
-
-    $billingData = new TblProviderBillingModel;
-    $billingData->provider_billing_name     = $request->provider_billing_name;
-    $billingData->provider_billing_email    = $request->provider_billing_email;
-    $billingData->provider_billing_telephone= $request->provider_billing_telephone;
-    $billingData->provider_billing_mobile   = $request->provider_billing_mobile;
-    $billingData->provider_billing_zipcode  = $request->provider_billing_zipcode;
-    $billingData->provider_billing_street   = $request->provider_billing_street;
-    $billingData->provider_billing_city     = $request->provider_billing_city;
-    $billingData->provider_billing_country  = $request->provider_billing_country;
-    $billingData->provider_id               = $providerData->provider_id;
-    $billingData->save();
-
 
     if($providerData->save())
     {
@@ -593,7 +564,6 @@ class CarewellController extends ActiveAuthController
   public function provider_details(Request $request,$provider_id)
   {
     $data['provider_details'] = TblProviderModel::where('tbl_provider.provider_id',$provider_id)
-                              ->join('tbl_provider_billing','tbl_provider_billing.provider_id','=','tbl_provider.provider_id')
                               ->first();
     $data['_provider_doctor']  = TblDoctorProviderModel::where('tbl_doctor_provider.provider_id',$provider_id)
                               ->join('tbl_provider','tbl_provider.provider_id','=','tbl_doctor_provider.provider_id')

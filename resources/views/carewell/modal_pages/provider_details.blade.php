@@ -1,18 +1,28 @@
 <script>
-	$(function ()
+//iCheck for checkbox and radio inputs
+$('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+checkboxClass: 'icheckbox_minimal-blue',
+radioClass   : 'iradio_minimal-blue'
+})
+//append
+$(document).ready(function() {
+	
+	$('body').on("click",".add-payee", function()
 	{
-		//select2
-		$('.select2').select2()
-		//Date picker
-		$('.datepicker').datepicker({
-		autoclose: true
-		})
-		//iCheck for checkbox and radio inputs
-	$('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
-	checkboxClass: 'icheckbox_minimal-blue',
-	radioClass   : 'iradio_minimal-blue'
-	})
-	})
+		$('.payee-form-element:first').clone().appendTo('.payee-number-form');
+	});
+	$('body').on("click",".remove-payee", function()
+	{
+		if($('.payee-form-element').length==1)
+		{
+			toastr.error('You cannot remove all text-box.', 'Something went wrong!', {timeOut: 3000})
+		}
+		else
+		{
+			$(this).closest(".payee-form-element").remove();
+		}
+	});
+});
 </script>
 <style>
 #bb
@@ -34,7 +44,7 @@ display: none;
 			<label>Provider Name</label>
 		</div>
 		<div class="col-md-10 form-content">
-			<input type="text" id="provider_name" value="{{$provider_details->provider_name}}" class="form-control"/>
+			<input type="text" value="{{$provider_details->provider_name}}" id="provider_name" class="form-control"/>
 		</div>
 	</div>
 	<div class="form-holder">
@@ -42,13 +52,13 @@ display: none;
 			<label>Contact Person</label>
 		</div>
 		<div class="col-md-4 form-content">
-			<input type="text" id="provider_contact_person"  value="{{$provider_details->provider_contact_person}}" class="form-control"/>
+			<input type="text" value="{{$provider_details->provider_contact_person}}"  id="provider_contact_person" class="form-control"/>
 		</div>
 		<div class="col-md-2 form-content">
 			<label>Email Address</label>
 		</div>
 		<div class="col-md-4 form-content">
-			<input type="text" id="provider_contact_email" value="{{$provider_details->provider_contact_email}}" class="form-control"/>
+			<input type="text" value="{{$provider_details->provider_contact_email}}"  id="provider_contact_email" class="form-control"/>
 		</div>
 	</div>
 	
@@ -57,121 +67,50 @@ display: none;
 			<label>Telephone Number</label>
 		</div>
 		<div class="col-md-4 form-content">
-			<input type="text" id="provider_contact_number" value="{{$provider_details->provider_contact_number}}" class="form-control"/>
+			<input type="text" value="{{$provider_details->provider_telephone_number}}"  id="provider_telephone_number" class="form-control"/>
 		</div>
 		<div class="col-md-2 form-content">
 			<label> Mobile Number</label>
 		</div>
 		<div class="col-md-4 form-content">
-			<input type="text" id="provider_mobile_number" value="{{$provider_details->provider_mobile_number}}" class="form-control"/>
+			<input type="text" value="{{$provider_details->provider_mobile_number}}"  id="provider_mobile_number" class="form-control"/>
 		</div>
 	</div>
+	
 	<div class="form-holder">
 		<div class="col-md-2 form-content">
-			<label>ZIP CODE </label>
+			<label>Address</label>
 		</div>
-		<div class="col-md-4 form-content">
-			<input type="text" id="provider_zip" value="{{$provider_details->provider_zip}}" class="form-control datepicker"/>
-		</div>
-		<div class="col-md-2 form-content">
-			<label>Street </label>
-		</div>
-		<div class="col-md-4 form-content">
-			<input type="text" id="provider_street" value="{{$provider_details->provider_street}}" class="form-control datepicker"/>
+		<div class="col-md-10 form-content">
+			<textarea cols="30" rows="3" id="provider_address" class="form-control">{{$provider_details->provider_address}}</textarea>
 		</div>
 	</div>
-	<div class="form-holder">
+	<div class="form-holder ">
 		<div class="col-md-2 form-content">
-			<label>City/Town</label>
+			<label>Payee</label>
 		</div>
-		<div class="col-md-4 form-content">
-			<input type="text" id="provider_city" value="{{$provider_details->provider_city}}" class="form-control datepicker"/>
+		<div class="col-md-10 payee-number-form">
+			<div class=" form-content payee-form-element">
+				<div class="input-group">
+					<input type="text" name="company_number[]" id="company_number" class="form-control"/>
+					<span class="input-group-btn">
+						<button class="btn btn-primary add-payee" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span> </button>
+						<button class="btn btn-danger remove-payee" type="button" tabindex="-1"><span class="fa fa-minus-circle" aria-hidden="true"></span> </button>
+					</span>
+				</div>
+			</div>
+			
 		</div>
-		<div class="col-md-2 form-content">
-			<label>Country</label>
-		</div>
-		<div class="col-md-4 form-content">
-			<input type="text" id="provider_country" value="{{$provider_details->provider_country}}" class="form-control datepicker"/>
-		</div>
-	</div>
-	<div class="row form-holder">
-		<div class="form-content pull-right col-md-4">
-			<input type="checkbox" id="provider_name_agreed" class="minimal"/> <label> Use provider name as my billing name.</label>
-		</div>
-		
 	</div>
 </div>
 <div class="row box-globals" style="min-height: 258px;">
 	<div class="nav-tabs-custom">
 		<ul class="nav nav-tabs">
-			<li class="active my-tab"><a data-toggle="tab" href="#billing">Billing Details</a></li>
-			<li class="my-tab"><a data-toggle="tab" href="#doctors">List of Doctors</a></li>
+			<li class="active my-tab"><a data-toggle="tab" href="#doctors">List of Doctors</a></li>
 			<li class="my-tab"><a data-toggle="tab" href="#attachment">Attachment</a></li>
 		</ul>
 		<div class="tab-content">
-			<div id="billing" class="tab-pane fade in active table-min-height">
-				<div class="form-holder">
-					<div class="col-md-2 form-content">
-						<label>Billing Name</label>
-					</div>
-					<div class="col-md-10 form-content">
-						<input type="text" id="provider_billing_name" value="{{$provider_details->provider_billing_name}}"  class="form-control"/>
-					</div>
-				</div>
-				<div class="form-holder">
-					<div class="col-md-2 form-content">
-						<label> Email Address</label>
-					</div>
-					<div class="col-md-10 form-content">
-						<input type="text" id="provider_billing_email" value="{{$provider_details->provider_billing_email}}"  class="form-control"/>
-					</div>
-				</div>
-				<div class="form-holder">
-					<div class="col-md-2 form-content">
-						<label> Telephone Number</label>
-					</div>
-					<div class="col-md-4 form-content">
-						<input type="text" id="provider_billing_telephone" value="{{$provider_details->provider_billing_telephone}}"  class="form-control"/>
-					</div>
-					<div class="col-md-2 form-content">
-						<label> Mobile Number</label>
-					</div>
-					<div class="col-md-4 form-content">
-						<input type="text" id="provider_billing_mobile" value="{{$provider_details->provider_billing_mobile}}"  class="form-control"/>
-					</div>
-				</div>
-				<div class="form-holder">
-					<div class="col-md-2 form-content">
-						<label>ZIP CODE </label>
-					</div>
-					<div class="col-md-4 form-content">
-						<input type="text" id="provider_billing_zipcode" value="{{$provider_details->provider_billing_zipcode}}"  class="form-control datepicker"/>
-					</div>
-					<div class="col-md-2 form-content">
-						<label>Street </label>
-					</div>
-					<div class="col-md-4 form-content">
-						<input type="text" id="provider_billing_street" value="{{$provider_details->provider_billing_street}}"  class="form-control datepicker"/>
-					</div>
-					
-				</div>
-				<div class="form-holder">
-					<div class="col-md-2 form-content">
-						<label>City/Town</label>
-					</div>
-					<div class="col-md-4 form-content">
-						<input type="text" id="provider_billing_city" value="{{$provider_details->provider_billing_city}}"  class="form-control datepicker"/>
-					</div>
-					
-					<div class="col-md-2 form-content">
-						<label>Country</label>
-					</div>
-					<div class="col-md-4 form-content">
-						<input type="text" id="provider_billing_country" value="{{$provider_details->provider_billing_country}}"  class="form-control datepicker"/>
-					</div>
-				</div>
-			</div>
-			<div id="doctors" class="tab-pane fade table-min-height">
+			<div id="doctors" class="tab-pane fade in active table-min-height">
 				<div class=" form-holder">
 					<div class="row">
 						<div class="col-xs-12">
