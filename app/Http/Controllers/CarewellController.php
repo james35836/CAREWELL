@@ -18,22 +18,21 @@ use App\Http\Model\TblCompanyJobsiteModel;
 use App\Http\Model\TblCalModel;
 use App\Http\Model\TblCalMemberModel;
 
+use App\Http\Model\TblAvailmentModel;
+use App\Http\Model\TblAvailmentChargesModel;
+
 use App\Http\Model\TblCoveragePlanModel;
 use App\Http\Model\TblCoveragePlanTagModel;
 
 
 use App\Http\Model\TblMemberModel;
 use App\Http\Model\TblMemberCompanyModel;
-use App\Http\Model\TblMemberPaymentModel;
 use App\Http\Model\TblMemberDependentModel;
 use App\Http\Model\TblMemberGovernmentCardModel;
 
 
 
-use App\Http\Model\TblAvailmentModel;
-use App\Http\Model\TblAvailmentPlanModel;
-use App\Http\Model\TblAvailmentTagModel;
-use App\Http\Model\TblAvailmentChargesModel;
+
 
 
 use App\Http\Model\TblPaymentModeModel;
@@ -817,17 +816,17 @@ class CarewellController extends ActiveAuthController
   public function billing_create_cal_submit(Request $request)
   {
     
-    $cal_count                                  =  TblCompanyCalModel::count();
+    $cal_count                                  =  TblCalModel::count();
     if($cal_count==null||$cal_count==0)
     {
       $calLastId                               =  1;
     }
     else
     {
-      $cal                                      =  TblCompanyCalModel::orderBy('cal_id','DESC')->first();
+      $cal                                      =  TblCalModel::orderBy('cal_id','DESC')->first();
       $calLastId                               =  $cal->cal_id+1;
     }
-    $companyCalData                             =   new TblCompanyCalModel;
+    $companyCalData                             =   new TblCalModel;
     $companyCalData->cal_company_id             =   $request->cal_company_id;
     $companyCalData->cal_number                 =   'CAL-'.sprintf("%05d",$calLastId);
     $companyCalData->cal_reveneu_period_month   =   $request->cal_reveneu_period_month;
@@ -863,7 +862,7 @@ class CarewellController extends ActiveAuthController
     $excels['number_of_rows'] =   10;
     $excels['company_id']     =   $company_id;
     $company_template         =   TblCompanyModel::where('company_id',$company_id)->first();
-    $cal_template             =   TblCompanyCalModel::where('cal_id',$cal_id)->first();
+    $cal_template             =   TblCalModel::where('cal_id',$cal_id)->first();
     $excels['company_name']   =   $company_template->company_name;
     $excels['company_id']     =   $company_template->company_id;
     $excels['cal_number']     =   $cal_template->cal_number;
