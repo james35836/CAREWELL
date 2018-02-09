@@ -23,11 +23,10 @@ class MaintenanceController extends Controller
       public function developer_truncate()
       {
             DB::table('tbl_company')->truncate();
-            DB::table('tbl_company_cal')->truncate();
-            DB::table('tbl_company_cal_member')->truncate();
+            DB::table('tbl_cal')->truncate();
+            DB::table('tbl_cal_member')->truncate();
             DB::table('tbl_company_contract')->truncate();
             DB::table('tbl_company_coverage_plan')->truncate();
-            DB::table('tbl_company_jobsite')->truncate();
             DB::table('tbl_member')->truncate();
             DB::table('tbl_member_company')->truncate();
             DB::table('tbl_member_dependent')->truncate();

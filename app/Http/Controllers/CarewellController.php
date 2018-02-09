@@ -9,20 +9,26 @@ use App\Http\Controllers\Controller;
 use App\Http\Model\TblUserModel;
 use App\Http\Model\TblUserInfoModel;
 
-
-use App\Http\Model\TblCompanyModel;
-use App\Http\Model\TblCompanyContractModel;
-use App\Http\Model\TblCompanyCoveragePlanModel;
-use App\Http\Model\TblCompanyJobsiteModel;
-
-use App\Http\Model\TblCalModel;
-use App\Http\Model\TblCalMemberModel;
-
 use App\Http\Model\TblAvailmentModel;
 use App\Http\Model\TblAvailmentChargesModel;
 
 use App\Http\Model\TblCoveragePlanModel;
 use App\Http\Model\TblCoveragePlanTagModel;
+
+
+use App\Http\Model\TblCompanyModel;
+use App\Http\Model\TblCompanyContractModel;
+use App\Http\Model\TblCompanyNumberModel;
+use App\Http\Model\TblCompanyContractImageModel;
+use App\Http\Model\TblCompanyContractBenefitsModel;
+use App\Http\Model\TblCompanyCoveragePlanModel;
+use App\Http\Model\TblCompanyDeploymentModel;
+
+
+use App\Http\Model\TblCalModel;
+use App\Http\Model\TblCalMemberModel;
+
+
 
 
 use App\Http\Model\TblMemberModel;
@@ -112,7 +118,6 @@ class CarewellController extends ActiveAuthController
     foreach ($data['_company'] as $key => $company) 
     {
       $data['_company'][$key]['coverage_plan']    = TblCompanyCoveragePlanModel::where('company_id',$company->company_id)
-                                                    ->join('tbl_availment_plan','tbl_availment_plan.availment_plan_id','=','tbl_company_coverage_plan.availment_plan_id')
                                                     ->get();
     }
   	return view('carewell.pages.company_center',$data);
@@ -137,81 +142,79 @@ class CarewellController extends ActiveAuthController
   }
   public function company_create_company()
   {
+
     $data['_coverage_plan']   = TblCoveragePlanModel::where('archived',0)->get();
     $data['_payment_mode']    = TblPaymentModeModel::get();
     return view('carewell.modal_pages.company_create_company',$data);
   }
   public function company_create_company_submit(Request $request)
   {
-
-        $count_company = TblCompanyModel::count();
+    
+        
         $unique_name   = substr(str_shuffle("ABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0,5);
-        if($count_company==null||$count_company==0)
-        {
-          $companyLastId = sprintf("%05d",1);
-        }
-        else
-        {
-          $company = TblCompanyModel::orderBy('company_id','DESC')->first();
-          $companyLastId = sprintf("%05d",$company->company_id+1);
-        }
         
         $companyData = new TblCompanyModel;
         $companyData->company_code            = StaticFunctionController::updateReferenceNumber('company');
         $companyData->company_name            = $request->company_name;
         $companyData->company_contact_person  = $request->company_contact_person;
         $companyData->company_email_address   = $request->company_email_address;
-        $companyData->company_phone_number    = $request->company_phone_number;
-        $companyData->company_zipcode         = $request->company_zipcode;
-        $companyData->company_street          = $request->company_street;
-        $companyData->company_city            = $request->company_city;
-        $companyData->company_country         = $request->company_country;
+        $companyData->company_address         = $request->company_address;
         $companyData->company_status          = 'active';
-        $companyData->company_date_created    = Carbon::now();
-        $companyData->company_parent_id      = 0;
+        $companyData->company_contract_signed = Carbon::now();
+        $companyData->company_created         = Carbon::now();
+        $companyData->company_parent_id       = 0;
         $companyData->save();
 
-        $fileContract = $request->file("contract");
-        $fileContractRef = $unique_name.'-'.$fileContract->getClientOriginalName();
-        $fileContract->move('contract',$fileContractRef );
-        $fileSchedule = $request->file("schedule");
-        $fileScheduleRef = $unique_name.'-'.$fileSchedule->getClientOriginalName();
-        $fileSchedule->move('schedule_of_benifits',$fileScheduleRef );
+        $contractCompanyData = new TblCompanyContractModel;
+        $contractCompanyData->contract_number  = StaticFunctionController::updateReferenceNumber('contract');
+        $contractCompanyData->payment_mode_id  = 1;
+        $contractCompanyData->contract_created = Carbon::now();
+        $contractCompanyData->company_id       = $companyData->company_id;
+        $contractCompanyData->save();
 
-        $contractData = new TblCompanyContractModel;
-        $contractData->contract_number          = StaticFunctionController::updateReferenceNumber('contract');
-        $contractData->contract_mode_of_payment = $request->contract_mode_of_payment;
-        $contractData->contract_image           = '/contract/'.$fileContractRef.'';
-        $contractData->contract_schedule_of_benifits_image = '/schedule_of_benifits/'.$fileScheduleRef.'';
-        $contractData->contract_date_created    = Carbon::now();
-        $contractData->company_id               = $companyData->company_id;
-        $contractData->save();
-
-        foreach($request->availmentData as $availment_plan)
+        foreach($request->contactData as $company_number)
         {
-          $coverageData = new TblCompanyCoveragePlanModel;
-          $coverageData->availment_plan_id = $availment_plan;
-          $coverageData->company_id = $companyData->company_id;
-          $coverageData->save();
-
-        }
-        foreach($request->ajaxData as $jobsite)
-        {
-          $jobsiteData                = new TblCompanyJobsiteModel;
-          $jobsiteData->jobsite_name  = $jobsite;
-          $jobsiteData->company_id    = $companyData->company_id;
-          $jobsiteData->save();
-        }
-        foreach($request->trunkData as $trunk)
-        {
-          $trunkData                  = new TblCompanyTrunklineModel;
-          $trunkData->trunkline_number= $trunk;
-          $trunkData->company_id      = $companyData->company_id;
-          $trunkData->save();
+          $numberData = new TblCompanyNumberModel;
+          $numberData->company_number = $company_number;
+          $numberData->company_id = $companyData->company_id;
+          $numberData->save();
         }
         
+        foreach($request->file("contractData") as $contract_image_name)
+        {
+          $fileContractRef = $unique_name.'-'.$contract_image_name->getClientOriginalName();
+          $contract_image_name->move('contract',$fileContractRef );
 
-     return "<div class='alert alert-success' style='text-align: center;'>Company Added Successfully!</div>";
+          $contractImageData = new TblCompanyContractImageModel;
+          $contractImageData->contract_image_name = '/contract/'.$fileContractRef.'';
+          $contractImageData->contract_id = $contractCompanyData->contract_id;
+          $contractImageData->save();
+        }
+        foreach($request->file("benefitsData") as $contract_benefits_name)
+        {
+          $fileContractRef = $unique_name.'-'.$contract_benefits_name->getClientOriginalName();
+          $contract_benefits_name->move('schedule_of_benefits',$fileContractRef );
+
+          $benefitsImageData = new TblCompanyContractBenefitsModel;
+          $benefitsImageData->contract_benefits_name = '/schedule_of_benefits/'.$fileContractRef.'';
+          $benefitsImageData->contract_id = $contractCompanyData->contract_id;
+          $benefitsImageData->save();
+        }
+        foreach($request->coveragePlanData as $coverage_plan_id)
+        {
+          $coverageData = new TblCompanyCoveragePlanModel;
+          $coverageData->coverage_plan_id = $coverage_plan_id;
+          $coverageData->company_id = $companyData->company_id;
+          $coverageData->save();
+        }
+        foreach($request->deploymentData as $deployment_name)
+        {
+          $deploymentData = new TblCompanyDeploymentModel;
+          $deploymentData->deployment_name = $deployment_name;
+          $deploymentData->contract_id = $contractCompanyData->contract_id;
+          $deploymentData->save();
+        }
+    return "<div class='alert alert-success' style='text-align: center;'>Company Added Successfully!</div>";
   }
  
   /*MEMBER*/
@@ -1224,16 +1227,15 @@ class CarewellController extends ActiveAuthController
   public function settings_coverage_plan_create_submit(Request $request)
   {
     $coverageData = new TblCoveragePlanModel;
-    $coverageData->coverage_name                = $request->coverage_name;
-    $coverageData->coverage_patient_confinement = $request->coverage_patient_confinement;
-    $coverageData->coverage_maximum_benefit     = $request->coverage_maximum_benefit;
-    $coverageData->coverage_case_handling       = $request->coverage_case_handling;
-    $coverageData->coverage_age_bracket         = $request->coverage_age_bracket;
-    $coverageData->coverage_monthly_premium     = $request->coverage_monthly_premium;
-    $coverageData->coverage_created             = Carbon::now();
+    $coverageData->coverage_plan_name                = $request->coverage_name;
+    $coverageData->coverage_plan_confinement = $request->coverage_patient_confinement;
+    $coverageData->coverage_plan_maximum_benefit     = $request->coverage_maximum_benefit;
+    $coverageData->coverage_plan_case_handling       = $request->coverage_case_handling;
+    $coverageData->coverage_plan_age_bracket         = $request->coverage_age_bracket;
+    $coverageData->coverage_plan_monthly_premium     = $request->coverage_monthly_premium;
+    $coverageData->coverage_plan_created             = Carbon::now();
     $coverageData->save();
    
-
     foreach($request->child_availment as $key=>$data)
     {
       if($data!=0)

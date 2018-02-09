@@ -4,28 +4,15 @@ var ajaxData 		= [];
 var availmentData 	= [];
 var check_null 		= [];
 var trunkData		= [];
+var benefitsData	= [];
+var contractData	= [];
+var contactData 	= [];
+var coveragePlanData= [];
+var deploymentData	= [];
 var value="0";
 var message="";
 
-var modals 			= '<div  class="modal fade modal-top confirm-modal" id="" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">'
-						  +'<div class="confirm-modal-dialog modal-dialog modal-sm">'
-						    +'<div class="modal-content">'
-						      +'<div class="modal-header">'
-						        +'<button type="button" class="close" data-dismiss="modal" aria-label="Close">'
-						        +'<span aria-hidden="true">&times;</span></button>'
-						        +'<h4 class="modal-title confirm-modal-title"></h4>'
-						      +'</div>'
-						      
-						      +'<div class="modal-body modal-body-sm">'
-						        +'<input type="hidden" class="link"/>'
-						      +'</div>'
-						      +'<div class="modal-footer">'
-						        +'<button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancel</button>'
-						        +'<button type="button" class="btn btn-primary confirm-submit">Save</button>'
-						      +'</div>'
-						    +'</div>'
-						  +'</div>'
-						+'</div>';
+
 
 function company_center()
 {
@@ -79,90 +66,107 @@ function company_center()
 
 	function create_company()
 	{
-		$(document).on('click','.create-company',function() 
+		$("body").on('click','.create-company',function()
 		{
+			$('.company-modal').remove();
+            $(".append-modal").append(globalModals);
+			$('.global-modal').removeClass().addClass('modal fade modal-top company-modal');
+			$('.global-modal-dialog').removeClass().addClass('company-modal-dialog modal-dialog modal-lg');
+			$('.global-modal-content').removeClass().addClass('modal-content');
+			$('.global-modal-header').removeClass().addClass('modal-header');
+			$('.global-modal-title').html('CREATE COMPANY');
+			$('.global-modal-title').removeClass().addClass('modal-title');
+			$('.global-modal-body').removeClass().addClass('modal-body company-modal-body');
 			$('.company-modal').modal('show');
-			$('.company-modal-title').html('CREATE COMPANY');
-			$('.company-ajax-loader').show();
-			$('.company-modal-body-content').hide();
+			$('.global-ajax-loader').show();
+            $('.global-modal-body-content').hide();
+            $('.global-modal-footer').hide();
+            var approval_id = $(this).data('approval_id');
+
 			$.ajax({
 				headers: {
 				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 				},
+
 				url:'/company/create_company',
 				method: "get",
                 success: function(data)
-				{
+                {
 					setTimeout(function()
 					{
-						$('.company-ajax-loader').hide();
-						$('.company-modal-body-content').show();
-						$('.company-modal-body-content').html(data);
+
+						$('.global-ajax-loader').hide().removeClass().addClass('.modal-loader company-ajax-loader');
+						$('.global-modal-body-content').show().removeClass().addClass('row box-holder  modal-body-content').html(data);
+						$('.global-modal-footer').show().removeClass().addClass('modal-footer company-modal-footer');
+                    	$('.global-footer-button').html('CREATE COMPANY').removeClass().addClass('btn btn-primary create-company-confirm');
                     }, 1000);
 				}
 			});
-
 		});
+		
 	}
 	function create_company_confirm()
 	{
 		$(document).on('click','.create-company-confirm',function() 
 		{
-			$('select[name="coverage_plan"] option:selected').each(function() 
-			{
-				availmentData.push(this.value);
+			
+            $('input[name="company_number[]"]').each(function()
+            {
+            	contactData.push(this.value);
+            });
 
-			});
-			$('input[name="jobsite[]"]').each(function()
+            var countContract = document.getElementById('contract_image_name').files.length;
+            var countBenefits = document.getElementById('contract_image_name').files.length;
+
+            $('input[name="contract_benefits_name[]"]').each(function()
             {
-            	ajaxData.push(this.value);
+            	benefitsData.push(this.value);
             });
-            $('input[name="trunk[]"]').each(function()
+            $('.coverage_plan_name :selected').each(function()
             {
-            	trunkData.push(this.value);
+            	coveragePlanData.push(this.value);
             });
+            $('input[name="deployment_name[]"]').each(function()
+            {
+            	deploymentData.push(this.value);
+            });
+  	 		
+            
             if(checking_null_validation(document.getElementById('company_name').value,"COMPANY NAME")=="")
 			{}	
-		    else if(checking_null_validation(document.getElementById('company_email_address').value,"COMPANY EMAIL ADDRESS")=="")
+		    else if(checking_null_validation(document.getElementById('company_contact_person').value,"COMPANY CONTACT PERSON")=="")
 			{}
-			else if(checking_null_validation(document.getElementById('company_contact_person').value,"COMPANY CONTACT PERSON")=="")
+			else if(checking_null_validation(document.getElementById('company_email_address').value,"COMPANY EMAIL ADDRESS")=="")
 			{}	
-			else if(checking_null_validation(document.getElementById('company_phone_number').value,"PHONE NUMBER")=="")
+			else if(checking_null_validation(document.getElementById('company_address').value,"COMPANY ADDRESS")=="")
 			{}
-			else if(checking_null_validation(document.getElementById('company_zipcode').value,"COMPANY ZIPCODE")=="")
-			{}
-			else if(checking_null_validation(document.getElementById('company_street').value,"COMPANY STREET")=="")
-			{}
-		    else if(checking_null_validation(document.getElementById('company_city').value,"COMPANY CITY")=="")
-			{}
-		    else if(checking_null_validation(document.getElementById('company_country').value,"COMPANY COUNTRY")=="")
-			{}
-			else if(checking_null_validation(document.getElementById('contract_mode_of_payment').value,"MODE OF PAYMENT")=="")
-			{}
-			else if(document.getElementById('contract_image').files.length == 0)
+			else if(contactData.length == 0)
 			{
-				toastr.error(' cannot be null.', 'Something went wrong!', {timeOut: 3000})
+				toastr.error('Please add Contact Number at least one.', 'Something went wrong!', {timeOut: 3000})
 			}
-			else if(document.getElementById('contract_schedule_of_benifits_image').files.length == 0)
+			else if(countContract == 0)
 			{
-				toastr.error('BENIFITS IMAGE cannot be null.', 'Something went wrong!', {timeOut: 3000})
+				toastr.error('Please add CONTRACT IMAGE at least one.', 'Something went wrong!', {timeOut: 3000})
 			}
-			else if(ajaxData.length == 0)
+
+			else if(countBenefits == 0)
 			{
-				toastr.error('Please add JOBSITE at least one.', 'Something went wrong!', {timeOut: 3000})
+				toastr.error('Please add BENIFITS IMAGE at least one.', 'Something went wrong!', {timeOut: 3000})
 			}
-			else if(availmentData.length == 0)
+			else if(deploymentData.length == 0)
 			{
-				toastr.error('Please select PLAN at least one.', 'Something went wrong!', {timeOut: 3000})
+				toastr.error('Please add DEPLOYMENT at least one.', 'Something went wrong!', {timeOut: 3000})
 			}
-			else if(trunkData.length == 0)
+			else if(coveragePlanData.length == 0)
 			{
-				toastr.error('Please add TRUNKLINE at least one.', 'Something went wrong!', {timeOut: 3000})
+				toastr.error('Please add COVERAGE PLAN at least one.', 'Something went wrong!', {timeOut: 3000})
 			}
+			
 			else
 			{
+				
 				$('.confirm-modal').remove();
-				$('.append-modal').append(modals);
+				$('.append-modal').append(confirmModals);
 	            $('.confirm-modal-dialog').removeClass().addClass('modal-dialog modal-sm');
 				$('.confirm-modal-title').html('Are you sure you want to add this company?');
 				$('.confirm-submit').addClass('create-company-submit');
@@ -171,28 +175,30 @@ function company_center()
 				formData.append("company_name", 			document.getElementById('company_name').value);
 	            formData.append("company_email_address", 	document.getElementById('company_email_address').value);
 	            formData.append("company_contact_person", 	document.getElementById('company_contact_person').value);
-	            formData.append("company_phone_number", 	document.getElementById('company_phone_number').value);
-	            formData.append("company_zipcode", 			document.getElementById('company_zipcode').value);
-	            formData.append("company_street", 			document.getElementById('company_street').value);
-	            formData.append("company_city", 			document.getElementById('company_city').value);
-	            formData.append("company_country", 			document.getElementById('company_country').value);
-	            
-	            formData.append("contract_mode_of_payment", document.getElementById('contract_mode_of_payment').value);
-	            formData.append("contract", 				document.getElementById('contract_image').files[0]);
-	            formData.append("schedule", 				document.getElementById('contract_schedule_of_benifits_image').files[0]);
+	            formData.append("company_address", 			document.getElementById('company_address').value);
 
-	            for (var i = 0; i < ajaxData.length; i++) 
+	            formData.append("payment_mode_id", 			document.getElementById('payment_mode_id').value);
+	            for (var i = 0; i < contactData.length; i++) 
 				{
-				    formData.append('ajaxData[]', ajaxData[i]);
+				    formData.append('contactData[]', contactData[i]);
 				}
-				for (var i = 0; i < trunkData.length; i++) 
+				
+	            for (var i = 0; i < countContract; i++) 
 				{
-				    formData.append('trunkData[]', trunkData[i]);
+				    formData.append('contractData[]', document.getElementById('contract_image_name').files[i]);
 				}
-
-				for (var j = 0; j < availmentData.length; j++) 
+				for (var i = 0; i < countBenefits; i++) 
 				{
-				    formData.append('availmentData[]', availmentData[j]);
+				    formData.append('benefitsData[]', document.getElementById('contract_benefits_name').files[i]);
+				}
+				for (var i = 0; i < coveragePlanData.length; i++) 
+				{
+				    formData.append('coveragePlanData[]', coveragePlanData[i]);
+				}
+				
+				for (var i = 0; i < deploymentData.length; i++) 
+				{
+				    formData.append('deploymentData[]', deploymentData[i]);
 				}
 			}
 		});
@@ -214,9 +220,9 @@ function company_center()
 				url:'/company/create_company/submit',
 				method: "POST",
                 data: formData,
-                contentType: false,
-                cache: false,
-                processData: false,
+                contentType:false,
+                cache:false,
+                processData:false,
                 success: function(data)
 				{
 					setTimeout(function()

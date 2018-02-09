@@ -82,7 +82,7 @@ function settings_coverage()
 			$('.confirm-modal').modal('show');
 			$('.confirm-submit').addClass('create-coverage-plan-submit');			
 			
-			ajaxData = $(".coverage-plan-form").serialize();
+			serializeData = $(".coverage-plan-form").serialize();
 		});
 	}
 	
@@ -99,7 +99,7 @@ function settings_coverage()
 				},
 				url:'/settings/coverage/create_plan_submit',
 				method: "POST",
-                data:ajaxData,
+                data:serializeData,
                 dataType: 'text',
                 success: function(data)
 				{

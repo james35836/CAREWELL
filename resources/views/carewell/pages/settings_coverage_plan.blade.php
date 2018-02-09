@@ -38,12 +38,12 @@
             @foreach($_coverage_plan as $coverage_plan)
             <tr>
               <td>{{$coverage_plan->coverage_plan_id}}</td>
-              <td>{{$coverage_plan->coverage_name}}</td>
-              <td>{{$coverage_plan->coverage_patient_confinement}}</td>
-              <td>{{$coverage_plan->coverage_maximum_benefit}}</td>
-              <td>{{$coverage_plan->coverage_case_handling}}</td>
-              <td>{{$coverage_plan->coverage_age_bracket}}</td>
-              <td>{{$coverage_plan->coverage_monthly_premium}}</td>
+              <td>{{$coverage_plan->coverage_plan_name}}</td>
+              <td>{{$coverage_plan->coverage_plan_confinement}}</td>
+              <td>{{$coverage_plan->coverage_plan_maximum_benefit}}</td>
+              <td>{{$coverage_plan->coverage_plan_case_handling}}</td>
+              <td>{{$coverage_plan->coverage_plan_age_bracket}}</td>
+              <td>{{$coverage_plan->coverage_plan_monthly_premium}}</td>
               <td><span class="label label-success">Active</span></td>
               <td>
                 <div class="btn-group">
