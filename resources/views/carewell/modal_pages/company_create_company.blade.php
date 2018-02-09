@@ -82,14 +82,9 @@ $(document).ready(function() {
 			$(this).closest(".contract-element").remove();
 		}
 	});
-
 	
 });
 </script>
-<form id="file-form" action="handler.php" method="POST">
-  <input type="file" id="file-select" name="photos[]" multiple/>
-  <button type="submit" id="upload-button">Upload</button>
-</form>
 <form class="company-form" method="post">
 	<div class="row box-globals">
 		<div class="form-holder">
@@ -172,32 +167,16 @@ $(document).ready(function() {
 						<div class="col-md-2 form-content">
 							<label>Contract Image</label>
 						</div>
-						<div class="col-md-10 contract-form">
-							<div class=" form-content contract-element">
-								<div class="input-group">
-									<input type="file" name="contract_image_name[]" id="contract_image_name" class="contract_image_name form-control convoFile" multiple/>
-									<span class="input-group-btn">
-										<button class="btn btn-primary add-contract" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span> </button>
-										<button class="btn btn-danger remove-contract" type="button" tabindex="-1"><span class="fa fa-minus-circle" aria-hidden="true"></span> </button>
-									</span>
-								</div>
-							</div>
+						<div class="col-md-10 form-content">
+							<input type="file" name="contract_image_name[]" id="contract_image_name" class="contract_image_name form-control convoFile" multiple/>
 						</div>
 					</div>
 					<div class="form-holder ">
 						<div class="col-md-2 form-content">
 							<label>Schedule of Benifit</label>
 						</div>
-						<div class="col-md-10 Benifit-form">
-							<div class=" form-content Benifit-element">
-								<div class="input-group">
-									<input type="file" name="contract_benefits_name[]" id="contract_benefits_name" class="form-control" multiple/>
-									<span class="input-group-btn">
-										<button class="btn btn-primary add-Benifit" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span> </button>
-										<button class="btn btn-danger remove-Benifit" type="button" tabindex="-1"><span class="fa fa-minus-circle" aria-hidden="true"></span> </button>
-									</span>
-								</div>
-							</div>
+						<div class=" form-content col-md-10">
+							<input type="file" name="contract_benefits_name[]" id="contract_benefits_name" class="form-control" multiple/>
 						</div>
 					</div>
 					<div class="form-holder ">

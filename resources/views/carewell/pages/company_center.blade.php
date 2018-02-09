@@ -39,7 +39,7 @@
               <td>{{$company->company_name}}</td>
               <td>
                 @foreach($company->coverage_plan as $coverage_plan)
-                <span class="label label-default">{{$coverage_plan->availment_plan_name}}</span>
+                <span class="label label-default">{{$coverage_plan->coverage_plan_name}}</span>
                 @endforeach
               </td>
               <td>{{$company->contract_number}}</td>

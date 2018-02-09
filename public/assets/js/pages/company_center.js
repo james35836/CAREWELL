@@ -110,25 +110,33 @@ function company_center()
 		$(document).on('click','.create-company-confirm',function() 
 		{
 			
-            $('input[name="company_number[]"]').each(function()
+            $('input[name="company_number[]"]').each(function(i, num)
             {
-            	contactData.push(this.value);
+            	if($(num).val()!="")
+            	{
+            		contactData.push(this.value);
+            	}
+            	
             });
 
             var countContract = document.getElementById('contract_image_name').files.length;
-            var countBenefits = document.getElementById('contract_image_name').files.length;
+            var countBenefits = document.getElementById('contract_benefits_name').files.length;
 
-            $('input[name="contract_benefits_name[]"]').each(function()
+            
+            $("select.coverage_plan_name").each(function(i, sel)
             {
-            	benefitsData.push(this.value);
+            	var selectedPlan = $(sel).val();
+            	if(selectedPlan!="SELECT COVERAGE PLAN")
+            	{
+            		coveragePlanData.push(selectedPlan);
+            	}
             });
-            $('.coverage_plan_name :selected').each(function()
+            $('input[name="deployment_name[]"]').each(function(i, dep)
             {
-            	coveragePlanData.push(this.value);
-            });
-            $('input[name="deployment_name[]"]').each(function()
-            {
-            	deploymentData.push(this.value);
+            	if($(dep).val()!="")
+            	{
+            		deploymentData.push(this.value);
+            	}
             });
   	 		
             
@@ -140,7 +148,7 @@ function company_center()
 			{}	
 			else if(checking_null_validation(document.getElementById('company_address').value,"COMPANY ADDRESS")=="")
 			{}
-			else if(contactData.length == 0)
+			else if(contactData==null||contactData=="")
 			{
 				toastr.error('Please add Contact Number at least one.', 'Something went wrong!', {timeOut: 3000})
 			}
@@ -148,16 +156,15 @@ function company_center()
 			{
 				toastr.error('Please add CONTRACT IMAGE at least one.', 'Something went wrong!', {timeOut: 3000})
 			}
-
 			else if(countBenefits == 0)
 			{
 				toastr.error('Please add BENIFITS IMAGE at least one.', 'Something went wrong!', {timeOut: 3000})
 			}
-			else if(deploymentData.length == 0)
+			else if(deploymentData==null||deploymentData=="")
 			{
 				toastr.error('Please add DEPLOYMENT at least one.', 'Something went wrong!', {timeOut: 3000})
 			}
-			else if(coveragePlanData.length == 0)
+			else if(coveragePlanData==null||coveragePlanData=="")
 			{
 				toastr.error('Please add COVERAGE PLAN at least one.', 'Something went wrong!', {timeOut: 3000})
 			}
@@ -182,8 +189,7 @@ function company_center()
 				{
 				    formData.append('contactData[]', contactData[i]);
 				}
-				
-	            for (var i = 0; i < countContract; i++) 
+				for (var i = 0; i < countContract; i++) 
 				{
 				    formData.append('contractData[]', document.getElementById('contract_image_name').files[i]);
 				}
@@ -209,7 +215,7 @@ function company_center()
 		$(document).on('click','.create-company-submit',function() 
 		{
 			
-            $('.confirm-modal').modal('hide');
+            $('.confirm-modal').remove();
             $(".company-modal-body").html("<div class='company-ajax-loader' style='display:none;text-align: center; padding:50px;'><img src='/assets/loader/loading.gif'/></div");
             $('.company-ajax-loader').show();
             

@@ -117,25 +117,28 @@ class CarewellController extends ActiveAuthController
     $data['_company']         = TblCompanyModel::Company()->paginate(10);
     foreach ($data['_company'] as $key => $company) 
     {
-      $data['_company'][$key]['coverage_plan']    = TblCompanyCoveragePlanModel::where('company_id',$company->company_id)
-                                                    ->get();
+      $data['_company'][$key]['coverage_plan']  = TblCompanyCoveragePlanModel::where('company_id',$company->company_id)
+                                                ->join('tbl_coverage_plan','tbl_coverage_plan.coverage_plan_id','=','tbl_company_coverage_plan.coverage_plan_id')
+                                                ->get();
     }
   	return view('carewell.pages.company_center',$data);
   }
   public function company_details($company_id)
   {
-    $data['_availment_plan']          = TblAvailmentPlanModel::get();
-    $data['_payment_mode']            = TblPaymentModeModel::get();
-    $data['company_details']          = TblCompanyModel::where('company_id',$company_id)->first();
-    $data['_company_jobsite']         = TblCompanyJobsiteModel::where('company_id',$company_id)->get();
-    $data['_company_trunkline']       = TblCompanyTrunklineModel::where('company_id',$company_id)->get();
-    $data['_company_availment_plan']  = TblCompanyCoveragePlanModel::where('company_id',$company_id)
-                                      ->join('tbl_availment_plan','tbl_availment_plan.availment_plan_id','=','tbl_company_coverage_plan.availment_plan_id')
-                                      ->get();
-    $data['_company_member']          = TblMemberCompanyModel::where('tbl_member_company.company_id',$company_id)
-                                      ->join('tbl_member','tbl_member.member_id','=','tbl_member_company.member_id')
-                                      ->get();
-    $data['company_contract']         = TblCompanyContractModel::where('company_id',$company_id)->first();
+    $data['_coverage_plan']       = TblCoveragePlanModel::get();
+    $data['_payment_mode']        = TblPaymentModeModel::get();
+    $data['company_details']      = TblCompanyModel::where('company_id',$company_id)->first();
+    $data['_company_deployment']  = TblCompanyDeploymentModel::where('company_id',$company_id)->get();
+    $data['_company_number']      = TblCompanyNumberModel::where('company_id',$company_id)->get();
+    $data['_coverage_plan']       = TblCompanyCoveragePlanModel::where('company_id',$company_id)
+                                  ->join('tbl_coverage_plan','tbl_coverage_plan.coverage_plan_id','=','tbl_company_coverage_plan.coverage_plan_id')
+                                  ->get();
+    $data['_company_member']      = TblMemberCompanyModel::where('tbl_member_company.company_id',$company_id)
+                                  ->join('tbl_member','tbl_member.member_id','=','tbl_member_company.member_id')
+                                  ->get();
+    $data['company_contract']     = TblCompanyContractModel::where('company_id',$company_id)
+                                  ->join('tbl_payment_mode','tbl_payment_mode.payment_mode_id','=','tbl_company_contract.payment_mode_id')
+                                  ->first();
 
     return view('carewell.modal_pages.company_details',$data);
 
