@@ -43,7 +43,7 @@
                 @endforeach
               </td>
               <td>{{$company->contract_number}}</td>
-              <td>{{date("F j, Y",strtotime($company->company_date_created))}}</td>
+              <td>{{date("F j, Y",strtotime($company->company_created))}}</td>
               <td>
                 @if($company->company_status=='active')
                 <span class="label label-success">Active</span>

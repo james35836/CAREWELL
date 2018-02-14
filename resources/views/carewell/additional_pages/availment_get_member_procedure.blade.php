@@ -22,11 +22,11 @@
 							@endforeach
 						</select>
 					</td>
-					<td><input type="text" name="procedure_availed_amount[]" id="procedure_availed_amount" class="amount form-control"/></td>
-					<td><input type="text" name="availed_phil_charity[]" id="" class="form-control"/></td>
-					<td><input type="text" name="availed_charge_patient[]" id="" class="form-control"/></td>
-					<td><input type="text" name="availed_charge_carewell[]" id="" class="form-control"/></td>
-					<td><textarea  name="availed_remarks[]" id="" cols="20" rows="2"></textarea></td>
+					<td><input type="text" value="0.0" name="procedure_availed_amount[]" id="procedure_availed_amount" class="amount form-control"/></td>
+					<td><input type="text" value="0.0" name="availed_phil_charity[]" id="" class="form-control"/></td>
+					<td><input type="text" value="0.0" name="availed_charge_patient[]" id="" class="form-control"/></td>
+					<td><input type="text" value="0.0" name="availed_charge_carewell[]" id="" class="form-control"/></td>
+					<td><textarea  name="availed_remarks[]" id="" cols="20" rows="2">NONE</textarea></td>
 					<td>
 						<div class="btn-group">
 							<button type="button" class="btn btn-primary  add-row"><i class="fa fa-plus"></i></button>

@@ -196,9 +196,9 @@
 						</tr>
 						@foreach($_member_dependent as $member_dependent)
 						<tr>
-							<td>{{$member_dependent->member_dependent_full_name}}</td>
-							<td>{{$member_dependent->member_dependent_relationship}}</td>
-							<td>{{date("F j, Y",strtotime($member_dependent->member_dependent_birthdate))}}</td>
+							<td>{{$member_dependent->dependent_full_name}}</td>
+							<td>{{$member_dependent->dependent_relationship}}</td>
+							<td>{{date("F j, Y",strtotime($member_dependent->dependent_birthdate))}}</td>
 							<td>
 								<div class="btn-group">
 									<button type="button" class="btn btn-danger btn-sm">Action</button>
@@ -225,13 +225,13 @@
 						<label>PHIL-HEALTH </label>
 					</div>
 					<div class="col-md-4 form-content">
-						<input type="text" class="form-control" value="{{$member_government->member_government_card_philhealth}}"/>
+						<input type="text" class="form-control" value="{{$member_government->government_card_philhealth}}"/>
 					</div>
 					<div class="col-md-2 form-content">
 						<label>SSS </label>
 					</div>
 					<div class="col-md-4 form-content">
-						<input type="text" class="form-control" value="{{$member_government->member_government_card_sss}}"/>
+						<input type="text" class="form-control" value="{{$member_government->government_card_sss}}"/>
 					</div>
 				</div>
 				<div class="form-holder">
@@ -239,13 +239,13 @@
 						<label>TIN </label>
 					</div>
 					<div class="col-md-4 form-content">
-						<input type="text" class="form-control" value="{{$member_government->member_government_card_tin}}"/>
+						<input type="text" class="form-control" value="{{$member_government->government_card_tin}}"/>
 					</div>
 					<div class="col-md-2 form-content">
 						<label>HDMF </label>
 					</div>
 					<div class="col-md-4 form-content">
-						<input type="text" class="form-control" value="{{$member_government->member_government_card_hdmf}}"/>
+						<input type="text" class="form-control" value="{{$member_government->government_card_hdmf}}"/>
 					</div>
 				</div>
 			</div>

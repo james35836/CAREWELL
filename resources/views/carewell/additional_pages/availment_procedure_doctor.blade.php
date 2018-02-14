@@ -32,7 +32,7 @@
 									<option>SELECT SPECIALIZATION</option>
 								</select>
 							</td>
-							<td><input type="text" name="approval_doctor_actual_pf[]" class="form-control"/></td>
+							<td><input type="text"  value="0.0" name="approval_doctor_actual_pf[]" class="form-control"/></td>
 							<td>
 								<select class="form-control select2" name="procedure_id[]">
 									<option>SELECT PROCEDURE</option>
@@ -41,10 +41,10 @@
 									@endforeach
 								</select>
 							</td>
-							<td><input type="text" name="approval_doctor_rate_rvs[]" class="form-control"/></td>
-							<td><input type="text" name="approval_doctor_phil_charity[]" class="form-control"/></td>
-							<td><input type="text" name="approval_doctor_charge_patient[]" class="form-control"/></td>
-							<td><input type="text" name="approval_doctor_charge_carewell[]" class="form-control"/></td>
+							<td><input type="text" value="0.0" name="approval_doctor_rate_rvs[]" class="form-control"/></td>
+							<td><input type="text" value="0.0" name="approval_doctor_phil_charity[]" class="form-control"/></td>
+							<td><input type="text" value="0.0" name="approval_doctor_charge_patient[]" class="form-control"/></td>
+							<td><input type="text" value="0.0" name="approval_doctor_charge_carewell[]" class="form-control"/></td>
 							<td>
 								<div class="btn-group">
 									<button type="button" class="btn btn-primary add-row"><i class="fa fa-plus"></i></button>

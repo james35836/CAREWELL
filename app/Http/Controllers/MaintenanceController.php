@@ -65,8 +65,8 @@ class MaintenanceController extends Controller
       }
 	public function developer_maintenance()
       {
-         $up['user_profile']  = '/profile/sam.jpg';
-         TblUserInfoModel::where('user_info_id',1)->update($up);  
+         // $up['user_profile']  = '/profile/sam.jpg';
+         // TblUserInfoModel::where('user_info_id',1)->update($up);  
 
         if (DB::table('tbl_specialization')->count() <= 0) 
         {

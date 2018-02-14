@@ -58,6 +58,24 @@ use App\Http\Model\TblScheduleOfBenefitsModel;
 
 class StaticFunctionController extends Controller
 {
+  public static function global()
+  {
+    $user_info = TblUserInfoModel::where('tbl_user_info.user_id',session('user_id'))
+                ->join('tbl_user','tbl_user.user_id','=','tbl_user_info.user_id')
+                ->first();
+    return $user_info;
+  }
+  public static function returnMessage($alert_message="",$str_name="")
+  {
+    if($alert_message=="success")
+    {
+      return "<div class='alert alert-success' style='text-align: center;'>".$str_name." Added Successfully!</div>";
+    }
+    else
+    {
+      return "<div class='alert alert-danger' style='text-align: center;'>".$str_name." transaction Failed!</div>";
+    }
+  }
   public function getDoctorSpecialty(Request $request)
   {
     if($request->ajax())
@@ -277,6 +295,7 @@ class StaticFunctionController extends Controller
   }
   public static function yesNotoInt($stryn = 'Y')
   {
+
         $int = 0;
         $stryn = strtoupper($stryn);
         if($stryn == 'Y' || $stryn == 'YES' || $stryn == 'TRUE')

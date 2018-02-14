@@ -17,8 +17,6 @@ use App\Http\Model\TblAvailmentChargesModel;
 use App\Http\Model\TblCoveragePlanModel;
 use App\Http\Model\TblCoveragePlanTagModel;
 
-
-
 use App\Http\Model\TblCompanyModel;
 use App\Http\Model\TblCompanyContractModel;
 use App\Http\Model\TblCompanyNumberModel;
@@ -27,22 +25,13 @@ use App\Http\Model\TblCompanyContractBenefitsModel;
 use App\Http\Model\TblCompanyCoveragePlanModel;
 use App\Http\Model\TblCompanyDeploymentModel;
 
-
 use App\Http\Model\TblCalModel;
 use App\Http\Model\TblCalMemberModel;
-
-
-
 
 use App\Http\Model\TblMemberModel;
 use App\Http\Model\TblMemberCompanyModel;
 use App\Http\Model\TblMemberDependentModel;
 use App\Http\Model\TblMemberGovernmentCardModel;
-
-
-
-
-
 
 use App\Http\Model\TblPaymentModeModel;
 
@@ -65,13 +54,6 @@ use App\Http\Model\TblProcedureModel;
 
 use App\Http\Model\TblScheduleOfBenefitsModel;
 
-
-
-
-
-
-
-
 use Excel;
 use Input;
 // use Request;
@@ -86,38 +68,32 @@ class CarewellController extends ActiveAuthController
 {
   
   /*STATIC DATA*/
-  public static function global()
-  {
-    $user_info = TblUserInfoModel::where('tbl_user_info.user_id',session('user_id'))
-                ->join('tbl_user','tbl_user.user_id','=','tbl_user_info.user_id')
-                ->first();
 
-    return $user_info;
 
-  }
-
+  
   
 
   /*DASHBOARD*/
   public function dashboard()
   {
+
   	$data['page']         = 'Dashboard';
-    $data['user']         = $this->global();
+    $data['user']         = StaticFunctionController::global();
     $data['company']      = TblCompanyModel::where('archived',0)->count();
     $data['member']       = TblMemberModel::where('archived',0)->count();
     $data['provider']     = TblProviderModel::where('archived',0)->count();
-    // $data['_approval']    = TblApprovalModel::where('tbl_approval.archived',0)
-    //                         ->join('tbl_member','tbl_member.member_id','=','tbl_approval.member_id')
-    //                         ->orderBy('approval_created','DESC')
-    //                         ->get();
+    $data['_approval']    = TblApprovalModel::where('tbl_approval.archived',0)
+                            ->join('tbl_member','tbl_member.member_id','=','tbl_approval.member_id')
+                            ->orderBy('approval_created','DESC')
+                            ->get();
     return view('carewell.pages.dashboard',$data);
   }
   /*COMPANY*/
   public function company()
   {
-  	$data['page']             = 'Company';
-    $data['user']             = $this->global();
-    $data['_company']         = TblCompanyModel::Company()->paginate(10);
+  	$data['page']          = 'Company';
+    $data['user']          = StaticFunctionController::global();
+    $data['_company']      = TblCompanyModel::Company()->paginate(10);
     foreach ($data['_company'] as $key => $company) 
     {
       $data['_company'][$key]['coverage_plan']  = TblCompanyCoveragePlanModel::where('company_id',$company->company_id)
@@ -137,12 +113,15 @@ class CarewellController extends ActiveAuthController
                                   ->join('tbl_coverage_plan','tbl_coverage_plan.coverage_plan_id','=','tbl_company_coverage_plan.coverage_plan_id')
                                   ->get();
     $data['_company_member']      = TblMemberCompanyModel::where('tbl_member_company.company_id',$company_id)
+                                  ->where('tbl_member_company.archived',0)
                                   ->join('tbl_member','tbl_member.member_id','=','tbl_member_company.member_id')
+                                  ->join('tbl_company_deployment','tbl_company_deployment.deployment_id','=','tbl_member_company.deployment_id')
                                   ->get();
     $data['company_contract']     = TblCompanyContractModel::where('company_id',$company_id)
                                   ->join('tbl_payment_mode','tbl_payment_mode.payment_mode_id','=','tbl_company_contract.payment_mode_id')
                                   ->first();
-
+    $data['_contract_images']     = TblCompanyContractImageModel::where('archived',0)->where('contract_id',$data['company_contract']->contract_id)->get();
+    $data['_benefits_images']     = TblCompanyContractBenefitsModel::where('archived',0)->where('contract_id',$data['company_contract']->contract_id)->get();
     return view('carewell.modal_pages.company_details',$data);
 
   }
@@ -215,19 +194,19 @@ class CarewellController extends ActiveAuthController
         }
         foreach($request->deploymentData as $deployment_name)
         {
-          $deploymentData = new TblCompanyDeploymentModel;
-          $deploymentData->deployment_name = $deployment_name;
-          $deploymentData->contract_id = $contractCompanyData->contract_id;
-          $deploymentData->save();
+          $deploymentCompanyData = new TblCompanyDeploymentModel;
+          $deploymentCompanyData->deployment_name = $deployment_name;
+          $deploymentCompanyData->company_id = $companyData->company_id;
+          $deploymentCompanyData->save();
         }
-    return "<div class='alert alert-success' style='text-align: center;'>Company Added Successfully!</div>";
+   return StaticFunctionController::returnMessage('success','COMPANY');
   }
  
   /*MEMBER*/
   public function member()
   {
   	$data['page']     = 'Member';
-    $data['user']     = $this->global();
+    $data['user']     = StaticFunctionController::global();
     $data['_company'] = TblCompanyModel::where('archived',0)->get();
     $data['_member']  = TblMemberModel::Member()->paginate(10);
   	return view('carewell.pages.member_center',$data);
@@ -301,11 +280,11 @@ class CarewellController extends ActiveAuthController
     $companyMemberData->save();
     if($memberData->save())
     {
-      return "<div class='alert alert-success' style='text-align: center;'>Member Added Successfully!</div>";
+      return StaticFunctionController::returnMessage('success','MEMBER');
     }
     else
     {
-      return "<div class='alert alert-danger' style='text-align: center;'>Something went wrong!</div>";
+      return StaticFunctionController::returnMessage('danger','MEMBER');
     }
   }
   public function member_view_details($member_id)
@@ -544,7 +523,7 @@ class CarewellController extends ActiveAuthController
   public function provider()
   {
     $data['page']       = 'Network Provider';
-    $data['user']       = $this->global();
+    $data['user']       = StaticFunctionController::global();
     $data['_provider']  = TblProviderModel::where('archived',0)->paginate(10);
     foreach ($data['_provider'] as $key => $provider) 
     {
@@ -579,11 +558,11 @@ class CarewellController extends ActiveAuthController
     }
     if($providerData->save())
     {
-      return "<div class='alert alert-success' style='text-align: center;'>Provider Added Successfully!</div>";    
+      return StaticFunctionController::returnMessage('success','PROVIDER');    
     }
     else
     {
-      return "error";
+      return StaticFunctionController::returnMessage('danger','PROVIDER'); 
     }
     
 
@@ -600,7 +579,9 @@ class CarewellController extends ActiveAuthController
                               ->get();
     foreach ($data['_provider_doctor'] as $key => $doctor) 
     {
-      $data['_provider_doctor'][$key]['doctor_specialization'] =  TblDoctorSpecializationModel::where('doctor_id',$doctor->doctor_id)->get();
+      $data['_provider_doctor'][$key]['doctor_specialization'] =  TblDoctorSpecializationModel::where('doctor_id',$doctor->doctor_id)
+                                                                ->join('tbl_specialization','tbl_specialization.specialization_id','=','tbl_doctor_specialization.specialization_id')
+                                                                ->get();
     }
 
     return view('carewell.modal_pages.provider_details',$data);
@@ -610,7 +591,7 @@ class CarewellController extends ActiveAuthController
   public function doctor(Request $request)
   {
     $data['page']       = 'Doctor';
-    $data['user']       = $this->global();
+    $data['user']       = StaticFunctionController::global();
     $data['_provider']  = TblProviderModel::where('archived',0)->get();
     $data['_doctor']    = TblDoctorModel::paginate(10);
     foreach ($data['_doctor'] as $key => $doctor) 
@@ -681,7 +662,7 @@ class CarewellController extends ActiveAuthController
     }
     if($doctorData->save())
     {
-      return "<div class='alert alert-success' style='text-align: center;'>Doctor Added Successfully!</div>";    
+      return StaticFunctionController::returnMessage('success','DOCTOR');    
     }
   }
   public function import_doctor()
@@ -837,7 +818,7 @@ class CarewellController extends ActiveAuthController
   public function billing()
   {
   	$data['page']         = 'Billing';
-    $data['user']         = $this->global();
+    $data['user']         = StaticFunctionController::global();
     $data['_cal_company'] = TblCalModel::join('tbl_company','tbl_company.company_id','=','tbl_cal.company_id')->paginate(10);
     $data['_company']     = TblCompanyModel::where('archived',0)->get();
   	return view('carewell.pages.billing_center',$data);
@@ -961,7 +942,7 @@ class CarewellController extends ActiveAuthController
           $sheet->setCellValue('E'.$key, $member->member_first_name);
           $sheet->setCellValue('F'.$key, $member->member_middle_name);
           $sheet->setCellValue('G'.$key, $member->member_last_name);
-          $sheet->setCellValue('H'.$key, date('m-d-Y', strtotime($member->member_birthdate)));
+          $sheet->setCellValue('H'.$key, date('m/d/Y', strtotime($member->member_birthdate)));
           $sheet->setCellValue('I'.$key, $member->coverage_plan_name);
           $sheet->setCellValue('J'.$key, $member->deployment_name);
           $sheet->setCellValue('K'.$key, $member->coverage_plan_monthly_premium);
@@ -1137,7 +1118,7 @@ class CarewellController extends ActiveAuthController
   {
   	$data['page']       = 'Availment';
     $data['_company']   = TblCompanyModel::where('archived',0)->get();
-    $data['user']       = $this->global();
+    $data['user']       = StaticFunctionController::global();
     // $data['_approval']  = TblCompanyModel::where('archived',0)->paginate(10);
     $data['_approval']  = TblApprovalModel::join('tbl_provider','tbl_provider.provider_id','=','tbl_approval.provider_id')
                           ->join('tbl_member','tbl_member.member_id','=','tbl_approval.member_id')
@@ -1183,7 +1164,7 @@ class CarewellController extends ActiveAuthController
   public function availment_create_approval_submit(Request $request)
   {
     StaticFunctionController::updateReferenceNumber('approval');
-    $data['user'] = $this->global();
+    $data['user'] = StaticFunctionController::global();
     $approvalData = new TblApprovalModel;
     
     $approvalData->approval_number            = StaticFunctionController::updateReferenceNumber('approval');
@@ -1223,11 +1204,11 @@ class CarewellController extends ActiveAuthController
     }
     if($approvalData->save()&&$availedData->save()&&$doctorData->save())
     {
-      return "<div class='alert alert-success' style='text-align: center;'>Company Added Successfully!</div>";
+      return StaticFunctionController::returnMessage('success','APPROVAL');
     }
     else
     {
-      return "<div class='alert alert-danger' style='text-align: center;'>Something went wrong!</div>";
+      return StaticFunctionController::returnMessage('danger','APPROVAL');
     }
     
   }
@@ -1252,6 +1233,7 @@ class CarewellController extends ActiveAuthController
     $data['_doctor_assigned']   = TblApprovalDoctorModel::where('tbl_approval_doctor.approval_id',$approval_id)
                                 ->join('tbl_procedure','tbl_procedure.procedure_id','=','tbl_approval_doctor.procedure_id')
                                 ->join('tbl_doctor','tbl_doctor.doctor_id','=','tbl_approval_doctor.doctor_id')
+                                ->join('tbl_specialization','tbl_specialization.specialization_id','=','tbl_approval_doctor.specialization_id')
                                 ->get();
     return view('carewell.modal_pages.availment_approval_details',$data);
   }
@@ -1262,7 +1244,7 @@ class CarewellController extends ActiveAuthController
   public function payable()
   {
   	$data['page']      = 'Payable';
-    $data['user']      = $this->global();
+    $data['user']      = StaticFunctionController::global();
     $data['_company']  = TblCompanyModel::where('archived',0)->get();
   	return view('carewell.pages.payable',$data);
   }
@@ -1278,11 +1260,22 @@ class CarewellController extends ActiveAuthController
                           ->paginate(10);
     return view('carewell.modal_pages.payable_create',$data);
   }
+  public function payable_create_get_approval($provider_id)
+  {
+    $data['_approval']  = TblApprovalModel::where('tbl_provider.provider_id',$provider_id)
+                          ->where('tbl_approval.archived',0)
+                          ->join('tbl_provider','tbl_provider.provider_id','=','tbl_approval.provider_id')
+                          ->join('tbl_member','tbl_member.member_id','=','tbl_approval.member_id')
+                          ->join('tbl_member_company','tbl_member_company.member_id','tbl_member.member_id')
+                          ->join('tbl_company','tbl_company.company_id','tbl_member_company.company_id')
+                          ->paginate(10);
+    return view('carewell.additional_pages.payable_get_approval',$data);
+  }
   public function reports()
   {
   	$data['page']     = 'Reports';
     $data['_company'] = TblCompanyModel::where('archived',0)->get();
-    $data['user']     = $this->global();
+    $data['user']     = StaticFunctionController::global();
 
     return view('carewell.pages.reports',$data);
   }
@@ -1290,7 +1283,7 @@ class CarewellController extends ActiveAuthController
   public function settings_coverage_plan()
   {
     $data['page'] = 'Coverage PLan';
-    $data['user'] = $this->global();
+    $data['user'] = StaticFunctionController::global();
 
     $data['_coverage_plan'] = TblCoveragePlanModel::paginate(10);
 
@@ -1340,7 +1333,7 @@ class CarewellController extends ActiveAuthController
     }
     if($coverageData->save())
     {
-      return "<div class='alert alert-success' style='text-align: center;'>Coverage Added Successfully!</div>";
+      return StaticFunctionController::returnMessage('success','COVERAGE PLAN');
     }
   }
   public function settings_coverage_plan_details($coverage_plan_id)

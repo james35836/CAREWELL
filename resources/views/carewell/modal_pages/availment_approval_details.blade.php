@@ -52,10 +52,10 @@ $(".remove-procedure").on("click", function() {
 		</div>
 		<div class="form-holder">
 			<div class="col-md-2 form-content">
-				<label>Caller ID</label>
+				<label>Caller NUMBER</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="text" class="form-control" value="{{$approval_details->user_id_number}}" disabled/>
+				<input type="text" class="form-control" value="{{$approval_details->user_number}}" disabled/>
 			</div>
 			<div class="col-md-2 form-content">
 				<label>Contact Number</label>
@@ -93,7 +93,7 @@ $(".remove-procedure").on("click", function() {
 				<label>Carewell ID</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="text" class="form-control"  value="{{$approval_details->member_company_carewell_id}}" disabled/>
+				<input type="text" class="form-control"  value="{{$approval_details->member_carewell_id}}" disabled/>
 			</div>
 		</div>
 		<div class="form-holder">
@@ -165,28 +165,26 @@ $(".remove-procedure").on("click", function() {
 	<div class="form-holder">
 		<form class="procedure-availed-submit-form" method="post" id="insertAvailed">
 			<div class="table-responsive no-padding">
-				<table class="table table-hover table-bordered procedure-form" style="display: inline !important;">
+				<table class="table table-hover table-bordered procedure-form">
 					<thead>
 						<tr>
 							<th>PROCEDURE/LABORATORY</th>
 							<th>AMOUNT</th>
-							<th>REMARKS</th>
 							<th>PHILHEALTH CHARITY/SWA</th>
 							<th>CHARGE TO PATIENT</th>
-							<th>DISAPPROVE</th>
 							<th>CHARGE TO CAREWELL</th>
+							<th>REMARKS</th>
 						</tr>
 					</thead>
 					<tbody>
 						@foreach($_availed as $availed)
 						<tr>
-							<td><input type="text" class="form-control" value="{{$availed->procedure_name}}" disabled/></td>
-							<td><input type="text" name="procedure_availed_amount[]" id="" class="form-control" value="{{$availed->procedure_amount}}" disabled/></td>
-							<td><textarea  name="procedure_availed_remarks[]" id="" cols="20" rows="2" disabled>{{$availed->procedure_availed_remarks}}</textarea></td>
-							<td><input type="text" name="procedure_availed_philhealth_charity[]" id="" class="form-control" value="{{$availed->procedure_availed_philhealth_charity}}" disabled/></td>
-							<td><input type="text" name="procedure_availed_charge_to_patient[]" id="" class="form-control" value="{{$availed->procedure_availed_charge_to_patient}}" disabled/></td>
-							<td><input type="text" name="procedure_availed_disapproved[]" id="" class="form-control" value="{{$availed->procedure_availed_disapproved}}" disabled/></td>
-							<td><input type="text" name="procedure_availed_charge_to_carewell[]" id="" class="form-control" value="{{$availed->procedure_availed_charge_to_carewell}}" disabled/></td>
+							<td><input type="text" class="form-control" value="{{$availed->availment_name}}" disabled/></td>
+							<td><input type="text" name="procedure_availed_amount[]" id="" class="form-control" value="{{$availed->availment_amount}}" disabled/></td>
+							<td><input type="text" name="availed_phil_charity[]" id="" class="form-control" value="{{$availed->availed_phil_charity}}" disabled/></td>
+							<td><input type="text" name="availed_charge_patient[]" id="" class="form-control" value="{{$availed->availed_charge_patient}}" disabled/></td>
+							<td><input type="text" name="availed_charge_carewell[]" id="" class="form-control" value="{{$availed->availed_charge_carewell}}" disabled/></td>
+							<td><textarea  name="availed_remarks[]" id="" cols="20" rows="2" disabled>{{$availed->availed_remarks}}</textarea></td>
 						</tr>
 						@endforeach
 					</tbody>
@@ -201,7 +199,7 @@ $(".remove-procedure").on("click", function() {
 	<div class="form-holder">
 		<form class="procedure-doctor-submit-form" method="post" id="insertDoctor">
 			<div class="table-responsive no-padding">
-				<table class="table table-hover table-bordered procedure-form" style="display: inline !important;text-align:center !important;">
+				<table class="table table-hover table-bordered procedure-form">
 					<thead>
 						<tr>
 							<th>PHYSICIAN/DOCTOR</th>
@@ -211,7 +209,6 @@ $(".remove-procedure").on("click", function() {
 							<th>RATE/R VS</th>
 							<th>PHILHEALTH CHARITY/SWA</th>
 							<th>CHARGE TO PATIENT</th>
-							<th>DISAPPROVED</th>
 							<th>CHARGE TO CAREWELL</th>
 						</tr>
 					</thead>
@@ -219,14 +216,13 @@ $(".remove-procedure").on("click", function() {
 						@foreach($_doctor_assigned as $doctor_assigned)
 						<tr>
 							<td><input type="text" class="form-control" value="{{$doctor_assigned->doctor_first_name." ".$doctor_assigned->doctor_last_name}}" disabled/></td>
-							<td><input type="text" name="[]" class="form-control" value="{{$doctor_assigned->procedure_doctor_rate_r_vs}}" disabled/></td>
-							<td><input type="text" name="procedure_doctor_actual_pf_charges[]" class="form-control" value="{{$doctor_assigned->procedure_doctor_actual_pf_charges}}" disabled/></td>
-							<td><input type="text" name="procedure_doctor_rate_r_vs[]" class="form-control" value="{{$doctor_assigned->procedure_name}}" disabled/></td>
-							<td><input type="text" name="procedure_doctor_rate_r_vs[]" class="form-control" value="{{$doctor_assigned->procedure_doctor_rate_r_vs}}" disabled/></td>
-							<td><input type="text" name="procedure_doctor_philhealth_charity[]" class="form-control" value="{{$doctor_assigned->procedure_doctor_philhealth_charity}}" disabled/></td>
-							<td><input type="text" name="procedure_doctor_charge_to_patient[]" class="form-control" value="{{$doctor_assigned->procedure_doctor_charge_to_patient}}" disabled/></td>
-							<td><input type="text" name="procedure_doctor_disapproved[]" class="form-control" value="{{$doctor_assigned->procedure_doctor_disapproved}}" disabled/></td>
-							<td><input type="text" name="procedure_doctor_charge_to_carewell[]" class="form-control" value="{{$doctor_assigned->procedure_doctor_charge_to_carewell}}" disabled/></td>
+							<td><input type="text" name="[]" class="form-control" value="{{$doctor_assigned->specialization_name}}" disabled/></td>
+							<td><input type="text" name="approval_doctor_actual_pf[]" class="form-control" value="{{$doctor_assigned->approval_doctor_actual_pf}}" disabled/></td>
+							<td><input type="text" name="procedure[]" class="form-control" value="{{$doctor_assigned->procedure_name}}" disabled/></td>
+							<td><input type="text" name="approval_doctor_rate_rvs[]" class="form-control" value="{{$doctor_assigned->approval_doctor_rate_rvs}}" disabled/></td>
+							<td><input type="text" name="approval_doctor_phil_charity[]" class="form-control" value="{{$doctor_assigned->approval_doctor_phil_charity}}" disabled/></td>
+							<td><input type="text" name="approval_doctor_charge_patient[]" class="form-control" value="{{$doctor_assigned->approval_doctor_charge_patient}}" disabled/></td>
+							<td><input type="text" name="approval_doctor_charge_carewell[]" class="form-control" value="{{$doctor_assigned->approval_doctor_charge_carewell}}" disabled/></td>
 						</tr>
 						@endforeach
 					</tbody>

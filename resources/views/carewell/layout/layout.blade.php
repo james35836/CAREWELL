@@ -234,11 +234,11 @@
           </a>
           
           <ul class="treeview-menu">
-            <li><a href="/reports"><i class="fa fa-circle-o"></i>AVAILMENT MONITORING</a></li>
-            <li><a href="#"><i class="fa fa-circle-o"></i>COMPANY AVAILMENT</a></li>
-            <li><a href="#"><i class="fa fa-circle-o"></i>AVAILMENT SUMMARY</a></li>
+            <li><a href="/reports"><i class="fa fa-circle-o"></i>AVAILMENT </a></li>
+            <li><a href="#"><i class="fa fa-circle-o"></i>MONITORING</a></li>
+            <li><a href="#"><i class="fa fa-circle-o"></i>BREAKDOWN</a></li>
             <li><a href="#"><i class="fa fa-circle-o"></i>ENDING NUMBER</a></li>
-            <li><a href="#"><i class="fa fa-circle-o"></i>AVAILMENT BREAKDOWN </a></li>
+            <li><a href="#"><i class="fa fa-circle-o"></i>SUMMARY</a></li>
           </ul>
         </li>
         <li class="treeview">

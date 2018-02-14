@@ -30,7 +30,7 @@
 			<label>PROVIDER</label>
 		</div>
 		<div class="col-md-4 form-content">
-			<select class="form-control select2" id="provider_id">
+			<select class="form-control select2 get-all-approval" id="provider_id">
 				<option>Select Provider</option>
 				@foreach($_provider as $provider)
 				<option value="{{$provider->provider_id}}">{{$provider->provider_name}}</option>
@@ -49,16 +49,16 @@
 			<label>Recieved</label>
 		</div>
 		<div class="col-md-4 form-content">
-			<input type="text" class="form-control" id="doctor_last_name"/>
+			<input type="text" class="form-control datepicker" id="doctor_last_name"/>
 		</div>
 		<div class="col-md-2 form-content">
 			<label>Due</label>
 		</div>
 		<div class="col-md-4 form-content">
-			<input type="text" class="form-control" id="doctor_first_name"/>
+			<input type="text" class="form-control datepicker" id="doctor_first_name"/>
 		</div>
 	</div>
-	<div class="form-holder">
+	{{-- <div class="form-holder">
 		<div class="col-md-2 form-content">
 			<label>Preperation Date</label>
 		</div>
@@ -71,9 +71,9 @@
 		<div class="col-md-4 form-content">
 			<input type="text" class="form-control" id="doctor_middle_name"/>
 		</div>
-	</div>
+	</div> --}}
 </div>
-<div class="payable-create-table">
+<div class="payable-create-table" id="payable-create-table">
 	<div class="box-globals">
 		<div class="row">
 			<div class="col-xs-12">
@@ -106,7 +106,7 @@
 							<td><input type="checkbox"></td>
 							<td>{{$approval->approval_number}}</td>
 							<td>{{$approval->member_universal_id}}</td>
-							<td>{{$approval->member_company_carewell_id}}</td>
+							<td>{{$approval->member_carewell_id}}</td>
 							<td>{{$approval->member_first_name." ".$approval->member_last_name }}</td>
 							<td>{{$approval->company_name}}</td>
 							<td>{{$approval->provider_name}}</td>

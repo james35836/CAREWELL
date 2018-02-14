@@ -126,6 +126,7 @@ Route::get('/availment/approval_details/{approval_id}','CarewellController@avail
 /*PAYABLE*/
 Route::get('/payable', 									'CarewellController@payable');
 Route::get('/payable/create_payable', 					'CarewellController@payable_create');
+Route::get('/payable/get_approval/{provider_id}', 		'CarewellController@payable_create_get_approval');
 
 
 

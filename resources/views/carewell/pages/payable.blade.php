@@ -3,14 +3,7 @@
 @include('carewell.modals.payable_center_modals')
 <div class="container">
   <div class="row">
-    <div class=" col-md-2 col-xs-6 pull-left">
-      <select class="form-control top-element">
-        <option>SELECT COMPANY</option>
-        @foreach($_company as $company)
-        <option value="{{$company->company_id}}">{{$company->company_name}}</option>
-        @endforeach
-      </select>
-    </div>
+    
     <div class=" col-md-2 col-xs-6 pull-right">
       <button type="button" class="btn btn-primary create-payable top-element"><i class="fa fa-plus btn-icon"></i>CREATE APPROVAL</button>
     </div>
@@ -48,25 +41,24 @@
                 <div class="box-body table-responsive no-padding">
                   <table class="table table-hover table-bordered">
                     <tr>
-                      <th>PAYABLE ID</th>
+                      <th>ID</th>
                       <th>APPROVAL #</th>
                       <th>UNIVERSAL ID</th>
+                      <th>CAREWELL ID</th>
                       <th>MEMBER NAME</th>
-                      <th>COMPANY</th>
-                      <th>DX</th>
+                      <th>APPROVAL CREATED</th>
                       <th>PROCEDURE/LAB</th>
                       <th>AMOUNT</th>
                       <th>PHYSICIAN</th>
-                      <th>PF</th>
+                      <th>PROFESIONAL FEE</th>
                       <th>D/A</th>
                       <th>CHARGE TO CAREWELL</th>
                       <th>REMARKS</th>
-                      <th>PROVIDER</th>
-                      <th>DATE</th>
+                      <th>PREPARATION DATE</th>
                       <th>ACTION</th>
                     </tr>
                     <tr>
-                      <td>CAL 01</td>
+                      <td>1</td>
                       <td>DEC-NOV</td>
                       <td>DEC-NOV</td>
                       <td>DIGIMA</td>
@@ -77,14 +69,13 @@
                       <td>CAL 01</td>
                       <td>DEC-NOV</td>
                       <td>DEC-NOV</td>
-                      <td>DIGIMA</td>
                       <td>DEC-NOV</td>
                       <td>DEC-NOV</td>
                       <td><span class="label label-success">active</span></td>
                       <td><span class="label label-success pop-up-lg action-span" data-modalname="APPROVAL DETAILS" data-link="/medical/approval/details">view details</span></td>
                     </tr>
                     <tr>
-                      <td>CAL 01</td>
+                      <td>1</td>
                       <td>DEC-NOV</td>
                       <td>DEC-NOV</td>
                       <td>DIGIMA</td>
@@ -95,14 +86,13 @@
                       <td>CAL 01</td>
                       <td>DEC-NOV</td>
                       <td>DEC-NOV</td>
-                      <td>DIGIMA</td>
                       <td>DEC-NOV</td>
                       <td>DEC-NOV</td>
                       <td><span class="label label-success">active</span></td>
                       <td><span class="label label-success pop-up-lg action-span" data-modalname="APPROVAL DETAILS" data-link="/medical/approval/details">view details</span></td>
                     </tr>
                     <tr>
-                      <td>CAL 01</td>
+                      <td>1</td>
                       <td>DEC-NOV</td>
                       <td>DEC-NOV</td>
                       <td>DIGIMA</td>
@@ -113,7 +103,6 @@
                       <td>CAL 01</td>
                       <td>DEC-NOV</td>
                       <td>DEC-NOV</td>
-                      <td>DIGIMA</td>
                       <td>DEC-NOV</td>
                       <td>DEC-NOV</td>
                       <td><span class="label label-success">active</span></td>

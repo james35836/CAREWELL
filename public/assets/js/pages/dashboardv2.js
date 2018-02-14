@@ -1,29 +1,4 @@
 var dashboardv2 	= new dashboardv2();
-var formData   		= new FormData();
-var dashboardModals = '<div class="modal fade modal-top global-modal">'+
-		          '<div class="modal-dialog global-modal-dialog">'+
-		            '<div class="modal-content global-modal-content">'+
-		              '<div class="modal-header global-modal-header">'+
-		                '<button type="button" class="close" data-dismiss="modal" aria-label="Close">'+
-		                  '<span aria-hidden="true">&times;</span></button>'+
-		                '<h4 class="modal-title global-modal-title">Default Modal</h4>'+
-		              '</div>'+
-		              '<div class="modal-body global-modal-body">'+
-		                '<div class="global-ajax-loader" style="display:none;text-align: center; padding:50px;">'+
-		                '<img src="/assets/loader/loading.gif"/>'+
-		                '</div>'+
-		                '<div class="row box-holder global-modal-body-content">'+
-		                '</div>'+
-		              '</div>'+
-		              '<div class="modal-footer global-modal-footer">'+
-		                '<button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>'+
-		                '<button type="button" class="btn btn-primary global-footer-button">Save changes</button>'+
-		              '</div>'+
-		            '</div>'+
-		          '</div>'+
-		        '</div>';
-
-			
 
 function dashboardv2()
 {
@@ -51,7 +26,7 @@ function dashboardv2()
 		$("body").on('click','.latest-approval',function()
 		{
 			$('.approval-modal').remove();
-            $(".append-modal").append(dashboardModals);
+            $(".append-modal").append(globalModals);
 			$('.global-modal').removeClass().addClass('modal fade modal-top approval-modal');
 			$('.global-modal-dialog').removeClass().addClass('modal-dialog modal-lg');
 			$('.global-modal-content').removeClass().addClass('modal-content');
@@ -70,7 +45,7 @@ function dashboardv2()
 				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 				},
 
-				url:'/medical/approval_details/'+approval_id,
+				url:'/availment/approval_details/'+approval_id,
 				method: "get",
                 success: function(data)
 				{

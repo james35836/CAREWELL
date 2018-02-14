@@ -246,7 +246,7 @@ function billing_center()
 			$('.confirm-modal').remove();
 			$('.append-modal').append(confirmModals);
             $('.confirm-modal-dialog').removeClass().addClass('modal-dialog modal-sm');
-			$('.confirm-modal-title').html('Are you sure you want to import this FILE?');
+			$('.confirm-modal-title').html('Are you sure you want to IMPORT this file?');
 			$('.confirm-submit').addClass('import-cal-member-submit');
 			$('.confirm-modal').modal('show');
 
@@ -261,9 +261,9 @@ function billing_center()
 	{
 		$(document).on('click','.import-cal-member-submit',function() 
 		{
-			$('.confirm-modal').modal('hide');
-            $('.billing-action-ajax-loader').show();
-            $('.billing-action-modal-body-content').hide();
+			$('.confirm-modal').remove();
+            $(".cal-member-modal-body").html("<div class='cal-member-ajax-loader' style='display:none;text-align: center; padding:50px;'><img src='/assets/loader/loading.gif'/></div");
+            $('.cal-member-ajax-loader').show();
 
             $.ajax({
 				headers: {
@@ -279,11 +279,10 @@ function billing_center()
 				{
 					setTimeout(function()
 					{
-						$('.modal-dialog').removeClass().addClass('modal-dialog modal-sm');
-						$('.billing-action-ajax-loader').hide();
-						$('.billing-action-modal-body-content').show();
-					    $(".billing-action-modal-body-content").html(data);
-					    $(".billing-action-modal-footer").html("<button type='button' class='btn btn-default pull-left btn-close-import' data-dismiss='modal'>Close</button>");
+						$('.cal-member-ajax-loader').hide();
+						$('.cal-member-modal-dialog').removeClass().addClass('modal-sm modal-dialog')
+						$('.cal-member-modal-body').html(data);
+						$('.cal-member-modal-footer').html('<button type="button" class="btn btn-default pull-left " data-dismiss="modal">Close</button>');
 					}, 1000);
 				}
 			});
