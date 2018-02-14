@@ -1,7 +1,4 @@
 var settings_coverage	= new settings_coverage();
-var formData   			= new FormData();
-var ajaxData 			= [];
-
 
 function settings_coverage()
 {
@@ -90,7 +87,7 @@ function settings_coverage()
 	{
 		$(document).on('click','.create-coverage-plan-submit',function() 
 		{
-			$('.confirm-modal').modal('hide');
+			$('.confirm-modal').remove();
             $(".coverage-plan-modal-body").html("<div class='coverage-plan-ajax-loader' style='display:none;text-align: center; padding:50px;'><img src='/assets/loader/loading.gif'/></div");
             $('.coverage-plan-ajax-loader').show();
             $.ajax({

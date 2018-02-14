@@ -1,36 +1,40 @@
 
 	<div class=" row box-globals">
+		<div class="col-md-8 pull-left top-label" style="">
+			<p>CAL NUMBER  : {{$cal_details->cal_number}}</p>
+		</div>
 		<div class=" col-md-4 pull-right">
-			<button type="button" data-member_company_id="{{$company_id}}" data-member_cal_id="{{$cal_id}}" class="btn btn-primary import-cal-memberss  button-lg" ><i class="fa fa-plus btn-icon"></i>IMPORT MEMBER</button>
+			<button type="button" data-member_company_id="{{$cal_details->company_id}}" data-member_cal_id="{{$cal_details->cal_id}}" class="btn btn-primary import-cal-memberss  button-lg" ><i class="fa fa-plus btn-icon"></i>IMPORT MEMBER</button>
 		</div>
 	</div>
 	<div class="row box-globals">
 		<div class="form-holder">
 			<div class="col-md-3  col-xs-6 form-content">
-				<label>CAL NUMBER : </label>
-			</div>
-			<div class="col-md-3  col-xs-6 form-content">
-				<label> CAL-00005</label>
-			</div>
-			<div class="col-md-3  col-xs-6 form-content">
 				<label>COMPANY NAME : </label>
 			</div>
 			<div class="col-md-3  col-xs-6 form-content">
-				<label> DIGIMA</label>
+				<label> {{$cal_details->company_name}}</label>
 			</div>
+			<div class="col-md-3  col-xs-6 form-content">
+				<label>PAYMENT DATE : </label>
+			</div>
+			<div class="col-md-3  col-xs-6 form-content">
+				<label> {{$cal_details->cal_payment_date}}</label>
+			</div>
+			
 		</div>
 		<div class="form-holder">
 			<div class="col-md-3  col-xs-6 form-content">
-				<label>COMPANY JOBSITE : </label>
+				<label>COVERAGE START : </label>
 			</div>
 			<div class="col-md-3  col-xs-6 form-content">
-				<label> BULACAN</label>
+				<label> {{$cal_details->cal_company_period_start}}</label>
 			</div>
 			<div class="col-md-3  col-xs-6 form-content">
-				<label>STATUS : </label>
+				<label>COVERAGE END : </label>
 			</div>
 			<div class="col-md-3  col-xs-6 form-content">
-				<label>ACTIVE </label>
+				<label>{{$cal_details->cal_company_period_end}} </label>
 			</div>
 		</div>
 	</div>
@@ -63,10 +67,10 @@
 							@foreach($_cal_member as $cal_member)
 							<tr>
 								<td>{{$cal_member->member_universal_id}}</td>
-								<td>{{$cal_member->member_company_carewell_id}}</td>
+								<td>{{$cal_member->member_carewell_id}}</td>
 								<td>{{$cal_member->member_first_name." ".$cal_member->member_last_name}}</td>
-								<td>{{date("F j, Y",strtotime($cal_member->cal_member_date_paid))}}</td>
-								<td>{{$cal_member->cal_member_amount}}</td>
+								<td>{{date("F j, Y",strtotime($cal_member->cal_payment_date))}}</td>
+								<td>{{$cal_member->cal_payment_amount}}</td>
 								<td><span class="label label-success">active</span></td>
 								<td>
 									<select name="" class="form-control cal-action">

@@ -20,7 +20,7 @@
       <i class="fa fa-upload import-icons import-element" aria-hidden="true"></i>
     </div>
     <div class="col-md-11">
-      <button type="button" data-cal_cal_id = "{{$cal_id}}" data-cal_company_id = "{{$company_id}}" class="btn btn-success import-element button-lg import-cal-member-confirm">IMPORT TEMPLATE</button>
+      <button type="button" data-cal_id = "{{$cal_id}}" data-company_id="{{$company_id}}" class="btn btn-success import-element button-lg import-cal-member-confirm">IMPORT TEMPLATE</button>
     </div>
   </div>
 </div>

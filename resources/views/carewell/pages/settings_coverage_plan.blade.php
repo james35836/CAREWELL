@@ -4,7 +4,7 @@
 <div class="container">
   <div class="row">
     <div class=" col-md-2 pull-right">
-      <button type="button" class="btn btn-primary  create-coverage-plan button-lg"><i class="fa fa-plus btn-icon"></i>CREATE NEW PLAN</button>
+      <button type="button" class="btn btn-primary  create-coverage-plan top-element"><i class="fa fa-plus btn-icon"></i>CREATE NEW PLAN</button>
     </div>
   </div>
   <div class="row">

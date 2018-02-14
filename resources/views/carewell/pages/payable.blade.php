@@ -3,10 +3,20 @@
 @include('carewell.modals.payable_center_modals')
 <div class="container">
   <div class="row">
-    <div class=" col-md-2 col-xs-6 pull-right">
-      <button type="button" class="btn btn-primary create-payable button-lg"><i class="fa fa-plus btn-icon"></i>CREATE PAYABLE</button>
+    <div class=" col-md-2 col-xs-6 pull-left">
+      <select class="form-control top-element">
+        <option>SELECT COMPANY</option>
+        @foreach($_company as $company)
+        <option value="{{$company->company_id}}">{{$company->company_name}}</option>
+        @endforeach
+      </select>
     </div>
+    <div class=" col-md-2 col-xs-6 pull-right">
+      <button type="button" class="btn btn-primary create-payable top-element"><i class="fa fa-plus btn-icon"></i>CREATE APPROVAL</button>
+    </div>
+    
   </div>
+  
   <div class="row">
     <div class="">
       <!-- Custom Tabs -->

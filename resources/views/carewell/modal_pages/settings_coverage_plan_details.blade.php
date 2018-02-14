@@ -1,47 +1,46 @@
-<script>	
+<script>
 $(document).ready(function()
 {
-	$('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
-      checkboxClass: 'icheckbox_minimal-blue',
-      radioClass   : 'iradio_minimal-blue'
-    })
-
-	$('body').on("click",".add-row", function()
+$('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+checkboxClass: 'icheckbox_minimal-blue',
+radioClass   : 'iradio_minimal-blue'
+})
+$('body').on("click",".add-row", function()
+{
+	var $table = $(this).closest('table');
+	$table.find('tr.table-row:first').clone().appendTo($table).find('.select2').select2();
+	
+});
+$('body').on("click",".remove-row", function()
+{
+	var $table = $(this).closest('table');
+	var count  = $table.find('tr.table-row').length;
+	if($(this).closest('table tr.table-row').index()==0)
 	{
-		var $table = $(this).closest('table');
-		$table.find('tr.table-row:first').clone().appendTo($table).find('.select2').select2();
-		
-	});
-	$('body').on("click",".remove-row", function()
+		toastr.error('You cannot remove first rows.', 'Something went wrong!', {timeOut: 3000})
+	}
+	else
 	{
-		var $table = $(this).closest('table');
-		var count  = $table.find('tr.table-row').length;
-		if($(this).closest('table tr.table-row').index()==0)
-		{
-			toastr.error('You cannot remove first rows.', 'Something went wrong!', {timeOut: 3000})
-		}
-		else
-		{
-			$(this).closest("tr").remove();
-		}
-		
-	});
+		$(this).closest("tr").remove();
+	}
+	
+});
 });
 </script>
 <form class="coverage-plan-form" method="POST">
-	<div class="row box-globals">
+	<div class="row box-globals" >
 		<div class="row form-holder ">
 			<div class="col-md-2 form-content">
 				<label>Coverage Plan Name</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="text" value="{{$coverage_plan_details->coverage_name}}" name="coverage_name" id="coverage_name" class="form-control">
+				<input type="text" value="{{$coverage_plan_details->coverage_plan_name}}" name="coverage_name" id="coverage_name" class="form-control">
 			</div>
 			<div class="col-md-2 form-content">
-				<label>Monthly Premium</label>
+				<label> Plan Premium</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="text" value="{{$coverage_plan_details->coverage_monthly_premium}}" name="coverage_monthly_premium" id="coverage_monthly_premium" class="form-control">
+				<input type="text" value="{{$coverage_plan_details->coverage_plan_monthly_premium}}" name="coverage_monthly_premium" id="coverage_monthly_premium" class="form-control">
 			</div>
 		</div>
 		<div class="row form-holder ">
@@ -49,13 +48,13 @@ $(document).ready(function()
 				<label>Age Bracket</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="text" value="{{$coverage_plan_details->coverage_age_bracket}}" name="coverage_age_bracket" id="coverage_age_bracket" class="form-control">
+				<input type="text" value="{{$coverage_plan_details->coverage_plan_age_bracket}}" name="coverage_age_bracket" id="coverage_age_bracket" class="form-control">
 			</div>
 			<div class="col-md-2 form-content">
 				<label>DL Case Handling FEE</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="text" value="{{$coverage_plan_details->coverage_case_handling}}" name="coverage_case_handling" id="coverage_case_handling" class="form-control">
+				<input type="text" value="{{$coverage_plan_details->coverage_plan_case_handling}}" name="coverage_case_handling" id="coverage_case_handling" class="form-control">
 			</div>
 		</div>
 		<div class="row form-holder ">
@@ -63,13 +62,13 @@ $(document).ready(function()
 				<label>Maximum Benefit Limit</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="text" value="{{$coverage_plan_details->coverage_maximum_benefit}}" name="coverage_maximum_benefit" id="coverage_maximum_benefit" class="form-control">
+				<input type="text" value="{{$coverage_plan_details->coverage_plan_maximum_benefit}}" name="coverage_maximum_benefit" id="coverage_maximum_benefit" class="form-control">
 			</div>
 			<div class="col-md-2 form-content">
 				<label>Patient Confinement</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="text" value="{{$coverage_plan_details->coverage_patient_confinement}}" id="coverage_patient_confinement" name="coverage_patient_confinement" class="form-control">
+				<input type="text" value="{{$coverage_plan_details->coverage_plan_confinement}}" id="coverage_patient_confinement" name="coverage_patient_confinement" class="form-control">
 			</div>
 		</div>
 	</div>

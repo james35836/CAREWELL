@@ -6,26 +6,6 @@ var message			= "";
 var specialData 	= [];
 var providerData	= [];
 
-var modals 			= '<div  class="modal fade modal-top confirm-modal" id="" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">'
-						  +'<div class="confirm-modal-dialog modal-dialog modal-sm">'
-						    +'<div class="modal-content">'
-						      +'<div class="modal-header">'
-						        +'<button type="button" class="close" data-dismiss="modal" aria-label="Close">'
-						        +'<span aria-hidden="true">&times;</span></button>'
-						        +'<h4 class="modal-title confirm-modal-title"></h4>'
-						      +'</div>'
-						      
-						      +'<div class="modal-body modal-body-sm">'
-						        +'<input type="hidden" class="link"/>'
-						      +'</div>'
-						      +'<div class="modal-footer">'
-						        +'<button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancel</button>'
-						        +'<button type="button" class="btn btn-primary confirm-submit">Save</button>'
-						      +'</div>'
-						    +'</div>'
-						  +'</div>'
-						+'</div>';
-
 function doctor_center()
 {
 	init();
@@ -41,18 +21,15 @@ function doctor_center()
 		$(document).ready(function()
 		{
 			checking_null_validation(value,message);
-            export_doctor_template();
-            
             add_doctor();
             add_doctor_confirm();
             add_doctor_submit();
+            export_doctor_template();
             import_doctor();
             import_doctor_confirm();
 			import_doctor_submit();
 			view_doctor_details();
-			view_doctor_transaction_details();
-			trigger();
-         });
+		});
 
 	}
 	function checking_null_validation(value,message)
@@ -75,19 +52,18 @@ function doctor_center()
 			$('.doctor-modal').remove();
             $(".append-modal").append(globalModals);
 			$('.global-modal').removeClass().addClass('modal fade modal-top doctor-modal');
-			$('.global-modal-dialog').removeClass().addClass('modal-dialog modal-lg');
+			$('.global-modal-dialog').removeClass().addClass('modal-dialog modal-lg doctor-modal-dialog');
 			$('.global-modal-content').removeClass().addClass('modal-content');
 			$('.global-modal-header').removeClass().addClass('modal-header');
 			$('.global-modal-title').html('ADD DOCTOR');
 			$('.global-modal-title').removeClass().addClass('modal-title second');
-			$('.global-modal-body').removeClass().addClass('modal-body');
+			$('.global-modal-body').removeClass().addClass('modal-body doctor-modal-body');
 			$('.doctor-modal').modal('show');
 			$('.global-ajax-loader').show();
             $('.global-modal-body-content').hide();
             $('.global-modal-footer').hide();
-            var approval_id = $(this).data('approval_id');
-
-			$.ajax({
+            
+            $.ajax({
 				headers: {
 				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 				},
@@ -98,11 +74,12 @@ function doctor_center()
                 {
 					setTimeout(function()
 					{
-						$('.global-ajax-loader').hide().removeClass().addClass('.modal-loader');
-						$('.global-modal-body-content').show().html(data).removeClass().addClass('row box-holder  modal-body-content');
-						$('.global-modal-footer').show().removeClass().addClass('modal-footer');
-                    	$('.global-footer-button').html('CREATE PLAN').removeClass().addClass('btn btn-primary');
-                    }, 1000);
+						$('.global-ajax-loader').hide().removeClass().addClass('.modal-loader doctor-ajax-loader');
+						$('.global-modal-body-content').show().removeClass().addClass('row box-holder  modal-body-content').html(data);
+						$('.global-modal-footer').show().removeClass().addClass('modal-footer doctor-modal-footer');
+                    	$('.global-footer-button').html('ADD DOCTOR').removeClass().addClass('btn btn-primary add-doctor-confirm');
+
+					}, 1000);
 				}
 			});
 		});
@@ -114,14 +91,23 @@ function doctor_center()
 		$(document).on('click','.add-doctor-confirm',function()
 		{
 			
-			$('input[name="provider_id"]:checked').each(function() 
-			{
-				providerData.push(this.value);
-			});
-			$('input[name="specialization_id"]:checked').each(function() 
-			{
-				specialData.push(this.value);
-			});
+			$("select.specialization_name").each(function(i, spe)
+            {
+            	var selectedSpecial = $(spe).val();
+            	if(selectedSpecial!="SELECT SPECIALIZATION")
+            	{
+            		specialData.push(selectedSpecial);
+            	}
+            });
+            $("select.provider_name").each(function(i, pro)
+            {
+            	var selectedProvider = $(pro).val();
+            	if(selectedProvider!="SELECT PROVIDER")
+            	{
+            		providerData.push(selectedProvider);
+            	}
+            });
+			
 			if(checking_null_validation(document.getElementById('doctor_first_name').value,"FIRST NAME")=="")
 			{}	
 			else if(checking_null_validation(document.getElementById('doctor_middle_name').value,"MIDDLE NAME")=="")
@@ -130,26 +116,23 @@ function doctor_center()
 			{}
 			else if(checking_null_validation(document.getElementById('doctor_gender').value,"GENDER")=="")
 			{}
-			else if(checking_null_validation(document.getElementById('doctor_birthdate').value,"BIRTHDATE")=="")
-			{}
 			else if(checking_null_validation(document.getElementById('doctor_contact_number').value,"CONTACT NUMBER")=="")
 			{}
 			else if(checking_null_validation(document.getElementById('doctor_email_address').value,"EMAIL ADDRESS")=="")
 			{}
-			else if(checking_null_validation(document.getElementById('doctor_address').value,"ADDRESS")=="")
-			{}
-			else if(providerData.length==0)
+			else if(providerData==null||providerData=="")
 			{
 				toastr.error('Please select PROVIDER at least one.', 'Something went wrong!', {timeOut: 3000})
 			}
-			else if(specialData.length==0)
+			else if(specialData==null||specialData=="")
 			{
 				toastr.error('Please select SPECIALIZATION at least one.', 'Something went wrong!', {timeOut: 3000})
 			}
 			else
 			{
+
 				$('.confirm-modal').remove();
-				$('.append-modal').append(modals);
+				$('.append-modal').append(confirmModals);
 	            $('.confirm-modal-dialog').removeClass().addClass('modal-dialog modal-sm');
 				$('.confirm-modal-title').html('Are you sure you want to add this DOCTOR?');
 				$('.confirm-submit').addClass('add-doctor-submit'); 
@@ -163,16 +146,13 @@ function doctor_center()
 				{
 				    formData.append('specialData[]', specialData[i]);
 				}
-				formData.append("doctor_first_name", 		document.getElementById('doctor_first_name').value);
+			    formData.append("doctor_first_name", 		document.getElementById('doctor_first_name').value);
 	            formData.append("doctor_middle_name", 		document.getElementById('doctor_middle_name').value);
 	            formData.append("doctor_last_name", 		document.getElementById('doctor_last_name').value);
 	            formData.append("doctor_gender", 			document.getElementById('doctor_gender').value);
-	            formData.append("doctor_birthdate", 		document.getElementById('doctor_birthdate').value);
 	            formData.append("doctor_contact_number", 	document.getElementById('doctor_contact_number').value);
 	            formData.append("doctor_email_address", 	document.getElementById('doctor_email_address').value);
-	            formData.append("doctor_address", 			document.getElementById('doctor_address').value);
-	            
-			}
+	        }
 		});
 	}
 	function add_doctor_submit()
@@ -180,7 +160,7 @@ function doctor_center()
 		$(document).on('click','.add-doctor-submit',function() 
 		{
 			
-            $('.confirm-modal').modal('hide');
+            $('.confirm-modal').remove();
             $(".doctor-modal-body").html("<div class='doctor-ajax-loader' style='display:none;text-align: center; padding:50px;'><img src='/assets/loader/loading.gif'/></div");
             $('.doctor-ajax-loader').show();
             
@@ -198,10 +178,11 @@ function doctor_center()
 				{
 					setTimeout(function()
 					{
-						$('.modal-dialog').removeClass('modal-lg');
-						$('.modal-dialog').addClass('modal-sm');
-					    $(".doctor-modal-body").html(data);
-					    $(".doctor-modal-footer").html("<button type='button' class='btn btn-default pull-left btn-close-lg' style='text-align:center' data-dismiss='modal'>Close</button>");
+						$('.doctor-ajax-loader').hide();
+						$('.doctor-modal-dialog').removeClass().addClass('modal-sm modal-dialog')
+						$('.doctor-modal-body').html(data);
+						$('.doctor-modal-footer').html('<button type="button" class="btn btn-default pull-left " data-dismiss="modal">Close</button>');
+
 					}, 1000);
 				}
 			});
@@ -209,80 +190,44 @@ function doctor_center()
 	}
 	function view_doctor_details()
 	{
-		$(document).on('click','.view-doctor-details',function()
+		$(document).on('click','.view-doctor-details',function() 
 		{
-			$('.doctor-modal').modal('show');
-			$('.doctor-ajax-loader').show();
-			$('.doctor-modal-body-content').hide();
-			$('.doctor-modal-title').html('DOCTOR DETAILS');
-			$(".doctor-modal-footer").html("<button type='button' class='btn btn-default pull-left btn-close-import' data-dismiss='modal'>Close</button><button type='button' class='btn btn-primary pull-right' >Save Changes</button>");
-			var doctor_id = $(this).data('doctor_id');
+
+			$('.doctor-details-modal').remove();
+            $(".append-modal").append(globalModals);
+			$('.global-modal').removeClass().addClass('modal fade modal-top doctor-details-modal');
+			$('.global-modal-dialog').removeClass().addClass('doctor-details-modal-dialog modal-dialog modal-lg');
+			$('.global-modal-content').removeClass().addClass('modal-content');
+			$('.global-modal-header').removeClass().addClass('modal-header');
+			$('.global-modal-title').html('DOCTOR DETAILS');
+			$('.global-modal-title').removeClass().addClass('modal-title');
+			$('.global-modal-body').removeClass().addClass('modal-body doctor-details-modal-body');
+			$('.doctor-details-modal').modal('show');
+			$('.global-ajax-loader').show();
+            $('.global-modal-body-content').hide();
+            $('.global-modal-footer').hide();
+            var doctor_id = $(this).data('doctor_id');
 			$.ajax({
 				headers: {
 				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 				},
-
 				url:'/doctor/view_doctor_details/'+doctor_id,
 				method: "get",
                 success: function(data)
 				{
 					setTimeout(function()
 					{
-						$('.doctor-ajax-loader').hide();
-						$('.doctor-modal-body-content').show();
-						$('.doctor-modal-body-content').html(data);
+						$('.global-ajax-loader').hide().removeClass().addClass('.modal-loader doctor-details-ajax-loader');
+						$('.global-modal-body-content').show().removeClass().addClass('row box-holder  modal-body-content').html(data);
+						$('.global-modal-footer').show().removeClass().addClass('modal-footer doctor-details-modal-footer');
+                    	$('.global-footer-button').html('SAVE CHANGES').removeClass().addClass('btn btn-primary doctor-details-confirm');
                     }, 1000);
 				}
 			});
-		});
-	}
-	function view_doctor_transaction_details()
-	{
-		$(document).on('click','.transaction-details',function()
-		{
-			var member_id = $(this).data('transaction_member_id');
-			$('.member-action-modal').modal('show');
-			$('.member-action-ajax-loader').show();
-			$('.member-action-modal-body-content').hide();
-			$('.member-action-modal-title').html('MEMBER TRANSACTION DETAILS');
-			$(".member-action-modal-footer").html("<button type='button' class='btn btn-default pull-left member-action-modal-close'>Close</button><button type='button' class='btn btn-primary pull-right' >Save Changes</button>");
 
-			$.ajax({
-				headers: {
-				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-				},
-
-				url:'/member/transaction_details/'+member_id,
-				method: "get",
-                success: function(data)
-				{
-					setTimeout(function()
-					{
-						$('.member-action-ajax-loader').hide();
-						$('.member-action-modal-body-content').show();
-						$('.member-action-modal-body-content').html(data);
-                    }, 1000);
-				}
-			});
 		});
 	}
 	
-	function trigger()
-	{
-
-		$(document).on('click','.btn-close-import',function()
-		{
-			$('.member-modal').modal('hide');
-			$('.modal-dialog').removeClass().addClass('modal-dialog modal-md');
-			$('.confirm-modal-import').removeClass('import-member-submit');
-		});
-		$(document).on('click','.member-action-modal-close',function()
-		{
-			$('.member-action-modal').modal('hide');
-		});
-
-		
-	}
 	function export_doctor_template()
 	{
 		$(document).on('change','.import-doctor-number-select',function()
@@ -325,16 +270,16 @@ function doctor_center()
 	{
 		$("body").on('click','.import-doctor',function()
 		{
-			$('.doctor-modal').remove();
+			$('.doctor-import-modal').remove();
             $(".append-modal").append(globalModals);
-			$('.global-modal').removeClass().addClass('modal fade modal-top doctor-modal');
+			$('.global-modal').removeClass().addClass('modal fade modal-top doctor-import-modal');
 			$('.global-modal-dialog').removeClass().addClass('modal-dialog modal-import');
 			$('.global-modal-content').removeClass().addClass('modal-content');
 			$('.global-modal-header').removeClass().addClass('modal-header');
 			$('.global-modal-title').html('IMPORT DOCTOR');
 			$('.global-modal-title').removeClass().addClass('modal-title second');
-			$('.global-modal-body').removeClass().addClass('modal-body');
-			$('.doctor-modal').modal('show');
+			$('.global-modal-body').removeClass().addClass('modal-body doctor-import-modal-body');
+			$('.doctor-import-modal').modal('show');
 			$('.global-ajax-loader').show();
             $('.global-modal-body-content').hide();
             $('.global-modal-footer').hide();
@@ -351,9 +296,9 @@ function doctor_center()
                 {
 					setTimeout(function()
 					{
-						$('.global-ajax-loader').hide().removeClass().addClass('.modal-loader');
+						$('.global-ajax-loader').hide().removeClass().addClass('.modal-loader doctor-import-loader');
 						$('.global-modal-body-content').show().html(data).removeClass().addClass('row box-holder  modal-body-content');
-						$('.global-modal-footer').show().removeClass().addClass('modal-footer');
+						$('.global-modal-footer').show().removeClass().addClass('modal-footer doctor-import-modal-footer');
                     	$('.global-footer-button').remove();
                     }, 1000);
 				}
@@ -365,7 +310,7 @@ function doctor_center()
 		$(document).on('click','.import-doctor-confirm',function() 
 		{
 			$('.confirm-modal').remove();
-			$('.append-modal').append(modals);
+			$('.append-modal').append(confirmModals);
             $('.confirm-modal-dialog').removeClass().addClass('modal-dialog modal-sm');
 			$('.confirm-modal-title').html('Are you sure you want to import this file?');
 			$('.confirm-submit').addClass('import-doctor-submit');
@@ -379,10 +324,11 @@ function doctor_center()
 	{
 		$(document).on('click','.import-doctor-submit',function() 
 		{
-			$('.confirm-modal').modal('hide');
-            $('.doctor-ajax-loader').show();
-            $('.import-doctor-action').hide();
-            $('.doctor-modal-body-content').hide();
+			$('.confirm-modal').remove();
+            $(".doctor-import-modal-body").html("<div class='doctor-import-ajax-loader' style='display:none;text-align: center; padding:50px;'><img src='/assets/loader/loading.gif'/></div");
+            $('.doctor-import-ajax-loader').show();
+
+			
             
             $.ajax({
 				headers: {
@@ -398,12 +344,11 @@ function doctor_center()
 				{
 					setTimeout(function()
 					{
-						$('.modal-dialog').removeClass('modal-lg');
-						$('.modal-dialog').addClass('modal-sm');
-						$('.doctor-ajax-loader').hide();
-						$('.doctor-modal-body-content').show();
-					    $(".doctor-modal-body-content").html(data);
-					    $(".doctor-modal-footer").html("<button type='button' class='btn btn-default pull-left btn-close-import' data-dismiss='modal'>Close</button>");
+						$('.doctor-import-ajax-loader').hide();
+						$('.doctor-import-modal-dialog').removeClass().addClass('modal-sm modal-dialog')
+						$('.doctor-import-modal-body').html(data);
+						$('.doctor-import-modal-footer').html('<button type="button" class="btn btn-default pull-left " data-dismiss="modal">Close</button>');
+
 					}, 1000);
 				}
 			});

@@ -77,133 +77,74 @@
 		</div>
 		
 	</div>
-	<div class="form-holder">
-		<div class="col-md-2 form-content">
-			<label>Birthdate</label>
-		</div>
-		<div class="col-md-4 form-content">
-			<input type="text"  value="{{$doctor_details->doctor_birthdate}}" class="form-control datepicker" id="doctor_birthdate"/>
-		</div>
-		<div class="col-md-2 form-content">
-			<label>Address</label>
-		</div>
-		<div class="col-md-4 form-content">
-			<textarea class="form-control" name="" id="doctor_address" cols="30" rows="3">{{$doctor_details->doctor_address}}</textarea>
-		</div>
-	</div>
-	
-	
 </div>
 <div class="row box-globals" >
 	<!-- Custom Tabs -->
 	<div class="nav-tabs-custom">
 		<ul class="nav nav-tabs">
-			<li class="active my-tab"><a data-toggle="tab" href="#provider">NETWORK PROVIDER</a></li>
-			<li class="my-tab"><a data-toggle="tab" href="#specialization">SPECIALIZATION</a></li>
+			<li class="active my-tab"><a data-toggle="tab" href="#specialization">SPECIALIZATION</a></li>
+			<li class="my-tab"><a data-toggle="tab" href="#provider">NETWORK PROVIDER</a></li>
 		</ul>
 		<div class="tab-content" >
-			<div id="provider" class="row tab-pane fade in active table-min-height">
-				<div class="row form-holder">
-					<div class="col-md-3 pull-right form-content">
-						<div class="btn-group">
-							<button type="button" class="btn btn-primary add-provider"><i  class="fa fa-plus btn-icon"></i> PROVIDER</button>
-							<button type="button" class="btn btn-danger remove-provider"><i  class="fa fa-minus btn-icon"></i> PROVIDER</button>
-						</div>
-					</div>
-				</div>
-				<div class="form-holder">
-					<div class="col-md-3 form-content">
-						
-					</div>
-					<div class="col-md-9 form-content provider-form">
-						
-					</div>
-				</div>
-				<div class="col-md-12 form-holder">
-					<div class=" box-body table-responsive no-padding">
-						<table class="table table-hover table-bordered">
-							<tr>
-								<th>ID</th>
-								<th>PROVIDER NAME</th>
-								<th>STATUS</th>
-								<th>ACTION</th>
-							</tr>
-							@foreach($_doctor_provider as $doctor_provider)
-							<tr>
-								<td>{{$doctor_provider->provider_id}}</td>
-								<td>{{$doctor_provider->provider_name}}</td>
-								<td><span class="label label-success">Active</span></td>
-								<td>
-									<div class="btn-group">
-										<button type="button" class="btn btn-danger btn-sm">Action</button>
-										<button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
-										<span class="caret"></span>
-										<span class="sr-only">Toggle Dropdown</span>
-										</button>
-										<ul class="dropdown-menu" role="menu" style="position: absolute !important;">
-											<li><button type="button" data-id="{{$doctor_provider->provider_id}}" class="btn btn-link view-member-details">View Member</button></li>
-											<li><button type="button" class="btn btn-link">Update Member</button></li>
-										</ul>
-									</div>
-								</td>
-							</tr>
-							@endforeach
-							<tr style="height:70px;">
-							</tr>
-						</table>
-					</div>
+			<div id="specialization" class="row tab-pane fade in active table-min-height" >
+				<div class="box-body table-responsive no-padding">
+					<table class="table table-hover table-bordered specialization-table">
+						<tr>
+							<th>SPECIALIZATION NAME</th>
+							<th></th>
+						</tr>
+						@foreach($_doctor_specialization as $doctor_specialization)
+						<tr class="table-row">
+							<td class="col-md-9">
+								<div class="input-group">
+									<select name="specialization_name[]" class="form-control select2 specialization_name">
+										<option value="{{$doctor_specialization->specialization_id}}">{{$doctor_specialization->specialization_name}}</option>
+										@foreach($_specialization as $specialization)
+										<option value="{{$specialization->specialization_id}}">{{$specialization->specialization_name}}</option>
+										@endforeach
+									</select>
+									<span class="input-group-btn">
+										<button class="btn btn-secondary add-new-option" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span> ADD ITEM</button>
+									</span>
+								</div>
+							</td>
+							<td class="col-md-3 last-td">
+								<div class="btn-group" role="group" aria-label="Basic example">
+									<button type="button" class="btn btn-primary btn-sm add-special"><i class="fa fa-plus-circle"></i></button>
+									<button type="button" class="btn btn-danger btn-sm remove-special"><i class="fa fa-minus-circle"></i></button>
+								</div>
+							</td>
+						</tr>
+						@endforeach
+					</table>
 				</div>
 			</div>
-			<div id="specialization" class="row tab-pane fade table-min-height">
-				<div class="row form-holder">
-					<div class="col-md-4 pull-right form-content">
-						<div class="btn-group">
-							<button type="button" class="btn btn-primary add-specialization"><i  class="fa fa-plus btn-icon"></i> SPECIALIZATION</button>
-							<button type="button" class="btn btn-danger remove-specialization"><i  class="fa fa-minus btn-icon"></i> SPECIALIZATION</button>
-						</div>
-					</div>
-				</div>
-				<div class="form-holder">
-					<div class="col-md-3 form-content">
-						
-					</div>
-					<div class="col-md-9 form-content specialization-form">
-						
-					</div>
-				</div>
-				<div class="col-md-12 form-holder">
-					<div class=" box-body table-responsive no-padding">
-						<table class="table table-hover table-bordered">
-							<tr>
-								<th>ID</th>
-								<th>SPECIALIZATION</th>
-								<th>STATUS</th>
-								<th>ACTION</th>
-							</tr>
-							@foreach($_doctor_specialization as $doctor_specialization)
-							<tr>
-								<td>{{$doctor_specialization->specialization_id}}</td>
-								<td>{{$doctor_specialization->specialization_name}}</td>
-								<td><span class="label label-success">Active</span></td>
-								<td>
-									<div class="btn-group">
-										<button type="button" class="btn btn-danger btn-sm">Action</button>
-										<button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
-										<span class="caret"></span>
-										<span class="sr-only">Toggle Dropdown</span>
-										</button>
-										<ul class="dropdown-menu" role="menu" style="position: absolute !important;">
-											<li><button type="button" data-id="{{$doctor_specialization->specialization_id}}" class="btn btn-link view-member-details">View Member</button></li>
-											<li><button type="button" class="btn btn-link">Update Member</button></li>
-										</ul>
-									</div>
-								</td>
-							</tr>
-							@endforeach
-							<tr style="height:70px;">
-							</tr>
-						</table>
-					</div>
+			<div id="provider" class="row tab-pane fade table-min-height" >
+				<div class="box-body table-responsive no-padding">
+					<table class="table table-hover table-bordered specialization-table">
+						<tr>
+							<th>PROVIDER NAME</th>
+							<th></th>
+						</tr>
+						@foreach($_doctor_provider as $doctor_provider)
+						<tr class="table-row">
+							<td class="col-md-9">
+								<select name="provider_name[]" class="provider_name form-control ">
+									<option value="{{$doctor_provider->provider_id}}">{{$doctor_provider->provider_name}}</option>
+									@foreach($_provider as $provider)
+									<option value="{{$provider->provider_id}}">{{$provider->provider_name}}</option>
+									@endforeach
+								</select>
+							</td>
+							<td class="col-md-3 last-td">
+								<div class="btn-group" role="group" aria-label="Basic example">
+									<button type="button" class="btn btn-primary btn-sm add-provider"><i class="fa fa-plus-circle"></i></button>
+									<button type="button" class="btn btn-danger btn-sm remove-provider"><i class="fa fa-minus-circle"></i></button>
+								</div>
+							</td>
+						</tr>
+						@endforeach
+					</table>
 				</div>
 			</div>
 		</div>

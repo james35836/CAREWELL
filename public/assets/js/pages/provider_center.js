@@ -1,5 +1,5 @@
 var provider_center 	= new provider_center();
-
+var payeeData			= [];
 
 function provider_center()
 {
@@ -78,6 +78,15 @@ function provider_center()
 	{
 		$('body').on('click','.create-provider-confirm',function() 
 		{ 
+			$('input[name="payee_name[]"]').each(function(i, payee)
+            {
+            	if($(payee).val()!="")
+            	{
+            		payeeData.push(this.value);
+            	}
+            	
+            });
+			
 			if(checking_null_validation(document.getElementById('provider_name').value,"PROVIDER NAME")=="")
 			{}	
 			else if(checking_null_validation(document.getElementById('provider_contact_person').value,"PROVIDER CONTACT PERSON")=="")
@@ -90,7 +99,11 @@ function provider_center()
 			{}
 			else if(checking_null_validation(document.getElementById('provider_address').value,"PROVIDER ADDRESS")=="")
 			{}
-			else
+		    else if(payeeData==null||payeeData=="")
+			{
+				toastr.error('Please add PAYEE at least one.', 'Something went wrong!', {timeOut: 3000})
+			}
+            else
 			{
 				$('.confirm-modal').remove();
 				$('.append-modal').append(confirmModals);
@@ -106,6 +119,10 @@ function provider_center()
 	            formData.append("provider_contact_email", 	document.getElementById('provider_contact_email').value);
 	            formData.append("provider_address", 	    document.getElementById('provider_address').value);
 	            
+	            for (var i = 0; i < payeeData.length; i++) 
+				{
+				    formData.append('payeeData[]', payeeData[i]);
+				}
 	            
 			}
 		});
@@ -153,7 +170,7 @@ function provider_center()
 			$('.global-modal-dialog').removeClass().addClass('provider-details-modal-dialog modal-dialog modal-lg');
 			$('.global-modal-content').removeClass().addClass('modal-content');
 			$('.global-modal-header').removeClass().addClass('modal-header');
-			$('.global-modal-title').html('CREATE COVERAGE PLAN');
+			$('.global-modal-title').html('PROVIDER DETAILS');
 			$('.global-modal-title').removeClass().addClass('modal-title');
 			$('.global-modal-body').removeClass().addClass('modal-body provider-details-modal-body');
 			$('.provider-details-modal').modal('show');

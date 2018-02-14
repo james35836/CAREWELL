@@ -1,43 +1,56 @@
 <script>
 	
-	$(document).ready(function() {
-	$('#selectAllSpecializationList').click (function () {
-	var checkedStatus = this.checked;
-	$('.specialization-table  tr').find('td:first :checkbox').each(function () {
-	$(this).prop('checked', checkedStatus);
-	});
-	});
-	$('#selectAllProviderList').click (function () {
-	var checkedStatus = this.checked;
-	$('.provider-table  tr').find('td:first :checkbox').each(function () {
-	$(this).prop('checked', checkedStatus);
-	});
-	});
-	
-	$(".add-specialization").on("click", function() {
-		
-		$(".specialization-form").append('<div class="specialization-count" style="margin-top: 20px;"><select name="specialization_name" class="form-control"><option>Allergist or Immunologist</option><option>Anesthesiologist</option><option>Cardiologist</option><option>Dermatologist</option><option>Gastroenterologist</option><option>Hematologist/Oncologist</option><option>Internal Medicine Physician</option><option>Nephrologist</option><option>Neurologist</option><option>Neurosurgeon</option><option>Obstetrician</option><option>Gynecologist</option><option>Nurse-Midwifery</option><option>Occupational Medicine Physician</option><option>Ophthalmologist</option><option>Oral and Maxillofacial Surgeon</option><option>Orthopaedic Surgeon</option><option>Otolaryngologist (Head and Neck Surgeon)</option><option>Pathologist</option><option>Pediatrician</option><option>Plastic Surgeon</option><option>Podiatrist</option><option>Psychiatrist</option><option>Pulmonary Medicine Physician</option><option>Radiation Onconlogist</option><option>Diagnostic Radiologist</option><option>Rheumatologist</option><option>Urologist</option></select></div>');
-		
-	});
-	$(".remove-specialization").on("click", function() {
-		if( $(".specialization-count").length!=1)
-			{
-		$(".specialization-form").children().last().remove();
-		}
-	});
-	});
-	
-	$(function ()
+	$(document).ready(function()
 	{
-		//select2
 		
-		$('.select3').select2()
-		$('.select2').select2()
 		//Date picker
-		$('.datepicker').datepicker({
+		$('.datepicker').datepicker(
+		{
 		autoclose: true
-		})
-	})
+		});
+		$('body').on("click",".add-special", function()
+		{
+			var $table = $(this).closest('table');
+			$table.find('tr.table-row:first').clone().appendTo($table).find('.select2').select2();
+			
+		});
+		$('body').on("click",".remove-special", function()
+		{
+			var $table = $(this).closest('table');
+			var count  = $table.find('tr.table-row').length;
+			if($(this).closest('table tr.table-row').index()==0)
+			{
+				toastr.error('You cannot remove first rows.', 'Something went wrong!', {timeOut: 3000})
+			}
+			else
+			{
+				$(this).closest("tr").remove();
+			}
+			
+		});
+		$('body').on("click",".add-provider", function()
+		{
+			var $table = $(this).closest('table');
+			$table.find('tr.table-row:first').clone().appendTo($table).find('.select2').select2();
+			
+		});
+		$('body').on("click",".remove-provider", function()
+		{
+			var $table = $(this).closest('table');
+			var count  = $table.find('tr.table-row').length;
+			if($(this).closest('table tr.table-row').index()==0)
+			{
+				toastr.error('You cannot remove first rows.', 'Something went wrong!', {timeOut: 3000})
+			}
+			else
+			{
+				$(this).closest("tr").remove();
+			}
+			
+		});
+	});
+	
+	
 </script>
 <div class="row box-globals">
 	<div class="form-holder">
@@ -86,7 +99,6 @@
 		</div>
 		
 	</div>
-	
 </div>
 <div class="row box-globals" >
 	<!-- Custom Tabs -->
@@ -106,8 +118,10 @@
 						<tr class="table-row">
 							<td class="col-md-9">
 								<div class="input-group">
-									<select name="child_availment_charges[]" class="form-control select2 ">
+									<select name="specialization_name[]" class="form-control select2 specialization_name">
+										<option>SELECT SPECIALIZATION</option>
 										@foreach($_specialization as $specialization)
+										
 										<option value="{{$specialization->specialization_id}}">{{$specialization->specialization_name}}</option>
 										@endforeach
 									</select>
@@ -118,8 +132,8 @@
 							</td>
 							<td class="col-md-3 last-td">
 								<div class="btn-group" role="group" aria-label="Basic example">
-									<button type="button" class="btn btn-primary btn-sm add-row"><i class="fa fa-plus-circle"></i></button>
-									<button type="button" class="btn btn-danger btn-sm remove-row"><i class="fa fa-minus-circle"></i></button>
+									<button type="button" class="btn btn-primary btn-sm add-special"><i class="fa fa-plus-circle"></i></button>
+									<button type="button" class="btn btn-danger btn-sm remove-special"><i class="fa fa-minus-circle"></i></button>
 								</div>
 							</td>
 						</tr>
@@ -135,21 +149,17 @@
 						</tr>
 						<tr class="table-row">
 							<td class="col-md-9">
-								<div class="input-group">
-									<select name="child_availment_charges[]" class="form-control ">
-										@foreach($_provider as $provider)
-										<option value="{{$provider->provider_id}}">{{$provider->provider_name}}</option>
-										@endforeach
-									</select>
-									<span class="input-group-btn">
-										<button class="btn btn-secondary add-new-option" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span> ADD ITEM</button>
-									</span>
-								</div>
+								<select name="provider_name[]" class="provider_name form-control ">
+									<option>SELECT PROVIDER</option>
+									@foreach($_provider as $provider)
+									<option value="{{$provider->provider_id}}">{{$provider->provider_name}}</option>
+									@endforeach
+								</select>
 							</td>
 							<td class="col-md-3 last-td">
 								<div class="btn-group" role="group" aria-label="Basic example">
-									<button type="button" class="btn btn-primary btn-sm add-row"><i class="fa fa-plus-circle"></i></button>
-									<button type="button" class="btn btn-danger btn-sm remove-row"><i class="fa fa-minus-circle"></i></button>
+									<button type="button" class="btn btn-primary btn-sm add-provider"><i class="fa fa-plus-circle"></i></button>
+									<button type="button" class="btn btn-danger btn-sm remove-provider"><i class="fa fa-minus-circle"></i></button>
 								</div>
 							</td>
 						</tr>

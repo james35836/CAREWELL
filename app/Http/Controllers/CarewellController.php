@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\StaticFunctionController;
+use App\Http\Controllers\ActiveAuthController;
 
 use App\Http\Model\TblUserModel;
 use App\Http\Model\TblUserInfoModel;
@@ -14,6 +16,7 @@ use App\Http\Model\TblAvailmentChargesModel;
 
 use App\Http\Model\TblCoveragePlanModel;
 use App\Http\Model\TblCoveragePlanTagModel;
+
 
 
 use App\Http\Model\TblCompanyModel;
@@ -44,26 +47,26 @@ use App\Http\Model\TblMemberGovernmentCardModel;
 use App\Http\Model\TblPaymentModeModel;
 
 use App\Http\Model\TblProviderModel;
-use App\Http\Model\TblProviderBillingModel;
+use App\Http\Model\TblProviderPayeeModel;
 
 use App\Http\Model\TblDoctorModel;
-use App\Http\Model\TblDoctorSpecializationModel;
 use App\Http\Model\TblDoctorProviderModel;
+use App\Http\Model\TblDoctorSpecializationModel;
+
+
 use App\Http\Model\TblSpecializationModel;
 
 use App\Http\Model\TblApprovalModel;
+use App\http\Model\TblApprovalAvailedModel;
+use App\Http\Model\TblApprovalDoctorModel;
+
 
 use App\Http\Model\TblProcedureModel;
-use App\http\Model\TblProcedureAvailedModel;
-use App\Http\Model\TblProcedureDoctorModel;
-
-
 
 use App\Http\Model\TblScheduleOfBenefitsModel;
 
 
-use App\Http\Controllers\StaticFunctionController;
-use App\Http\Controllers\ActiveAuthController;
+
 
 
 
@@ -232,7 +235,7 @@ class CarewellController extends ActiveAuthController
   public function member_create_member()
   {
     $data['_company'] = TblCompanyModel::where('archived',0)->get();
-    return view('carewell.modal_pages.member_create_member',$data);
+    return view('carewell.modal_pages.member_create',$data);
   }
   public function member_create_member_submit(Request $request)
   {
@@ -312,23 +315,36 @@ class CarewellController extends ActiveAuthController
     $data['member_government'] = TblMemberGovernmentCardModel::where('member_id',$member_id)->first();
     $data['_member_company']    = TblMemberCompanyModel::where('member_id',$member_id)
                                 ->join('tbl_company','tbl_company.company_id','=','tbl_member_company.company_id')
-                                ->join('tbl_company_jobsite','tbl_company_jobsite.jobsite_id','=','tbl_member_company.jobsite_id')
-                                ->join('tbl_availment_plan','tbl_availment_plan.availment_plan_id','=','tbl_member_company.availment_plan_id')
+                                ->join('tbl_company_deployment','tbl_company_deployment.deployment_id','=','tbl_member_company.deployment_id')
+                                ->join('tbl_coverage_plan','tbl_coverage_plan.coverage_plan_id','=','tbl_member_company.coverage_plan_id')
                                 ->get();
 
-    return view('carewell.modal_pages.member_view_details',$data);
+    return view('carewell.modal_pages.member_details',$data);
   }
   public function member_transaction_details($member_id)
   {
-    $data['_payment_history'] = TblCompanyCalMemberModel::where('tbl_company_cal_member.member_id',$member_id)
-                                ->join('tbl_member','tbl_member.member_id','=','tbl_company_cal_member.member_id')
-                                ->join('tbl_company_cal','tbl_company_cal.cal_id','=','tbl_company_cal_member.cal_id')
-                                ->join('tbl_company','tbl_company.company_id','=','tbl_company_cal.cal_company_id')
+    $coverage = TblMemberCompanyModel::where('archived',0)->where('member_id',$member_id)->first();
+    $data['coverage_plan_details']  = TblCoveragePlanModel::where('coverage_plan_id',$coverage->coverage_plan_id)->first();
+    $data['_coverage_plan_covered'] = TblCoveragePlanTagModel::where('coverage_plan_id',$coverage->coverage_plan_id)
+                                    ->join('tbl_availment','tbl_availment.availment_id','=','tbl_coverage_plan_tag.availment_id')
+                                    ->get();
+    foreach($data['_coverage_plan_covered'] as $key=>$coverage_plan_covered)
+    {
+      $data['_coverage_plan_covered'][$key]['child_plan_item']    =  TblCoveragePlanTagModel::where('availment_parent_id',$coverage_plan_covered->availment_id)->where('coverage_plan_id',$coverage->coverage_plan_id)->CoveragePlanTag($coverage->coverage_plan_id)->get();
+      $data['_coverage_plan_covered'][$key]['child_availment']    =  TblAvailmentModel::where('availment_parent_id',$coverage_plan_covered->availment_id)->get();
+      $data['_coverage_plan_covered'][$key]['availment_charges']  =  TblAvailmentChargesModel::where('archived',0)->get();
+    }
+
+    $data['_payment_history']   = TblCalMemberModel::where('tbl_cal_member.member_id',$member_id)
+                                ->join('tbl_member','tbl_member.member_id','=','tbl_cal_member.member_id')
+                                ->join('tbl_cal','tbl_cal.cal_id','=','tbl_cal_member.cal_id')
+                                ->join('tbl_company','tbl_company.company_id','=','tbl_cal.company_id')
                                 ->paginate(10);
-    $data['_approval']        = TblApprovalModel::where('tbl_approval.member_id',$member_id)
+    $data['_availment_history'] = TblApprovalModel::where('tbl_approval.member_id',$member_id)
                                 ->join('tbl_provider','tbl_provider.provider_id','=','tbl_approval.provider_id')
-                                ->join('tbl_member','tbl_member.member_id','=','tbl_approval.member_id')
+                                ->join('tbl_availment','tbl_availment.availment_id','=','tbl_approval.availment_id')
                                 ->get();
+                                // dd($data['_availment_history']);
 
     return view('carewell.modal_pages.member_transaction_details',$data);
   }
@@ -345,7 +361,7 @@ class CarewellController extends ActiveAuthController
         $excels['company_id']     =   $company_id;
         $company_template         =   TblCompanyModel::where('company_id',$company_id)->first();
         $excels['company_code']   =   $company_template->company_code;
-        $excels['data']           =   ['COMPANY CODE','EMPLOYEE NUMBER','MEMBER LAST NAME','MEMBER FIRST NAME','MEMBER MIDDLE NAME','MEMBER BIRTHDATE','MEMBER JOBSITE','AVAILMENT PLAN NAME'];
+        $excels['data']           =   ['COMPANY CODE','CAREWELL ID','EMPLOYEE NUMBER','MEMBER LAST NAME','MEMBER FIRST NAME','MEMBER MIDDLE NAME','MEMBER BIRTHDATE','MEMBER JOBSITE','COVERAGE PLAN'];
          Excel::create('CAREWELL '.$company_template->company_name.' TEMPLATE', function($excel) use ($excels) 
          {
 
@@ -362,7 +378,7 @@ class CarewellController extends ActiveAuthController
                   $sheet->setCellValue('A'.$rowcell, $excels['company_code']);
               
                   /* DEPLOYMENT*/
-                  $deployment_cell = $sheet->getCell('G'.$rowcell)->getDataValidation();
+                  $deployment_cell = $sheet->getCell('H'.$rowcell)->getDataValidation();
                   $deployment_cell->setType(\PHPExcel_Cell_DataValidation::TYPE_LIST);
                   $deployment_cell->setErrorStyle(\PHPExcel_Cell_DataValidation::STYLE_INFORMATION);
                   $deployment_cell->setAllowBlank(false);
@@ -374,7 +390,7 @@ class CarewellController extends ActiveAuthController
                   $deployment_cell->setFormula1('deployment');
                   
                   /* AVAILMENT*/
-                  $availment_cell = $sheet->getCell('H'.$rowcell)->getDataValidation();
+                  $availment_cell = $sheet->getCell('I'.$rowcell)->getDataValidation();
                   $availment_cell->setType(\PHPExcel_Cell_DataValidation::TYPE_LIST);
                   $availment_cell->setErrorStyle(\PHPExcel_Cell_DataValidation::STYLE_INFORMATION);
                   $availment_cell->setAllowBlank(false);
@@ -383,7 +399,7 @@ class CarewellController extends ActiveAuthController
                   $availment_cell->setShowDropDown(true);
                   $availment_cell->setErrorTitle('Input error');
                   $availment_cell->setError('Value is not in list.');
-                  $availment_cell->setFormula1('availment');
+                  $availment_cell->setFormula1('coverage');
               }
             });
 
@@ -392,38 +408,38 @@ class CarewellController extends ActiveAuthController
           {
               $company_id       = $excels['company_id'];
               $_company         = TblCompanyModel::get();
-              $_jobsite         = TblCompanyJobsiteModel::where('company_id',$company_id)->get();
-              $_availment       = TblCompanyCoveragePlanModel::where('company_id',$company_id)
-                                  ->join('tbl_availment_plan','tbl_availment_plan.availment_plan_id','=','tbl_company_coverage_plan.availment_plan_id')
+              $_deployment      = TblCompanyDeploymentModel::where('company_id',$company_id)->get();
+              $_coverage       = TblCompanyCoveragePlanModel::where('company_id',$company_id)
+                                  ->join('tbl_coverage_plan','tbl_coverage_plan.coverage_plan_id','=','tbl_company_coverage_plan.coverage_plan_id')
                                   ->get();
               /* DEPLOYMENT REFERENCES */
-              $sheet->SetCellValue("D1", "Deployment");
-              $job_number = 2;
-              foreach($_jobsite as $jobsite)
+              $sheet->SetCellValue("H1", "deployment");
+              $deployment_number = 2;
+              foreach($_deployment as $deployment)
               {
-                  $sheet->SetCellValue("D".$job_number, $jobsite->jobsite_name);
-                  $job_number++;
+                  $sheet->SetCellValue("H".$deployment_number, $deployment->deployment_name);
+                  $deployment_number++;
               }
-              $job_number--;
+              $deployment_number--;
               /* AVAILMENT REFERENCES */
-              $sheet->SetCellValue("F1", "availment");
-              $availment_number = 2;
-              foreach($_availment as $availment)
+              $sheet->SetCellValue("I1", "coverage");
+              $coverage_number = 2;
+              foreach($_coverage as $coverage)
               {
-                  $sheet->SetCellValue("F".$availment_number, $availment->availment_plan_name);
-                  $availment_number++;
+                  $sheet->SetCellValue("I".$coverage_number, $coverage->coverage_plan_name);
+                  $coverage_number++;
               }
-              $availment_number--;
+              $coverage_number--;
               /*DEPLOYMENT*/
               $sheet->_parent->addNamedRange(
                   new \PHPExcel_NamedRange(
-                  'deployment', $sheet, 'D2:D'.$job_number
+                  'deployment', $sheet, 'H2:H'.$deployment_number
                   )
               );
               /*AVAILMENT*/
               $sheet->_parent->addNamedRange(
                   new \PHPExcel_NamedRange(
-                  'availment', $sheet, 'F2:F'.$availment_number
+                  'coverage', $sheet, 'I2:I'.$coverage_number
                   )
               );
           });
@@ -530,6 +546,10 @@ class CarewellController extends ActiveAuthController
     $data['page']       = 'Network Provider';
     $data['user']       = $this->global();
     $data['_provider']  = TblProviderModel::where('archived',0)->paginate(10);
+    foreach ($data['_provider'] as $key => $provider) 
+    {
+      $data['_provider'][$key]['provider_payee'] =  TblProviderPayeeModel::where('provider_id',$provider->provider_id)->get();
+    }
     return view('carewell.pages.provider_center',$data);
   }
   public function provider_create()
@@ -550,6 +570,13 @@ class CarewellController extends ActiveAuthController
     $providerData->provider_created         = Carbon::now();
     $providerData->save();
 
+    foreach($request->payeeData as $payee_name)
+    {
+      $providerPayeeData = new TblProviderPayeeModel;
+      $providerPayeeData->provider_payee_name = $payee_name;
+      $providerPayeeData->provider_id = $providerData->provider_id;
+      $providerPayeeData->save();
+    }
     if($providerData->save())
     {
       return "<div class='alert alert-success' style='text-align: center;'>Provider Added Successfully!</div>";    
@@ -563,6 +590,8 @@ class CarewellController extends ActiveAuthController
   }
   public function provider_details(Request $request,$provider_id)
   {
+    $data['_provider_payee'] = TblProviderPayeeModel::where('provider_id',$provider_id)
+                              ->get();
     $data['provider_details'] = TblProviderModel::where('tbl_provider.provider_id',$provider_id)
                               ->first();
     $data['_provider_doctor']  = TblDoctorProviderModel::where('tbl_doctor_provider.provider_id',$provider_id)
@@ -589,29 +618,33 @@ class CarewellController extends ActiveAuthController
       $data['_doctor'][$key]['specialization']  =  TblDoctorSpecializationModel::where('doctor_id',$doctor->doctor_id)
                                                 ->join('tbl_specialization','tbl_specialization.specialization_id','=','tbl_doctor_specialization.specialization_id')
                                                 ->get();
-      $data['_doctor'][$key]['provider']  =  TblDoctorProviderModel::where('doctor_id',$doctor->doctor_id)
+      $data['_doctor'][$key]['provider']        =  TblDoctorProviderModel::where('doctor_id',$doctor->doctor_id)
                                                 ->join('tbl_provider','tbl_provider.provider_id','=','tbl_doctor_provider.provider_id')
                                                 ->get();
     }
     return view('carewell.pages.doctor_center',$data);
 
   }
-  public function add_doctor()
-  {
-    $data['_provider'] = TblProviderModel::where('archived',0)->get();
-    $data['_specialization'] = TblSpecializationModel::get();
-    return view('carewell.modal_pages.doctor_create',$data);
-  }
+  
   public function doctor_view_details(Request $request,$doctor_id)
   {
-    $data['_provider']              = TblProviderModel::get();
+    $data['_provider']              = TblProviderModel::where('archived',0)->get();
+    $data['_specialization']        = TblSpecializationModel::where('archived',0)->get();
     $data['doctor_details']         = TblDoctorModel::where('doctor_id',$doctor_id)->first();
-    $data['_doctor_specialization'] = TblDoctorSpecializationModel::where('doctor_id',$doctor_id)->get();
+    $data['_doctor_specialization'] = TblDoctorSpecializationModel::where('doctor_id',$doctor_id)
+                                    ->join('tbl_specialization','tbl_specialization.specialization_id','=','tbl_doctor_specialization.specialization_id')
+                                    ->get();
     $data['_doctor_provider']       = TblDoctorProviderModel::where('tbl_doctor_provider.doctor_id',$doctor_id)
                                     ->join('tbl_provider','tbl_provider.provider_id','=','tbl_doctor_provider.provider_id')
                                     ->get();
 
     return view('carewell.modal_pages.doctor_details',$data);
+  }
+  public function add_doctor()
+  {
+    $data['_provider']        = TblProviderModel::where('archived',0)->get();
+    $data['_specialization']  = TblSpecializationModel::get();
+    return view('carewell.modal_pages.doctor_create',$data);
   }
   public function add_doctor_submit(Request $request)
   {
@@ -624,10 +657,8 @@ class CarewellController extends ActiveAuthController
     $doctorData->doctor_middle_name     = $request->doctor_middle_name;
     $doctorData->doctor_last_name       = $request->doctor_last_name;
     $doctorData->doctor_gender          = $request->doctor_gender;
-    $doctorData->doctor_birthdate       = $request->doctor_birthdate;
     $doctorData->doctor_contact_number  = $request->doctor_contact_number;
     $doctorData->doctor_email_address   = $request->doctor_email_address;
-    $doctorData->doctor_address         = $request->doctor_address;
     $doctorData->doctor_created         = Carbon::now();
     $doctorData->save();
 
@@ -636,8 +667,8 @@ class CarewellController extends ActiveAuthController
     foreach($request->providerData as $provider)
     {
       $providerData = new TblDoctorProviderModel;
-      $providerData->provider_id          = $provider;
-      $providerData->doctor_id            = $doctorData->doctor_id;
+      $providerData->provider_id  = $provider;
+      $providerData->doctor_id    = $doctorData->doctor_id;
       $providerData->save();
     }
 
@@ -664,7 +695,7 @@ class CarewellController extends ActiveAuthController
     $excels['provider_id']    =   $provider_id;
     $provider_template         =   TblProviderModel::where('provider_id',$provider_id)->first();
     $excels['provider_name']   =   $provider_template->provider_name;
-    $excels['data']           =   ['PROVIDER NAME','DOCTOR NUMBER','DOCTOR LAST NAME','DOCTOR FIRST NAME','DOCTOR MIDDLE NAME','DOCTOR GENDER','DOCTOR BIRTHDATE','DOCTOR CONTACT NUMBER','DOCTOR EMAIL ADDRESS','DOCTOR ADDRESS','DOCTOR SPECIALIZATION'];
+    $excels['data']           =   ['PROVIDER NAME','DOCTOR LAST NAME','DOCTOR FIRST NAME','DOCTOR MIDDLE NAME','DOCTOR GENDER','DOCTOR CONTACT NUMBER','DOCTOR EMAIL ADDRESS','DOCTOR SPECIALIZATION'];
     Excel::create('CAREWELL '.$provider_template->provider_name.' PROVIDER TEMPLATE', function($excel) use ($excels) 
     {
       $excel->sheet('template', function($sheet) use ($excels) 
@@ -680,7 +711,7 @@ class CarewellController extends ActiveAuthController
             $sheet->setCellValue('A'.$rowcell, $excels['provider_name']);
         
             /* GENDER*/
-            $gender_cell = $sheet->getCell('F'.$rowcell)->getDataValidation();
+            $gender_cell = $sheet->getCell('E'.$rowcell)->getDataValidation();
             $gender_cell->setType(\PHPExcel_Cell_DataValidation::TYPE_LIST);
             $gender_cell->setErrorStyle(\PHPExcel_Cell_DataValidation::STYLE_INFORMATION);
             $gender_cell->setAllowBlank(false);
@@ -690,24 +721,55 @@ class CarewellController extends ActiveAuthController
             $gender_cell->setErrorTitle('Input error');
             $gender_cell->setError('Value is not in list.');
             $gender_cell->setFormula1('gender');
+
+            /* SPECIALIZATION*/
+            $special_cell = $sheet->getCell('H'.$rowcell)->getDataValidation();
+            $special_cell->setType(\PHPExcel_Cell_DataValidation::TYPE_LIST);
+            $special_cell->setErrorStyle(\PHPExcel_Cell_DataValidation::STYLE_INFORMATION);
+            $special_cell->setAllowBlank(false);
+            $special_cell->setShowInputMessage(true);
+            $special_cell->setShowErrorMessage(true);
+            $special_cell->setShowDropDown(true);
+            $special_cell->setErrorTitle('Input error');
+            $special_cell->setError('Value is not in list.');
+            $special_cell->setFormula1('special');
         }
       });
       /* DATA VALIDATION (REFERENCE FOR DROPDOWN LIST) */
       $excel->sheet('reference', function($sheet) use($excels) 
       {
         $provider_id       = $excels['provider_id'];
+        $_specialization    = TblSpecializationModel::where('archived',0)->get();
         
         /* GENDER REFERENCES */
-        $sheet->SetCellValue("F1", "gender");
-        $sheet->SetCellValue("F2", 'MALE');
-        $sheet->SetCellValue("F3", 'FEMALE');
+        $sheet->SetCellValue("E1", "gender");
+        $sheet->SetCellValue("E2", 'MALE');
+        $sheet->SetCellValue("E3", 'FEMALE');
+
+        /* DEPLOYMENT REFERENCES */
+        $sheet->SetCellValue("H1", "special");
+        $special_number = 2;
+        foreach($_specialization as $specialization)
+        {
+            $sheet->SetCellValue("H".$special_number, $specialization->specialization_name);
+            $special_number++;
+        }
+        $special_number--;
         
         /*GENDER*/
         $sheet->_parent->addNamedRange(
             new \PHPExcel_NamedRange(
-            'gender', $sheet, 'F2:F3'
+            'gender', $sheet, 'E2:E3'
             )
         );
+        /*SPECIALIZATION*/
+        $sheet->_parent->addNamedRange(
+            new \PHPExcel_NamedRange(
+            'special', $sheet, 'H2:H'.$special_number
+            )
+        );
+        
+
       });
     })->download('xlsx');
   }
@@ -717,7 +779,7 @@ class CarewellController extends ActiveAuthController
     $_data  = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->all();
     
     $first  = $_data[0]; 
-      if(isset($first['provider_name'])&&isset($first['doctor_last_name']))
+      if(isset($first['provider_name'])&&isset($first['doctor_last_name'])&&isset($first['doctor_first_name'])&&isset($first['doctor_middle_name']))
       {    
         $count = 0;
         foreach($_data as $data)
@@ -729,15 +791,13 @@ class CarewellController extends ActiveAuthController
                           ->where('doctor_last_name', StaticFunctionController::nullableToString($data['doctor_last_name']))
                           ->where('doctor_middle_name',StaticFunctionController::nullableToString($data['doctor_middle_name']))
                           ->count();
-          if($count_doctor == 0 && $data['doctor_birthdate']!=null&&StaticFunctionController::getid($data['provider_name'], 'provider') != null )
+          if($count_doctor == 0 &&StaticFunctionController::getid($data['provider_name'], 'provider') != null )
           {
-            $doctor['doctor_number']            =   StaticFunctionController::nullableToString($data['doctor_number']);
+            $doctor['doctor_number']            =   StaticFunctionController::updateReferenceNumber('doctor');
             $doctor['doctor_first_name']        =   StaticFunctionController::nullableToString($data['doctor_first_name']);
             $doctor['doctor_middle_name']       =   StaticFunctionController::nullableToString($data['doctor_middle_name']);
             $doctor['doctor_last_name']         =   StaticFunctionController::nullableToString($data['doctor_last_name']);
-            $doctor['doctor_birthdate']         =   date_format($data['doctor_birthdate'],"d-m-Y");  
             $doctor['doctor_gender']            =   StaticFunctionController::nullableToString($data['doctor_gender']);
-            $doctor['doctor_address']           =   StaticFunctionController::nullableToString($data['doctor_address']);
             $doctor['doctor_contact_number']    =   StaticFunctionController::nullableToString($data['doctor_contact_number']);
             $doctor['doctor_email_address']     =   StaticFunctionController::nullableToString($data['doctor_email_address']);
             $doctor['doctor_created']           =   Carbon::now();
@@ -745,7 +805,7 @@ class CarewellController extends ActiveAuthController
             $doctor_id                          =   TblDoctorModel::insertGetId($doctor);
             
 
-            $specialization['specialization_name']  =   StaticFunctionController::nullableToString($data['doctor_email_address']);
+            $specialization['specialization_id']  =   StaticFunctionController::getid($data['doctor_specialization'], 'specialization');
             $specialization['doctor_id']            =   $doctor_id ;
             TblDoctorSpecializationModel::insert($specialization);
 
@@ -792,19 +852,8 @@ class CarewellController extends ActiveAuthController
   public function billing_create_cal_submit(Request $request)
   {
     
-    $cal_count                                  =  TblCalModel::count();
-    if($cal_count==null||$cal_count==0)
-    {
-      $calLastId                               =  1;
-    }
-    else
-    {
-      $cal                                      =  TblCalModel::orderBy('cal_id','DESC')->first();
-      $calLastId                               =  $cal->cal_id+1;
-    }
     $companyCalData                             =   new TblCalModel;
-    $companyCalData->cal_company_id             =   $request->cal_company_id;
-    $companyCalData->cal_number                 =   'CAL-'.sprintf("%05d",$calLastId);
+    $companyCalData->cal_number                 =   StaticFunctionController::updateReferenceNumber('billing_cal');;
     $companyCalData->cal_reveneu_period_month   =   $request->cal_reveneu_period_month;
     $companyCalData->cal_reveneu_period_year    =   $request->cal_reveneu_period_year;
     $companyCalData->cal_reveneu_period         =   $request->cal_reveneu_period;
@@ -813,42 +862,54 @@ class CarewellController extends ActiveAuthController
     $companyCalData->cal_company_period_end     =   $request->cal_company_period_end;
     $companyCalData->cal_payment_date           =   $request->cal_payment_date;
     $companyCalData->cal_created                =   Carbon::now();
+    $companyCalData->company_id                 =   $request->cal_company_id;
     $companyCalData->save();
 
     return "<div class='alert alert-success' style='text-align: center;'>Company Cal Added Successfully!</div>";    
   }
-  public function billing_member_view($cal_id,$company_id)
+  public function billing_cal_details($cal_id)
   {
-    $data['cal_id']   = $cal_id;
-    $data['company_id']   = $company_id;
-    $data['_cal_member']  = TblCompanyCalMemberModel::where('cal_id',$cal_id)
-                            ->join('tbl_member','tbl_member.member_id','=','tbl_company_cal_member.member_id')
-                            ->join('tbl_member_company','tbl_member_company.member_id','=','tbl_company_cal_member.member_id')
+    $data['cal_details']  = TblCalModel::where('cal_id',$cal_id)
+                          ->join('tbl_company','tbl_company.company_id','=','tbl_cal.company_id')
+                          ->first();
+    $data['_cal_member']  = TblCalMemberModel::where('cal_id',$cal_id)
+                            ->join('tbl_member','tbl_member.member_id','=','tbl_cal_member.member_id')
+                            ->join('tbl_member_company','tbl_member_company.member_id','=','tbl_cal_member.member_id')
                             ->paginate(10);
-    return view('carewell.modal_pages.billing_cal_members',$data);
+    return view('carewell.modal_pages.billing_cal_details',$data);
   }
   public function billing_import_cal_members($cal_id,$company_id)
   {
     $data['cal_id']       = $cal_id;
     $data['company_id']   = $company_id;
-    return view('carewell.modal_pages.billing_import_cal_members',$data);
+    return view('carewell.modal_pages.billing_import',$data);
   }
   public function billing_cal_download_template($cal_id,$company_id)
   {
     $excels['number_of_rows'] =   10;
     $excels['company_id']     =   $company_id;
-    $company_template         =   TblCompanyModel::where('company_id',$company_id)->first();
-    $cal_template             =   TblCalModel::where('cal_id',$cal_id)->first();
-    $excels['company_name']   =   $company_template->company_name;
-    $excels['company_id']     =   $company_template->company_id;
+    $cal_template             =   TblCalModel::where('cal_id',$cal_id)
+                              ->join('tbl_company','tbl_company.company_id','=','tbl_cal.company_id')
+                              ->first();
+    $excels['company_name']   =   $cal_template->company_name;
+    $excels['company_id']     =   $cal_template->company_id;
     $excels['cal_number']     =   $cal_template->cal_number;
-    $excels['_member']        =   TblMemberCompanyModel::where('tbl_member_company.company_id',$excels['company_id'])
-                                  ->join('tbl_member','tbl_member.member_id','=','tbl_member_company.member_id')
-                                  ->join('tbl_availment_plan','tbl_availment_plan.availment_plan_id','=','tbl_member_company.availment_plan_id')
-                                  ->join('tbl_company','tbl_company.company_id','=','tbl_member_company.company_id')
-                                  ->get();
-    $excels['data'] = ['COMPANY','CAL NUMBER','CAREWELL ID','MEMBER FIRST NAME','MEMBER MIDDLE NAME','MEMBER LAST NAME','PAYMENT AMOUNT','MEMBER STATUS'];
-    Excel::create('CAL - '.$company_template->company_name.' - TEMPLATE', function($excel) use ($excels) 
+
+    $excels['_deployment']    = TblCompanyDeploymentModel::where('tbl_company_deployment.company_id',$company_id)->get();
+    $excels['_coverage']      = TblCompanyCoveragePlanModel::where('tbl_company_coverage_plan.company_id',$company_id)
+                              ->join('tbl_coverage_plan','tbl_coverage_plan.coverage_plan_id','=','tbl_company_coverage_plan.coverage_plan_id')
+                              ->get();
+    $excels['_member']        = TblMemberCompanyModel::where('tbl_member_company.archived',0)
+                              ->where('tbl_member_company.company_id',$company_id)
+                              ->join('tbl_member','tbl_member.member_id','=','tbl_member_company.member_id')
+                              ->join('tbl_coverage_plan','tbl_coverage_plan.coverage_plan_id','=','tbl_member_company.coverage_plan_id')
+                              ->join('tbl_company','tbl_company.company_id','=','tbl_member_company.company_id')
+                              ->join('tbl_company_deployment','tbl_company_deployment.deployment_id','=','tbl_member_company.deployment_id')
+                              ->get();
+    // dd($excels['_member']);
+    $excels['count_member']   =   count($excels['_member'])+10;
+    $excels['data'] = ['COMPANY','CAL NUMBER','UNIVERSAL ID','CAREWELL ID','MEMBER FIRST NAME','MEMBER MIDDLE NAME','MEMBER LAST NAME','MEMBER BIRTHDATE','COVERAGE PLAN','DEPLOYMENT','PAYMENT AMOUNT','MEMBER STATUS'];
+    Excel::create('CAL - '.$excels['company_name'].' - TEMPLATE', function($excel) use ($excels) 
     {
       $excel->sheet('template', function($sheet) use ($excels) 
       {
@@ -857,13 +918,30 @@ class CarewellController extends ActiveAuthController
         $number_of_rows = $excels['number_of_rows'];
         $sheet->fromArray($data, null, 'A1', false, false);
         $sheet->freezeFirstRow();
-        $count_member     = count($_member);
-        for($row = 1, $rowcell = 2; $row <= $count_member; $row++, $rowcell++)
+        for($row = 1, $rowcell = 2; $row <= $excels['count_member']; $row++, $rowcell++)
         {
           $sheet->setCellValue('A'.$rowcell, $excels['company_name']);
           $sheet->setCellValue('B'.$rowcell, $excels['cal_number']);
+          
+          $coverage_cell = $sheet->getCell('I'.$rowcell)->getDataValidation();
+          $coverage_cell->setType(\PHPExcel_Cell_DataValidation::TYPE_LIST);
+          $coverage_cell->setErrorStyle(\PHPExcel_Cell_DataValidation::STYLE_INFORMATION);
+          $coverage_cell->setAllowBlank(false);
+          $coverage_cell->setShowInputMessage(true);
+          $coverage_cell->setShowErrorMessage(true);
+          $coverage_cell->setShowDropDown(true);
+          $coverage_cell->setErrorTitle('Input error');
+          $coverage_cell->setError('Value is not in list.');
+          $coverage_cell->setFormula1('coverage');
 
-          $status_cell = $sheet->getCell('H'.$rowcell)->getDataValidation();
+          $deployment_cell = $sheet->getCell('J'.$rowcell)->getDataValidation();
+          $deployment_cell->setType(\PHPExcel_Cell_DataValidation::TYPE_LIST);
+          $deployment_cell->setErrorStyle(\PHPExcel_Cell_DataValidation::STYLE_INFORMATION);
+          $deployment_cell->setAllowBlank(false);
+          $deployment_cell->setShowDropDown(true);
+          $deployment_cell->setFormula1('deployment');
+
+          $status_cell = $sheet->getCell('L'.$rowcell)->getDataValidation();
           $status_cell->setType(\PHPExcel_Cell_DataValidation::TYPE_LIST);
           $status_cell->setErrorStyle(\PHPExcel_Cell_DataValidation::STYLE_INFORMATION);
           $status_cell->setAllowBlank(false);
@@ -877,30 +955,67 @@ class CarewellController extends ActiveAuthController
         foreach($_member as  $key => $member)
         {
           $key = $key+=2;
-          $sheet->setCellValue('C'.$key, $member->member_company_carewell_id);
-          $sheet->setCellValue('D'.$key, $member->member_first_name);
-          $sheet->setCellValue('E'.$key, $member->member_middle_name);
-          $sheet->setCellValue('F'.$key, $member->member_last_name);
-          $sheet->setCellValue('G'.$key, $member->availment_plan_price);
-          $sheet->setCellValue('H'.$key, $member->member_company_status);
+
+          $sheet->setCellValue('C'.$key, $member->member_universal_id);
+          $sheet->setCellValue('D'.$key, $member->member_carewell_id);
+          $sheet->setCellValue('E'.$key, $member->member_first_name);
+          $sheet->setCellValue('F'.$key, $member->member_middle_name);
+          $sheet->setCellValue('G'.$key, $member->member_last_name);
+          $sheet->setCellValue('H'.$key, date('m-d-Y', strtotime($member->member_birthdate)));
+          $sheet->setCellValue('I'.$key, $member->coverage_plan_name);
+          $sheet->setCellValue('J'.$key, $member->deployment_name);
+          $sheet->setCellValue('K'.$key, $member->coverage_plan_monthly_premium);
+          $sheet->setCellValue('L'.$key, $member->member_company_status);
         }
       });
       /* DATA VALIDATION (REFERENCE FOR DROPDOWN LIST) */
       $excel->sheet('reference', function($sheet) use($excels) 
       {
+        $_coverage    = $excels['_coverage'];
+        $_deployment  = $excels['_deployment'];
+        /* COVERAGE REFERENCES */
+        $sheet->SetCellValue("I1", "coverage");
+        $coverage_number = 2;
+        foreach($_coverage as $coverage)
+        {
+            $sheet->SetCellValue("I".$coverage_number, $coverage->coverage_plan_name);
+            $coverage_number++;
+        }
+        $coverage_number--;
+        /* DEPLOYMENT REFERENCES */
+        $sheet->SetCellValue("J1", "deployment");
+        $deployment_number = 2;
+        foreach($_deployment as $deployment)
+        {
+            $sheet->SetCellValue("J".$deployment_number, $deployment->deployment_name);
+            $deployment_number++;
+        }
+        $deployment_number--;
+        /* STATUS REFERENCE */
+        $sheet->SetCellValue("L1", "status");
+        $sheet->SetCellValue("L2", "ACTIVE");
+        $sheet->SetCellValue("L3", "INACTIVE");
+        
 
-         /* STATUS REFERENCE */
-          $sheet->SetCellValue("A1", "status");
-          $sheet->SetCellValue("A2", "ACTIVE");
-          $sheet->SetCellValue("A3", "INACTIVE");
-          $sheet->SetCellValue("A4", "RESIGN");
-
-          $sheet->_parent->addNamedRange
-          (
-              new \PHPExcel_NamedRange(
-              'status', $sheet, 'A2:A4'
-              )
-          );
+        /*COVERAGE*/
+        $sheet->_parent->addNamedRange(
+            new \PHPExcel_NamedRange(
+            'coverage', $sheet, 'I2:I'.$coverage_number
+            )
+        );
+        /*DEPLOYMENT*/
+        $sheet->_parent->addNamedRange(
+            new \PHPExcel_NamedRange(
+            'deployment', $sheet, 'J2:J'.$deployment_number
+            )
+        );
+        /*STATUS*/
+        $sheet->_parent->addNamedRange
+        (
+            new \PHPExcel_NamedRange(
+            'status', $sheet, 'L2:L3'
+            )
+        );
       });
       
     })->download('xlsx');
@@ -913,33 +1028,90 @@ class CarewellController extends ActiveAuthController
     $cal_id       = $request->cal_id;
     $companyData  = TblCompanyModel::where('company_id',$company_id)->first();
     $first        = $_data[0]; 
-          if(isset($first['company'])&&isset($first['cal_number'])&&isset($first['carewell_id']))
+          if(isset($first['company'])&&isset($first['cal_number']))
           {    
-               $count = 0;
-               foreach($_data as $data)
-               {
+            $count = 0;
+              foreach($_data as $data)
+              {
+                $checkingMember = StaticFunctionController::checkIfExistMember($data['carewell_id'],$data['universal_id']);
+                if($checkingMember==0&&$data['member_birthdate']!="")
+                {
+                  
 
-                    $check_member   = TblMemberCompanyModel::where('member_company_carewell_id',$data['carewell_id'])->first();
-                    $check_exist    = TblCompanyCalMemberModel::where('member_id',$check_member->member_id)
-                                    ->where('cal_id',$cal_id)
-                                    ->first();
-                    $count_member = count($check_member);
-                    $count_exist  = count($check_exist);
-                    if($count_member != 0 &&$count_exist==0)
-                    {
-                          
-                          $cal_member['cal_member_amount']        =   StaticFunctionController::nullableToString($data['payment_amount']);
-                          $cal_member['cal_member_date_paid']     =   Carbon::now();
-                          $cal_member['member_id']                =   $check_member->member_id;
-                          $cal_member['cal_id']                   =   $cal_id; 
+                  $member['member_first_name']        =   StaticFunctionController::nullableToString($data['member_first_name']);
+                  $member['member_middle_name']       =   StaticFunctionController::nullableToString($data['member_middle_name']);
+                  $member['member_last_name']         =   StaticFunctionController::nullableToString($data['member_last_name']);
+                  $member['member_birthdate']         =   date_format($data['member_birthdate'],"d-m-Y");  
+                  $member['member_gender']            =   "N/A";
+                  $member['member_marital_status']    =   "N/A";
+                  $member['member_mother_maiden_name']=   "N/A";
+                  $member['member_permanet_address']  =   "N/A";
+                  $member['member_present_address']   =   "N/A";
+                  $member['member_contact_number']    =   "N/A";
+                  $member['member_email_address']     =   "N/A";
+                  $member['member_created']           =   Carbon::now();
 
-                          
-                          TblCompanyCalMemberModel::insert($cal_member);
-                          
-                          $count++;
-                    }
-               }    
-               if($count == 0)
+                  $display_name                       =   $member['member_first_name']." ".$member['member_middle_name']." ".$member['member_last_name'];
+
+                  $member['member_universal_id']      =   StaticFunctionController::generateUniversalId($display_name,$member['member_birthdate']);
+
+                  $member_id                          =   TblMemberModel::insertGetId($member);
+
+                  $dependent['dependent_full_name']    =   "N/A";
+                  $dependent['dependent_birthdate']    =   "N/A";
+                  $dependent['dependent_relationship'] =   "N/A";
+                  $dependent['member_id']                     =   $member_id;
+                  TblMemberDependentModel::insert($dependent);
+
+                  $government['government_card_philhealth'] =   "N/A";
+                  $government['government_card_sss']        =   "N/A";
+                  $government['government_card_tin']        =   "N/A";
+                  $government['government_card_hdmf']       =   "N/A";
+                  $government['member_id']                         =   $member_id;
+                  TblMemberGovernmentCardModel::insert($government);
+                  
+                  $company['member_carewell_id']        =   StaticFunctionController::generateCarewellId($companyData->company_code);
+                  $company['member_employee_number']    =   "11";
+                  $company['member_company_status']     =   "active";
+                  $company['member_transaction_date']   =   "active";
+                  $company['coverage_plan_id']          =   StaticFunctionController::getid($data['coverage_plan'], 'coverage');
+                  $company['deployment_id']             =   StaticFunctionController::getid($data['deployment'], 'deployment');
+                  $company['member_id']                 =   $member_id;
+                  $company['company_id']                =   $company_id;
+                  TblMemberCompanyModel::insert($company);
+
+                  $cal_member['cal_payment_amount']     =   StaticFunctionController::nullableToString($data['payment_amount']);
+                  $cal_member['cal_payment_date']       =   Carbon::now();
+                  $cal_member['member_id']              =   $member_id;
+                  $cal_member['cal_id']                 =   $cal_id; 
+
+                  TblCalMemberModel::insert($cal_member);
+                  $count++;
+                }
+                else
+                {
+                  $check_member   = TblMemberCompanyModel::where('member_carewell_id',$data['carewell_id'])->first();
+                  $check_exist    = TblCalMemberModel::where('member_id',StaticFunctionController::getid($data['universal_id'],'member'))
+                                  ->where('cal_id',$cal_id)
+                                  ->first();
+                  $count_member = count($check_member);
+                  $count_exist  = count($check_exist);
+                  if($count_member != 0 &&$count_exist==0)
+                  {
+                        
+                        $cal_member['cal_payment_amount']       =   StaticFunctionController::nullableToString($data['payment_amount']);
+                        $cal_member['cal_payment_date']         =   Carbon::now();
+                        $cal_member['member_id']                =   $check_member->member_id;
+                        $cal_member['cal_id']                   =   $cal_id; 
+
+                        TblCalMemberModel::insert($cal_member);
+                        
+                        $count++;
+                  }
+
+                }
+              }
+            if($count == 0)
                {
                     $message = '<center><b><span class="color-gray">There is nothing to insert</span></b></center>';
                     
@@ -948,15 +1120,11 @@ class CarewellController extends ActiveAuthController
                {
                   $message = '<center><b><span class="color-green">'.$count.' Employee/s has been inserted.</span></b></center>';
                }
-               
-
-
-               return $message;
+              return $message;
           }
           else
           {
                return '<center><b><span class="color-red">Wrong file Format</span></b></center>';
-               
           }
   }
   public function billing_billing_statement()
@@ -965,28 +1133,31 @@ class CarewellController extends ActiveAuthController
   }
 
   /*MEDICAL*/
-  public function medical()
+  public function availment()
   {
-  	$data['page']       = 'Medical';
+  	$data['page']       = 'Availment';
     $data['_company']   = TblCompanyModel::where('archived',0)->get();
     $data['user']       = $this->global();
+    // $data['_approval']  = TblCompanyModel::where('archived',0)->paginate(10);
     $data['_approval']  = TblApprovalModel::join('tbl_provider','tbl_provider.provider_id','=','tbl_approval.provider_id')
                           ->join('tbl_member','tbl_member.member_id','=','tbl_approval.member_id')
                           ->join('tbl_member_company','tbl_member_company.member_id','tbl_member.member_id')
                           ->join('tbl_company','tbl_company.company_id','tbl_member_company.company_id')
                           ->paginate(10);
-  	return view('carewell.pages.medical_center',$data);
+  	return view('carewell.pages.availment_center',$data);
   }
-  public function medical_create_approval()
+  public function availment_create_approval()
   {
-    $data['_member']    = TblMemberModel::get();
-    $data['_provider']  = TblProviderModel::get();
+    $data['_member']    = TblMemberModel::join('tbl_member_company','tbl_member_company.member_id','=','tbl_member.member_id')
+                        ->where('tbl_member_company.archived',0)
+                        ->get();
+    $data['_provider']  = TblProviderModel::where('archived',0)->get();
     $data['_availment'] = TblAvailmentModel::where('availment_parent_id',0)->get();
-    $data['_procedure'] = TblProcedureModel::get();
+    $data['_procedure'] = TblCompanyModel::get();
     $data['_doctor']    = TblDoctorModel::get();
-    return view('carewell.modal_pages.medical_create_approval',$data);
+    return view('carewell.modal_pages.availment_approval_create',$data);
   }
-  public function medical_create_approval_member_info($member_id)
+  public function availment_get_member_info($member_id)
   {
     $data['member_info']  = TblMemberModel::where('tbl_member.member_id',$member_id)->Member()->first();
     $data['_member']      = TblMemberModel::get();
@@ -995,71 +1166,59 @@ class CarewellController extends ActiveAuthController
       $data['_member'][$key]['display_name'] =  $member['member_first_name']." ".$member['member_middle_name']." ".$member['member_last_name'];
     }
     
-    return view('carewell.modal_pages.medical_create_approval_member',$data);
+    return view('carewell.additional_pages.availment_get_member_info',$data);
   }
-  public function medical_create_approval_availment_info($availment_id)
+  public function availment_get_member_procedure($availment_id)
   {
-    $data['_procedure']   = TblProcedureModel::get();
-    return view('carewell.modal_pages.medical_create_approval_availment',$data);
+    $data['_procedure']   = TblAvailmentModel::where('availment_parent_id',$availment_id)
+                            ->get();
+    return view('carewell.additional_pages.availment_get_member_procedure',$data);
   }
-  public function medical_create_approval_doctor_info($provider_id)
+  public function availment_get_provider_doctor($provider_id)
   {
     $data['_procedure']   = TblProcedureModel::get();
     $data['_doctor']      = TblDoctorModel::get();
-    return view('carewell.modal_pages.medical_create_approval_doctor',$data);
+    return view('carewell.additional_pages.availment_procedure_doctor',$data);
   }
-  public function medical_create_approval_submit(Request $request)
+  public function availment_create_approval_submit(Request $request)
   {
-    $approval_count                                  =  TblApprovalModel::count();
-    if($approval_count==null||$approval_count==0)
-    {
-      $approvalLastId                               =  1;
-    }
-    else
-    {
-      $approval                                      =  TblApprovalModel::orderBy('approval_id','DESC')->first();
-      $approvalLastId                               =  $approval->approval_id+1;
-    }
-    
+    StaticFunctionController::updateReferenceNumber('approval');
     $data['user'] = $this->global();
     $approvalData = new TblApprovalModel;
-    $approvalData->approval_number            = 'APP-'.str_replace(["-", "–"], "",date("m-y")).'-'.sprintf("%05d",$approvalLastId);
+    
+    $approvalData->approval_number            = StaticFunctionController::updateReferenceNumber('approval');
     $approvalData->approval_complaint         = $request->approval_complaint;
-    $approvalData->approval_initial_diagnosis = $request->approval_initial_diagnosis;
-    $approvalData->approval_final_diagnosis   = $request->approval_final_diagnosis;
     $approvalData->approval_created           = Carbon::now();
     $approvalData->availment_id               = $request->availment_id;
     $approvalData->provider_id                = $request->provider_id;
     $approvalData->member_id                  = $request->member_id;
     $approvalData->user_id                    = $data['user']->user_id;
     $approvalData->save();
-
-    foreach($request->procedure_id as $key=>$data)
+    
+    foreach($request->availed_id as $key=>$data)
     {
-      $availedData = new TblProcedureAvailedModel;
-      $availedData->procedure_availed_amount              = $request->procedure_availed_amount[$key];
-      $availedData->procedure_availed_remarks             = $request->procedure_availed_remarks[$key];
-      $availedData->procedure_availed_philhealth_charity  = $request->procedure_availed_philhealth_charity[$key];
-      $availedData->procedure_availed_charge_to_patient   = $request->procedure_availed_charge_to_patient[$key];
-      $availedData->procedure_availed_disapproved         = $request->procedure_availed_disapproved[$key];
-      $availedData->procedure_availed_charge_to_carewell  = $request->procedure_availed_charge_to_carewell[$key];
-      $availedData->procedure_id                          = $request->procedure_id[$key];
-      $availedData->approval_id                           = $approvalData->approval_id;
+      $availedData = new TblApprovalAvailedModel;
+      $availedData->availed_phil_charity      = $request->availed_phil_charity[$key];
+      $availedData->availed_charge_patient    = $request->availed_charge_patient[$key];
+      $availedData->availed_charge_carewell   = $request->availed_charge_carewell[$key];
+      $availedData->availed_remarks           = $request->availed_remarks[$key];
+      $availedData->availment_id              = $request->availed_id[$key];
+      $availedData->approval_id               = $approvalData->approval_id;
       $availedData->save();
     }
     
     foreach($request->doctor_id as $key=>$data)
     {
-      $doctorData = new TblProcedureDoctorModel;
-      $doctorData->procedure_doctor_actual_pf_charges    = $request->procedure_doctor_actual_pf_charges[$key];
-      $doctorData->procedure_doctor_rate_r_vs            = $request->procedure_doctor_rate_r_vs[$key];
-      $doctorData->procedure_doctor_philhealth_charity   = $request->procedure_doctor_philhealth_charity[$key];
-      $doctorData->procedure_doctor_charge_to_patient   = $request->procedure_doctor_charge_to_patient[$key];
-      $doctorData->procedure_doctor_disapproved          = $request->procedure_doctor_disapproved[$key];
-      $doctorData->procedure_doctor_charge_to_carewell   = $request->procedure_doctor_charge_to_carewell[$key];
-      $doctorData->procedure_id                          = $request->doctor_procedure_id[$key];
-      $doctorData->doctor_id                             = $request->doctor_id[$key];
-      $doctorData->approval_id                           = $approvalData->approval_id;
+      $doctorData = new TblApprovalDoctorModel;
+      $doctorData->approval_doctor_actual_pf        = $request->approval_doctor_actual_pf[$key];
+      $doctorData->approval_doctor_rate_rvs         = $request->approval_doctor_rate_rvs[$key];
+      $doctorData->approval_doctor_phil_charity     = $request->approval_doctor_phil_charity[$key];
+      $doctorData->approval_doctor_charge_patient   = $request->approval_doctor_charge_patient[$key];
+      $doctorData->approval_doctor_charge_carewell  = $request->approval_doctor_charge_carewell[$key];
+      $doctorData->specialization_id                = $request->specialization_id[$key];
+      $doctorData->doctor_id                        = $request->doctor_id[$key];
+      $doctorData->procedure_id                     = $request->procedure_id[$key];
+      $doctorData->approval_id                      = $approvalData->approval_id;
       $doctorData->save();
     }
     if($approvalData->save()&&$availedData->save()&&$doctorData->save())
@@ -1072,7 +1231,7 @@ class CarewellController extends ActiveAuthController
     }
     
   }
-  public function medical_view_approval_details($approval_id)
+  public function availment_view_approval_details($approval_id)
   {
     $data['_member']    = TblMemberModel::get();
     $data['_provider']  = TblProviderModel::get();
@@ -1087,14 +1246,14 @@ class CarewellController extends ActiveAuthController
                                 ->join('tbl_member_company','tbl_member_company.member_id','tbl_member.member_id')
                                 ->join('tbl_company','tbl_company.company_id','tbl_member_company.company_id')
                                 ->first();
-    $data['_availed']   = TblProcedureAvailedModel::where('tbl_procedure_availed.approval_id',$approval_id)
-                                ->join('tbl_procedure','tbl_procedure.procedure_id','=','tbl_procedure_availed.procedure_id')
+    $data['_availed']           = TblApprovalAvailedModel::where('tbl_approval_availed.approval_id',$approval_id)
+                                ->join('tbl_availment','tbl_availment.availment_id','=','tbl_approval_availed.availment_id')
                                 ->get();
-    $data['_doctor_assigned']   = TblProcedureDoctorModel::where('tbl_procedure_doctor.approval_id',$approval_id)
-                                ->join('tbl_procedure','tbl_procedure.procedure_id','=','tbl_procedure_doctor.procedure_id')
-                                ->join('tbl_doctor','tbl_doctor.doctor_id','=','tbl_procedure_doctor.doctor_id')
+    $data['_doctor_assigned']   = TblApprovalDoctorModel::where('tbl_approval_doctor.approval_id',$approval_id)
+                                ->join('tbl_procedure','tbl_procedure.procedure_id','=','tbl_approval_doctor.procedure_id')
+                                ->join('tbl_doctor','tbl_doctor.doctor_id','=','tbl_approval_doctor.doctor_id')
                                 ->get();
-    return view('carewell.modal_pages.medical_approval_details',$data);
+    return view('carewell.modal_pages.availment_approval_details',$data);
   }
 
   
@@ -1102,8 +1261,9 @@ class CarewellController extends ActiveAuthController
   /*PAYABLE*/
   public function payable()
   {
-  	$data['page'] = 'Payable';
-    $data['user'] = $this->global();
+  	$data['page']      = 'Payable';
+    $data['user']      = $this->global();
+    $data['_company']  = TblCompanyModel::where('archived',0)->get();
   	return view('carewell.pages.payable',$data);
   }
 
@@ -1111,7 +1271,7 @@ class CarewellController extends ActiveAuthController
   {
 
     $data['_provider']  = TblProviderModel::where('archived',0)->get();
-    $data['_approval'] = TblApprovalModel::join('tbl_provider','tbl_provider.provider_id','=','tbl_approval.provider_id')
+    $data['_approval']  = TblApprovalModel::join('tbl_provider','tbl_provider.provider_id','=','tbl_approval.provider_id')
                           ->join('tbl_member','tbl_member.member_id','=','tbl_approval.member_id')
                           ->join('tbl_member_company','tbl_member_company.member_id','tbl_member.member_id')
                           ->join('tbl_company','tbl_company.company_id','tbl_member_company.company_id')
@@ -1120,64 +1280,13 @@ class CarewellController extends ActiveAuthController
   }
   public function reports()
   {
-  	$data['page'] = 'Reports';
-    $data['user'] = $this->global();
+  	$data['page']     = 'Reports';
+    $data['_company'] = TblCompanyModel::where('archived',0)->get();
+    $data['user']     = $this->global();
 
     return view('carewell.pages.reports',$data);
   }
   /*SETTINGS*/
-  public function settings_plan()
-  {
-  	$data['page'] = 'Plan Settings';
-    $data['user'] = $this->global();
-
-    $data['_availment_plan'] = TblAvailmentPlanModel::paginate(10);
-
-  	return view('carewell.pages.settings_plan',$data);
-  }
-  public function settings_plan_create_plan()
-  {
-    $data['_availment'] = TblAvailmentModel::all();
-    return view('carewell.modal_pages.settings_create_plan',$data);
-  }
-  public function settings_plan_create_plan_submit(Request $request)
-  {
-   
-    $availmentPlanData = new TblAvailmentPlanModel;
-    $availmentPlanData->availment_plan_name   =   $request->availment_plan_name;
-    $availmentPlanData->availment_plan_price  =   $request->availment_plan_price;
-    $availmentPlanData->availment_plan_created=   Carbon::now();
-    $availmentPlanData->save();
-
-    foreach($request->ajaxData as $key=> $availment_id)
-    {
-
-      $availmentTagData = new TblAvailmentTagModel;
-      $availmentTagData->availment_id                   =   $availment_id;
-      $availmentTagData->availment_plan_id              =   $availmentPlanData->availment_plan_id;
-      $availmentTagData->availment_type_coverage_amount =   '1400';
-      $availmentTagData->save();
-    }
-    return "<div class='alert alert-success' style='text-align: center;'>Company Added Successfully!</div>";
-  }
-  public function settings_plan_details($availment_plan_id)
-  {
-    $data['_availment_plan_details'] = TblAvailmentTagModel::where('availment_plan_id',$availment_plan_id)->AvailmentTag($availment_plan_id)->get();
-    // dd($data);
-    $data['availment_plan'] = TblAvailmentPlanModel::where('availment_plan_id',$availment_plan_id)->first();
-    return view('carewell.modal_pages.settings_plan_details',$data);
-  }
-
-  public function settings_provider()
-  {
-    $data['page'] = 'Provider Settings';
-    $data['user'] = $this->global();
-
-    $data['_provider'] = TblProviderModel::paginate(10);
-
-    return view('carewell.pages.settings_provider',$data);
-  }
-
   public function settings_coverage_plan()
   {
     $data['page'] = 'Coverage PLan';

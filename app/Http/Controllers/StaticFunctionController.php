@@ -15,9 +15,9 @@ use App\Http\Model\TblUserInfoModel;
 use App\Http\Model\TblCompanyModel;
 use App\Http\Model\TblCompanyContractModel;
 use App\Http\Model\TblCompanyCoveragePlanModel;
-use App\Http\Model\TblCompanyJobsiteModel;
-use App\Http\Model\TblCompanyCalModel;
-use App\Http\Model\TblCompanyCalMemberModel;
+use App\Http\Model\TblCompanyDeploymentModel;
+use App\Http\Model\TblCalModel;
+use App\Http\Model\TblCalMemberModel;
 use App\Http\Model\TblCompanyTrunklineModel;
 
 
@@ -31,7 +31,8 @@ use App\Http\Model\TblMemberGovernmentCardModel;
 
 
 use App\Http\Model\TblAvailmentModel;
-use App\Http\Model\TblAvailmentPlanModel;
+
+use App\Http\Model\TblCoveragePlanModel;
 use App\Http\Model\TblAvailmentTagModel;
 
 use App\Http\Model\TblPaymentModeModel;
@@ -57,6 +58,21 @@ use App\Http\Model\TblScheduleOfBenefitsModel;
 
 class StaticFunctionController extends Controller
 {
+  public function getDoctorSpecialty(Request $request)
+  {
+    if($request->ajax())
+    {
+        $data['_specialization']  = TblDoctorSpecializationModel::where('tbl_doctor_specialization.doctor_id',$request->doctor_id)
+                                    ->join('tbl_specialization','tbl_specialization.specialization_id','=','tbl_doctor_specialization.specialization_id')
+                                    ->get();
+        $data['_specializationList'] = '';
+        foreach($data['_specialization'] as $specializationDoctor)
+        {
+            $data['_specializationList']     .= '<option value='.$specializationDoctor->specialization_id.'>'.$specializationDoctor->specialization_name;
+        }
+        return $data['_specializationList'];
+    }
+  }
   public function getProcedureAmount(Request $request)
   {
     if($request->ajax())
@@ -94,12 +110,23 @@ class StaticFunctionController extends Controller
         return $data['jobsiteList'];
     }
   }
-  public static function generateUniversalId($company_code)
+  
+  public static function generateUniversalId($display_name,$birthdate)
   {
-    $member_company_data = Self::updateReferenceNumber('member_company');
-    $carewell_id = $company_code."-".date("my")."-".$member_company_data;
+    
+    $member_count = TblMemberModel::count();
+    if($member_count==null||$member_count==0)
+    {
+      $member_data = sprintf("%08d",1);
+    }
+    else
+    {
+      $member = TblMemberModel::orderBy('member_id','DESC')->first();
+      $member_data = sprintf("%08d",$member->member_id + 1);
+    }
+    $universal_id = Self::initials($display_name)."-".Self::birthdate($birthdate)."-".$member_data;
 
-    return $carewell_id;
+    return $universal_id;
   }
   public static function generateCarewellId($company_code)
   {
@@ -122,6 +149,19 @@ class StaticFunctionController extends Controller
     $refrenceNumber = '00000';
     switch ($str_name) 
     {
+      case 'approval':
+        $approval_count          =  TblApprovalModel::count();
+        if($approval_count==null||$approval_count==0)
+        {
+          $refrenceNumber = 'APP-'.str_replace(["-", "–"], "",date("m-y")).'-'.sprintf("%05d",1);
+        }
+        else
+        {
+          $approval              =  TblApprovalModel::orderBy('approval_id','DESC')->first();
+          $refrenceNumber = 'APP-'.str_replace(["-", "–"], "",date("m-y")).'-'.sprintf("%05d",$approval->approval_id+1);
+       
+        }
+        break;
       case 'doctor':
         $count_doctor = TblDoctorModel::count();
         if($count_doctor==null||$count_doctor==0)
@@ -172,7 +212,21 @@ class StaticFunctionController extends Controller
           $member_company = TblMemberCompanyModel::orderBy('member_company_id','DESC')->first();
           $refrenceNumber = sprintf("%05d",$member_company->member_company_id + 1);
         }
+        break;
+      case 'billing_cal':
+        $cal_count        =  TblCalModel::count();
+        if($cal_count==null||$cal_count==0)
+        {
+          $refrenceNumber = 'CAL-'.sprintf("%05d",1);
+        }
+        else
+        {
+          $cal            =  TblCalModel::orderBy('cal_id','DESC')->first();
+          $refrenceNumber =  'CAL-'.sprintf("%05d",$cal->cal_id+1);
+        }
+        break;
     }
+     
     return $refrenceNumber; 
   }
   public static function nullableToString($data = null, $output = 'string')
@@ -197,6 +251,30 @@ class StaticFunctionController extends Controller
     return $ret;
     
   }
+  public static function birthdate($birthdate) 
+  {
+    $date = $birthdate;
+    // $bdate = date_format($date,"m-y");
+    $bdate = date('m-y', strtotime($birthdate));
+    // dd($bdate);
+    $final = str_replace(' ','',preg_replace('/[^a-z0-9\s]/i', '', $bdate));
+    return $final;
+    
+  }
+  public static function checkIfExistMember($carewell_id,$universal_id)
+  {
+    $check_universal = TblMemberModel::where('member_universal_id',$universal_id)->first();
+    $check_carewell  = TblMemberCompanyModel::where('member_carewell_id',$carewell_id)->first();
+    if($check_universal!=null&&$check_carewell!=null)
+    {
+      $result = 1;
+    }
+    else
+    {
+      $result = 0;
+    }
+    return $result;
+  }
   public static function yesNotoInt($stryn = 'Y')
   {
         $int = 0;
@@ -212,16 +290,16 @@ class StaticFunctionController extends Controller
     $id = 0;
     switch ($str_param) 
     {
-      case 'jobsite':
-        $id = TblCompanyJobsiteModel::where('jobsite_name', $str_name)->value('jobsite_id');
+      case 'deployment':
+        $id = TblCompanyDeploymentModel::where('deployment_name', $str_name)->value('deployment_id');
         if($id == null)
         {
           $id = 1;
         }
         break;
 
-      case 'availment':
-        $id = TblAvailmentPlanModel::where('availment_plan_name', $str_name)->value('availment_plan_id');
+      case 'coverage':
+        $id = TblCoveragePlanModel::where('coverage_plan_name', $str_name)->value('coverage_plan_id');
         if($id == null)
         {
           $id = 1;
@@ -238,6 +316,21 @@ class StaticFunctionController extends Controller
 
       case 'provider':
         $id = TblProviderModel::where('provider_name', $str_name)->value('provider_id');
+        if($id == null)
+        {
+          $id = 1;
+        }
+        break;
+
+      case 'specialization':
+        $id = TblSpecializationModel::where('specialization_name', $str_name)->value('specialization_id');
+        if($id == null)
+        {
+          $id = 1;
+        }
+        break;
+      case 'member':
+        $id = TblMemberModel::where('member_universal_id', $str_name)->value('member_id');
         if($id == null)
         {
           $id = 1;

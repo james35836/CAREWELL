@@ -55,7 +55,7 @@ class MaintenanceController extends Controller
                   $user_info[0]["user_gender"]        = "NOT AVAILABLE";
                   $user_info[0]["user_birthdate"]     = "NOT AVAILABLE";
                   $user_info[0]["user_contact_number"]= "NOT AVAILABLE";
-                  $user_info[0]["user_number"]     = "NOT AVAILABLE";
+                  $user_info[0]["user_number"]        = "CW-0000001";
                   $user_info[0]["user_address"]       = "NOT AVAILABLE";
                   $user_info[0]["user_created"]       = Carbon::now();
                   $user_info[0]["user_id"]            = 1;
@@ -618,35 +618,35 @@ class MaintenanceController extends Controller
 
         //     DB::table('tbl_schedule_of_benefits')->insert($benefits);
         // }
-        // if (DB::table('tbl_procedure')->count() <= 0) 
-        // {
-        //     $procedure[0]["procedure_id"]       = 1;
-        //     $procedure[0]["procedure_name"]     = "Sakit sa tiyan";
-        //     $procedure[0]["procedure_amount"]   = 2870;
-        //     $procedure[0]["procedure_created"]  = Carbon::now();
+        if (DB::table('tbl_procedure')->count() <= 0) 
+        {
+            $procedure[0]["procedure_id"]       = 1;
+            $procedure[0]["procedure_name"]     = "Sakit sa tiyan";
+            $procedure[0]["procedure_amount"]   = '2870';
+            $procedure[0]["procedure_created"]  = Carbon::now();
             
-        //     $procedure[1]["procedure_id"]       = 2;
-        //     $procedure[1]["procedure_name"]     = "sakit sa puso";
-        //     $procedure[1]["procedure_amount"]   = 5571;
-        //     $procedure[1]["procedure_created"]  = Carbon::now();
+            $procedure[1]["procedure_id"]       = 2;
+            $procedure[1]["procedure_name"]     = "sakit sa puso";
+            $procedure[1]["procedure_amount"]   = '5571';
+            $procedure[1]["procedure_created"]  = Carbon::now();
 
-        //     $procedure[2]["procedure_id"]       = 3;
-        //     $procedure[2]["procedure_name"]     = "sakit sa baga";
-        //     $procedure[2]["procedure_amount"]   = 1;
-        //     $procedure[2]["procedure_created"]  = Carbon::now();
+            $procedure[2]["procedure_id"]       = 3;
+            $procedure[2]["procedure_name"]     = "sakit sa baga";
+            $procedure[2]["procedure_amount"]   = '1';
+            $procedure[2]["procedure_created"]  = Carbon::now();
 
-        //     $procedure[3]["procedure_id"]       = 4;
-        //     $procedure[3]["procedure_name"]     = "sakit sa ulo";
-        //     $procedure[3]["procedure_amount"]   = 851;
-        //     $procedure[3]["procedure_created"]  = Carbon::now();
+            $procedure[3]["procedure_id"]       = 4;
+            $procedure[3]["procedure_name"]     = "sakit sa ulo";
+            $procedure[3]["procedure_amount"]   = '851';
+            $procedure[3]["procedure_created"]  = Carbon::now();
 
-        //     $procedure[4]["procedure_id"]       = 5;
-        //     $procedure[4]["procedure_name"]     = "sakit sa katawan";
-        //     $procedure[4]["procedure_amount"]   = 875870;
-        //     $procedure[4]["procedure_created"]  = Carbon::now();
+            $procedure[4]["procedure_id"]       = 5;
+            $procedure[4]["procedure_name"]     = "sakit sa katawan";
+            $procedure[4]["procedure_amount"]   = '875870';
+            $procedure[4]["procedure_created"]  = Carbon::now();
 
-        //     DB::table('tbl_procedure')->insert($procedure);
-        // }
+            DB::table('tbl_procedure')->insert($procedure);
+        }
         // if (DB::table('tbl_jobsite')->count() <= 0) 
         // {
         //     $job[0]["jobsite_id"]       = 35836;

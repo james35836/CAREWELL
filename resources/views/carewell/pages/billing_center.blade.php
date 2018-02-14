@@ -2,9 +2,10 @@
 @section('content')
 @include('carewell.modals.billing_center_modals')
 <div class="container">
+  
   <div class="row">
     <div class=" col-md-2  col-xs-6 pull-left">
-      <select class="form-control">
+      <select class="form-control top-element">
         <option>SELECT COMPANY</option>
         @foreach($_company as $company)
         <option value="{{$company->company_id}}">{{$company->company_name}}</option>
@@ -12,7 +13,7 @@
       </select>
     </div>
     <div class=" col-md-2 pull-right">
-      <button type="button" class="btn btn-primary  create-cal button-lg" ><i class="fa fa-plus btn-icon"></i>CREATE CAL</button>
+      <button type="button" class="btn btn-primary  create-cal top-element" ><i class="fa fa-plus btn-icon"></i>CREATE CAL</button>
     </div>
     
   </div>
@@ -53,11 +54,6 @@
               <td><span class="label label-success">active</span></td>
               <td>{{date("F j, Y",strtotime($cal_company->cal_created))}}</td>
               <td>
-                {{-- <select name="" class="form-control cal-action">
-                  <option value="" >ACTION</option>
-                  <option value="member" >View Member</option>
-                  <option value="billing" class="pop-up-lg">Billing Statement</option>
-                </select> --}}
                 <div class="btn-group">
                   <button type="button" class="btn btn-danger">Action</button>
                   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -65,11 +61,10 @@
                   <span class="sr-only">Toggle Dropdown</span>
                   </button>
                   <ul class="dropdown-menu" role="menu" style="position: absolute !important;">
-                    <li><button type="button" data-cal_id="{{$cal_company->cal_id}}" data-company_id="{{$cal_company->cal_company_id}}" class="btn btn-link cal-view-details"><i class="fa fa-eye btn-icon"></i>  View Details</button></li>
+                    <li><button type="button" data-cal_id="{{$cal_company->cal_id}}" data-company_id="{{$cal_company->company_id}}" class="btn btn-link cal-view-details"><i class="fa fa-eye btn-icon"></i>  View Details</button></li>
                     <li><button type="button" class="btn btn-link"><i class="fa fa-trash btn-icon"></i> Archived CAL</button></li>
                   </ul>
                 </div>
-
               </td>
             </tr>
             @endforeach

@@ -90,16 +90,17 @@ display: none;
 			<label>Payee</label>
 		</div>
 		<div class="col-md-10 payee-number-form">
+			@foreach($_provider_payee as $provider_payee)
 			<div class=" form-content payee-form-element">
 				<div class="input-group">
-					<input type="text" name="company_number[]" id="company_number" class="form-control"/>
+					<input type="text" value="{{$provider_payee->provider_payee_name}}" name="company_number[]" id="company_number" class="form-control"/>
 					<span class="input-group-btn">
 						<button class="btn btn-primary add-payee" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span> </button>
 						<button class="btn btn-danger remove-payee" type="button" tabindex="-1"><span class="fa fa-minus-circle" aria-hidden="true"></span> </button>
 					</span>
 				</div>
 			</div>
-			
+			@endforeach
 		</div>
 	</div>
 </div>
@@ -107,15 +108,15 @@ display: none;
 	<div class="nav-tabs-custom">
 		<ul class="nav nav-tabs">
 			<li class="active my-tab"><a data-toggle="tab" href="#doctors">List of Doctors</a></li>
-			<li class="my-tab"><a data-toggle="tab" href="#attachment">Attachment</a></li>
 		</ul>
 		<div class="tab-content">
+			
 			<div id="doctors" class="tab-pane fade in active table-min-height">
 				<div class=" form-holder">
 					<div class="row">
 						<div class="col-xs-12">
 							<div class="box-header">
-								<h3 class="box-title">MEMBERS</h3>
+								<h3 class="box-title">DOCTORS</h3>
 								<div class="box-tools">
 									<div class="input-group input-group-sm" style="width: 150px;">
 										<input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
@@ -159,18 +160,7 @@ display: none;
 					
 				</div>
 			</div>
-			<div id="attachment" class="tab-pane fade table-min-height">
-				<div class="row form-holder">
-					<div class="col-md-2 form-content">
-						<label>ATTACHMENT</label>
-					</div>
-					<div class="col-md-10 form-content">
-						<label id="bb"> CLICK TO SELECT FILE (max.25MB)
-							<input type="file" id="File"   size="60" >
-						</label>
-					</div>
-				</div>
-			</div>
+			
 		</div>
 	</div>
 </div>

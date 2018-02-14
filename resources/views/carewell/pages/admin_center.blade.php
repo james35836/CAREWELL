@@ -9,7 +9,7 @@
       </select>
     </div>
     <div class=" col-md-2 col-xs-6 pull-right">
-      <button class="btn btn-primary button-lg create-user" type="button" ><i class="fa fa-plus btn-icon "></i>CREATE USER</button>
+      <button class="btn btn-primary top-element create-user" type="button" ><i class="fa fa-plus btn-icon "></i>CREATE USER</button>
     </div>
   </div>
   <div class="row">

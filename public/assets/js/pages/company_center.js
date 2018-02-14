@@ -251,7 +251,7 @@ function company_center()
 			$('.global-modal-dialog').removeClass().addClass('company-details-modal-dialog modal-dialog modal-lg');
 			$('.global-modal-content').removeClass().addClass('modal-content');
 			$('.global-modal-header').removeClass().addClass('modal-header');
-			$('.global-modal-title').html('CREATE COVERAGE PLAN');
+			$('.global-modal-title').html('COMPANY DETAILS');
 			$('.global-modal-title').removeClass().addClass('modal-title');
 			$('.global-modal-body').removeClass().addClass('modal-body company-details-modal-body');
 			$('.company-details-modal').modal('show');

@@ -4,7 +4,7 @@
 <div class="container">
   <div class="row ">
     <div class=" col-md-2 pull-right">
-      <button type="button" class="btn btn-primary  button-lg create-company"><i class="fa fa-plus btn-icon "></i>CREATE COMPANY</button>
+      <button type="button" class="btn btn-primary  top-element create-company"><i class="fa fa-plus btn-icon "></i>CREATE COMPANY</button>
     </div>
   </div>
   <div class="row">

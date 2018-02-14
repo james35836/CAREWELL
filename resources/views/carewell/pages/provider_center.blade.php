@@ -37,7 +37,11 @@
               <tr>
                 <td>{{sprintf("%05d",$provider->provider_id)}}</td>
                 <td>{{$provider->provider_name}}</td>
-                <td>{{$provider->provider_billing_name}}</td>
+                <td>
+                  @foreach($provider->provider_payee as $payee)
+                  <span class="label label-default">{{$payee->provider_payee_name}}</span>
+                  @endforeach
+                </td>
                 <td><span class="label label-success">active</span></td>
                 <td>{{date("F j, Y",strtotime($provider->provider_created))}}</td>
                 <td>

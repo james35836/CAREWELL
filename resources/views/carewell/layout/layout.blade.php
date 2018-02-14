@@ -226,6 +226,22 @@
           </a>
         </li>
         <li class="treeview">
+          <a >
+            <i class="fa fa-share"></i> <span>REPORTS</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          
+          <ul class="treeview-menu">
+            <li><a href="/reports"><i class="fa fa-circle-o"></i>AVAILMENT MONITORING</a></li>
+            <li><a href="#"><i class="fa fa-circle-o"></i>COMPANY AVAILMENT</a></li>
+            <li><a href="#"><i class="fa fa-circle-o"></i>AVAILMENT SUMMARY</a></li>
+            <li><a href="#"><i class="fa fa-circle-o"></i>ENDING NUMBER</a></li>
+            <li><a href="#"><i class="fa fa-circle-o"></i>AVAILMENT BREAKDOWN </a></li>
+          </ul>
+        </li>
+        <li class="treeview">
           <a href="#">
             <i class="fa fa-cog"></i>
             <span>SETTINGS</span>
@@ -236,7 +252,6 @@
           <ul class="treeview-menu">
             <li><a href="/settings/admin"><i class="fa fa-universal-access"></i>ADMIN PANEL</a></li>
             <li><a href="/settings/coverage"><i class="fa fa-circle-o"></i>COVERAGE PLAN</a></li>
-            <li><a href="/settings/plan"><i class="fa fa-tasks "></i> CREATE PLAN</a></li>
           </ul>
         </li>
       </ul>
@@ -320,7 +335,7 @@
 <script src="/assets/js/pages/company_center.js"></script>
 <script src="/assets/js/pages/member_center.js"></script>
 <script src="/assets/js/pages/billing_center.js"></script>
-<script src="/assets/js/pages/medical_center.js"></script>
+<script src="/assets/js/pages/availment_center.js"></script>
 <script src="/assets/js/pages/provider_center.js"></script>
 <script src="/assets/js/pages/doctor_center.js"></script>
 <script src="/assets/js/pages/payable_center.js"></script>
@@ -342,6 +357,10 @@
 $('body').on('hidden.bs.modal', function (e) {
     if($('.modal').hasClass('in')) {
     $('body').addClass('modal-open');
+    }
+    else
+    {
+      $('div').removeClass('modal-backdrop');
     }    
 });
  

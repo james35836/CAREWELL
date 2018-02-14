@@ -11,9 +11,10 @@
   
 </script>
   <div class="container">
+    
     <div class="row">
       <div class=" col-md-2 col-xs-6 pull-left">
-        <select class="form-control">
+        <select class="form-control top-element">
           <option>SELECT COMPANY</option>
           @foreach($_company as $company)
           <option value="{{$company->company_id}}">{{$company->company_name}}</option>
@@ -21,7 +22,7 @@
         </select>
       </div>
       <div class=" col-md-2 col-xs-6 pull-right">
-        <button type="button" class="btn btn-primary create-approval button-lg"><i class="fa fa-plus btn-icon"></i>CREATE APPROVAL</button> 
+        <button type="button" class="btn btn-primary create-approval top-element"><i class="fa fa-plus btn-icon"></i>CREATE APPROVAL</button> 
       </div>
       
     </div>
@@ -56,7 +57,7 @@
               <tr>
                 <td>{{$approval->approval_number}}</td>
                 <td>{{$approval->member_universal_id}}</td>
-                <td>{{$approval->member_company_carewell_id}}</td>
+                <td>{{$approval->member_carewell_id}}</td>
                 <td>{{$approval->member_first_name." ".$approval->member_last_name }}</td>
                 <td>{{$approval->company_name}}</td>
                 <td>{{$approval->provider_name}}</td>

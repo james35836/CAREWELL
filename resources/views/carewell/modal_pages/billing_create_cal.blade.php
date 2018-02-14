@@ -15,7 +15,7 @@ autoclose: true
     </div>
     <div class="col-md-4 form-content">
       <select name="" id="cal_company_id" class="form-control">
-        <option value="company" >SELECT NAME</option>
+        <option>SELECT COMPANY</option>
         @foreach($_company as $company)
         <option value="{{$company->company_id}}" >{{$company->company_name}}</option>
         @endforeach

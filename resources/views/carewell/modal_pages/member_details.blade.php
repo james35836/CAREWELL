@@ -160,11 +160,11 @@
 						</tr>
 						@foreach($_member_company as $member_company)
 						<tr>
-							<td>{{$member_company->member_company_carewell_id}}</td>
+							<td>{{$member_company->member_carewell_id}}</td>
 							<td>{{$member_company->company_name}}</td>
-							<td>{{$member_company->member_company_employee_number}}</td>
-							<td>{{$member_company->availment_plan_name}}</td>
-							<td>{{$member_company->jobsite_name}}</td>
+							<td>{{$member_company->member_employee_number}}</td>
+							<td>{{$member_company->coverage_plan_name}}</td>
+							<td>{{$member_company->deployment_name}}</td>
 							<td><span class="label label-success">active</span></td>
 							<td>
 								<div class="btn-group">

@@ -54,7 +54,7 @@
             <tr>
               <td>{{$member->member_universal_id}}</td>
               <td>{{$member->member_first_name}} {{$member->member_last_name}}</td>
-              <td>{{$member->member_company_carewell_id}}</td>
+              <td>{{$member->member_carewell_id}}</td>
               <td>{{$member->company_name}}</td>
               <td>
                 @if($member->member_company_status=='active')
@@ -63,7 +63,7 @@
                 <span class="label label-danger">inactive</span>
                 @endif
               </td>
-              <td>{{date("F j, Y",strtotime($member->member_date_created))}}</td>
+              <td>{{date("F j, Y",strtotime($member->member_created))}}</td>
               <td>
                 <div class="btn-group">
                   <button type="button" class="btn btn-danger">Action</button>

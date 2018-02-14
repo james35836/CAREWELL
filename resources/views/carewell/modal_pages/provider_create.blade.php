@@ -94,7 +94,7 @@ input[type="file"] {
 			<div class="col-md-10 payee-number-form">
 				<div class=" form-content payee-form-element">
 					<div class="input-group">
-						<input type="text" name="company_number[]" id="company_number" class="form-control"/>
+						<input type="text" name="payee_name[]" id="company_number" class="form-control"/>
 						<span class="input-group-btn">
 							<button class="btn btn-primary add-payee" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span> </button>
 							<button class="btn btn-danger remove-payee" type="button" tabindex="-1"><span class="fa fa-minus-circle" aria-hidden="true"></span> </button>

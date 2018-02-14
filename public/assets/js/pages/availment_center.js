@@ -1,27 +1,6 @@
 var availment_center 	= new availment_center();
-var formData   		= new FormData();
-var value			= 0;
-var message			= "";
 
-var modals 			= '<div  class="modal fade modal-top confirm-modal" id="" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">'
-						  +'<div class="confirm-modal-dialog modal-dialog modal-sm">'
-						    +'<div class="modal-content">'
-						      +'<div class="modal-header">'
-						        +'<button type="button" class="close" data-dismiss="modal" aria-label="Close">'
-						        +'<span aria-hidden="true">&times;</span></button>'
-						        +'<h4 class="modal-title confirm-modal-title"></h4>'
-						      +'</div>'
-						      
-						      +'<div class="modal-body modal-body-sm">'
-						        +'<input type="hidden" class="link"/>'
-						      +'</div>'
-						      +'<div class="modal-footer">'
-						        +'<button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancel</button>'
-						        +'<button type="button" class="btn btn-primary confirm-submit">Save</button>'
-						      +'</div>'
-						    +'</div>'
-						  +'</div>'
-						+'</div>';
+
 
 function availment_center()
 {
@@ -37,7 +16,6 @@ function availment_center()
 	{
 		$(document).ready(function()
 		{
-			trigger();
 			checking_null_validation(value,message);
             create_approval();
             create_approval_get_info();
@@ -45,24 +23,11 @@ function availment_center()
             create_approval_submit();
             availment_transaction_details();
             approval_details();
-            
-            
-            
-
-		});
+        });
 
 	}
 	
-	function trigger()
-	{
-		$(document).on('click','.availment-btn-close',function()
-		{
-			$('.approval-modal').modal('hide');
-			$(".approval-modal-body").html("<p style='text-align:center'>RELOAD THE PAGE</p>");
-			
-		});
-		
-	} 
+	
 	function checking_null_validation(value,message)
 	{
 		if(value=="0")
@@ -81,10 +46,20 @@ function availment_center()
 		$(document).on('click','.create-approval',function() 
 		{
 
+			$('.approval-modal').remove();
+            $(".append-modal").append(globalModals);
+			$('.global-modal').removeClass().addClass('modal fade modal-top approval-modal');
+			$('.global-modal-dialog').removeClass().addClass('approval-modal-dialog modal-dialog modal-lg');
+			$('.global-modal-content').removeClass().addClass('modal-content');
+			$('.global-modal-header').removeClass().addClass('modal-header');
+			$('.global-modal-title').html('CREATE APPROVAL');
+			$('.global-modal-title').removeClass().addClass('modal-title');
+			$('.global-modal-body').removeClass().addClass('modal-body approval-modal-body');
 			$('.approval-modal').modal('show');
-			$('.approval-action-modal-title').html('CREATE APPROVAL');
-			$('.approval-ajax-loader').show();
-            $('.approval-modal-body-content').hide();
+			$('.global-ajax-loader').show();
+            $('.global-modal-body-content').hide();
+            $('.global-modal-footer').hide();
+            var approval_id = $(this).data('approval_id');
 
 			$.ajax({
 				headers: {
@@ -96,9 +71,10 @@ function availment_center()
 				{
 					setTimeout(function()
 					{
-						$('.approval-modal-body-content').html(data);
-						$('.approval-ajax-loader').hide();
-						$('.approval-modal-body-content').show();
+						$('.global-ajax-loader').hide().removeClass().addClass('.modal-loader approval-ajax-loader');
+						$('.global-modal-body-content').show().removeClass().addClass('row box-holder  modal-body-content').html(data);
+						$('.global-modal-footer').show().removeClass().addClass('modal-footer approval-modal-footer');
+                    	$('.global-footer-button').html('CREATE APPROVAL').removeClass().addClass('btn btn-primary create-approval-confirm');
 						
                     }, 1000);
 				}
@@ -116,7 +92,7 @@ function availment_center()
 				headers: {
 				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 				},
-				url:'/availment/create_approval/member/'+member_id,
+				url:'/availment/get_member_info/'+member_id,
 				method: "get",
                 success: function(data)
 				{
@@ -132,7 +108,7 @@ function availment_center()
 				headers: {
 				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 				},
-				url:'/availment/create_approval/availment/'+availment_id,
+				url:'/availment/get_member_procedure/'+availment_id,
 				method: "get",
                 success: function(data)
 				{
@@ -148,7 +124,7 @@ function availment_center()
 				headers: {
 				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 				},
-				url:'/availment/create_approval/doctor/'+provider_id,
+				url:'/availment/get_provider_doctor/'+provider_id,
 				method: "get",
                 success: function(data)
 				{
@@ -174,6 +150,23 @@ function availment_center()
 			});
 			
 		});
+		$(document).on('change','.get-doctor-specialty',function() 
+		{
+			var doctor_id 	= $(this).val();
+			$.ajax({
+				headers: {
+				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				},
+				url:'/get/doctor_specialty',
+				data:{doctor_id: doctor_id},
+				method: "POST",
+                success: function(data)
+				{
+					$('.doctor-specialty').html(data);
+				}
+			});
+			
+		});
 
     }
     function create_approval_confirm()
@@ -181,13 +174,13 @@ function availment_center()
 		$(document).on('click','.create-approval-confirm',function() 
 		{
 			$('.confirm-modal').remove();
-			$('.append-modal').append(modals);
+			$('.append-modal').append(confirmModals);
             $('.confirm-modal-dialog').removeClass().addClass('modal-dialog modal-sm');
 			$('.confirm-modal-title').html('Are you sure you want to add this approval?');
 			$('.confirm-submit').addClass('create-approval-submit');
 			$('.confirm-modal').modal('show');
 
-			ajaxData = $(".member-submit-form,.approval-submit-form,.procedure-availed-submit-form,.procedure-doctor-submit-form").serialize();
+			ajaxData = $(".approval-submit-form").serialize();
 			
 		});
 	}
@@ -225,11 +218,20 @@ function availment_center()
 	
 		$(document).on('click','.availment-transaction-details',function()
 		{
-			$('.approval-action-modal').modal('show');
-			$('.approval-action-ajax-loader').show();
-			$('.approval-action-modal-body-content').hide();
-			$('.approval-action-modal-title').html('MEMBER TRANSACTION DETAILS');
-			$(".approval-action-modal-footer").html("<button type='button' class='btn btn-default pull-left member-action-modal-close'>Close</button><button type='button' class='btn btn-primary pull-right' >Save Changes</button>");
+			$('.approval-details-modal').remove();
+            $(".append-modal").append(globalModals);
+			$('.global-modal').removeClass().addClass('modal fade modal-top approval-details-modal');
+			$('.global-modal-dialog').removeClass().addClass('approval-details-modal-dialog modal-dialog modal-lg');
+			$('.global-modal-content').removeClass().addClass('modal-content');
+			$('.global-modal-header').removeClass().addClass('modal-header');
+			$('.global-modal-title').html('CREATE APPROVAL');
+			$('.global-modal-title').removeClass().addClass('modal-title');
+			$('.global-modal-body').removeClass().addClass('modal-body approval-details-modal-body');
+			$('.approval-details-modal').modal('show');
+			$('.global-ajax-loader').show();
+            $('.global-modal-body-content').hide();
+            $('.global-modal-footer').hide();
+            var approval_id = $(this).data('approval_id');
             var member_id = $(this).data('member_id');
 			$.ajax({
 				headers: {
@@ -242,9 +244,10 @@ function availment_center()
 				{
 					setTimeout(function()
 					{
-						$('.approval-action-ajax-loader').hide();
-						$('.approval-action-modal-body-content').show();
-						$('.approval-action-modal-body-content').html(data);
+						$('.global-ajax-loader').hide().removeClass().addClass('.modal-loader approval-details-ajax-loader');
+						$('.global-modal-body-content').show().removeClass().addClass('row box-holder  modal-body-content').html(data);
+						$('.global-modal-footer').show().removeClass().addClass('modal-footer approval-details-modal-footer');
+                    	$('.global-footer-button').html('CREATE PLAN').removeClass().addClass('btn btn-primary create-approval-details-confirm');
                     }, 1000);
 				}
 			});
