@@ -188,7 +188,7 @@ function availment_center()
 	{
 		$(document).on('click','.create-approval-submit',function() 
 	    {
-	    	$('.confirm-modal').modal('hide');
+	    	$('.confirm-modal').remove();
             $(".approval-modal-body").html("<div class='approval-ajax-loader' style='display:none;text-align: center; padding:50px;'><img src='/assets/loader/loading.gif'/></div");
             $('.approval-ajax-loader').show();
 	        $.ajax({
@@ -218,16 +218,16 @@ function availment_center()
 	
 		$(document).on('click','.availment-transaction-details',function()
 		{
-			$('.approval-details-modal').remove();
+			$('.approval-transaction-modal').remove();
             $(".append-modal").append(globalModals);
-			$('.global-modal').removeClass().addClass('modal fade modal-top approval-details-modal');
-			$('.global-modal-dialog').removeClass().addClass('approval-details-modal-dialog modal-dialog modal-lg');
+			$('.global-modal').removeClass().addClass('modal fade modal-top approval-transaction-modal');
+			$('.global-modal-dialog').removeClass().addClass('approval-transaction-modal-dialog modal-dialog modal-md');
 			$('.global-modal-content').removeClass().addClass('modal-content');
 			$('.global-modal-header').removeClass().addClass('modal-header');
-			$('.global-modal-title').html('CREATE APPROVAL');
+			$('.global-modal-title').html('TRANSACTION DETAILS');
 			$('.global-modal-title').removeClass().addClass('modal-title');
-			$('.global-modal-body').removeClass().addClass('modal-body approval-details-modal-body');
-			$('.approval-details-modal').modal('show');
+			$('.global-modal-body').removeClass().addClass('modal-body approval-transaction-modal-body');
+			$('.approval-transaction-modal').modal('show');
 			$('.global-ajax-loader').show();
             $('.global-modal-body-content').hide();
             $('.global-modal-footer').hide();
@@ -244,10 +244,10 @@ function availment_center()
 				{
 					setTimeout(function()
 					{
-						$('.global-ajax-loader').hide().removeClass().addClass('.modal-loader approval-details-ajax-loader');
+						$('.global-ajax-loader').hide().removeClass().addClass('.modal-loader approval-transaction-ajax-loader');
 						$('.global-modal-body-content').show().removeClass().addClass('row box-holder  modal-body-content').html(data);
-						$('.global-modal-footer').show().removeClass().addClass('modal-footer approval-details-modal-footer');
-                    	$('.global-footer-button').html('CREATE PLAN').removeClass().addClass('btn btn-primary create-approval-details-confirm');
+						$('.global-modal-footer').show().removeClass().addClass('modal-footer approval-transaction-modal-footer');
+                    	$('.global-footer-button').html('CREATE PLAN').removeClass().addClass('btn btn-primary create-approval-transaction-confirm');
                     }, 1000);
 				}
 			});
@@ -258,11 +258,21 @@ function availment_center()
 	{
 		$(document).on('click','.view-approval-details',function()
 		{
-			$('.approval-modal').modal('show');
-			$('.approval-ajax-loader').show();
-			$('.approval-modal-body-content').hide();
-			$('.approval-modal-title').html('APPROVAL DETAILS');
-			$(".approval-modal-footer").html("<button type='button' class='btn btn-default pull-left member-modal-close'>Close</button><button type='button' class='btn btn-primary pull-right' >Save Changes</button>");
+			$('.approval-details-modal').remove();
+            $(".append-modal").append(globalModals);
+			$('.global-modal').removeClass().addClass('modal fade modal-top approval-details-modal');
+			$('.global-modal-dialog').removeClass().addClass('approval-details-modal-dialog modal-dialog modal-lg');
+			$('.global-modal-content').removeClass().addClass('modal-content');
+			$('.global-modal-header').removeClass().addClass('modal-header');
+			$('.global-modal-title').html('APPROVAL DETAILS');
+			$('.global-modal-title').removeClass().addClass('modal-title');
+			$('.global-modal-body').removeClass().addClass('modal-body approval-details-modal-body');
+			$('.approval-details-modal').modal('show');
+			$('.global-ajax-loader').show();
+            $('.global-modal-body-content').hide();
+            $('.global-modal-footer').hide();
+
+			
             var approval_id = $(this).data('approval_id');
 			$.ajax({
 				headers: {
@@ -275,9 +285,10 @@ function availment_center()
 				{
 					setTimeout(function()
 					{
-						$('.approval-ajax-loader').hide();
-						$('.approval-modal-body-content').show();
-						$('.approval-modal-body-content').html(data);
+						$('.global-ajax-loader').hide().removeClass().addClass('.modal-loader approval-details-ajax-loader');
+						$('.global-modal-body-content').show().removeClass().addClass('row box-holder  modal-body-content').html(data);
+						$('.global-modal-footer').show().removeClass().addClass('modal-footer approval-details-modal-footer');
+                    	$('.global-footer-button').html('CREATE PLAN').removeClass().addClass('btn btn-primary create-approval-details-confirm');
                     }, 1000);
 				}
 			});

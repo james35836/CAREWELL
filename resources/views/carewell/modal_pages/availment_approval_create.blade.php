@@ -5,7 +5,8 @@ $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
 checkboxClass: 'icheckbox_minimal-blue',
 radioClass   : 'iradio_minimal-blue'
 });
-$('.get-member-info').select2();
+$('body').find('.get-member-info').select2();
+
 $('body').on("click",".add-row", function()
 {
 	var $table = $(this).closest('table');
@@ -87,7 +88,7 @@ $('body').on('change','.amount',function()
 			</div>
 			<div class="form-holder">
 				<div class="pull-right multiple-button-holder">
-					<button type="button" class="btn btn-warning button-lg medical-transaction-details" disabled><i class="fa fa-upload btn-icon"></i> TRANSACTION DETAILS</button>
+					<button type="button" class="btn btn-warning button-lg availment-transaction-details" disabled><i class="fa fa-upload btn-icon"></i> TRANSACTION DETAILS</button>
 				</div>
 			</div>
 			

@@ -9,7 +9,7 @@
 					<select class="form-control select2 get-member-info" style="width: 100%;">
 						<option selected="selected">{{$member_info->member_first_name." ".$member_info->member_middle_name." ".$member_info->member_last_name}}</option>
 						@foreach($_member as $member)
-						<option value="{{$member->member_id}}">{{$member->display_name}}</option>
+						<option value="{{$member->member_id}}">{{$member->member_carewell_id ." ".$member->display_name}}</option>
 						@endforeach
 					</select>
 				</div>
@@ -51,7 +51,7 @@
 			</div>
 			<div class="form-holder">
 				<div class="pull-right multiple-button-holder">
-					<button type="button" data-member_id="{{$member_info->member_id}}" class="btn btn-warning button-lg medical-transaction-details" ><i class="fa fa-upload btn-icon"></i> TRANSACTION DETAILS</button>
+					<button type="button" data-member_id="{{$member_info->member_id}}" class="btn btn-warning button-lg availment-transaction-details" ><i class="fa fa-upload btn-icon"></i> TRANSACTION DETAILS</button>
 				</div>
 			</div>
 		</form>
