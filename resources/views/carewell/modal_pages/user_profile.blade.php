@@ -39,11 +39,13 @@
     border-radius: 30px;
     display: block;
     float: left;
+        width: 100%;
 }
 
 .profile-pic {
-    max-width: 250px;
-    max-height: 250px;
+    /*max-width: 250px;
+    max-height: 250px;*/
+    width:100%;
     display: block;
 }
 
@@ -54,21 +56,21 @@
 
 <div class="row box-globals">
 	<div class="form-holder">
-		<div class=" col-md-6">
-			<div class="col-md-12 form-content">
+		<div class=" col-md-4">
+			<div class="form-content">
 				<img class="profile-pic" src="{{$user->user_profile}}" />
-				<input class="file-upload" type="file" accept="image/*"/>
+				<input class="file-upload" id="newFile" type="file" accept="image/*"/>
+				<input id="oldFile" value="{{$user->user_profile}}" type="hidden" />
 			</div>
-			<div class="col-md-12 form-content">
+			<div class="form-content">
 				<div class="upload-button 	btn btn-primary">Upload New Profile</div>
 			</div>
 		</div>
-		<div class=" col-md-6">
-			<div class="col-md-12 form-content">
+		<div class=" col-md-8">
+			<div class="form-content">
 				<label>USER ACCESS LEVEL</label>
 			</div>
-			
-			<div class="col-md-12 form-content">
+			<div class="form-content">
 				<select id="user_position" class="form-control">
 					<option>{{$user->user_position}}</option>
 					<option disabled>ROLE</option>
@@ -78,6 +80,12 @@
 					<option>ENCODER</option>
 					<option>ACCOUNTING</option>
 				</select>
+			</div>
+			<div class="form-content">
+				<label>ID NUMBER</label>
+			</div>
+			<div class="form-content">
+				<input type="text" disabled id="user_number" value="{{$user->user_number}}" class="form-control"/>
 			</div>
 		</div>
 		
@@ -142,18 +150,11 @@
 			<input type="text" id="user_email" value="{{$user->user_email}}" class="form-control"/>
 		</div>
 		<div class="col-md-2 form-content">
-			<label>ID NUMBER</label>
-		</div>
-		<div class="col-md-4 form-content">
-			<input type="text" id="user_id_number" value="{{$user->user_id_number}}" class="form-control"/>
-		</div>
-	</div>
-	<div class="form-holder">
-		<div class="col-md-2 form-content">
 			<label>Address</label>
 		</div>
-		<div class="col-md-10 form-content">
+		<div class="col-md-4 form-content">
 			<textarea id="user_address" class="form-control" rows="5">{{$user->user_address}}</textarea>
 		</div>
 	</div>
+	
 </div>

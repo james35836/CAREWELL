@@ -10,6 +10,11 @@ class TblApprovalAvailedModel extends Model
     protected $primaryKey = 'availed_id	';
     public $timestamps = false;
 
+    public function scopeTotalAmount($query)
+    {
+    	$query ->select(DB::raw("SUM(numberofclick) as count"));
+    	return $query;
+    }
     
 }
 

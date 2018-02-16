@@ -121,7 +121,7 @@ function settings_coverage()
 			$('.global-modal-dialog').removeClass().addClass('coverage-details-modal-dialog modal-dialog modal-lg');
 			$('.global-modal-content').removeClass().addClass('modal-content');
 			$('.global-modal-header').removeClass().addClass('modal-header');
-			$('.global-modal-title').html('CREATE COVERAGE PLAN');
+			$('.global-modal-title').html('COVERAGE PLAN DETAILS');
 			$('.global-modal-title').removeClass().addClass('modal-title');
 			$('.global-modal-body').removeClass().addClass('modal-body coverage-details-modal-body');
 			$('.coverage-details-modal').modal('show');

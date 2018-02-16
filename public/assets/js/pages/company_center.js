@@ -68,38 +68,14 @@ function company_center()
 	{
 		$("body").on('click','.create-company',function()
 		{
-			$('.company-modal').remove();
-            $(".append-modal").append(globalModals);
-			$('.global-modal').removeClass().addClass('modal fade modal-top company-modal');
-			$('.global-modal-dialog').removeClass().addClass('company-modal-dialog modal-dialog modal-lg');
-			$('.global-modal-content').removeClass().addClass('modal-content');
-			$('.global-modal-header').removeClass().addClass('modal-header');
-			$('.global-modal-title').html('CREATE COMPANY');
-			$('.global-modal-title').removeClass().addClass('modal-title');
-			$('.global-modal-body').removeClass().addClass('modal-body company-modal-body');
-			$('.company-modal').modal('show');
-			$('.global-ajax-loader').show();
-            $('.global-modal-body-content').hide();
-            $('.global-modal-footer').hide();
-            $.ajax({
-				headers: {
-				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-				},
-
-				url:'/company/create_company',
-				method: "get",
-                success: function(data)
-                {
-					setTimeout(function()
-					{
-
-						$('.global-ajax-loader').hide().removeClass().addClass('.modal-loader company-ajax-loader');
-						$('.global-modal-body-content').show().removeClass().addClass('row box-holder  modal-body-content').html(data);
-						$('.global-modal-footer').show().removeClass().addClass('modal-footer company-modal-footer');
-                    	$('.global-footer-button').html('CREATE COMPANY').removeClass().addClass('btn btn-primary create-company-confirm');
-                    }, 1000);
-				}
-			});
+			var company_id = $(this).data('company_id');
+			var modalName= 'CREATE COMPANY';
+			var modalClass='company';
+			var modalLink='/company/create_company';
+			var modalActionName='CREATE COMPANY';
+			var modalAction='create-company-confirm';
+			var modalSize = 'modal-lg';
+			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
 		});
 		
 	}
@@ -169,13 +145,10 @@ function company_center()
 			
 			else
 			{
+				var	confirmModalMessage = 'Are you sure you want to add this company?';
+				var confirmModalAction = 'create-company-submit';
+				globals.confirm_modals(confirmModalMessage,confirmModalAction);
 				
-				$('.confirm-modal').remove();
-				$('.append-modal').append(confirmModals);
-	            $('.confirm-modal-dialog').removeClass().addClass('modal-dialog modal-sm');
-				$('.confirm-modal-title').html('Are you sure you want to add this company?');
-				$('.confirm-submit').addClass('create-company-submit');
-				$('.confirm-modal').modal('show');
 
 				formData.append("company_name", 			document.getElementById('company_name').value);
 	            formData.append("company_email_address", 	document.getElementById('company_email_address').value);
@@ -244,39 +217,14 @@ function company_center()
 	{
 		$(document).on('click','.view-company-details',function() 
 		{
-
-			$('.company-details-modal').remove();
-            $(".append-modal").append(globalModals);
-			$('.global-modal').removeClass().addClass('modal fade modal-top company-details-modal');
-			$('.global-modal-dialog').removeClass().addClass('company-details-modal-dialog modal-dialog modal-lg');
-			$('.global-modal-content').removeClass().addClass('modal-content');
-			$('.global-modal-header').removeClass().addClass('modal-header');
-			$('.global-modal-title').html('COMPANY DETAILS');
-			$('.global-modal-title').removeClass().addClass('modal-title');
-			$('.global-modal-body').removeClass().addClass('modal-body company-details-modal-body');
-			$('.company-details-modal').modal('show');
-			$('.global-ajax-loader').show();
-            $('.global-modal-body-content').hide();
-            $('.global-modal-footer').hide();
-            var company_id = $(this).data('company_id');
-			$.ajax({
-				headers: {
-				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-				},
-				url:'/company/company_details/'+company_id,
-				method: "get",
-                success: function(data)
-				{
-					setTimeout(function()
-					{
-						$('.global-ajax-loader').hide().removeClass().addClass('.modal-loader company-details-ajax-loader');
-						$('.global-modal-body-content').show().removeClass().addClass('row box-holder  modal-body-content').html(data);
-						$('.global-modal-footer').show().removeClass().addClass('modal-footer company-details-modal-footer');
-                    	$('.global-footer-button').html('SAVE CHANGES').removeClass().addClass('btn btn-primary company-details-confirm');
-                    }, 1000);
-				}
-			});
-
+			var company_id = $(this).data('company_id');
+			var modalName= 'COMPANY DETAILS';
+			var modalClass='company-details';
+			var modalLink='/company/company_details/'+company_id;
+			var modalActionName='SAVE CHANGES';
+			var modalAction='create-company-confirm';
+			var modalSize = 'modal-lg';
+			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
 		});
 	}
 }

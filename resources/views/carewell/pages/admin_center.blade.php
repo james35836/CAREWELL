@@ -42,7 +42,7 @@
             @foreach($_user_data as $user_data)
             <tr>
               <td>{{$user_data->user_id}}</td>
-              <td>{{$user_data->user_id_number}}</td>
+              <td>{{$user_data->user_number}}</td>
               <td>{{$user_data->user_first_name." ".$user_data->user_last_name}}</td>
               <td>{{$user_data->user_email}}</td>
               <td>{{$user_data->user_gender}}</td>

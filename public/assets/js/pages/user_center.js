@@ -1,27 +1,4 @@
 var user_center 	= new user_center();
-var formData   		= new FormData();
-
-var modals 			= '<div  class="modal fade modal-top confirm-modal" id="" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">'
-						  +'<div class="confirm-modal-dialog modal-dialog modal-sm">'
-						    +'<div class="modal-content">'
-						      +'<div class="modal-header">'
-						        +'<button type="button" class="close" data-dismiss="modal" aria-label="Close">'
-						        +'<span aria-hidden="true">&times;</span></button>'
-						        +'<h4 class="modal-title confirm-modal-title"></h4>'
-						      +'</div>'
-						      
-						      +'<div class="modal-body modal-body-sm">'
-						        +'<input type="hidden" class="link"/>'
-						      +'</div>'
-						      +'<div class="modal-footer">'
-						        +'<button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancel</button>'
-						        +'<button type="button" class="btn btn-primary confirm-submit">Save</button>'
-						      +'</div>'
-						    +'</div>'
-						  +'</div>'
-						+'</div>';
-
-
 
 
 function user_center()
@@ -40,6 +17,7 @@ function user_center()
 		{
             
 			user_view_profile();
+
 			
          });
 
@@ -80,12 +58,19 @@ function user_center()
 						$('.global-ajax-loader').hide().removeClass().addClass('.modal-loader');
 						$('.global-modal-body-content').show().html(data).removeClass().addClass('row box-holder  modal-body-content');
 						$('.global-modal-footer').show().removeClass().addClass('modal-footer');
-                    	$('.global-footer-button').html('SAVE PROFILE').removeClass().addClass('btn btn-primary');
+                    	$('.global-footer-button').html('SAVE PROFILE').removeClass().addClass('btn btn-primary save-profile-confirm');
                     }, 1000);
 				}
 			});
 
 		});
+    }
+    function save_profile_confirm()
+    {
+    	$('body').on('click','.save-profile-confirm',function()
+    	{
+
+    	});
     }
     
 }

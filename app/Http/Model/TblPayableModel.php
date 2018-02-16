@@ -4,11 +4,12 @@ namespace App\Http\Model;
 
 use Illuminate\Database\Eloquent\Model;
 
-class TblUserModel extends Model
+class TblPayableModel extends Model
 {
-    protected $table = 'tbl_user';
-    protected $primaryKey = 'user_id';
+    protected $table = 'tbl_payable';
+    protected $primaryKey = 'payable_id';
     public $timestamps = false;
 
     
 }
+

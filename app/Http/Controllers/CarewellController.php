@@ -42,6 +42,8 @@ use App\Http\Model\TblDoctorModel;
 use App\Http\Model\TblDoctorProviderModel;
 use App\Http\Model\TblDoctorSpecializationModel;
 
+use App\Http\Model\TblPayableModel;
+use App\Http\Model\TblPayableApprovalModel;
 
 use App\Http\Model\TblSpecializationModel;
 
@@ -1243,10 +1245,22 @@ class CarewellController extends ActiveAuthController
   /*PAYABLE*/
   public function payable()
   {
-  	$data['page']      = 'Payable';
-    $data['user']      = StaticFunctionController::global();
-    $data['_company']  = TblCompanyModel::where('archived',0)->get();
-  	return view('carewell.pages.payable',$data);
+  	$data['page']       = 'Payable';
+    $data['user']       = StaticFunctionController::global();
+    $data['_provider']  = TblProviderModel::where('archived',0)->get();
+    $data['_payable']   = TblPayableModel::where('tbl_payable.archived',0)
+                        ->join('tbl_user_info','tbl_user_info.user_id','=','tbl_payable.user_id')
+                        ->join('tbl_provider','tbl_provider.provider_id','=','tbl_payable.provider_id')
+                        ->paginate(10);
+                        
+    foreach ($data['_payable'] as $key => $payable) 
+    {
+      $data['_payable'][$key]['approval_number']    =  TblPayableApprovalModel::where('payable_id',$payable->payable_id)
+                                                    ->join('tbl_approval','tbl_approval.approval_id','=','tbl_payable_approval.approval_id')
+                                                    ->get();
+    }
+
+  	return view('carewell.pages.payable_center',$data);
   }
 
   public function payable_create()
@@ -1260,6 +1274,7 @@ class CarewellController extends ActiveAuthController
                           ->paginate(10);
     return view('carewell.modal_pages.payable_create',$data);
   }
+
   public function payable_create_get_approval($provider_id)
   {
     $data['_approval']  = TblApprovalModel::where('tbl_provider.provider_id',$provider_id)
@@ -1271,6 +1286,69 @@ class CarewellController extends ActiveAuthController
                           ->paginate(10);
     return view('carewell.additional_pages.payable_get_approval',$data);
   }
+  public function payable_create_submit(Request $request)
+  {
+    $user         = StaticFunctionController::global();
+
+    // dd($request->all());
+    $payableDatas = new TblPayableModel;
+    $payableDatas->payable_soa_number  = $request->payable_soa_number;
+    $payableDatas->payable_recieved    = $request->payable_recieved; 
+    $payableDatas->payable_due         = $request->payable_due;
+    $payableDatas->payable_created     = Carbon::now();
+    $payableDatas->provider_id         = $request->provider_id;  
+    $payableDatas->user_id             = $user->user_id;
+    $payableDatas->save();
+    foreach($request->approvalData as $approval_id)
+    {
+      $payApprovalData = new TblPayableApprovalModel;
+      $payApprovalData->approval_id = $approval_id; 
+      $payApprovalData->payable_id  = $payableDatas->payable_id;
+      $payApprovalData->save();
+    }
+    if($payableDatas->save())
+    {
+      return StaticFunctionController::returnMessage('success','PAYABLE ');
+    }
+
+  }
+  public function payable_details($payable_id)
+  {
+    $data['_provider']  = TblProviderModel::where('archived',0)->get();
+    $data['payable_details']   = TblPayableModel::where('tbl_payable.payable_id',$payable_id)
+                        ->join('tbl_user_info','tbl_user_info.user_id','=','tbl_payable.user_id')
+                        ->join('tbl_provider','tbl_provider.provider_id','=','tbl_payable.provider_id')
+                        ->first();
+    // $data['_approval']  = TblApprovalModel::join('tbl_provider','tbl_provider.provider_id','=','tbl_approval.provider_id')
+    //                     ->join('tbl_member','tbl_member.member_id','=','tbl_approval.member_id')
+    //                     ->join('tbl_member_company','tbl_member_company.member_id','tbl_member.member_id')
+    //                     ->join('tbl_company','tbl_company.company_id','tbl_member_company.company_id')
+    //                     ->paginate(10);
+    $data['_payable_approval'] =  TblPayableApprovalModel::where('payable_id',$payable_id)
+                        ->join('tbl_approval','tbl_approval.approval_id','=','tbl_payable_approval.approval_id')
+                        ->join('tbl_member','tbl_member.member_id','=','tbl_approval.member_id')
+                        ->join('tbl_member_company','tbl_member_company.member_id','=','tbl_member.member_id')
+                        ->get();
+
+    foreach ($data['_payable_approval'] as $key => $payable_approval) 
+    {
+      $data['_payable_approval'][$key]['availed']   =  TblApprovalAvailedModel::where('tbl_approval_availed.approval_id',$payable_approval->approval_id)
+                                                    ->join('tbl_availment','tbl_availment.availment_id','=','tbl_approval_availed.availment_id')
+                                                    ->get();
+      $data['_payable_approval'][$key]['doctor']    =  TblApprovalDoctorModel::where('tbl_approval_doctor.approval_id',$payable_approval->approval_id)
+                                                    ->join('tbl_doctor','tbl_doctor.doctor_id','=','tbl_approval_doctor.doctor_id')
+                                                    ->get();
+      $data['_payable_approval'][$key]['doctor_fee']=  TblApprovalDoctorModel::where('tbl_approval_doctor.approval_id',$payable_approval->approval_id)
+                                                    ->sum('approval_doctor_charge_carewell');
+                                                    
+      $data['_payable_approval'][$key]['charge_carewell']= TblApprovalDoctorModel::where('tbl_approval_doctor.approval_id',$payable_approval->approval_id)
+                                                    ->sum('approval_doctor_charge_carewell');                                          
+                                                          
+    }
+    // dd($data['_payable_approval'][$key]['doctor_fee']);
+    return view('carewell.modal_pages.payable_details',$data);
+  }
+  /*REPORTS*/
   public function reports()
   {
   	$data['page']     = 'Reports';

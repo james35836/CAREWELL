@@ -83,24 +83,76 @@ var dataOptionModals = '<div class="row box-globals">'+
 
 function globals()
 {
-	init();
-
-	function init()
+	this.global_modals = function(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize)
 	{
-		ready_document();
+		$('.'+modalClass+'-modal').remove();
+        $(".append-modal").append(globalModals);
+		$('.global-modal').removeClass().addClass('modal fade modal-top '+modalClass+'-modal');
+		$('.global-modal-dialog').removeClass().addClass(''+modalClass+'-modal-dialog modal-dialog '+modalSize);
+		$('.global-modal-content').removeClass().addClass('modal-content');
+		$('.global-modal-header').removeClass().addClass('modal-header');
+		$('.global-modal-title').html(modalName);
+		$('.global-modal-title').removeClass().addClass('modal-title');
+		$('.global-modal-body').removeClass().addClass('modal-body '+modalClass+'-modal-body');
+		$('.'+modalClass+'-modal').modal('show');
+		$('.global-ajax-loader').show();
+        $('.global-modal-body-content').hide();
+        $('.global-modal-footer').hide();
+
+        $.ajax({
+				headers: {
+				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				},
+
+				url:modalLink,
+				method: "get",
+                success: function(data)
+                {
+					setTimeout(function()
+					{
+
+						$('.global-ajax-loader').hide().removeClass().addClass('.modal-loader company-ajax-loader');
+						$('.global-modal-body-content').show().removeClass().addClass('row box-holder  modal-body-content').html(data);
+						$('.global-modal-footer').show().removeClass().addClass('modal-footer company-modal-footer');
+                    	$('.global-footer-button').html(modalActionName).removeClass().addClass('btn btn-primary '+modalAction+'');
+                    }, 800);
+				}
+			});
+	}
+	this.confirm_modals = function(confirmModalMessage,confirmModalAction)
+	{
+		$('.confirm-modal').remove();
+		$('.append-modal').append(confirmModals);
+        $('.confirm-modal-dialog').removeClass().addClass('modal-dialog modal-sm');
+		$('.confirm-modal-title').html(confirmModalMessage);
+		$('.confirm-submit').addClass(confirmModalAction);
+		$('.confirm-modal').modal('show');
 	}
 
-	function ready_document()
+	init();
+	function init()
 	{
 		$(document).ready(function()
 		{
-			// pop_modals();
-			// loader();
-			// open_tabs();
-			// logout_modals();
-			// global_submit();
-			add_select_option();
-			add_select_option_submit();
+			document_ready();
+		});
+
+	}
+
+	function document_ready()
+	{
+		check_all_checkbox();
+		add_select_option();
+		add_select_option_submit();
+		
+	}
+	
+    
+    function check_all_checkbox()
+    {
+    	$('body').on('click','.checkAllCheckbox',function (e) 
+    	{
+		    $(this).closest('table').find('td input:checkbox').prop('checked', this.checked);
 		});
     }
     function add_select_option()
@@ -108,6 +160,7 @@ function globals()
 		$('body').on("click",".add-new-option",function()
 		{
 			ajaxData.newOption = $(this).closest('td').find('select');
+
 			$('.add-option-modal').remove();
             $(".append-modal").append(globalModals);
 			$('.global-modal').removeClass().addClass('modal fade modal-top add-option-modal');
@@ -151,134 +204,4 @@ function globals()
 
         });
 	}
-
-	// function logout_modals()
-	// {
-	// 	$(document).on('click','.close-md',function() 
-	// 	{
-			
- //            $('#modal-default-md').modal('hide');
-            
-	// 	});
-	// }
-	// function open_tabs()
-	// {
-	// 	$(document).ready(function(){
-	// 	    $(".nav-tabs a").click(function(){
-	// 	        $(this).tab('show');
-	// 	    });
-	// 	});
-	// }
-	
-	// function loader(size)
-	// {
-	// 	if(size=='sm')
-	// 	{
-	// 		$(".modal-body-sm").html("<div class='ajax-loader-sm' style='display:none;text-align: center; padding:50px;'><img src='/assets/loader/loading.gif'/></div>");
-	// 	}
-	// 	else if(size=='md')
-	// 	{
-	// 		$(".modal-body-md").html("<div class='ajax-loader-md' style='display:none;text-align: center; padding:50px;'><img src='/assets/loader/loading.gif'/></div>");
-	// 	}
-	// 	else if(size=='lg')
-	// 	{
-	// 		$(".modal-body-lg").html("<div class='ajax-loader-lg' style='display:none;text-align: center; padding:50px;'><img src='/assets/loader/loading.gif'/></div>");
-	// 	}
-	// }
-	
-	// function pop_modals()
-	// {
-	// 	$(document).on('click','.pop-up-sm',function() 
-	// 	{
- //            var modalName 	= 	$(this).data('modalname');
- //            var link 		= 	$(this).data('link');
-	// 				            $('#modal-default-sm').modal();
-	// 				            $('.sm-title').html(modalName);
-	// 				            loader('sm');
-	// 					        $('.ajax-loader-sm').show();
-	// 		$.ajax({
-	// 				type:'get',
-	// 				url:link,
-	// 				dataType:'text',
-	// 				success: function(data)
-	// 						{
-	// 							setTimeout(function()
-	// 							{
-	// 							    $(".modal-body-sm").html(data);
-	// 		    					$('.ajax-loader-sm').css('display','none');
-	// 							}, 1000);
-	// 						}
-	// 				});
-	// 	});
-	// 	$(document).on('click','.pop-up-md',function() 
-	// 	{
- //            var modalName 	= 	$(this).data('modalname');
- //            var link 		= 	$(this).data('link');
-	// 				            $('#modal-default-md').modal('show');
-	// 				            $('.md-title').html(modalName);
-	// 				            loader('md');
-	// 				            $('.ajax-loader-md').show();
- //            $.ajax({
-	// 				type:'get',
-	// 				url:link,
-	// 				dataType:'text',
-	// 				success: function(data)
-	// 						{
-	// 							setTimeout(function()
-	// 							{
-	// 							    $(".modal-body-md").html(data);
-	// 							    $('.ajax-loader-md').css('display','none');
-	// 							}, 1000);
-	// 						}
-	// 				});
-			
-	// 	});
-	// 	$(document).on('click','.pop-up-lg',function() 
-	// 	{
- //            var modalName 	= 	$(this).data('modalname');
- //            var link 		= 	$(this).data('link');
- //            var clickable 	= 	$(this).data('clickable');
- //            					$('#modal-default-lg').modal('show');
- //            					$('.confirm-modal-lg').addClass(clickable);
-	// 					        loader('lg');
-	// 					        $('.lg-title').html(modalName);
-	// 					        $('.ajax-loader-lg').show();
-						            
-	// 		$.ajax({
-	// 				type:'get',
-	// 				url:link,
-	// 				dataType:'text',
-	// 				success: function(data)
-	// 						{
-	// 							setTimeout(function()
-	// 							{
-	// 							    $(".modal-body-lg").html(data);
-	// 		    					$('.ajax-loader-lg').css('display','none');
-	// 							}, 1000);
-	// 						}
-	// 				});
-	// 	});
-	// 	$(document).on('click','.pop-up-import-member',function() 
-	// 	{
-	// 		var modalName 	= 	$(this).data('modalname');
- //            var link 		= 	$(this).data('link');
-	// 				            $('.import-member-modal').modal('show');
-	// 				            $('.confirm-modal-import').addClass('import-member');
-	// 				            $('.import-title').html(modalName);
-	// 				            $(".menu-content").hide();
-	// 				            $('.ajax-loader-import').show();
-	// 							setTimeout(function()
-	// 							{
-	// 							    $(".menu-content").show();
-	// 								$('.ajax-loader-import').hide();
-	// 							}, 1000);
-							
-					
-	// 	});
-	// }
-	// function global_submit()
-	// {
-
-	// }
-	
 }

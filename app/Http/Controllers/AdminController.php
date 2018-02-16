@@ -24,14 +24,14 @@ class AdminController extends ActiveAuthController
   public function admin_center()
   {
   	$data['page'] = 'Admin Panel'; 
-    $data['user'] = CarewellController::global();
+    $data['user'] = StaticFunctionController::global();
     $data['_user_data']= TblUserModel::join('tbl_user_info','tbl_user_info.user_id','=','tbl_user.user_id')->paginate(10);
   	return view('carewell.pages.admin_center',$data);
   }
   public function admin_create_user()
   {
     $data['page'] = 'Admin Panel'; 
-    $data['user'] = CarewellController::global();
+    $data['user'] = StaticFunctionController::global();
 
     return view('carewell.modal_pages.admin_create_user',$data);
   }

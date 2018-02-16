@@ -266,7 +266,7 @@ $(document).ready(function() {
 			</div>
 			<div id="member" class="row tab-pane fade table-min-height" >
 				<div class="form-holder ">
-					<div class="table-responsive no-padding">
+					<div class="table-responsive">
 						<table class="table table-bordered">
 							<thead>
 								<tr>

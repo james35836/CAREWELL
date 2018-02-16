@@ -17,5 +17,12 @@ class TblCompanyModel extends Model
         // $query -> join('tbl_company_coverage_plan','tbl_company_coverage_plan.company_id','=','tbl_company.company_id');
         return $query;
     }
+    public function scopeComp($query)
+    {
+        $query->join('tbl_user_info','tbl_user_info.user_id','=','tbl_payable.user_id')
+        ->join('tbl_provider','tbl_provider.provider_id','=','tbl_payable.provider_id');
+        return $query;
+
+    }
 }
 

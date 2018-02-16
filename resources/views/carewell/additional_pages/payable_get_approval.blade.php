@@ -16,7 +16,7 @@
 				<div class="box-body table-responsive no-padding">
 					<table class="table table-hover table-bordered">
 						<tr>
-							<th><input type="checkbox"></th>
+							<th><input type="checkbox"  class="checkAllCheckbox"></th>
 							<th>APPROVAL #</th>
 							<th>UNIVERSAL ID</th>
 							<th>CAREWELL ID</th>
