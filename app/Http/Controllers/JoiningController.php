@@ -56,7 +56,7 @@ use App\Http\Model\TblProcedureDoctorModel;
 use App\Http\Model\TblScheduleOfBenefitsModel;
 
 
-class SearchController extends ActiveAuthController
+class JoiningController extends ActiveAuthController
 {
   
   
