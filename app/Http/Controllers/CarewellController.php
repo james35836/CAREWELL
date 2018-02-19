@@ -179,11 +179,11 @@ class CarewellController extends ActiveAuthController
         }
         foreach($request->file("benefitsData") as $contract_benefits_name)
         {
-          $fileContractRef = $unique_name.'-'.$contract_benefits_name->getClientOriginalName();
-          $contract_benefits_name->move('schedule_of_benefits',$fileContractRef );
+          $fileContractBRef = $unique_name.'-'.$contract_benefits_name->getClientOriginalName();
+          $contract_benefits_name->move('schedule_of_benefits',$fileContractBRef );
 
           $benefitsImageData = new TblCompanyContractBenefitsModel;
-          $benefitsImageData->contract_benefits_name = '/schedule_of_benefits/'.$fileContractRef.'';
+          $benefitsImageData->contract_benefits_name = '/schedule_of_benefits/'.$fileContractBRef.'';
           $benefitsImageData->contract_id = $contractCompanyData->contract_id;
           $benefitsImageData->save();
         }
