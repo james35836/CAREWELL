@@ -72,7 +72,7 @@ function settings_coverage()
 						$('.coverage-plan-ajax-loader').hide();
 						$('.coverage-plan-modal-dialog').removeClass().addClass('modal-sm modal-dialog')
 						$('.coverage-plan-modal-body').html(data);
-						$('.coverage-plan-modal-footer').html('<button type="button" class="btn btn-default pull-left " data-dismiss="modal">Close</button>');
+						$('.coverage-plan-modal-footer').html(successButton);
                     }, 1000);
 				}
 			});

@@ -130,7 +130,7 @@ function globals()
                     	}
 						else
 						{
-							$('.global-modal-footer').show().removeClass().addClass('modal-footer company-modal-footer');
+							$('.global-modal-footer').show().removeClass().addClass('modal-footer '+modalClass+'-modal-footer');
                     		$('.global-footer-button').html(modalActionName).removeClass().addClass('btn btn-primary '+modalAction+'');
                         }
 					 }, 800);
