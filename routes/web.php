@@ -134,6 +134,9 @@ Route::get('/payable/payable_details/{payable_id}', 	'CarewellController@payable
 
 /*REPORTS*/
 Route::get('/reports', 									'CarewellController@reports');
+Route::get('/reports/availment', 					    'CarewellController@reports_availment');
+
+
 /*SETTINGS*/
 
 Route::get('/settings/coverage', 				    	'CarewellController@settings_coverage_plan');

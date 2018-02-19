@@ -54,7 +54,7 @@
                       <th>PREPARATION DATE</th>
                       <th>ACTION</th>
                     </tr>
-                    @foreach($_payable as $payable)
+                    @foreach($_payable_open as $payable)
                     <tr>
                       
                       <td>{{$payable->payable_id}}</td>
@@ -89,7 +89,7 @@
                   </table>
                 </div>
                 <div class="box-footer clearfix">
-                  @include('globals.pagination', ['paginator' => $_payable])
+                  @include('globals.pagination', ['paginator' => $_payable_open])
                 </div>
               </div>
             </div>
@@ -126,7 +126,7 @@
                       <th>PREPARATION DATE</th>
                       <th>ACTION</th>
                     </tr>
-                    @foreach($_payable as $payable)
+                    @foreach($_payable_close as $payable)
                     <tr>
                       
                       <td>{{$payable->payable_id}}</td>
@@ -161,7 +161,7 @@
                   </table>
                 </div>
                 <div class="box-footer clearfix">
-                  @include('globals.pagination', ['paginator' => $_payable])
+                  @include('globals.pagination', ['paginator' => $_payable_close])
                 </div>
               </div>
             </div>

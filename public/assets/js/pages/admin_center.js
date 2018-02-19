@@ -40,31 +40,17 @@ function admin_center()
 
 	function create_user()
 	{
-		$(document).on('click','.create-user',function() 
+		$("body").on('click','.create-user',function() 
 		{
-			$('.admin-modal').modal('show');
-			$('.modal-dialog').removeClass().addClass('modal-dialog modal-lg');
-			$('.admin-modal-title').html('CREATE USER');
-			$('.admin-ajax-loader').show();
-			$('.admin-modal-body-content').hide();
-			$.ajax({
-				headers: {
-				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-				},
-				url:'/admin/create_user',
-				method: "get",
-                success: function(data)
-				{
-					setTimeout(function()
-					{
-						$('.admin-ajax-loader').hide();
-						$('.admin-modal-body-content').show();
-						$('.admin-modal-body-content').html(data);
-                    }, 1000);
-				}
-			});
-
+			var modalName= 'CREATE USER';
+			var modalClass='admin';
+			var modalLink='/admin/create_user';
+			var modalActionName='CREATE USER';
+			var modalAction='create-user-confirm';
+			var modalSize = 'modal-lg';
+			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
 		});
+		
 	}
 	function create_user_confirm()
 	{
@@ -95,12 +81,11 @@ function admin_center()
 			{}
 			else
 			{
-				$('.confirm-modal').remove();
-				$('.append-modal').append(confirmModals);
-	            $('.confirm-modal-dialog').removeClass().addClass('modal-dialog modal-sm');
-				$('.confirm-modal-title').html('Are you sure you want to add this DOCTOR?');
-				$('.confirm-submit').addClass('create-user-submit'); 
-				$('.confirm-modal').modal('show');
+				var	confirmModalMessage = 'Are you sure you want to add this USER?';
+				var confirmModalAction = 'create-user-submit';
+				globals.confirm_modals(confirmModalMessage,confirmModalAction);
+
+				
 
 				formData.append("user_position", 		document.getElementById('user_position').value);
 	            formData.append("user_first_name", 		document.getElementById('user_first_name').value);
@@ -157,32 +142,18 @@ function admin_center()
 	}
 	function view_user_deatils()
 	{
-		$(document).on('click','.view-user-details',function() 
+		$("body").on('click','.view-user-details',function() 
 		{
-			$('.admin-modal').modal('show');
-			$('.modal-dialog').removeClass().addClass('modal-dialog modal-lg');
-			$('.admin-modal-title').html('USER DETAILS');
-			$('.admin-ajax-loader').show();
-			$('.admin-modal-body-content').hide();
 			var user_id = $(this).data('user_id');
-			$.ajax({
-				headers: {
-				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-				},
-				url:'/admin/view_user_deatils/'+user_id,
-				method: "get",
-                success: function(data)
-				{
-					setTimeout(function()
-					{
-						$('.admin-ajax-loader').hide();
-						$('.admin-modal-body-content').show();
-						$('.admin-modal-body-content').html(data);
-                    }, 1000);
-				}
-			});
-
+			var modalName= 'USER DETAILS';
+			var modalClass='admin-details';
+			var modalLink='/admin/view_user_deatils/'+user_id;
+			var modalActionName='SAVE CHANGES';
+			var modalAction='save-user-confirm';
+			var modalSize = 'modal-lg';
+			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
 		});
+		
 	}
 	
 }

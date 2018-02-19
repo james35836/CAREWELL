@@ -15,61 +15,34 @@ function user_center()
 	{
 		$(document).ready(function()
 		{
-            
-			user_view_profile();
-
-			
-         });
-
+            user_view_profile();
+			save_profile_confirm();
+		});
 	}
 	
 	
 	function user_view_profile()
 	{
-		
-        $(document).on('click','.view-profile',function() 
+		$("body").on('click','.view-profile',function() 
 		{
-			$('.approval-modal').remove();
-            $(".append-modal").append(globalModals);
-			$('.global-modal').removeClass().addClass('modal fade modal-top approval-modal');
-			$('.global-modal-dialog').removeClass().addClass('modal-dialog modal-lg');
-			$('.global-modal-content').removeClass().addClass('modal-content');
-			$('.global-modal-header').removeClass().addClass('modal-header');
-			$('.global-modal-title').html(' PROFILE DETAILS');
-			$('.global-modal-title').removeClass().addClass('modal-title second');
-			$('.global-modal-body').removeClass().addClass('modal-body');
-			$('.approval-modal').modal('show');
-			$('.global-ajax-loader').show();
-            $('.global-modal-body-content').hide();
-            $('.global-modal-footer').hide();
-            
-
-			
-			$.ajax({
-				headers: {
-				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-				},
-				url:'/user/view_profile',
-				method: "get",
-                success: function(data)
-				{
-					setTimeout(function()
-					{
-						$('.global-ajax-loader').hide().removeClass().addClass('.modal-loader');
-						$('.global-modal-body-content').show().html(data).removeClass().addClass('row box-holder  modal-body-content');
-						$('.global-modal-footer').show().removeClass().addClass('modal-footer');
-                    	$('.global-footer-button').html('SAVE PROFILE').removeClass().addClass('btn btn-primary save-profile-confirm');
-                    }, 1000);
-				}
-			});
-
+			var modalName= 'PROFILE DETAILS';
+			var modalClass='admin';
+			var modalLink='/user/view_profile';
+			var modalActionName='SAVE CHANGES';
+			var modalAction='save-profile-confirm';
+			var modalSize = 'modal-lg';
+			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
 		});
+
+        
     }
     function save_profile_confirm()
     {
     	$('body').on('click','.save-profile-confirm',function()
     	{
-
+    		var	confirmModalMessage = 'Are you sure you want to add this USER?';
+			var confirmModalAction = 'create-user-submit';
+			globals.confirm_modals(confirmModalMessage,confirmModalAction);
     	});
     }
     

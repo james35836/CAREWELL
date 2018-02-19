@@ -1248,14 +1248,24 @@ class CarewellController extends ActiveAuthController
   	$data['page']       = 'Payable';
     $data['user']       = StaticFunctionController::global();
     $data['_provider']  = TblProviderModel::where('archived',0)->get();
-    $data['_payable']   = TblPayableModel::where('tbl_payable.archived',0)
+    $data['_payable_open']   = TblPayableModel::where('tbl_payable.archived',0)
                         ->join('tbl_user_info','tbl_user_info.user_id','=','tbl_payable.user_id')
                         ->join('tbl_provider','tbl_provider.provider_id','=','tbl_payable.provider_id')
                         ->paginate(10);
-                        
-    foreach ($data['_payable'] as $key => $payable) 
+    foreach ($data['_payable_open'] as $key => $payable) 
     {
-      $data['_payable'][$key]['approval_number']    =  TblPayableApprovalModel::where('payable_id',$payable->payable_id)
+      $data['_payable_open'][$key]['approval_number']    =  TblPayableApprovalModel::where('payable_id',$payable->payable_id)
+                                                    ->join('tbl_approval','tbl_approval.approval_id','=','tbl_payable_approval.approval_id')
+                                                    ->get();
+    }
+
+    $data['_payable_close']   = TblPayableModel::where('tbl_payable.archived',1)
+                        ->join('tbl_user_info','tbl_user_info.user_id','=','tbl_payable.user_id')
+                        ->join('tbl_provider','tbl_provider.provider_id','=','tbl_payable.provider_id')
+                        ->paginate(10);
+    foreach ($data['_payable_close'] as $key => $payable) 
+    {
+      $data['_payable_close'][$key]['approval_number']    =  TblPayableApprovalModel::where('payable_id',$payable->payable_id)
                                                     ->join('tbl_approval','tbl_approval.approval_id','=','tbl_payable_approval.approval_id')
                                                     ->get();
     }
@@ -1357,6 +1367,26 @@ class CarewellController extends ActiveAuthController
 
     return view('carewell.pages.reports',$data);
   }
+  public function reports_availment()
+  {
+    $data['page']     = 'Availment Reports';
+    $data['_company'] = TblCompanyModel::where('archived',0)->get();
+    $data['user']     = StaticFunctionController::global();
+
+    foreach ($data['_company'] as $key => $company) 
+    {
+      $data['_company'][$key]['company_availment']  =  TblCompanyCoveragePlanModel::where('tbl_company_coverage_plan.company_id',$company->company_id)
+                                                    ->where('tbl_availment.availment_parent_id',0)
+                                                    ->join('tbl_coverage_plan','tbl_coverage_plan.coverage_plan_id','=','tbl_company_coverage_plan.coverage_plan_id')
+                                                    ->join('tbl_coverage_plan_tag','tbl_coverage_plan_tag.coverage_plan_id','=','tbl_coverage_plan.coverage_plan_id')
+                                                    ->join('tbl_availment','tbl_availment.availment_id','=','tbl_coverage_plan_tag.availment_id')
+                                                    ->get();
+    }
+
+    return view('carewell.pages.reports_availment',$data);
+  }
+
+
   /*SETTINGS*/
   public function settings_coverage_plan()
   {

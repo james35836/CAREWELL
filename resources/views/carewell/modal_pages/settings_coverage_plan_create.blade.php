@@ -1,6 +1,9 @@
 <script>	
 $(document).ready(function()
 {
+	$('div.box-container').find('.form-control').attr('disabled',!this.checked); 
+	$('div.box-container').find('.btn').attr('disabled',!this.checked); 
+
 	$('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
       checkboxClass: 'icheckbox_minimal-blue',
       radioClass   : 'iradio_minimal-blue'
@@ -26,6 +29,17 @@ $(document).ready(function()
 		}
 		
 	});
+	$("body").on('click','.parent-box',function()
+  	{
+  	    var $parent = $(this).closest('div.availment-box');        
+        $parent.find('.form-control').attr('enabled',this.checked);
+        $parent.find('.btn').attr('enabled',this.checked); 
+
+        $parent.find('.form-control').attr('disabled',!this.checked);
+        $parent.find('.btn').attr('disabled',!this.checked);
+                 
+        
+	}); 
 });
 </script>
 <form class="coverage-plan-form" method="POST">
@@ -81,13 +95,13 @@ $(document).ready(function()
 		</div>
 		<div class="form-holder">
 			<div class="row type-of-availment-padding">
-				<div class="row availment-container">
+				<div class="row availment-container box-container">
 					@foreach($_availment as $availment)
-					<div class=" availment-box">
+					<div class="availment-box">
 						<div class="parent-availment ">
 							<p style="font-size: 20px;font-weight: bold;">
-								<input type="checkbox" class="minimal" name="parent_availment[]" value="{{$availment->availment_id}}"/>
-								{{$availment->availment_name}}
+								<input type="checkbox" id="parent-box" class="parent-box" name="parent_availment[]" value="{{$availment->availment_id}}"/>
+								{{$availment->availment_name}}z
 							</p>
 							<table class="table table-bordered availed-table">
 								<thead>

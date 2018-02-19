@@ -5,6 +5,17 @@ var ajaxData 		= [];
 var value			= "0";
 var message			= "";
 var approvalData	= [];
+var availmentData 	= [];
+var check_null 		= [];
+var trunkData		= [];
+var benefitsData	= [];
+var contractData	= [];
+var contactData 	= [];
+var coveragePlanData= [];
+var deploymentData	= [];
+
+
+var successButton	= '<button type="button" class="btn btn-default pull-left " data-dismiss="modal">RELOAD</button>';
 
 var confirmModals 			= '<div  class="modal fade modal-top confirm-modal" id="" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">'
 						  +'<div class="confirm-modal-dialog modal-dialog modal-sm">'
@@ -25,24 +36,24 @@ var confirmModals 			= '<div  class="modal fade modal-top confirm-modal" id="" t
 						    +'</div>'
 						  +'</div>'
 						+'</div>';
-var pageModals = '<div class="modal fade modal-top global-modal">'+
-				          '<div class="modal-dialog global-modal-dialog">'+
-				            '<div class="modal-content global-modal-content">'+
-				              '<div class="modal-header global-modal-header">'+
+var importModals = '<div class="modal fade modal-top import-modal">'+
+				          '<div class="modal-dialog import-modal-dialog">'+
+				            '<div class="modal-content import-modal-content">'+
+				              '<div class="modal-header import-modal-header">'+
 				                '<button type="button" class="close" data-dismiss="modal" aria-label="Close">'+
 				                  '<span aria-hidden="true">&times;</span></button>'+
-				                '<h4 class="modal-title global-modal-title">Default Modal</h4>'+
+				                '<h4 class="modal-title import-modal-title">Default Modal</h4>'+
 				              '</div>'+
-				              '<div class="modal-body global-modal-body">'+
-				                '<div class="global-ajax-loader" style="display:none;text-align: center; padding:50px;">'+
+				              '<div class="modal-body import-modal-body">'+
+				                '<div class="import-modal-loader" style="display:none;text-align: center; padding:50px;">'+
 				                '<img src="/assets/loader/loading.gif"/>'+
 				                '</div>'+
-				                '<div class="row box-holder global-modal-body-content">'+
+				                '<div class="row box-holder import-modal-body-content">'+
 				                '</div>'+
 				              '</div>'+
-				              '<div class="modal-footer global-modal-footer">'+
+				              '<div class="modal-footer import-modal-footer">'+
 				                '<button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>'+
-				                '<button type="button" class="btn btn-primary global-footer-button">Save changes</button>'+
+				                '<button type="button" class="btn btn-primary import-footer-button">Save changes</button>'+
 				              '</div>'+
 				            '</div>'+
 				          '</div>'+
@@ -85,6 +96,7 @@ function globals()
 {
 	this.global_modals = function(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize)
 	{
+
 		$('.'+modalClass+'-modal').remove();
         $(".append-modal").append(globalModals);
 		$('.global-modal').removeClass().addClass('modal fade modal-top '+modalClass+'-modal');
@@ -110,12 +122,18 @@ function globals()
                 {
 					setTimeout(function()
 					{
-
 						$('.global-ajax-loader').hide().removeClass().addClass('.modal-loader company-ajax-loader');
 						$('.global-modal-body-content').show().removeClass().addClass('row box-holder  modal-body-content').html(data);
-						$('.global-modal-footer').show().removeClass().addClass('modal-footer company-modal-footer');
-                    	$('.global-footer-button').html(modalActionName).removeClass().addClass('btn btn-primary '+modalAction+'');
-                    }, 800);
+						if(modalSize=="modal-import")
+						{
+							$('.global-modal-footer').show().html("<button type='button' class='btn btn-default pull-left btn-close-import' data-dismiss='modal'>Close</button>");
+                    	}
+						else
+						{
+							$('.global-modal-footer').show().removeClass().addClass('modal-footer company-modal-footer');
+                    		$('.global-footer-button').html(modalActionName).removeClass().addClass('btn btn-primary '+modalAction+'');
+                        }
+					 }, 800);
 				}
 			});
 	}
@@ -128,6 +146,24 @@ function globals()
 		$('.confirm-submit').addClass(confirmModalAction);
 		$('.confirm-modal').modal('show');
 	}
+	
+	this.checking_null_validation = function(value,message)
+	{
+		if(value=="0")
+		{
+			return "null";
+		}
+		else if(value=="")
+		{
+			toastr.error(message+' cannot be null.', 'Something went wrong!', {timeOut: 3000})
+			return "";
+		}
+	}
+	this.global_tostr  = function (message)
+	{
+		toastr.error('Please add/select '+message+' at least one.', 'Something went wrong!', {timeOut: 3000})
+	}
+	
 
 	init();
 	function init()

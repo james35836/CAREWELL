@@ -1,94 +1,96 @@
 <html><head>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
-{{-- <script type="text/javascript">
-$(document).ready(function(){
-var result = [];
-  $('table tr').each(function(){
-    $('td', this).each(function(index, val)
+<script type="text/javascript">
+$(function()
+{
+  function tally (selector) 
+  {
+    $(selector).each(function () 
     {
-      if(!result[index]) result[index] = 0;
-      result[index] += parseInt($(val).text());
+      var total = 0,
+        column = $(this).siblings(selector).andSelf().index(this);
+      $(this).parents().prevUntil(':has(' + selector + ')').each(function () {
+        total += parseFloat($('td.sum:eq(' + column + ')', this).html()) || 0;
+      })
+      $(this).html(total);
     });
-  });
+  }
+  tally('td.subtotal');
   
-  $('table').append('<tr></tr>');
-  $(result).each(function(){
-    $('table tr').last().append('<td>'+this+'</td>')
-  });
 });
  
-</script> --}}
-<script type="text/javascript">
- $(document).ready(function(){
-    $(".expenses").each(function() {
-
-      $(this).keyup(function(){
-            sum($(this).parents("tr"));
-      });
-    });
-});
-function sum(parent){
-    var sum = 0;
-    $(parent).find(".expenses").each(function(){
-        if(!isNaN(this.value) && this.value.length!=0) {
-            sum += parseFloat(this.value);
-        }
-    });
-    $(parent).find(".expenses_sum").val(sum.toFixed(2));
-}
 </script>
 </head>
 <body>
-  <table border="1">
-  <tr>
-    <th>sl</th>
-    <th>TA</th>
-    <th>DA</th>
-    <th>HA</th>
-    <th>Total</th>
-  </tr>
-  <tr>
-    <td>1</td>
-    <td><input class="expenses"></td>
-    <td><input class="expenses"></td>
-    <td><input class="expenses"></td>
-    <td><input class="expenses_sum"></td>
-  </tr>
-  <tr>
-    <td>2</td>
-    <td><input class="expenses"></td>
-    <td><input class="expenses"></td>
-    <td><input class="expenses"></td>
-    <td><input class="expenses_sum"></td>
-  </tr>
-  <tr>
-    <td>3</td>
-    <td><input class="expenses"></td>
-    <td><input class="expenses"></td>
-    <td><input class="expenses"></td>
-    <td><input class="expenses_sum"></td>
-  </tr>
+<table id="data">
+<tr>
+  <th>Name</th>
+  <th>Age</th>
+  <th>Weight</th>
+</tr>
+
+<tr>
+  <td>Joe</td>
+  <td>30</td>
+  <td class="sum">175</td>
+  <td class="sum">1</td>
+</tr>
+<tr>
+  <td>Jack</td>
+  <td>29</td>
+  <td class="sum">18565</td>
+  <td class="sum">1</td>
+</tr>
+<tr><td>Jim</td>
+  <td>31</td>
+  <td class="sum">178</td><td class="sum">1</td></tr>
+<tr>
+  <td>Jeff</td>
+  <td>28</td>
+  <td class="sum">173</td>
+  <td class="sum">1</td></tr>
+<tr>
+  <th colspan="2" align="right">Sum</th>
+  <td class="subtotal"></td>
+  <td class="subtotal"></td>
+</tr>
+
 </table>
-{{-- <table style="border:2px solid black;">
-    <tr>
-      <td>2</td>
-      <td>49</td>
-      <td>98</td>
-    </tr>
-    <tr>
-      <td>55</td>
-      <td>1211</td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <td>99</td>
-      <td>1</td>
-      <td>21</td>
-    </tr>
-    <tr><td>183</td>
-      <td>12</td>
-      <td>55</td>
-    </tr>
-</table> --}}
+fksdhflgsd
+fsdgdsf
+<table id="data">
+<tr>
+  <th>Name</th>
+  <th>Age</th>
+  <th>Weight</th>
+</tr>
+
+<tr>
+  <td>Joe</td>
+  <td>30</td>
+  <td class="sum">175</td>
+  <td class="sum">1</td>
+</tr>
+<tr>
+  <td>Jack</td>
+  <td>29</td>
+  <td class="sum">165</td>
+  <td class="sum">1</td>
+</tr>
+<tr><td>Jim</td>
+  <td>31</td>
+  <td class="sum">178572</td><td class="sum">1</td></tr>
+<tr>
+  <td>Jeff</td>
+  <td>28</td>
+  <td class="sum">173</td>
+  <td class="sum">1</td></tr>
+<tr>
+  <th colspan="2" align="right">Sum</th>
+  <td class="subtotal"></td>
+  <td class="subtotal"></td>
+</tr>
+
+</table>
 </body>
 </html>

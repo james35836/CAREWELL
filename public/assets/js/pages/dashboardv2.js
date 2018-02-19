@@ -28,46 +28,17 @@ function dashboardv2()
 
 	function latest_approval()
 	{
-			
 		$("body").on('click','.latest-approval',function()
 		{
-			alert(globals.samps('a'));
-			// checking_null_validation("",'none');
-			// globals.sample('AB');
-			// $('.approval-modal').remove();
-   //          $(".append-modal").append(globalModals);
-			// $('.global-modal').removeClass().addClass('modal fade modal-top approval-modal');
-			// $('.global-modal-dialog').removeClass().addClass('modal-dialog modal-lg');
-			// $('.global-modal-content').removeClass().addClass('modal-content');
-			// $('.global-modal-header').removeClass().addClass('modal-header');
-			// $('.global-modal-title').html(' APPROVAL DETAILS');
-			// $('.global-modal-title').removeClass().addClass('modal-title second');
-			// $('.global-modal-body').removeClass().addClass('modal-body');
-			// $('.approval-modal').modal('show');
-			// $('.global-ajax-loader').show();
-   //          $('.global-modal-body-content').hide();
-   //          $('.global-modal-footer').hide();
-   //          var approval_id = $(this).data('approval_id');
-
-			// $.ajax({
-			// 	headers: {
-			// 	      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-			// 	},
-
-			// 	url:'/availment/approval_details/'+approval_id,
-			// 	method: "get",
-   //              success: function(data)
-			// 	{
-			// 		setTimeout(function()
-			// 		{
-			// 			$('.global-ajax-loader').hide().removeClass().addClass('.modal-loader');
-			// 			$('.global-modal-body-content').show().html(data).removeClass().addClass('row box-holder  modal-body-content');
-			// 			$('.global-modal-footer').show().removeClass().addClass('modal-footer');
-   //                  	$('.global-footer-button').html('SAVE APPROVAL').removeClass().addClass('btn btn-primary');
-   //                  }, 1000);
-			// 	}
-			// });
-		});
+			var approval_id = $(this).data('approval_id');
+			var modalName= 'APPROVAL DETAILS';
+			var modalClass='approval';
+			var modalLink='/availment/approval_details/'+approval_id;
+			var modalActionName='SAVE CHANGES';
+			var modalAction='confirm';
+			var modalSize = 'modal-lg';
+			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
+        });
 	}
 	
 	function dashboard_modals()

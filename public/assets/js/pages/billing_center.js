@@ -1,5 +1,5 @@
 var billing_center 	= new billing_center();
-var formData   		= new FormData();
+
 function billing_center()
 {
 	init();
@@ -14,8 +14,7 @@ function billing_center()
 	{
 		$(document).ready(function()
 		{
-			checking_null_validation(value,message);
-            create_cal();
+			create_cal();
 			create_cal_confirm();
 			create_cal_submit();
 			cal_view_details();
@@ -27,79 +26,40 @@ function billing_center()
 		});
 
 	}
-	function checking_null_validation(value,message)
-	{
-		if(value=="0")
-		{
-			return "null";
-		}
-		else if(value=="")
-		{
-			toastr.error(message+' cannot be null.', 'Something went wrong!', {timeOut: 3000})
-			return "";
-		}
-    }
 	function create_cal()
 	{
 		$("body").on('click','.create-cal',function()
 		{
-			$('.cal-modal').remove();
-            $(".append-modal").append(globalModals);
-			$('.global-modal').removeClass().addClass('modal fade modal-top cal-modal');
-			$('.global-modal-dialog').removeClass().addClass('modal-dialog modal-lg cal-modal-dialog');
-			$('.global-modal-content').removeClass().addClass('modal-content');
-			$('.global-modal-header').removeClass().addClass('modal-header');
-			$('.global-modal-title').html('CREATE CAL');
-			$('.global-modal-title').removeClass().addClass('modal-title');
-			$('.global-modal-body').removeClass().addClass('modal-body cal-modal-body');
-			$('.cal-modal').modal('show');
-			$('.global-ajax-loader').show();
-            $('.global-modal-body-content').hide();
-            $('.global-modal-footer').hide();
-            
-            $.ajax({
-				headers: {
-				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-				},
-
-				url:'/billing/create_cal',
-				method: "get",
-                success: function(data)
-                {
-					setTimeout(function()
-					{
-						$('.global-ajax-loader').hide().removeClass().addClass('.modal-loader cal-ajax-loader');
-						$('.global-modal-body-content').show().removeClass().addClass('row box-holder  modal-body-content').html(data);
-						$('.global-modal-footer').show().removeClass().addClass('modal-footer cal-modal-footer');
-                    	$('.global-footer-button').html('CREATE CAL').removeClass().addClass('btn btn-primary create-cal-confirm');
-
-					}, 1000);
-				}
-			});
+			var company_id = $(this).data('company_id');
+			var modalName= 'CREATE CAL';
+			var modalClass='cal';
+			var modalLink='/billing/create_cal';
+			var modalActionName='CREATE CAL';
+			var modalAction='create-cal-confirm';
+			var modalSize = 'modal-lg';
+			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
 		});
+
     }
     function create_cal_confirm()
 	{
-		$(document).on('click','.create-cal-confirm',function() 
+		$('body').on('click','.create-cal-confirm',function() 
 		{
 			if(document.getElementById('cal_company_id').value=="SELECT COMPANY")
 			{
-				toastr.error('Please select COMPANY.', 'Something went wrong!', {timeOut: 3000})
+				globals.global_tostr('COMPANY');
 			}
-			else if(checking_null_validation(document.getElementById('cal_payment_date').value,"PAYMENT DATE")=="")
+			else if(globals.checking_null_validation(document.getElementById('cal_payment_date').value,"PAYMENT DATE")=="")
 			{}
-			else if(checking_null_validation(document.getElementById('cal_company_period_start').value,"PERIOD START")=="")
+			else if(globals.checking_null_validation(document.getElementById('cal_company_period_start').value,"PERIOD START")=="")
 			{}
-			else if(checking_null_validation(document.getElementById('cal_company_period_end').value,"PERIOD END")=="")
+			else if(globals.checking_null_validation(document.getElementById('cal_company_period_end').value,"PERIOD END")=="")
 			{}
 			else
 			{
-				$('.confirm-modal').remove();
-				$('.append-modal').append(confirmModals);
-	            $('.confirm-modal-dialog').removeClass().addClass('modal-dialog modal-sm');
-				$('.confirm-modal-title').html('Are you sure you want to add this CAL?');
-				$('.confirm-submit').addClass('create-cal-submit');
-				$('.confirm-modal').modal('show');
+				var	confirmModalMessage = 'Are you sure you want to add this CAL?';
+				var confirmModalAction = 'create-cal-submit';
+				globals.confirm_modals(confirmModalMessage,confirmModalAction);
 
 				formData.append("cal_company_id", 			document.getElementById('cal_company_id').value);
 	            formData.append("cal_reveneu_period_month", document.getElementById('cal_reveneu_period_month').value);
@@ -116,7 +76,7 @@ function billing_center()
 	
 	function create_cal_submit()
 	{
-		$(document).on('click','.create-cal-submit',function() 
+		$('body').on('click','.create-cal-submit',function() 
 		{
 
 			$('.confirm-modal').remove();
@@ -147,45 +107,19 @@ function billing_center()
 	}
 	function cal_view_details()
 	{
-		
 		$("body").on('click','.cal-view-details',function()
 		{
-			$('.cal-details-modal').remove();
-            $(".append-modal").append(globalModals);
-			$('.global-modal').removeClass().addClass('modal fade modal-top cal-details-modal');
-			$('.global-modal-dialog').removeClass().addClass('modal-dialog modal-lg cal-details-modal-dialog');
-			$('.global-modal-content').removeClass().addClass('modal-content');
-			$('.global-modal-header').removeClass().addClass('modal-header');
-			$('.global-modal-title').html('CAL DETAILS');
-			$('.global-modal-title').removeClass().addClass('modal-title');
-			$('.global-modal-body').removeClass().addClass('modal-body cal-details-modal-body');
-			$('.cal-details-modal').modal('show');
-			$('.global-ajax-loader').show();
-            $('.global-modal-body-content').hide();
-            $('.global-modal-footer').hide();
-            var cal_id = $(this).data('cal_id');
-			var company_id = $(this).data('company_id');
-            
-            $.ajax({
-				headers: {
-				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-				},
-
-				url:'/billing/cal_details/'+cal_id,
-				method: "get",
-                success: function(data)
-                {
-					setTimeout(function()
-					{
-						$('.global-ajax-loader').hide().removeClass().addClass('.modal-loader cal-details-ajax-loader');
-						$('.global-modal-body-content').show().removeClass().addClass('row box-holder  modal-body-content').html(data);
-						$('.global-modal-footer').show().removeClass().addClass('modal-footer cal-details-modal-footer');
-                    	$('.global-footer-button').html('CREATE CAL').removeClass().addClass('btn btn-primary create-cal-confirm');
-
-					}, 1000);
-				}
-			});
+			var cal_id = $(this).data('cal_id');
+			var modalName= 'CAL DETAILS';
+			var modalClass='company';
+			var modalLink='/billing/cal_details/'+cal_id;
+			var modalActionName='SAVE CHANGES';
+			var modalAction='confirm';
+			var modalSize = 'modal-lg';
+			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
 		});
+
+		
 	}
 	function download_cal_template()
 	{
@@ -198,58 +132,29 @@ function billing_center()
 	}
 	function import_cal_members()
 	{
-
-		$(document).on('click','.import-cal-memberss',function() 
+		$("body").on('click','.import-cal-members',function() 
 		{
-			$('.cal-member-modal').remove();
-            $(".append-modal").append(globalModals);
-			$('.global-modal').removeClass().addClass('modal fade modal-top cal-member-modal');
-			$('.global-modal-dialog').removeClass().addClass('modal-dialog modal-import cal-member-modal-dialog');
-			$('.global-modal-content').removeClass().addClass('modal-content');
-			$('.global-modal-header').removeClass().addClass('modal-header');
-			$('.global-modal-title').html('IMPORT CAL MEMBERS');
-			$('.global-modal-title').removeClass().addClass('modal-title');
-			$('.global-modal-body').removeClass().addClass('modal-body cal-member-modal-body');
-			$('.cal-member-modal').modal('show');
-			$('.global-ajax-loader').show();
-            $('.global-modal-body-content').hide();
-            $('.global-modal-footer').hide();
-
 			var company_id 	= $(this).data('member_company_id');
 			var cal_id 		= $(this).data('member_cal_id');
-			
-			$.ajax({
-				headers: {
-				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-				},
-				url:'/billing/import_cal_members/'+cal_id+'/'+company_id,
-				method: "get",
-                success: function(data)
-				{
-					setTimeout(function()
-					{
-						$('.global-ajax-loader').hide().removeClass().addClass('.modal-loader cal-member-ajax-loader');
-						$('.global-modal-body-content').show().removeClass().addClass('row box-holder  modal-body-content').html(data);
-						$('.global-modal-footer').show().removeClass().addClass('modal-footer cal-member-modal-footer');
-                    	$('.global-footer-button').remove();
-						
-                    }, 1000);
-				}
-			});
 
-		});
+			var modalName= 'IMPORT MEMBER';
+			var modalClass='cal-member';
+			var modalLink='/billing/import_cal_members/'+cal_id+'/'+company_id;
+			var modalActionName='SAVE CHANGES';
+			var modalAction='confirm';
+			var modalSize = 'modal-import';
+			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
+        });
+
+		
 	}
 	function import_cal_member_confirm()
 	{
-		$(document).on('click','.import-cal-member-confirm',function() 
+		$('body').on('click','.import-cal-member-confirm',function() 
 		{
-			$('.confirm-modal').remove();
-			$('.append-modal').append(confirmModals);
-            $('.confirm-modal-dialog').removeClass().addClass('modal-dialog modal-sm');
-			$('.confirm-modal-title').html('Are you sure you want to IMPORT this file?');
-			$('.confirm-submit').addClass('import-cal-member-submit');
-			$('.confirm-modal').modal('show');
-
+			var	confirmModalMessage = 'Are you sure you want to IMPORT this file?';
+			var confirmModalAction = 'import-cal-member-submit';
+			globals.confirm_modals(confirmModalMessage,confirmModalAction);
 			
 			formData.append("company_id", 			$(this).data('company_id'));
 			formData.append("cal_id", 				$(this).data('cal_id'));
@@ -282,7 +187,7 @@ function billing_center()
 						$('.cal-member-ajax-loader').hide();
 						$('.cal-member-modal-dialog').removeClass().addClass('modal-sm modal-dialog')
 						$('.cal-member-modal-body').html(data);
-						$('.cal-member-modal-footer').html('<button type="button" class="btn btn-default pull-left " data-dismiss="modal">Close</button>');
+						$('.cal-member-modal-footer').html(successButton);
 					}, 1000);
 				}
 			});

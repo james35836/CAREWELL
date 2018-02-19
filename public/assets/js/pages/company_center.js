@@ -1,18 +1,4 @@
 var company_center 	= new company_center();
-var formData   		= new FormData();
-var ajaxData 		= [];
-var availmentData 	= [];
-var check_null 		= [];
-var trunkData		= [];
-var benefitsData	= [];
-var contractData	= [];
-var contactData 	= [];
-var coveragePlanData= [];
-var deploymentData	= [];
-var value="0";
-var message="";
-
-
 
 function company_center()
 {
@@ -32,35 +18,7 @@ function company_center()
             create_company_confirm();
             create_company_submit();
             action_view_company_details();
-			trigger();
-			checking_null_validation(value,message);
-
-
-         });
-
-	}
-
-	function trigger()
-	{
-		$(document).on('click','.btn-close-lg',function()
-		{
-			$('.company-modal').modal('hide');
-			$(".company-modal-body").html('<center>RELOAD PAGE</center>');
-			
 		});
-	} 
-	function checking_null_validation(value,message)
-	{
-		if(value=="0")
-		{
-			return "null";
-		}
-		else if(value=="")
-		{
-			toastr.error(message+' cannot be null.', 'Something went wrong!', {timeOut: 3000})
-			return "";
-		}
-
 
 	}
 
@@ -114,33 +72,33 @@ function company_center()
             });
   	 		
             
-            if(checking_null_validation(document.getElementById('company_name').value,"COMPANY NAME")=="")
+            if(globals.checking_null_validation(document.getElementById('company_name').value,"COMPANY NAME")=="")
 			{}	
-		    else if(checking_null_validation(document.getElementById('company_contact_person').value,"COMPANY CONTACT PERSON")=="")
+		    else if(globals.checking_null_validation(document.getElementById('company_contact_person').value,"COMPANY CONTACT PERSON")=="")
 			{}
-			else if(checking_null_validation(document.getElementById('company_email_address').value,"COMPANY EMAIL ADDRESS")=="")
+			else if(globals.checking_null_validation(document.getElementById('company_email_address').value,"COMPANY EMAIL ADDRESS")=="")
 			{}	
-			else if(checking_null_validation(document.getElementById('company_address').value,"COMPANY ADDRESS")=="")
+			else if(globals.checking_null_validation(document.getElementById('company_address').value,"COMPANY ADDRESS")=="")
 			{}
 			else if(contactData==null||contactData=="")
 			{
-				toastr.error('Please add Contact Number at least one.', 'Something went wrong!', {timeOut: 3000})
+				globals.global_tostr('CONTACT NUMBER');
 			}
 			else if(countContract == 0)
 			{
-				toastr.error('Please add CONTRACT IMAGE at least one.', 'Something went wrong!', {timeOut: 3000})
+				globals.global_tostr('CONTACT IMAGE');
 			}
 			else if(countBenefits == 0)
 			{
-				toastr.error('Please add BENIFITS IMAGE at least one.', 'Something went wrong!', {timeOut: 3000})
+				globals.global_tostr('BENEFITS  IMAGE');
 			}
 			else if(deploymentData==null||deploymentData=="")
 			{
-				toastr.error('Please add DEPLOYMENT at least one.', 'Something went wrong!', {timeOut: 3000})
+				globals.global_tostr('DEPLOYMENT');
 			}
 			else if(coveragePlanData==null||coveragePlanData=="")
 			{
-				toastr.error('Please add COVERAGE PLAN at least one.', 'Something went wrong!', {timeOut: 3000})
+				globals.global_tostr('COVERAGE PLAN');
 			}
 			
 			else
@@ -204,10 +162,10 @@ function company_center()
 				{
 					setTimeout(function()
 					{
-						$('.modal-dialog').removeClass('modal-lg');
-						$('.modal-dialog').addClass('modal-sm');
-					    $(".company-modal-body").html(data);
-					    $(".company-modal-footer").html("<button type='button' class='btn btn-default pull-left btn-close-lg' style='text-align:center' data-dismiss='modal'>Close</button>");
+						$('.company-ajax-loader').hide();
+						$('.company-modal-dialog').removeClass().addClass('modal-sm modal-dialog')
+						$('.company-modal-body').html(data);
+						$('.company-modal-footer').html(successButton);
 					}, 1000);
 				}
 			});

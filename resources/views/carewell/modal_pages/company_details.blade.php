@@ -132,17 +132,17 @@ $(document).ready(function() {
 		</div>
 		
 		<div class="col-md-10 contact-number-form">
-			@foreach($_company_number as $company_number)
-			<div class=" form-content contact-form-element">
-				<div class="input-group">
-					<input type="text" value="{{$company_number->company_number}}" name="company_number[]" id="company_number" class="form-control"/>
-					<span class="input-group-btn">
-						<button class="btn btn-primary add-contact" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span> </button>
-						<button class="btn btn-danger remove-contact" type="button" tabindex="-1"><span class="fa fa-minus-circle" aria-hidden="true"></span> </button>
-					</span>
-				</div>
-			</div>
-			@endforeach
+			<table class="table table-bordered">
+				
+				<tbody>
+					@foreach($_company_number as $company_number)
+					<tr>
+						<td><input type="text" value="{{$company_number->company_number}}" name="company_number[]" id="company_number" class="form-control"/></td>
+					</tr>
+					@endforeach
+				</tbody>
+			</table>
+			
 		</div>
 		
 	</div>

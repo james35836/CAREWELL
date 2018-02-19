@@ -283,6 +283,7 @@ class StaticFunctionController extends Controller
   {
     $check_universal = TblMemberModel::where('member_universal_id',$universal_id)->first();
     $check_carewell  = TblMemberCompanyModel::where('member_carewell_id',$carewell_id)->first();
+    
     if($check_universal!=null&&$check_carewell!=null)
     {
       $result = 1;
