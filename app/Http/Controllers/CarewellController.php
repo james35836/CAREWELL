@@ -1172,8 +1172,8 @@ class CarewellController extends ActiveAuthController
   {
     StaticFunctionController::updateReferenceNumber('approval');
     $data['user'] = StaticFunctionController::global();
+
     $approvalData = new TblApprovalModel;
-    
     $approvalData->approval_number            = StaticFunctionController::updateReferenceNumber('approval');
     $approvalData->approval_complaint         = $request->approval_complaint;
     $approvalData->approval_created           = Carbon::now();
@@ -1183,14 +1183,14 @@ class CarewellController extends ActiveAuthController
     $approvalData->user_id                    = $data['user']->user_id;
     $approvalData->save();
     
-    foreach($request->availed_id as $key=>$data)
+    foreach($request->availed_id as $key=>$datas)
     {
       $availedData = new TblApprovalAvailedModel;
       $availedData->availed_phil_charity      = $request->availed_phil_charity[$key];
       $availedData->availed_charge_patient    = $request->availed_charge_patient[$key];
       $availedData->availed_charge_carewell   = $request->availed_charge_carewell[$key];
       $availedData->availed_remarks           = $request->availed_remarks[$key];
-      $availedData->availment_id              = $request->availed_id[$key];
+      $availedData->availment_id              = $datas;
       $availedData->approval_id               = $approvalData->approval_id;
       $availedData->save();
     }
@@ -1204,7 +1204,7 @@ class CarewellController extends ActiveAuthController
       $doctorData->approval_doctor_charge_patient   = $request->approval_doctor_charge_patient[$key];
       $doctorData->approval_doctor_charge_carewell  = $request->approval_doctor_charge_carewell[$key];
       $doctorData->specialization_id                = $request->specialization_id[$key];
-      $doctorData->doctor_id                        = $request->doctor_id[$key];
+      $doctorData->doctor_id                        = $data;
       $doctorData->procedure_id                     = $request->procedure_id[$key];
       $doctorData->approval_id                      = $approvalData->approval_id;
       $doctorData->save();
