@@ -252,6 +252,7 @@
           <ul class="treeview-menu">
             <li><a href="/settings/admin"><i class="fa fa-universal-access"></i>ADMIN PANEL</a></li>
             <li><a href="/settings/coverage"><i class="fa fa-circle-o"></i>COVERAGE PLAN</a></li>
+            <li><a href="/settings/developer"><i class="fa fa-circle-o"></i>DEVELOPER</a></li>
           </ul>
         </li>
       </ul>
@@ -342,6 +343,7 @@
 {{-- <script src="/assets/js/pages/report_center.js"></script> --}}
 <script src="/assets/js/pages/settings_center.js"></script>
 <script src="/assets/js/pages/settings_coverage.js"></script>
+<script src="/assets/js/pages/settings_developer.js"></script>
 
 
 <!-- SCRIPT -->

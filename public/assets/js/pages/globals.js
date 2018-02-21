@@ -13,9 +13,11 @@ var contractData	= [];
 var contactData 	= [];
 var coveragePlanData= [];
 var deploymentData	= [];
+var data            = "";
+var link            = "";
 
 
-var successButton	= '<button type="button" class="btn btn-default pull-left " data-dismiss="modal">RELOAD</button>';
+var successButton	= '<button type="button" class="btn btn-default pull-left reload-btn" data-dismiss="modal">RELOAD</button>';
 
 var confirmModals 			= '<div  class="modal fade modal-top confirm-modal" id="" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">'
 						  +'<div class="confirm-modal-dialog modal-dialog modal-sm">'
@@ -163,7 +165,30 @@ function globals()
 	{
 		toastr.error('Please add/select '+message+' at least one.', 'Something went wrong!', {timeOut: 3000})
 	}
-	
+	this.get_information = function(link,value,showId,val)
+	{
+		$.ajax({
+			headers: {
+			      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			},
+
+			url:link,
+			data:{value: value},
+			method: "POST",
+            success: function(data)
+			{
+				if(val=='val')
+				{
+					$(showId).val(data);
+				}
+				else
+				{
+					$(showId).html(data);
+				}
+				
+			}
+		});
+	}
 
 	init();
 	function init()
@@ -180,10 +205,16 @@ function globals()
 		check_all_checkbox();
 		add_select_option();
 		add_select_option_submit();
-		
+		reload_page();
 	}
 	
-    
+    function reload_page()
+    {
+    	$('body').on('click','.reload-btn',function()
+    	{
+    		location.reload();
+    	});
+    }
     function check_all_checkbox()
     {
     	$('body').on('click','.checkAllCheckbox',function (e) 

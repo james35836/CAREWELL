@@ -35,19 +35,23 @@ Route::get('/register', 								'FrontController@register');
 /*STATIC CONTROLLER*/
 
 Route::any('/get/company_coverage_plan', 				'StaticFunctionController@getCompanyCoveragePlan');
+Route::any('/get/provider_doctor', 						'StaticFunctionController@getProviderDoctor');
 Route::any('/get/company_jobsite', 						'StaticFunctionController@getCompanyJobsite');
-Route::any('/get/procedure_amount', 					'StaticFunctionController@getProcedureAmount');
+Route::any('/get/laboratory_amount', 					'StaticFunctionController@getLaboratoryAmount');
 Route::any('/get/doctor_specialty', 					'StaticFunctionController@getDoctorSpecialty');
 
 
 /*USER*/
 Route::get('/user/view_profile', 						'UserController@user_view_profile');
-/*DASHBOARD*/
-Route::get('/dashboard', 								'CarewellController@dashboard');
 /*ADMIN*/
 Route::get('/settings/admin', 							'AdminController@admin_center');
 Route::get('/admin/create_user', 						'AdminController@admin_create_user');
 Route::POST('/admin/create_user/submit', 				'AdminController@admin_create_user_submit');
+
+
+Route::get('/settings/developer', 				    	'AdminController@settings_developer');
+Route::get('/settings/developer_modal', 				'AdminController@settings_developer_modal');
+Route::post('/settings/developer_modal_submit', 		'AdminController@settings_developer_modal_submit');
 
 
 Route::get('/admin/view_user_deatils/{user_id}', 		'AdminController@admin_view_user_deatils');
@@ -55,6 +59,10 @@ Route::get('/admin/view_user_deatils/{user_id}', 		'AdminController@admin_view_u
 
 // Route::get('/admin', 								    'AdminController@admin');
 // Route::get('/admin', 								    'AdminController@admin');
+
+/*DASHBOARD*/
+Route::get('/dashboard', 								'CarewellController@dashboard');
+
 /*COMPANY*/
 Route::get('/company', 									'CarewellController@company');
 Route::get('/company/company_details/{company_id}', 	'CarewellController@company_details');
@@ -143,6 +151,7 @@ Route::get('/settings/coverage', 				    	'CarewellController@settings_coverage_
 Route::get('/settings/coverage/create_plan', 			'CarewellController@settings_coverage_plan_create');
 Route::post('/settings/coverage/create_plan_submit', 	'CarewellController@settings_coverage_plan_create_submit');
 Route::get('/settings/coverage/plan_details/{coverage_plan_id}', 			'CarewellController@settings_coverage_plan_details');
+
 
 
 

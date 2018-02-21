@@ -74,16 +74,54 @@ $(document).ready(function()
 		</div>
 		<div class="row form-holder ">
 			<div class="col-md-2 form-content">
-				<label>Maximum Benefit Limit</label>
+				<label>Processing Fee</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="text" name="coverage_maximum_benefit" id="coverage_maximum_benefit" class="form-control">
+				<input type="text" name="coverage_age_bracket" id="coverage_age_bracket" class="form-control">
+			</div>
+			<div class="col-md-2 form-content">
+				<label>CARI Fee</label>
+			</div>
+			<div class="col-md-4 form-content">
+				<input type="text" name="coverage_case_handling" id="coverage_case_handling" class="form-control">
+			</div>
+		</div>
+		<div class="row form-holder ">
+			<div class="col-md-2 form-content">
+				<label>CARI Fee</label>
+			</div>
+			<div class="col-md-4 form-content">
+				<input type="text" name="coverage_age_bracket" id="coverage_age_bracket" class="form-control">
+			</div>
+			<div class="col-md-2 form-content">
+				<label>HIV</label>
+			</div>
+			<div class="col-md-4 form-content">
+				<input type="text" name="coverage_case_handling" id="coverage_case_handling" class="form-control">
+			</div>
+		</div>
+		<div class="row form-holder ">
+			<div class="col-md-2 form-content">
+				<label>MBL</label>
+			</div>
+			<div class="col-md-4 form-content">
+				<select class="form-control" name="coverage_maximum_benefit" id="coverage_maximum_benefit">
+					<option>10,000</option>
+					<option>20,000</option>
+					<option>30,000</option>
+					<option>40,000</option>
+				</select>
 			</div>
 			<div class="col-md-2 form-content">
 				<label>Patient Confinement</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="text" id="coverage_patient_confinement" name="coverage_patient_confinement" class="form-control">
+				<select class="form-control" name="coverage_patient_confinement" id="coverage_patient_confinement">
+					<option>10,000</option>
+					<option>20,000</option>
+					<option>30,000</option>
+					<option>40,000</option>
+				</select>
 			</div>
 		</div>
 	</div>
@@ -101,7 +139,7 @@ $(document).ready(function()
 						<div class="parent-availment ">
 							<p style="font-size: 20px;font-weight: bold;">
 								<input type="checkbox" id="parent-box" class="parent-box" name="parent_availment[]" value="{{$availment->availment_id}}"/>
-								{{$availment->availment_name}}z
+								{{$availment->availment_name}}
 							</p>
 							<table class="table table-bordered availed-table">
 								<thead>

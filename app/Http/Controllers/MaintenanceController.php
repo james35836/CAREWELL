@@ -484,140 +484,46 @@ class MaintenanceController extends Controller
             DB::table('tbl_availment_charges')->insert($charges);
         }
         
-        // if (DB::table('tbl_schedule_of_benefits')->count() <= 0) 
-        // {
-        //     $benefits[0]["benefits_id"]    = 1;
-        //     $benefits[0]["benefits_name"]   = "Required to the PHILHEALTH";
-        //     $benefits[0]["benefits_parent_id"]    = 0;
-        //     $benefits[0]["member_id"]    = 0;
-            
-        //     $benefits[1]["benefits_id"]    = 2;
-        //     $benefits[1]["benefits_name"]   = "Room and Board";
-        //     $benefits[1]["benefits_parent_id"]    = 1;
-        //     $benefits[1]["member_id"]    = 0;
+        if (DB::table('tbl_doctor_procedure')->count() <= 0) 
+        {
+            $doctor_procedure[0]["doctor_procedure_id"]       = 1;
+            $doctor_procedure[0]["doctor_procedure_code"]     = "10060";
+            $doctor_procedure[0]["doctor_procedure_descriptive"]   = 'Incision and drainage of abscess (e.g., carbuncle, suppurative hidradenitis, cutaneous or subcutaneous abscess, cyst, furuncle, or paronychia)';
+            $doctor_procedure[0]["doctor_procedure_rvu"]      = "10";
+            $doctor_procedure[0]["doctor_procedure_case"]     = "100";
 
-        //     $benefits[2]["benefits_id"]    = 3;
-        //     $benefits[2]["benefits_name"]   = "Emergency Accredited Hospital";
-        //     $benefits[2]["benefits_parent_id"]    = 1;
-        //     $benefits[2]["member_id"]    = 0;
+            $doctor_procedure[1]["doctor_procedure_id"]       = 2;
+            $doctor_procedure[1]["doctor_procedure_code"]     = "10080";
+            $doctor_procedure[1]["doctor_procedure_descriptive"]   = 'Incision and drainage of pilonidal cyst';
+            $doctor_procedure[1]["doctor_procedure_rvu"]      = "10";
+            $doctor_procedure[1]["doctor_procedure_case"]     = "100";
 
-        //     $benefits[3]["benefits_id"]    = 4;
-        //     $benefits[3]["benefits_name"]   = "Prescribed Take Home Medicine";
-        //     $benefits[3]["benefits_parent_id"]    = 1;
-        //     $benefits[3]["member_id"]    = 0;
+            $doctor_procedure[2]["doctor_procedure_id"]       = 3;
+            $doctor_procedure[2]["doctor_procedure_code"]     = "10120";
+            $doctor_procedure[2]["doctor_procedure_descriptive"]   = 'Incision and removal of foreign body, subcutaneous tissues';
+            $doctor_procedure[2]["doctor_procedure_rvu"]      = "10";
+            $doctor_procedure[2]["doctor_procedure_case"]     = "100";
 
-        //     $benefits[4]["benefits_id"]    = 5;
-        //     $benefits[4]["benefits_name"]   = "Out Patient";
-        //     $benefits[4]["benefits_parent_id"]    = 0;
-        //     $benefits[4]["member_id"]    = 0;
+            $doctor_procedure[3]["doctor_procedure_id"]       = 4;
+            $doctor_procedure[3]["doctor_procedure_code"]     = "10140";
+            $doctor_procedure[3]["doctor_procedure_descriptive"]   = 'Incision and drainage of hematoma, seroma, or fluid collection';
+            $doctor_procedure[3]["doctor_procedure_rvu"]      = "10";
+            $doctor_procedure[3]["doctor_procedure_case"]     = "100";
 
-        //     $benefits[5]["benefits_id"]    = 6;
-        //     $benefits[5]["benefits_name"]   = "Consultation Accredited Medical Hospital";
-        //     $benefits[5]["benefits_parent_id"]    = 5;
-        //     $benefits[5]["member_id"]    = 0;
+            $doctor_procedure[4]["doctor_procedure_id"]       = 5;
+            $doctor_procedure[4]["doctor_procedure_code"]     = "10160";
+            $doctor_procedure[4]["doctor_procedure_descriptive"]   = 'Puncture aspiration of abscess, hematoma, bulla, or cyst';
+            $doctor_procedure[4]["doctor_procedure_rvu"]      = "10";
+            $doctor_procedure[4]["doctor_procedure_case"]     = "100";
 
-        //     $benefits[6]["benefits_id"]    = 7;
-        //     $benefits[6]["benefits_name"]   = "Laboratory and Drug Test";
-        //     $benefits[6]["benefits_parent_id"]    = 5;
-        //     $benefits[6]["member_id"]    = 0;
+            $doctor_procedure[5]["doctor_procedure_id"]       = 6;
+            $doctor_procedure[5]["doctor_procedure_code"]     = "10180";
+            $doctor_procedure[5]["doctor_procedure_descriptive"]   = 'Incision and drainage, complex, postoperative wound infection';
+            $doctor_procedure[5]["doctor_procedure_rvu"]      = "15";
+            $doctor_procedure[5]["doctor_procedure_case"]     = "100";
 
-        //     $benefits[7]["benefits_id"]    = 8;
-        //     $benefits[7]["benefits_name"]   = "Effective Something";
-        //     $benefits[7]["benefits_parent_id"]    = 5;
-        //     $benefits[7]["member_id"]    = 0;
-
-        //     $benefits[8]["benefits_id"]    = 9;
-        //     $benefits[8]["benefits_name"]   = "Medico Legal Cases";
-        //     $benefits[8]["benefits_parent_id"]    = 5;
-        //     $benefits[8]["member_id"]    = 0;
-
-        //     $benefits[9]["benefits_id"]    = 10;
-        //     $benefits[9]["benefits_name"]   = "DENTAL";
-        //     $benefits[9]["benefits_parent_id"]    = 0;
-        //     $benefits[9]["member_id"]    = 0;
-
-        //     $benefits[10]["benefits_id"]    = 11;
-        //     $benefits[10]["benefits_name"]   = "Shape Tooth Extract";
-        //     $benefits[10]["benefits_parent_id"]    = 10;
-        //     $benefits[10]["member_id"]    = 0;
-
-        //     $benefits[11]["benefits_id"]    = 12;
-        //     $benefits[11]["benefits_name"]   = "Prophylaxis";
-        //     $benefits[11]["benefits_parent_id"]    = 10;
-        //     $benefits[11]["member_id"]    = 0;
-
-        //     $benefits[12]["benefits_id"]    = 13;
-        //     $benefits[12]["benefits_name"]   = "Temporary Pasta";
-        //     $benefits[12]["benefits_parent_id"]    = 10;
-        //     $benefits[12]["member_id"]    = 0;
-            
-        //     $benefits[13]["benefits_id"]    = 14;
-        //     $benefits[13]["benefits_name"]   = "Consultation to Dentist";
-        //     $benefits[13]["benefits_parent_id"]    = 10;
-        //     $benefits[13]["member_id"]    = 0;
-
-        //     $benefits[14]["benefits_id"]    = 15;
-        //     $benefits[14]["benefits_name"]   = "Annual Physical Examination";
-        //     $benefits[14]["benefits_parent_id"]    = 0;
-        //     $benefits[14]["member_id"]    = 0;
-
-        //     $benefits[15]["benefits_id"]    = 16;
-        //     $benefits[15]["benefits_name"]   = "Chest X-ray,UBC,Urinalysis";
-        //     $benefits[15]["benefits_parent_id"]    = 15;
-        //     $benefits[15]["member_id"]    = 0;
-
-        //     $benefits[16]["benefits_id"]    = 17;
-        //     $benefits[16]["benefits_name"]   = "Re-Exixting ILLNESS";
-        //     $benefits[16]["benefits_parent_id"]    = 0;
-        //     $benefits[16]["member_id"]    = 0;
-
-        //     $benefits[17]["benefits_id"]    = 18;
-        //     $benefits[17]["benefits_name"]   = "Death Benefit";
-        //     $benefits[17]["benefits_parent_id"]    = 0;
-        //     $benefits[17]["member_id"]    = 0;
-
-        //     $benefits[18]["benefits_id"]    = 19;
-        //     $benefits[18]["benefits_name"]   = "Natural Death";
-        //     $benefits[18]["benefits_parent_id"]    = 18;
-        //     $benefits[18]["member_id"]    = 0;
-
-        //     $benefits[19]["benefits_id"]    = 20;
-        //     $benefits[19]["benefits_name"]   = "Accidental Death";
-        //     $benefits[19]["benefits_parent_id"]    = 18;
-        //     $benefits[19]["member_id"]    = 0;
-
-        //     $benefits[20]["benefits_id"]    = 21;
-        //     $benefits[20]["benefits_name"]   = "Motorcycle Accident";
-        //     $benefits[20]["benefits_parent_id"]    = 0;
-        //     $benefits[20]["member_id"]    = 0;
-
-        //     $benefits[21]["benefits_id"]    = 22;
-        //     $benefits[21]["benefits_name"]   = "Medical";
-        //     $benefits[21]["benefits_parent_id"]    = 21;
-        //     $benefits[21]["member_id"]    = 0;
-
-        //     $benefits[22]["benefits_id"]    = 23;
-        //     $benefits[22]["benefits_name"]   = "Death";
-        //     $benefits[22]["benefits_parent_id"]    = 21;
-        //     $benefits[22]["member_id"]    = 0;
-
-        //     $benefits[23]["benefits_id"]    = 24;
-        //     $benefits[23]["benefits_name"]   = "Emergency Non-Accredited Hospital";
-        //     $benefits[23]["benefits_parent_id"]    = 1;
-        //     $benefits[23]["member_id"]    = 0;
-
-        //     $benefits[24]["benefits_id"]    = 25;
-        //     $benefits[24]["benefits_name"]   = "Non-Emergency Non-Accredited Hospital";
-        //     $benefits[24]["benefits_parent_id"]    = 1;
-        //     $benefits[24]["member_id"]    = 0;
-
-        //     $benefits[25]["benefits_id"]    = 26;
-        //     $benefits[25]["benefits_name"]   = "Non-Emergency Accredited Hospital";
-        //     $benefits[25]["benefits_parent_id"]    = 1;
-        //     $benefits[25]["member_id"]    = 0;
-
-        //     DB::table('tbl_schedule_of_benefits')->insert($benefits);
-        // }
+            DB::table('tbl_doctor_procedure')->insert($doctor_procedure);
+        }
         if (DB::table('tbl_procedure')->count() <= 0) 
         {
             $procedure[0]["procedure_id"]       = 1;
@@ -647,13 +553,80 @@ class MaintenanceController extends Controller
 
             DB::table('tbl_procedure')->insert($procedure);
         }
-        // if (DB::table('tbl_jobsite')->count() <= 0) 
-        // {
-        //     $job[0]["jobsite_id"]       = 35836;
-        //     $job[0]["jobsite_name"]     = "Sakit sa tiyan";
-        //     $job[0]["company_id"]       = 35836;
-        //     DB::table('tbl_jobsite')->insert($job);
-        // }
+        if (DB::table('tbl_laboratory')->count() <= 0) 
+        {
+            $laboratory[0]["laboratory_id"]       = 1;
+            $laboratory[0]["laboratory_name"]     = "ABG ( ARTERIAL BLOOD GAS)";
+            $laboratory[0]["laboratory_amount"]   = '2870';
+            
+            $laboratory[1]["laboratory_id"]       = 2;
+            $laboratory[1]["laboratory_name"]     = "CARDIAC MONITOR/ DAY";
+            $laboratory[1]["laboratory_amount"]   = '5571';
+            
+            $laboratory[2]["laboratory_id"]       = 3;
+            $laboratory[2]["laboratory_name"]     = "CPAP MACHINE/ DAY";
+            $laboratory[2]["laboratory_amount"]   = '1';
+            
+            $laboratory[3]["laboratory_id"]       = 4;
+            $laboratory[3]["laboratory_name"]     = "DEFIBRILATOR MONITORING";
+            $laboratory[3]["laboratory_amount"]   = '851';
+            
+            $laboratory[4]["laboratory_id"]       = 5;
+            $laboratory[4]["laboratory_name"]     = "INFUSION PUMP";
+            $laboratory[4]["laboratory_amount"]   = '870';
+
+            $laboratory[5]["laboratory_id"]       = 6;
+            $laboratory[5]["laboratory_name"]     = "NEBULIZATION";
+            $laboratory[5]["laboratory_amount"]   = '270';
+            
+            $laboratory[6]["laboratory_id"]       = 7;
+            $laboratory[6]["laboratory_name"]     = "O2 SPOT CHECK";
+            $laboratory[6]["laboratory_amount"]   = '551';
+            
+            $laboratory[7]["laboratory_id"]       = 8;
+            $laboratory[7]["laboratory_name"]     = "PFT W/OUT BRONCHODILTOR";
+            $laboratory[7]["laboratory_amount"]   = '1';
+            
+            $laboratory[8]["laboratory_id"]       = 9;
+            $laboratory[8]["laboratory_name"]     = "PFT WITH BRONCHODILATOR";
+            $laboratory[8]["laboratory_amount"]   = '851';
+            
+            $laboratory[9]["laboratory_id"]       = 10;
+            $laboratory[9]["laboratory_name"]     = "PULSE OXIMETER /DAY";
+            $laboratory[9]["laboratory_amount"]   = '870';
+
+            $laboratory[10]["laboratory_id"]       = 11;
+            $laboratory[10]["laboratory_name"]     = "SYRINGE PUMP";
+            $laboratory[10]["laboratory_amount"]   = '270';
+            
+            $laboratory[11]["laboratory_id"]       = 12;
+            $laboratory[11]["laboratory_name"]     = "VENTILATOR (PB 7200)";
+            $laboratory[11]["laboratory_amount"]   = '571';
+            
+            $laboratory[12]["laboratory_id"]       = 13;
+            $laboratory[12]["laboratory_name"]     = "VENTILATOR (PLV/ IS)";
+            $laboratory[12]["laboratory_amount"]   = '1';
+            
+            $laboratory[13]["laboratory_id"]       = 14;
+            $laboratory[13]["laboratory_name"]     = "VENTILATOR BIPAP";
+            $laboratory[13]["laboratory_amount"]   = '81';
+            
+            $laboratory[14]["laboratory_id"]       = 15;
+            $laboratory[14]["laboratory_name"]     = "VENTILATOR PEDIA STR";
+            $laboratory[14]["laboratory_amount"]   = '870';
+
+            $laboratory[15]["laboratory_id"]       = 16;
+            $laboratory[15]["laboratory_name"]     = "2D ECHO & VASCULAR CD COPY";
+            $laboratory[15]["laboratory_amount"]   = '851';
+            
+
+            $laboratory[16]["laboratory_id"]       = 17;
+            $laboratory[16]["laboratory_name"]     = "ACHIEVA VENT";
+            $laboratory[16]["laboratory_amount"]   = '80';
+            
+            DB::table('tbl_laboratory')->insert($laboratory);
+        }
+
 
 
 

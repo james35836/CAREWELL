@@ -36,8 +36,8 @@
 							<td>
 								<select class="form-control select2" name="procedure_id[]">
 									<option>SELECT PROCEDURE</option>
-									@foreach($_procedure as $procedure)
-									<option value="{{$procedure->procedure_id}}">{{$procedure->procedure_name}}</option>
+									@foreach($_procedure_doctor as $procedure_doctor)
+									<option value="{{$procedure_doctor->doctor_procedure_id}}">{{$procedure_doctor->doctor_procedure_descriptive}}</option>
 									@endforeach
 								</select>
 							</td>

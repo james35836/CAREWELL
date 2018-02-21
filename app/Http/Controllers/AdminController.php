@@ -4,20 +4,72 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests;
-
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\StaticFunctionController;
 use App\Http\Controllers\ActiveAuthController;
 
 use App\Http\Model\TblUserModel;
 use App\Http\Model\TblUserInfoModel;
 
-use Redirect;
-use Session;
-use Crypt;
-use Mail;
-use Carbon\Carbon;
+use App\Http\Model\TblAvailmentModel;
+use App\Http\Model\TblAvailmentChargesModel;
 
-use App\Http\Controllers\StaticFunctionController;
+use App\Http\Model\TblCoveragePlanModel;
+use App\Http\Model\TblCoveragePlanTagModel;
+
+use App\Http\Model\TblCompanyModel;
+use App\Http\Model\TblCompanyContractModel;
+use App\Http\Model\TblCompanyNumberModel;
+use App\Http\Model\TblCompanyContractImageModel;
+use App\Http\Model\TblCompanyContractBenefitsModel;
+use App\Http\Model\TblCompanyCoveragePlanModel;
+use App\Http\Model\TblCompanyDeploymentModel;
+
+use App\Http\Model\TblCalModel;
+use App\Http\Model\TblCalMemberModel;
+
+use App\Http\Model\TblMemberModel;
+use App\Http\Model\TblMemberCompanyModel;
+use App\Http\Model\TblMemberDependentModel;
+use App\Http\Model\TblMemberGovernmentCardModel;
+
+use App\Http\Model\TblPaymentModeModel;
+
+use App\Http\Model\TblProviderModel;
+use App\Http\Model\TblProviderPayeeModel;
+
+use App\Http\Model\TblDoctorModel;
+use App\Http\Model\TblDoctorProcedureModel;
+use App\Http\Model\TblDoctorProviderModel;
+use App\Http\Model\TblDoctorSpecializationModel;
+
+use App\Http\Model\TblPayableModel;
+use App\Http\Model\TblPayableApprovalModel;
+
+use App\Http\Model\TblSpecializationModel;
+
+use App\Http\Model\TblApprovalModel;
+use App\http\Model\TblApprovalAvailedModel;
+use App\Http\Model\TblApprovalDoctorModel;
+
+use App\Http\Model\TblLaboratoryModel;
+
+use App\Http\Model\TblDiagnosisModel;
+
+
+use App\Http\Model\TblProcedureModel;
+
+use App\Http\Model\TblScheduleOfBenefitsModel;
+
+use Excel;
+use Input;
+// use Request;
+use DB;
+use Carbon\Carbon;
+use Paginate;
+use Crypt;
+
+
 
 class AdminController extends ActiveAuthController
 {
@@ -92,6 +144,108 @@ class AdminController extends ActiveAuthController
                           ->join('tbl_user_info','tbl_user_info.user_id','=','tbl_user.user_id')
                           ->first();
     return view('carewell.modal_pages.admin_user_details',$data);
+  }
+  public function settings_developer()
+  {
+    $data['page'] = 'DEVELOPER';
+    $data['user'] = StaticFunctionController::global();
+
+    $data['_coverage_plan'] = TblCoveragePlanModel::paginate(10);
+
+    return view('carewell.pages.settings_developer',$data);
+  }
+  public function settings_developer_modal()
+  {
+
+    return view('carewell.modal_pages.developer_modal');
+  }
+  
+  public function settings_developer_modal_submit(Request $request)
+  {
+    $file   = $request->file('importDeveloperFile')->getRealPath();
+    $_data  = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->all();
+    $first  = $_data[0]; 
+    if(isset($first['provider_payee_name'])&&isset($first['provider_name'])&&$request->file_name=="provider")
+    {
+      $count = 0;
+      $countPayee = 0;
+        foreach($_data as $data)
+        {
+          $refNumber = StaticFunctionController::getIdNorName($data['provider_name'],'provider');
+          if($refNumber==$data['provider_name'])
+          {
+
+            $providerData = new TblProviderModel;
+            $providerData->provider_name            = $data['provider_name'];
+            $providerData->provider_contact_person  = "N/A";
+            $providerData->provider_telephone_number= "N/A";
+            $providerData->provider_mobile_number   = "N/A";
+            $providerData->provider_contact_email   = "N/A";
+            $providerData->provider_address         = "N/A";
+            $providerData->provider_created         = Carbon::now();
+            $providerData->save();
+            
+            $providerPayeeData = new TblProviderPayeeModel;
+            $providerPayeeData->provider_payee_name = $data['provider_payee_name'];
+            $providerPayeeData->provider_id = $providerData->provider_id;
+            $providerPayeeData->save();
+
+            $count++;
+          }
+          else
+          {
+            $providerPayeeData = new TblProviderPayeeModel;
+            $providerPayeeData->provider_payee_name = $data['provider_payee_name'];
+            $providerPayeeData->provider_id = $refNumber;
+            $providerPayeeData->save();
+
+            $countPayee++;
+          }
+        }    
+
+        if($count == 0)
+        {
+          $message = '<center><b><span class="color-gray">There is nothing to insert</span></b></center>';
+        }
+        else
+        {
+          $message = '<center><b><span class="color-green">'.$count.' Provider/s has been inserted and '.$countPayee.' payee.</span></b></center>';
+        }
+        return $message;
+    }
+    if(isset($first['diagnosis_name'])&&isset($first['diagnosis_covered'])&&$request->file_name=="diagnosis")
+    {
+      $count = 0;
+      $countExist = 0; 
+        foreach($_data as $data)
+        {
+          
+          $check = TblDiagnosisModel::where('diagnosis_name',$data['diagnosis_name'])->where('diagnosis_covered',$data['diagnosis_covered'])->first();
+          if($check==null&&$data['diagnosis_name']!="")
+          {
+            $diagnosisData = new TblDiagnosisModel;
+            $diagnosisData->diagnosis_name           = $data['diagnosis_name'];
+            $diagnosisData->diagnosis_covered        = $data['diagnosis_covered'];
+            $diagnosisData->save();
+            
+            $count++;
+          }
+          else
+          {
+            $countExist++;
+          }
+        }    
+
+        if($count == 0)
+        {
+          $message = '<center><b><span class="color-gray">There is nothing to insert</span></b></center>';
+        }
+        else
+        {
+          $message = '<center><b><span class="color-green">'.$count.' Diagnosis/s has been inserted and '.$countExist.' diagnosis are already exist.</span></b></center>';
+        }
+        return $message;
+    }
   }
   
 }

@@ -51,6 +51,7 @@ use App\Http\Model\TblProcedureModel;
 use App\http\Model\TblProcedureAvailedModel;
 use App\Http\Model\TblProcedureDoctorModel;
 
+use App\Http\Model\TblLaboratoryModel;
 
 
 use App\Http\Model\TblScheduleOfBenefitsModel;
@@ -76,11 +77,27 @@ class StaticFunctionController extends Controller
       return "<div class='alert alert-danger' style='text-align: center;'>".$str_name." transaction Failed!</div>";
     }
   }
+  public function getProviderDoctor(Request $request)
+  {
+    if($request->ajax())
+    {
+        $data['_provider_doctor']  = TblDoctorProviderModel::where('tbl_doctor_provider.provider_id',$request->value)
+                              ->join('tbl_doctor','tbl_doctor.doctor_id','=','tbl_doctor_provider.doctor_id')
+                              ->get();
+        $data['_provider_doctors'] = '<option>-SELECT DOCTOR-';
+        foreach($data['_provider_doctor'] as $provider_doctor)
+        {
+            $data['_provider_doctors']     .= '<option value='.$provider_doctor->doctor_id.'>'.$provider_doctor->doctor_first_name." ".$provider_doctor->doctor_last_name;
+        }
+        return $data['_provider_doctors'];
+    }
+  }
+  
   public function getDoctorSpecialty(Request $request)
   {
     if($request->ajax())
     {
-        $data['_specialization']  = TblDoctorSpecializationModel::where('tbl_doctor_specialization.doctor_id',$request->doctor_id)
+        $data['_specialization']  = TblDoctorSpecializationModel::where('tbl_doctor_specialization.doctor_id',$request->value)
                                     ->join('tbl_specialization','tbl_specialization.specialization_id','=','tbl_doctor_specialization.specialization_id')
                                     ->get();
         $data['_specializationList'] = '';
@@ -91,12 +108,12 @@ class StaticFunctionController extends Controller
         return $data['_specializationList'];
     }
   }
-  public function getProcedureAmount(Request $request)
+  public function getLaboratoryAmount(Request $request)
   {
     if($request->ajax())
     {
-        $procedure  = TblProcedureModel::where('tbl_procedure.procedure_id',$request->procedure_id)->first();
-        $amount = $procedure ->procedure_amount;
+        $laboratory  = TblLaboratoryModel::where('tbl_laboratory.laboratory_id',$request->value)->first();
+        $amount = $laboratory ->laboratory_amount;
         return $amount;
     }
   }
@@ -282,10 +299,18 @@ class StaticFunctionController extends Controller
   public static function checkIfExistMember($carewell_id,$universal_id)
   {
     $check_universal = TblMemberModel::where('member_universal_id',$universal_id)->first();
-    $check_carewell  = TblMemberCompanyModel::where('member_carewell_id',$carewell_id)->first();
     
-    if($check_universal!=null&&$check_carewell!=null)
+    if($check_universal!=null)
     {
+      $check_carewell  = TblMemberCompanyModel::where('member_carewell_id',$carewell_id)->first();
+      if($check_carewell!=null)
+      {
+        $result = 0;
+      }
+      else
+      {
+
+      }
       $result = 1;
     }
     else
@@ -304,6 +329,28 @@ class StaticFunctionController extends Controller
              $int = 1;
         }
         return $int;
+  }
+  public static function getIdNorName($name="",$str_param)
+  {
+    $ref = "";
+    switch ($str_param) 
+    {
+ 
+
+      case 'provider':
+        $ref = TblProviderModel::where('provider_name', $name)->value('provider_id');
+        break;
+    }
+
+    if($ref == null)
+    {    
+      $refer = $name;
+    }
+    else
+    {
+      $refer = $ref;
+    }
+  return $refer; 
   }
   public static function getid($str_name = '', $str_param = '')
   {

@@ -73,19 +73,13 @@
 								<td>{{$cal_member->cal_payment_amount}}</td>
 								<td><span class="label label-success">active</span></td>
 								<td>
-									<select name="" class="form-control cal-action">
-										<option value="" >ACTION</option>
-										<option value="member" >View Member</option>
-										<option value="billing" class="pop-up-lg">Billing Statement</option>
-									</select>
+									<button type="button" class="btn btn-danger btn-sm"><i class="fa fa-minus-circle"></i></button>
 								</td>
 							</tr>
 							@endforeach
 						</table>
 					</div>
-					<div class="box-footer clearfix">
-						@include('globals.pagination', ['paginator' => $_cal_member])
-					</div>
+					
 				</div>
 			</div>
 		</div>

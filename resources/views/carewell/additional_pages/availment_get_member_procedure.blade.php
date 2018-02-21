@@ -22,7 +22,7 @@
 							@endforeach
 						</select>
 					</td>
-					<td><input type="text" value="0.0" name="procedure_availed_amount[]" id="procedure_availed_amount" class="amount form-control"/></td>
+					<td><input type="text" value="0.0" name="[]" id="procedure_availed_amount" class="amount form-control"/></td>
 					<td><input type="text" value="0.0" name="availed_phil_charity[]" id="" class="form-control"/></td>
 					<td><input type="text" value="0.0" name="availed_charge_patient[]" id="" class="form-control"/></td>
 					<td><input type="text" value="0.0" name="availed_charge_carewell[]" id="" class="form-control"/></td>

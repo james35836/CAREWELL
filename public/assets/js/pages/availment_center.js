@@ -45,7 +45,7 @@ function availment_center()
 	}
     function create_approval_get_info()
 	{
-		$(document).on('change','.get-member-info',function() 
+		$('body').on('change','.get-member-info',function() 
 		{
 			var member_id 	= $(this).val();
 			$.ajax({
@@ -61,72 +61,27 @@ function availment_center()
 			});
 			
 		});
-		$(document).on('change','.get-availment-info',function() 
-		{
-			var availment_id 	= $(this).val();
-			$.ajax({
-				headers: {
-				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-				},
-				url:'/availment/get_member_procedure/'+availment_id,
-				method: "get",
-                success: function(data)
-				{
-					$('#insertAvailed').html(data);
-				}
-			});
-			
-		});
-		$(document).on('change','.get-doctor-info',function() 
+		
+
+		$('body').on('change','.get-provider-doctor',function() 
 		{
 			var provider_id 	= $(this).val();
-			$.ajax({
-				headers: {
-				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-				},
-				url:'/availment/get_provider_doctor/'+provider_id,
-				method: "get",
-                success: function(data)
-				{
-					$('#insertDoctor').html(data);
-				}
-			});
-			
+			globals.get_information('/get/provider_doctor',provider_id,'.doctor-list','html')
 		});
-		$(document).on('change','.get-procedure-amount',function() 
+
+		$('body').on('change','.get-laboratory-amount',function() 
 		{
-			var procedure_id 	= $(this).val();
-			$.ajax({
-				headers: {
-				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-				},
-				url:'/get/procedure_amount',
-				data:{procedure_id: procedure_id},
-				method: "POST",
-                success: function(data)
-				{
-					$('#procedure_availed_amount').val(data);
-				}
-			});
-			
+			var laboratory_id 	= $(this).val();
+			globals.get_information('/get/laboratory_amount',laboratory_id,'.laboratory_amount','val')
 		});
-		$(document).on('change','.get-doctor-specialty',function() 
+
+		$('body').on('change','.doctor-list',function() 
 		{
 			var doctor_id 	= $(this).val();
-			$.ajax({
-				headers: {
-				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-				},
-				url:'/get/doctor_specialty',
-				data:{doctor_id: doctor_id},
-				method: "POST",
-                success: function(data)
-				{
-					$('.doctor-specialty').html(data);
-				}
-			});
-			
+			globals.get_information('/get/doctor_specialty',doctor_id,'.doctor-specialty','html')
 		});
+
+		
 
     }
     function create_approval_confirm()
