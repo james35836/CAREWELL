@@ -144,7 +144,7 @@
 			<div id="company" class="row tab-pane fade in active table-min-height">
 				<div class="row ">
 			    <div class=" col-md-3 pull-right">
-			      <button type="button" class="btn btn-primary  button-lg create-company"><i class="fa fa-plus btn-icon "></i>CREATE ADJUSTMENT</button>
+			      <button type="button" class="btn btn-primary  button-lg member-adjustment" data-member_id="{{$member_details->member_id}}"><i class="fa fa-plus btn-icon "></i>CREATE ADJUSTMENT</button>
 			    </div>
 			  </div>
 				<div class="box-body table-responsive no-padding">

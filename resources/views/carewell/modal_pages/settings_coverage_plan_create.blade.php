@@ -52,7 +52,7 @@ $(document).ready(function()
 				<input type="text" name="coverage_name" id="coverage_name" class="form-control">
 			</div>
 			<div class="col-md-2 form-content">
-				<label>Monthly Premium</label>
+				<label>Premium</label>
 			</div>
 			<div class="col-md-4 form-content">
 				<input type="text" name="coverage_monthly_premium" id="coverage_monthly_premium" class="form-control">
@@ -88,16 +88,21 @@ $(document).ready(function()
 		</div>
 		<div class="row form-holder ">
 			<div class="col-md-2 form-content">
-				<label>CARI Fee</label>
+				<label>HIV</label>
 			</div>
 			<div class="col-md-4 form-content">
 				<input type="text" name="coverage_age_bracket" id="coverage_age_bracket" class="form-control">
 			</div>
 			<div class="col-md-2 form-content">
-				<label>HIV</label>
+				<label>Patient Confinement</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="text" name="coverage_case_handling" id="coverage_case_handling" class="form-control">
+				<select class="form-control" name="coverage_patient_confinement" id="coverage_patient_confinement">
+					<option>10,000</option>
+					<option>20,000</option>
+					<option>30,000</option>
+					<option>40,000</option>
+				</select>
 			</div>
 		</div>
 		<div class="row form-holder ">
@@ -113,15 +118,35 @@ $(document).ready(function()
 				</select>
 			</div>
 			<div class="col-md-2 form-content">
-				<label>Patient Confinement</label>
+				<input type="checkbox" ><label>Illness</label>
+			</div>
+			<div class="col-md-2 form-content">
+				<input type="checkbox" ><label>Year</label>
+			</div>
+			<div class="col-md-2 form-content">
+				<input type="checkbox" ><label>Desease</label>
+			</div>
+		</div>
+		<div class="row form-holder ">
+			<div class="col-md-2 form-content">
+				<label>AMOUNT</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<select class="form-control" name="coverage_patient_confinement" id="coverage_patient_confinement">
+				<select class="form-control" name="coverage_maximum_benefit" id="coverage_maximum_benefit">
 					<option>10,000</option>
 					<option>20,000</option>
 					<option>30,000</option>
 					<option>40,000</option>
 				</select>
+			</div>
+			<div class="col-md-2 form-content">
+				<input type="checkbox" ><label>Illness</label>
+			</div>
+			<div class="col-md-2 form-content">
+				<input type="checkbox" ><label>Year</label>
+			</div>
+			<div class="col-md-2 form-content">
+				<input type="checkbox" ><label>Desease</label>
 			</div>
 		</div>
 	</div>
@@ -136,56 +161,58 @@ $(document).ready(function()
 				<div class="row availment-container box-container">
 					@foreach($_availment as $availment)
 					<div class="availment-box">
-						<div class="parent-availment ">
+						<div class="parent-availment">
 							<p style="font-size: 20px;font-weight: bold;">
 								<input type="checkbox" id="parent-box" class="parent-box" name="parent_availment[]" value="{{$availment->availment_id}}"/>
 								{{$availment->availment_name}}
 							</p>
-							<table class="table table-bordered availed-table">
-								<thead>
-									<tr>
-										<th class="col-md-5">PROCEDURE</th>
-										<th class="col-md-5" >CHARGE</th>
-										<th class="col-md-2"></th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr class="table-row">
-										<td class="col-md-5">
-											<div class="input-group">
-												<select name="child_availment[]" class="form-control procedure select2">
-													<option value="0">SELECT PROCEDURE</option>
-													@foreach($availment->child_availment as $child_availment)
-													<option value="{{$child_availment->availment_id}}">{{$child_availment->availment_name}}</option>
-													@endforeach
-												</select>
-												<span class="input-group-btn">
-													<button class="btn btn-secondary add-new-option" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span> ADD ITEM</button>
-												</span>
-											</div>
-										</td>
-										<td class="col-md-4">
-											<div class="input-group">
-												<select name="child_availment_charges[]" class="form-control select2 ">
-													@foreach($availment->availment_charges as $availment_charges)
-													<option value="{{$availment_charges->availment_charges_id}}">{{$availment_charges->availment_charges_name}}</option>
-													@endforeach
-												</select>
-												<span class="input-group-btn">
-													<button class="btn btn-secondary add-new-option" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span> ADD ITEM</button>
-												</span>
-											</div>
-										</td>
-										<td class="col-md-2 last-td">
-											<div class="btn-group" role="group" aria-label="Basic example">
-												<button type="button" class="btn btn-primary btn-sm add-row"><i class="fa fa-plus-circle"></i></button>
-												<button type="button" class="btn btn-danger btn-sm remove-row"><i class="fa fa-minus-circle"></i></button>
-											</div>
-											
-										</td>
-									</tr>
-								</tbody>
-							</table>
+							<div  style="overflow-x:scroll;">
+								<table class="table table-bordered availed-table" >
+									<thead>
+										<tr>
+											<th class="col-md-5">PROCEDURE</th>
+											<th class="col-md-5" >CHARGE</th>
+											<th class="col-md-2"></th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr class="table-row">
+											<td class="col-md-5">
+												<div class="input-group">
+													<select name="child_availment[]" class="form-control procedure select2">
+														<option value="0">SELECT PROCEDURE</option>
+														@foreach($availment->child_availment as $child_availment)
+														<option value="{{$child_availment->availment_id}}">{{$child_availment->availment_name}}</option>
+														@endforeach
+													</select>
+													<span class="input-group-btn">
+														<button class="btn btn-secondary add-new-option" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span> ADD ITEM</button>
+													</span>
+												</div>
+											</td>
+											<td class="col-md-4">
+												<div class="input-group">
+													<select name="child_availment_charges[]" class="form-control select2 ">
+														@foreach($availment->availment_charges as $availment_charges)
+														<option value="{{$availment_charges->availment_charges_id}}">{{$availment_charges->availment_charges_name}}</option>
+														@endforeach
+													</select>
+													<span class="input-group-btn">
+														<button class="btn btn-secondary add-new-option" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span> ADD ITEM</button>
+													</span>
+												</div>
+											</td>
+											<td class="col-md-2 last-td">
+												<div class="btn-group" role="group" aria-label="Basic example">
+													<button type="button" class="btn btn-primary btn-sm add-row"><i class="fa fa-plus-circle"></i></button>
+													<button type="button" class="btn btn-danger btn-sm remove-row"><i class="fa fa-minus-circle"></i></button>
+												</div>
+												
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
 						</div>
 					</div>
 					@endforeach

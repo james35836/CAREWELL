@@ -108,32 +108,32 @@ function company_center()
 				globals.confirm_modals(confirmModalMessage,confirmModalAction);
 				
 
-				formData.append("company_name", 			document.getElementById('company_name').value);
-	            formData.append("company_email_address", 	document.getElementById('company_email_address').value);
-	            formData.append("company_contact_person", 	document.getElementById('company_contact_person').value);
-	            formData.append("company_address", 			document.getElementById('company_address').value);
+				companyData.append("company_name", 				document.getElementById('company_name').value);
+	            companyData.append("company_email_address", 	document.getElementById('company_email_address').value);
+	            companyData.append("company_contact_person", 	document.getElementById('company_contact_person').value);
+	            companyData.append("company_address", 			document.getElementById('company_address').value);
 
-	            formData.append("payment_mode_id", 			document.getElementById('payment_mode_id').value);
+	            companyData.append("payment_mode_id", 			document.getElementById('payment_mode_id').value);
 	            for (var i = 0; i < contactData.length; i++) 
 				{
-				    formData.append('contactData[]', contactData[i]);
+				    companyData.append('contactData[]', contactData[i]);
 				}
 				for (var i = 0; i < countContract; i++) 
 				{
-				    formData.append('contractData[]', document.getElementById('contract_image_name').files[i]);
+				    companyData.append('contractData[]', document.getElementById('contract_image_name').files[i]);
 				}
 				for (var i = 0; i < countBenefits; i++) 
 				{
-				    formData.append('benefitsData[]', document.getElementById('contract_benefits_name').files[i]);
+				    companyData.append('benefitsData[]', document.getElementById('contract_benefits_name').files[i]);
 				}
 				for (var i = 0; i < coveragePlanData.length; i++) 
 				{
-				    formData.append('coveragePlanData[]', coveragePlanData[i]);
+				    companyData.append('coveragePlanData[]', coveragePlanData[i]);
 				}
 				
 				for (var i = 0; i < deploymentData.length; i++) 
 				{
-				    formData.append('deploymentData[]', deploymentData[i]);
+				    companyData.append('deploymentData[]', deploymentData[i]);
 				}
 			}
 		});
@@ -141,39 +141,14 @@ function company_center()
 	
     function create_company_submit()
 	{
-		$(document).on('click','.create-company-submit',function() 
+		$('body').on('click','.create-company-submit',function() 
 		{
-			
-            $('.confirm-modal').remove();
-            $(".company-modal-body").html("<div class='company-ajax-loader' style='display:none;text-align: center; padding:50px;'><img src='/assets/loader/loading.gif'/></div");
-            $('.company-ajax-loader').show();
-            
-            $.ajax({
-				headers: {
-				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-				},
-				url:'/company/create_company/submit',
-				method: "POST",
-                data: formData,
-                contentType:false,
-                cache:false,
-                processData:false,
-                success: function(data)
-				{
-					setTimeout(function()
-					{
-						$('.company-ajax-loader').hide();
-						$('.company-modal-dialog').removeClass().addClass('modal-sm modal-dialog')
-						$('.company-modal-body').html(data);
-						$('.company-modal-footer').html(successButton);
-					}, 1000);
-				}
-			});
-		});
+			globals.global_submit('company','/company/create_company/submit',companyData);
+        });
 	}
 	function action_view_company_details()
 	{
-		$(document).on('click','.view-company-details',function() 
+		$('body').on('click','.view-company-details',function() 
 		{
 			var company_id = $(this).data('company_id');
 			var modalName= 'COMPANY DETAILS';

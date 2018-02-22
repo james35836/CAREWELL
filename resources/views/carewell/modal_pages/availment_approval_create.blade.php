@@ -1,7 +1,6 @@
 <script>
 $(document).ready(function()
 {
-
 $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
 checkboxClass: 'icheckbox_minimal-blue',
 radioClass   : 'iradio_minimal-blue'
@@ -336,12 +335,21 @@ $('body').on('change','.amount',function()
 		<div class="row box-globals">
 			<div class="form-holder col-md-6">
 				<div class="form-content col-md-2">
-				<label>Payee</label>
+					<label>Payee</label>
 				</div>
-				<div class="form-content col-md-10">
-				<select  class="form-control">
-					<option value="0">SELECT PAYEE</option>
-				</select>
+				<div class="form-content col-md-10 payee-form">
+					<div class="input-group payee-element">
+						<select class="form-control payee_id" name="payee_id[]" id="payeeList">
+							<option value="0">SELECT PAYEE</option>
+							{{-- @foreach($_coverage_plan as $coverage_plan)
+							<option value="{{$coverage_plan->coverage_plan_id}}">{{$coverage_plan->coverage_plan_name}}</option>
+							@endforeach --}}
+						</select>
+						<span class="input-group-btn">
+							<button class="btn btn-primary add-payee" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span> </button>
+							<button class="btn btn-danger remove-payee" type="button" tabindex="-1"><span class="fa fa-minus-circle" aria-hidden="true"></span> </button>
+						</span>
+					</div>
 				</div>
 			</div>
 		</div>

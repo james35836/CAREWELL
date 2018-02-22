@@ -23,7 +23,9 @@ function member_center()
 			import_member_submit();
 			view_member_details();
 			view_member_transaction_details();
-			view_member_approval_details();
+			member_adjustment();
+			member_adjustment_confirm();
+			member_adjustment_submit();
 		});
 
 	}
@@ -41,51 +43,17 @@ function member_center()
 			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
         });
 
+		$('body').on('change','.select_company',function() 
+		{
+			var company_id 	= $(this).val();
+			globals.get_dual_information('/get/company_info',company_id,'.coverageList','.deploymentList');
+		});
+
 		
-		$(document).on('change','.select_company',function()
-		{
-			var company_id = $(this).val();
-			
-			document.getElementById("availment_plan_id").disabled = false;
-			$.ajax({
-				headers: {
-				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-				},
-				type:'POST',
-				url:'/get/company_coverage_plan',
-				data:{company_id:company_id},
-				dataType:'text',
-				success:function(data)
-				{
-					$('.coverage-plan-show').html(data);
-				}
-			});
-			
-		});
-		$(document).on('change','.coverage-plan-show',function()
-		{
-			var company_id = $('.select_company').val();
-			
-			document.getElementById("jobsite_id").disabled = false;
-			$.ajax({
-				headers: {
-				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-				},
-				type:'POST',
-				url:'/get/company_jobsite',
-				data:{company_id:company_id},
-				dataType:'text',
-				success:function(data)
-				{
-					$('.jobsite-show').html(data);
-				}
-			});
-			
-		});
 	}
 	function create_member_confirm()
 	{
-		$(document).on('click','.create-member-confirm',function()
+		$('body').on('click','.create-member-confirm',function()
 		{
 			
 			if(globals.checking_null_validation(document.getElementById('member_first_name').value,"FIRST NAME")=="")
@@ -93,6 +61,8 @@ function member_center()
 		    else if(globals.checking_null_validation(document.getElementById('member_middle_name').value,"MIDDLE NAME")=="")
 			{}
 			else if(globals.checking_null_validation(document.getElementById('member_last_name').value,"LAST NAME")=="")
+			{}
+			else if(globals.checking_null_validation(document.getElementById('member_birthdate').value,"BIRTHDATE")=="")
 			{}
 			else if(document.getElementById('member_gender').value=="SELECT GENDER")
 			{
@@ -102,11 +72,9 @@ function member_center()
 			{
 				globals.global_tostr('STATUS');
 			}
-		    else if(globals.checking_null_validation(document.getElementById('member_monther_maiden_name').value,"MOTHER MAIDEN NAME")=="")
+			else if(globals.checking_null_validation(document.getElementById('member_mother_maiden_name').value,"MOTHER MAIDEN NAME")=="")
 			{}
-			else if(globals.checking_null_validation(document.getElementById('member_birthdate').value,"BIRTHDATE")=="")
-			{}
-			else if(globals.checking_null_validation(document.getElementById('member_contact_number').value,"CONTACT NUMBER")=="")
+		    else if(globals.checking_null_validation(document.getElementById('member_contact_number').value,"CONTACT NUMBER")=="")
 			{}
 			else if(globals.checking_null_validation(document.getElementById('member_email_address').value,"EMAIL ADDRESS")=="")
 			{}
@@ -114,17 +82,17 @@ function member_center()
 			{}
 		    else if(globals.checking_null_validation(document.getElementById('member_present_address').value,"PRESENT ADDRESS")=="")
 			{}
-			else if(globals.checking_null_validation(document.getElementById('member_company_employee_number').value,"EMPLOYEE NUMBER")=="")
+			else if(globals.checking_null_validation(document.getElementById('member_employee_number').value,"EMPLOYEE NUMBER")=="")
 			{}
-			else if(document.getElementById('company_id').value=="SELECT COMPANY")
+			else if(document.getElementById('company_id').value=="0")
 			{
 				globals.global_tostr('COMPANY');
 			}
-			else if(document.getElementById('availment_plan_id').value=="COVERAGE PLAN")
+			else if(document.getElementById('coverage_plan_id').value=="0")
 			{
 				globals.global_tostr('COVERAGE PLAN');
 			}
-			else if(document.getElementById('jobsite_id').value=="DEPLOYMENT")
+			else if(document.getElementById('deployment_id').value=="0")
 			{
 				globals.global_tostr('DEPLOYMENT');
 			}
@@ -142,7 +110,7 @@ function member_center()
 	}
     function create_member_submit()
     { 	
-    	$(document).on('click','.create-member-submit',function() 
+    	$('body').on('click','.create-member-submit',function() 
 	    {
 	    	$('.confirm-modal').remove();
             $(".member-modal-body").html("<div class='member-ajax-loader' style='display:none;text-align: center; padding:50px;'><img src='/assets/loader/loading.gif'/></div");
@@ -200,25 +168,12 @@ function member_center()
 
 		
 	}
-	function view_member_approval_details()
-	{
-		$("body").on('click','.view-member-approval-details',function()
-		{
-			var approval_id = $(this).data('approval_id');
-			var modalName= 'APPROVAL DETAILS';
-			var modalClass='approval';
-			var modalLink='/availment/approval_details/'+approval_id;
-			var modalActionName='SAVE CHANGES';
-			var modalAction='confirm';
-			var modalSize = 'modal-lg';
-			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
-        });
-	}
+	
 	
 	function export_template()
 	{
 
-		$(document).on('change','.import-number-select',function()
+		$('body').on('change','.import-number-select',function()
 		{
 			var company_id = $('.import-member-company-select').val();
 			var number     = $(this).val();
@@ -235,7 +190,7 @@ function member_center()
 			}
 			
 		});
-		$(document).on('change','.import-member-company-select',function()
+		$('body').on('change','.import-member-company-select',function()
 		{
 			var company_id = $(this).val();
 			var number     = $('.import-number-select').val();
@@ -277,7 +232,7 @@ function member_center()
 			var confirmModalAction = 'import-member-submit';
 			globals.confirm_modals(confirmModalMessage,confirmModalAction);
 
-			ajaxData = $(".member-submit-form,.approval-submit-form,.procedure-availed-submit-form,.procedure-doctor-submit-form").serialize();
+			memberFileData.append("importMemberFile", 	document.getElementById('importMemberFile').files[0]);
 		});
 		
 	}
@@ -286,32 +241,74 @@ function member_center()
 	{
 		$('body').on('click','.import-member-submit',function() 
 		{
-			$('.confirm-modal').remove();
-            $(".member-import-modal-body").html("<div class='member-import-ajax-loader' style='display:none;text-align: center; padding:50px;'><img src='/assets/loader/loading.gif'/></div");
-            $('.member-import-ajax-loader').show();
-            
-            $.ajax({
-				headers: {
-				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-				},
-				url:'/member/import_member/submit',
-				method: "POST",
-                data: formData,
-                contentType: false,
-                cache: false,
-                processData: false,
-                success: function(data)
-				{
-					setTimeout(function()
-					{
-						$('.member-import-ajax-loader').hide();
-						$('.member-import-modal-dialog').removeClass().addClass('modal-sm modal-dialog')
-						$('.member-import-modal-body').html(data);
-						$('.member-import-modal-footer').html(successButton);
-
-					}, 1000);
-				}
-			});
+			globals.global_submit('member-import','/member/import_member/submit',memberFileData);
+        });
+		
+	}
+	function member_adjustment()
+	{
+		$("body").on('click','.member-adjustment',function() 
+		{
+			var member_id = $(this).data('member_id');
+			var modalName= 'ADJUSTMENT ';
+			var modalClass='member-adjustment';
+			var modalLink='/member/member_adjustment/'+member_id;
+			var modalActionName='SAVE CHANGES';
+			var modalAction='member-adjustment-confirm';
+			var modalSize = 'modal-md';
+			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
+        });
+        $('body').on('change','#company_id_adjustment',function() 
+		{
+			var company_id 	= $(this).val();
+			globals.get_dual_information('/get/company_info',company_id,'#deployment_id_adjustment','#coverage_plan_id_adjustment');
 		});
+	}
+	function member_adjustment_confirm()
+	{
+		$('body').on('click','.member-adjustment-confirm',function() 
+		{
+			if(document.getElementById('company_id_adjustment').value=="0")
+			{
+				globals.global_tostr('COMPANY');
+			}
+			else if(document.getElementById('coverage_plan_id_adjustment').value=="0")
+			{
+				globals.global_tostr('COVERAGE PLAN');
+			}
+			else if(document.getElementById('deployment_id_adjustment').value=="0")
+			{
+				globals.global_tostr('DEPLOYMENT');
+			}
+			else if(document.getElementById('employee_number_adjustment').value=="")
+			{
+				globals.global_tostr('EMPLOYEE NUMBER');
+			}
+			else
+			{
+				var	confirmModalMessage = 'Are you sure you want to proceed with this adjustment?';
+				var confirmModalAction = 'member-adjustment-submit';
+				globals.confirm_modals(confirmModalMessage,confirmModalAction);
+
+
+				adjustmentData.append("company_id_adjustment", 		document.getElementById('company_id_adjustment').value);
+	            adjustmentData.append("coverage_plan_id_adjustment",document.getElementById('coverage_plan_id_adjustment').value);
+	            adjustmentData.append("deployment_id_adjustment", 	document.getElementById('deployment_id_adjustment').value);
+	            adjustmentData.append("employee_number_adjustment", document.getElementById('employee_number_adjustment').value);
+	            adjustmentData.append("member_id_adjustment", 		document.getElementById('member_id_adjustment').value);
+				
+			}
+		
+		});
+		
+
+	}
+	function member_adjustment_submit()
+	{
+		$('body').on('click','.member-adjustment-submit',function() 
+		{
+
+			globals.global_submit('member-adjustment','/member/member_adjustment/submit',adjustmentData);
+        });
 	}
 }

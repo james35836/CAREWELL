@@ -16,6 +16,13 @@ class TblCalMemberModel extends Model
               	->where('cal_id',$cal_id);
         return $query;
     }
+    public function scopePaymentHistory($query)
+    {
+        $query  ->join('tbl_member','tbl_member.member_id','=','tbl_cal_member.member_id')
+                ->join('tbl_cal','tbl_cal.cal_id','=','tbl_cal_member.cal_id')
+                ->join('tbl_company','tbl_company.company_id','=','tbl_cal.company_id');
+        return $query;
+    }
     	
                             
 }

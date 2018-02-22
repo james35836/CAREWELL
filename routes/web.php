@@ -34,9 +34,8 @@ Route::get('/logout', 									'FrontController@logout');
 Route::get('/register', 								'FrontController@register');
 /*STATIC CONTROLLER*/
 
-Route::any('/get/company_coverage_plan', 				'StaticFunctionController@getCompanyCoveragePlan');
+Route::any('/get/company_info', 						'StaticFunctionController@getCompanyInfo');
 Route::any('/get/provider_doctor', 						'StaticFunctionController@getProviderDoctor');
-Route::any('/get/company_jobsite', 						'StaticFunctionController@getCompanyJobsite');
 Route::any('/get/laboratory_amount', 					'StaticFunctionController@getLaboratoryAmount');
 Route::any('/get/doctor_specialty', 					'StaticFunctionController@getDoctorSpecialty');
 
@@ -78,11 +77,16 @@ Route::get('/member', 									'CarewellController@member');
 Route::get('/member/create_member', 					'CarewellController@member_create_member');
 Route::post('/member/create_member/submit', 			'CarewellController@member_create_member_submit');
 
-Route::get('/member/view_member_details/{member_id}', 	'CarewellController@member_view_details');
+Route::get('/member/view_member_details/{member_id}', 	'CarewellController@member_details');
 Route::get('/member/transaction_details/{member_id}',   'CarewellController@member_transaction_details');
 Route::get('/member/download_template/{company_id}/{number}', 	'CarewellController@member_download_template');
 Route::get('/member/import_member', 					'CarewellController@member_import_member');
 Route::post('/member/import_member/submit', 			'CarewellController@member_import_member_submit');
+
+Route::get('/member/member_adjustment/{member_id}', 	'CarewellController@member_adjustment');
+Route::post('/member/member_adjustment/submit', 		'CarewellController@member_adjustment_submit');
+
+
 
 /*PROVIDER*/
 Route::get('/provider', 								'CarewellController@provider');
@@ -118,6 +122,9 @@ Route::post('/billing/cal_import_template_submit', 		'CarewellController@billing
 
 
 Route::get('/billing/billing/statement', 			    'CarewellController@billing_billing_statement');
+
+Route::post('/billing/cal_member/remove', 				'CarewellController@billing_cal_member_remove');
+
 
 
 /*MEDICAL*/

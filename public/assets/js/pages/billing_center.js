@@ -1,5 +1,5 @@
 var billing_center 	= new billing_center();
-
+var billingMemberData = new FormData();
 function billing_center()
 {
 	init();
@@ -22,6 +22,8 @@ function billing_center()
 			import_cal_members();
 			import_cal_member_confirm();
 			import_cal_member_submit();
+			remove_cal_member();
+			remove_cal_member_submit();
 
 		});
 
@@ -61,14 +63,14 @@ function billing_center()
 				var confirmModalAction = 'create-cal-submit';
 				globals.confirm_modals(confirmModalMessage,confirmModalAction);
 
-				formData.append("cal_company_id", 			document.getElementById('cal_company_id').value);
-	            formData.append("cal_reveneu_period_month", document.getElementById('cal_reveneu_period_month').value);
-	            formData.append("cal_reveneu_period_year", 	document.getElementById('cal_reveneu_period_year').value);
-	            formData.append("cal_reveneu_period", 		document.getElementById('cal_reveneu_period').value);
-	            formData.append("cal_reveneu_period_count", document.getElementById('cal_reveneu_period_count').value);
-	            formData.append("cal_company_period_start", document.getElementById('cal_company_period_start').value);
-	            formData.append("cal_company_period_end", 	document.getElementById('cal_company_period_end').value);
-	            formData.append("cal_payment_date", 		document.getElementById('cal_payment_date').value);
+				calData.append("cal_company_id", 			document.getElementById('cal_company_id').value);
+	            calData.append("cal_reveneu_period_month", document.getElementById('cal_reveneu_period_month').value);
+	            calData.append("cal_reveneu_period_year", 	document.getElementById('cal_reveneu_period_year').value);
+	            calData.append("cal_reveneu_period", 		document.getElementById('cal_reveneu_period').value);
+	            calData.append("cal_reveneu_period_count", document.getElementById('cal_reveneu_period_count').value);
+	            calData.append("cal_company_period_start", document.getElementById('cal_company_period_start').value);
+	            calData.append("cal_company_period_end", 	document.getElementById('cal_company_period_end').value);
+	            calData.append("cal_payment_date", 		document.getElementById('cal_payment_date').value);
             }
 			
         });
@@ -76,34 +78,11 @@ function billing_center()
 	
 	function create_cal_submit()
 	{
-		$('body').on('click','.create-cal-submit',function() 
+		$('body').on('click','.create-cal-submit',function()
 		{
-
-			$('.confirm-modal').remove();
-            $(".cal-modal-body").html("<div class='cal-ajax-loader' style='display:none;text-align: center; padding:50px;'><img src='/assets/loader/loading.gif'/></div");
-            $('.cal-ajax-loader').show();
-			$.ajax({
-				headers: {
-				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-				},
-				url:'/billing/create_cal/sumbit',
-				method: "POST",
-                data: formData,
-                contentType: false,
-                cache: false,
-                processData: false,
-                success: function(data)
-				{
-					setTimeout(function()
-					{
-						$('.cal-ajax-loader').hide();
-						$('.cal-modal-dialog').removeClass().addClass('modal-sm modal-dialog')
-						$('.cal-modal-body').html(data);
-						$('.cal-modal-footer').html('<button type="button" class="btn btn-default pull-left " data-dismiss="modal">Close</button>');
-                    }, 1000);
-				}
-			});
-		});
+			globals.global_submit('cal','/billing/create_cal/sumbit',calData);
+        });
+		
 	}
 	function cal_view_details()
 	{
@@ -137,6 +116,7 @@ function billing_center()
 			var company_id 	= $(this).data('member_company_id');
 			var cal_id 		= $(this).data('member_cal_id');
 
+
 			var modalName= 'IMPORT MEMBER';
 			var modalClass='cal-member';
 			var modalLink='/billing/import_cal_members/'+cal_id+'/'+company_id;
@@ -156,41 +136,65 @@ function billing_center()
 			var confirmModalAction = 'import-cal-member-submit';
 			globals.confirm_modals(confirmModalMessage,confirmModalAction);
 			
-			formData.append("company_id", 			$(this).data('company_id'));
-			formData.append("cal_id", 				$(this).data('cal_id'));
-			formData.append("importCalMemberFile", 	document.getElementById('importCalMemberFile').files[0]);
+			calFileData.append("company_id", 			$(this).data('company_id'));
+			calFileData.append("cal_id", 				$(this).data('cal_id'));
+			calFileData.append("importCalMemberFile", 	document.getElementById('importCalMemberFile').files[0]);
             
         });
 	}
 	function import_cal_member_submit()
 	{
-		$(document).on('click','.import-cal-member-submit',function() 
+		$('body').on('click','.import-cal-member-submit',function() 
 		{
-			$('.confirm-modal').remove();
-            $(".cal-member-modal-body").html("<div class='cal-member-ajax-loader' style='display:none;text-align: center; padding:50px;'><img src='/assets/loader/loading.gif'/></div");
-            $('.cal-member-ajax-loader').show();
+			globals.global_submit('cal-member','/billing/cal_import_template_submit',calFileData);
+        });
+	}
+	function remove_cal_member()
+	{
+		$('body').on('click','.remove-cal-member',function() 
+		{
+			
+			
+			var	confirmModalMessage = 'Are you sure you want to remove this member?';
+			var confirmModalAction = 'remove-cal-member-submit';
+			globals.confirm_modals(confirmModalMessage,confirmModalAction);
 
-            $.ajax({
+			billingMemberData.append("cal_member_id", 	$(this).data('cal_member_id'));
+			ajaxData.tdCloser  = $(this).closest('tr');
+		});
+	}
+	function remove_cal_member_submit()
+	{
+		$('body').on('click','.remove-cal-member-submit',function() 
+		{
+			$(".confirm-modal-body").html("<div class='confirm-ajax-loader' style='display:none;text-align: center; padding:50px;'><img src='/assets/loader/loading.gif'/></div");
+	        $(".confirm-ajax-loader").show();
+	        $('.confirm-modal-title').html("");
+	        $(".confirm-modal-footer").html('');
+
+			$.ajax({
 				headers: {
 				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 				},
-				url:'/billing/cal_import_template_submit',
+				url:'/billing/cal_member/remove',
 				method: "POST",
-                data: formData,
-                contentType: false,
-                cache: false,
-                processData: false,
-                success: function(data)
-				{
+		        data: billingMemberData,
+		        contentType:false,
+	            cache:false,
+	            processData:false,
+				success: function(data)
+                {
 					setTimeout(function()
 					{
-						$('.cal-member-ajax-loader').hide();
-						$('.cal-member-modal-dialog').removeClass().addClass('modal-sm modal-dialog')
-						$('.cal-member-modal-body').html(data);
-						$('.cal-member-modal-footer').html(successButton);
-					}, 1000);
+						$(".confirm-ajax-loader").remove();
+						ajaxData.tdCloser.remove();
+						
+						$(".confirm-modal-body").html(data);
+						$(".confirm-modal-footer").html(successButton);
+                        
+					}, 800);
 				}
 			});
-		});
+        });
 	}
 }

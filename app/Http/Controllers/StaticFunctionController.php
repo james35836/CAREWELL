@@ -39,6 +39,8 @@ use App\Http\Model\TblPaymentModeModel;
 
 use App\Http\Model\TblProviderModel;
 use App\Http\Model\TblProviderBillingModel;
+use App\Http\Model\TblProviderPayeeModel;
+
 
 use App\Http\Model\TblDoctorModel;
 use App\Http\Model\TblDoctorSpecializationModel;
@@ -77,6 +79,32 @@ class StaticFunctionController extends Controller
       return "<div class='alert alert-danger' style='text-align: center;'>".$str_name." transaction Failed!</div>";
     }
   }
+
+  public function getCompanyInfo(Request $request)
+  {
+    
+    if($request->ajax())
+    {
+        $data['_coverage']  = TblCompanyCoveragePlanModel::where('tbl_company_coverage_plan.company_id',$request->value)
+                              ->join('tbl_coverage_plan','tbl_coverage_plan.coverage_plan_id','=','tbl_company_coverage_plan.coverage_plan_id')
+                              ->get();
+        $data['_coverage_list'] = '<option value="0">-SELECT COVERAGE PLAN-';
+        foreach($data['_coverage'] as $coverage)
+        {
+            $data['_coverage_list']     .= '<option value='.$coverage->coverage_plan_id.'>'.$coverage->coverage_plan_name;
+        }
+
+        $data['_deployment'] = TblCompanyDeploymentModel::where('company_id',$request->value)->get();
+        $data['_deployment_list'] = '<option value="0">-SELECT DEPLOYMENT-';
+        foreach($data['_deployment'] as $deployment)
+        {
+            $data['_deployment_list']     .= '<option value='.$deployment->deployment_id.'>'.$deployment->deployment_name;
+        }
+
+        return  response()->json(array('first' => $data['_deployment_list'],'second' => $data['_coverage_list']));
+    }
+  }
+  
   public function getProviderDoctor(Request $request)
   {
     if($request->ajax())
@@ -89,7 +117,15 @@ class StaticFunctionController extends Controller
         {
             $data['_provider_doctors']     .= '<option value='.$provider_doctor->doctor_id.'>'.$provider_doctor->doctor_first_name." ".$provider_doctor->doctor_last_name;
         }
-        return $data['_provider_doctors'];
+
+        $data['_payee'] = TblProviderPayeeModel::where('provider_id',$request->value)->get();
+        $data['_payee_list'] = '<option>-SELECT PAYEE-';
+        foreach($data['_payee'] as $payee)
+        {
+            $data['_payee_list']     .= '<option value='.$payee->provider_payee_id.'>'.$payee->provider_payee_name;
+        }
+
+        return  response()->json(array('first' => $data['_provider_doctors'],'second' => $data['_payee_list']));
     }
   }
   
@@ -117,35 +153,6 @@ class StaticFunctionController extends Controller
         return $amount;
     }
   }
-  public function getCompanyCoveragePlan(Request $request)
-  {
-    if($request->ajax())
-    {
-        $data['_coveragePlan']  = TblCompanyCoveragePlanModel::where('tbl_company_coverage_plan.company_id',$request->company_id)
-                        ->join('tbl_availment_plan','tbl_availment_plan.availment_plan_id','=','tbl_company_coverage_plan.availment_plan_id')
-                        ->get();
-        $data['_coveragePlanList'] = '<option>COVERAGE PLAN';
-        foreach($data['_coveragePlan'] as $coveragePlan)
-        {
-            $data['_coveragePlanList']     .= '<option value='.$coveragePlan->availment_plan_id.'>'.$coveragePlan->availment_plan_name;
-        }
-        return $data['_coveragePlanList'];
-    }
-  }
-  public function getCompanyJobsite(Request $request)
-  {
-    if($request->ajax())
-    {
-        $data['_jobsite']  = TblCompanyJobsiteModel::where('company_id',$request->company_id)->get();
-        $data['jobsiteList'] = '<option>DEPLOYMENT';
-        foreach($data['_jobsite'] as $jobsite)
-        {
-            $data['jobsiteList']     .= '<option value='.$jobsite->jobsite_id.'>'.$jobsite->jobsite_name;
-        }
-        return $data['jobsiteList'];
-    }
-  }
-  
   public static function generateUniversalId($display_name,$birthdate)
   {
     

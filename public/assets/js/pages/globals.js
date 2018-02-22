@@ -1,5 +1,20 @@
 var globals 		= new globals();
 var formData   	  	= new FormData();
+var doctorData		= new FormData();
+var doctorFileData  = new FormData();
+var adjustmentData	= new FormData();
+var memberFileData	= new FormData();
+var companyData		= new FormData();
+var providerData 	= new FormData();
+var calData 		= new FormData();
+var calFileData 	= new FormData();
+
+var doctorProviderData	= [];
+var specialData 		= [];
+
+
+var payeeData			= [];
+
 var serializeData 	= [];
 var ajaxData 		= [];
 var value			= "0";
@@ -7,7 +22,7 @@ var message			= "";
 var approvalData	= [];
 var availmentData 	= [];
 var check_null 		= [];
-var trunkData		= [];
+
 var benefitsData	= [];
 var contractData	= [];
 var contactData 	= [];
@@ -17,49 +32,31 @@ var data            = "";
 var link            = "";
 
 
+
+
+
+
 var successButton	= '<button type="button" class="btn btn-default pull-left reload-btn" data-dismiss="modal">RELOAD</button>';
 
 var confirmModals 			= '<div  class="modal fade modal-top confirm-modal" id="" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">'
 						  +'<div class="confirm-modal-dialog modal-dialog modal-sm">'
-						    +'<div class="modal-content">'
+						    +'<div class="modal-content confirm-modal-content">'
 						      +'<div class="modal-header">'
 						        +'<button type="button" class="close" data-dismiss="modal" aria-label="Close">'
 						        +'<span aria-hidden="true">&times;</span></button>'
 						        +'<h4 class="modal-title confirm-modal-title"></h4>'
 						      +'</div>'
 						      
-						      +'<div class="modal-body modal-body-sm">'
+						      +'<div class="modal-body modal-body-sm confirm-modal-body">'
 						        +'<input type="hidden" class="link"/>'
 						      +'</div>'
-						      +'<div class="modal-footer">'
+						      +'<div class="modal-footer confirm-modal-footer">'
 						        +'<button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancel</button>'
-						        +'<button type="button" class="btn btn-primary confirm-submit">Save</button>'
+						        +'<button type="button" class="btn btn-primary confirm-submit">Yes</button>'
 						      +'</div>'
 						    +'</div>'
 						  +'</div>'
 						+'</div>';
-var importModals = '<div class="modal fade modal-top import-modal">'+
-				          '<div class="modal-dialog import-modal-dialog">'+
-				            '<div class="modal-content import-modal-content">'+
-				              '<div class="modal-header import-modal-header">'+
-				                '<button type="button" class="close" data-dismiss="modal" aria-label="Close">'+
-				                  '<span aria-hidden="true">&times;</span></button>'+
-				                '<h4 class="modal-title import-modal-title">Default Modal</h4>'+
-				              '</div>'+
-				              '<div class="modal-body import-modal-body">'+
-				                '<div class="import-modal-loader" style="display:none;text-align: center; padding:50px;">'+
-				                '<img src="/assets/loader/loading.gif"/>'+
-				                '</div>'+
-				                '<div class="row box-holder import-modal-body-content">'+
-				                '</div>'+
-				              '</div>'+
-				              '<div class="modal-footer import-modal-footer">'+
-				                '<button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>'+
-				                '<button type="button" class="btn btn-primary import-footer-button">Save changes</button>'+
-				              '</div>'+
-				            '</div>'+
-				          '</div>'+
-				        '</div>';
 
 var globalModals = '<div class="modal fade modal-top global-modal">'+
 		          '<div class="modal-dialog global-modal-dialog">'+
@@ -124,7 +121,7 @@ function globals()
                 {
 					setTimeout(function()
 					{
-						$('.global-ajax-loader').hide().removeClass().addClass('.modal-loader company-ajax-loader');
+						$('.global-ajax-loader').hide().removeClass().addClass('.modal-loader '+modalClass+'-ajax-loader');
 						$('.global-modal-body-content').show().removeClass().addClass('row box-holder  modal-body-content').html(data);
 						if(modalSize=="modal-import")
 						{
@@ -185,10 +182,81 @@ function globals()
 				{
 					$(showId).html(data);
 				}
-				
 			}
 		});
 	}
+	this.get_dual_information = function(link,value,showId,showId2)
+	{
+		$.ajax({
+			headers: {
+			      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			},
+
+			url:link,
+			data:{value: value},
+			method: "POST",
+            success: function(data)
+			{
+				$(showId).html(data.first);
+				$(showId2).html(data.second);
+			}
+		});
+	}
+	this.global_submit = function(modalName,submitLink,submitData)
+	{
+		$('.confirm-modal').remove();
+        $("."+modalName+"-modal-body").html("<div class='"+modalName+"-ajax-loader' style='display:none;text-align: center; padding:50px;'><img src='/assets/loader/loading.gif'/></div");
+        $("."+modalName+"-ajax-loader").show();
+        
+        $.ajax({
+			headers: {
+			      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			},
+			url:submitLink,
+			method: "POST",
+            data: submitData,
+            contentType:false,
+            cache:false,
+            processData:false,
+            success: function(data)
+			{
+				setTimeout(function()
+				{
+					$('.'+modalName+'-ajax-loader').hide();
+					$('.'+modalName+'-modal-dialog').removeClass().addClass('modal-sm modal-dialog')
+					$('.'+modalName+'-modal-body').html(data);
+					$('.'+modalName+'-modal-footer').html(successButton);
+				}, 1000);
+			}
+		});
+	}
+	this.global_submit_serialized = function(modalName,submitLink,submitData)
+	{
+		$('.confirm-modal').remove();
+        $("."+modalName+"-modal-body").html("<div class='"+modalName+"-ajax-loader' style='display:none;text-align: center; padding:50px;'><img src='/assets/loader/loading.gif'/></div");
+        $("."+modalName+"-ajax-loader").show();
+        
+        $.ajax({
+			headers: {
+			      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			},
+			url:submitLink,
+			method: "POST",
+            data: submitData,
+            dataType:"text",
+            success: function(data)
+			{
+				setTimeout(function()
+				{
+					$('.'+modalName+'-ajax-loader').hide();
+					$('.'+modalName+'-modal-dialog').removeClass().addClass('modal-sm modal-dialog')
+					$('.'+modalName+'-modal-body').html(data);
+					$('.'+modalName+'-modal-footer').html(successButton);
+				}, 1000);
+			}
+		});
+	}
+	
 
 	init();
 	function init()

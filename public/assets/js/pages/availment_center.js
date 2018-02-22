@@ -66,19 +66,19 @@ function availment_center()
 		$('body').on('change','.get-provider-doctor',function() 
 		{
 			var provider_id 	= $(this).val();
-			globals.get_information('/get/provider_doctor',provider_id,'.doctor-list','html')
+			globals.get_dual_information('/get/provider_doctor',provider_id,'.doctor-list','payeeList');
 		});
 
 		$('body').on('change','.get-laboratory-amount',function() 
 		{
 			var laboratory_id 	= $(this).val();
-			globals.get_information('/get/laboratory_amount',laboratory_id,'.laboratory_amount','val')
+			globals.get_information('/get/laboratory_amount',laboratory_id,'.laboratory_amount','val');
 		});
 
 		$('body').on('change','.doctor-list',function() 
 		{
 			var doctor_id 	= $(this).val();
-			globals.get_information('/get/doctor_specialty',doctor_id,'.doctor-specialty','html')
+			globals.get_information('/get/doctor_specialty',doctor_id,'.doctor-specialty','html');
 		});
 
 		

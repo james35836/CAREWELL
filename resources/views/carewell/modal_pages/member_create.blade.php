@@ -106,7 +106,7 @@
 				<label>Mother Maiden Name</label>
 			</div>
 			<div class="col-md-10 form-content">
-				<input type="text" name="member_monther_maiden_name" id="member_monther_maiden_name" class="form-control"/>
+				<input type="text" name="member_mother_maiden_name" id="member_mother_maiden_name" class="form-control"/>
 			</div>
 		</div>
 		<div class="form-holder">
@@ -137,10 +137,10 @@
 			</thead>
 			<tbody>
 				<tr>
-					<td><input type="text" name="member_dependent_full_name[]" id="member_dependent_full_name" class="form-control"/></td>
-					<td><input type="text" name="member_dependent_birthdate[]" id="member_dependent_birthdate[]" class="form-control datepicker"/></td>
+					<td><input type="text" name="dependent_full_name[]" id="dependent_full_name" class="form-control"/></td>
+					<td><input type="text" name="dependent_birthdate[]" id="dependent_birthdate[]" class="form-control datepicker"/></td>
 					<td>
-						<select  name="member_dependent_relationship[]" id="member_dependent_relationship[]" class="form-control">
+						<select  name="dependent_relationship[]" id="dependent_relationship[]" class="form-control">
 							<option>FATHER</option>
 							<option>MOTHER</option>
 							<option>CHILD</option>
@@ -176,13 +176,13 @@
 				<label>Phil-Health Number</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="text" name="member_government_card_philhealth" id="member_government_card_philhealth" class="form-control"/>
+				<input type="text" name="government_card_philhealth" id="government_card_philhealth" class="form-control"/>
 			</div>
 			<div class="col-md-2 form-content">
 				<label>SSS Number</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="text" name="member_government_card_sss" id="member_government_card_sss" class="form-control"/>
+				<input type="text" name="government_card_sss" id="government_card_sss" class="form-control"/>
 			</div>
 		</div>
 		<div class="form-holder">
@@ -190,13 +190,13 @@
 				<label>Tin Number</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="text" name="member_government_card_tin" id="member_government_card_tin" class="form-control"/>
+				<input type="text" name="government_card_tin" id="government_card_tin" class="form-control"/>
 			</div>
 			<div class="col-md-2 form-content">
 				<label>HDMF</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="text" name="member_government_card_hdmf" id="member_government_card_hdmf" class="form-control"/>
+				<input type="text" name="government_card_hdmf" id="government_card_hdmf" class="form-control"/>
 			</div>
 		</div>
 	</form>
@@ -209,7 +209,7 @@
 			</div>
 			<div class="col-md-4 form-content">
 				<select name="company_id" id="company_id" class="form-control select2 select_company">.
-					<option>SELECT COMPANY</option>
+					<option value="0">SELECT COMPANY</option>
 					@foreach($_company as $company)
 					<option value="{{$company->company_id}}">{{$company->company_name}}</option>
 					@endforeach
@@ -219,7 +219,7 @@
 				<label>Coverage Plan</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<select name="availment_plan_id" id="availment_plan_id" class="form-control select2 coverage-plan-show" disabled>
+				<select name="coverage_plan_id" id="coverage_plan_id" class="form-control select2 coverageList">
 					<option>COVERAGE PLAN</option>
 				</select>
 			</div>
@@ -229,7 +229,7 @@
 				<label>Deployment</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<select name="jobsite_id" id="jobsite_id" class="form-control jobsite-show" disabled>
+				<select name="deployment_id" id="deployment_id" class="form-control deploymentList">
 					<option >DEPLOYMENT</option>
 				</select>
 			</div>
@@ -238,7 +238,7 @@
 				<label>Employee Number</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="text"  name="member_company_employee_number" id="member_company_employee_number" class="form-control"/>
+				<input type="text"  name="member_employee_number" id="member_employee_number" class="form-control"/>
 			</div>
 		</div>
 	</form>

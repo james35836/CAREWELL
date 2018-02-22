@@ -17,6 +17,7 @@ function user_center()
 		{
             user_view_profile();
 			save_profile_confirm();
+			save_profile_submit();
 		});
 	}
 	
@@ -40,9 +41,18 @@ function user_center()
     {
     	$('body').on('click','.save-profile-confirm',function()
     	{
-    		var	confirmModalMessage = 'Are you sure you want to add this USER?';
-			var confirmModalAction = 'create-user-submit';
+    		var	confirmModalMessage = 'Are you sure you want to save this changes?';
+			var confirmModalAction = 'save-profile-submit';
 			globals.confirm_modals(confirmModalMessage,confirmModalAction);
+    	});
+    }
+    function save_profile_submit()
+    {
+    	$('body').on('click','.save-profile-submit',function()
+    	{
+    		
+    		
+    		ajaxData = $(".profile-form").serialize();
     	});
     }
     

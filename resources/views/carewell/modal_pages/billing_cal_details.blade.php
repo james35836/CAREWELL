@@ -73,7 +73,7 @@
 								<td>{{$cal_member->cal_payment_amount}}</td>
 								<td><span class="label label-success">active</span></td>
 								<td>
-									<button type="button" class="btn btn-danger btn-sm"><i class="fa fa-minus-circle"></i></button>
+									<button type="button" data-cal_member_id="{{$cal_member->cal_member_id}}" class="btn btn-danger btn-sm remove-cal-member"><i class="fa fa-minus-circle"></i></button>
 								</td>
 							</tr>
 							@endforeach

@@ -220,14 +220,9 @@
             <i class="fa fa-paypal"></i> <span>PAYABLE</span>
           </a>
         </li>
-        <li>
-          <a href="/reports">
-            <i class="fa fa-bar-chart"></i> <span>REPORTS</span>
-          </a>
-        </li>
         <li class="treeview">
           <a >
-            <i class="fa fa-share"></i> <span>REPORTS</span>
+            <i class="fa fa-bar-chart"></i> <span>REPORTS</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
