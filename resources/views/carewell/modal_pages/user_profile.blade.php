@@ -59,8 +59,9 @@
 			<div class=" col-md-4">
 				<div class="form-content">
 					<img class="profile-pic" src="{{$user->user_profile}}" />
-					<input class="file-upload" name="new_profile" id="newFile" type="file" accept="image/*"/>
-					<input id="oldFile" name="old_profile" value="{{$user->user_profile}}" type="hidden" />
+					<input class="file-upload" id="new_profile" id="newFile" type="file" accept="image/*"/>
+					<input id="old_profile" value="{{$user->user_profile}}" type="hidden" />
+					<input id="user_id" value="{{$user->user_id}}" type="hidden" />
 				</div>
 				<div class="form-content">
 					<div class="upload-button 	btn btn-primary">Upload New Profile</div>

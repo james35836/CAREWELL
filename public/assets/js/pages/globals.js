@@ -9,6 +9,8 @@ var providerData 	= new FormData();
 var calData 		= new FormData();
 var calFileData 	= new FormData();
 
+var userProfileData = new FormData();
+
 var doctorProviderData	= [];
 var specialData 		= [];
 

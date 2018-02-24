@@ -28,10 +28,10 @@ Route::get('/login', 									'FrontController@login');
 Route::post('/login_submit', 							'FrontController@login_submit');
 Route::get('/logout', 									'FrontController@logout');
 
+Route::get('/reset/password', 							'FrontController@reset_password');
 
+Route::post('/reset/password/submit', 					'FrontController@reset_password_submit');
 
-
-Route::get('/register', 								'FrontController@register');
 /*STATIC CONTROLLER*/
 
 Route::any('/get/company_info', 						'StaticFunctionController@getCompanyInfo');
@@ -42,6 +42,10 @@ Route::any('/get/doctor_specialty', 					'StaticFunctionController@getDoctorSpec
 
 /*USER*/
 Route::get('/user/view_profile', 						'UserController@user_view_profile');
+
+Route::POST('/user/save_profile', 						'UserController@user_save_profile');
+
+
 /*ADMIN*/
 Route::get('/settings/admin', 							'AdminController@admin_center');
 Route::get('/admin/create_user', 						'AdminController@admin_create_user');
@@ -55,9 +59,6 @@ Route::post('/settings/developer_modal_submit', 		'AdminController@settings_deve
 
 Route::get('/admin/view_user_deatils/{user_id}', 		'AdminController@admin_view_user_deatils');
 
-
-// Route::get('/admin', 								    'AdminController@admin');
-// Route::get('/admin', 								    'AdminController@admin');
 
 /*DASHBOARD*/
 Route::get('/dashboard', 								'CarewellController@dashboard');

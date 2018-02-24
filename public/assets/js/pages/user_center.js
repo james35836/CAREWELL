@@ -27,7 +27,7 @@ function user_center()
 		$("body").on('click','.view-profile',function() 
 		{
 			var modalName= 'PROFILE DETAILS';
-			var modalClass='admin';
+			var modalClass='profile';
 			var modalLink='/user/view_profile';
 			var modalActionName='SAVE CHANGES';
 			var modalAction='save-profile-confirm';
@@ -41,19 +41,60 @@ function user_center()
     {
     	$('body').on('click','.save-profile-confirm',function()
     	{
-    		var	confirmModalMessage = 'Are you sure you want to save this changes?';
-			var confirmModalAction = 'save-profile-submit';
-			globals.confirm_modals(confirmModalMessage,confirmModalAction);
+    		if(document.getElementById('user_position').value=="SELECT ROLE")
+			{
+				toastr.error('Please select position.', 'Something went wrong!', {timeOut: 3000})
+			}
+			else if(globals.checking_null_validation(document.getElementById('user_last_name').value,"LAST NAME")=="")
+			{}	
+			else if(globals.checking_null_validation(document.getElementById('user_first_name').value,"FIRST NAME")=="")
+			{}	
+			else if(globals.checking_null_validation(document.getElementById('user_middle_name').value,"MIDDLE NAME")=="")
+			{}
+			else if(globals.checking_null_validation(document.getElementById('user_gender').value,"GENDER")=="")
+			{}
+			else if(globals.checking_null_validation(document.getElementById('user_birthdate').value,"BIRTHDATE")=="")
+			{}
+            else if(globals.checking_null_validation(document.getElementById('user_contact_number').value,"CONTACT NUMBER")=="")
+			{}
+			else if(globals.checking_null_validation(document.getElementById('user_email').value,"EMAIL ADDRESS")=="")
+			{}
+			else if(globals.checking_null_validation(document.getElementById('user_number').value,"ID NUMBER")=="")
+			{}
+			else if(globals.checking_null_validation(document.getElementById('user_address').value,"ADDRESS")=="")
+			{}
+			else
+			{
+				var	confirmModalMessage = 'Are you sure you want to save this changes?';
+				var confirmModalAction = 'save-profile-submit';
+				globals.confirm_modals(confirmModalMessage,confirmModalAction);
+
+				
+				userProfileData.append("new_profile", 			document.getElementById('new_profile').files[0]);
+				userProfileData.append("old_profile", 			document.getElementById('old_profile').value);
+				userProfileData.append("user_id", 				document.getElementById('user_id').value);
+				userProfileData.append("user_position", 		document.getElementById('user_position').value);
+	            userProfileData.append("user_first_name", 		document.getElementById('user_first_name').value);
+	            userProfileData.append("user_middle_name", 		document.getElementById('user_middle_name').value);
+	            userProfileData.append("user_last_name", 		document.getElementById('user_last_name').value);
+	            userProfileData.append("user_gender", 			document.getElementById('user_gender').value);
+	            userProfileData.append("user_birthdate", 		document.getElementById('user_birthdate').value);
+	            userProfileData.append("user_contact_number", 	document.getElementById('user_contact_number').value);
+	            userProfileData.append("user_email", 			document.getElementById('user_email').value);
+	            userProfileData.append("user_address", 			document.getElementById('user_address').value);
+	         
+			}
+    		
     	});
     }
     function save_profile_submit()
-    {
+    { 	
     	$('body').on('click','.save-profile-submit',function()
-    	{
-    		
-    		
-    		ajaxData = $(".profile-form").serialize();
-    	});
+	    {
+	    	
+	    	globals.global_submit('profile','/user/save_profile',userProfileData);
+		});
+
     }
     
 }

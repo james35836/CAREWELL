@@ -5,6 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Carewell | {{$page}}</title>
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <meta name="csrf-token" content="{{ csrf_token() }}" />
   <link rel="stylesheet" href="/assets/bower_components/bootstrap/dist/css/bootstrap.min.css">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="/assets/bower_components/font-awesome/css/font-awesome.min.css">
@@ -30,6 +31,7 @@
 <script src="/assets/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <!-- iCheck -->
 <script src="/assets/plugins/iCheck/icheck.min.js"></script>
+<script src="/assets/js/front.js"></script>
 <script>
   $(function () {
     $('input').iCheck({
@@ -38,6 +40,7 @@
       increaseArea: '20%' /* optional */
     });
   });
+  
 </script>
 </body>
 </html>

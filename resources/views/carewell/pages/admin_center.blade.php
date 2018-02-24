@@ -3,11 +3,6 @@
 @include('carewell.modals.admin_center_modals')
 <div class="container">
   <div class="row">
-    <div class=" col-md-2 col-xs-6 pull-left">
-      <select class="form-control">
-        <option>SELECT COMPANY</option>
-      </select>
-    </div>
     <div class=" col-md-2 col-xs-6 pull-right">
       <button class="btn btn-primary top-element create-user" type="button" ><i class="fa fa-plus btn-icon "></i>CREATE USER</button>
     </div>

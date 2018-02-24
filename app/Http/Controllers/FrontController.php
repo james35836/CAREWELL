@@ -10,6 +10,7 @@ use App\Http\Model\TblUserModel;
 use Redirect;
 use Session;
 use Crypt;
+use Mail;
 
 
 class FrontController extends Controller
@@ -24,7 +25,7 @@ class FrontController extends Controller
   public function login()
   {
     Self::allow_logged_out_users_only();
-  	$data['page'] = 'Login';
+  	$data['page'] = 'Login Page';
   	return view('front.pages.login',$data);
   }
   public function  login_submit(Request $request)
@@ -65,8 +66,9 @@ class FrontController extends Controller
     }
     else
     {
-      Session::flash('error', 'Email you entered does not exist to any account.');
-        return Redirect::to('/login');
+
+     Session::flash('error', 'Email you entered does not exist to any account.');
+      return Redirect::to('/login');
     }
   }
   public function register()
@@ -80,5 +82,44 @@ class FrontController extends Controller
     Session::forget('active');
     Session::flash('error', 'Session Expired');
     return Redirect::to('/login');
+  }
+  public function reset_password()
+  {
+    Self::allow_logged_out_users_only();
+    $data['page'] = 'Reset Password';
+    return view('front.pages.reset_password',$data);
+  }
+  public function reset_password_submit(Request $request)
+  {
+    $check = TblUserModel::where('user_email',$request->resetEmail)
+            ->join('tbl_user_info','tbl_user_info.user_info_id','=','tbl_user.user_id')
+            ->first();
+    if($check!=null)
+    {
+      $name       = $check->user_first_name." ".$check->user_last_name;
+      $email      = $check->user_email;
+      $password   = Crypt::decrypt($check->user_password);
+      $link       = 'http://carewell.digimahouse.com/';
+      $data       = array('name'=>$name,'email'=>$email,'password'=>$password,'link'=>$link);
+      $check_mail = Mail::send('front.pages.reset_password_email', $data, function($message) use($data) 
+                  {
+                    $message->to('jamesomosora@gmail.com', 'Carewell Reset Password')->subject('Carewell Login');
+                    $message->from('carewelladmin@admin.com','Carewell Assistance');
+                  });
+      if(Mail::failures())
+      {
+        return "<div class='alert alert-danger' style='text-align: center;'>Something went wrong!</div>";
+        
+      }
+      else 
+      {
+        return "<div class='alert alert-success' style='text-align: center;'>Please check your email!</div>";
+      }
+    }
+    else
+    {
+      echo "wala";
+    }
+
   }
 }

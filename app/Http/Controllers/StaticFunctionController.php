@@ -243,6 +243,18 @@ class StaticFunctionController extends Controller
           $refrenceNumber = sprintf("%05d",$contract->contract_id+1);
         }
         break;
+      case 'user':
+        $count_user = TblUserInfoModel::count();
+        if($count_user==null||$count_user==0)
+        {
+          $refrenceNumber = sprintf("%05d",1);
+        }
+        else
+        {
+          $user = TblUserInfoModel::orderBy('user_info_id','DESC')->first();
+          $refrenceNumber = sprintf("%05d",$user->user_info_id+1);
+        }
+        break;
       case 'member_company':
         $member_company_count = TblMemberCompanyModel::count();
         if($member_company_count==null||$member_company_count==0)
