@@ -53,5 +53,21 @@ class UserController extends Controller
       
       
   }
+  public function user_change_password()
+  {
+
+    $userData = StaticFunctionController::global();
+    $data['old_password']   = Crypt::decrypt($userData->user_password);
+    return view('carewell.modal_pages.user_change_password',$data);
+  }
+  public function user_change_password_submit(Request $request)
+  {
+    
+    $data['user'] = StaticFunctionController::global();
+    $new_password['user_password'] = Crypt::encrypt($request->new_password);
+    TblUserModel::where('user_id',$data['user']->user_id)->update($new_password);
+
+    return "<div class='alert alert-success' style='text-align: center;'>Password Change!</div>";
+  }
   
 }

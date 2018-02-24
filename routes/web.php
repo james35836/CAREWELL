@@ -45,6 +45,10 @@ Route::get('/user/view_profile', 						'UserController@user_view_profile');
 
 Route::POST('/user/save_profile', 						'UserController@user_save_profile');
 
+Route::get('/user/change_password', 			'UserController@user_change_password');
+Route::POST('/user/change_password/submit', 			'UserController@user_change_password_submit');
+
+
 
 /*ADMIN*/
 Route::get('/settings/admin', 							'AdminController@admin_center');

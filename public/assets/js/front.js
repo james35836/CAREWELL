@@ -64,7 +64,8 @@ function front()
     {
 
       var resetEmail = $('#resetEmail').val();
-      alert(resetEmail);
+      $('#show-error').html('<h1 style="text-align:center;"><i class="fa fa-spinner fa-pulse fa-fw"></i></h1>');
+      
       $.ajax({
         headers: {
               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

@@ -154,5 +154,10 @@
 				<textarea id="user_address" class="form-control" rows="5">{{$user->user_address}}</textarea>
 			</div>
 		</div>
+		<div class="form-holder">
+			<div class="col-md-4 form-content">
+				<button type="button" data-user_id="{{$user->user_id}}" class="btn btn-warning change-password">CHANGE PASSWORD</button>
+			</div>
+		</div>
 	</div>
 </form>

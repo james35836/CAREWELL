@@ -188,23 +188,21 @@ table[class=hide], img[class=hide], td[class=hide] {
                 <table class="one-column" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-spacing:0; border-left:1px solid #e8e7e5; border-right:1px solid #e8e7e5; border-bottom:1px solid #e8e7e5; border-top:1px solid #e8e7e5" bgcolor="#FFFFFF">
                   <tr>
                     <td align="left" style="padding:50px 50px 50px 50px"><p style="color:#262626; font-size:24px; text-align:left; font-family: Verdana, Geneva, sans-serif"><strong>Hi, {{$name}}</strong>,</p>
-                      <p style="color:#000000; font-size:16px; text-align:left; font-family: Verdana, Geneva, sans-serif; line-height:22px ">You are now activated! Use credentials below to access your dashboard.
+                      <p style="color:#000000; font-size:16px; text-align:left; font-family: Verdana, Geneva, sans-serif; line-height:22px ">
                         <br />
                         <br />
-                        Note: Your password below is system generated password, but we still require you to change your password. Follow steps below:
+                        We have sent you this email in response to your request to reset your password. 
                         <br />
-						<br />
-						1. Login your account, use the link below then use credential below to login.
-                        <br />
-                        2. After you login, at the upper right of the website, you'll see the profile picture icon. then update your profile.
+						            <br />
+                        We recommended that you keep your password secure and not share it with anyone. If you feel your password has been compromised, you can change it by gooing to your profile settings and click "CHANGE PASSWORD" button.
                         <br />
                         <br />
-                        Email: {{$email}}
+                        We have your decrypted password, you can use it to login to your account or click the link below to reset password.<br />
+                        <br/>
+                        CURRENT PASSWORD: {{$password}}
                         <br />
-                        PASSWORD: {{$password}}
                         <br />
-                        <br />
-                         Click this link: {{$link}}  or just click the button below.
+                         To reset password, just click this link: {{$link}}  or just click the button below.
                         <br />
                         <br />
                       </p>
@@ -213,7 +211,7 @@ table[class=hide], img[class=hide], td[class=hide] {
                           <tr>
                             <td align="center"><table border="0" cellpadding="0" cellspacing="0" style="Margin:0 auto;">
                                 <tr>
-                                  <td width="250" height="60" align="center" bgcolor="  #3c8dbc;" style="-moz-border-radius: 30px; -webkit-border-radius: 30px; border-radius: 30px;"><a href="{{$link}}" style="width:250; display:block; text-decoration:none; border:0; text-align:center; font-weight:bold;font-size:18px; font-family: Arial, sans-serif; color: black" class="button_link">LOGIN</a></td>
+                                  <td width="250" height="60" align="center" bgcolor="  #3c8dbc;" style="-moz-border-radius: 30px; -webkit-border-radius: 30px; border-radius: 30px;"><a href="{{$link}}" style="width:250; display:block; text-decoration:none; border:0; text-align:center; font-weight:bold;font-size:18px; font-family: Arial, sans-serif; color: black" class="button_link">RESET PASSWORD</a></td>
                                 </tr>
                               </table></td>
                           </tr>

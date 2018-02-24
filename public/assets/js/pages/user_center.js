@@ -18,6 +18,9 @@ function user_center()
             user_view_profile();
 			save_profile_confirm();
 			save_profile_submit();
+			change_password();
+			change_password_submit();
+
 		});
 	}
 	
@@ -96,5 +99,44 @@ function user_center()
 		});
 
     }
-    
+    function change_password()
+    {
+    	$("body").on('click','.change-password',function() 
+		{
+			var modalName= 'CHANGE PASSWORD';
+			var modalClass='password';
+			var modalLink='/user/change_password';
+			var modalActionName='SAVE CHANGES';
+			var modalAction='change-password-submit';
+			var modalSize = 'modal-mdsm';
+			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
+		});
+    }
+    function change_password_submit()
+    {
+    	$('body').on('click','.change-password-submit',function()
+	    {
+
+	      var current_password 	= $('#current_password').val();
+	      var new_password 		= $('#new_password').val();
+	      var confirm_password 	= $('#confirm_password').val();
+	      var old_password	   	= $('#old_password').val();
+	      
+	      passwordData.append("new_password",	new_password);
+          
+          if(new_password!=confirm_password)
+	      {
+	      	toastr.error('Your new password doesnt match confirmation.', 'Something went wrong!', {timeOut: 3000});
+	      }
+	      else if(current_password!=old_password)
+	      {
+	      	toastr.error('Current password doesnt match to old password.', 'Something went wrong!', {timeOut: 3000});
+	      }
+	      else
+	      {
+	      	globals.global_submit('password','/user/change_password/submit',passwordData);
+	      }
+	      
+	    });
+    }
 }
