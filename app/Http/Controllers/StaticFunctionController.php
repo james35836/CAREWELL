@@ -247,12 +247,12 @@ class StaticFunctionController extends Controller
         $count_user = TblUserInfoModel::count();
         if($count_user==null||$count_user==0)
         {
-          $refrenceNumber = sprintf("%05d",1);
+          $refrenceNumber = 'CW-'.sprintf("%05d",1);
         }
         else
         {
           $user = TblUserInfoModel::orderBy('user_info_id','DESC')->first();
-          $refrenceNumber = sprintf("%05d",$user->user_info_id+1);
+          $refrenceNumber = 'CW-'.sprintf("%05d",$user->user_info_id+1);
         }
         break;
       case 'member_company':
@@ -437,6 +437,69 @@ class StaticFunctionController extends Controller
   {
     $age = date_create($birthdate)->diff(date_create('today'))->y;
     return $age;
+  }
+  public static function archived_data($archived_id,$archived_name)
+  {
+    $message = "";
+    $archived['archived'] = '1';
+    switch ($archived_name) 
+    {
+      case 'USER':
+        $check = TblUserModel::where('user_id', $archived_id)->update($archived);
+        break;
+      case 'COMPANY':
+        $check = TblCompanyModel::where('company_id',$archived_id)->update($archived);
+        break;
+      case 'MEMBER':
+        $check = TblMemberModel::where('member_id',$archived_id)->update($archived);
+        break;
+      case 'PROVIDER':
+        $check = TblProviderModel::where('provider_id',$archived_id)->update($archived);
+        break;
+      case 'DOCTOR':
+        $check = TblDoctorModel::where('doctor_id',$archived_id)->update($archived);
+        break;
+    }
+
+    if($check==true)
+    {    
+      $message = "SUCCESSFULLY";
+    }
+    else
+    {
+      $message = "FAILED";
+    }
+    return $message; 
+  }
+  public static function restore_data($restore_id,$restore_name)
+  {
+    $message = "";
+    $restore['archived'] = '0';
+    switch ($restore_name) 
+    {
+      case 'USER':
+        $check = TblUserModel::where('user_id', $restore_id)->update($restore);
+        break;
+      case 'COMPANY':
+        $check = TblCompanyModel::where('company_id',$restore_id)->update($restore);
+        break;
+      case 'MEMBER':
+        $check = TblMemberModel::where('member_id',$restore_id)->update($restore);
+        break;
+      case 'DOCTOR':
+        $check = TblDoctorModel::where('doctor_id',$restore_id)->update($restore);
+        break;
+    }
+
+    if($check==true)
+    {    
+      $message = "SUCCESSFULLY";
+    }
+    else
+    {
+      $message = "FAILED";
+    }
+    return $message; 
   }
   
 }

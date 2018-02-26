@@ -142,7 +142,7 @@ function member_center()
 	{
 		$('body').on('click','.view-member-details',function()
 		{
-			var member_id = $(this).data('id');
+			var member_id = $(this).data('member_id');
 			var modalName= 'MEMBER DETAILS';
 			var modalClass='member-details';
 			var modalLink='/member/view_member_details/'+member_id;

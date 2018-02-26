@@ -45,9 +45,8 @@ Route::get('/user/view_profile', 						'UserController@user_view_profile');
 
 Route::POST('/user/save_profile', 						'UserController@user_save_profile');
 
-Route::get('/user/change_password', 			'UserController@user_change_password');
+Route::get('/user/change_password', 					'UserController@user_change_password');
 Route::POST('/user/change_password/submit', 			'UserController@user_change_password_submit');
-
 
 
 /*ADMIN*/
@@ -165,7 +164,10 @@ Route::post('/settings/coverage/create_plan_submit', 	'CarewellController@settin
 Route::get('/settings/coverage/plan_details/{coverage_plan_id}', 			'CarewellController@settings_coverage_plan_details');
 
 
-
+/*ARCHIVED*/
+Route::POST('/archived/submit', 						'CarewellController@archived_submit');
+/*RESTORE*/
+Route::POST('/restore/submit', 							'CarewellController@restore_submit');
 
 /*MAINTENANCE*/
 Route::get('/developer/maintenance', 				    'MaintenanceController@developer_maintenance');

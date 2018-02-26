@@ -22,9 +22,11 @@
     <link rel="stylesheet" href="/assets/css/AdminLTE.min.css">
     <link rel="stylesheet" href="/assets/css/globals.css">
     <!-- FONT -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+    <link rel="stylesheet" href="/assets/css/offline/font-offline.css">
+    {{-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic"> --}}
     <!-- AJAX -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/assets/js/offline/ajax-offline.js"></script>
+    {{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> --}}
     <!-- TOASTR -->
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet">
@@ -172,9 +174,9 @@
         </div>
       </div>
       <!-- search form -->
-      <form action="#" method="get" class="sidebar-form">
-        <div class="input-group">
-          -
+      <form action="#" method="get" class="sidebar-form ">
+        <div class="user-id-display">
+          <p style="margin:0;">{{$user->user_number}}</p>
         </div>
       </form>
       <ul class="sidebar-menu" data-widget="tree">

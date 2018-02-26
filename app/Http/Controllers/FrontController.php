@@ -101,11 +101,11 @@ class FrontController extends Controller
       $password   = Crypt::decrypt($check->user_password);
       $link       = 'http://carewell.digimahouse.com/';
       $data       = array('name'=>$name,'email'=>$email,'password'=>$password,'link'=>$link);
-      $check_mail = Mail::send('front.pages.reset_password_email', $data, function($message) use($data) 
-                  {
-                    $message->to('jamesomosora@gmail.com', 'Carewell Reset Password')->subject('Carewell Login');
-                    $message->from('carewelladmin@admin.com','Carewell Assistance');
-                  });
+      Mail::send('front.pages.reset_password_email', $data, function($message) use($data) 
+      {
+        $message->to('jamesomosora@gmail.com', 'Carewell Reset Password')->subject('Carewell Reset Password');
+        $message->from('carewelladmin@admin.com','Carewell Assistance');
+      });
       if(Mail::failures())
       {
         return "<div class='alert alert-danger' style='text-align: center;'>Something went wrong!</div>";

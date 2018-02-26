@@ -102,10 +102,17 @@ class CarewellController extends ActiveAuthController
   {
   	$data['page']          = 'Company';
     $data['user']          = StaticFunctionController::global();
-    $data['_company']      = TblCompanyModel::Company()->paginate(10);
-    foreach ($data['_company'] as $key => $company) 
+    $data['_company_active']      = TblCompanyModel::where('tbl_company.archived',0)->Company()->paginate(10);
+    $data['_company_inactive']      = TblCompanyModel::where('tbl_company.archived',1)->Company()->paginate(10);
+    foreach ($data['_company_active'] as $key => $company) 
     {
-      $data['_company'][$key]['coverage_plan']  = TblCompanyCoveragePlanModel::where('company_id',$company->company_id)
+      $data['_company_active'][$key]['coverage_plan']  = TblCompanyCoveragePlanModel::where('company_id',$company->company_id)
+                                                ->join('tbl_coverage_plan','tbl_coverage_plan.coverage_plan_id','=','tbl_company_coverage_plan.coverage_plan_id')
+                                                ->get();
+    }
+    foreach ($data['_company_inactive'] as $key => $company) 
+    {
+      $data['_company_inactive'][$key]['coverage_plan']  = TblCompanyCoveragePlanModel::where('company_id',$company->company_id)
                                                 ->join('tbl_coverage_plan','tbl_coverage_plan.coverage_plan_id','=','tbl_company_coverage_plan.coverage_plan_id')
                                                 ->get();
     }
@@ -219,10 +226,11 @@ class CarewellController extends ActiveAuthController
   /*MEMBER*/
   public function member()
   {
-  	$data['page']     = 'Member';
-    $data['user']     = StaticFunctionController::global();
-    $data['_company'] = TblCompanyModel::where('archived',0)->get();
-    $data['_member']  = TblMemberModel::Member()->orderBy('tbl_member.member_id','ASC')->paginate(10);
+  	$data['page']                 = 'Member';
+    $data['user']                 = StaticFunctionController::global();
+    $data['_company']             = TblCompanyModel::where('archived',0)->get();
+    $data['_member_active']       = TblMemberModel::where('tbl_member.archived',0)->Member()->orderBy('tbl_member.member_id','ASC')->paginate(10);
+    $data['_member_deactivate']   = TblMemberModel::where('tbl_member.archived',1)->Member()->orderBy('tbl_member.member_id','ASC')->paginate(10);
   	return view('carewell.pages.member_center',$data);
   }
   public function member_create_member()
@@ -544,11 +552,18 @@ class CarewellController extends ActiveAuthController
   {
     $data['page']       = 'Network Provider';
     $data['user']       = StaticFunctionController::global();
-    $data['_provider']  = TblProviderModel::where('archived',0)->paginate(10);
-    foreach ($data['_provider'] as $key => $provider) 
+    $data['_provider_active']  = TblProviderModel::where('archived',0)->paginate(10);
+    foreach ($data['_provider_active'] as $key => $provider) 
     {
-      $data['_provider'][$key]['provider_payee'] =  TblProviderPayeeModel::where('provider_id',$provider->provider_id)->get();
+      $data['_provider_active'][$key]['provider_payee'] =  TblProviderPayeeModel::where('provider_id',$provider->provider_id)->get();
     }
+
+    $data['_provider_inactive']  = TblProviderModel::where('archived',1)->paginate(10);
+    foreach ($data['_provider_inactive'] as $key => $provider) 
+    {
+      $data['_provider_inactive'][$key]['provider_payee'] =  TblProviderPayeeModel::where('provider_id',$provider->provider_id)->get();
+    }
+
     return view('carewell.pages.provider_center',$data);
   }
   public function provider_create()
@@ -608,13 +623,25 @@ class CarewellController extends ActiveAuthController
     $data['page']       = 'Doctor';
     $data['user']       = StaticFunctionController::global();
     $data['_provider']  = TblProviderModel::where('archived',0)->get();
-    $data['_doctor']    = TblDoctorModel::paginate(10);
-    foreach ($data['_doctor'] as $key => $doctor) 
+    
+    $data['_doctor_active']    = TblDoctorModel::where('archived',0)->paginate(10);
+    foreach ($data['_doctor_active'] as $key => $doctor) 
     {
-      $data['_doctor'][$key]['specialization']  =  TblDoctorSpecializationModel::where('doctor_id',$doctor->doctor_id)
+      $data['_doctor_active'][$key]['specialization']  =  TblDoctorSpecializationModel::where('doctor_id',$doctor->doctor_id)
                                                 ->join('tbl_specialization','tbl_specialization.specialization_id','=','tbl_doctor_specialization.specialization_id')
                                                 ->get();
-      $data['_doctor'][$key]['provider']        =  TblDoctorProviderModel::where('doctor_id',$doctor->doctor_id)
+      $data['_doctor_active'][$key]['provider']        =  TblDoctorProviderModel::where('doctor_id',$doctor->doctor_id)
+                                                ->join('tbl_provider','tbl_provider.provider_id','=','tbl_doctor_provider.provider_id')
+                                                ->get();
+    }
+
+    $data['_doctor_inactive']    = TblDoctorModel::where('archived',1)->paginate(10);
+    foreach ($data['_doctor_inactive'] as $key => $doctor) 
+    {
+      $data['_doctor_inactive'][$key]['specialization']  =  TblDoctorSpecializationModel::where('doctor_id',$doctor->doctor_id)
+                                                ->join('tbl_specialization','tbl_specialization.specialization_id','=','tbl_doctor_specialization.specialization_id')
+                                                ->get();
+      $data['_doctor_inactive'][$key]['provider']        =  TblDoctorProviderModel::where('doctor_id',$doctor->doctor_id)
                                                 ->join('tbl_provider','tbl_provider.provider_id','=','tbl_doctor_provider.provider_id')
                                                 ->get();
     }
@@ -834,7 +861,8 @@ class CarewellController extends ActiveAuthController
   {
   	$data['page']         = 'Billing';
     $data['user']         = StaticFunctionController::global();
-    $data['_cal_company'] = TblCalModel::join('tbl_company','tbl_company.company_id','=','tbl_cal.company_id')->paginate(10);
+    $data['_cal_open'] = TblCalModel::where('tbl_cal.archived',0)->join('tbl_company','tbl_company.company_id','=','tbl_cal.company_id')->paginate(10);
+    $data['_cal_close'] = TblCalModel::where('tbl_cal.archived',1)->join('tbl_company','tbl_company.company_id','=','tbl_cal.company_id')->paginate(10);
     $data['_company']     = TblCompanyModel::where('archived',0)->get();
   	return view('carewell.pages.billing_center',$data);
   }
@@ -1584,6 +1612,19 @@ class CarewellController extends ActiveAuthController
     }
     return view('carewell.modal_pages.settings_coverage_plan_details',$data);
 
+  }
+
+  /*ARCHIVED*/
+  public function archived_submit(Request $request)
+  {
+    
+    return StaticFunctionController::archived_data($request->archived_id,$request->archived_name);
+  }
+  /*RESTORE*/
+  public function restore_submit(Request $request)
+  {
+    
+    return StaticFunctionController::restore_data($request->restore_id,$request->restore_name);
   }
 
   

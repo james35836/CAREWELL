@@ -169,7 +169,7 @@ function billing_center()
 		{
 			$(".confirm-modal-body").html("<div class='confirm-ajax-loader' style='display:none;text-align: center; padding:50px;'><img src='/assets/loader/loading.gif'/></div");
 	        $(".confirm-ajax-loader").show();
-	        $('.confirm-modal-title').html("");
+	        $('.confirm-modal-title').html("MESSAGE");
 	        $(".confirm-modal-footer").html('');
 
 			$.ajax({

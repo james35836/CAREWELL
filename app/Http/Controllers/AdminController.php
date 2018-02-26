@@ -78,7 +78,8 @@ class AdminController extends ActiveAuthController
   {
   	$data['page'] = 'Admin Panel'; 
     $data['user'] = StaticFunctionController::global();
-    $data['_user_data']= TblUserModel::join('tbl_user_info','tbl_user_info.user_id','=','tbl_user.user_id')->paginate(10);
+    $data['_user_active']= TblUserModel::where('tbl_user.archived',0)->UserInfo()->paginate(10);
+    $data['_user_archived']= TblUserModel::where('tbl_user.archived',1)->UserInfo()->paginate(10);
   	return view('carewell.pages.admin_center',$data);
   }
   public function admin_create_user()
