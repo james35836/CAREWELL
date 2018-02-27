@@ -18,25 +18,10 @@ function provider_center()
             create_provider();
             create_provider_confirm();
             create_provider_submit();
-            checking_null_validation(value,message);
             view_provider_details();
 		});
 
 	}
-
-	function checking_null_validation(value,message)
-	{
-		if(value=="0")
-		{
-			return "null";
-		}
-		else if(value=="")
-		{
-			toastr.error(message+' cannot be null.', 'Something went wrong!', {timeOut: 3000})
-			return "";
-		}
-    }
-
 	function create_provider()
 	{
 		$("body").on('click','.create-provider',function() 
@@ -64,17 +49,17 @@ function provider_center()
             	
             });
 			
-			if(checking_null_validation(document.getElementById('provider_name').value,"PROVIDER NAME")=="")
+			if(globals.checking_null_validation(document.getElementById('provider_name').value,"PROVIDER NAME")=="")
 			{}	
-			else if(checking_null_validation(document.getElementById('provider_contact_person').value,"PROVIDER CONTACT PERSON")=="")
+			else if(globals.checking_null_validation(document.getElementById('provider_contact_person').value,"PROVIDER CONTACT PERSON")=="")
 			{}	
-			else if(checking_null_validation(document.getElementById('provider_telephone_number').value,"PROVIDER PHONE NUMBER")=="")
+			else if(globals.checking_null_validation(document.getElementById('provider_telephone_number').value,"PROVIDER PHONE NUMBER")=="")
 			{}
-			else if(checking_null_validation(document.getElementById('provider_mobile_number').value,"PROVIDER MOBILE NUMBER")=="")
+			else if(globals.checking_null_validation(document.getElementById('provider_mobile_number').value,"PROVIDER MOBILE NUMBER")=="")
 			{}
-			else if(checking_null_validation(document.getElementById('provider_contact_email').value,"PROVIDER EMAIL ADDRESS")=="")
+			else if(globals.checking_null_validation(document.getElementById('provider_contact_email').value,"PROVIDER EMAIL ADDRESS")=="")
 			{}
-			else if(checking_null_validation(document.getElementById('provider_address').value,"PROVIDER ADDRESS")=="")
+			else if(globals.checking_null_validation(document.getElementById('provider_address').value,"PROVIDER ADDRESS")=="")
 			{}
 		    else if(payeeData==null||payeeData=="")
 			{

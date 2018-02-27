@@ -56,9 +56,6 @@ use App\Http\Model\TblLaboratoryModel;
 
 use App\Http\Model\TblDiagnosisModel;
 
-
-
-
 use App\Http\Model\TblProcedureModel;
 
 use App\Http\Model\TblScheduleOfBenefitsModel;
@@ -71,30 +68,38 @@ use Carbon\Carbon;
 use Paginate;
 use Crypt;
 
-
-
 class CarewellController extends ActiveAuthController
 {
-  
-  /*STATIC DATA*/
-
-
-  
-  
-
   /*DASHBOARD*/
   public function dashboard()
   {
-
+    $monthYear            = date("Y");
   	$data['page']         = 'Dashboard';
     $data['user']         = StaticFunctionController::global();
-    $data['company']      = TblCompanyModel::where('archived',0)->count();
-    $data['member']       = TblMemberModel::where('archived',0)->count();
-    $data['provider']     = TblProviderModel::where('archived',0)->count();
-    $data['_approval']    = TblApprovalModel::where('tbl_approval.archived',0)
-                            ->join('tbl_member','tbl_member.member_id','=','tbl_approval.member_id')
-                            ->orderBy('approval_created','DESC')
-                            ->get();
+
+    $data['January']    =  TblApprovalModel::where('approval_created','LIKE','%'.date('Y-01').'%')->count();
+    $data['February']   =  TblApprovalModel::where('approval_created','LIKE','%'.date('Y-02').'%')->count();
+    $data['March']      =  TblApprovalModel::where('approval_created','LIKE','%'.date('Y-03').'%')->count();
+    $data['April']      =  TblApprovalModel::where('approval_created','LIKE','%'.date('Y-04').'%')->count();
+    $data['May']        =  TblApprovalModel::where('approval_created','LIKE','%'.date('Y-05').'%')->count();
+    $data['June']       =  TblApprovalModel::where('approval_created','LIKE','%'.date('Y-06').'%')->count();
+    $data['July']       =  TblApprovalModel::where('approval_created','LIKE','%'.date('Y-07').'%')->count();
+    $data['August']     =  TblApprovalModel::where('approval_created','LIKE','%'.date('Y-08').'%')->count();
+    $data['September']  =  TblApprovalModel::where('approval_created','LIKE','%'.date('Y-09').'%')->count();
+    $data['October']    =  TblApprovalModel::where('approval_created','LIKE','%'.date('Y-10').'%')->count();
+    $data['November']   =  TblApprovalModel::where('approval_created','LIKE','%'.date('Y-11').'%')->count();
+    $data['December']   =  TblApprovalModel::where('approval_created','LIKE','%'.date('Y-12').'%')->count();
+   
+    $data['company_active']    = TblCompanyModel::where('archived',0)->count();
+    $data['member_active']     = TblMemberModel::where('archived',0)->count();
+
+    $data['company_inactive']    = TblCompanyModel::where('archived',0)->count();
+    $data['member_inactive']     = TblMemberModel::where('archived',1)->count();
+
+    $data['provider_active']   = TblProviderModel::where('archived',0)->count();
+    
+    $data['_approval']  = TblApprovalModel::where('tbl_approval.archived',0)->ApprovalInfo()->orderBy('approval_created','DESC')->get();
+    $data['total_approval'] =  count($data['_approval']);
     return view('carewell.pages.dashboard',$data);
   }
   /*COMPANY*/
@@ -303,9 +308,7 @@ class CarewellController extends ActiveAuthController
     $data['member_details']     = TblMemberModel::where('member_id',$member_id)->first();
     $data['_member_dependent']  = TblMemberDependentModel::where('member_id',$member_id)->get();
     $data['member_government']  = TblMemberGovernmentCardModel::where('member_id',$member_id)->first();
-    $data['_member_company']    = TblMemberCompanyModel::where('tbl_member_company.member_id',$member_id)
-                                ->MemberCompany()
-                                ->get();
+    $data['_member_company']    = TblMemberCompanyModel::where('tbl_member_company.member_id',$member_id)->MemberCompany()->get();
 
     return view('carewell.modal_pages.member_details',$data);
   }
@@ -861,8 +864,8 @@ class CarewellController extends ActiveAuthController
   {
   	$data['page']         = 'Billing';
     $data['user']         = StaticFunctionController::global();
-    $data['_cal_open'] = TblCalModel::where('tbl_cal.archived',0)->join('tbl_company','tbl_company.company_id','=','tbl_cal.company_id')->paginate(10);
-    $data['_cal_close'] = TblCalModel::where('tbl_cal.archived',1)->join('tbl_company','tbl_company.company_id','=','tbl_cal.company_id')->paginate(10);
+    $data['_cal_open']    = TblCalModel::where('tbl_cal.archived',0)->join('tbl_company','tbl_company.company_id','=','tbl_cal.company_id')->paginate(10);
+    $data['_cal_close']   = TblCalModel::where('tbl_cal.archived',1)->join('tbl_company','tbl_company.company_id','=','tbl_cal.company_id')->paginate(10);
     $data['_company']     = TblCompanyModel::where('archived',0)->get();
   	return view('carewell.pages.billing_center',$data);
   }
@@ -896,10 +899,8 @@ class CarewellController extends ActiveAuthController
     $data['cal_details']  = TblCalModel::where('cal_id',$cal_id)
                           ->join('tbl_company','tbl_company.company_id','=','tbl_cal.company_id')
                           ->first();
-    $data['_cal_member']  = TblCalMemberModel::where('cal_id',$cal_id)
-                            ->join('tbl_member','tbl_member.member_id','=','tbl_cal_member.member_id')
-                            ->join('tbl_member_company','tbl_member_company.member_id','=','tbl_cal_member.member_id')
-                            ->get();
+    $data['_cal_member']  = TblCalMemberModel::where('cal_id',$cal_id)->CalMember()->get();
+    
     return view('carewell.modal_pages.billing_cal_details',$data);
   }
   public function billing_import_cal_members($cal_id,$company_id)
@@ -1381,27 +1382,16 @@ class CarewellController extends ActiveAuthController
   }
   public function availment_view_approval_details($approval_id)
   {
-    $data['_member']    = TblMemberModel::get();
-    $data['_provider']  = TblProviderModel::get();
-    $data['_availment'] = TblAvailmentModel::where('availment_parent_id',0)->get();
-    $data['_procedure'] = TblProcedureModel::get();
-    $data['_doctor']    = TblDoctorModel::get();
-    $data['approval_details']  = TblApprovalModel::where('tbl_approval.approval_id',$approval_id)
-                                ->join('tbl_availment','tbl_availment.availment_id','=','tbl_approval.availment_id')
-                                ->join('tbl_user_info','tbl_user_info.user_id','tbl_approval.user_id')
-                                ->join('tbl_provider','tbl_provider.provider_id','=','tbl_approval.provider_id')
-                                ->join('tbl_member','tbl_member.member_id','=','tbl_approval.member_id')
-                                ->join('tbl_member_company','tbl_member_company.member_id','tbl_member.member_id')
-                                ->join('tbl_company','tbl_company.company_id','tbl_member_company.company_id')
-                                ->first();
-    $data['_availed']           = TblApprovalAvailedModel::where('tbl_approval_availed.approval_id',$approval_id)
-                                ->join('tbl_availment','tbl_availment.availment_id','=','tbl_approval_availed.availment_id')
-                                ->get();
-    $data['_doctor_assigned']   = TblApprovalDoctorModel::where('tbl_approval_doctor.approval_id',$approval_id)
-                                ->join('tbl_procedure','tbl_procedure.procedure_id','=','tbl_approval_doctor.procedure_id')
-                                ->join('tbl_doctor','tbl_doctor.doctor_id','=','tbl_approval_doctor.doctor_id')
-                                ->join('tbl_specialization','tbl_specialization.specialization_id','=','tbl_approval_doctor.specialization_id')
-                                ->get();
+    $data['_member']          = TblMemberModel::where('archived',0)->get();
+    $data['_provider']        = TblProviderModel::where('archived',0)->get();
+    $data['_availment']       = TblAvailmentModel::where('availment_parent_id',0)->get();
+    $data['_procedure']       = TblProcedureModel::where('archived',0)->get();
+    $data['_doctor']          = TblDoctorModel::where('archived',0)->get();
+    $data['approval_details'] = TblApprovalModel::where('tbl_approval.approval_id',$approval_id)->ApprovalDetails()->first();
+    $data['_availed']         = TblApprovalAvailedModel::where('tbl_approval_availed.approval_id',$approval_id)
+                              ->join('tbl_availment','tbl_availment.availment_id','=','tbl_approval_availed.availment_id')
+                              ->get();
+    $data['_doctor_assigned'] = TblApprovalDoctorModel::where('tbl_approval_doctor.approval_id',$approval_id)->ApprovalDoctor()->get();
     return view('carewell.modal_pages.availment_approval_details',$data);
   }
 
@@ -1411,10 +1401,7 @@ class CarewellController extends ActiveAuthController
   	$data['page']       = 'Payable';
     $data['user']       = StaticFunctionController::global();
     $data['_provider']  = TblProviderModel::where('archived',0)->get();
-    $data['_payable_open']   = TblPayableModel::where('tbl_payable.archived',0)
-                        ->join('tbl_user_info','tbl_user_info.user_id','=','tbl_payable.user_id')
-                        ->join('tbl_provider','tbl_provider.provider_id','=','tbl_payable.provider_id')
-                        ->paginate(10);
+    $data['_payable_open']   = TblPayableModel::where('tbl_payable.archived',0)->PayableInfo()->paginate(10);
     foreach ($data['_payable_open'] as $key => $payable) 
     {
       $data['_payable_open'][$key]['approval_number']    =  TblPayableApprovalModel::where('payable_id',$payable->payable_id)
@@ -1422,10 +1409,7 @@ class CarewellController extends ActiveAuthController
                                                     ->get();
     }
 
-    $data['_payable_close']   = TblPayableModel::where('tbl_payable.archived',1)
-                        ->join('tbl_user_info','tbl_user_info.user_id','=','tbl_payable.user_id')
-                        ->join('tbl_provider','tbl_provider.provider_id','=','tbl_payable.provider_id')
-                        ->paginate(10);
+    $data['_payable_close']   = TblPayableModel::where('tbl_payable.archived',1)->PayableInfo()->paginate(10);
     foreach ($data['_payable_close'] as $key => $payable) 
     {
       $data['_payable_close'][$key]['approval_number']    =  TblPayableApprovalModel::where('payable_id',$payable->payable_id)
@@ -1440,18 +1424,13 @@ class CarewellController extends ActiveAuthController
   {
 
     $data['_provider']  = TblProviderModel::where('archived',0)->get();
-    $data['_approval']  = TblApprovalModel::where('tbl_member_company.archived',0)
-                          ->ApprovalInfo()
-                          ->paginate(10);
+    $data['_approval']  = TblApprovalModel::where('tbl_member_company.archived',0)->ApprovalInfo()->paginate(10);
     return view('carewell.modal_pages.payable_create',$data);
   }
 
   public function payable_create_get_approval($provider_id)
   {
-    $data['_approval']  = TblApprovalModel::where('tbl_provider.provider_id',$provider_id)
-                          ->where('tbl_approval.archived',0)
-                          ->ApprovalInfo()  
-                          ->paginate(10);
+    $data['_approval']  = TblApprovalModel::where('tbl_provider.provider_id',$provider_id)->where('tbl_approval.archived',0)->ApprovalInfo()->paginate(10);
     return view('carewell.additional_pages.payable_get_approval',$data);
   }
   public function payable_create_submit(Request $request)
@@ -1482,17 +1461,9 @@ class CarewellController extends ActiveAuthController
   }
   public function payable_details($payable_id)
   {
-    $data['_provider']  = TblProviderModel::where('archived',0)->get();
-    $data['payable_details']   = TblPayableModel::where('tbl_payable.payable_id',$payable_id)
-                        ->join('tbl_user_info','tbl_user_info.user_id','=','tbl_payable.user_id')
-                        ->join('tbl_provider','tbl_provider.provider_id','=','tbl_payable.provider_id')
-                        ->first();
-    $data['_payable_approval'] =  TblPayableApprovalModel::where('payable_id',$payable_id)
-                        ->where('tbl_member_company.archived',0)
-                        ->join('tbl_approval','tbl_approval.approval_id','=','tbl_payable_approval.approval_id')
-                        ->join('tbl_member','tbl_member.member_id','=','tbl_approval.member_id')
-                        ->join('tbl_member_company','tbl_member_company.member_id','=','tbl_member.member_id')
-                        ->get();
+    $data['_provider']          = TblProviderModel::where('archived',0)->get();
+    $data['payable_details']    = TblPayableModel::where('tbl_payable.payable_id',$payable_id)->PayableInfo()->first();
+    $data['_payable_approval']  =  TblPayableApprovalModel::where('payable_id',$payable_id)->where('tbl_member_company.archived',0)->PayableApproval()->get();
 
     foreach ($data['_payable_approval'] as $key => $payable_approval) 
     {
@@ -1626,8 +1597,4 @@ class CarewellController extends ActiveAuthController
     
     return StaticFunctionController::restore_data($request->restore_id,$request->restore_name);
   }
-
-  
-
-
 }

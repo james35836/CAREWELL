@@ -7,7 +7,7 @@
 			</div>
 			<div class="form-content">
 				<input type="password" id="current_password" class="form-control"/>
-				<input type="text" id="old_password" value="{{$old_password}}"/>
+				<input type="hidden" id="old_password" value="{{$old_password}}"/>
 			</div>
 		</div>
 		<div class="form-holder">

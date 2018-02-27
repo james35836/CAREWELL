@@ -4,70 +4,171 @@
 <div class="container">
   <div class="row">
     <div class=" col-md-2 pull-right">
-      <button type="button" class="btn btn-primary  developer-modals top-element"><i class="fa fa-plus btn-icon"></i>CREATE NEW PLAN</button>
+      <button type="button" class="btn btn-primary  developer-modals top-element"><i class="fa fa-upload btn-icon"></i>IMPORT DATA</button>
     </div>
   </div>
   <div class="row">
-    <div class="col-xs-12">
-      <div class="box">
-        <div class="box-header">
-          <h3 class="box-title">COVERAGE PLAN LIST</h3>
-          <div class="box-tools">
-            <div class="input-group input-group-sm" style="width: 150px;">
-              <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
-              <div class="input-group-btn">
-                <button type="submit" class="btn btn-default"><i class="fa fa-search" ></i></button>
+    <div class="nav-tabs-custom">
+      <ul class="nav nav-tabs">
+        <li class="active"><a href="#laboratoryTab" data-toggle="tab">LABORATORY </a></li>
+        <li><a href="#procedureTab" data-toggle="tab">DOCTOR PROCEDURE </a></li>
+        <li><a href="#diagnosisTab" data-toggle="tab">DIAGNOSIS</a></li>
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane active" id="laboratoryTab">
+          <div class="row">
+            <div class="col-md-3 col-xs-12 pull-right">
+              <div class="input-group margin">
+                <input type="text" class="form-control">
+                <span class="input-group-btn">
+                  <button type="button" class="btn btn-default"><i class="fa fa-search"></i></button>
+                </span>
               </div>
             </div>
           </div>
+          <div class=" box-body table-responsive no-padding">
+            <table class="table table-hover table-bordered">
+              <tr>
+                <th>LABORATORY ID</th>
+                <th>LABORATORY NAME</th>
+                <th>LABORATORY AMOUNT</th>
+                <th>STATUS</th>
+                <th>ACTION</th>
+              </tr>
+              @foreach($_laboratory as $laboratory)
+              <tr>
+                <td>{{$laboratory->laboratory_id}}</td>
+                <td>{{$laboratory->laboratory_name}}</td>
+                <td>{{$laboratory->laboratory_amount}}</td>
+                <td><span class="label label-success">active</span></td>
+                <td>
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-danger">Action</button>
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <span class="caret"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu" style="position: absolute !important;">
+                      <li><button type="button" data-user_id="{{$laboratory->user_id}}" class="btn btn-link view-user-details"><i class="fa fa-eye btn-icon"></i>  View User</button></li>
+                      <li><button type="button" data-id="{{$laboratory->user_id}}" data-name="USER" class="btn btn-link archived"><i class="fa fa-trash btn-icon"></i> Archived User</button></li>
+                    </ul>
+                  </div>
+                </td>
+              </tr>
+              @endforeach
+              <tr style="height:80px;">
+              </tr>
+            </table>
+          </div>
+          <div class="box-footer clearfix">
+            @include('globals.pagination', ['paginator' => $_laboratory])
+          </div>
         </div>
-        <!-- /.box-header -->
-        <div class="box-body table-responsive no-padding">
-          <table class="table table-hover table-bordered">
-            <tr>
-              <th>PLAN ID</th>
-              <th>PLAN NAME</th>
-              <th>PLAN CONFINEMENT</th>
-              <th>PLAN MAX BENEFIT</th>
-              <th>PLAN CASE HANDLING</th>
-              <th>PLAN AGE BRACKET</th>
-              <th>PLAN MONTHLY PREMIUM</th>
-              <th>STATUS</th>
-              <th>ACTION</th>
-            </tr>
-            @foreach($_coverage_plan as $coverage_plan)
-            <tr>
-              <td>{{$coverage_plan->coverage_plan_id}}</td>
-              <td>{{$coverage_plan->coverage_plan_name}}</td>
-              <td>{{$coverage_plan->coverage_plan_confinement}}</td>
-              <td>{{$coverage_plan->coverage_plan_maximum_benefit}}</td>
-              <td>{{$coverage_plan->coverage_plan_case_handling}}</td>
-              <td>{{$coverage_plan->coverage_plan_age_bracket}}</td>
-              <td>{{$coverage_plan->coverage_plan_monthly_premium}}</td>
-              <td><span class="label label-success">Active</span></td>
-              <td>
-                <div class="btn-group">
-                  <button type="button" class="btn btn-danger">Action</button>
-                  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                  <span class="caret"></span>
-                  <span class="sr-only">Toggle Dropdown</span>
-                  </button>
-                  <ul class="dropdown-menu" role="menu" style="position: absolute !important;">
-                    <li><button type="button" data-coverage_plan_id="{{$coverage_plan->coverage_plan_id}}" class="btn btn-link coverage-plan-details"><i class="fa fa-eye btn-icon"></i>  View Plan</button></li>
-                    <li><button type="button" class="btn btn-link"><i class="fa fa-trash btn-icon"></i> Archived Plan</button></li>
-                  </ul>
-                </div>
-              </td>
-            </tr>
-            @endforeach
-            <tr style="height: 70px;">
-            </tr>
-          </table>
+        <!-- /.tab-pane -->
+        <div class="tab-pane" id="procedureTab">
+          <div class="row">
+            <div class="col-md-3 col-xs-12 pull-right">
+              <div class="input-group margin">
+                <input type="text" class="form-control">
+                <span class="input-group-btn">
+                  <button type="button" class="btn btn-default"><i class="fa fa-search"></i></button>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="box-body table-responsive no-padding">
+            <table class="table table-hover table-bordered">
+              <tr>
+                <th>PROCEDURE ID</th>
+                <th>PROCEDURE CODE</th>
+                <th>PROCEDURE DESCRIPTIVE</th>
+                <th>PROCEDURE RVU</th>
+                <th>PROCEDURE CASE</th>
+                <th>STATUS</th>
+                <th>ACTION</th>
+              </tr>
+              @foreach($_doctor_procedure as $doctor_procedure)
+              <tr>
+                <td>{{$doctor_procedure->doctor_procedure_id}}</td>
+                <td>{{$doctor_procedure->doctor_procedure_code}}</td>
+                <td>{{$doctor_procedure->doctor_procedure_descriptive}}</td>
+                <td>{{$doctor_procedure->doctor_procedure_rvu}}</td>
+                <td>{{$doctor_procedure->doctor_procedure_case}}</td>
+                <td><span class="label label-success">active</span></td>
+                <td>
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-danger">Action</button>
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <span class="caret"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu" style="position: absolute !important;">
+                      <li><button type="button" data-user_id="{{$doctor_procedure->user_id}}" class="btn btn-link view-user-details"><i class="fa fa-eye btn-icon"></i>  View User</button></li>
+                      <li><button type="button" data-id="{{$doctor_procedure->user_id}}" data-name="USER" class="btn btn-link restore" ><i class="fa fa-trash btn-icon"></i> Restore User </button></li>
+                    </ul>
+                  </div>
+                </td>
+              </tr>
+              @endforeach
+              <tr style="height:80px;">
+              </tr>
+            </table>
+          </div>
+          <div class="box-footer clearfix">
+            @include('globals.pagination', ['paginator' => $_doctor_procedure])
+          </div>
         </div>
-        <div class="box-footer clearfix">
-          @include('globals.pagination', ['paginator' => $_coverage_plan])
+        <div class="tab-pane" id="diagnosisTab">
+          <div class="row">
+            <div class="col-md-3 col-xs-12 pull-right">
+              <div class="input-group margin">
+                <input type="text" class="form-control">
+                <span class="input-group-btn">
+                  <button type="button" class="btn btn-default"><i class="fa fa-search"></i></button>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="box-body table-responsive no-padding">
+            <table class="table table-hover table-bordered">
+              <tr>
+                <th>DIAGNOSIS ID</th>
+                <th>DIAGNOSIS NAME</th>
+                <th>DIAGNOSIS COVERED</th>
+                <th>STATUS</th>
+                <th>ACTION</th>
+              </tr>
+              @foreach($_diagnosis as $diagnosis)
+              <tr>
+                <td>{{$diagnosis->diagnosis_id}}</td>
+                <td>{{$diagnosis->diagnosis_name}}</td>
+                <td>{{$diagnosis->diagnosis_covered}}</td>
+                <td><span class="label label-success">active</span></td>
+                <td>
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-danger">Action</button>
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <span class="caret"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu" style="position: absolute !important;">
+                      <li><button type="button" data-user_id="{{$diagnosis->diagnosis_id}}" class="btn btn-link view-user-details"><i class="fa fa-eye btn-icon"></i>  View User</button></li>
+                      <li><button type="button" data-id="{{$diagnosis->diagnosis_id}}" data-name="USER" class="btn btn-link restore" ><i class="fa fa-trash btn-icon"></i> Restore User </button></li>
+                    </ul>
+                  </div>
+                </td>
+              </tr>
+              @endforeach
+              <tr style="height:80px;">
+              </tr>
+            </table>
+          </div>
+          <div class="box-footer clearfix">
+            @include('globals.pagination', ['paginator' => $_diagnosis])
+          </div>
         </div>
       </div>
+      <!-- /.tab-content -->
     </div>
   </div>
 </div>

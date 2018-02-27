@@ -2,11 +2,17 @@
 @section('content')
 @include('carewell.modals.doctor_center_modals')
 <div class="container">
-  <div class="row">
-    <div class=" col-md-2 col-xs-6 pull-right no-padding">
-      <button class="btn btn-primary top-element add-doctor" type="button" ><i class="fa fa-plus btn-icon "></i>ADD DOCTOR</button>
+  <div class="col-md-3 col-xs-6 pull-right no-padding">
+      <div class="dropdown">
+        <button class="btn btn-primary top-element dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fa fa-plus btn-icon "></i>ADD DOCTOR
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <button type="button" class="btn btn-link  add-doctor"><i class="fa   fa-pencil-square btn-icon" ></i>ADD MANUALLY</button>
+          <button type="button" class="btn btn-link   import-doctor"><i class="fa fa-file-excel-o btn-icon" ></i>IMPORT EXCEL</button>
+        </div>
+      </div>
     </div>
-  </div>
   <div class="row">
     <div class="nav-tabs-custom">
       <ul class="nav nav-tabs">

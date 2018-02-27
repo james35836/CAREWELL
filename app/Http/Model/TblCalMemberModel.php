@@ -23,6 +23,12 @@ class TblCalMemberModel extends Model
                 ->join('tbl_company','tbl_company.company_id','=','tbl_cal.company_id');
         return $query;
     }
+    public function scopeCalMember($query)
+    {
+        $query  ->join('tbl_member','tbl_member.member_id','=','tbl_cal_member.member_id')
+                ->join('tbl_member_company','tbl_member_company.member_id','=','tbl_cal_member.member_id');
+        return $query;
+    }
     	
                             
 }

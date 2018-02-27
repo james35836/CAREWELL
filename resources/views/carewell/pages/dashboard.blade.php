@@ -6,7 +6,7 @@ function date_time(id)
 date = new Date;
 year = date.getFullYear();
 month = date.getMonth();
-months = new Array('January', 'February', 'March', 'April', 'May', 'June', 'Jully', 'August', 'September', 'October', 'November', 'December');
+months = new Array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
 d = date.getDate();
 day = date.getDay();
 days = new Array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
@@ -40,16 +40,14 @@ text-align: center;
 }
 </style>
 <!-- Info boxes -->
-<div class="row" class="append-modals">
 
-</div>
 <div class="row">
   <div class="col-md-3 col-sm-6 col-xs-12">
     <div class="info-box">
       <span class="info-box-icon bg-aqua"><i class="fa fa-users"></i></span>
       <div class="info-box-content">
         <span class="info-box-text modals-ko">MEMBER</span>
-        <span class="info-box-number"  style="padding-top: 20px;">{{$member}}</span>
+        <span class="info-box-number"  style="padding-top: 20px;">{{$member_active}}</span>
       </div>
     </div>
   </div>
@@ -58,7 +56,7 @@ text-align: center;
       <span class="info-box-icon bg-red"><i class="fa fa-building"></i></span>
       <div class="info-box-content">
         <span class="info-box-text">COMPANY</span>
-        <span class="info-box-number" style="padding-top: 20px;">{{$company}}</span>
+        <span class="info-box-number" style="padding-top: 20px;">{{$company_active}}</span>
       </div>
     </div>
   </div>
@@ -68,7 +66,7 @@ text-align: center;
       <span class="info-box-icon bg-green"><i class="ion ion-ios-medkit"></i></span>
       <div class="info-box-content">
         <span class="info-box-text">NETWORK PROVIDER</span>
-        <span class="info-box-number" style="padding-top: 20px;">{{$provider}}</span>
+        <span class="info-box-number" style="padding-top: 20px;">{{$provider_active}}</span>
       </div>
     </div>
   </div>
@@ -111,15 +109,22 @@ text-align: center;
               <strong>STATISTIC</strong>
             </p>
             <div class="chart">
-              <canvas id="salesChart" style="height: 200px;"></canvas>
+              <script>
+                $(document).ready(function()
+                {
+                  dashboard.graph('#approvalChart',{{$January}},{{$February}},{{$March}},{{$April}},{{$May}},{{$June}},{{$July}},{{$August}},{{$September}},{{$October}},{{$November}},{{$December}});
+                });
+                
+              </script>
+              <canvas id="approvalChart" style="height: 200px;"></canvas>
             </div>
             
           </div>
           <div class="col-md-4" >
             
-              <div class="box-header with-border">
-                <h3 class="box-title">LATEST INQUIRY</h3>
-              </div>
+              <p class="text-center">
+              <strong>LATEST INQUIRY</strong>
+            </p>
               <!-- /.box-header -->
               <div class="box-body" style="max-height: 200px;overflow-x: hidden;overflow-y: scroll;">
                 <table class="table table-bordered">
@@ -153,7 +158,7 @@ text-align: center;
           <div class="col-sm-3 col-xs-6">
             <div class="description-block border-right">
               <span class="description-percentage text-green"><i class="fa fa-caret-up"></i> 17%</span>
-              <h5 class="description-header">$35,210.43</h5>
+              <h5 class="description-header">{{$total_approval}}</h5>
               <span class="description-text">TOTAL APPROVAL</span>
             </div>
             <!-- /.description-block -->
@@ -171,7 +176,7 @@ text-align: center;
           <div class="col-sm-3 col-xs-6">
             <div class="description-block border-right">
               <span class="description-percentage text-green"><i class="fa fa-caret-up"></i> 20%</span>
-              <h5 class="description-header">$24,813.53</h5>
+              <h5 class="description-header">{{$member_inactive}}</h5>
               <span class="description-text">INACTIVE MEMBER</span>
             </div>
             <!-- /.description-block -->
