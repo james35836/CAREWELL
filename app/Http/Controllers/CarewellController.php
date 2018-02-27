@@ -1495,7 +1495,7 @@ class CarewellController extends ActiveAuthController
   public function reports_availment()
   {
     $data['page']     = 'Availment Reports';
-    $data['_company'] = TblCompanyModel::where('archived',0)->get();
+    $data['_company'] = TblCompanyModel::where('archived',0)->paginate(10);
     $data['user']     = StaticFunctionController::global();
 
     foreach ($data['_company'] as $key => $company) 

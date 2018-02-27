@@ -123,7 +123,7 @@
                 <img src="{{$user->user_profile}}" class="img-circle" alt="User Image">
                 <p>
                   {{$user->user_first_name." ".$user->user_last_name}}
-                  <small>CAREWELL {{$user->user_position}}</small>
+                  <small>{{$user->user_position}}</small>
                   <small>Member since {{date("F j, Y",strtotime($user->user_created))}}</small>
                 </p>
               </li>

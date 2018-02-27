@@ -61,8 +61,6 @@
                 </td>
               </tr>
               @endforeach
-              <tr style="height:80px;">
-              </tr>
             </table>
           </div>
           <div class="box-footer clearfix">
@@ -117,8 +115,6 @@
                 </td>
               </tr>
               @endforeach
-              <tr style="height:80px;">
-              </tr>
             </table>
           </div>
           <div class="box-footer clearfix">

@@ -77,8 +77,6 @@
                 </td>
               </tr>
               @endforeach
-              <tr style="height:70px;">
-              </tr>
             </table>
           </div>
           <div class="box-footer clearfix">
