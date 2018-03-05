@@ -5,42 +5,23 @@ $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
 checkboxClass: 'icheckbox_minimal-blue',
 radioClass   : 'iradio_minimal-blue'
 })
-$('body').on("click",".add-row", function()
-{
-	var $table = $(this).closest('table');
-	$table.find('tr.table-row:first').clone().appendTo($table).find('.select2').select2();
-	
-});
-$('body').on("click",".remove-row", function()
-{
-	var $table = $(this).closest('table');
-	var count  = $table.find('tr.table-row').length;
-	if($(this).closest('table tr.table-row').index()==0)
-	{
-		toastr.error('You cannot remove first rows.', 'Something went wrong!', {timeOut: 3000})
-	}
-	else
-	{
-		$(this).closest("tr").remove();
-	}
-	
-});
+
 });
 </script>
 <form class="coverage-plan-form" method="POST">
-	<div class="row box-globals" >
+	<div class="row box-globals">
 		<div class="row form-holder ">
 			<div class="col-md-2 form-content">
 				<label>Coverage Plan Name</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="text" value="{{$coverage_plan_details->coverage_plan_name}}" name="coverage_name" id="coverage_name" class="form-control">
+				<input type="text" value="{{$coverage_plan_details->coverage_plan_name}}"  name="coverage_plan_name" id="coverage_plan_name" class="form-control">
 			</div>
 			<div class="col-md-2 form-content">
-				<label> Plan Premium</label>
+				<label>Premium</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="text" value="{{$coverage_plan_details->coverage_plan_monthly_premium}}" name="coverage_monthly_premium" id="coverage_monthly_premium" class="form-control">
+				<input type="text" value="{{$coverage_plan_details->coverage_plan_premium}}" name="coverage_plan_premium" id="coverage_plan_premium" class="form-control">
 			</div>
 		</div>
 		<div class="row form-holder ">
@@ -48,27 +29,79 @@ $('body').on("click",".remove-row", function()
 				<label>Age Bracket</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="text" value="{{$coverage_plan_details->coverage_plan_age_bracket}}" name="coverage_age_bracket" id="coverage_age_bracket" class="form-control">
+				<input type="text" value="{{$coverage_plan_details->coverage_plan_age_bracket}}" name="coverage_plan_age_bracket" id="coverage_plan_age_bracket" class="form-control">
 			</div>
 			<div class="col-md-2 form-content">
-				<label>DL Case Handling FEE</label>
+				<label>Case Handling FEE</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="text" value="{{$coverage_plan_details->coverage_plan_case_handling}}" name="coverage_case_handling" id="coverage_case_handling" class="form-control">
+				<input type="text" value="{{$coverage_plan_details->coverage_plan_case_handling}}" name="coverage_plan_case_handling" id="coverage_plan_case_handling" class="form-control">
 			</div>
 		</div>
 		<div class="row form-holder ">
 			<div class="col-md-2 form-content">
-				<label>Maximum Benefit Limit</label>
+				<label>Processing Fee</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="text" value="{{$coverage_plan_details->coverage_plan_maximum_benefit}}" name="coverage_maximum_benefit" id="coverage_maximum_benefit" class="form-control">
+				<input type="text" value="{{$coverage_plan_details->coverage_plan_processing_fee}}" name="coverage_plan_processing_fee" id="coverage_plan_processing_fee" class="form-control">
 			</div>
 			<div class="col-md-2 form-content">
-				<label>Patient Confinement</label>
+				<label>CARI Fee</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="text" value="{{$coverage_plan_details->coverage_plan_confinement}}" id="coverage_patient_confinement" name="coverage_patient_confinement" class="form-control">
+				<input type="text" value="{{$coverage_plan_details->coverage_plan_cari_fee}}" name="coverage_plan_cari_fee" id="coverage_plan_cari_fee" class="form-control">
+			</div>
+		</div>
+		<div class="row form-holder ">
+			<div class="col-md-2 form-content">
+				<label>HIB</label>
+			</div>
+			<div class="col-md-4 form-content">
+				<input type="text" value="{{$coverage_plan_details->coverage_plan_hib}}" name="coverage_plan_hib" id="coverage_plan_hib" class="form-control">
+			</div>
+			<div class="col-md-2 form-content">
+				<label>Pre-Existing</label>
+			</div>
+			<div class="col-md-4 form-content">
+				<select class="form-control" name="coverage_plan_preexisting" id="coverage_plan_preexisting">
+					<option>{{$coverage_plan_details->coverage_plan_name}}</option>
+					<option>WAVE</option>
+					<option>12 MONTHS</option>
+				</select>
+			</div>
+		</div>
+		<div class="row form-holder ">
+			<div class="col-md-2 form-content">
+				<label>ABL</label>
+			</div>
+			<div class="col-md-4 form-content">
+				<select class="form-control" name="coverage_plan_annual_benefit" id="coverage_plan_annual_benefit">
+					<option>{{$coverage_plan_details->coverage_plan_annual_benefit}}</option>
+					<option>20,000</option>
+					<option>30,000</option>
+					<option>40,000</option>
+				</select>
+			</div>
+			<div class="col-md-2 form-content">
+				<label>MBL</label>
+			</div>
+			<div class="col-md-4 form-content">
+				<div class="col-md-4 no-padding">
+					<select class="form-control " name="coverage_plan_maximum_benefit" id="coverage_plan_maximum_benefit">
+						<option>{{$coverage_plan_details->coverage_plan_maximum_benefit}}</option>
+						<option>20,000</option>
+						<option>30,000</option>
+						<option>40,000</option>
+					</select>
+				</div>
+				
+				<div class="col-md-3 form-content">
+					<input type="checkbox" value="{{$coverage_plan_details->coverage_plan_mbl_year}}"  name="coverage_plan_mbl_year" id="coverage_plan_mbl_year"><label>Year</label>
+				</div>
+				<div class="col-md-5 form-content no-padding">
+					<input type="checkbox" value="{{$coverage_plan_details->coverage_plan_mbl_illness}}"  name="coverage_plan_mbl_illness" id="coverage_plan_mbl_illness"><label>Illness/ Disease</label>
+				</div>
+				
 			</div>
 		</div>
 	</div>
@@ -102,10 +135,10 @@ $('body').on("click",".remove-row", function()
 										<td class="col-md-5">
 											<div class="input-group">
 												<select name="child_availment[]" class="form-control procedure select2">
-													<option value="0">{{$child_plan_item->availment_name}}</option>
-													@foreach($coverage_plan_covered->child_availment as $child_availment)
+													<option value="0">{{$child_plan_item->procedure_name}}</option>
+													{{-- @foreach($coverage_plan_covered->child_availment as $child_availment)
 													<option value="{{$child_availment->availment_id}}">{{$child_availment->availment_name}}</option>
-													@endforeach
+													@endforeach --}}
 												</select>
 												<span class="input-group-btn">
 													<button class="btn btn-secondary add-new-option" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span> ADD ITEM</button>
@@ -116,9 +149,9 @@ $('body').on("click",".remove-row", function()
 											<div class="input-group">
 												<select name="child_availment_charges[]" class="form-control select2 ">
 													<option value="0">{{$child_plan_item->availment_charges_name}}</option>
-													@foreach($coverage_plan_covered->availment_charges as $availment_charges)
+													{{-- @foreach($coverage_plan_covered->availment_charges as $availment_charges)
 													<option value="{{$availment_charges->availment_charges_id}}">{{$availment_charges->availment_charges_name}}</option>
-													@endforeach
+													@endforeach --}}
 												</select>
 												<span class="input-group-btn">
 													<button class="btn btn-secondary add-new-option" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span> ADD ITEM</button>

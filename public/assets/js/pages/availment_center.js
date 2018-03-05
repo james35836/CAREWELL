@@ -27,9 +27,6 @@ function availment_center()
 
 	}
 	
-	
-	
-	
 	function create_approval()
 	{
 		$("body").on('click','.create-approval',function() 
@@ -56,17 +53,31 @@ function availment_center()
 				method: "get",
                 success: function(data)
 				{
-					$('#insertMember').html(data);
+					$('#insertMember').html(data).find('.member_id').select2();
 				}
 			});
 			
 		});
 		
 
-		$('body').on('change','.get-provider-doctor',function() 
+		$('body').on('change','.get-provider-info',function() 
 		{
 			var provider_id 	= $(this).val();
-			globals.get_dual_information('/get/provider_doctor',provider_id,'.doctor-list','payeeList');
+			$.ajax({
+				headers: {
+				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				},
+
+				url:'/get/provider_info',
+				data:{provider_id: provider_id},
+				method: "POST",
+	            success: function(data)
+				{
+					$('.doctorList').html(data.first);
+					$('.payeeList').html(data.second);
+					$('.rateRvs').val(data.third);
+				}
+			});
 		});
 
 		$('body').on('change','.get-laboratory-amount',function() 

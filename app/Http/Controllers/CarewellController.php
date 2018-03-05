@@ -16,6 +16,8 @@ use App\Http\Model\TblAvailmentChargesModel;
 
 use App\Http\Model\TblCoveragePlanModel;
 use App\Http\Model\TblCoveragePlanTagModel;
+use App\Http\Model\TblCoveragePlanProcedureModel;
+
 
 use App\Http\Model\TblCompanyModel;
 use App\Http\Model\TblCompanyContractModel;
@@ -51,6 +53,8 @@ use App\Http\Model\TblSpecializationModel;
 use App\Http\Model\TblApprovalModel;
 use App\http\Model\TblApprovalAvailedModel;
 use App\Http\Model\TblApprovalDoctorModel;
+use App\Http\Model\TblApprovalProcedureModel;
+
 
 use App\Http\Model\TblLaboratoryModel;
 
@@ -320,12 +324,14 @@ class CarewellController extends ActiveAuthController
     $data['_coverage_plan_covered'] = TblCoveragePlanTagModel::where('coverage_plan_id',$coverage->coverage_plan_id)
                                     ->join('tbl_availment','tbl_availment.availment_id','=','tbl_coverage_plan_tag.availment_id')
                                     ->get();
+
     foreach($data['_coverage_plan_covered'] as $key=>$coverage_plan_covered)
     {
-      $data['_coverage_plan_covered'][$key]['child_plan_item']    =  TblCoveragePlanTagModel::where('availment_parent_id',$coverage_plan_covered->availment_id)->where('coverage_plan_id',$coverage->coverage_plan_id)->CoveragePlanTag($coverage->coverage_plan_id)->get();
+      $data['_coverage_plan_covered'][$key]['child_plan_item']    =  TblCoveragePlanProcedureModel::where('coverage_plan_tag_id',$coverage_plan_covered->coverage_plan_tag_id)->CoveragePlanTag()->get();
       $data['_coverage_plan_covered'][$key]['child_availment']    =  TblAvailmentModel::where('availment_parent_id',$coverage_plan_covered->availment_id)->get();
       $data['_coverage_plan_covered'][$key]['availment_charges']  =  TblAvailmentChargesModel::where('archived',0)->get();
     }
+
 
     $data['_payment_history']   = TblCalMemberModel::where('tbl_cal_member.member_id',$member_id)->PaymentHistory()->paginate(10);
     $data['_availment_history'] = TblApprovalModel::where('tbl_approval.member_id',$member_id)->AvailmentHistory()->get();
@@ -579,6 +585,7 @@ class CarewellController extends ActiveAuthController
     
     $providerData = new TblProviderModel;
     $providerData->provider_name            = $request->provider_name;
+    $providerData->provider_rvs             = $request->provider_rvs;
     $providerData->provider_contact_person  = $request->provider_contact_person;
     $providerData->provider_telephone_number= $request->provider_telephone_number;
     $providerData->provider_mobile_number   = $request->provider_mobile_number;
@@ -1314,6 +1321,7 @@ class CarewellController extends ActiveAuthController
     foreach ($data['_member'] as $key => $member) 
     {
       $data['_member'][$key]['display_name'] =  $member['member_first_name']." ".$member['member_middle_name']." ".$member['member_last_name'];
+      $data['_member'][$key]['carewell_id']  =  TblMemberCompanyModel::where('member_id',$member->member_id)->where('archived',0)->value('member_carewell_id');
     }
     
     return view('carewell.additional_pages.availment_get_member_info',$data);
@@ -1331,6 +1339,7 @@ class CarewellController extends ActiveAuthController
   }
   public function availment_create_approval_submit(Request $request)
   {
+    dd($request->all());
     StaticFunctionController::updateReferenceNumber('approval');
     $data['user'] = StaticFunctionController::global();
 
@@ -1338,22 +1347,32 @@ class CarewellController extends ActiveAuthController
     $approvalData->approval_number            = StaticFunctionController::updateReferenceNumber('approval');
     $approvalData->approval_complaint         = $request->approval_complaint;
     $approvalData->approval_created           = Carbon::now();
+    $approvalData->diagnosis_id               = $request->diagnosis_id;
     $approvalData->availment_id               = $request->availment_id;
     $approvalData->provider_id                = $request->provider_id;
     $approvalData->member_id                  = $request->member_id;
     $approvalData->user_id                    = $data['user']->user_id;
     $approvalData->save();
     
-    foreach($request->availed_id as $key=>$datas)
+    foreach($request->final_diagnosis_id as $diagnosis_id)
     {
-      $availedData = new TblApprovalAvailedModel;
-      $availedData->availed_phil_charity      = $request->availed_phil_charity[$key];
-      $availedData->availed_charge_patient    = $request->availed_charge_patient[$key];
-      $availedData->availed_charge_carewell   = $request->availed_charge_carewell[$key];
-      $availedData->availed_remarks           = $request->availed_remarks[$key];
-      $availedData->availment_id              = $datas;
-      $availedData->approval_id               = $approvalData->approval_id;
-      $availedData->save();
+      $diagnosisData = new TblApprovalDiagnosisModel;
+      $diagnosisData->approval_diagnosis_type = '0';
+      $diagnosisData->diagnosis_id = $diagnosis_id;
+      $diagnosisData->approval_id = $approvalData->approval_id;
+      $diagnosisData->save();
+    }
+    foreach($request->procedure_id as $key=>$datas)
+    {
+      $procedureData = new TblApprovalProcedureModel;
+      $procedureData->procedure_id              = $request->procedure_id[$key];
+      $procedureData->procedure_gross_amount    = $request->procedure_gross_amount[$key];
+      $procedureData->procedure_philhealth      = $request->procedure_philhealth[$key];
+      $procedureData->procedure_charge_patient  = $request->procedure_charge_patient[$key];
+      $procedureData->procedure_charge_carewell = $request->procedure_charge_carewell[$key];
+      $procedureData->diagnosis_id              = $request->diagnosis_id[$key];
+      $procedureData->approval_id               = $approvalData->approval_id;
+      $procedureData->save();
     }
     
     foreach($request->doctor_id as $key=>$data)
@@ -1366,11 +1385,11 @@ class CarewellController extends ActiveAuthController
       $doctorData->approval_doctor_charge_carewell  = $request->approval_doctor_charge_carewell[$key];
       $doctorData->specialization_id                = $request->specialization_id[$key];
       $doctorData->doctor_id                        = $data;
-      $doctorData->procedure_id                     = $request->procedure_id[$key];
+      $doctorData->doctor_procedure_id              = $request->doctor_procedure_id[$key];
       $doctorData->approval_id                      = $approvalData->approval_id;
       $doctorData->save();
     }
-    if($approvalData->save()&&$availedData->save()&&$doctorData->save())
+    if($approvalData->save()&&$procedureData->save()&&$doctorData->save())
     {
       return StaticFunctionController::returnMessage('success','APPROVAL');
     }
@@ -1527,7 +1546,7 @@ class CarewellController extends ActiveAuthController
     $data['_availment'] = TblAvailmentModel::where('availment_parent_id',0)->get();
     foreach ($data['_availment'] as $key => $availment) 
     {
-      $data['_availment'][$key]['child_availment']    =  TblAvailmentModel::where('availment_parent_id',$availment->availment_id)->get();
+      $data['_availment'][$key]['procedure']    =  TblProcedureModel::where('archived',0)->get();
       $data['_availment'][$key]['availment_charges']  =  TblAvailmentChargesModel::where('archived',0)->get();
     }
     return view('carewell.modal_pages.settings_coverage_plan_create',$data);
@@ -1535,34 +1554,110 @@ class CarewellController extends ActiveAuthController
   public function settings_coverage_plan_create_submit(Request $request)
   {
     $coverageData = new TblCoveragePlanModel;
-    $coverageData->coverage_plan_name                = $request->coverage_name;
-    $coverageData->coverage_plan_confinement = $request->coverage_patient_confinement;
-    $coverageData->coverage_plan_maximum_benefit     = $request->coverage_maximum_benefit;
-    $coverageData->coverage_plan_case_handling       = $request->coverage_case_handling;
-    $coverageData->coverage_plan_age_bracket         = $request->coverage_age_bracket;
-    $coverageData->coverage_plan_monthly_premium     = $request->coverage_monthly_premium;
-    $coverageData->coverage_plan_created             = Carbon::now();
+    $coverageData->coverage_plan_name             = $request->coverage_plan_name;
+    $coverageData->coverage_plan_preexisting      = $request->coverage_plan_preexisting;
+    $coverageData->coverage_plan_annual_benefit   = $request->coverage_plan_annual_benefit;
+    $coverageData->coverage_plan_maximum_benefit  = $request->coverage_plan_maximum_benefit;
+    $coverageData->coverage_plan_mbl_illness      = $request->coverage_plan_mbl_illness;  
+    $coverageData->coverage_plan_mbl_year         = $request->coverage_plan_mbl_year;
+    $coverageData->coverage_plan_case_handling    = $request->coverage_plan_case_handling;
+    $coverageData->coverage_plan_age_bracket      = $request->coverage_plan_age_bracket;
+    $coverageData->coverage_plan_premium          = $request->coverage_plan_premium;
+    $coverageData->coverage_plan_cari_fee         = $request->coverage_plan_cari_fee;
+    $coverageData->coverage_plan_hib              = $request->coverage_plan_hib;
+    $coverageData->coverage_plan_processing_fee   = $request->coverage_plan_processing_fee;
+    $coverageData->coverage_plan_created          = Carbon::now();
     $coverageData->save();
    
-    foreach($request->child_availment as $key=>$data)
+    
+    foreach($request->availment_id as $availment_id)
     {
-      if($data!=0)
+      $planTagData = new TblCoveragePlanTagModel;
+      $planTagData->availment_id            = $availment_id;
+      $planTagData->coverage_plan_id        = $coverageData->coverage_plan_id;
+      $planTagData->save();
+      if($availment_id==1)
       {
-        $coverageTagData = new TblCoveragePlanTagModel;
-        $coverageTagData->availment_charges_id    = $request->child_availment_charges[$key];
-        $coverageTagData->availment_id            = $request->child_availment[$key];
-        $coverageTagData->coverage_plan_id        = $coverageData->coverage_plan_id;
-        $coverageTagData->save();
+        
+        foreach($request->procedure_id_1 as $key=>$procedure_id)
+        {
+          $procedureTagData = new TblCoveragePlanProcedureModel;
+          $procedureTagData->availment_charges_id  = $request->availment_charges_id_1[$key];
+          $procedureTagData->procedure_id          = $request->procedure_id_1[$key];
+          $procedureTagData->coverage_plan_tag_id  = $planTagData->coverage_plan_tag_id;
+          $procedureTagData->save();
+        }
+      }
+      else if($availment_id==2)
+      {
+        foreach($request->procedure_id_2 as $key=>$procedure_id)
+        {
+
+          $procedureTagData = new TblCoveragePlanProcedureModel;
+          $procedureTagData->availment_charges_id  = $request->availment_charges_id_2[$key];
+          $procedureTagData->procedure_id          = $procedure_id;
+          $procedureTagData->coverage_plan_tag_id  = $planTagData->coverage_plan_tag_id;
+          $procedureTagData->save();
+        }
+      }
+      else if($availment_id==3)
+      {
+        foreach($request->procedure_id_3 as $key=>$procedure_id)
+        {
+          $procedureTagData = new TblCoveragePlanProcedureModel;
+          $procedureTagData->availment_charges_id  = $request->availment_charges_id_3[$key];
+          $procedureTagData->procedure_id          = $procedure_id;
+          $procedureTagData->coverage_plan_tag_id  = $planTagData->coverage_plan_tag_id;
+          $procedureTagData->save();
+        }
+      }
+      else if($availment_id==4)
+      {
+        foreach($request->procedure_id_4 as $key=>$procedure_id)
+        {
+          $procedureTagData = new TblCoveragePlanProcedureModel;
+          $procedureTagData->availment_charges_id  = $request->availment_charges_id_4[$key];
+          $procedureTagData->procedure_id          = $procedure_id;
+          $procedureTagData->coverage_plan_tag_id  = $planTagData->coverage_plan_tag_id;
+          $procedureTagData->save();
+        }
+      }
+      else if($availment_id==5)
+      {
+        foreach($request->procedure_id_5 as $key=>$procedure_id)
+        {
+          $procedureTagData = new TblCoveragePlanProcedureModel;
+          $procedureTagData->availment_charges_id  = $request->availment_charges_id_5[$key];
+          $procedureTagData->procedure_id          = $procedure_id;
+          $procedureTagData->coverage_plan_tag_id  = $planTagData->coverage_plan_tag_id;
+          $procedureTagData->save();
+        }
+      }
+      else if($availment_id==6)
+      {
+        foreach($request->procedure_id_6 as $key=>$procedure_id)
+        {
+          $procedureTagData = new TblCoveragePlanProcedureModel;
+          $procedureTagData->availment_charges_id  = $request->availment_charges_id_6[$key];
+          $procedureTagData->procedure_id          = $procedure_id;
+          $procedureTagData->coverage_plan_tag_id  = $planTagData->coverage_plan_tag_id;
+          $procedureTagData->save();
+        }
+      }
+      else if($availment_id==7)
+      {
+        foreach($request->procedure_id_7 as $key=>$procedure_id)
+        {
+          $procedureTagData = new TblCoveragePlanProcedureModel;
+          $procedureTagData->availment_charges_id  = $request->availment_charges_id_7[$key];
+          $procedureTagData->procedure_id          = $procedure_id;
+          $procedureTagData->coverage_plan_tag_id  = $planTagData->coverage_plan_tag_id;
+          $procedureTagData->save();
+        }
       }
       
-    }
-    foreach($request->parent_availment as $parent_availment)
-    {
-      $parentTagData = new TblCoveragePlanTagModel;
-      $parentTagData->availment_charges_id    = 0;
-      $parentTagData->availment_id            = $parent_availment;
-      $parentTagData->coverage_plan_id        = $coverageData->coverage_plan_id;
-      $parentTagData->save();
+      
+      
     }
     if($coverageData->save())
     {
@@ -1577,10 +1672,11 @@ class CarewellController extends ActiveAuthController
                                     ->get();
     foreach($data['_coverage_plan_covered'] as $key=>$coverage_plan_covered)
     {
-      $data['_coverage_plan_covered'][$key]['child_plan_item']    =  TblCoveragePlanTagModel::where('availment_parent_id',$coverage_plan_covered->availment_id)->where('coverage_plan_id',$coverage_plan_id)->CoveragePlanTag($coverage_plan_id)->get();
+      $data['_coverage_plan_covered'][$key]['child_plan_item']    =  TblCoveragePlanProcedureModel::where('coverage_plan_tag_id',$coverage_plan_covered->coverage_plan_tag_id)->CoveragePlanTag()->get();
       $data['_coverage_plan_covered'][$key]['child_availment']    =  TblAvailmentModel::where('availment_parent_id',$coverage_plan_covered->availment_id)->get();
       $data['_coverage_plan_covered'][$key]['availment_charges']  =  TblAvailmentChargesModel::where('archived',0)->get();
     }
+    // dd($data);
     return view('carewell.modal_pages.settings_coverage_plan_details',$data);
 
   }

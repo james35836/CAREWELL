@@ -222,14 +222,15 @@
             <i class="fa fa-paypal"></i> <span>PAYABLE</span>
           </a>
         </li>
+        
         <li class="treeview">
-          <a >
-            <i class="fa fa-bar-chart"></i> <span>REPORTS</span>
+          <a href="#">
+            <i class="fa fa-bar-chart"></i>
+            <span>REPORTS</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
-          
           <ul class="treeview-menu">
             <li><a href="/reports/availment"><i class="fa fa-circle-o"></i>AVAILMENT </a></li>
             <li><a href="#"><i class="fa fa-circle-o"></i>MONITORING</a></li>
@@ -238,6 +239,7 @@
             <li><a href="#"><i class="fa fa-circle-o"></i>SUMMARY</a></li>
           </ul>
         </li>
+
         <li class="treeview">
           <a href="#">
             <i class="fa fa-cog"></i>

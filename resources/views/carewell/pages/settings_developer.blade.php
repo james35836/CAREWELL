@@ -12,6 +12,7 @@
       <ul class="nav nav-tabs">
         <li class="active"><a href="#laboratoryTab" data-toggle="tab">LABORATORY </a></li>
         <li><a href="#procedureTab" data-toggle="tab">DOCTOR PROCEDURE </a></li>
+        <li><a href="#descriptionTab" data-toggle="tab">DESCRIPTION</a></li>
         <li><a href="#diagnosisTab" data-toggle="tab">DIAGNOSIS</a></li>
       </ul>
       <div class="tab-content">
@@ -114,6 +115,51 @@
           </div>
           <div class="box-footer clearfix">
             @include('globals.pagination', ['paginator' => $_doctor_procedure])
+          </div>
+        </div>
+        <div class="tab-pane" id="descriptionTab">
+          <div class="row">
+            <div class="col-md-3 col-xs-12 pull-right">
+              <div class="input-group margin">
+                <input type="text" class="form-control">
+                <span class="input-group-btn">
+                  <button type="button" class="btn btn-default"><i class="fa fa-search"></i></button>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="box-body table-responsive no-padding">
+            <table class="table table-hover table-bordered">
+              <tr>
+                <th>DESCRIPTION ID</th>
+                <th>DESCRIPTION NAME</th>
+                <th>STATUS</th>
+                <th>ACTION</th>
+              </tr>
+              @foreach($_procedure as $procedure)
+              <tr>
+                <td>{{$procedure->procedure_id}}</td>
+                <td>{{$procedure->procedure_name}}</td>
+                <td><span class="label label-success">active</span></td>
+                <td>
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-danger">Action</button>
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <span class="caret"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu" style="position: absolute !important;">
+                      <li><button type="button" data-user_id="{{$procedure->procedure_id}}" class="btn btn-link view-user-details"><i class="fa fa-eye btn-icon"></i>  View User</button></li>
+                      <li><button type="button" data-id="{{$procedure->procedure_id}}" data-name="USER" class="btn btn-link restore" ><i class="fa fa-trash btn-icon"></i> Restore User </button></li>
+                    </ul>
+                  </div>
+                </td>
+              </tr>
+              @endforeach
+            </table>
+          </div>
+          <div class="box-footer clearfix">
+            @include('globals.pagination', ['paginator' => $_diagnosis])
           </div>
         </div>
         <div class="tab-pane" id="diagnosisTab">

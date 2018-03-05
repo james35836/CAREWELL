@@ -45,8 +45,17 @@ input[type="file"] {
 		<div class="col-md-2 form-content">
 			<label>Provider Name</label>
 		</div>
-		<div class="col-md-10 form-content">
+		<div class="col-md-4 form-content">
 			<input type="text" id="provider_name" class="form-control"/>
+		</div>
+		<div class="col-md-2 form-content">
+			<label>Provider Rate/RVS</label>
+		</div>
+		<div class="col-md-4 form-content">
+			<select name="provider_rvs" id="provider_rvs" class="form-control">
+				<option value="201">201</option>
+				<option value="209">209</option>
+			</select>
 		</div>
 	</div>
 	<div class="form-holder">

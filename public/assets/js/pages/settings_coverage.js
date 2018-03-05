@@ -42,11 +42,40 @@ function settings_coverage()
 	{
 		$('body').on('click','.create-coverage-plan-confirm',function() 
 		{
-			var	confirmModalMessage = 'Are you sure you want to add this plan?';
-			var confirmModalAction = 'create-coverage-plan-submit';
-			globals.confirm_modals(confirmModalMessage,confirmModalAction);		
+			if(globals.checking_null_validation(document.getElementById('coverage_plan_name').value,"COMPANY NAME")=="")
+			{}	
+		    else if(globals.checking_null_validation(document.getElementById('coverage_plan_preexisting').value,"COMPANY CONTACT PERSON")=="")
+			{}
+			else if(globals.checking_null_validation(document.getElementById('coverage_plan_maximum_benefit').value,"COMPANY EMAIL ADDRESS")=="")
+			{}	
+			else if(globals.checking_null_validation(document.getElementById('coverage_plan_annual_benefit').value,"COMPANY ADDRESS")=="")
+			{}
+			else if(globals.checking_null_validation(document.getElementById('coverage_plan_case_handling').value,"COMPANY ADDRESS")=="")
+			{}
+			else if(globals.checking_null_validation(document.getElementById('coverage_plan_age_bracket').value,"COMPANY ADDRESS")=="")
+			{}
+			else if(globals.checking_null_validation(document.getElementById('coverage_plan_mbl_illness').value,"COMPANY ADDRESS")=="")
+			{}
+			else if(globals.checking_null_validation(document.getElementById('coverage_plan_mbl_year').value,"COMPANY ADDRESS")=="")
+			{}
+			else if(globals.checking_null_validation(document.getElementById('coverage_plan_cari_fee').value,"COMPANY ADDRESS")=="")
+			{}
+			else if(globals.checking_null_validation(document.getElementById('coverage_plan_hib').value,"COMPANY ADDRESS")=="")
+			{}
+			else if(globals.checking_null_validation(document.getElementById('coverage_plan_processing_fee').value,"COMPANY ADDRESS")=="")
+			{}
+			else if(globals.checking_null_validation(document.getElementById('coverage_plan_premium').value,"COMPANY ADDRESS")=="")
+			{}
+			else
+			{
+				var	confirmModalMessage = 'Are you sure you want to add this plan?';
+				var confirmModalAction = 'create-coverage-plan-submit';
+				globals.confirm_modals(confirmModalMessage,confirmModalAction);		
+				
+				serializeData = $('.coverage-plan-form').serialize();
+
+			}
 			
-			serializeData = $(".coverage-plan-form").serialize();
 		});
 	}
 	

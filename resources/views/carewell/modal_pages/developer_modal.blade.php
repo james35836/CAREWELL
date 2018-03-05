@@ -7,6 +7,7 @@
       <select class="form-control" id="JamesDev">
         <option value="provider">Provider</option>
         <option value="diagnosis">Diagnosis</option>
+        <option value="procedure">Description</option>
       </select>
     </div>
     

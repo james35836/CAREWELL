@@ -72,6 +72,7 @@ function provider_center()
 				globals.confirm_modals(confirmModalMessage,confirmModalAction);
 
 				providerData.append("provider_name", 			document.getElementById('provider_name').value);
+				providerData.append("provider_rvs", 			document.getElementById('provider_rvs').value);
 	            providerData.append("provider_contact_person", 	document.getElementById('provider_contact_person').value);
 	            providerData.append("provider_telephone_number",document.getElementById('provider_telephone_number').value);
 	            providerData.append("provider_mobile_number", 	document.getElementById('provider_mobile_number').value);

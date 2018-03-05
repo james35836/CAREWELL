@@ -66,9 +66,10 @@ class FrontController extends Controller
     }
     else
     {
+      return Redirect::back()->withErrors(['User Login is Incorectaa!', 'User Login is Incorect!']);
 
-     Session::flash('error', 'Email you entered does not exist to any account.');
-      return Redirect::to('/login');
+     // Session::flash('error', 'Email you entered does not exist to any account.');
+     //  return Redirect::to('/login');
     }
   }
   public function register()

@@ -33,6 +33,8 @@ use App\Http\Model\TblMemberGovernmentCardModel;
 use App\Http\Model\TblAvailmentModel;
 
 use App\Http\Model\TblCoveragePlanModel;
+use App\Http\Model\TblCoveragePlanProcedureModel;
+
 use App\Http\Model\TblAvailmentTagModel;
 
 use App\Http\Model\TblPaymentModeModel;
@@ -105,11 +107,12 @@ class StaticFunctionController extends Controller
     }
   }
   
-  public function getProviderDoctor(Request $request)
+  public function getProviderInfo(Request $request)
   {
     if($request->ajax())
     {
-        $data['_provider_doctor']  = TblDoctorProviderModel::where('tbl_doctor_provider.provider_id',$request->value)
+        $provider_rvs  = TblProviderModel::where('provider_id',$request->provider_id)->value('provider_rvs');
+        $data['_provider_doctor']  = TblDoctorProviderModel::where('tbl_doctor_provider.provider_id',$request->provider_id)
                               ->join('tbl_doctor','tbl_doctor.doctor_id','=','tbl_doctor_provider.doctor_id')
                               ->get();
         $data['_provider_doctors'] = '<option>-SELECT DOCTOR-';
@@ -118,14 +121,16 @@ class StaticFunctionController extends Controller
             $data['_provider_doctors']     .= '<option value='.$provider_doctor->doctor_id.'>'.$provider_doctor->doctor_first_name." ".$provider_doctor->doctor_last_name;
         }
 
-        $data['_payee'] = TblProviderPayeeModel::where('provider_id',$request->value)->get();
+        $data['_payee'] = TblProviderPayeeModel::where('provider_id',$request->provider_id)->get();
+        
         $data['_payee_list'] = '<option>-SELECT PAYEE-';
         foreach($data['_payee'] as $payee)
         {
             $data['_payee_list']     .= '<option value='.$payee->provider_payee_id.'>'.$payee->provider_payee_name;
         }
 
-        return  response()->json(array('first' => $data['_provider_doctors'],'second' => $data['_payee_list']));
+
+        return  response()->json(array('first' => $data['_provider_doctors'],'second' => $data['_payee_list'],'third'=>$provider_rvs));
     }
   }
   
@@ -501,5 +506,6 @@ class StaticFunctionController extends Controller
     }
     return $message; 
   }
+  
   
 }

@@ -10,9 +10,12 @@
       <a href="/">WELCOME TO <b>Carewell</b></a>
     </div>
     <hr>
-    @if(Session::has('error'))
-      <div class="alert alert-danger">{{ Session::get('error') }}</div>
+    @if($errors->any())
+      <div class="alert alert-danger"><center>{{$errors->first()}}</center></div>
     @endif
+    {{-- @if(Session::has('error'))
+      <div class="alert alert-danger">{{ Session::get('error') }}</div>
+    @endif --}}
     <div id="showForm">
       <form action="/login_submit" method="post">
         {{csrf_field()}}

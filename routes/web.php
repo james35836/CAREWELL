@@ -35,7 +35,7 @@ Route::post('/reset/password/submit', 					'FrontController@reset_password_submi
 /*STATIC CONTROLLER*/
 
 Route::any('/get/company_info', 						'StaticFunctionController@getCompanyInfo');
-Route::any('/get/provider_doctor', 						'StaticFunctionController@getProviderDoctor');
+Route::any('/get/provider_info', 						'StaticFunctionController@getProviderInfo');
 Route::any('/get/laboratory_amount', 					'StaticFunctionController@getLaboratoryAmount');
 Route::any('/get/doctor_specialty', 					'StaticFunctionController@getDoctorSpecialty');
 

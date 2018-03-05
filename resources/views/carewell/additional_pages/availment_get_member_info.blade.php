@@ -6,10 +6,10 @@
 					<label>Name</label>
 				</div>
 				<div class="col-md-4 form-content form-group">
-					<select class="form-control select2 get-member-info" style="width: 100%;">
-						<option selected="selected">{{$member_info->member_first_name." ".$member_info->member_middle_name." ".$member_info->member_last_name}}</option>
+					<select class="form-control get-member-info member_id" name="member_id">
+						<option value="{{$member_info->member_id}}">{{$member_info->member_first_name." ".$member_info->member_middle_name." ".$member_info->member_last_name}}</option>
 						@foreach($_member as $member)
-						<option value="{{$member->member_id}}">{{$member->member_carewell_id ." ".$member->display_name}}</option>
+						<option value="{{$member->member_id}}">{{$member->carewell_id ." ".$member->display_name}}</option>
 						@endforeach
 					</select>
 				</div>
@@ -19,7 +19,6 @@
 				<div class="col-md-4 form-content">
 					<input type="text" class="form-control" value="{{$member_info->company_name}}" disabled/>
 				</div>
-				<input type="hidden" name="member_id" value="{{$member_info->member_id}}"/>
 			</div>
 			<div class="form-holder">
 				<div class="col-md-2 form-content">

@@ -155,6 +155,7 @@ class AdminController extends ActiveAuthController
     $data['_laboratory']        = TblLaboratoryModel::where('archived',0)->paginate(10);
     $data['_diagnosis']         = TblDiagnosisModel::where('archived',0)->paginate(10);
     $data['_doctor_procedure']  = TblDoctorProcedureModel::where('archived',0)->paginate(10);
+    $data['_procedure']         = TblProcedureModel::where('archived',0)->paginate(10);
 
     return view('carewell.pages.settings_developer',$data);
   }
@@ -249,6 +250,45 @@ class AdminController extends ActiveAuthController
           $message = '<center><b><span class="color-green">'.$count.' Diagnosis/s has been inserted and '.$countExist.' diagnosis are already exist.</span></b></center>';
         }
         return $message;
+    }
+    if(isset($first['procedure_name'])&&isset($first['procedure_amount'])&&$request->file_name=="procedure")
+    {
+      $count = 0;
+      $countExist = 0; 
+        foreach($_data as $data)
+        {
+          
+          $check = TblProcedureModel::where('procedure_name',$data['procedure_name'])->first();
+          if($check==null&&$data['procedure_name']!="")
+          {
+            $procedureData = new TblProcedureModel;
+            $procedureData->procedure_name           = $data['procedure_name'];
+            $procedureData->procedure_amount        = "0";
+            $procedureData->procedure_created        = Carbon::now();
+            
+            $procedureData->save();
+            
+            $count++;
+          }
+          else
+          {
+            $countExist++;
+          }
+        }    
+
+        if($count == 0)
+        {
+          $message = '<center><b><span class="color-gray">There is nothing to insert</span></b></center>';
+        }
+        else
+        {
+          $message = '<center><b><span class="color-green">'.$count.' Description/s has been inserted and '.$countExist.' descriptions are already exist.</span></b></center>';
+        }
+        return $message;
+    }
+    else
+    {
+      return '<center><b><span class="color-gray">WRONG FILE</span></b></center>';
     }
   }
   

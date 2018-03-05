@@ -18,6 +18,10 @@ var restoreData 	= new FormData();
 
 var doctorProviderData	= [];
 var specialData 		= [];
+var availmentData 		= [];
+var procedureData		= []; 
+var chargesData			= [];
+
 
 
 var payeeData			= [];
@@ -27,7 +31,7 @@ var ajaxData 		= [];
 var value			= "0";
 var message			= "";
 var approvalData	= [];
-var availmentData 	= [];
+
 var check_null 		= [];
 
 var benefitsData	= [];
@@ -339,14 +343,15 @@ function globals()
 		add_select_option_submit();
 		reload_page();
 
-		archived();
-        archived_submit();
-        restore();
-        restore_submit();
+		archived_data();
+        restore_data();
+
+        add_remove_element();
 
         table_sorter();
+        table_action_add_remove();
 	}
-	function archived()
+	function archived_data()
 	{
 		$('body').on('click','.archived',function()
 		{
@@ -359,9 +364,6 @@ function globals()
 			ajaxData.tdCloser  	= $(this).closest('tr');
 			ajaxData.name 		= $(this).data('name');
 		});
-	}
-	function archived_submit()
-	{
 		$('body').on('click','.archived-submit',function() 
 		{
 			$(".confirm-modal-body").html('<h1 style="text-align:center;"><i class="fa fa-spinner fa-pulse fa-fw"></i></h1>');
@@ -391,9 +393,8 @@ function globals()
 			});
 		});
 	}
-	function restore()
+	function restore_data()
 	{
-		
 		$('body').on('click','.restore',function()
 		{
 			var	confirmModalMessage = 'Are you sure you want to proceed to restore?';
@@ -406,9 +407,6 @@ function globals()
 			ajaxData.name 		= $(this).data('name');
 			
 		});
-	}
-	function restore_submit()
-	{
 		$('body').on('click','.restore-submit',function() 
 		{
 			$(".confirm-modal-body").html('<h1 style="text-align:center;"><i class="fa fa-spinner fa-pulse fa-fw"></i></h1>');
@@ -526,5 +524,56 @@ function globals()
 		{ 
 			return $(row).children('td').eq(index).text() 
 		}
+	}
+	function table_action_add_remove()
+	{
+		$('body').on("click",".add-row", function()
+		{
+			var j = $(this).data('number');
+			var $table = $(this).closest('table');
+			$nrow = $table.find('tr:eq('+j+')').clone().addClass('select');
+			$table.append($nrow);
+			
+		});
+
+		$('body').on("click",".remove-row", function()
+		{
+			var $table = $(this).closest('table');
+			var count  = $table.find('tr.table-row').length;
+			if(count==1)
+			{
+				toastr.error('You cannot remove all rows.', 'Something went wrong!', {timeOut: 3000})
+			}
+			else
+			{
+				$(this).closest("tr").remove();
+			}
+			
+		});
+	}
+	function add_remove_element()
+	{
+		$('body').on("click",".add-element", function()
+		{
+			var $div = $(this).closest('div.form-element');
+			var $this = $(this);
+			$nelement = $div.find('div.my-element:first').clone();
+			$nelement.appendTo($div);
+			
+		});
+		$('body').on("click",".remove-element", function()
+		{
+			var $div = $(this).closest('div.form-element');
+			var count  = $div.find('div.my-element').length;
+			if(count==1)
+			{
+				toastr.error('You cannot remove all element.', 'Something went wrong!', {timeOut: 3000})
+			}
+			else
+			{
+				$(this).closest("div.my-element").remove();
+			}
+			
+		});
 	}
 }
