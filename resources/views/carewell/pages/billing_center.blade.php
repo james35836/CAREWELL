@@ -63,7 +63,7 @@
                     </button>
                     <ul class="dropdown-menu" role="menu" style="position: absolute !important;">
                       <li><button type="button" data-cal_id="{{$cal_open->cal_id}}" data-company_id="{{$cal_open->company_id}}" class="btn btn-link cal-view-details"><i class="fa fa-eye btn-icon"></i>  View Details</button></li>
-                      <li><button type="button" class="btn btn-link"><i class="fa fa-trash btn-icon"></i> Mark as Close</button></li>
+                      <li><button type="button" data-cal_id="{{$cal_open->cal_id}}" class="btn btn-link close-cal"><i class="fa fa-trash btn-icon"></i> Mark as Close</button></li>
                     </ul>
                   </div>
                 </td>

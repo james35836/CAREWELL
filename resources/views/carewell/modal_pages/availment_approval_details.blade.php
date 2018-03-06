@@ -128,21 +128,16 @@ $(".remove-procedure").on("click", function() {
 				<input type="text" class="form-control" value="{{$approval_details->availment_name}}" disabled/>
 			</div>
 		</div>
-		<div class="form-holder row">
-		</div>
+		
 		<div class="form-holder">
 			<div class="col-md-2 form-content">
 				<label>Cheif Complaint</label>
 			</div>
-			<div class="col-md-4 form-content">
+			<div class="col-md-10 form-content">
 				<textarea name="approval_complaint" id="approval_complaint" cols="2" rows="3" class="form-control" disabled>{{$approval_details->approval_complaint}}</textarea>
 			</div>
-			<div class="col-md-6 form-content">
-				<input type="checkbox" class="minimal" ><label> Laboratory?</label>
-			</div>
 		</div>
-		<div class="row form-holder">
-		</div>
+		
 		<div class="form-holder">
 			<div class="col-md-2 form-content">
 				<label>Initial Diagnosis</label>
@@ -163,71 +158,149 @@ $(".remove-procedure").on("click", function() {
 		</div>
 	</form>
 	<div class="form-holder">
-		<form class="procedure-availed-submit-form" method="post" id="insertAvailed">
-			<div class="table-responsive no-padding">
-				<table class="table table-hover table-bordered procedure-form">
-					<thead>
-						<tr>
-							<th>PROCEDURE/LABORATORY</th>
-							<th>AMOUNT</th>
-							<th>PHILHEALTH CHARITY/SWA</th>
-							<th>CHARGE TO PATIENT</th>
-							<th>CHARGE TO CAREWELL</th>
-							<th>REMARKS</th>
-						</tr>
-					</thead>
-					<tbody>
-						@foreach($_availed as $availed)
-						<tr>
-							<td><input type="text" class="form-control" value="{{$availed->availment_name}}" disabled/></td>
-							<td><input type="text" name="procedure_availed_amount[]" id="" class="form-control" value="{{$availed->availment_amount}}" disabled/></td>
-							<td><input type="text" name="availed_phil_charity[]" id="" class="form-control" value="{{$availed->availed_phil_charity}}" disabled/></td>
-							<td><input type="text" name="availed_charge_patient[]" id="" class="form-control" value="{{$availed->availed_charge_patient}}" disabled/></td>
-							<td><input type="text" name="availed_charge_carewell[]" id="" class="form-control" value="{{$availed->availed_charge_carewell}}" disabled/></td>
-							<td><textarea  name="availed_remarks[]" id="" cols="20" rows="2" disabled>{{$availed->availed_remarks}}</textarea></td>
-						</tr>
-						@endforeach
-					</tbody>
-				</table>
+		<div class="table-responsive no-padding">
+			<table class="table table-hover table-bordered procedure-form">
+				<thead>
+					<tr>
+						<th>DESCRIPTION</th>
+						<th>GROSS AMOUNT</th>
+						<th>PHILHEALTH CHARITY/SWA</th>
+						<th>CHARGE TO PATIENT</th>
+						<th>CHARGE TO CAREWELL</th>
+						<th>ASSIGNED DIAGNOSIS</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach($_availed as $availed)
+					<tr>
+						<td><input type="text" class="form-control" value="{{$availed->procedure_name}}" disabled/></td>
+						<td><input type="text" name="procedure_gross_amount[]" id="" class="form-control" value="{{$availed->procedure_gross_amount}}" disabled/></td>
+						<td><input type="text" name="procedure_philhealth[]" id="" class="form-control" value="{{$availed->procedure_philhealth}}" disabled/></td>
+						<td><input type="text" name="procedure_charge_patient[]" id="" class="form-control" value="{{$availed->procedure_charge_patient}}" disabled/></td>
+						<td><input type="text" name="procedure_charge_carewell[]" id="" class="form-control" value="{{$availed->procedure_charge_carewell}}" disabled/></td>
+						<td><input type="text" name="diagnosis_name[]" id="" class="form-control" value="{{$availed->diagnosis_name}}" disabled/></td>
+					</tr>
+					
+					@endforeach
+				</tbody>
+			</table>
+		</div>
+		<div class="col-md-6 pull-right col-xs-12">
+			<div class="col-md-6 form-holder">
+				<label>Total Gross Amount</label>
 			</div>
-		</form>
+			<div class="col-md-6 form-holder">
+				<input type="text" class="form-control" id="total_gross_amount">
+			</div>
+		</div>
+		<div class="col-md-6 pull-right col-xs-12">
+			<div class="col-md-6 form-holder">
+				<label>Total Philhealth Charity</label>
+			</div>
+			<div class="col-md-6 form-holder">
+				<input type="text" class="form-control" id="total_philhealth">
+			</div>
+		</div>
+		<div class="col-md-6 pull-right col-xs-12">
+			<div class="col-md-6 form-holder">
+				<label>Total Charge to Patient</label>
+			</div>
+			<div class="col-md-6 form-holder">
+				<input type="text" class="form-control" id="total_charge_patient">
+			</div>
+		</div>
+		<div class="col-md-6 pull-right col-xs-12">
+			<div class="col-md-6 form-holder">
+				<label>Total Charge to Carewell</label>
+			</div>
+			<div class="col-md-6 form-holder">
+				<input type="text" class="form-control" id="total_charge_carewell">
+			</div>
+		</div>
 	</div>
 </div>
 <div class="row box-globals">
 	<div class="row form-holder">
 	</div>
 	<div class="form-holder">
-		<form class="procedure-doctor-submit-form" method="post" id="insertDoctor">
-			<div class="table-responsive no-padding">
-				<table class="table table-hover table-bordered procedure-form">
-					<thead>
-						<tr>
-							<th>PHYSICIAN/DOCTOR</th>
-							<th>SPECIALIZATION</th>
-							<th>ACTUAL PF CHARGES</th>
-							<th>PROCEDURE/LABORATORY</th>
-							<th>RATE/R VS</th>
-							<th>PHILHEALTH CHARITY/SWA</th>
-							<th>CHARGE TO PATIENT</th>
-							<th>CHARGE TO CAREWELL</th>
-						</tr>
-					</thead>
-					<tbody>
-						@foreach($_doctor_assigned as $doctor_assigned)
-						<tr>
-							<td><input type="text" class="form-control" value="{{$doctor_assigned->doctor_first_name." ".$doctor_assigned->doctor_last_name}}" disabled/></td>
-							<td><input type="text" name="[]" class="form-control" value="{{$doctor_assigned->specialization_name}}" disabled/></td>
-							<td><input type="text" name="approval_doctor_actual_pf[]" class="form-control" value="{{$doctor_assigned->approval_doctor_actual_pf}}" disabled/></td>
-							<td><input type="text" name="procedure[]" class="form-control" value="{{$doctor_assigned->procedure_name}}" disabled/></td>
-							<td><input type="text" name="approval_doctor_rate_rvs[]" class="form-control" value="{{$doctor_assigned->approval_doctor_rate_rvs}}" disabled/></td>
-							<td><input type="text" name="approval_doctor_phil_charity[]" class="form-control" value="{{$doctor_assigned->approval_doctor_phil_charity}}" disabled/></td>
-							<td><input type="text" name="approval_doctor_charge_patient[]" class="form-control" value="{{$doctor_assigned->approval_doctor_charge_patient}}" disabled/></td>
-							<td><input type="text" name="approval_doctor_charge_carewell[]" class="form-control" value="{{$doctor_assigned->approval_doctor_charge_carewell}}" disabled/></td>
-						</tr>
-						@endforeach
-					</tbody>
-				</table>
+		
+		<div class="table-responsive no-padding">
+			<table class="table table-hover table-bordered procedure-form">
+				<thead>
+					<tr>
+						<th>PHYSICIAN</th>
+						<th>SPECIALIZATION</th>
+						<th>RATE/R VS</th>
+						<th>PROCEDURE</th>
+						<th>ACTUAL PF CHARGES</th>
+						<th>PHILHEALTH CHARITY/SWA</th>
+						<th>CHARGE TO PATIENT</th>
+						<th>CHARGE TO CAREWELL</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach($_doctor_assigned as $doctor_assigned)
+					<tr>
+						<td><input type="text" class="form-control" value="{{$doctor_assigned->doctor_first_name." ".$doctor_assigned->doctor_last_name}}" disabled/></td>
+						<td><input type="text" name="[]" class="form-control" value="{{$doctor_assigned->specialization_name}}" disabled/></td>
+						<td><input type="text" name="approval_doctor_actual_pf[]" class="form-control" value="{{$doctor_assigned->approval_doctor_actual_pf}}" disabled/></td>
+						<td><input type="text" name="procedure[]" class="form-control" value="{{$doctor_assigned->doctor_procedure_descriptive}}" disabled/></td>
+						<td><input type="text" name="approval_doctor_rate_rvs[]" class="form-control" value="201" disabled/></td>
+						<td><input type="text" name="approval_doctor_phil_charity[]" class="form-control" value="{{$doctor_assigned->approval_doctor_phil_charity}}" disabled/></td>
+						<td><input type="text" name="approval_doctor_charge_patient[]" class="form-control" value="{{$doctor_assigned->approval_doctor_charge_patient}}" disabled/></td>
+						<td><input type="text" name="approval_doctor_charge_carewell[]" class="form-control" value="{{$doctor_assigned->approval_doctor_charge_carewell}}" disabled/></td>
+					</tr>
+					@endforeach
+					
+				</tbody>
+			</table>
+		</div>
+		<div class="col-md-6 pull-right col-xs-12">
+			<div class="col-md-6 form-holder">
+				<label>Total Actual PF Charges</label>
 			</div>
-		</form>
+			<div class="col-md-6 form-holder">
+				<input type="text" id="" class="form-control">
+			</div>
+		</div>
+		<div class="col-md-6 pull-right col-xs-12">
+			<div class="col-md-6 form-holder">
+				<label>Total Philhealth Charity</label>
+			</div>
+			<div class="col-md-6 form-holder">
+				<input type="text" class="form-control">
+			</div>
+		</div>
+		<div class="col-md-6 pull-right col-xs-12">
+			<div class="col-md-6 form-holder">
+				<label>Total Charge to Patient</label>
+			</div>
+			<div class="col-md-6 form-holder">
+				<input type="text" class="form-control">
+			</div>
+		</div>
+		<div class="col-md-6 pull-right col-xs-12">
+			<div class="col-md-6 form-holder">
+				<label>Total Charge to Carewell</label>
+			</div>
+			<div class="col-md-6 form-holder">
+				<input type="text" class="form-control">
+			</div>
+		</div>
+		
+	</div>
+</div>
+<div class="row box-globals">
+	<div class="form-holder col-md-6">
+		<div class="form-content col-md-2">
+			<label>Payee</label>
+		</div>
+		<div class="form-content col-md-10 form-element">
+			@foreach($_payee as $payee)
+			<div class="my-element">
+				<input type="text" class="form-control" value="{{$payee->provider_payee_name}}">
+			</div>
+			@endforeach
+		</div>
 	</div>
 </div>

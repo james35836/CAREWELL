@@ -54,6 +54,9 @@ use App\Http\Model\TblApprovalModel;
 use App\http\Model\TblApprovalAvailedModel;
 use App\Http\Model\TblApprovalDoctorModel;
 use App\Http\Model\TblApprovalProcedureModel;
+use App\Http\Model\TblApprovalDiagnosisModel;
+use App\Http\Model\TblApprovalPayeeModel;
+
 
 
 use App\Http\Model\TblLaboratoryModel;
@@ -1290,6 +1293,11 @@ class CarewellController extends ActiveAuthController
     }
 
   }
+  public function billing_cal_close($cal_id)
+  {
+    $data['cal_info'] = TblCalModel::where('cal_id',$cal_id)->first();
+    return view('carewell.modal_pages.billing_cal_close',$data);
+  }
 
   /*MEDICAL*/
   public function availment()
@@ -1297,7 +1305,7 @@ class CarewellController extends ActiveAuthController
   	$data['page']       = 'Availment';
     $data['_company']   = TblCompanyModel::where('archived',0)->get();
     $data['user']       = StaticFunctionController::global();
-    $data['_approval']  = TblApprovalModel::ApprovalInfo()->paginate(10);
+    $data['_approval']  = TblApprovalModel::where('tbl_member_company.archived',0)->ApprovalInfo()->paginate(10);
   	return view('carewell.pages.availment_center',$data);
   }
   public function availment_create_approval()
@@ -1339,7 +1347,6 @@ class CarewellController extends ActiveAuthController
   }
   public function availment_create_approval_submit(Request $request)
   {
-    dd($request->all());
     StaticFunctionController::updateReferenceNumber('approval');
     $data['user'] = StaticFunctionController::global();
 
@@ -1354,11 +1361,11 @@ class CarewellController extends ActiveAuthController
     $approvalData->user_id                    = $data['user']->user_id;
     $approvalData->save();
     
-    foreach($request->final_diagnosis_id as $diagnosis_id)
+    foreach($request->final_diagnosis_id as $final_diagnosis_id)
     {
       $diagnosisData = new TblApprovalDiagnosisModel;
       $diagnosisData->approval_diagnosis_type = '0';
-      $diagnosisData->diagnosis_id = $diagnosis_id;
+      $diagnosisData->diagnosis_id = $final_diagnosis_id;
       $diagnosisData->approval_id = $approvalData->approval_id;
       $diagnosisData->save();
     }
@@ -1374,12 +1381,10 @@ class CarewellController extends ActiveAuthController
       $procedureData->approval_id               = $approvalData->approval_id;
       $procedureData->save();
     }
-    
     foreach($request->doctor_id as $key=>$data)
     {
       $doctorData = new TblApprovalDoctorModel;
       $doctorData->approval_doctor_actual_pf        = $request->approval_doctor_actual_pf[$key];
-      $doctorData->approval_doctor_rate_rvs         = $request->approval_doctor_rate_rvs[$key];
       $doctorData->approval_doctor_phil_charity     = $request->approval_doctor_phil_charity[$key];
       $doctorData->approval_doctor_charge_patient   = $request->approval_doctor_charge_patient[$key];
       $doctorData->approval_doctor_charge_carewell  = $request->approval_doctor_charge_carewell[$key];
@@ -1388,6 +1393,13 @@ class CarewellController extends ActiveAuthController
       $doctorData->doctor_procedure_id              = $request->doctor_procedure_id[$key];
       $doctorData->approval_id                      = $approvalData->approval_id;
       $doctorData->save();
+    }
+    foreach($request->provider_payee_id as $key=>$payee_id)
+    {
+      $payeeData = new TblApprovalPayeeModel;
+      $payeeData->payee_id        = $payee_id;
+      $payeeData->approval_id     = $approvalData->approval_id;
+      $payeeData->save();
     }
     if($approvalData->save()&&$procedureData->save()&&$doctorData->save())
     {
@@ -1401,16 +1413,18 @@ class CarewellController extends ActiveAuthController
   }
   public function availment_view_approval_details($approval_id)
   {
-    $data['_member']          = TblMemberModel::where('archived',0)->get();
     $data['_provider']        = TblProviderModel::where('archived',0)->get();
-    $data['_availment']       = TblAvailmentModel::where('availment_parent_id',0)->get();
-    $data['_procedure']       = TblProcedureModel::where('archived',0)->get();
-    $data['_doctor']          = TblDoctorModel::where('archived',0)->get();
+    
     $data['approval_details'] = TblApprovalModel::where('tbl_approval.approval_id',$approval_id)->ApprovalDetails()->first();
-    $data['_availed']         = TblApprovalAvailedModel::where('tbl_approval_availed.approval_id',$approval_id)
-                              ->join('tbl_availment','tbl_availment.availment_id','=','tbl_approval_availed.availment_id')
+    $data['_availed']         = TblApprovalProcedureModel::where('tbl_approval_procedure.approval_id',$approval_id)
+                              ->join('tbl_procedure','tbl_procedure.procedure_id','=','tbl_approval_procedure.procedure_id')
+                              ->join('tbl_diagnosis','tbl_diagnosis.diagnosis_id','=','tbl_approval_procedure.diagnosis_id')
                               ->get();
     $data['_doctor_assigned'] = TblApprovalDoctorModel::where('tbl_approval_doctor.approval_id',$approval_id)->ApprovalDoctor()->get();
+    $data['_payee']           = TblApprovalPayeeModel::where('approval_id',$approval_id)
+                                ->join('tbl_provider_payee','tbl_provider_payee.provider_payee_id','=','tbl_approval_payee.payee_id')
+                                ->get();
+    // dd($data);
     return view('carewell.modal_pages.availment_approval_details',$data);
   }
 

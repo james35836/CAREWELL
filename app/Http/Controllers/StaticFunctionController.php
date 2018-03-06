@@ -33,6 +33,8 @@ use App\Http\Model\TblMemberGovernmentCardModel;
 use App\Http\Model\TblAvailmentModel;
 
 use App\Http\Model\TblCoveragePlanModel;
+use App\Http\Model\TblCoveragePlanTagModel;
+
 use App\Http\Model\TblCoveragePlanProcedureModel;
 
 use App\Http\Model\TblAvailmentTagModel;
@@ -149,13 +151,23 @@ class StaticFunctionController extends Controller
         return $data['_specializationList'];
     }
   }
-  public function getLaboratoryAmount(Request $request)
+  public function getAvailmentInfo(Request $request)
   {
     if($request->ajax())
     {
-        $laboratory  = TblLaboratoryModel::where('tbl_laboratory.laboratory_id',$request->value)->first();
-        $amount = $laboratory ->laboratory_amount;
-        return $amount;
+        $coverage  = TblMemberCompanyModel::where('archived',0)->where('member_id',$request->member_id)->value('coverage_plan_id');
+        
+        $coverage_plan_tag = TblCoveragePlanTagModel::where('coverage_plan_id',$coverage)->where('availment_id',$request->availment_id)->first();
+        $data['procedure'] = TblCoveragePlanProcedureModel::where('coverage_plan_tag_id',$coverage_plan_tag->coverage_plan_tag_id)
+                        ->join('tbl_procedure','tbl_procedure.procedure_id','=','tbl_coverage_plan_procedure.procedure_id')
+                        ->get();
+        
+        $data['_procedureList'] = '<option>-SELECT DESCRIPTION-';
+        foreach($data['procedure'] as $procedure)
+        {
+            $data['_procedureList']     .= '<option value='.$procedure->procedure_id.'>'.$procedure->procedure_name;
+        }
+        return $data['_procedureList'];
     }
   }
   public static function generateUniversalId($display_name,$birthdate)

@@ -24,9 +24,24 @@ function billing_center()
 			import_cal_member_submit();
 			remove_cal_member();
 			remove_cal_member_submit();
+			cal_close();
 
 		});
 
+	}
+	function cal_close()
+	{
+		$("body").on('click','.close-cal',function()
+		{
+			var cal_id = $(this).data('cal_id');
+			var modalName= 'CAL INFORMATION ';
+			var modalClass='cal-close';
+			var modalLink='/billing/cal_close/'+cal_id;
+			var modalActionName='MARK AS CLOSE';
+			var modalAction='cal-close-confirm';
+			var modalSize = 'modal-lg';
+			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
+		});
 	}
 	function create_cal()
 	{

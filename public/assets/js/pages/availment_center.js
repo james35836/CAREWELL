@@ -26,6 +26,34 @@ function availment_center()
         });
 
 	}
+	this.get_total = function()
+	{
+		var amount = 0;
+		var philhealth = 0;
+		var patient = 0;
+		var carewell = 0;
+		$('.gross-amount').each(function() 
+		{
+			amount += Number($(this).val());
+		});
+		$('.philhealth').each(function() 
+		{
+			philhealth += Number($(this).val());
+		});
+		$('.charge-patient').each(function() 
+		{
+			patient += Number($(this).val());
+		});
+		$('.charge-carewell').each(function() 
+		{
+			carewell += Number($(this).val());
+		});
+		$('#total_gross_amount').val(amount);
+		$('#total_philhealth').val(philhealth);
+		$('#total_charge_patient').val(patient);
+		$('#total_charge_carewell').val(carewell);
+
+	}
 	
 	function create_approval()
 	{
@@ -80,10 +108,25 @@ function availment_center()
 			});
 		});
 
-		$('body').on('change','.get-laboratory-amount',function() 
+		$('body').on('change','.get-availment-info',function() 
 		{
-			var laboratory_id 	= $(this).val();
-			globals.get_information('/get/laboratory_amount',laboratory_id,'.laboratory_amount','val');
+
+			var availment_id 	= $(this).val();
+			var member_id		= $('select.member_id').val();
+			$.ajax({
+				headers: {
+				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				},
+
+				url:'/get/availment_info',
+				data:{availment_id:availment_id,member_id:member_id},
+				method: "POST",
+
+	            success: function(data)
+				{
+					$('.procedureList').html(data);
+				}
+			});
 		});
 
 		$('body').on('change','.doctor-list',function() 

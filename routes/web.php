@@ -36,7 +36,7 @@ Route::post('/reset/password/submit', 					'FrontController@reset_password_submi
 
 Route::any('/get/company_info', 						'StaticFunctionController@getCompanyInfo');
 Route::any('/get/provider_info', 						'StaticFunctionController@getProviderInfo');
-Route::any('/get/laboratory_amount', 					'StaticFunctionController@getLaboratoryAmount');
+Route::any('/get/availment_info', 						'StaticFunctionController@getAvailmentInfo');
 Route::any('/get/doctor_specialty', 					'StaticFunctionController@getDoctorSpecialty');
 
 
@@ -128,6 +128,8 @@ Route::post('/billing/cal_import_template_submit', 		'CarewellController@billing
 Route::get('/billing/billing/statement', 			    'CarewellController@billing_billing_statement');
 
 Route::post('/billing/cal_member/remove', 				'CarewellController@billing_cal_member_remove');
+
+Route::get('/billing/cal_close/{cal_id}', 				'CarewellController@billing_cal_close');
 
 
 

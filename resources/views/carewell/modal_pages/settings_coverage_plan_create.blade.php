@@ -170,7 +170,7 @@ $parent.find('.btn').attr('disabled',!this.checked);
 									</td>
 									<td class="col-md-2 last-td">
 										<div class="btn-group" role="group" aria-label="Basic example">
-											<button type="button" class="btn btn-primary btn-sm add-row"><i class="fa fa-plus-circle"></i></button>
+											<button type="button" data-number="2" class="btn btn-primary btn-sm add-row"><i class="fa fa-plus-circle"></i></button>
 											<button type="button" class="btn btn-danger btn-sm remove-row"><i class="fa fa-minus-circle"></i></button>
 										</div>
 									</td>

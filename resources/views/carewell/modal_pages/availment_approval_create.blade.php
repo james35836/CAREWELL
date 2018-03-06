@@ -9,21 +9,74 @@ $(document).ready(function()
 	
 	$('body').find('.get-availment-info').select2();
 	$('body').find('.get-provider-info').select2();
+	$('body').find('.default-select2').select2();
 
 	
 	
-	$('body').on('change','.gross_amount',function()
+	$('body').on('change','.gross-amount',function()
 	{
-		var sum = 0;
-		$('.gross_amount').each(function() {
-	sum += Number($(this).val());
+		
+		var value = $(this).val();
+		
+		var $amount 	= $(this).parents('tr').find('.gross-amount');
+		var $philhealth = $(this).parents('tr').find('.philhealth');
+		var $patient 	= $(this).parents('tr').find('.charge-patient');
+		var $carewell 	= $(this).parents('tr').find('.charge-carewell');
+
+		
+		$philhealth.val('0');
+		$patient.val('0');
+		$carewell.val(value);
+		availment_center.get_total();
+
 	});
-	$('#total_gross_amount').val(sum);
-	});
+	$('body').on('change','.philhealth',function()
+	{
+		var new_carewell = 0;
+		var value = $(this).val();
+		
+		var $amount 	= $(this).parents('tr').find('.gross-amount');
+		var $patient 	= $(this).parents('tr').find('.charge-patient');
+		var $carewell 	= $(this).parents('tr').find('.charge-carewell');
+
+		new_carewell = parseInt($amount.val())-(parseInt(value)+parseInt($patient.val()));
+		if (new_carewell >=0) 
+		{
+		   $carewell.val(new_carewell);
+		   availment_center.get_total();
+		}
+		else
+		{
+			toastr.error('Please check the amount distribution.', 'Something went wrong!', {timeOut: 3000})
+		}
+    });
+    $('body').on('change','.charge-patient',function()
+	{
+		var new_carewell = 0;
+		var value = $(this).val();
+		
+		var $amount 	= $(this).parents('tr').find('.gross-amount');
+		var $philhealth = $(this).parents('tr').find('.philhealth');
+		var $carewell 	= $(this).parents('tr').find('.charge-carewell');
+
+		new_carewell = parseInt($amount.val())-(parseInt(value)+parseInt($philhealth.val()));
+		if (new_carewell >= 0) 
+		{
+		   $carewell.val(new_carewell);
+		   availment_center.get_total();
+		}
+		else
+		{
+			toastr.error('Please check the amount distribution.', 'Something went wrong!', {timeOut: 3000})
+		}
+		
+    });
+
 	$('body').on('change','.final-diagnosis',function()
 	{
 		var val = $(this).val();
 		var text = $(this).find('option:selected').text();
+
 		var newData = $('body').find('select.assigned-diagnosis');
 		newData.append('<option value="'+val+'" selected="selected">'+text+'</option>');
 	});
@@ -132,7 +185,7 @@ $(document).ready(function()
 				<label>Initial Diagnosis</label>
 			</div>
 			<div class="col-md-10 form-content">
-				<select class="form-control select3" id="diagnosis_id" name="diagnosis_id" >
+				<select class="form-control default-select2" id="diagnosis_id" name="diagnosis_id" >
 					<option>SELECT DIAGNOSIS</option>
 					@foreach($_diagnosis as $diagnosis)
 					<option value="{{$diagnosis->diagnosis_id}}">{{$diagnosis->diagnosis_name}}</option>
@@ -178,17 +231,17 @@ $(document).ready(function()
 				</tr>
 				<tr class="table-row">
 					<td>
-						<select class="form-control select2 get-laboratory-amount" name="procedure_id[]">
+						<select class="form-control select2 procedureList" name="procedure_id[]">
 							<option value="0">-Select-</option>
 							@foreach($_laboratory as $laboratory)
 							<option value="{{$laboratory->laboratory_id}}">{{$laboratory->laboratory_name}}</option>
 							@endforeach
 						</select>
 					</td>
-					<td><input type="text"  value="0.0" name="procedure_gross_amount[]" id="laboratory_amount" class="gross_amount form-control"/></td>
-					<td><input type="text" value="0.0" name="procedure_philhealth[]" id="" class="form-control"/></td>
-					<td><input type="text" value="0.0" name="procedure_charge_patient[]" id="" class="form-control"/></td>
-					<td><input type="text" value="0.0" name="procedure_charge_carewell[]" id="" class="form-control"/></td>
+					<td><input type="text"  value="0.0" name="procedure_gross_amount[]" id="laboratory_amount" class="gross-amount form-control"/></td>
+					<td><input type="text" value="0.0" name="procedure_philhealth[]" id="" class="philhealth form-control"/></td>
+					<td><input type="text" value="0.0" name="procedure_charge_patient[]" id="" class="charge-patient form-control"/></td>
+					<td><input type="text" value="0.0" name="procedure_charge_carewell[]" id="" class="charge-carewell form-control"/></td>
 					<td>
 						<select class="form-control select2 assigned-diagnosis" name="assigned_diagnosis_id[]">
 							<option value="0">DIAGNOSIS</option>
@@ -216,7 +269,7 @@ $(document).ready(function()
 				<label>Total Philhealth Charity</label>
 			</div>
 			<div class="col-md-6 form-holder">
-				<input type="text" class="form-control">
+				<input type="text" class="form-control" id="total_philhealth">
 			</div>
 		</div>
 		<div class="col-md-6 pull-right col-xs-12">
@@ -224,7 +277,7 @@ $(document).ready(function()
 				<label>Total Charge to Patient</label>
 			</div>
 			<div class="col-md-6 form-holder">
-				<input type="text" class="form-control">
+				<input type="text" class="form-control" id="total_charge_patient">
 			</div>
 		</div>
 		<div class="col-md-6 pull-right col-xs-12">
@@ -232,7 +285,7 @@ $(document).ready(function()
 				<label>Total Charge to Carewell</label>
 			</div>
 			<div class="col-md-6 form-holder">
-				<input type="text" class="form-control">
+				<input type="text" class="form-control" id="total_charge_carewell">
 			</div>
 		</div>
 	</div>
@@ -336,7 +389,7 @@ $(document).ready(function()
 			</div>
 			<div class="form-content col-md-10 form-element">
 				<div class="input-group my-element">
-					<select class="form-control payeeList" name="payee_id[]" id="payeeList">
+					<select class="form-control payeeList" name="provider_payee_id[]" id="payeeList">
 						<option value="0">SELECT PROVIDER</option>
 					</select>
 					<span class="input-group-btn">

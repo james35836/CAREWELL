@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="/assets/css/AdminLTE.min.css">
     <link rel="stylesheet" href="/assets/css/globals.css">
     <!-- FONT -->
-    <link rel="stylesheet" href="/assets/css/offline/font-offline.css">
+    {{-- <link rel="stylesheet" href="/assets/css/offline/font-offline.css"> --}}
     {{-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic"> --}}
     <!-- AJAX -->
     <script src="/assets/js/offline/ajax-offline.js"></script>

@@ -350,7 +350,9 @@ function globals()
 
         table_sorter();
         table_action_add_remove();
+        
 	}
+	
 	function archived_data()
 	{
 		$('body').on('click','.archived',function()
