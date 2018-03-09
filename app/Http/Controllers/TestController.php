@@ -78,6 +78,7 @@ class TestController extends Controller
 
   public function sample()
   {
+    
     return view('sample');
   }
   public function sample_submit(Request $request)
