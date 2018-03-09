@@ -10,7 +10,6 @@ $(document).ready(function()
 	$('body').find('.get-availment-info').select2();
 	$('body').find('.get-provider-info').select2();
 	$('body').find('.default-select2').select2();
-
 	
 	
 	$('body').on('change','.gross-amount',function()
@@ -18,65 +17,59 @@ $(document).ready(function()
 		
 		var value = $(this).val();
 		
-		var $amount 	= $(this).parents('tr').find('.gross-amount');
+			var $amount 	= $(this).parents('tr').find('.gross-amount');
 		var $philhealth = $(this).parents('tr').find('.philhealth');
-		var $patient 	= $(this).parents('tr').find('.charge-patient');
-		var $carewell 	= $(this).parents('tr').find('.charge-carewell');
-
+			var $patient 	= $(this).parents('tr').find('.charge-patient');
+			var $carewell 	= $(this).parents('tr').find('.charge-carewell');
 		
 		$philhealth.val('0');
 		$patient.val('0');
 		$carewell.val(value);
 		availment_center.get_total();
-
 	});
 	$('body').on('change','.philhealth',function()
 	{
 		var new_carewell = 0;
 		var value = $(this).val();
 		
-		var $amount 	= $(this).parents('tr').find('.gross-amount');
-		var $patient 	= $(this).parents('tr').find('.charge-patient');
-		var $carewell 	= $(this).parents('tr').find('.charge-carewell');
-
+			var $amount 	= $(this).parents('tr').find('.gross-amount');
+			var $patient 	= $(this).parents('tr').find('.charge-patient');
+			var $carewell 	= $(this).parents('tr').find('.charge-carewell');
 		new_carewell = parseInt($amount.val())-(parseInt(value)+parseInt($patient.val()));
-		if (new_carewell >=0) 
+		if (new_carewell >=0)
 		{
-		   $carewell.val(new_carewell);
-		   availment_center.get_total();
+		$carewell.val(new_carewell);
+		availment_center.get_total();
 		}
 		else
 		{
 			toastr.error('Please check the amount distribution.', 'Something went wrong!', {timeOut: 3000})
 		}
-    });
-    $('body').on('change','.charge-patient',function()
+});
+$('body').on('change','.charge-patient',function()
 	{
 		var new_carewell = 0;
 		var value = $(this).val();
 		
-		var $amount 	= $(this).parents('tr').find('.gross-amount');
+			var $amount 	= $(this).parents('tr').find('.gross-amount');
 		var $philhealth = $(this).parents('tr').find('.philhealth');
-		var $carewell 	= $(this).parents('tr').find('.charge-carewell');
-
+			var $carewell 	= $(this).parents('tr').find('.charge-carewell');
 		new_carewell = parseInt($amount.val())-(parseInt(value)+parseInt($philhealth.val()));
-		if (new_carewell >= 0) 
+		if (new_carewell >= 0)
 		{
-		   $carewell.val(new_carewell);
-		   availment_center.get_total();
+		$carewell.val(new_carewell);
+		availment_center.get_total();
 		}
 		else
 		{
 			toastr.error('Please check the amount distribution.', 'Something went wrong!', {timeOut: 3000})
 		}
 		
-    });
-
+});
 	$('body').on('change','.final-diagnosis',function()
 	{
 		var val = $(this).val();
 		var text = $(this).find('option:selected').text();
-
 		var newData = $('body').find('select.assigned-diagnosis');
 		newData.append('<option value="'+val+'" selected="selected">'+text+'</option>');
 	});
@@ -143,7 +136,13 @@ $(document).ready(function()
 			</div>
 		</div>
 	</div>
+	
 	<div class="row box-globals">
+		<div class="form-holder col-md-12 no-padding">
+			<div class="pull-right col-md-3 col-xs-12">
+				<button type="button" class="btn btn-primary top-element" ><i class="fa fa-upload btn-icon"></i> REEMBURSEMENT</button>
+			</div>
+		</div>
 		<div class="form-holder">
 			<div class="col-md-2 form-content">
 				<label>Network Provider</label>
@@ -332,7 +331,6 @@ $(document).ready(function()
 							<option value="{{$procedure_doctor->doctor_procedure_id}}">{{$procedure_doctor->doctor_procedure_descriptive}}</option>
 							@endforeach
 						</select>
-
 					</td>
 					<td><input type="text"  value="0.0" name="approval_doctor_actual_pf[]" class="form-control"/></td>
 					<td><input type="text" value="0.0" name="approval_doctor_phil_charity[]" class="form-control"/></td>

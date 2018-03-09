@@ -3,7 +3,7 @@
 @include('carewell.modals.billing_center_modals')
 <div class="container">
   <div class="row">
-    <div class=" col-md-2 col-xs-6 pull-right no-padding">
+    <div class=" col-md-3 col-xs-12 pull-right no-padding">
       <button class="btn btn-primary top-element create-cal" type="button" ><i class="fa fa-plus btn-icon "></i>CREATE CAL</button>
     </div>
   </div>
@@ -25,8 +25,8 @@
               </select>
             </div>
             <div class="col-md-3 col-xs-12 pull-right">
-              <div class="input-group margin">
-                <input type="text" class="form-control">
+              <div class="input-group top-element">
+                <input type="text" class="form-control " id="search_key">
                 <span class="input-group-btn">
                   <button type="button" class="btn btn-default"><i class="fa fa-search"></i></button>
                 </span>
@@ -102,9 +102,9 @@
                 <th>COMPANY</th>
                 <th>PERIOD MONTH</th>
                 <th>DATE COVERAGE</th>
-                <th>PAYMENT PERIOD</th>
-                <th>STATUS</th>
-                <th>DATE CREATED</th>
+                <th>CHECK NUMBER</th>
+                <th>AMOUNT</th>
+                <th>DATE CLOSED</th>
                 <th>ACTION</th>
               </tr>
               @foreach($_cal_close as $cal_close)

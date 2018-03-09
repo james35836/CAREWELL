@@ -94,7 +94,7 @@ autoclose: true
     <div class="col-md-4 form-content">
       <select name="" id="cal_reveneu_period" class="form-control">
         @foreach($_period as $period)
-        <option >{{$period->payment_mode_name}}</option>
+        <option>{{$period->payment_mode_name}}</option>
         @endforeach
       </select>
     </div>

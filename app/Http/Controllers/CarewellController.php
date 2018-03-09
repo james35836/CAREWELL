@@ -28,6 +28,7 @@ use App\Http\Model\TblCompanyCoveragePlanModel;
 use App\Http\Model\TblCompanyDeploymentModel;
 
 use App\Http\Model\TblCalModel;
+use App\Http\Model\TblCalInfoModel;
 use App\Http\Model\TblCalMemberModel;
 
 use App\Http\Model\TblMemberModel;
@@ -906,11 +907,21 @@ class CarewellController extends ActiveAuthController
   }
   public function billing_cal_details($cal_id)
   {
-    $data['cal_details']  = TblCalModel::where('cal_id',$cal_id)
-                          ->join('tbl_company','tbl_company.company_id','=','tbl_cal.company_id')
-                          ->first();
-    $data['_cal_member']  = TblCalMemberModel::where('cal_id',$cal_id)->CalMember()->get();
-    
+    $data['cal_check']      = TblCalModel::where('cal_id',$cal_id)->value('archived');
+    $data['_cal_member']    = TblCalMemberModel::where('cal_id',$cal_id)->CalMember()->get();
+    if($data['cal_check']==0)
+    {
+       $data['cal_details'] = TblCalModel::where('cal_id',$cal_id)
+                            ->join('tbl_company','tbl_company.company_id','=','tbl_cal.company_id')
+                            ->first();
+    }
+    else
+    {
+      $data['cal_details'] = TblCalModel::where('tbl_cal.cal_id',$cal_id)
+                            ->join('tbl_company','tbl_company.company_id','=','tbl_cal.company_id')
+                            ->join('tbl_cal_info','tbl_cal_info.cal_id','=','tbl_cal.cal_id')
+                            ->first();
+    }
     return view('carewell.modal_pages.billing_cal_details',$data);
   }
   public function billing_import_cal_members($cal_id,$company_id)
@@ -1297,6 +1308,31 @@ class CarewellController extends ActiveAuthController
   {
     $data['cal_info'] = TblCalModel::where('cal_id',$cal_id)->first();
     return view('carewell.modal_pages.billing_cal_close',$data);
+  }
+  public function billing_cal_close_submit(Request $request)
+  {
+    
+    $unique_name   = substr(str_shuffle("ABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0,5);
+    $cal_info_attached_file = $request->file('cal_file');
+    $fileCalRef = $unique_name.'-'.$cal_info_attached_file->getClientOriginalName();
+    $cal_info_attached_file->move('cal_file',$fileCalRef );
+
+    $calCloseData                           =   new TblCalInfoModel;
+    $calCloseData->cal_info_attached_file   =   '/cal_file/'.$fileCalRef.'';
+    $calCloseData->cal_info_check_number    =   $request->cal_info_check_number;
+    $calCloseData->cal_info_collection_date =   $request->cal_info_collection_date;
+    $calCloseData->cal_info_check_date      =   $request->cal_info_check_date;
+    $calCloseData->cal_info_or_number       =   $request->cal_info_or_number;
+    $calCloseData->cal_info_amount          =   $request->cal_info_amount;
+    $calCloseData->cal_info_created         =   Carbon::now();
+    $calCloseData->cal_id                   =   $request->cal_id;
+    $calCloseData->save();
+
+    $update['archived'] = '1';
+    TblCalModel::where('cal_id',$request->cal_id)->update($update);
+
+    return StaticFunctionController::returnMessage('success','CAL CLOSE');    
+
   }
 
   /*MEDICAL*/

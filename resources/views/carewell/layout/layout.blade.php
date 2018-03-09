@@ -354,16 +354,17 @@
     $('.datepicker').datepicker({
       autoclose: true
     })
- })
-$('body').on('hidden.bs.modal', function (e) {
-    if($('.modal').hasClass('in')) {
-    $('body').addClass('modal-open');
-    }
-    else
-    {
-      $('div').removeClass('modal-backdrop');
-    }    
-});
+  })
+  $('body').on('hidden.bs.modal', function (e) {
+      if($('.modal').hasClass('in')) {
+      $('body').addClass('modal-open');
+      }
+      else
+      {
+        $('div').removeClass('modal-backdrop');
+      }    
+  });
+  
  
 </script>
 </body>

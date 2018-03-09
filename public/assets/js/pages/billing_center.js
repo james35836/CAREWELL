@@ -25,6 +25,9 @@ function billing_center()
 			remove_cal_member();
 			remove_cal_member_submit();
 			cal_close();
+			cal_close_confirm();
+			cal_close_submit();
+
 
 		});
 
@@ -42,6 +45,51 @@ function billing_center()
 			var modalSize = 'modal-lg';
 			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
 		});
+	}
+	function cal_close_confirm()
+	{
+		$('body').on('click','.cal-close-confirm',function() 
+		{
+			var cal_file = document.getElementById('cal_info_attached_file').files.length;
+
+            if(cal_file==0)
+			{
+				globals.global_tostr('ATTACHED FILE');
+			}
+			else if(globals.checking_null_validation(document.getElementById('cal_info_check_number').value,"CHECK NUMBER")=="")
+			{}
+			else if(globals.checking_null_validation(document.getElementById('cal_info_collection_date').value,"COLLECTION DATE")=="")
+			{}
+			else if(globals.checking_null_validation(document.getElementById('cal_info_check_date').value,"CHECK DATE")=="")
+			{}
+			else if(globals.checking_null_validation(document.getElementById('cal_info_or_number').value,"O.R NUMBER")=="")
+			{}
+			else if(globals.checking_null_validation(document.getElementById('cal_info_amount').value,"AMOUNT")=="")
+			{}
+			else
+			{
+				var	confirmModalMessage = 'Are you sure you want to close this CAL?';
+				var confirmModalAction = 'cal-close-submit';
+				globals.confirm_modals(confirmModalMessage,confirmModalAction);
+
+				calCloseData.append("cal_info_check_number", 	document.getElementById('cal_info_check_number').value);
+	            calCloseData.append("cal_info_collection_date", document.getElementById('cal_info_collection_date').value);
+	            calCloseData.append("cal_info_check_date", 		document.getElementById('cal_info_check_date').value);
+	            calCloseData.append("cal_info_or_number", 		document.getElementById('cal_info_or_number').value);
+	            calCloseData.append("cal_info_amount", 			document.getElementById('cal_info_amount').value);
+	            calCloseData.append("cal_file", 				document.getElementById('cal_info_attached_file').files[0]);
+	            calCloseData.append("cal_id", 					document.getElementById('cal_id').value);
+	        }
+			
+        });
+	}
+	function cal_close_submit()
+	{
+		$('body').on('click','.cal-close-submit',function()
+		{
+			globals.global_submit('cal-close','/billing/cal_close/sumbit',calCloseData);
+        });
+
 	}
 	function create_cal()
 	{

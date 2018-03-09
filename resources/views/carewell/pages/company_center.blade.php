@@ -3,7 +3,7 @@
 @include('carewell.modals.company_center_modals')
 <div class="container">
   <div class="row">
-    <div class=" col-md-2 col-xs-6 pull-right no-padding">
+    <div class=" col-md-3 col-xs-12 pull-right no-padding">
       <button class="btn btn-primary top-element create-company" type="button" ><i class="fa fa-plus btn-icon "></i>CREATE COMPANY</button>
     </div>
   </div>
@@ -16,10 +16,10 @@
       <div class="tab-content">
         <div class="tab-pane active" id="activeCompany">
           <div class="row">
-
-            <div class="col-md-4 col-xs-12 pull-right">
-              <div class="input-group margin">
-                <input type="text" class="form-control">
+            
+            <div class="col-md-3 col-xs-12 pull-right">
+              <div class="input-group top-element">
+                <input type="text" class="form-control " id="search_key">
                 <span class="input-group-btn">
                   <button type="button" class="btn btn-default"><i class="fa fa-search"></i></button>
                 </span>

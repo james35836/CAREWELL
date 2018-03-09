@@ -16,15 +16,17 @@
       <div class="tab-content">
         <div class="tab-pane active" id="activeUser">
           <div class="row">
-            <div class="col-md-4 col-xs-12 pull-right">
+            
+            <div class="col-md-3 col-xs-12 pull-right">
               <div class="input-group margin">
-                <input type="text" class="form-control">
+                <input type="text" class="form-control " id="search_key">
                 <span class="input-group-btn">
                   <button type="button" class="btn btn-default"><i class="fa fa-search"></i></button>
                 </span>
               </div>
             </div>
           </div>
+          
           <div class=" box-body table-responsive no-padding">
             <table class="table table-hover table-bordered">
               <tr>

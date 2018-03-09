@@ -182,11 +182,14 @@ class AdminController extends ActiveAuthController
 
             $providerData = new TblProviderModel;
             $providerData->provider_name            = $data['provider_name'];
+            $providerData->provider_rvs             = $data['provider_rvs'];
             $providerData->provider_contact_person  = "N/A";
             $providerData->provider_telephone_number= "N/A";
             $providerData->provider_mobile_number   = "N/A";
             $providerData->provider_contact_email   = "N/A";
             $providerData->provider_address         = "N/A";
+
+            
             $providerData->provider_created         = Carbon::now();
             $providerData->save();
             

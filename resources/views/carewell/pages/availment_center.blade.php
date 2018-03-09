@@ -5,7 +5,7 @@
   
   <div class="row">
     
-    <div class=" col-md-2 col-xs-6 pull-right">
+    <div class=" col-md-3 col-xs-12 pull-right no-padding">
       <button type="button" class="btn btn-primary create-approval top-element"><i class="fa fa-plus btn-icon"></i>CREATE APPROVAL</button>
     </div>
   </div>
@@ -18,7 +18,7 @@
       <div class="tab-content">
         <div class="tab-pane active" id="activeCompany">
           <div class="row">
-            <div class="col-md-3 col-xs-12 pull-left">
+            <div class=" col-md-3 col-xs-12 pull-left">
               <select class="form-control top-element">
                 <option>SELECT COMPANY</option>
                 @foreach($_company as $company)
@@ -28,13 +28,15 @@
             </div>
             <div class="col-md-3 col-xs-12 pull-right">
               <div class="input-group margin">
-                <input type="text" class="form-control">
+                <input type="text" class="form-control " id="search_key">
                 <span class="input-group-btn">
                   <button type="button" class="btn btn-default"><i class="fa fa-search"></i></button>
                 </span>
               </div>
             </div>
           </div>
+
+          
           <div class="box-body table-responsive no-padding">
             <table class="table table-hover table-bordered">
               <tr>

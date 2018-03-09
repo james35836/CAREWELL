@@ -130,6 +130,7 @@ Route::get('/billing/billing/statement', 			    'CarewellController@billing_bill
 Route::post('/billing/cal_member/remove', 				'CarewellController@billing_cal_member_remove');
 
 Route::get('/billing/cal_close/{cal_id}', 				'CarewellController@billing_cal_close');
+Route::post('/billing/cal_close/sumbit',				'CarewellController@billing_cal_close_submit');
 
 
 

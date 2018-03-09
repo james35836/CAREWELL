@@ -2,7 +2,8 @@
 @section('content')
 @include('carewell.modals.doctor_center_modals')
 <div class="container">
-  <div class="col-md-3 col-xs-6 pull-right no-padding">
+  <div class="row">
+    <div class="col-md-3 col-xs-12 pull-right no-padding">
       <div class="dropdown">
         <button class="btn btn-primary top-element dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <i class="fa fa-plus btn-icon "></i>ADD DOCTOR
@@ -13,6 +14,11 @@
         </div>
       </div>
     </div>
+    
+  </div>
+
+
+  
   <div class="row">
     <div class="nav-tabs-custom">
       <ul class="nav nav-tabs">
@@ -31,8 +37,8 @@
               </select>
             </div>
             <div class="col-md-3 col-xs-12 pull-right">
-              <div class="input-group margin">
-                <input type="text" class="form-control">
+              <div class="input-group top-element">
+                <input type="text" class="form-control " id="search_key">
                 <span class="input-group-btn">
                   <button type="button" class="btn btn-default"><i class="fa fa-search"></i></button>
                 </span>

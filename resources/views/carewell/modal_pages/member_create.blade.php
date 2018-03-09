@@ -1,11 +1,12 @@
 <script>
-	$(document).ready(function() 
+	$(document).ready(function()
 	{
-		$(document).on("click",".addDependent", function() 
+		$('body').find('.select2').select2();
+		$(document).on("click",".addDependent", function()
 		{
 			$(".dependent-form").append('<tr><td><input type="text" name="member_dependent_full_name[]" id="member_dependent_full_name" class="form-control"/></td><td><input type="text" name="member_dependent_birthdate[]" id="member_dependent_birthdate[]" class="date-picker form-control datepicker"/></td><td><select  name="member_dependent_relationship[]" id="member_dependent_relationship[]" class="form-control"><option>FATHER</option><option>MOTHER</option><option>CHILD</option><option>SPOUSE</option><option>UNCLE</option><option>AUNT</option><option>BROTHER</option><option>SISTER</option><option>GRANDFATHER</option><option>GRANDMOTHER</option><option>NEPHEW</option><option>NIECE</option><option>COUSIN</option></select></td></tr>');
 		});
-		$(document).on("click",".removeDependent", function() 
+		$(document).on("click",".removeDependent", function()
 		{
 			if ($(".dependent-form tr").length >2)
 			{
@@ -20,16 +21,11 @@
 	});
 	$(function ()
 	{
-		//select2
-		$('.select2').select2()
-		//Date picker
-		
 		$("body").on("click", ".datepicker", function(){
-
-	        $(this).datepicker();
-	        $(this).datepicker("show");
-	        
-	    });
+		$(this).datepicker();
+		$(this).datepicker("show");
+		
+		});
 	})
 </script>
 <div class="row box-globals">
@@ -103,14 +99,6 @@
 		</div>
 		<div class="form-holder">
 			<div class="col-md-2 form-content">
-				<label>Mother Maiden Name</label>
-			</div>
-			<div class="col-md-10 form-content">
-				<input type="text" name="member_mother_maiden_name" id="member_mother_maiden_name" class="form-control"/>
-			</div>
-		</div>
-		<div class="form-holder">
-			<div class="col-md-2 form-content">
 				<label>Permanent Address</label>
 			</div>
 			<div class="col-md-4 form-content">
@@ -123,10 +111,20 @@
 				<textarea  id="member_present_address" name="member_present_address" class="form-control" cols="30" rows="3"></textarea>
 			</div>
 		</div>
+		<div class="form-holder">
+			<div class="col-md-2 form-content">
+				<label>Mother Maiden Name</label>
+			</div>
+			<div class="col-md-10 form-content">
+				<input type="text" name="member_mother_maiden_name" id="member_mother_maiden_name" class="form-control"/>
+			</div>
+		</div>
+		
 	</form>
 </div>
 <div class="row box-globals">
 	<form class="member-dependent-form" method="post">
+		<div class="box-body table-responsive no-padding">
 		<table class="table table-bordered dependent-form" style="border:none !important;">
 			<thead>
 				<tr>
@@ -159,6 +157,7 @@
 				</tr>
 			</tbody>
 		</table>
+	</div>
 	</form>
 	<div class="form-holder">
 		<div class="form-content" style="text-align: center;margin-top:3px;">

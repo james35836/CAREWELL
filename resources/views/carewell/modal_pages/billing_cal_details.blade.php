@@ -12,9 +12,11 @@ autoclose: true
 	<div class="col-md-8 pull-left top-label" style="">
 		<p>CAL NUMBER  : {{$cal_details->cal_number}}</p>
 	</div>
+	@if($cal_check==0)
 	<div class=" col-md-4 pull-right">
 		<button type="button" data-member_company_id="{{$cal_details->company_id}}" data-member_cal_id="{{$cal_details->cal_id}}" class="btn btn-primary import-cal-members  button-lg" ><i class="fa fa-plus btn-icon"></i>IMPORT MEMBER</button>
 	</div>
+	@endif
 </div>
 <div class="row box-globals">
 	<div class="form-holder">
@@ -30,8 +32,6 @@ autoclose: true
 		<div class="col-md-4  form-content">
 			<input type="text" class="form-control datepicker" value="{{$cal_details->cal_payment_date}}"/>
 		</div>
-		
-		
 	</div>
 	<div class="form-holder">
 		<div class="col-md-2  form-content">
@@ -50,6 +50,63 @@ autoclose: true
 		
 	</div>
 </div>
+@if($cal_check==1)
+<div class=" row box-globals">
+	<div class="form-holder">
+		<div class="col-md-2 form-content">
+			<label>Attached File</label>
+		</div>
+		<div class="col-md-4 form-content">
+			<input type="file" value="{{$cal_details->cal_info_attached_file}}" class="form-control pull-right" id="cal_info_attached_file">
+		</div>
+		<div class="col-md-2 form-content">
+			<label>Check Number</label>
+		</div>
+		<div class="col-md-4 form-content">
+			<input type="text" value="{{$cal_details->cal_info_check_number}}" class="form-control " id="cal_info_check_number">
+		</div>
+		
+	</div>
+	<div class="form-holder">
+		<div class="col-md-2 form-content">
+			<label>Collection Date</label>
+		</div>
+		<div class="col-md-4 form-content">
+			<div class="input-group date">
+				<div class="input-group-addon">
+					<i class="fa fa-calendar"></i>
+				</div>
+				<input type="text" value="{{$cal_details->cal_info_collection_date}}" class="form-control pull-right datepicker" id="cal_info_collection_date">
+			</div>
+		</div>
+		<div class="col-md-2 form-content">
+			<label>Check Date</label>
+		</div>
+		<div class="col-md-4 form-content">
+			<div class="input-group date">
+				<div class="input-group-addon">
+					<i class="fa fa-calendar"></i>
+				</div>
+				<input type="text" value="{{$cal_details->cal_info_check_date}}" class="form-control pull-right datepicker" id="cal_info_check_date">
+			</div>
+		</div>
+	</div>
+	<div class="form-holder">
+		<div class="col-md-2 form-content">
+			<label>O.R Number</label>
+		</div>
+		<div class="col-md-4 form-content">
+			<input type="text" value="{{$cal_details->cal_info_or_number}}" class="form-control " id="cal_info_or_number">
+		</div>
+		<div class="col-md-2 form-content">
+			<label>Amount</label>
+		</div>
+		<div class="col-md-4 form-content">
+			<input type="text" value="{{$cal_details->cal_info_amount}}" class="form-control " id="cal_info_amount">
+		</div>
+	</div>
+</div>
+@endif
 <div class="row box-globals">
 	<div class="form-holder">
 		<div class="row">

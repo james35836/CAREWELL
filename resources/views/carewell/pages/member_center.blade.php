@@ -3,7 +3,7 @@
 @include('carewell.modals.member_center_modals')
 <div class="container">
   <div class="row">
-    <div class="col-md-3 col-xs-6 pull-right no-padding">
+    <div class="col-md-3 col-xs-12 pull-right no-padding">
       <div class="dropdown">
         <button class="btn btn-primary top-element dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <i class="fa fa-plus btn-icon "></i>CREATE MEMBER
@@ -25,7 +25,7 @@
       <div class="tab-content">
         <div class="tab-pane active" id="activeCompany">
           <div class="row">
-            <div class="col-md-3 col-xs-12 pull-left">
+            <div class=" col-md-3 col-xs-12 pull-left">
               <select class="form-control top-element">
                 <option>SELECT COMPANY</option>
                 @foreach($_company as $company)
@@ -34,14 +34,15 @@
               </select>
             </div>
             <div class="col-md-3 col-xs-12 pull-right">
-              <div class="input-group margin">
-                <input type="text" class="form-control">
+              <div class="input-group top-element">
+                <input type="text" class="form-control " id="search_key">
                 <span class="input-group-btn">
                   <button type="button" class="btn btn-default"><i class="fa fa-search"></i></button>
                 </span>
               </div>
             </div>
           </div>
+          
           <div class="box-body table-responsive no-padding">
             <table class="table table-hover table-bordered">
               <tr>
@@ -92,7 +93,7 @@
               </select>
             </div>
             <div class="col-md-3 col-xs-12 pull-right">
-              <div class="input-group margin">
+              <div class="input-group top-element">
                 <input type="text" class="form-control">
                 <span class="input-group-btn">
                   <button type="button" class="btn btn-default"><i class="fa fa-search"></i></button>
@@ -126,7 +127,7 @@
                     </button>
                     <ul class="dropdown-menu" role="menu" style="position: absolute !important;">
                       <li><button type="button" data-member_id="{{$member_deactivate->member_id}}" class="btn btn-link view-member-details"><i class="fa fa-eye btn-icon"></i>  View Member</button></li>
-                      <li><button type="button" class="btn btn-link restore" data-id="{{$member_deactivate->member_id}}" data-name="MEMBER"><i class="fa fa-trash btn-icon"></i> Archived Member</button></li>
+                      <li><button type="button" class="btn btn-link restore" data-id="{{$member_deactivate->member_id}}" data-name="MEMBER"><i class="fa fa-trash btn-icon"></i> Restore Member</button></li>
                     </ul>
                   </div>
                 </td>
@@ -144,8 +145,3 @@
   </div>
 </div>
 @endsection
-
-
-
-
-

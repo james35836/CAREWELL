@@ -7,6 +7,7 @@ var memberFileData	= new FormData();
 var companyData		= new FormData();
 var providerData 	= new FormData();
 var calData 		= new FormData();
+var calCloseData	= new FormData();
 var calFileData 	= new FormData();
 
 var userProfileData = new FormData();
@@ -326,6 +327,7 @@ function globals()
 		});
 	}
 	
+	
 	init();
 	function init()
 	{
@@ -350,6 +352,7 @@ function globals()
 
         table_sorter();
         table_action_add_remove();
+        
         
 	}
 	
@@ -578,4 +581,5 @@ function globals()
 			
 		});
 	}
+	
 }

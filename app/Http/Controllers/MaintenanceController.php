@@ -160,7 +160,7 @@ class MaintenanceController extends Controller
         if (DB::table('tbl_availment')->count() <= 0) 
         {
             $insert[0]["availment_id"]    = 1;
-            $insert[0]["availment_name"]   = "Anual Physical Examination";
+            $insert[0]["availment_name"]   = "Annual Physical Examination";
             $insert[0]["availment_parent_id"]    = 0;
             
             $insert[1]["availment_id"]    = 2;
