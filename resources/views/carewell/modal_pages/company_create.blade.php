@@ -50,30 +50,11 @@
 	<div class="row box-globals" >
 		<div class="nav-tabs-custom">
 			<ul class="nav nav-tabs">
-				<li class="active my-tab"><a data-toggle="tab" href="#contract">CONTRACT DETAILS</a></li>
+				<li class="active my-tab"><a data-toggle="tab" href="#contract">CONTRACT</a></li>
 				<li class="my-tab"><a data-toggle="tab" href="#deployment">DEPLOYMENT</a></li>
 			</ul>
 			<div class="tab-content" >
 				<div id="contract" class="row tab-pane fade in active table-min-height" >
-					<div class="form-holder">
-						<div class="col-md-2 form-content">
-							<label>Contract Number</label>
-						</div>
-						<div class="col-md-4 form-content">
-							<input type="text" id="contract_number" class="form-control" disabled/>
-						</div>
-						<div class="col-md-2 form-content">
-							<label>Mode of Payment</label>
-						</div>
-						<div class="col-md-4 form-content">
-							<select id="payment_mode_id" class="form-control">
-								<option disabled>MODE OF PAYMENT</option>
-								@foreach($_payment_mode as $payment_mode)
-								<option value="{{$payment_mode->payment_mode_id}}">{{$payment_mode->payment_mode_name}}</option>
-								@endforeach
-							</select>
-						</div>
-					</div>
 					<div class="form-holder ">
 						<div class="col-md-2 form-content">
 							<label>Contract Image</label>
