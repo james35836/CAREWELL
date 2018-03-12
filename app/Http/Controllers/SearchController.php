@@ -176,7 +176,7 @@ class SearchController extends ActiveAuthController
 					break;
 					case 'provider':
 						$data['_provider_active']  = TblProviderModel::where('archived',0)
-											->where('tbl_provider.provider_name','like','%'.$key.'%');
+											->where('tbl_provider.provider_name','like','%'.$key.'%')
 				                            ->paginate(10);
 					    foreach ($data['_provider_active'] as $key => $provider) 
 					    {
@@ -242,7 +242,7 @@ class SearchController extends ActiveAuthController
 					break;
 					case 'provider':
 						$data['_provider_inactive']  = TblProviderModel::where('archived',1)
-											->where('tbl_provider.provider_name','like','%'.$key.'%');
+											->where('tbl_provider.provider_name','like','%'.$key.'%')
 				                            ->paginate(10);
 					    foreach ($data['_provider_inactive'] as $key => $provider) 
 					    {
