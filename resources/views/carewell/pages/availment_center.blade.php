@@ -1,6 +1,5 @@
 @extends('carewell.layout.layout')
 @section('content')
-@include('carewell.modals.medical_center_modals')
 <div class="container">
   
   <div class="row">

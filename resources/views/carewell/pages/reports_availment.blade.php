@@ -1,6 +1,5 @@
 @extends('carewell.layout.layout')
 @section('content')
-@include('carewell.modals.medical_center_modals')
 <script >
 $(document).ready(function() {
 $(".sum_table tr:not(:first,:last)  td:last-child").text(function()

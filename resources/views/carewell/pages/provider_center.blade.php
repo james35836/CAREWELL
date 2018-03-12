@@ -1,6 +1,5 @@
 @extends('carewell.layout.layout')
 @section('content')
-@include('carewell.modals.provider_center_modals')
 <div class="container">
   <div class="row">
     <div class=" col-md-3 col-xs-12 pull-right no-padding">

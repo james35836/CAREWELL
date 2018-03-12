@@ -1,6 +1,5 @@
 @extends('carewell.layout.layout')
 @section('content')
-@include('carewell.modals.settings_coverage_modals')
 <div class="container">
   <div class="row">
     <div class=" col-md-2 pull-right">
