@@ -17,7 +17,7 @@
         <div class="tab-pane active" id="activeCompany">
           <div class="row">
             <div class=" col-md-3 col-xs-12 pull-left">
-              <select class="form-control top-element">
+              <select class="form-control top-element filter">
                 <option>SELECT COMPANY</option>
                 @foreach($_company as $company)
                 <option value="{{$company->company_id}}">{{$company->company_name}}</option>

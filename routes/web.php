@@ -20,7 +20,7 @@ Route::get('/testing_excel2', 			    			'TestController@testing_excel2');
 Route::get('/sample',									'TestController@sample');	
 Route::post('/samples',									'TestController@sample_submit');
 
-Route::get('/export_pdf',									'TestController@export_pdf');
+Route::get('/export_pdf',								'TestController@export_pdf');
 
 /*LOGIN*/
 Route::get('/', 										'FrontController@login');
@@ -38,6 +38,11 @@ Route::any('/get/company_info', 						'StaticFunctionController@getCompanyInfo')
 Route::any('/get/provider_info', 						'StaticFunctionController@getProviderInfo');
 Route::any('/get/availment_info', 						'StaticFunctionController@getAvailmentInfo');
 Route::any('/get/doctor_specialty', 					'StaticFunctionController@getDoctorSpecialty');
+
+/*FILETERING*/
+
+Route::post('/page/filtering', 							'SearchController@pageFiltering');
+Route::post('/page/searching', 							'SearchController@pageSearching');
 
 
 /*USER*/

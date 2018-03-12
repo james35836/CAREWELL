@@ -20,13 +20,14 @@
             
             <div class="col-md-3 col-xs-12 pull-right">
               <div class="input-group top-element">
-                <input type="text" class="form-control " id="search_key">
+                <input type="text" class="form-control search-key">
                 <span class="input-group-btn">
-                  <button type="button" class="btn btn-default"><i class="fa fa-search"></i></button>
+                  <button type="button" class="btn btn-default searching" data-name="provider" data-archived="0"><i class="fa fa-search"></i></button>
                 </span>
               </div>
             </div>
           </div>
+          <div id="showTable">
           <div class="box-body table-responsive no-padding">
             <table class="table table-hover table-bordered">
               <tr>
@@ -67,14 +68,15 @@
             @include('globals.pagination', ['paginator' => $_provider_active])
           </div>
         </div>
+        </div>
         <!-- /.tab-pane -->
         <div class="tab-pane" id="inActiveCompany">
           <div class="row">
             <div class="col-md-3 col-xs-12 pull-right">
-              <div class="input-group margin">
-                <input type="text" class="form-control">
+              <div class="input-group top-element">
+                <input type="text" class="form-control search-key">
                 <span class="input-group-btn">
-                  <button type="button" class="btn btn-default"><i class="fa fa-search"></i></button>
+                  <button type="button" class="btn btn-default searching" data-name="provider" data-archived="1"><i class="fa fa-search"></i></button>
                 </span>
               </div>
             </div>

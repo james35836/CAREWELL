@@ -113,10 +113,10 @@ class CarewellController extends ActiveAuthController
   /*COMPANY*/
   public function company()
   {
-  	$data['page']          = 'Company';
-    $data['user']          = StaticFunctionController::global();
-    $data['_company_active']      = TblCompanyModel::where('tbl_company.archived',0)->Company()->paginate(10);
-    $data['_company_inactive']      = TblCompanyModel::where('tbl_company.archived',1)->Company()->paginate(10);
+  	$data['page']               = 'Company';
+    $data['user']               = StaticFunctionController::global();
+    $data['_company_active']    = TblCompanyModel::where('tbl_company.archived',0)->Company()->paginate(10);
+    $data['_company_inactive']  = TblCompanyModel::where('tbl_company.archived',1)->Company()->paginate(10);
     foreach ($data['_company_active'] as $key => $company) 
     {
       $data['_company_active'][$key]['coverage_plan']  = TblCompanyCoveragePlanModel::where('company_id',$company->company_id)
@@ -241,7 +241,7 @@ class CarewellController extends ActiveAuthController
     $data['user']                 = StaticFunctionController::global();
     $data['_company']             = TblCompanyModel::where('archived',0)->get();
     $data['_member_active']       = TblMemberModel::where('tbl_member.archived',0)->Member()->orderBy('tbl_member.member_id','ASC')->paginate(10);
-    $data['_member_deactivate']   = TblMemberModel::where('tbl_member.archived',1)->Member()->orderBy('tbl_member.member_id','ASC')->paginate(10);
+    $data['_member_inactive']     = TblMemberModel::where('tbl_member.archived',1)->Member()->orderBy('tbl_member.member_id','ASC')->paginate(10);
   	return view('carewell.pages.member_center',$data);
   }
   public function member_create_member()

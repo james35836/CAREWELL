@@ -13,9 +13,12 @@ var calFileData 	= new FormData();
 var userProfileData = new FormData();
 var passwordData 	= new FormData();
 var userData 		= new FormData();
-var archivedData 	= new FormData();
 
+var archivedData 	= new FormData();
 var restoreData 	= new FormData();
+
+var filterData 		= new FormData();
+var searchData 		= new FormData();
 
 var doctorProviderData	= [];
 var specialData 		= [];
@@ -23,10 +26,7 @@ var availmentData 		= [];
 var procedureData		= []; 
 var chargesData			= [];
 
-
-
 var payeeData			= [];
-
 var serializeData 	= [];
 var ajaxData 		= [];
 var value			= "0";
@@ -42,11 +42,6 @@ var coveragePlanData= [];
 var deploymentData	= [];
 var data            = "";
 var link            = "";
-
-
-
-
-
 
 var successButton	= '<button type="button" class="btn btn-default pull-left reload-btn" data-dismiss="modal">RELOAD</button>';
 
@@ -352,8 +347,63 @@ function globals()
 
         table_sorter();
         table_action_add_remove();
+
+        filtering();
+        searching();
         
         
+	}
+	function filtering()
+	{
+		$('body').on('change','.filtering',function()
+		{
+
+			var table = 						$(this).closest('div.tab-pane').find('#showTable');
+			filterData.append("val_id", 		$(this).val());
+			filterData.append("val_name", 		$(this).data('name'));
+			filterData.append("val_archived", 	$(this).data('archived'));
+
+			$.ajax({
+				headers: {
+				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				},
+				url:'/page/filtering',
+				method: "POST",
+		        data: filterData,
+		        contentType:false,
+	            cache:false,
+	            processData:false,
+				success: function(data)
+				{
+					table.html(data);
+				}
+			});
+		});
+	}
+	function searching()
+	{
+		$('body').on('click','.searching',function()
+		{
+			var table = 						$(this).closest('div.tab-pane').find('#showTable');
+			searchData.append("val_key", 		$(this).closest('div').find('input.search-key').val());
+			searchData.append("val_name", 		$(this).data('name'));
+			searchData.append("val_archived", 	$(this).data('archived'));
+			$.ajax({
+				headers: {
+				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				},
+				url:'/page/searching',
+				method: "POST",
+		        data: searchData,
+		        contentType:false,
+	            cache:false,
+	            processData:false,
+				success: function(data)
+				{
+					table.html(data);
+				}
+			});
+		});
 	}
 	
 	function archived_data()
