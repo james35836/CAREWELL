@@ -109,14 +109,7 @@
 				<input type="text"  value="{{$member_details->member_contact_number}}" name="member_contact_number" id="member_contact_number" class="form-control"/>
 			</div>
 		</div>
-		<div class="form-holder">
-			<div class="col-md-2 form-content">
-				<label>Mother Maiden Name</label>
-			</div>
-			<div class="col-md-10 form-content">
-				<input type="text" value="{{$member_details->member_mother_maiden_name}}" name="member_monther_maiden_name" id="member_monther_maiden_name" class="form-control"/>
-			</div>
-		</div>
+		
 		<div class="form-holder">
 			<div class="col-md-2 form-content">
 				<label>Permanent Address</label>
@@ -129,6 +122,14 @@
 			</div>
 			<div class="col-md-4 form-content">
 				<textarea  id="member_present_address" name="member_present_address" class="form-control" cols="30" rows="3">{{$member_details->member_present_address}}</textarea>
+			</div>
+		</div>
+		<div class="form-holder">
+			<div class="col-md-2 form-content">
+				<label>Mother Maiden Name</label>
+			</div>
+			<div class="col-md-10 form-content">
+				<input type="text" value="{{$member_details->member_mother_maiden_name}}" name="member_monther_maiden_name" id="member_monther_maiden_name" class="form-control"/>
 			</div>
 		</div>
 	</form>
@@ -154,6 +155,7 @@
 							<th>COMPANY NAME</th>
 							<th>EMPLOYEE ID</th>
 							<th>COVERAGE PLAN</th>
+							<th>MODE OF PAYMENT</th>
 							<th>JOBSITE</th>
 							<th>STATUS</th>
 							<th>ACTION</th>
@@ -164,6 +166,7 @@
 							<td>{{$member_company->company_name}}</td>
 							<td>{{$member_company->member_employee_number}}</td>
 							<td>{{$member_company->coverage_plan_name}}</td>
+							<td>{{$member_company->member_payment_mode}}</td>
 							<td>{{$member_company->deployment_name}}</td>
 							<td><span class="label label-success">active</span></td>
 							<td>

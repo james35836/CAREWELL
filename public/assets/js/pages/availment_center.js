@@ -77,11 +77,23 @@ function availment_center()
 				headers: {
 				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 				},
-				url:'/availment/get_member_info/'+member_id,
-				method: "get",
+				url:'/availment/get_member_info',
+				method: "post",
+				data: {member_id:member_id},
                 success: function(data)
 				{
-					$('#insertMember').html(data).find('.member_id').select2();
+					$('.member_id').val(data.member_id);
+					$('.member_name').val(data.member_name);
+					$('.member_universal_id').val(data.member_universal_id);
+					$('.member_carewell_id').val(data.member_carewell_id);
+					$('.member_birthdate').val(data.member_birthdate);
+					$('.member_age').val(data.member_age);
+					$('.company_name').val(data.company_name);
+					$('.get-availment-info').html(data.availment_list);
+					$('.member_list').html(data.member_list);
+					$('.availment-transaction-details').data('member_id',data.member_id);
+					$('.availment-transaction-details').removeAttr("disabled");
+					
 				}
 			});
 			

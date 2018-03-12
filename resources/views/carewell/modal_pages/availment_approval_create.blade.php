@@ -87,7 +87,7 @@ $('body').on('change','.charge-patient',function()
 					<label>Name</label>
 				</div>
 				<div class="col-md-4 form-content form-group">
-					<select data-name="member" class="form-control select2 get-member-info" style="width: 100%;">
+					<select data-name="member" name="member_id" class="form-control select2 get-member-info member_id" style="width: 100%;">
 						<option selected="selected">SELECT PATIENT</option>
 						@foreach($_member as $member)
 						<option value="{{$member->member_id}}">{{$member->member_carewell_id." ".$member->member_first_name." ".$member->member_middle_name." ".$member->member_last_name}}</option>
@@ -98,7 +98,7 @@ $('body').on('change','.charge-patient',function()
 					<label>Company</label>
 				</div>
 				<div class="col-md-4 form-content">
-					<input type="text" class="form-control"  disabled/>
+					<input type="text" class="form-control company_name"  disabled/>
 				</div>
 			</div>
 			<div class="form-holder">
@@ -106,13 +106,13 @@ $('body').on('change','.charge-patient',function()
 					<label>Universal ID</label>
 				</div>
 				<div class="col-md-4 form-content">
-					<input type="text" class="form-control" disabled/>
+					<input type="text" class="form-control member_universal_id" disabled/>
 				</div>
 				<div class="col-md-2 form-content">
 					<label>Carewell ID</label>
 				</div>
 				<div class="col-md-4 form-content">
-					<input type="text" class="form-control" disabled/>
+					<input type="text" class="form-control member_carewell_id" disabled/>
 				</div>
 			</div>
 			<div class="form-holder">
@@ -120,13 +120,13 @@ $('body').on('change','.charge-patient',function()
 					<label>Birthdate</label>
 				</div>
 				<div class="col-md-4 form-content">
-					<input type="text" class="form-control" disabled/>
+					<input type="text" class="form-control member_birthdate" disabled/>
 				</div>
 				<div class="col-md-2 form-content">
 					<label>Age</label>
 				</div>
 				<div class="col-md-4 form-content">
-					<input type="text" class="form-control" disabled/>
+					<input type="text" class="form-control member_age" disabled/>
 				</div>
 			</div>
 			<div class="form-holder">

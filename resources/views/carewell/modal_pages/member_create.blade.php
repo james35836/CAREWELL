@@ -228,7 +228,7 @@
 				<label>Deployment</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<select name="deployment_id" id="deployment_id" class="form-control deploymentList">
+				<select name="deployment_id" id="deployment_id" class="form-control select2 deploymentList">
 					<option >DEPLOYMENT</option>
 				</select>
 			</div>
@@ -238,6 +238,19 @@
 			</div>
 			<div class="col-md-4 form-content">
 				<input type="text"  name="member_employee_number" id="member_employee_number" class="form-control"/>
+			</div>
+		</div>
+		<div class="form-holder">
+			<div class="col-md-2 form-content">
+				<label>Mode of Payment</label>
+			</div>
+			<div class="col-md-4 form-content">
+				<select name="member_payment_mode" id="member_payment_mode" class="form-control">
+					<option >MODE OF PAYMENT</option>
+					@foreach($_payment_mode as $payment_mode)
+					<option>{{$payment_mode->payment_mode_name}}</option>
+					@endforeach
+				</select>
 			</div>
 		</div>
 	</form>

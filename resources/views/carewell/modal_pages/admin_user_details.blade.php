@@ -88,7 +88,7 @@
 			<label>ID NUMBER</label>
 		</div>
 		<div class="col-md-4 form-content">
-			<input type="text" id="user_id_number" value="{{$user_details->user_id_number}}" class="form-control"/>
+			<input type="text" id="user_id_number" value="{{$user_details->user_number}}" class="form-control"/>
 		</div>
 	</div>
 	<div class="form-holder">

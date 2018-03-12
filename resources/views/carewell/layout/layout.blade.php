@@ -65,7 +65,7 @@
                         <li>
                           <a href="#">
                             <div class="pull-left">
-                              <img src="/images/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                              <img src="{{$user->user_profile}}" class="img-circle" alt="User Image">
                             </div>
                             <h4>
                             Support Team

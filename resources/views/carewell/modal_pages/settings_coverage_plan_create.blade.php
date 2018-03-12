@@ -85,7 +85,9 @@ $parent.find('.btn').attr('disabled',!this.checked);
 			</div>
 			<div class="col-md-4 form-content">
 				<select class="form-control" name="coverage_plan_annual_benefit" id="coverage_plan_annual_benefit">
-					<option>10,000</option>
+					
+					<option>SELECT</option>
+					<option class="btn btn-primary active btn-lg">ADD OPTION</option>
 					<option>20,000</option>
 					<option>30,000</option>
 					<option>40,000</option>

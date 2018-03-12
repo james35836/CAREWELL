@@ -206,7 +206,6 @@ class MaintenanceController extends Controller
             $payment[3]["payment_mode_id"]    = 4;
             $payment[3]["payment_mode_name"]   = "SEMESTRAL";
             
-
             $payment[4]["payment_mode_id"]    = 5;
             $payment[4]["payment_mode_name"]   = "ANNUAL";
             

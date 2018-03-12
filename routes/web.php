@@ -137,7 +137,7 @@ Route::post('/billing/cal_close/sumbit',				'CarewellController@billing_cal_clos
 /*MEDICAL*/
 Route::get('/availment', 									'CarewellController@availment');
 Route::get('/availment/create_approval', 					'CarewellController@availment_create_approval');
-Route::get('/availment/get_member_info/{member_id}',		'CarewellController@availment_get_member_info');
+Route::post('/availment/get_member_info',		'CarewellController@availment_get_member_info');
 Route::get('/availment/get_member_procedure/{availment_id}','CarewellController@availment_get_member_procedure');
 Route::get('/availment/get_provider_doctor/{provider_id}','CarewellController@availment_get_provider_doctor');
 Route::post('/availment/create_approval/submit',			'CarewellController@availment_create_approval_submit');

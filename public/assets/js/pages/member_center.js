@@ -46,7 +46,7 @@ function member_center()
 		$('body').on('change','.select_company',function() 
 		{
 			var company_id 	= $(this).val();
-			globals.get_dual_information('/get/company_info',company_id,'.coverageList','.deploymentList');
+			globals.get_dual_information('/get/company_info',company_id,'.deploymentList','.coverageList');
 		});
 
 		

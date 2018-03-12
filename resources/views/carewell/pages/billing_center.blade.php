@@ -41,7 +41,7 @@
                 <th>PERIOD MONTH</th>
                 <th>DATE COVERAGE</th>
                 <th>PAYMENT PERIOD</th>
-                <th>STATUS</th>
+                <th>REVENEU PERIOD</th>
                 <th>DATE CREATED</th>
                 <th>ACTION</th>
               </tr>
@@ -52,7 +52,7 @@
                 <td>{{date("F j, Y",strtotime($cal_open->cal_reveneu_period_month))}}</td>
                 <td>{{date("F j, Y",strtotime($cal_open->cal_company_period_start))}} - {{date("F j, Y",strtotime($cal_open->cal_company_period_end))}}</td>
                 <td>{{date("F j, Y",strtotime($cal_open->cal_payment_date))}}</td>
-                <td><span class="label label-success">active</span></td>
+                <td>{{$cal_open->cal_reveneu_period}}</td>
                 <td>{{date("F j, Y",strtotime($cal_open->cal_created))}}</td>
                 <td>
                   <div class="btn-group">

@@ -4,86 +4,6 @@ $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
 checkboxClass: 'icheckbox_minimal-blue',
 radioClass   : 'iradio_minimal-blue'
 })
-//append
-$(document).ready(function() {
-	
-	$('body').on("click",".add-contact", function()
-	{
-		$('.contact-form-element:first').clone().appendTo('.contact-number-form');
-	});
-	$('body').on("click",".remove-contact", function()
-	{
-		if($('.contact-form-element').length==1)
-		{
-			toastr.error('You cannot remove all rows.', 'Something went wrong!', {timeOut: 3000})
-		}
-		else
-		{
-			$(this).closest(".contact-form-element").remove();
-		}
-	});
-	$('body').on("click",".add-deployment", function()
-	{
-		$(this).closest(".deployment-form-element").clone().appendTo('.deployment-number-form');
-	});
-	$('body').on("click",".remove-deployment", function()
-	{
-		if($('.deployment-form-element').length==1)
-		{
-			toastr.error('You cannot remove all rows.', 'Something went wrong!', {timeOut: 3000})
-		}
-		else
-		{
-			$(this).closest(".deployment-form-element").remove();
-		}
-	});
-	$('body').on("click",".add-coverage", function()
-	{
-		$(this).closest(".coverage-plan-element").clone().appendTo('.coverage-plan-form');
-	});
-	$('body').on("click",".remove-coverage", function()
-	{
-		if($('.coverage-plan-element').length==1)
-		{
-			toastr.error('You cannot remove all rows.', 'Something went wrong!', {timeOut: 3000})
-		}
-		else
-		{
-			$(this).closest(".coverage-plan-element").remove();
-		}
-	});
-	$('body').on("click",".add-Benifit", function()
-	{
-		$(this).closest(".Benifit-element").clone().appendTo('.Benifit-form');
-	});
-	$('body').on("click",".remove-Benifit", function()
-	{
-		if($('.Benifit-element').length==1)
-		{
-			toastr.error('You cannot remove all rows.', 'Something went wrong!', {timeOut: 3000})
-		}
-		else
-		{
-			$(this).closest(".Benifit-element").remove();
-		}
-	});
-	$('body').on("click",".add-contract", function()
-	{
-		$(this).closest(".contract-element").clone().appendTo('.contract-form');
-	});
-	$('body').on("click",".remove-contract", function()
-	{
-		if($('.contract-element').length==1)
-		{
-			toastr.error('You cannot remove all rows.', 'Something went wrong!', {timeOut: 3000})
-		}
-		else
-		{
-			$(this).closest(".contract-element").remove();
-		}
-	});
-	
-});
 </script>
 <div class="row box-globals">
 	<div class="form-holder">
@@ -156,24 +76,12 @@ $(document).ready(function() {
 		</ul>
 		<div class="tab-content" >
 			<div id="contract" class="row tab-pane fade in active table-min-height" >
-				<div class="form-holder">
+				<div class="form-holder col-md-12">
 					<div class="col-md-2 form-content">
 						<label>Contract Number</label>
 					</div>
 					<div class="col-md-4 form-content">
 						<input type="text" value="{{$company_contract->contract_number}}" id="contract_number" class="form-control"/>
-					</div>
-					<div class="col-md-2 form-content">
-						<label>Mode of Payment</label>
-					</div>
-					<div class="col-md-4 form-content">
-						<select id="payment_mode_id" class="form-control">
-							<option>{{$company_contract->payment_mode_name}}</option>
-							<option disabled>MODE OF PAYMENT</option>
-							@foreach($_payment_mode as $payment_mode)
-							<option value="{{$payment_mode->payment_mode_id}}">{{$payment_mode->payment_mode_name}}</option>
-							@endforeach
-						</select>
 					</div>
 				</div>
 				<div class="form-holder ">
