@@ -404,7 +404,7 @@ $(document).ready(function()
 			<div class="form-content col-md-10 form-element">
 				<div class="input-group my-element">
 					<select class="form-control payeeList" name="provider_payee_id[]" id="payeeList">
-						<option value="0">SELECT PROVIDER</option>
+						<option value="0">SELECT PAYEE</option>
 					</select>
 					<span class="input-group-btn">
 						<button class="btn btn-primary add-element" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span> </button>
