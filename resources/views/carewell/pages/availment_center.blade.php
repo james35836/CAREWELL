@@ -45,7 +45,7 @@
                 <th>PATIENT NAME</th>
                 <th>COMPANY</th>
                 <th>PROVIDER</th>
-                <th>STATUS</th>
+                <th>DATE ISSUED</th>
                 <th>ACTION</th>
               </tr>
               @foreach($_approval as $approval)
@@ -56,7 +56,7 @@
                 <td>{{$approval->member_first_name." ".$approval->member_last_name }}</td>
                 <td>{{$approval->company_name}}</td>
                 <td>{{$approval->provider_name}}</td>
-                <td><span class="label label-success">active</span></td>
+                <td>{{date("F j, Y",strtotime($approval->approval_created))}}</td>
                 <td>
                   <div class="btn-group">
                     <button type="button" class="btn btn-danger">Action</button>

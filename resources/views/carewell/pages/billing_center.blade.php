@@ -37,10 +37,10 @@
               <tr>
                 <th>CAL #</th>
                 <th>COMPANY</th>
-                <th>PERIOD MONTH</th>
-                <th>DATE COVERAGE</th>
-                <th>PAYMENT PERIOD</th>
-                <th>REVENEU PERIOD</th>
+                <th>COVERAGE MONTH</th>
+                <th>COVERAGE PERIOD</th>
+                <th>PAYMENT DATE</th>
+                <th>MODE OF PAYMENT</th>
                 <th>DATE CREATED</th>
                 <th>ACTION</th>
               </tr>
@@ -48,10 +48,10 @@
               <tr>
                 <td>{{$cal_open->cal_number}}</td>
                 <td>{{$cal_open->company_name}}</td>
-                <td>{{date("F j, Y",strtotime($cal_open->cal_reveneu_period_month))}}</td>
-                <td>{{date("F j, Y",strtotime($cal_open->cal_company_period_start))}} - {{date("F j, Y",strtotime($cal_open->cal_company_period_end))}}</td>
+                <td>{{$cal_open->cal_coverage_month_start}}-{{$cal_open->cal_coverage_month_end}}</td>
+                <td>{{date("F j, Y",strtotime($cal_open->cal_coverage_period_start))}} - {{date("F j, Y",strtotime($cal_open->cal_coverage_period_end))}}</td>
                 <td>{{date("F j, Y",strtotime($cal_open->cal_payment_date))}}</td>
-                <td>{{$cal_open->cal_reveneu_period}}</td>
+                <td>{{$cal_open->cal_payment_mode}}</td>
                 <td>{{date("F j, Y",strtotime($cal_open->cal_created))}}</td>
                 <td>
                   <div class="btn-group">
@@ -99,21 +99,21 @@
               <tr>
                 <th>CAL #</th>
                 <th>COMPANY</th>
-                <th>PERIOD MONTH</th>
-                <th>DATE COVERAGE</th>
-                <th>CHECK NUMBER</th>
-                <th>AMOUNT</th>
-                <th>DATE CLOSED</th>
+                <th>COVERAGE MONTH</th>
+                <th>COVERAGE PERIOD</th>
+                <th>PAYMENT DATE</th>
+                <th>MODE OF PAYMENT</th>
+                <th>DATE CREATED</th>
                 <th>ACTION</th>
               </tr>
               @foreach($_cal_close as $cal_close)
               <tr>
                 <td>{{$cal_close->cal_number}}</td>
                 <td>{{$cal_close->company_name}}</td>
-                <td>{{date("F j, Y",strtotime($cal_close->cal_reveneu_period_month))}}</td>
-                <td>{{date("F j, Y",strtotime($cal_close->cal_company_period_start))}} - {{date("F j, Y",strtotime($cal_close->cal_company_period_end))}}</td>
+                <td>{{$cal_close->cal_coverage_month_start}}-{{$cal_close->cal_coverage_month_end}}</td>
+                <td>{{date("F j, Y",strtotime($cal_close->cal_coverage_period_start))}} - {{date("F j, Y",strtotime($cal_close->cal_coverage_period_end))}}</td>
                 <td>{{date("F j, Y",strtotime($cal_close->cal_payment_date))}}</td>
-                <td><span class="label label-success">active</span></td>
+                <td>{{$cal_close->cal_payment_mode}}</td>
                 <td>{{date("F j, Y",strtotime($cal_close->cal_created))}}</td>
                 <td>
                   <div class="btn-group">
@@ -124,7 +124,6 @@
                     </button>
                     <ul class="dropdown-menu" role="menu" style="position: absolute !important;">
                       <li><button type="button" data-cal_id="{{$cal_close->cal_id}}" data-company_id="{{$cal_close->company_id}}" class="btn btn-link cal-view-details"><i class="fa fa-eye btn-icon"></i>  View Details</button></li>
-                      <li><button type="button" class="btn btn-link"><i class="fa fa-trash btn-icon"></i> Mark as Close</button></li>
                     </ul>
                   </div>
                 </td>
@@ -133,7 +132,7 @@
             </table>
           </div>
           <div class="box-footer clearfix">
-            @include('globals.pagination', ['paginator' => $_cal_close])
+            @include('globals.pagination', ['paginator' => $_cal_open])
           </div>
         </div>
       </div>

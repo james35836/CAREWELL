@@ -26,32 +26,33 @@ function availment_center()
         });
 
 	}
-	this.get_total = function()
+	this.get_total = function($this)
 	{
 		var amount = 0;
 		var philhealth = 0;
 		var patient = 0;
 		var carewell = 0;
-		$('.gross-amount').each(function() 
+		$this.find('.gross-amount').each(function() 
 		{
 			amount += Number($(this).val());
 		});
-		$('.philhealth').each(function() 
+		$this.find('.philhealth').each(function() 
 		{
 			philhealth += Number($(this).val());
 		});
-		$('.charge-patient').each(function() 
+		$this.find('.charge-patient').each(function() 
 		{
 			patient += Number($(this).val());
 		});
-		$('.charge-carewell').each(function() 
+		$this.find('.charge-carewell').each(function() 
 		{
 			carewell += Number($(this).val());
 		});
-		$('#total_gross_amount').val(amount);
-		$('#total_philhealth').val(philhealth);
-		$('#total_charge_patient').val(patient);
-		$('#total_charge_carewell').val(carewell);
+		
+		$this.find('input.total_gross_amount').val(amount);
+		$this.find('input.total_philhealth').val(philhealth);
+		$this.find('input.total_charge_patient').val(patient);
+		$this.find('input.total_charge_carewell').val(carewell);
 
 	}
 	
@@ -125,23 +126,31 @@ function availment_center()
 
 			var availment_id 	= $(this).val();
 			var member_id		= $('select.member_id').val();
-			$.ajax({
-				headers: {
-				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-				},
+			if(member_id==0||member_id=="")
+			{
+				globals.global_tostr('MEMBER');
+			}
+			else
+			{
+				$.ajax({
+					headers: {
+					      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+					},
 
-				url:'/get/availment_info',
-				data:{availment_id:availment_id,member_id:member_id},
-				method: "POST",
+					url:'/get/availment_info',
+					data:{availment_id:availment_id,member_id:member_id},
+					method: "POST",
 
-	            success: function(data)
-				{
-					$('.procedureList').html(data);
-				}
-			});
+		            success: function(data)
+					{
+						$('.procedureList').html(data);
+					}
+				});
+			}
+			
 		});
 
-		$('body').on('change','.doctor-list',function() 
+		$('body').on('change','.doctorList',function() 
 		{
 			var doctor_id 	= $(this).val();
 			globals.get_information('/get/doctor_specialty',doctor_id,'.doctor-specialty','html');
@@ -154,11 +163,62 @@ function availment_center()
 	{
 		$('body').on('click','.create-approval-confirm',function() 
 		{
-			var	confirmModalMessage = 'Are you sure you want to add this approval?';
-			var confirmModalAction = 'create-approval-submit';
-			globals.confirm_modals(confirmModalMessage,confirmModalAction);
+			$("select.final_diagnosis_id").each(function(i, sel)
+            {
+            	var selectedFinal = $(sel).val();
+            	if(selectedFinal!=0)
+            	{
+            		finalDiagnosisData.push(selectedFinal);
+            	}
+            });
+            $("select.payeeList").each(function(i, sel)
+            {
+            	var selectedPayee = $(sel).val();
+            	if(selectedPayee!=0)
+            	{
+            		payeeData.push(selectedPayee);
+            	}
+            });
+            
 
-			ajaxData = $(".approval-submit-form").serialize();
+			if(document.getElementById('member_id').value==0)
+			{
+				globals.global_tostr('MEMBER');
+			}	
+			else if(document.getElementById('provider_id').value==0)
+			{
+				globals.global_tostr('PROVIDER');
+			}
+			else if(document.getElementById('availment_id').value==0)
+			{
+				globals.global_tostr('AVAILMENT');
+			}
+		    else if(globals.checking_null_validation(document.getElementById('approval_complaint').value,"COMPLAINT")=="")
+			{}
+			else if(document.getElementById('initial_diagnosis_id').value==0)
+			{
+				globals.global_tostr('INITIAL DIAGNOSIS');
+			}	
+			else if(finalDiagnosisData==null||finalDiagnosisData=="")
+			{
+				globals.global_tostr('FINAL DIAGNOSIS');
+			}
+			else if(payeeData==null||payeeData=="")
+			{
+				globals.global_tostr('PAYEE');
+			}
+			
+			else 
+			{
+				var	confirmModalMessage = 'Are you sure you want to add this approval?';
+				var confirmModalAction = 'create-approval-submit';
+				globals.confirm_modals(confirmModalMessage,confirmModalAction);
+
+				ajaxData = $(".approval-submit-form").serialize();
+			}
+
+
+			
 			
 		});
 	}

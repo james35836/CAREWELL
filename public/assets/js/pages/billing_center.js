@@ -37,7 +37,7 @@ function billing_center()
 		$("body").on('click','.close-cal',function()
 		{
 			var cal_id = $(this).data('cal_id');
-			var modalName= 'CAL INFORMATION ';
+			var modalName= 'COLLECTION DETAILS';
 			var modalClass='cal-close';
 			var modalLink='/billing/cal_close/'+cal_id;
 			var modalActionName='MARK AS CLOSE';
@@ -110,30 +110,43 @@ function billing_center()
 	{
 		$('body').on('click','.create-cal-confirm',function() 
 		{
-			if(document.getElementById('cal_company_id').value=="SELECT COMPANY")
+			if(document.getElementById('company_id').value=="0")
 			{
 				globals.global_tostr('COMPANY');
 			}
+			else if(globals.checking_null_validation(document.getElementById('cal_reveneu_period_year').value,"REVENUE YEAR")=="")
+			{}
+			else if(globals.checking_null_validation(document.getElementById('cal_payment_mode').value,"MODE OF PAYMENT")=="")
+			{}
+			else if(globals.checking_null_validation(document.getElementById('cal_payment_count').value,"PAYMENT COUNT")=="")
+			{}
 			else if(globals.checking_null_validation(document.getElementById('cal_payment_date').value,"PAYMENT DATE")=="")
 			{}
-			else if(globals.checking_null_validation(document.getElementById('cal_company_period_start').value,"PERIOD START")=="")
+			else if(globals.checking_null_validation(document.getElementById('cal_coverage_month_start').value,"COVERAGE MONTH START")=="")
 			{}
-			else if(globals.checking_null_validation(document.getElementById('cal_company_period_end').value,"PERIOD END")=="")
+			else if(globals.checking_null_validation(document.getElementById('cal_coverage_month_end').value,"COVERAGE MONTH END")=="")
+			{}
+			else if(globals.checking_null_validation(document.getElementById('cal_coverage_period_start').value,"COVERAGE PERIOD START")=="")
+			{}
+			else if(globals.checking_null_validation(document.getElementById('cal_coverage_period_end').value,"COVERAGE PERIOD END")=="")
 			{}
 			else
 			{
 				var	confirmModalMessage = 'Are you sure you want to add this CAL?';
 				var confirmModalAction = 'create-cal-submit';
 				globals.confirm_modals(confirmModalMessage,confirmModalAction);
+		 
 
-				calData.append("cal_company_id", 			document.getElementById('cal_company_id').value);
-	            calData.append("cal_reveneu_period_month", document.getElementById('cal_reveneu_period_month').value);
+				calData.append("company_id", 				document.getElementById('company_id').value);
 	            calData.append("cal_reveneu_period_year", 	document.getElementById('cal_reveneu_period_year').value);
-	            calData.append("cal_reveneu_period", 		document.getElementById('cal_reveneu_period').value);
-	            calData.append("cal_reveneu_period_count", document.getElementById('cal_reveneu_period_count').value);
-	            calData.append("cal_company_period_start", document.getElementById('cal_company_period_start').value);
-	            calData.append("cal_company_period_end", 	document.getElementById('cal_company_period_end').value);
-	            calData.append("cal_payment_date", 		document.getElementById('cal_payment_date').value);
+	            calData.append("cal_payment_mode", 	document.getElementById('cal_payment_mode').value);
+	            calData.append("cal_payment_count", 		document.getElementById('cal_payment_count').value);
+	            calData.append("cal_payment_date", 	document.getElementById('cal_payment_date').value);
+	            calData.append("cal_coverage_month_start", document.getElementById('cal_coverage_month_start').value);
+	            calData.append("cal_coverage_month_end", 	document.getElementById('cal_coverage_month_end').value);
+	            calData.append("cal_coverage_period_start", 		document.getElementById('cal_coverage_period_start').value);
+            	calData.append("cal_coverage_period_end", 		document.getElementById('cal_coverage_period_end').value);
+           
             }
 			
         });

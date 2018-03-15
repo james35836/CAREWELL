@@ -10,21 +10,24 @@ autoclose: true
 </script>
 <div class=" row box-globals">
   <div class="form-holder">
-    <div class="col-md-2 form-content">
+    <div class="col-md-3 form-content">
       <label>Company Name</label>
     </div>
-    <div class="col-md-4 form-content">
-      <select name="" id="cal_company_id" class="form-control">
-        <option>SELECT COMPANY</option>
+    <div class="col-md-9 form-content">
+      <select name="" id="company_id" class="form-control">
+        <option value="0">SELECT COMPANY</option>
         @foreach($_company as $company)
         <option value="{{$company->company_id}}" >{{$company->company_name}}</option>
         @endforeach
       </select>
     </div>
-    <div class="col-md-2 form-content">
+    
+  </div>
+  <div class="form-holder">
+    <div class="col-md-3 form-content">
       <label>Payment Date</label>
     </div>
-    <div class="col-md-4 form-content">
+    <div class="col-md-3 form-content">
       <div class="input-group date">
         <div class="input-group-addon">
           <i class="fa fa-calendar"></i>
@@ -32,31 +35,10 @@ autoclose: true
         <input type="text" class="form-control pull-right datepicker" id="cal_payment_date">
       </div>
     </div>
-  </div>
-  <div class="form-holder">
-    <div class="col-md-2 form-content">
-      <label>Revenue  Month</label>
+    <div class="col-md-3 form-content">
+      <label>Revenue Year</label>
     </div>
-    <div class="col-md-4 form-content">
-      <select name="" id="cal_reveneu_period_month" class="form-control">
-        <option >JANUARY</option>
-        <option >FEBRUARY</option>
-        <option >MARCH</option>
-        <option >APRIL</option>
-        <option >MAY</option>
-        <option >JUNE</option>
-        <option >JULY</option>
-        <option >AUGUST</option>
-        <option >SEPTEMBER</option>
-        <option >OCTOBER</option>
-        <option >NOVEMBER</option>
-        <option >DECEMBER</option>
-      </select>
-    </div>
-    <div class="col-md-2 form-content">
-      <label>Revenue  Year</label>
-    </div>
-    <div class="col-md-4 form-content">
+    <div class="col-md-3 form-content">
       <select name="" id="cal_reveneu_period_year" class="form-control">
         <option >2015</option>
         <option >2016</option>
@@ -88,46 +70,87 @@ autoclose: true
     </div>
   </div>
   <div class="form-holder">
-    <div class="col-md-2 form-content">
-      <label>Revenue Period</label>
+    <div class="col-md-3 form-content">
+      <label>Mode of Payment</label>
     </div>
-    <div class="col-md-4 form-content">
-      <select name="" id="cal_reveneu_period" class="form-control">
+    <div class="col-md-3 form-content">
+      <select name="" id="cal_payment_mode" class="form-control">
         @foreach($_period as $period)
         <option>{{$period->payment_mode_name}}</option>
         @endforeach
       </select>
     </div>
-    <div class="col-md-2 form-content">
-      <label>Revenue  Count</label>
+    <div class="col-md-3 form-content">
+      <label>Payment  Count</label>
     </div>
-    <div class="col-md-4 form-content">
-      <select name="" id="cal_reveneu_period_count" class="form-control">
-        <option value="first" >FIRST-PERIOD</option>
+    <div class="col-md-3 form-content">
+      <select name="" id="cal_payment_count" class="form-control">
+        <option value="FIRST-PERIOD" >FIRST-PERIOD</option>
+        <option value="SECOND-PERIOD" >SECOND-PERIOD</option>
       </select>
     </div>
   </div>
   <div class="form-holder">
-    <div class="col-md-2 form-content">
-      <label>Coverage  Start</label>
+    <div class="col-md-3 form-content">
+      <label>Coverage  Month  Start</label>
     </div>
-    <div class="col-md-4 form-content">
+    <div class="col-md-3 form-content">
+      <select name="" id="cal_coverage_month_start" class="form-control">
+        <option >JANUARY</option>
+        <option >FEBRUARY</option>
+        <option >MARCH</option>
+        <option >APRIL</option>
+        <option >MAY</option>
+        <option >JUNE</option>
+        <option >JULY</option>
+        <option >AUGUST</option>
+        <option >SEPTEMBER</option>
+        <option >OCTOBER</option>
+        <option >NOVEMBER</option>
+        <option >DECEMBER</option>
+      </select>
+    </div>
+    <div class="col-md-3 form-content">
+      <label>Coverage Month End</label>
+    </div>
+    <div class="col-md-3 form-content">
+      <select name="" id="cal_coverage_month_end" class="form-control">
+        <option >JANUARY</option>
+        <option >FEBRUARY</option>
+        <option >MARCH</option>
+        <option >APRIL</option>
+        <option >MAY</option>
+        <option >JUNE</option>
+        <option >JULY</option>
+        <option >AUGUST</option>
+        <option >SEPTEMBER</option>
+        <option >OCTOBER</option>
+        <option >NOVEMBER</option>
+        <option >DECEMBER</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-holder">
+    <div class="col-md-3 form-content">
+      <label>Coverage  Period Start</label>
+    </div>
+    <div class="col-md-3 form-content">
       <div class="input-group date">
         <div class="input-group-addon">
           <i class="fa fa-calendar"></i>
         </div>
-        <input type="text" class="form-control pull-right datepicker" id="cal_company_period_start">
+        <input type="text" class="form-control pull-right datepicker" id="cal_coverage_period_start">
       </div>
     </div>
-    <div class="col-md-2 form-content">
-      <label>Coverage  End</label>
+    <div class="col-md-3 form-content">
+      <label>Coverage Period End</label>
     </div>
-    <div class="col-md-4 form-content">
+    <div class="col-md-3 form-content">
       <div class="input-group date">
         <div class="input-group-addon">
           <i class="fa fa-calendar"></i>
         </div>
-        <input type="text" class="form-control pull-right datepicker" id="cal_company_period_end">
+        <input type="text" class="form-control pull-right datepicker" id="cal_coverage_period_end">
       </div>
     </div>
   </div>

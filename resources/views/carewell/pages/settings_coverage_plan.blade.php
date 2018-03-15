@@ -2,7 +2,7 @@
 @section('content')
 <div class="container">
   <div class="row">
-    <div class=" col-md-2 col-xs-6 pull-right no-padding">
+    <div class=" col-md-3 col-xs-12 pull-right no-padding">
       <button class="btn btn-primary top-element create-coverage-plan" type="button" ><i class="fa fa-plus btn-icon "></i>CREATE PLAN</button>
     </div>
   </div>
@@ -16,13 +16,8 @@
       <div class="tab-content">
         <div class="tab-pane active" id="activeCompany">
           <div class="row">
-            <div class=" col-md-3 col-xs-12 pull-left">
-              <select class="form-control top-element select2">
-                <option>SELECT PROVIDER</option>
-              </select>
-            </div>
             <div class="col-md-3 col-xs-12 pull-right">
-              <div class="input-group margin">
+              <div class="input-group top-element">
                 <input type="text" class="form-control">
                 <span class="input-group-btn">
                   <button type="button" class="btn btn-default"><i class="fa fa-search"></i></button>

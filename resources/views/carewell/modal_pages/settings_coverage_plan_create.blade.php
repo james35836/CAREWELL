@@ -7,7 +7,6 @@ $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
 checkboxClass: 'icheckbox_minimal-blue',
 radioClass   : 'iradio_minimal-blue'
 })
-
 $("body").on('click','.parent-box',function()
 {
 var $parent = $(this).closest('div.availment-box');
@@ -84,44 +83,54 @@ $parent.find('.btn').attr('disabled',!this.checked);
 				<label>ABL</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<select class="form-control" name="coverage_plan_annual_benefit" id="coverage_plan_annual_benefit">
-					
-					<option>SELECT</option>
-					<option class="btn btn-primary active btn-lg">ADD OPTION</option>
-					<option>20,000</option>
-					<option>30,000</option>
-					<option>40,000</option>
-				</select>
+				<div class="input-group">
+					<select class="form-control " name="coverage_plan_annual_benefit" id="coverage_plan_annual_benefit">
+						<option>10,000</option>
+						<option>20,000</option>
+						<option>30,000</option>
+						<option>40,000</option>
+					</select>
+					<span class="input-group-btn">
+						<button class="btn btn-secondary add-option" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span></button>
+					</span>
+				</div>
 			</div>
 			<div class="col-md-2 form-content">
 				<label>MBL</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<div class="col-md-4 no-padding">
+				<div class="input-group">
 					<select class="form-control " name="coverage_plan_maximum_benefit" id="coverage_plan_maximum_benefit">
 						<option>10,000</option>
 						<option>20,000</option>
 						<option>30,000</option>
 						<option>40,000</option>
 					</select>
+					<span class="input-group-btn">
+						<button class="btn btn-secondary add-option" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span></button>
+					</span>
 				</div>
-				
-				<div class="col-md-3 form-content">
-					<input type="checkbox" name="coverage_plan_mbl_year" id="coverage_plan_mbl_year"><label>Year</label>
+			</div>
+		</div>
+		<div class="row form-holder ">
+			<div class="col-md-4 form-content col-xs-12 pull-right">
+				<div class="col-md-6 col-xs-12 form-content no-padding">
+					<input type="checkbox" class="minimal" name="coverage_plan_mbl_year" id="coverage_plan_mbl_year"> <label> Year</label>
 				</div>
-				<div class="col-md-5 form-content no-padding">
-					<input type="checkbox" name="coverage_plan_mbl_illness" id="coverage_plan_mbl_illness"><label>Illness/ Disease</label>
+				<div class="col-md-6 col-xs-12 form-content no-padding">
+					<input type="checkbox" class="minimal" name="coverage_plan_mbl_illness" id="coverage_plan_mbl_illness"> <label> Illness/Disease</label>
 				</div>
-				
 			</div>
 		</div>
 	</div>
 	<div class="row box-globals">
 		<div class="row form-holder">
-			<div class="col-md-3 form-content">
-				<label>Type of Benefits</label>
-			</div>
+			<center>
+				<p style="font-size:20px;">TYPE OF BENEFITS</p>
+			</center>
 		</div>
+	</div>
+	<div class="row box-globals">
 		<div class="form-holder">
 			<div class="row type-of-availment-padding">
 				<div class="row availment-container box-container">
@@ -154,7 +163,7 @@ $parent.find('.btn').attr('disabled',!this.checked);
 												@endforeach
 											</select>
 											<span class="input-group-btn">
-												<button class="btn btn-secondary add-new-option" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span> ADD ITEM</button>
+												<button class="btn btn-secondary add-new-option" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span></button>
 											</span>
 										</div>
 									</td>
@@ -166,7 +175,7 @@ $parent.find('.btn').attr('disabled',!this.checked);
 												@endforeach
 											</select>
 											<span class="input-group-btn">
-												<button class="btn btn-secondary add-new-option" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span> ADD ITEM</button>
+												<button class="btn btn-secondary add-new-option" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span></button>
 											</span>
 										</div>
 									</td>

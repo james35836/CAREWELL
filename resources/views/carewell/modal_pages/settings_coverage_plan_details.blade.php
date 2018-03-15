@@ -75,42 +75,54 @@ radioClass   : 'iradio_minimal-blue'
 				<label>ABL</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<select class="form-control" name="coverage_plan_annual_benefit" id="coverage_plan_annual_benefit">
-					<option>{{$coverage_plan_details->coverage_plan_annual_benefit}}</option>
-					<option>20,000</option>
-					<option>30,000</option>
-					<option>40,000</option>
-				</select>
+				<div class="input-group">
+					<select class="form-control " name="coverage_plan_annual_benefit" id="coverage_plan_annual_benefit">
+						<option>{{$coverage_plan_details->coverage_plan_annual_benefit}}</option>
+						<option>20,000</option>
+						<option>30,000</option>
+						<option>40,000</option>
+					</select>
+					<span class="input-group-btn">
+						<button class="btn btn-secondary add-option" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span></button>
+					</span>
+				</div>
 			</div>
 			<div class="col-md-2 form-content">
 				<label>MBL</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<div class="col-md-4 no-padding">
+				<div class="input-group">
 					<select class="form-control " name="coverage_plan_maximum_benefit" id="coverage_plan_maximum_benefit">
 						<option>{{$coverage_plan_details->coverage_plan_maximum_benefit}}</option>
 						<option>20,000</option>
 						<option>30,000</option>
 						<option>40,000</option>
 					</select>
+					<span class="input-group-btn">
+						<button class="btn btn-secondary add-option" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span></button>
+					</span>
 				</div>
-				
-				<div class="col-md-3 form-content">
-					<input type="checkbox" value="{{$coverage_plan_details->coverage_plan_mbl_year}}"  name="coverage_plan_mbl_year" id="coverage_plan_mbl_year"><label>Year</label>
+			</div>
+		</div>
+		<div class="row form-holder ">
+			<div class="col-md-4 form-content col-xs-12 pull-right">
+				<div class="col-md-6 col-xs-12 form-content no-padding">
+					<input type="checkbox" class="minimal"  value="{{$coverage_plan_details->coverage_plan_mbl_year}}" name="coverage_plan_mbl_year" id="coverage_plan_mbl_year"> <label> Year</label>
 				</div>
-				<div class="col-md-5 form-content no-padding">
-					<input type="checkbox" value="{{$coverage_plan_details->coverage_plan_mbl_illness}}"  name="coverage_plan_mbl_illness" id="coverage_plan_mbl_illness"><label>Illness/ Disease</label>
+				<div class="col-md-6 col-xs-12 form-content no-padding">
+					<input type="checkbox" class="minimal"  value="{{$coverage_plan_details->coverage_plan_mbl_illness}}" name="coverage_plan_mbl_illness" id="coverage_plan_mbl_illness"> <label> Illness/Disease</label>
 				</div>
-				
 			</div>
 		</div>
 	</div>
 	<div class="row box-globals">
 		<div class="row form-holder">
-			<div class="col-md-3 form-content">
-				<label>Type of Coverage</label>
-			</div>
+			<center>
+				<p style="font-size:20px;">TYPE OF BENEFITS</p>
+			</center>
 		</div>
+	</div>
+	<div class="row box-globals">
 		<div class="form-holder">
 			<div class="row type-of-availment-padding">
 				<div class="row availment-container">
@@ -118,7 +130,7 @@ radioClass   : 'iradio_minimal-blue'
 					<div class=" availment-box">
 						<div class="parent-availment ">
 							<p style="font-size: 20px;font-weight: bold;">
-								<input type="checkbox" class="minimal" name="parent_availment[]" value="{{$coverage_plan_covered->availment_id}}"/>
+								{{-- <input type="checkbox" class="minimal" name="parent_availment[]" value="{{$coverage_plan_covered->availment_id}}"/> --}}
 								{{$coverage_plan_covered->availment_name}}
 							</p>
 							<table class="table table-bordered availed-table">
@@ -141,7 +153,7 @@ radioClass   : 'iradio_minimal-blue'
 													@endforeach --}}
 												</select>
 												<span class="input-group-btn">
-													<button class="btn btn-secondary add-new-option" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span> ADD ITEM</button>
+													<button class="btn btn-secondary add-new-option" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span></button>
 												</span>
 											</div>
 										</td>
@@ -154,7 +166,7 @@ radioClass   : 'iradio_minimal-blue'
 													@endforeach --}}
 												</select>
 												<span class="input-group-btn">
-													<button class="btn btn-secondary add-new-option" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span> ADD ITEM</button>
+													<button class="btn btn-secondary add-new-option" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span></button>
 												</span>
 											</div>
 										</td>

@@ -921,18 +921,18 @@ class CarewellController extends ActiveAuthController
   }
   public function billing_create_cal_submit(Request $request)
   {
-    
     $companyCalData                             =   new TblCalModel;
     $companyCalData->cal_number                 =   StaticFunctionController::updateReferenceNumber('billing_cal');;
-    $companyCalData->cal_reveneu_period_month   =   $request->cal_reveneu_period_month;
     $companyCalData->cal_reveneu_period_year    =   $request->cal_reveneu_period_year;
-    $companyCalData->cal_reveneu_period         =   $request->cal_reveneu_period;
-    $companyCalData->cal_reveneu_period_count   =   $request->cal_reveneu_period_count;
-    $companyCalData->cal_company_period_start   =   $request->cal_company_period_start;
-    $companyCalData->cal_company_period_end     =   $request->cal_company_period_end;
+    $companyCalData->cal_payment_mode           =   $request->cal_payment_mode;
+    $companyCalData->cal_payment_count          =   $request->cal_payment_count;
     $companyCalData->cal_payment_date           =   $request->cal_payment_date;
+    $companyCalData->cal_coverage_month_start   =   $request->cal_coverage_month_start;
+    $companyCalData->cal_coverage_month_end     =   $request->cal_coverage_month_end;
+    $companyCalData->cal_coverage_period_start  =   $request->cal_coverage_period_start;
+    $companyCalData->cal_coverage_period_end    =   $request->cal_coverage_period_end;
     $companyCalData->cal_created                =   Carbon::now();
-    $companyCalData->company_id                 =   $request->cal_company_id;
+    $companyCalData->company_id                 =   $request->company_id;
     $companyCalData->save();
 
     return StaticFunctionController::returnMessage('success','COMPANY CAL');     
@@ -954,6 +954,14 @@ class CarewellController extends ActiveAuthController
                             ->join('tbl_cal_info','tbl_cal_info.cal_id','=','tbl_cal.cal_id')
                             ->first();
     }
+    $sum = 0;
+    foreach($data['_cal_member'] as $amount)
+    {
+      $sum = $sum + $amount->cal_payment_amount;
+    }
+
+    $data['total_amount']   = $sum;
+    $data['total_member']   = count($data['_cal_member']);
     return view('carewell.modal_pages.billing_cal_details',$data);
   }
   public function billing_import_cal_members($cal_id,$company_id)
@@ -1497,7 +1505,7 @@ class CarewellController extends ActiveAuthController
       $procedureData->procedure_philhealth      = $request->procedure_philhealth[$key];
       $procedureData->procedure_charge_patient  = $request->procedure_charge_patient[$key];
       $procedureData->procedure_charge_carewell = $request->procedure_charge_carewell[$key];
-      $procedureData->diagnosis_id              = $request->diagnosis_id[$key];
+      $procedureData->diagnosis_id     = $request->assigned_diagnosis_id[$key];
       $procedureData->approval_id               = $approvalData->approval_id;
       $procedureData->save();
     }

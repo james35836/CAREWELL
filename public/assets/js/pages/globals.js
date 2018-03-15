@@ -26,6 +26,8 @@ var availmentData 		= [];
 var procedureData		= []; 
 var chargesData			= [];
 
+var finalDiagnosisData	= [];
+
 var payeeData			= [];
 var serializeData 	= [];
 var ajaxData 		= [];
@@ -321,6 +323,30 @@ function globals()
 			}
 		});
 	}
+	this.option_modal  = function(modalClass,modalAction)
+	{
+		$('.'+modalClass).remove();
+        $(".append-modal").append(globalModals);
+		$('.global-modal').removeClass().addClass('modal fade modal-top '+modalClass);
+		$('.global-modal-dialog').removeClass().addClass('modal-dialog modal-'+modalClass);
+		$('.global-modal-content').removeClass().addClass('modal-content');
+		$('.global-modal-header').removeClass().addClass('modal-header');
+		$('.global-modal-title').html('ADD NEW OPTION');
+		$('.global-modal-title').removeClass().addClass('modal-title second');
+		$('.global-modal-body').removeClass().addClass('modal-body');
+		$('.'+modalClass).modal('show');
+		$('.global-ajax-loader').show();
+        $('.global-modal-body-content').hide();
+        $('.global-modal-footer').hide();
+        setTimeout(function()
+		{
+
+			$('.global-ajax-loader').hide().removeClass().addClass('.modal-loader');
+			$('.global-modal-body-content').show().removeClass().addClass('row box-holder  modal-body-content').html(dataOptionModals);
+			$('.global-modal-footer').show().removeClass().addClass('modal-footer');
+        	$('.global-footer-button').html('ADD OPTION').removeClass().addClass('btn btn-primary '+modalAction);
+        }, 1000);
+	}
 	
 	
 	init();
@@ -337,7 +363,6 @@ function globals()
 	{
 		check_all_checkbox();
 		add_select_option();
-		add_select_option_submit();
 		reload_page();
 
 		archived_data();
@@ -513,37 +538,19 @@ function globals()
 		$('body').on("click",".add-new-option",function()
 		{
 			ajaxData.newOption = $(this).closest('td').find('select');
-
-			$('.add-option-modal').remove();
-            $(".append-modal").append(globalModals);
-			$('.global-modal').removeClass().addClass('modal fade modal-top add-option-modal');
-			$('.global-modal-dialog').removeClass().addClass('modal-dialog modal-add-option ');
-			$('.global-modal-content').removeClass().addClass('modal-content');
-			$('.global-modal-header').removeClass().addClass('modal-header');
-			$('.global-modal-title').html('ADD NEW OPTION');
-			$('.global-modal-title').removeClass().addClass('modal-title second');
-			$('.global-modal-body').removeClass().addClass('modal-body');
-			$('.add-option-modal').modal('show');
-			$('.global-ajax-loader').show();
-            $('.global-modal-body-content').hide();
-            $('.global-modal-footer').hide();
-            setTimeout(function()
-			{
-
-				$('.global-ajax-loader').hide().removeClass().addClass('.modal-loader');
-				$('.global-modal-body-content').show().removeClass().addClass('row box-holder  modal-body-content').html(dataOptionModals);
-				$('.global-modal-footer').show().removeClass().addClass('modal-footer');
-            	$('.global-footer-button').html('ADD OPTION').removeClass().addClass('btn btn-primary add-new-option-submit');
-            }, 1000);
+			globals.option_modal('add-option1','add-option-submit');
 		});
-	}
-	function add_select_option_submit()
-	{
-		$('body').on('click','.add-new-option-submit',function () 
+		$('body').on('click','.add-option',function () 
+		{
+			ajaxData.newOption = $(this).closest('div').find('select');
+			globals.option_modal('add-option1','add-option-submit');
+		});
+		$('body').on('click','.add-option-submit',function () 
 		{
 			
             var newopt 	= $('.new-option-name').val();
             var newData = ajaxData.newOption;
+            $('.add-option1').remove();
             if (newopt == '') 
             {
                 toastr.error('Add option first before submit.', 'Something went wrong!', {timeOut: 3000})
@@ -557,6 +564,7 @@ function globals()
 
         });
 	}
+	
 	function table_sorter()
 	{
 		$('body').on('click','th',function()
