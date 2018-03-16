@@ -77,9 +77,13 @@ $(document).ready(function()
 		var newData = $('body').find('select.assigned-diagnosis');
 		newData.append('<option value="'+val+'" selected="selected">'+text+'</option>');
 	});
-	$('body').on('change','#total_gross_amount',function()
+	$('body').on('click','.reembursementBtn',function()
 	{
-		alert();
+		$('.reemburse-provider').html('<input type="text" class="form-control" name="state_d" id="state_d">');
+		$('.doctorList').replaceWith('<input type="text" class="form-control" name="state_d" id="state_d">');
+		$('.payeeList').replaceWith('<input type="text" class="form-control" name="state_d" id="state_d">');
+	
+
 	});
 });
 </script>
@@ -144,14 +148,14 @@ $(document).ready(function()
 	<div class="row box-globals">
 		<div class="form-holder col-md-12 no-padding">
 			<div class="pull-right col-md-3 col-xs-12">
-				<button type="button" class="btn btn-primary top-element" ><i class="fa fa-upload btn-icon"></i> REEMBURSEMENT</button>
+				<button type="button" class="btn btn-primary top-element reembursementBtn" ><i class="fa fa-upload btn-icon"></i> REEMBURSEMENT</button>
 			</div>
 		</div>
 		<div class="form-holder">
 			<div class="col-md-2 form-content">
 				<label>Network Provider</label>
 			</div>
-			<div class="col-md-4 form-content">
+			<div class="col-md-4 form-content reemburse-provider">
 				<select class="form-control get-provider-info" id="provider_id" name="provider_id">
 					<option value="0">SELECT PROVIDER</option>
 					@foreach($_provider as $provider)

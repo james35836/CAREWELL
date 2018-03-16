@@ -377,7 +377,7 @@ class StaticFunctionController extends Controller
         break;
     }
 
-    if($ref == null)
+    if($ref == null||$ref=="")
     {    
       $refer = $name;
     }

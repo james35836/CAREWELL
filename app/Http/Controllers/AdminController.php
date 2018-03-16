@@ -65,7 +65,7 @@ use Excel;
 use Input;
 // use Request;
 use DB;
-// use Carbon\Carbon;
+use Carbon\Carbon;
 use Paginate;
 use Crypt;
 use Mail;
@@ -178,9 +178,8 @@ class AdminController extends ActiveAuthController
         foreach($_data as $data)
         {
           $refNumber = StaticFunctionController::getIdNorName($data['provider_name'],'provider');
-          if($refNumber==$data['provider_name'])
+          if($refNumber==$data->provider_name)
           {
-            dd("james");
             $providerData = new TblProviderModel;
             $providerData->provider_name            = $data['provider_name'];
             $providerData->provider_rvs             = $data['provider_rvs'];
