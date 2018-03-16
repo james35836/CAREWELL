@@ -2,7 +2,7 @@
 @section('content')
 <div class="container">
   <div class="row">
-    <div class=" col-md-2 pull-right">
+    <div class=" col-md-3 col-xs-12 pull-right no-padding">
       <button type="button" class="btn btn-primary  developer-modals top-element"><i class="fa fa-upload btn-icon"></i>IMPORT DATA</button>
     </div>
   </div>
@@ -14,6 +14,12 @@
         <li><a href="#descriptionTab" data-toggle="tab">DESCRIPTION</a></li>
         <li><a href="#diagnosisTab" data-toggle="tab">DIAGNOSIS</a></li>
       </ul>
+      {{-- <ul class="nav  nav-stacked nav-tabs">
+        <li class="active"><a href="#">Home</a></li>
+        <li><a href="#procedureTab">Menu 1</a></li>
+        <li><a href="#">Menu 2</a></li>
+        <li><a href="#">Menu 3</a></li>
+      </ul> --}}
       <div class="tab-content">
         <div class="tab-pane active" id="laboratoryTab">
           <div class="row">
@@ -212,5 +218,6 @@
       <!-- /.tab-content -->
     </div>
   </div>
+  
 </div>
 @endsection

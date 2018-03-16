@@ -37,35 +37,12 @@ function settings_developer()
 	}
 	function developer_modal_submit()
 	{
-		
 		$('body').on('click','.developer-modals-submit',function() 
 		{
 			formData.append("file_name", 			$('#JamesDev').val());
 			formData.append("importDeveloperFile", 	document.getElementById('importDeveloperFile').files[0]);
-            
-            $.ajax({
-				headers: {
-				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-				},
-				url:'/settings/developer_modal_submit',
-				method: "POST",
-                data: formData,
-                contentType: false,
-                cache: false,
-                processData: false,
-                success: function(data)
-				{
-					setTimeout(function()
-					{
-						$('.developer-ajax-loader').hide();
-						$('.developer-modal-dialog').removeClass().addClass('modal-sm modal-dialog')
-						$('.developer-modal-body').html(data);
-						$('.developer-modal-footer').html(successButton);
-
-					}, 1000);
-				}
-			});
-		});
+			globals.global_submit('developer','/settings/developer_modal_submit',formData);
+        });
 	}
 
 }

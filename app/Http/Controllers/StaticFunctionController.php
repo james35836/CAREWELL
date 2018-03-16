@@ -369,10 +369,9 @@ class StaticFunctionController extends Controller
   public static function getIdNorName($name="",$str_param)
   {
     $ref = "";
+    $refer = "";
     switch ($str_param) 
     {
- 
-
       case 'provider':
         $ref = TblProviderModel::where('provider_name', $name)->value('provider_id');
         break;

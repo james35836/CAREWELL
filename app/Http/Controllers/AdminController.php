@@ -65,7 +65,7 @@ use Excel;
 use Input;
 // use Request;
 use DB;
-use Carbon\Carbon;
+// use Carbon\Carbon;
 use Paginate;
 use Crypt;
 use Mail;
@@ -172,6 +172,7 @@ class AdminController extends ActiveAuthController
     $first  = $_data[0]; 
     if(isset($first['provider_payee_name'])&&isset($first['provider_name'])&&$request->file_name=="provider")
     {
+
       $count = 0;
       $countPayee = 0;
         foreach($_data as $data)
@@ -179,7 +180,7 @@ class AdminController extends ActiveAuthController
           $refNumber = StaticFunctionController::getIdNorName($data['provider_name'],'provider');
           if($refNumber==$data['provider_name'])
           {
-
+            dd("james");
             $providerData = new TblProviderModel;
             $providerData->provider_name            = $data['provider_name'];
             $providerData->provider_rvs             = $data['provider_rvs'];
@@ -188,8 +189,6 @@ class AdminController extends ActiveAuthController
             $providerData->provider_mobile_number   = "N/A";
             $providerData->provider_contact_email   = "N/A";
             $providerData->provider_address         = "N/A";
-
-            
             $providerData->provider_created         = Carbon::now();
             $providerData->save();
             
