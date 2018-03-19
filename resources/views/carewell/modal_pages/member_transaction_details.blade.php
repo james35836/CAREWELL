@@ -134,11 +134,7 @@
 								<label>Pre-Existing</label>
 							</div>
 							<div class="col-md-4 form-content">
-								<select class="form-control" name="coverage_plan_preexisting" id="coverage_plan_preexisting">
-									<option>{{$coverage_plan_details->coverage_plan_name}}</option>
-									<option>WAVE</option>
-									<option>12 MONTHS</option>
-								</select>
+								<input type="text" value="{{$coverage_plan_details->coverage_plan_name}}" class="form-control">
 							</div>
 						</div>
 						<div class="row form-holder ">
@@ -146,33 +142,13 @@
 								<label>ABL</label>
 							</div>
 							<div class="col-md-4 form-content">
-								<div class="input-group">
-									<select class="form-control " name="coverage_plan_annual_benefit" id="coverage_plan_annual_benefit">
-										<option>{{$coverage_plan_details->coverage_plan_annual_benefit}}</option>
-										<option>20,000</option>
-										<option>30,000</option>
-										<option>40,000</option>
-									</select>
-									<span class="input-group-btn">
-										<button class="btn btn-secondary add-option" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span></button>
-									</span>
-								</div>
+								<input type="text" value="{{$coverage_plan_details->coverage_plan_annual_benefit}}" class="form-control">
 							</div>
 							<div class="col-md-2 form-content">
 								<label>MBL</label>
 							</div>
 							<div class="col-md-4 form-content">
-								<div class="input-group">
-									<select class="form-control " name="coverage_plan_maximum_benefit" id="coverage_plan_maximum_benefit">
-										<option>{{$coverage_plan_details->coverage_plan_maximum_benefit}}</option>
-										<option>20,000</option>
-										<option>30,000</option>
-										<option>40,000</option>
-									</select>
-									<span class="input-group-btn">
-										<button class="btn btn-secondary add-option" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span></button>
-									</span>
-								</div>
+								<input type="text" value="{{$coverage_plan_details->coverage_plan_maximum_benefit}}" class="form-control">
 							</div>
 						</div>
 						<div class="row form-holder ">
@@ -214,24 +190,10 @@
 													@foreach($coverage_plan_covered->child_plan_item as $child_plan_item)
 													<tr class="table-row">
 														<td class="col-md-5">
-															
-															<select name="child_availment[]" class="form-control procedure select2">
-																<option value="0">{{$child_plan_item->procedure_name}}</option>
-																@foreach($coverage_plan_covered->child_availment as $child_availment)
-																<option value="{{$child_availment->availment_id}}">{{$child_availment->availment_name}}</option>
-																@endforeach
-															</select>
-															
+															<input type="text" value="{{$child_plan_item->procedure_name}}" class="form-control">
 														</td>
 														<td class="col-md-4">
-															
-															<select name="child_availment_charges[]" class="form-control select2 ">
-																<option value="0">{{$child_plan_item->availment_charges_name}}</option>
-																@foreach($coverage_plan_covered->availment_charges as $availment_charges)
-																<option value="{{$availment_charges->availment_charges_id}}">{{$availment_charges->availment_charges_name}}</option>
-																@endforeach
-															</select>
-															
+															<input type="text" value="{{$child_plan_item->availment_charges_name}}" class="form-control">
 														</td>
 														
 													</tr>

@@ -217,6 +217,7 @@
 .table-responsive 
 {
   	overflow-y: visible !important;
+  	overflow: inherit;
   	td 
 	{
 		min-width:120px !important;

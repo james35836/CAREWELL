@@ -40,7 +40,7 @@ autoclose: true
 			<label>REVENUE YEAR</label>
 		</div>
 		<div class="col-md-3  form-content">
-			<input type="text" class="form-control" value="{{$cal_details->cal_revenue_period_year}}"/>
+			<input type="text" class="form-control" value="{{$cal_details->cal_reveneu_period_year}}"/>
 		</div>
 		
 	</div>

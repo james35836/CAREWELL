@@ -152,7 +152,6 @@ class AdminController extends ActiveAuthController
     $data['page'] = 'DEVELOPER';
     $data['user'] = StaticFunctionController::global();
 
-    $data['_laboratory']        = TblLaboratoryModel::where('archived',0)->paginate(10);
     $data['_diagnosis']         = TblDiagnosisModel::where('archived',0)->paginate(10);
     $data['_doctor_procedure']  = TblDoctorProcedureModel::where('archived',0)->paginate(10);
     $data['_procedure']         = TblProcedureModel::where('archived',0)->paginate(10);

@@ -1043,7 +1043,7 @@ class CarewellController extends ActiveAuthController
           $sheet->setCellValue('H'.$key, date('m/d/Y', strtotime($member->member_birthdate)));
           $sheet->setCellValue('I'.$key, $member->coverage_plan_name);
           $sheet->setCellValue('J'.$key, $member->deployment_name);
-          $sheet->setCellValue('K'.$key, $member->coverage_plan_monthly_premium);
+          $sheet->setCellValue('K'.$key, $member->coverage_plan_premium);
           $sheet->setCellValue('L'.$key, $member->member_company_status);
         }
       });
