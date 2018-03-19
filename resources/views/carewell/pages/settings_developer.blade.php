@@ -100,19 +100,19 @@ transform: rotate(-90deg);
     </div>
   </div>
   <div class="row">
-    <div class="col-sm-3 no-padding">
+    <div class="col-sm-2 no-padding">
       <ul class="nav nav-tabs tabs-left" role="tablist">
         <li role="presentation" class="active"><a href="#procedureTab" aria-controls="profile" role="tab" data-toggle="tab">DOCTOR PROCEDURE </a></li>
         <li role="presentation"><a href="#descriptionTab" aria-controls="profile" role="tab" data-toggle="tab">DESCRIPTION</a></li>
         <li role="presentation"><a href="#diagnosisTab" aria-controls="profile" role="tab" data-toggle="tab">DIAGNOSIS</a></li>
       </ul>
     </div>
-    <div class="col-sm-9 nav-tabs-custom no-padding">
+    <div class="col-sm-10 nav-tabs-custom no-padding">
       <div class="tab-content">
         <div role="tabpanel" class="tab-pane active" id="procedureTab">
           <div class="row">
             <div class="col-md-3 col-xs-12 pull-right">
-              <div class="input-group margin">
+              <div class="input-group top-element">
                 <input type="text" class="form-control">
                 <span class="input-group-btn">
                   <button type="button" class="btn btn-default"><i class="fa fa-search"></i></button>
@@ -165,7 +165,7 @@ transform: rotate(-90deg);
         <div role="tabpanel" class="tab-pane" id="descriptionTab">
           <div class="row">
             <div class="col-md-3 col-xs-12 pull-right">
-              <div class="input-group margin">
+              <div class="input-group top-element">
                 <input type="text" class="form-control">
                 <span class="input-group-btn">
                   <button type="button" class="btn btn-default"><i class="fa fa-search"></i></button>

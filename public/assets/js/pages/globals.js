@@ -6,6 +6,7 @@ var adjustmentData	= new FormData();
 var memberFileData	= new FormData();
 var companyData		= new FormData();
 var providerData 	= new FormData();
+var providerFileData= new FormData();
 var calData 		= new FormData();
 var calCloseData	= new FormData();
 var calFileData 	= new FormData();
@@ -19,6 +20,8 @@ var restoreData 	= new FormData();
 
 var filterData 		= new FormData();
 var searchData 		= new FormData();
+
+
 
 var doctorProviderData	= [];
 var specialData 		= [];

@@ -223,10 +223,15 @@
 		min-width:120px !important;
 	}
 }
-.box-body
+@media (min-width: 780px) 
 {
-	overflow: inherit;
+    .box-body
+	{
+
+		overflow: inherit;
+	}
 }
+
 //nakamamatay
 .top-label
 {

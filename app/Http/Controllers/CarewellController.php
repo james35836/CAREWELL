@@ -440,11 +440,11 @@ class CarewellController extends ActiveAuthController
               $coverage_number--;
 
               /* PAYMENT REFERENCES */
-              $sheet->SetCellValue("I1", "coverage");
+              $sheet->SetCellValue("J1", "payment");
               $payment_mode_number = 2;
               foreach($_payment_mode as $payment_mode)
               {
-                  $sheet->SetCellValue("I".$payment_mode_number, $payment_mode->payment_mode_name);
+                  $sheet->SetCellValue("J".$payment_mode_number, $payment_mode->payment_mode_name);
                   $payment_mode_number++;
               }
               $payment_mode_number--;
@@ -465,7 +465,7 @@ class CarewellController extends ActiveAuthController
               /*PAYMENT*/
               $sheet->_parent->addNamedRange(
                   new \PHPExcel_NamedRange(
-                  'payment', $sheet, 'J2:I'.$payment_mode_number
+                  'payment', $sheet, 'J2:J'.$payment_mode_number
                   )
               );
           });
@@ -661,6 +661,77 @@ class CarewellController extends ActiveAuthController
     }
 
     return view('carewell.modal_pages.provider_details',$data);
+  }
+  public function provider_import()
+  {
+    return view('carewell.modal_pages.provider_import');
+  }
+  public function provider_import_submit(Request $request)
+  {
+    $file   = $request->file('importProviderFile')->getRealPath();
+    $_data  = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->all();
+    $first  = $_data[0]; 
+    if(isset($first['provider_payee_name'])&&isset($first['provider_name']))
+    {
+      $count = 0;
+      $countPayee = 0;
+        foreach($_data as $data)
+        {
+          // dd($data);
+          $refNumber = StaticFunctionController::getIdNorName($data['provider_name'],'provider_payee');
+          if($refNumber==$data->provider_name)
+          {
+            $providerData = new TblProviderModel;
+            $providerData->provider_name            = $data['provider_name'];
+            $providerData->provider_rvs             = $data['provider_rvs'];
+            $providerData->provider_contact_person  = "N/A";
+            $providerData->provider_telephone_number= "N/A";
+            $providerData->provider_mobile_number   = "N/A";
+            $providerData->provider_contact_email   = "N/A";
+            $providerData->provider_address         = "N/A";
+            $providerData->provider_created         = Carbon::now();
+            $providerData->save();
+            
+            $providerPayeeData = new TblProviderPayeeModel;
+            $providerPayeeData->provider_payee_name = $data['provider_payee_name'];
+            $providerPayeeData->provider_id = $providerData->provider_id;
+            $providerPayeeData->save();
+            $count++;
+          }
+          else
+          {
+            $providerPayeeData = new TblProviderPayeeModel;
+            $providerPayeeData->provider_payee_name = $data['provider_payee_name'];
+            $providerPayeeData->provider_id = $refNumber;
+            $providerPayeeData->save();
+
+            $countPayee++;
+          }
+        }    
+
+        if($count == 0)
+        {
+          $message = '<center><b><span class="color-gray">There is nothing to insert</span></b></center>';
+        }
+        else
+        {
+          $message = '<center><b><span class="color-green">'.$count.' Provider/s has been inserted and '.$countPayee.' payee.</span></b></center>';
+        }
+        return $message;
+    }
+  }
+  public function provider_export_template(Request $request)
+  {
+    $excels['data']           =   ['PROVIDER NAME','PROVIDER PAYEE','PROVIDER RVS'];
+    Excel::create('CAREWELL PROVIDER TEMPLATE', function($excel) use ($excels) 
+    {
+      $excel->sheet('template', function($sheet) use ($excels) 
+      {
+        $data = $excels['data'];
+        $sheet->fromArray($data, null, 'A1', false, false);
+        $sheet->freezeFirstRow();
+      });
+    })->download('xlsx');
   }
 
   /*DOCTOR*/

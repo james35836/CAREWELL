@@ -28,7 +28,7 @@ function settings_developer()
 			var company_id = $(this).data('company_id');
 			var modalName= 'DEVELOPER MODAL';
 			var modalClass='developer';
-			var modalLink='/settings/developer_modal';
+			var modalLink='/settings/maintenance_modal';
 			var modalActionName='SUBMIT';
 			var modalAction='developer-modals-submit';
 			var modalSize = 'modal-import';
@@ -41,7 +41,7 @@ function settings_developer()
 		{
 			formData.append("file_name", 			$('#JamesDev').val());
 			formData.append("importDeveloperFile", 	document.getElementById('importDeveloperFile').files[0]);
-			globals.global_submit('developer','/settings/developer_modal_submit',formData);
+			globals.global_submit('developer','/settings/maintenance_modal_submit',formData);
         });
 	}
 

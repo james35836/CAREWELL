@@ -147,9 +147,9 @@ class AdminController extends ActiveAuthController
                           ->first();
     return view('carewell.modal_pages.admin_user_details',$data);
   }
-  public function settings_developer()
+  public function settings_maintenance()
   {
-    $data['page'] = 'DEVELOPER';
+    $data['page'] = 'Maintenance';
     $data['user'] = StaticFunctionController::global();
 
     $data['_diagnosis']         = TblDiagnosisModel::where('archived',0)->paginate(10);
@@ -158,13 +158,13 @@ class AdminController extends ActiveAuthController
 
     return view('carewell.pages.settings_developer',$data);
   }
-  public function settings_developer_modal()
+  public function settings_maintenance_modal()
   {
 
     return view('carewell.modal_pages.developer_modal');
   }
   
-  public function settings_developer_modal_submit(Request $request)
+  public function settings_maintenance_modal_submit(Request $request)
   {
     $file   = $request->file('importDeveloperFile')->getRealPath();
     $_data  = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->all();

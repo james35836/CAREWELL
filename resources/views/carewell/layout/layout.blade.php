@@ -251,7 +251,7 @@
           <ul class="treeview-menu">
             <li><a href="/settings/admin"><i class="fa fa-universal-access"></i>ADMIN PANEL</a></li>
             <li><a href="/settings/coverage"><i class="fa fa-circle-o"></i>COVERAGE PLAN</a></li>
-            <li><a href="/settings/developer"><i class="fa fa-circle-o"></i>DEVELOPER</a></li>
+            <li><a href="/settings/maintenance"><i class="fa fa-circle-o"></i>MAINTENANCE</a></li>
           </ul>
         </li>
       </ul>
@@ -357,7 +357,8 @@
     })
   })
   $('body').on('hidden.bs.modal', function (e) {
-      if($('.modal').hasClass('in')) {
+      if($('.modal').hasClass('in')) 
+      {
       $('body').addClass('modal-open');
       }
       else
@@ -365,6 +366,20 @@
         $('div').removeClass('modal-backdrop');
       }    
   });
+  $(document).ready(function()
+  {
+    $('body').on('click','li.treeview',function()
+    {
+      alert();
+      if($(this).hasClass('menu-open'))
+      {
+        $(this).closest('treeview').find('ul.treeview-menu').css('display','block');
+      }
+      
+      
+    });
+  });
+
   
  
 </script>

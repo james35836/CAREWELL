@@ -2,21 +2,27 @@
 @section('content')
 <div class="container">
   <div class="row">
-    <div class=" col-md-3 col-xs-12 pull-right no-padding">
-      <button class="btn btn-primary top-element create-provider" type="button" ><i class="fa fa-plus btn-icon "></i>CREATE PROVIDER</button>
+    <div class="col-md-3 col-xs-12 pull-right no-padding">
+      <div class="dropdown">
+        <button class="btn btn-primary top-element dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fa fa-plus btn-icon "></i>CREATE MEMBER
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <button type="button" class="btn btn-link  create-provider"><i class="fa   fa-pencil-square btn-icon" ></i>CREATE PROVIDER</button>
+          <button type="button" class="btn btn-link   import-provider"><i class="fa fa-file-excel-o btn-icon" ></i>IMPORT EXCEL</button>
+        </div>
+      </div>
     </div>
   </div>
   <div class="row">
     <div class="nav-tabs-custom">
       <ul class="nav nav-tabs">
-        <li class="active"><a href="#activeCompany" data-toggle="tab">ACTIVE </a></li>
-        <li><a href="#inActiveCompany" data-toggle="tab">INACTIVE </a></li>
+        <li class="active"><a href="#activeTab" data-toggle="tab">ACTIVE </a></li>
+        <li><a href="#inActiveTab" data-toggle="tab">INACTIVE </a></li>
       </ul>
       <div class="tab-content">
-        <div class="tab-pane active" id="activeCompany">
-          
+        <div class="tab-pane active" id="activeTab">
           <div class="row">
-            
             <div class="col-md-3 col-xs-12 pull-right">
               <div class="input-group top-element">
                 <input type="text" class="form-control search-key">
@@ -69,7 +75,7 @@
         </div>
         </div>
         <!-- /.tab-pane -->
-        <div class="tab-pane" id="inActiveCompany">
+        <div class="tab-pane" id="inActiveTab">
           <div class="row">
             <div class="col-md-3 col-xs-12 pull-right">
               <div class="input-group top-element">

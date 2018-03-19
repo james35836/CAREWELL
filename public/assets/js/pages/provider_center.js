@@ -18,6 +18,9 @@ function provider_center()
             create_provider();
             create_provider_confirm();
             create_provider_submit();
+            import_provider();
+            import_provider_confirm();
+            import_provider_submit();
             view_provider_details();
 		});
 
@@ -96,6 +99,42 @@ function provider_center()
         });
 		
 	}
+	function import_provider()
+	{
+		$("body").on('click','.import-provider',function() 
+		{
+			var provider_id = $(this).data('provider_id');
+			var modalName= 'IMPORT PROVIDER';
+			var modalClass='provider-import';
+			var modalLink='/provider/import_provider';
+			var modalActionName='SAVE CHANGES';
+			var modalAction='create-approval-confirm';
+			var modalSize = 'modal-import';
+			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
+        });
+	}
+	function import_provider_confirm()
+	{
+		$('body').on('click','.import-provider-confirm',function()
+		{
+			if(document.getElementById('importProviderFile').files.length==0)
+			{
+				var	confirmModalMessage = 'Are you sure you want to import this file?';
+				var confirmModalAction = 'import-provider-submit';
+				globals.confirm_modals(confirmModalMessage,confirmModalAction);
+				providerFileData.append("importProviderFile", 	document.getElementById('importProviderFile').files[0]);
+			}
+			
+		});
+	}
+	function import_provider_submit()
+	{
+		$('body').on('click','.import-provider-submit',function() 
+		{
+			globals.global_submit('provider-import','/provider/import_provider/submit',providerFileData);
+        });
+	}
+	
 	function view_provider_details()
 	{
 		$('body').on('click','.view-provider-details',function()

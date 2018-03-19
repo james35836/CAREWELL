@@ -60,9 +60,9 @@ Route::get('/admin/create_user', 						'AdminController@admin_create_user');
 Route::POST('/admin/create_user/submit', 				'AdminController@admin_create_user_submit');
 
 
-Route::get('/settings/developer', 				    	'AdminController@settings_developer');
-Route::get('/settings/developer_modal', 				'AdminController@settings_developer_modal');
-Route::post('/settings/developer_modal_submit', 		'AdminController@settings_developer_modal_submit');
+Route::get('/settings/maintenance', 				    	'AdminController@settings_maintenance');
+Route::get('/settings/maintenance_modal', 				'AdminController@settings_maintenance_modal');
+Route::post('/settings/maintenance_modal_submit', 		'AdminController@settings_maintenance_modal_submit');
 
 
 Route::get('/admin/view_user_deatils/{user_id}', 		'AdminController@admin_view_user_deatils');
@@ -101,8 +101,13 @@ Route::post('/member/member_adjustment/submit', 		'CarewellController@member_adj
 Route::get('/provider', 								'CarewellController@provider');
 Route::get('/provider/create_provider', 				'CarewellController@provider_create');
 Route::post('/provider/create_provider/submit', 		'CarewellController@provider_create_submit');
-
 Route::get('/provider/provider_details/{provider_id}', 	'CarewellController@provider_details');
+Route::get('/provider/import_provider', 				'CarewellController@provider_import');
+Route::post('/provider/import_provider/submit', 		'CarewellController@provider_import_submit');
+Route::get('/provider/export_template', 				'CarewellController@provider_export_template');
+
+
+
 
 
 /*DOCTOR*/
