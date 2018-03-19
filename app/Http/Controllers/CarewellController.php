@@ -1055,7 +1055,11 @@ class CarewellController extends ActiveAuthController
     $excels['_coverage']      = TblCompanyCoveragePlanModel::where('tbl_company_coverage_plan.company_id',$company_id)
                               ->join('tbl_coverage_plan','tbl_coverage_plan.coverage_plan_id','=','tbl_company_coverage_plan.coverage_plan_id')
                               ->get();
-    $excels['_member']        = TblMemberCompanyModel::where('tbl_member_company.archived',0)->where('tbl_member_company.company_id',$company_id)->MemberCompany()->get();
+    $excels['_member']        = TblMemberCompanyModel::where('tbl_member_company.archived',0)
+                              ->where('tbl_member_company.company_id',$company_id)
+                              ->where('tbl_member_company.member_payment_mode',$cal_template->cal_payment_mode)
+                              ->MemberCompany()
+                              ->get();
     $excels['count_member']   =   count($excels['_member'])+10;
     $excels['data'] = ['COMPANY','CAL NUMBER','UNIVERSAL ID','CAREWELL ID','MEMBER FIRST NAME','MEMBER MIDDLE NAME','MEMBER LAST NAME','MEMBER BIRTHDATE','COVERAGE PLAN','DEPLOYMENT','PAYMENT AMOUNT','MEMBER STATUS'];
     Excel::create('CAL - '.$excels['company_name'].' - TEMPLATE', function($excel) use ($excels) 

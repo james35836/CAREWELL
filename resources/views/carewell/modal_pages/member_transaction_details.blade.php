@@ -7,7 +7,7 @@
 		</ul>
 		<div class="tab-content">
 			<div id="payment" class="tab-pane fade in active">
-				<div class="box-body table-responsive no-padding">
+				<div class="table-responsive no-padding">
 					<table class="table table-hover table-bordered">
 						<thead>
 							<tr>
@@ -15,7 +15,8 @@
 								<th>Cal Number</th>
 								<th>Payment Amount</th>
 								<th>Payment Date</th>
-								<th>Status</th>
+								<th>Coverage Month</th>
+								<th>Coverage Period</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -24,8 +25,9 @@
 								<td>{{$payment_history->company_name}}</td>
 								<td>{{$payment_history->cal_number}}</td>
 								<td>{{$payment_history->cal_payment_amount}}</td>
-								<td>{{date("F j, Y",strtotime($payment_history->cal_member_date_paid))}}</td>
-								<td><span class="label label-success">active</span></td>
+								<td>{{date("F j, Y",strtotime($payment_history->cal_payment_date))}}</td>
+								<td>{{$payment_history->cal_coverage_month_start}} - {{$payment_history->cal_coverage_month_end}}</td>
+								<td>{{date("F j, Y",strtotime($payment_history->cal_coverage_period_start))}} - {{date("F j, Y",strtotime($payment_history->cal_coverage_period_end))}}</td>
 							</tr>
 							@endforeach
 						</tbody>
@@ -65,14 +67,14 @@
 						<div class="col-md-3 form-content">
 							<label>REMAINING BALANCE</label>
 						</div>
-						<div class="col-md-3 form-content">
-							<input type="text" value="25000"  name="coverage_plan_name" id="coverage_plan_name" class="form-control">
+						<div class="col-md-3  form-content">
+							<p style="font-size:20px;font-size: 25px;font-weight: bold;color: #157315;">500</p>
 						</div>
 						<div class="col-md-3 form-content">
 							<label>TOTAL AVAILED</label>
 						</div>
-						<div class="col-md-3 form-content">
-							<input type="text" value="3000" name="coverage_plan_premium" id="coverage_plan_premium" class="form-control">
+						<div class="col-md-3  form-content">
+							<p style="font-size:20px;font-size: 25px;font-weight: bold;color: #157315;">500</p>
 						</div>
 					</div>
 				</div>
