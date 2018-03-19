@@ -217,11 +217,15 @@
 .table-responsive 
 {
   	overflow-y: visible !important;
-  	overflow: inherit;
+  	// overflow: inherit;
   	td 
 	{
 		min-width:120px !important;
 	}
+}
+.box-body
+{
+	overflow: inherit;
 }
 //nakamamatay
 .top-label

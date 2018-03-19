@@ -1,19 +1,5 @@
 <script>
 	
-	$(document).ready(function() {
-	$(".add-specialization").on("click", function() {
-		
-		$(".specialization-form").append('<div class="specialization-count" style="margin-top: 20px;"><select name="specialization_name" class="form-control"><option>Allergist or Immunologist</option><option>Anesthesiologist</option><option>Cardiologist</option><option>Dermatologist</option><option>Gastroenterologist</option><option>Hematologist/Oncologist</option><option>Internal Medicine Physician</option><option>Nephrologist</option><option>Neurologist</option><option>Neurosurgeon</option><option>Obstetrician</option><option>Gynecologist</option><option>Nurse-Midwifery</option><option>Occupational Medicine Physician</option><option>Ophthalmologist</option><option>Oral and Maxillofacial Surgeon</option><option>Orthopaedic Surgeon</option><option>Otolaryngologist (Head and Neck Surgeon)</option><option>Pathologist</option><option>Pediatrician</option><option>Plastic Surgeon</option><option>Podiatrist</option><option>Psychiatrist</option><option>Pulmonary Medicine Physician</option><option>Radiation Onconlogist</option><option>Diagnostic Radiologist</option><option>Rheumatologist</option><option>Urologist</option></select></div>');
-		
-	});
-	$(".remove-specialization").on("click", function() {
-		if( $(".specialization-count").length!=1)
-			{
-		$(".specialization-form").children().last().remove();
-		}
-	});
-	});
-	
 	$(function ()
 	{
 		//select2
@@ -84,7 +70,7 @@
 					</div>
 				</div>
 				<!-- /.box-header -->
-				<div class="box-body table-responsive no-padding">
+				<div class="table-responsive no-padding">
 					<table class="table table-hover table-bordered">
 						<tr>
 							<th><input type="checkbox" class="checkAllCheckbox"></th>
