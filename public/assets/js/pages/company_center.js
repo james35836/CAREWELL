@@ -48,7 +48,6 @@ function company_center()
             	{
             		contactData.push(this.value);
             	}
-            	
             });
 
             var countContract = document.getElementById('contract_image_name').files.length;
@@ -107,13 +106,11 @@ function company_center()
 				var confirmModalAction = 'create-company-submit';
 				globals.confirm_modals(confirmModalMessage,confirmModalAction);
 				
-
 				companyData.append("company_name", 				document.getElementById('company_name').value);
 	            companyData.append("company_email_address", 	document.getElementById('company_email_address').value);
 	            companyData.append("company_contact_person", 	document.getElementById('company_contact_person').value);
 	            companyData.append("company_address", 			document.getElementById('company_address').value);
 
-	            companyData.append("payment_mode_id", 			document.getElementById('payment_mode_id').value);
 	            for (var i = 0; i < contactData.length; i++) 
 				{
 				    companyData.append('contactData[]', contactData[i]);
