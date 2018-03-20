@@ -55,7 +55,7 @@ $parent.find('.btn').attr('disabled',!this.checked);
 				<input type="text" name="coverage_plan_processing_fee" id="coverage_plan_processing_fee" class="form-control">
 			</div>
 			<div class="col-md-2 form-content">
-				<label>CARI Fee</label>
+				<label>CARD Fee</label>
 			</div>
 			<div class="col-md-4 form-content">
 				<input type="text" name="coverage_plan_cari_fee" id="coverage_plan_cari_fee" class="form-control">
@@ -73,7 +73,7 @@ $parent.find('.btn').attr('disabled',!this.checked);
 			</div>
 			<div class="col-md-4 form-content">
 				<select class="form-control" name="coverage_plan_preexisting" id="coverage_plan_preexisting">
-					<option>WAVE</option>
+					<option>WAIVED</option>
 					<option>12 MONTHS</option>
 				</select>
 			</div>
@@ -115,10 +115,10 @@ $parent.find('.btn').attr('disabled',!this.checked);
 		<div class="row form-holder ">
 			<div class="col-md-4 form-content col-xs-12 pull-right">
 				<div class="col-md-6 col-xs-12 form-content no-padding">
-					<input type="checkbox" class="minimal" name="coverage_plan_mbl_year" id="coverage_plan_mbl_year"> <label> Year</label>
+					<input type="checkbox" checked class="minimal" name="coverage_plan_mbl_year" id="coverage_plan_mbl_year"> <label> Year</label>
 				</div>
 				<div class="col-md-6 col-xs-12 form-content no-padding">
-					<input type="checkbox" class="minimal" name="coverage_plan_mbl_illness" id="coverage_plan_mbl_illness"> <label> Illness/Disease</label>
+					<input type="checkbox" checked class="minimal" name="coverage_plan_mbl_illness" id="coverage_plan_mbl_illness"> <label> Illness/Disease</label>
 				</div>
 			</div>
 		</div>
