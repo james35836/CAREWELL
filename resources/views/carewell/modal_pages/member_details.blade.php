@@ -137,9 +137,9 @@
 <div class="row box-globals" style="min-height: 300px;">
 	<div class="nav-tabs-custom">
 		<ul class="nav nav-tabs">
-			<li class="active my-tab"><a data-toggle="tab" href="#company">Company Details</a></li>
-			<li class="my-tab"><a data-toggle="tab" href="#dependent">Dependent</a></li>
-			<li class="my-tab"><a data-toggle="tab" href="#government">Government Cards</a></li>
+			<li class="active my-tab "><a data-toggle="tab" href="#company">Company Details</a></li>
+			<li class="my-tab "><a data-toggle="tab" href="#dependent">Dependent</a></li>
+			<li class="my-tab "><a data-toggle="tab" href="#government">Government Cards</a></li>
 		</ul>
 		<div class="tab-content">
 			<div id="company" class="row tab-pane fade in active table-min-height">
@@ -158,7 +158,6 @@
 							<th>MODE OF PAYMENT</th>
 							<th>JOBSITE</th>
 							<th>STATUS</th>
-							<th>ACTION</th>
 						</tr>
 						@foreach($_member_company as $member_company)
 						<tr>
@@ -169,18 +168,6 @@
 							<td>{{$member_company->member_payment_mode}}</td>
 							<td>{{$member_company->deployment_name}}</td>
 							<td><span class="label label-success">active</span></td>
-							<td>
-								<div class="btn-group">
-									<button type="button" class="btn btn-danger btn-sm">Action</button>
-									<button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
-									<span class="caret"></span>
-									<span class="sr-only">Toggle Dropdown</span>
-									</button>
-									<ul class="dropdown-menu" role="menu" style="position: absolute !important;">
-										<li><button type="button" data-id="{{$member_company->member_id}}" class="btn btn-link"> Archived</button></li>
-									</ul>
-								</div>
-							</td>
 						</tr>
 						@endforeach
 						<tr style="height:70px;">

@@ -148,7 +148,7 @@ $(document).ready(function()
 	<div class="row box-globals">
 		<div class="form-holder col-md-12 no-padding">
 			<div class="pull-right col-md-3 col-xs-12">
-				<button type="button" class="btn btn-primary top-element reembursementBtn" ><i class="fa fa-upload btn-icon"></i> REEMBURSEMENT</button>
+				<button type="button" class="btn btn-primary top-element reembursementBtn" ><i class="fa fa-upload btn-icon"></i> REIMBURSEMENT</button>
 			</div>
 		</div>
 		<div class="form-holder">

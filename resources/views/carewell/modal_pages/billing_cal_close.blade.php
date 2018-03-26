@@ -13,7 +13,24 @@ autoclose: true
     <p>CAL NUMBER  : {{$cal_info->cal_number}}</p>
     <input type="hidden" id="cal_id" value="{{$cal_info->cal_id}}"/>
   </div>
+</div>
+<div class="row box-globals">
   
+  <div class="form-holder">
+    <div class="col-md-3  form-content">
+      <label>TOTAL MEMBER</label>
+    </div>
+    <div class="col-md-3  form-content">
+      <p style="font-size:20px;font-size: 25px;font-weight: bold;color: #157315;">{{$total_member}}</p>
+    </div>
+    
+    <div class="col-md-3  form-content">
+      <label>TOTAL AMOUNT</label>
+    </div>
+    <div class="col-md-3  form-content">
+      <p style="font-size:20px;font-size: 25px;font-weight: bold;color: #157315;">{{$total_amount}}</p>
+    </div>
+  </div>
 </div>
 <div class=" row box-globals">
 
@@ -68,6 +85,14 @@ autoclose: true
     </div>
     <div class="col-md-4 form-content">
       <input type="text" class="form-control " id="cal_info_amount">
+    </div>
+  </div>
+  <div class="form-holder">
+    <div class="col-md-2 form-content">
+      <label>BANK NAME</label>
+    </div>
+    <div class="col-md-4 form-content">
+      <input type="text" class="form-control " id="cal_info_bank">
     </div>
   </div>
 </div>

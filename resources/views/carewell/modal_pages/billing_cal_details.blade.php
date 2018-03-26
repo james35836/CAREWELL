@@ -42,39 +42,6 @@ autoclose: true
 		<div class="col-md-3  form-content">
 			<input type="text" class="form-control" value="{{$cal_details->cal_reveneu_period_year}}"/>
 		</div>
-		
-	</div>
-	<div class="form-holder">
-		<div class="col-md-3  form-content">
-			<label>COVERAGE MONTH START </label>
-		</div>
-		<div class="col-md-3  form-content">
-			<input type="text" class="form-control" value="{{$cal_details->cal_coverage_month_start}}"/>
-		</div>
-		
-		<div class="col-md-3  form-content">
-			<label>COVERAGE MONTH END </label>
-		</div>
-		<div class="col-md-3  form-content">
-			<input type="text" class="form-control" value="{{$cal_details->cal_coverage_month_end}}"/>
-		</div>
-		
-	</div>
-	<div class="form-holder">
-		<div class="col-md-3  form-content">
-			<label>COVERAGE PERIOD START </label>
-		</div>
-		<div class="col-md-3  form-content">
-			<input type="text" class="form-control datepicker" value="{{$cal_details->cal_coverage_period_start}}"/>
-		</div>
-		
-		<div class="col-md-3  form-content">
-			<label>COVERAGE PERIOD END </label>
-		</div>
-		<div class="col-md-3  form-content">
-			<input type="text" class="form-control datepicker" value="{{$cal_details->cal_coverage_period_end}}"/>
-		</div>
-		
 	</div>
 </div>
 @if($cal_check==1)
@@ -162,9 +129,9 @@ autoclose: true
 					<th>Universal ID</th>
 					<th>Carewell ID</th>
 					<th>Name</th>
-					<th>Date Paid</th>
+					<th>Coverage Period</th>
+					<th>Period Count</th>
 					<th>Paid Amount</th>
-					<th>Status</th>
 					<th>Action</th>
 				</tr>
 				@foreach($_cal_member as $cal_member)
@@ -172,9 +139,9 @@ autoclose: true
 					<td>{{$cal_member->member_universal_id}}</td>
 					<td>{{$cal_member->member_carewell_id}}</td>
 					<td>{{$cal_member->member_first_name." ".$cal_member->member_last_name}}</td>
-					<td>{{date("F j, Y",strtotime($cal_member->cal_payment_date))}}</td>
+					<td>{{date("F j, Y",strtotime($cal_member->cal_payment_start))}}-{{date("F j, Y",strtotime($cal_member->cal_payment_end))}}</td>
+					<td>{{$cal_member->cal_payment_count}}</td>
 					<td>{{$cal_member->cal_payment_amount}}</td>
-					<td><span class="label label-success">active</span></td>
 					<td>
 						<button type="button" data-cal_member_id="{{$cal_member->cal_member_id}}" class="btn btn-danger btn-sm remove-cal-member"><i class="fa fa-minus-circle"></i></button>
 					</td>

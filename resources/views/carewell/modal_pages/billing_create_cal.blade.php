@@ -27,7 +27,7 @@ autoclose: true
     <div class="col-md-3 form-content">
       <label>Payment Date</label>
     </div>
-    <div class="col-md-3 form-content">
+    <div class="col-md-9 form-content">
       <div class="input-group date">
         <div class="input-group-addon">
           <i class="fa fa-calendar"></i>
@@ -35,10 +35,13 @@ autoclose: true
         <input type="text" class="form-control pull-right datepicker" id="cal_payment_date">
       </div>
     </div>
+    
+  </div>
+  <div class="form-holder">
     <div class="col-md-3 form-content">
       <label>Revenue Year</label>
     </div>
-    <div class="col-md-3 form-content">
+    <div class="col-md-9 form-content">
       <select name="" id="cal_reveneu_period_year" class="form-control">
         <option >2015</option>
         <option >2016</option>
@@ -68,90 +71,16 @@ autoclose: true
         <option >2040</option>
       </select>
     </div>
-  </div>
-  <div class="form-holder">
-    <div class="col-md-3 form-content">
-      <label>Mode of Payment</label>
-    </div>
-    <div class="col-md-3 form-content">
-      <select name="" id="cal_payment_mode" class="form-control">
-        @foreach($_period as $period)
-        <option>{{$period->payment_mode_name}}</option>
-        @endforeach
-      </select>
-    </div>
-    <div class="col-md-3 form-content">
-      <label>Payment  Count</label>
-    </div>
-    <div class="col-md-3 form-content">
-      <select name="" id="cal_payment_count" class="form-control">
-        <option value="FIRST-PERIOD" >FIRST-PERIOD</option>
-        <option value="SECOND-PERIOD" >SECOND-PERIOD</option>
-      </select>
-    </div>
-  </div>
-  <div class="form-holder">
-    <div class="col-md-3 form-content">
-      <label>Coverage  Month  Start</label>
-    </div>
-    <div class="col-md-3 form-content">
-      <select name="" id="cal_coverage_month_start" class="form-control">
-        <option >JANUARY</option>
-        <option >FEBRUARY</option>
-        <option >MARCH</option>
-        <option >APRIL</option>
-        <option >MAY</option>
-        <option >JUNE</option>
-        <option >JULY</option>
-        <option >AUGUST</option>
-        <option >SEPTEMBER</option>
-        <option >OCTOBER</option>
-        <option >NOVEMBER</option>
-        <option >DECEMBER</option>
-      </select>
-    </div>
-    <div class="col-md-3 form-content">
-      <label>Coverage Month End</label>
-    </div>
-    <div class="col-md-3 form-content">
-      <select name="" id="cal_coverage_month_end" class="form-control">
-        <option >JANUARY</option>
-        <option >FEBRUARY</option>
-        <option >MARCH</option>
-        <option >APRIL</option>
-        <option >MAY</option>
-        <option >JUNE</option>
-        <option >JULY</option>
-        <option >AUGUST</option>
-        <option >SEPTEMBER</option>
-        <option >OCTOBER</option>
-        <option >NOVEMBER</option>
-        <option >DECEMBER</option>
-      </select>
-    </div>
-  </div>
-  <div class="form-holder">
-    <div class="col-md-3 form-content">
-      <label>Coverage  Period Start</label>
-    </div>
-    <div class="col-md-3 form-content">
-      <div class="input-group date">
-        <div class="input-group-addon">
-          <i class="fa fa-calendar"></i>
-        </div>
-        <input type="text" class="form-control pull-right datepicker" id="cal_coverage_period_start">
+    <div class="form-holder">
+      <div class="col-md-3 form-content">
+        <label>Mode of Payment</label>
       </div>
-    </div>
-    <div class="col-md-3 form-content">
-      <label>Coverage Period End</label>
-    </div>
-    <div class="col-md-3 form-content">
-      <div class="input-group date">
-        <div class="input-group-addon">
-          <i class="fa fa-calendar"></i>
-        </div>
-        <input type="text" class="form-control pull-right datepicker" id="cal_coverage_period_end">
+      <div class="col-md-9 form-content">
+        <select name="" id="cal_payment_mode" class="form-control">
+          @foreach($_period as $period)
+          <option>{{$period->payment_mode_name}}</option>
+          @endforeach
+        </select>
       </div>
     </div>
   </div>
-</div>

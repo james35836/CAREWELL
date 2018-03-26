@@ -517,6 +517,71 @@ class StaticFunctionController extends Controller
     }
     return $message; 
   }
+  public static function getModeOfPayment($last_payment,$mode_of_payment,$coverage_plan_id,$payment_amount)
+  {
+
+    $premium          = TblCoveragePlanModel::where('coverage_plan_id',$coverage_plan_id)->value('coverage_plan_premium');
+    $premium_gross    = number_format($payment_amount / number_format($premium));
+    $period           = self::modeOfPaymentReference($mode_of_payment,$last_payment,$premium_gross);
+    $date['start']    = $period['start'];
+    $date['end']      = $period['end'];
+    $date['count']    = $premium_gross;
+    return $date;
+  }
+
+  public static function modeOfPaymentReference($mode_of_payment,$last_payment,$premium_gross)
+  {
+    $reference = number_format($premium_gross)%2;
+    $period_paid = date('d',strtotime($last_payment));
+    $ref = round($premium_gross/2);
+
+    if($mode_of_payment=="SEMI-MONTHLY")
+    {
+      $i = 0;
+  
+      for($i=0; $i<=$premium_gross;  $i++)
+      {
+        
+          $date = date('Y-m-18', strtotime($last_payment));
+          $new_date = strtotime($date. '+'.$i.' months');
+
+          $first_cut_start[$i]  = date('Y-m-01', $new_date);
+          $first_cut_end[$i]    = date('Y-m-15', $new_date);
+
+          $second_cut_start[$i] = date('Y-m-16', $new_date);
+          $second_cut_end[$i]   = date('Y-m-t',   $new_date );
+      }
+      
+      
+      
+      if($period_paid<=15)
+      {
+        $data['start']  = date('Y-m-16', strtotime($date));
+        if($reference==0)
+        {
+          $data['end']  = $second_cut_end[$ref];
+        }
+        else
+        {
+          $data['end']  = $first_cut_end[$ref];
+        }
+      }
+      else
+      {
+        $data['start']  = date('Y-m-01', strtotime($date. '+1 months'));
+        if($reference==true)
+        {
+          $data['end']  = $first_cut_end[$ref];
+        }
+        else
+        {
+          $data['end']  = $second_cut_end[$ref];
+        }
+
+      }
+      return $data;
+    }
+  }
   
   
 }

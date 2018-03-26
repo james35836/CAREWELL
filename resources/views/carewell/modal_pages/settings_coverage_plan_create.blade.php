@@ -1,6 +1,9 @@
 <script>
 $(document).ready(function()
 {
+
+
+
 $('div.box-container').find('.form-control').attr('disabled',!this.checked);
 $('div.box-container').find('.btn').attr('disabled',!this.checked);
 $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
@@ -17,6 +20,23 @@ $parent.find('.btn').attr('disabled',!this.checked);
 });
 });
 </script>
+<script>
+    $(function () {
+        $('select[multiple].active.3col').multiselect({
+            columns: 3,
+            placeholder: 'Select States',
+            search: true,
+            searchOptions: {
+                'default': 'Search States'
+            },
+            selectAll: true
+        });
+    });
+</script>
+
+<link   href="/assets/plugins/fselect/multiselect.css" rel="stylesheet">
+<script src="/assets/plugins/fselect/multiselect.js"></script>
+
 <form class="coverage-plan-form" method="POST">
 	<div class="row box-globals">
 		<div class="row form-holder ">
@@ -130,7 +150,7 @@ $parent.find('.btn').attr('disabled',!this.checked);
 			</center>
 		</div>
 	</div>
-	<div class="row box-globals">
+	{{-- <div class="row box-globals">
 		<div class="form-holder">
 			<div class="row type-of-availment-padding">
 				<div class="row availment-container box-container">
@@ -194,5 +214,79 @@ $parent.find('.btn').attr('disabled',!this.checked);
 				</div>
 			</div>
 		</div>
+	</div> --}}
+	<div class="row box-globals">
+		<div class="form-holder">
+			<div class="form-content col-md-6">
+				<select name="basic[]" multiple="multiple" class="3col active">
+			        <option value="AL">Alabama</option>
+			        <option value="AK">Alaska</option>
+			        <option value="AZ">Arizona</option>
+			        <option value="AR">Arkansas</option>
+			        <option value="CA">California</option>
+			        <option value="CO">Colorado</option>
+			        <option value="CT">Connecticut</option>
+			        <option value="DE">Delaware</option>
+			        <option value="FL">Florida</option>
+			        <option value="GA">Georgia</option>
+			        <option value="HI">Hawaii</option>
+			        <option value="ID">Idaho</option>
+			        <option value="IL">Illinois</option>
+			        <option value="IN">Indiana</option>
+			        <option value="IA">Iowa</option>
+			        <option value="KS">Kansas</option>
+			        <option value="KY">Kentucky</option>
+			        <option value="LA">Louisiana</option>
+			        <option value="ME">Maine</option>
+			        <option value="MD">Maryland</option>
+			        <option value="MA">Massachusetts</option>
+			        <option value="MI">Michigan</option>
+			        <option value="MN">Minnesota</option>
+			        <option value="MS">Mississippi</option>
+			        <option value="MO">Missouri</option>
+			        <option value="MT">Montana</option>
+			        <option value="NE">Nebraska</option>
+			        <option value="NV">Nevada</option>
+			        <option value="NH">New Hampshire</option>
+			        <option value="NJ">New Jersey</option>
+			        <option value="NM">New Mexico</option>
+			        <option value="NY">New York</option>
+			        <option value="NC">North Carolina</option>
+			        <option value="ND">North Dakota</option>
+			        <option value="OH">Ohio</option>
+			        <option value="OK">Oklahoma</option>
+			        <option value="OR">Oregon</option>
+			        <option value="PA">Pennsylvania</option>
+			        <option value="RI">Rhode Island</option>
+			        <option value="SC">South Carolina</option>
+			        <option value="SD">South Dakota</option>
+			        <option value="TN">Tennessee</option>
+			        <option value="TX">Texas</option>
+			        <option value="UT">Utah</option>
+			        <option value="VT">Vermont</option>
+			        <option value="VA">Virginia</option>
+			        <option value="WA">Washington</option>
+			        <option value="WV">West Virginia</option>
+			        <option value="WI">Wisconsin</option>
+			        <option value="WY">Wyoming</option>
+			    </select>
+			</div>
+			<div class="form-content col-md-3">
+				<select class="form-control " name="coverage_plan_maximum_benefit" id="coverage_plan_maximum_benefit">
+					<option>COVERED</option>
+					<option>NOT COVERED</option>
+				</select>
+			</div>
+			<div class="form-content col-md-3">
+				<select class="form-control " name="coverage_plan_maximum_benefit" id="coverage_plan_maximum_benefit">
+					<option>10,000</option>
+					<option>20,000</option>
+					<option>30,000</option>
+					<option>40,000</option>
+				</select>
+			</div>
+			
+		</div>
 	</div>
+	
 </form>

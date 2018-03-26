@@ -1,9 +1,9 @@
 <div class="row box-globals" style="min-height:320px;border:none !important">
 	<div class="nav-tabs-custom">
 		<ul class="nav nav-tabs">
-			<li class="active my-tab"><a data-toggle="tab" href="#payment">Payment History</a></li>
-			<li class="my-tab"><a data-toggle="tab" href="#availment">Availment History</a></li>
-			<li class="my-tab"><a data-toggle="tab" href="#schedule">Schedule of Benifit</a></li>
+			<li class="active my-tab "><a data-toggle="tab" href="#payment">Payment History</a></li>
+			<li class="my-tab "><a data-toggle="tab" href="#availment">Availment History</a></li>
+			<li class="my-tab "><a data-toggle="tab" href="#schedule">Schedule of Benifit</a></li>
 		</ul>
 		<div class="tab-content">
 			<div id="payment" class="tab-pane fade in active">
@@ -15,7 +15,7 @@
 								<th>Cal Number</th>
 								<th>Payment Amount</th>
 								<th>Payment Date</th>
-								<th>Coverage Month</th>
+								<th>Payment Count</th>
 								<th>Coverage Period</th>
 							</tr>
 						</thead>
@@ -26,8 +26,8 @@
 								<td>{{$payment_history->cal_number}}</td>
 								<td>{{$payment_history->cal_payment_amount}}</td>
 								<td>{{date("F j, Y",strtotime($payment_history->cal_payment_date))}}</td>
-								<td>{{$payment_history->cal_coverage_month_start}} - {{$payment_history->cal_coverage_month_end}}</td>
-								<td>{{date("F j, Y",strtotime($payment_history->cal_coverage_period_start))}} - {{date("F j, Y",strtotime($payment_history->cal_coverage_period_end))}}</td>
+								<td>{{$payment_history->cal_payment_count}}</td>
+								<td>{{date("F j, Y",strtotime($payment_history->cal_payment_start))}} - {{date("F j, Y",strtotime($payment_history->cal_payment_end))}}</td>
 							</tr>
 							@endforeach
 						</tbody>

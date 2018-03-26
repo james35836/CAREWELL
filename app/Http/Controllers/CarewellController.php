@@ -201,21 +201,16 @@ class CarewellController extends ActiveAuthController
           $contractImageData->contract_id = $contractCompanyData->contract_id;
           $contractImageData->save();
         }
-        // foreach($request->file("benefitsData") as $contract_benefits_name)
-        // {
-          // $fileContractBRef = $unique_name.'-'.$contract_benefits_name->getClientOriginalName();
-          // $contract_benefits_name->move('schedule_of_benefits',$fileContractBRef );
+        foreach($request->file("benefitsData") as $contract_benefits_name)
+        {
+          $fileContractBRef = $unique_name.'-'.$contract_benefits_name->getClientOriginalName();
+          $contract_benefits_name->move('schedule_of_benefits',$fileContractBRef );
 
-          // $benefitsImageData = new TblCompanyContractBenefitsModel;
-          // $benefitsImageData->contract_benefits_name = '/schedule_of_benefits/'.$fileContractBRef.'';
-          // $benefitsImageData->contract_id = $contractCompanyData->contract_id;
-          // $benefitsImageData->save();
-        // }
           $benefitsImageData = new TblCompanyContractBenefitsModel;
-          $benefitsImageData->contract_benefits_name = 'none';
+          $benefitsImageData->contract_benefits_name = '/schedule_of_benefits/'.$fileContractBRef.'';
           $benefitsImageData->contract_id = $contractCompanyData->contract_id;
           $benefitsImageData->save();
-
+        }
         foreach($request->coveragePlanData as $coverage_plan_id)
         {
           $coverageData = new TblCompanyCoveragePlanModel;
@@ -975,18 +970,27 @@ class CarewellController extends ActiveAuthController
   /*BILLING*/
   public function billing()
   {
-  	$data['page']         = 'Billing';
-    $data['user']         = StaticFunctionController::global();
-    $data['_cal_open']    = TblCalModel::where('tbl_cal.archived',0)->join('tbl_company','tbl_company.company_id','=','tbl_cal.company_id')->paginate(10);
-    $data['_cal_close']   = TblCalModel::where('tbl_cal.archived',1)->join('tbl_company','tbl_company.company_id','=','tbl_cal.company_id')->paginate(10);
-    $data['_company']     = TblCompanyModel::where('archived',0)->get();
+  	$data['page']             = 'Billing';
+    $data['user']             = StaticFunctionController::global();
+    $data['_cal_open']        = TblCalModel::where('tbl_cal.archived',0)->join('tbl_company','tbl_company.company_id','=','tbl_cal.company_id')->paginate(10);
+    $data['_cal_close']       = TblCalModel::where('tbl_cal.archived',1)->join('tbl_company','tbl_company.company_id','=','tbl_cal.company_id')->paginate(10);
+    $data['_company']         = TblCompanyModel::where('archived',0)->get();
+
+    foreach ($data['_cal_open'] as $key => $cal_open) 
+    {
+      $data['_cal_open'][$key]['members']  =  TblCalMemberModel::where('cal_id',$cal_open->cal_id)->count();
+    }
+    foreach ($data['_cal_close'] as $key => $cal_close) 
+    {
+      $data['_cal_close'][$key]['members']  =  TblCalMemberModel::where('cal_id',$cal_close->cal_id)->count();
+    }
   	return view('carewell.pages.billing_center',$data);
   }
   public function billing_create_cal()
   {
-    $data['_company']     = TblCompanyModel::get();
-    $data['_cal_company'] = TblCalModel::get();
-    $data['_period']      = TblPaymentModeModel::get();
+    $data['_company']         = TblCompanyModel::get();
+    $data['_cal_company']     = TblCalModel::get();
+    $data['_period']          = TblPaymentModeModel::get();
     return view('carewell.modal_pages.billing_create_cal',$data);
   }
   public function billing_create_cal_submit(Request $request)
@@ -995,12 +999,7 @@ class CarewellController extends ActiveAuthController
     $companyCalData->cal_number                 =   StaticFunctionController::updateReferenceNumber('billing_cal');;
     $companyCalData->cal_reveneu_period_year    =   $request->cal_reveneu_period_year;
     $companyCalData->cal_payment_mode           =   $request->cal_payment_mode;
-    $companyCalData->cal_payment_count          =   $request->cal_payment_count;
     $companyCalData->cal_payment_date           =   $request->cal_payment_date;
-    $companyCalData->cal_coverage_month_start   =   $request->cal_coverage_month_start;
-    $companyCalData->cal_coverage_month_end     =   $request->cal_coverage_month_end;
-    $companyCalData->cal_coverage_period_start  =   $request->cal_coverage_period_start;
-    $companyCalData->cal_coverage_period_end    =   $request->cal_coverage_period_end;
     $companyCalData->cal_created                =   Carbon::now();
     $companyCalData->company_id                 =   $request->company_id;
     $companyCalData->save();
@@ -1009,20 +1008,20 @@ class CarewellController extends ActiveAuthController
   }
   public function billing_cal_details($cal_id)
   {
-    $data['cal_check']      = TblCalModel::where('cal_id',$cal_id)->value('archived');
-    $data['_cal_member']    = TblCalMemberModel::where('cal_id',$cal_id)->CalMember()->get();
+    $data['cal_check']        = TblCalModel::where('cal_id',$cal_id)->value('archived');
+    $data['_cal_member']      = TblCalMemberModel::where('cal_id',$cal_id)->CalMember()->get();
     if($data['cal_check']==0)
     {
-       $data['cal_details'] = TblCalModel::where('cal_id',$cal_id)
-                            ->join('tbl_company','tbl_company.company_id','=','tbl_cal.company_id')
-                            ->first();
+       $data['cal_details']   = TblCalModel::where('cal_id',$cal_id)
+                              ->join('tbl_company','tbl_company.company_id','=','tbl_cal.company_id')
+                              ->first();
     }
     else
     {
-      $data['cal_details'] = TblCalModel::where('tbl_cal.cal_id',$cal_id)
-                            ->join('tbl_company','tbl_company.company_id','=','tbl_cal.company_id')
-                            ->join('tbl_cal_info','tbl_cal_info.cal_id','=','tbl_cal.cal_id')
-                            ->first();
+      $data['cal_details']    = TblCalModel::where('tbl_cal.cal_id',$cal_id)
+                              ->join('tbl_company','tbl_company.company_id','=','tbl_cal.company_id')
+                              ->join('tbl_cal_info','tbl_cal_info.cal_id','=','tbl_cal.cal_id')
+                              ->first();
     }
     $sum = 0;
     foreach($data['_cal_member'] as $amount)
@@ -1030,14 +1029,14 @@ class CarewellController extends ActiveAuthController
       $sum = $sum + $amount->cal_payment_amount;
     }
 
-    $data['total_amount']   = $sum;
-    $data['total_member']   = count($data['_cal_member']);
+    $data['total_amount']     = $sum;
+    $data['total_member']     = count($data['_cal_member']);
     return view('carewell.modal_pages.billing_cal_details',$data);
   }
   public function billing_import_cal_members($cal_id,$company_id)
   {
-    $data['cal_id']       = $cal_id;
-    $data['company_id']   = $company_id;
+    $data['cal_id']           = $cal_id;
+    $data['company_id']       = $company_id;
     return view('carewell.modal_pages.billing_import',$data);
   }
   public function billing_cal_download_template($cal_id,$company_id)
@@ -1051,6 +1050,7 @@ class CarewellController extends ActiveAuthController
     $excels['company_id']     =   $cal_template->company_id;
     $excels['cal_number']     =   $cal_template->cal_number;
 
+    $excels['_payment']       = TblPaymentModeModel::where('archived',0)->get();
     $excels['_deployment']    = TblCompanyDeploymentModel::where('tbl_company_deployment.company_id',$company_id)->get();
     $excels['_coverage']      = TblCompanyCoveragePlanModel::where('tbl_company_coverage_plan.company_id',$company_id)
                               ->join('tbl_coverage_plan','tbl_coverage_plan.coverage_plan_id','=','tbl_company_coverage_plan.coverage_plan_id')
@@ -1061,7 +1061,7 @@ class CarewellController extends ActiveAuthController
                               ->MemberCompany()
                               ->get();
     $excels['count_member']   =   count($excels['_member'])+10;
-    $excels['data'] = ['COMPANY','CAL NUMBER','UNIVERSAL ID','CAREWELL ID','MEMBER FIRST NAME','MEMBER MIDDLE NAME','MEMBER LAST NAME','MEMBER BIRTHDATE','COVERAGE PLAN','DEPLOYMENT','PAYMENT AMOUNT','MEMBER STATUS'];
+    $excels['data'] = ['LAST NAME','FIRST NAME','MIDDLE NAME','BIRTHDATE','COVERAGE PLAN','DEPLOYMENT','MODE OF PAYMENT','PAYMENT AMOUNT'];
     Excel::create('CAL - '.$excels['company_name'].' - TEMPLATE', function($excel) use ($excels) 
     {
       $excel->sheet('template', function($sheet) use ($excels) 
@@ -1073,10 +1073,8 @@ class CarewellController extends ActiveAuthController
         $sheet->freezeFirstRow();
         for($row = 1, $rowcell = 2; $row <= $excels['count_member']; $row++, $rowcell++)
         {
-          $sheet->setCellValue('A'.$rowcell, $excels['company_name']);
-          $sheet->setCellValue('B'.$rowcell, $excels['cal_number']);
-          
-          $coverage_cell = $sheet->getCell('I'.$rowcell)->getDataValidation();
+
+          $coverage_cell = $sheet->getCell('E'.$rowcell)->getDataValidation();
           $coverage_cell->setType(\PHPExcel_Cell_DataValidation::TYPE_LIST);
           $coverage_cell->setErrorStyle(\PHPExcel_Cell_DataValidation::STYLE_INFORMATION);
           $coverage_cell->setAllowBlank(false);
@@ -1087,120 +1085,136 @@ class CarewellController extends ActiveAuthController
           $coverage_cell->setError('Value is not in list.');
           $coverage_cell->setFormula1('coverage');
 
-          $deployment_cell = $sheet->getCell('J'.$rowcell)->getDataValidation();
+          $deployment_cell = $sheet->getCell('F'.$rowcell)->getDataValidation();
           $deployment_cell->setType(\PHPExcel_Cell_DataValidation::TYPE_LIST);
           $deployment_cell->setErrorStyle(\PHPExcel_Cell_DataValidation::STYLE_INFORMATION);
           $deployment_cell->setAllowBlank(false);
           $deployment_cell->setShowDropDown(true);
           $deployment_cell->setFormula1('deployment');
 
-          $status_cell = $sheet->getCell('L'.$rowcell)->getDataValidation();
-          $status_cell->setType(\PHPExcel_Cell_DataValidation::TYPE_LIST);
-          $status_cell->setErrorStyle(\PHPExcel_Cell_DataValidation::STYLE_INFORMATION);
-          $status_cell->setAllowBlank(false);
-          $status_cell->setShowInputMessage(true);
-          $status_cell->setShowErrorMessage(true);
-          $status_cell->setShowDropDown(true);
-          $status_cell->setErrorTitle('Input error');
-          $status_cell->setError('Value is not in list.');
-          $status_cell->setFormula1('status');
+          $payment_cell = $sheet->getCell('G'.$rowcell)->getDataValidation();
+          $payment_cell->setType(\PHPExcel_Cell_DataValidation::TYPE_LIST);
+          $payment_cell->setErrorStyle(\PHPExcel_Cell_DataValidation::STYLE_INFORMATION);
+          $payment_cell->setAllowBlank(false);
+          $payment_cell->setShowDropDown(true);
+          $payment_cell->setFormula1('payment');
         }
         foreach($_member as  $key => $member)
         {
           $key = $key+=2;
 
-          $sheet->setCellValue('C'.$key, $member->member_universal_id);
-          $sheet->setCellValue('D'.$key, $member->member_carewell_id);
-          $sheet->setCellValue('E'.$key, $member->member_first_name);
-          $sheet->setCellValue('F'.$key, $member->member_middle_name);
-          $sheet->setCellValue('G'.$key, $member->member_last_name);
-          $sheet->setCellValue('H'.$key, date('m/d/Y', strtotime($member->member_birthdate)));
-          $sheet->setCellValue('I'.$key, $member->coverage_plan_name);
-          $sheet->setCellValue('J'.$key, $member->deployment_name);
-          $sheet->setCellValue('K'.$key, $member->coverage_plan_premium);
-          $sheet->setCellValue('L'.$key, $member->member_company_status);
+          $sheet->setCellValue('A'.$key, $member->member_last_name);
+          $sheet->setCellValue('B'.$key, $member->member_first_name);
+          $sheet->setCellValue('C'.$key, $member->member_middle_name);
+          $sheet->setCellValue('D'.$key, date('m/d/Y', strtotime($member->member_birthdate)));
+          $sheet->setCellValue('E'.$key, $member->coverage_plan_name);
+          $sheet->setCellValue('F'.$key, $member->deployment_name);
+          $sheet->setCellValue('G'.$key, $member->member_payment_mode);
+          $sheet->setCellValue('H'.$key, $member->coverage_plan_premium);
+          
         }
       });
       /* DATA VALIDATION (REFERENCE FOR DROPDOWN LIST) */
       $excel->sheet('reference', function($sheet) use($excels) 
       {
+
         $_coverage    = $excels['_coverage'];
         $_deployment  = $excels['_deployment'];
+        $_payment     = $excels['_payment'];
         /* COVERAGE REFERENCES */
-        $sheet->SetCellValue("I1", "coverage");
+        $sheet->SetCellValue("E1", "coverage");
         $coverage_number = 2;
         foreach($_coverage as $coverage)
         {
-            $sheet->SetCellValue("I".$coverage_number, $coverage->coverage_plan_name);
+            $sheet->SetCellValue("E".$coverage_number, $coverage->coverage_plan_name);
             $coverage_number++;
         }
         $coverage_number--;
         /* DEPLOYMENT REFERENCES */
-        $sheet->SetCellValue("J1", "deployment");
+        $sheet->SetCellValue("F1", "deployment");
         $deployment_number = 2;
         foreach($_deployment as $deployment)
         {
-            $sheet->SetCellValue("J".$deployment_number, $deployment->deployment_name);
+            $sheet->SetCellValue("F".$deployment_number, $deployment->deployment_name);
             $deployment_number++;
         }
         $deployment_number--;
-        /* STATUS REFERENCE */
-        $sheet->SetCellValue("L1", "status");
-        $sheet->SetCellValue("L2", "ACTIVE");
-        $sheet->SetCellValue("L3", "INACTIVE");
+
+        /* PAYMENT REFERENCES */
+        $sheet->SetCellValue("G1", "payment");
+        $payment_number = 2;
+        foreach($_payment as $payment)
+        {
+            $sheet->SetCellValue("G".$payment_number, $payment->payment_mode_name);
+            $payment_number++;
+        }
+        $payment_number--;
+        
         
 
         /*COVERAGE*/
         $sheet->_parent->addNamedRange(
             new \PHPExcel_NamedRange(
-            'coverage', $sheet, 'I2:I'.$coverage_number
+            'coverage', $sheet, 'E2:E'.$coverage_number
             )
         );
         /*DEPLOYMENT*/
         $sheet->_parent->addNamedRange(
             new \PHPExcel_NamedRange(
-            'deployment', $sheet, 'J2:J'.$deployment_number
+            'deployment', $sheet, 'F2:F'.$deployment_number
             )
         );
-        /*STATUS*/
-        $sheet->_parent->addNamedRange
-        (
+        /*PAYMENT*/
+        $sheet->_parent->addNamedRange(
             new \PHPExcel_NamedRange(
-            'status', $sheet, 'L2:L3'
+            'payment', $sheet, 'G2:G'.$payment_number
             )
         );
+        
       });
       
     })->download('xlsx');
   }
   public function billing_cal_import_template(Request $request)
   {
-    $file         = $request->file('importCalMemberFile')->getRealPath();
-    $_data        = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->all();
-    $first        = $_data[0]; 
+    $file               = $request->file('importCalMemberFile')->getRealPath();
+    $_data              = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->all();
+    $companyData        = TblCompanyModel::join('tbl_cal','tbl_cal.company_id','=','tbl_company.company_id')
+                        ->where('tbl_company.company_id',$request->company_id)
+                        ->where('tbl_cal.cal_id',$request->cal_id)
+                        ->first();
+    $first              = $_data[0]; 
 
-    if(isset($first['company'])&&isset($first['cal_number']))
+    if(isset($first['last_name'])&&isset($first['first_name'])&&isset($first['middle_name'])&&isset($first['birthdate']))
     {    
       $count            = 0;
       $countBdate       = 0;
       $countWrongCode   = 0;
-      $countExist      = 0;
-      $countNew      = 0;
+      $countExist       = 0;
+      $countNew         = 0;
       foreach($_data as $data)
       {
-        $companyData  = TblCompanyModel::join('tbl_cal','tbl_cal.company_id','=','tbl_company.company_id')
-                    ->where('tbl_company.company_name',$data['company'])
-                    ->where('tbl_cal.cal_number',$data['cal_number'])
-                    ->first();
-        if($companyData!=null&&$data['member_first_name']!=""&&$data['member_last_name']!=""&&$data['member_middle_name']!="")
+        
+        if($data['first_name']!=""&&$data['last_name']!=""&&$data['middle_name']!=""&&$data['birthdate']!="")
         {
-          if($data['universal_id']==""&&$data['carewell_id']=="")
+          $checkingMember = TblMemberModel::MemberExist($data['first_name'],$data['middle_name'],$data['last_name'],$data['birthdate'])->first();
+          
+          if($checkingMember!=null)
           {
-            $checkingMember = TblMemberModel::MemberExist($data['member_first_name'],$data['member_middle_name'],$data['member_last_name'])->first();
-            
-            if($checkingMember!=null)
-            {
-              $checkCal     = TblCalMemberModel::CalMemberExist($checkingMember->member_id,$companyData->cal_id)->first();
+              $checkCal       = TblCalMemberModel::CalMemberExist($checkingMember->member_id,$companyData->cal_id)->first();
+              $member_data    = TblMemberCompanyModel::where('member_id',$checkingMember->member_id)->where('archived',0)->first();
+              $last_payment   = TblCalMemberModel::where('member_id',$checkingMember->member_id)->orderBy('cal_payment_end','DESC')->first();
+              if(count($last_payment)!=0)
+              {
+                $payment_date = date('Y-m-d', strtotime($last_payment->cal_payment_end));
+              }
+              else
+              {
+                $payment_date = date('Y-m-d');
+              }
+              $period_date    = StaticFunctionController::getModeOfPayment($payment_date,$member_data->member_payment_mode,$member_data->coverage_plan_id,$data['payment_amount']);
+
+
               if($checkCal!=null)
               {
                 $countExist++;
@@ -1209,179 +1223,92 @@ class CarewellController extends ActiveAuthController
               {
                 $cal_member['cal_payment_amount']     =   StaticFunctionController::nullableToString($data['payment_amount']);
                 $cal_member['cal_payment_date']       =   Carbon::now();
+                $cal_member['cal_payment_count']      =   $period_date['count'];
+                $cal_member['cal_payment_start']      =   $period_date['start'];
+                $cal_member['cal_payment_end']        =   $period_date['end'];
                 $cal_member['member_id']              =   $checkingMember->member_id;
                 $cal_member['cal_id']                 =   $companyData->cal_id;
-
+                // dd($cal_member,$payment_date);
                 TblCalMemberModel::insert($cal_member);
-
                 $count++; 
               }
 
-            }
-            else
-            {
-              $member['member_first_name']        =   StaticFunctionController::nullableToString($data['member_first_name']);
-              $member['member_middle_name']       =   StaticFunctionController::nullableToString($data['member_middle_name']);
-              $member['member_last_name']         =   StaticFunctionController::nullableToString($data['member_last_name']);
-                                                  $date = $data['member_birthdate'];
-              $member['member_birthdate']         =   date('d-m-Y', strtotime($date));  
-              $member['member_gender']            =   "N/A";
-              $member['member_marital_status']    =   "N/A";
-              $member['member_mother_maiden_name']=   "N/A";
-              $member['member_permanet_address']  =   "N/A";
-              $member['member_present_address']   =   "N/A";
-              $member['member_contact_number']    =   "N/A";
-              $member['member_email_address']     =   "N/A";
-              $member['member_created']           =   Carbon::now();
-
-              $display_name                       =   $member['member_first_name']." ".$member['member_middle_name']." ".$member['member_last_name'];
-
-              $member['member_universal_id']      =   StaticFunctionController::generateUniversalId($display_name,$member['member_birthdate']);
-
-              $member_id                          =   TblMemberModel::insertGetId($member);
-
-              $dependent['dependent_full_name']    =   "N/A";
-              $dependent['dependent_birthdate']    =   "N/A";
-              $dependent['dependent_relationship'] =   "N/A";
-              $dependent['member_id']                     =   $member_id;
-              TblMemberDependentModel::insert($dependent);
-
-              $government['government_card_philhealth'] =   "N/A";
-              $government['government_card_sss']        =   "N/A";
-              $government['government_card_tin']        =   "N/A";
-              $government['government_card_hdmf']       =   "N/A";
-              $government['member_id']                         =   $member_id;
-              TblMemberGovernmentCardModel::insert($government);
-              
-              $company['member_carewell_id']        =   StaticFunctionController::generateCarewellId($companyData->company_code);
-              $company['member_employee_number']    =   "11";
-              $company['member_company_status']     =   "N/A";
-              $company['member_transaction_date']   =   Carbon::now();
-              $company['coverage_plan_id']          =   StaticFunctionController::getid($data['coverage_plan'], 'coverage');
-              $company['deployment_id']             =   StaticFunctionController::getid($data['deployment'], 'deployment');
-              $company['member_id']                 =   $member_id;
-              $company['company_id']                =   $companyData->company_id;
-              $company['member_payment_mode']       =   'SEMI-MONTHLY';
-
-              TblMemberCompanyModel::insert($company);
-
-              $cal_member['cal_payment_amount']     =   StaticFunctionController::nullableToString($data['payment_amount']);
-              $cal_member['cal_payment_date']       =   Carbon::now();
-              $cal_member['member_id']              =   $member_id;
-              $cal_member['cal_id']                 =   $companyData->cal_id; 
-
-
-              TblCalMemberModel::insert($cal_member);
-              $countNew++;
-            }
           }
           else
           {
-            $checkingMember = TblMemberModel::MemberExist($data['member_first_name'],$data['member_middle_name'],$data['member_last_name'])->first();
             
-            if($checkingMember!=null)
+            
+            $member['member_first_name']        =   StaticFunctionController::nullableToString($data['first_name']);
+            $member['member_middle_name']       =   StaticFunctionController::nullableToString($data['middle_name']);
+            $member['member_last_name']         =   StaticFunctionController::nullableToString($data['last_name']);
+                                                $date = $data['birthdate'];
+            $member['member_birthdate']         =   date('d-m-Y', strtotime($date));  
+            $member['member_gender']            =   "N/A";
+            $member['member_marital_status']    =   "N/A";
+            $member['member_mother_maiden_name']=   "N/A";
+            $member['member_permanet_address']  =   "N/A";
+            $member['member_present_address']   =   "N/A";
+            $member['member_contact_number']    =   "N/A";
+            $member['member_email_address']     =   "N/A";
+            $member['member_created']           =   Carbon::now();
+
+            $display_name                       =   $member['member_first_name']." ".$member['member_middle_name']." ".$member['member_last_name'];
+
+            $member['member_universal_id']      =   StaticFunctionController::generateUniversalId($display_name,$member['member_birthdate']);
+
+            $member_id                          =   TblMemberModel::insertGetId($member);
+
+            $dependent['dependent_full_name']    =   "N/A";
+            $dependent['dependent_birthdate']    =   "N/A";
+            $dependent['dependent_relationship'] =   "N/A";
+            $dependent['member_id']                     =   $member_id;
+            TblMemberDependentModel::insert($dependent);
+
+            $government['government_card_philhealth'] =   "N/A";
+            $government['government_card_sss']        =   "N/A";
+            $government['government_card_tin']        =   "N/A";
+            $government['government_card_hdmf']       =   "N/A";
+            $government['member_id']                         =   $member_id;
+            TblMemberGovernmentCardModel::insert($government);
+            
+            $company['member_carewell_id']        =   StaticFunctionController::generateCarewellId($companyData->company_code);
+            $company['member_employee_number']    =   "11";
+            $company['member_company_status']     =   "N/A";
+            $company['member_transaction_date']   =   Carbon::now();
+            $company['coverage_plan_id']          =   StaticFunctionController::getid($data['coverage_plan'], 'coverage');
+            $company['deployment_id']             =   StaticFunctionController::getid($data['deployment'], 'deployment');
+            $company['member_id']                 =   $member_id;
+            $company['company_id']                =   $companyData->company_id;
+            $company['member_payment_mode']       =   'SEMI-MONTHLY';
+
+            TblMemberCompanyModel::insert($company);
+
+            $checkCal     = TblCalMemberModel::CalMemberExist($member_id,$companyData->cal_id)->first();
+            $member_data  = TblMemberCompanyModel::where('member_id',$member_id)->where('archived',0)->first();
+            $last_payment = TblCalMemberModel::where('member_id',$member_id)->orderBy('cal_payment_end','DESC')->first();
+
+
+
+            if(count($last_payment)!=0)
             {
-              $checkCal     = TblCalMemberModel::CalMemberExist($checkingMember->member_id,$companyData->cal_id)->first();
-              if($checkCal!=null)
-              {
-                $countExist++;
-              }
-              else
-              {
-                $checkingMemberCompany = TblMemberCompanyModel::where('member_id',$checkingMember->member_id)->where('company_id',$companyData->company_id)->first();
-                if($checkingMemberCompany!=null)
-                {
-                  $cal_member['cal_payment_amount']     =   StaticFunctionController::nullableToString($data['payment_amount']);
-                  $cal_member['cal_payment_date']       =   Carbon::now();
-                  $cal_member['member_id']              =   $checkingMember->member_id;
-                  $cal_member['cal_id']                 =   $companyData->cal_id;
-
-                  TblCalMemberModel::insert($cal_member);
-
-                  $count++; 
-
-                }
-                else
-                {
-                  $archived['archived'] = 1;
-                  TblMemberCompanyModel::where('member_id',$checkingMember->member_id)->update($archived);
-                
-                  $company['member_carewell_id']        =   StaticFunctionController::generateCarewellId($companyData->company_code);
-                  $company['member_employee_number']    =   "11";
-                  $company['member_company_status']     =   "active";
-                  $company['member_transaction_date']   =   Carbon::now();
-                  $company['coverage_plan_id']          =   StaticFunctionController::getid($data['coverage_plan'], 'coverage');
-                  $company['deployment_id']             =   StaticFunctionController::getid($data['deployment'], 'deployment');
-                  $company['member_id']                 =   $checkingMember->member_id;
-                  $company['company_id']                =   $companyData->company_id;
-                  $company['member_payment_mode']       =   'SEMI-MONTHLY';
-                  TblMemberCompanyModel::insert($company);
-
-                  $cal_member['cal_payment_amount']     =   StaticFunctionController::nullableToString($data['payment_amount']);
-                  $cal_member['cal_payment_date']       =   Carbon::now();
-                  $cal_member['member_id']              =   $checkingMember->member_id;
-                  $cal_member['cal_id']                 =   $companyData->cal_id;
-
-                  TblCalMemberModel::insert($cal_member);
-
-                  $count++; 
-                }
-              }
+              $payment_date = $last_payment->cal_payment_end;
             }
             else
             {
-              $member['member_first_name']        =   StaticFunctionController::nullableToString($data['member_first_name']);
-              $member['member_middle_name']       =   StaticFunctionController::nullableToString($data['member_middle_name']);
-              $member['member_last_name']         =   StaticFunctionController::nullableToString($data['member_last_name']);
-                                            $date = $data['member_birthdate'];
-              $member['member_birthdate']         =   date('d-m-Y', strtotime($date));  
-              $member['member_gender']            =   "N/A";
-              $member['member_marital_status']    =   "N/A";
-              $member['member_mother_maiden_name']=   "N/A";
-              $member['member_permanet_address']  =   "N/A";
-              $member['member_present_address']   =   "N/A";
-              $member['member_contact_number']    =   "N/A";
-              $member['member_email_address']     =   "N/A";
-              $member['member_created']           =   Carbon::now();
-
-              $display_name                       =   $member['member_first_name']." ".$member['member_middle_name']." ".$member['member_last_name'];
-
-              $member['member_universal_id']      =   StaticFunctionController::generateUniversalId($display_name,$member['member_birthdate']);
-
-              $member_id                          =   TblMemberModel::insertGetId($member);
-
-              $dependent['dependent_full_name']    =   "N/A";
-              $dependent['dependent_birthdate']    =   "N/A";
-              $dependent['dependent_relationship'] =   "N/A";
-              $dependent['member_id']                     =   $member_id;
-              TblMemberDependentModel::insert($dependent);
-
-              $government['government_card_philhealth'] =   "N/A";
-              $government['government_card_sss']        =   "N/A";
-              $government['government_card_tin']        =   "N/A";
-              $government['government_card_hdmf']       =   "N/A";
-              $government['member_id']                         =   $member_id;
-              TblMemberGovernmentCardModel::insert($government);
-              
-              $company['member_carewell_id']        =   StaticFunctionController::generateCarewellId($companyData->company_code);
-              $company['member_employee_number']    =   "11";
-              $company['member_company_status']     =   "N/A";
-              $company['member_transaction_date']   =   Carbon::now();
-              $company['coverage_plan_id']          =   StaticFunctionController::getid($data['coverage_plan'], 'coverage');
-              $company['deployment_id']             =   StaticFunctionController::getid($data['deployment'], 'deployment');
-              $company['member_id']                 =   $member_id;
-              $company['company_id']                =   $companyData->company_id;
-              $company['member_payment_mode']       =   'SEMI-MONTHLY';
-              TblMemberCompanyModel::insert($company);
-
-              $cal_member['cal_payment_amount']     =   StaticFunctionController::nullableToString($data['payment_amount']);
-              $cal_member['cal_payment_date']       =   Carbon::now();
-              $cal_member['member_id']              =   $member_id;
-              $cal_member['cal_id']                 =   $companyData->cal_id; 
-
-              TblCalMemberModel::insert($cal_member);
-              $countNew++;
+              $payment_date = date('Y-m-d');
             }
+            $period_date  = StaticFunctionController::getModeOfPayment($payment_date,$member_data->member_payment_mode,$member_data->coverage_plan_id,$data['payment_amount']);
+
+            $cal_member['cal_payment_amount']     =   StaticFunctionController::nullableToString($data['payment_amount']);
+            $cal_member['cal_payment_date']       =   Carbon::now();
+            $cal_member['cal_payment_count']      =   $period_date['count'];
+            $cal_member['cal_payment_start']      =   $period_date['start'];
+            $cal_member['cal_payment_end']        =   $period_date['end'];
+            $cal_member['member_id']              =   $member_id;
+            $cal_member['cal_id']                 =   $companyData->cal_id;
+
+            TblCalMemberModel::insert($cal_member);
+            $countNew++;
           }
         }
         else
@@ -1426,6 +1353,17 @@ class CarewellController extends ActiveAuthController
   public function billing_cal_close($cal_id)
   {
     $data['cal_info'] = TblCalModel::where('cal_id',$cal_id)->first();
+    $data['_cal_member']  = TblCalMemberModel::where('cal_id',$cal_id)->get();
+    $sum = 0;
+    foreach($data['_cal_member'] as $amount)
+    {
+      $sum = $sum + $amount->cal_payment_amount;
+    }
+
+    $data['total_amount']     = $sum;
+    $data['total_member']     = count($data['_cal_member']);
+
+
     return view('carewell.modal_pages.billing_cal_close',$data);
   }
   public function billing_cal_close_submit(Request $request)
