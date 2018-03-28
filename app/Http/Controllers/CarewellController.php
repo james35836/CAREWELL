@@ -1695,6 +1695,7 @@ class CarewellController extends ActiveAuthController
 
     return view('carewell.pages.settings_coverage_plan',$data);
   }
+
   public function settings_coverage_plan_create()
   {
     $data['_availment'] = TblAvailmentModel::where('availment_parent_id',0)->get();
@@ -1704,6 +1705,20 @@ class CarewellController extends ActiveAuthController
       $data['_availment'][$key]['availment_charges']  =  TblAvailmentChargesModel::where('archived',0)->get();
     }
     return view('carewell.modal_pages.settings_coverage_plan_create',$data);
+  }
+
+  public function settings_coverage_items()
+  {
+    $data['page'] = 'Coverage PLan';
+    $data['user'] = StaticFunctionController::global();
+
+    $data['_availment'] = TblAvailmentModel::where('availment_parent_id',0)->get();
+    foreach ($data['_availment'] as $key => $availment) 
+    {
+      $data['_availment'][$key]['procedure']    =  TblProcedureModel::where('archived',0)->get();
+      $data['_availment'][$key]['availment_charges']  =  TblAvailmentChargesModel::where('archived',0)->get();
+    }
+    return view('carewell.additional_pages.coverage_plan_item',$data);
   }
   public function settings_coverage_plan_create_submit(Request $request)
   {

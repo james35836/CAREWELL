@@ -1,6 +1,7 @@
 @extends('carewell.layout.layout')
 @section('content')
 <div class="container">
+
   <div class="row">
     <div class=" col-md-3 col-xs-12 pull-right no-padding">
       <button class="btn btn-primary top-element create-cal" type="button" ><i class="fa fa-plus btn-icon "></i>CREATE CAL</button>

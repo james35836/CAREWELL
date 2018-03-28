@@ -173,6 +173,8 @@ Route::get('/reports/availment', 					    'CarewellController@reports_availment'
 
 Route::get('/settings/coverage', 				    	'CarewellController@settings_coverage_plan');
 Route::get('/settings/coverage/create_plan', 			'CarewellController@settings_coverage_plan_create');
+
+Route::get('/settings/coverage/items', 				    	'CarewellController@settings_coverage_items');
 Route::post('/settings/coverage/create_plan_submit', 	'CarewellController@settings_coverage_plan_create_submit');
 Route::get('/settings/coverage/plan_details/{coverage_plan_id}', 			'CarewellController@settings_coverage_plan_details');
 
