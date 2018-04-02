@@ -1,6 +1,9 @@
 @extends('carewell.layout.layout')
 @section('content')
 <div class="container">
+  <?php
+ 
+  ?>
 
   <div class="row">
     <div class=" col-md-3 col-xs-12 pull-right no-padding">

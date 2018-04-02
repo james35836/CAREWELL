@@ -75,6 +75,7 @@ use DB;
 use Carbon\Carbon;
 use Paginate;
 use Crypt;
+use Session;
 
 class CarewellController extends ActiveAuthController
 {
@@ -1455,24 +1456,8 @@ class CarewellController extends ActiveAuthController
           'availment_list'      => $data['_availment_list'],
           'member_list'         => $data['_member_list']
         ));
-        
-
-
-
-
-
-
     }
-
-
-
-
-
-
-
-
-    
-    // return view('carewell.additional_pages.availment_get_member_info',$data);
+  // return view('carewell.additional_pages.availment_get_member_info',$data);
   }
   public function availment_get_member_procedure($availment_id)
   {
@@ -1698,6 +1683,8 @@ class CarewellController extends ActiveAuthController
 
   public function settings_coverage_plan_create()
   {
+    Session::forget('coverage_plan_item');
+    
     $data['_availment'] = TblAvailmentModel::where('availment_parent_id',0)->get();
     foreach ($data['_availment'] as $key => $availment) 
     {
@@ -1707,21 +1694,76 @@ class CarewellController extends ActiveAuthController
     return view('carewell.modal_pages.settings_coverage_plan_create',$data);
   }
 
-  public function settings_coverage_items()
+  public function settings_coverage_items($availment_id)
   {
-    $data['page'] = 'Coverage PLan';
-    $data['user'] = StaticFunctionController::global();
-
-    $data['_availment'] = TblAvailmentModel::where('availment_parent_id',0)->get();
-    foreach ($data['_availment'] as $key => $availment) 
+    if(Session::has('coverage_plan_item'))
     {
-      $data['_availment'][$key]['procedure']    =  TblProcedureModel::where('archived',0)->get();
-      $data['_availment'][$key]['availment_charges']  =  TblAvailmentChargesModel::where('archived',0)->get();
+      Session::get('coverage_plan_item');
+       print_r(Session::get('coverage_plan_item'));
     }
+    else
+    {
+      Session::put('coverage_plan_item', array());
+    }
+    $data['page']           =   'Coverage PLan';
+    $data['user']           =   StaticFunctionController::global();
+    $data['availment_id']   =   $availment_id;
+    $data['_procedure']     =   TblProcedureModel::where('archived',0)->limit(10)->get();
+    
     return view('carewell.additional_pages.coverage_plan_item',$data);
+  }
+  public function settings_coverage_items_submit(Request $request)
+  {
+    $array = array();
+    if(Session::has('coverage_plan_item'))
+    {
+      $array                  = Session::get('coverage_plan_item');
+    }
+    
+
+    
+    $availment_id           = $request->availment_id;
+    $plan_charges           = $request->plan_charges;
+    $plan_covered_amount    = $request->plan_covered_amount;
+    $plan_limit             = $request->plan_limit;
+
+    foreach($request->procedure_id as $key=>$procedure_id)
+    {
+      $insert['procedure_id']         = $procedure_id;
+      $insert['availment_id']         = $availment_id[$key];
+      $insert['plan_charges']         = $plan_charges[$key];
+      $insert['plan_covered_amount']  = $plan_covered_amount[$key];
+      $insert['plan_limit']           = $plan_limit[$key];
+      array_push($array, $insert);
+    }
+    // dd($array);
+    Session::put('coverage_plan_item',$array);
+    // dd(Session::get('coverage_plan_item'));
+    
+    return StaticFunctionController::returnMessage('success','PROCEDURE');
+   
+    
+
   }
   public function settings_coverage_plan_create_submit(Request $request)
   {
+    foreach(Session::get('coverage_plan_item')  as $data)
+    {
+      $james['data'] = $data;
+    }
+    return 'THIS IS A DEMO ONLY ';
+    $insert_employee = array();
+    foreach(Session::get('coverage_plan_item') as $key=>$tag)
+               {    
+                    $insert['procedure_id']         = $tag;
+                    $insert['availment_id']         = $request->availment_id[$key];
+                    $insert['plan_charges']         = $request->plan_charges[$key];
+                    $insert['plan_covered_amount']  = $request->plan_covered_amount[$key];
+                    $insert['plan_limit']           = $request->plan_limit[$key];
+                    array_push($insert_employee, $insert);
+               }
+     dd($insert_employee);
+
     $coverageData = new TblCoveragePlanModel;
     $coverageData->coverage_plan_name             = $request->coverage_plan_name;
     $coverageData->coverage_plan_preexisting      = $request->coverage_plan_preexisting;

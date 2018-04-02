@@ -1,21 +1,21 @@
 <script>
-$(document).ready(function()
-{
-	$('div.box-container').find('.form-control').attr('disabled',!this.checked);
-	$('div.box-container').find('.btn').attr('disabled',!this.checked);
-	$('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
-	checkboxClass: 'icheckbox_minimal-blue',
-	radioClass   : 'iradio_minimal-blue'
-	})
-	$("body").on('click','.parent-box',function()
-	{
-	var $parent = $(this).closest('div.availment-box');
-	$parent.find('.form-control').attr('enabled',this.checked);
-	$parent.find('.btn').attr('enabled',this.checked);
-	$parent.find('.form-control').attr('disabled',!this.checked);
-	$parent.find('.btn').attr('disabled',!this.checked);
-	});
-});
+// $(document).ready(function()
+// {
+// 	$('div.box-container').find('.form-control').attr('disabled',!this.checked);
+// 	$('div.box-container').find('.btn').attr('disabled',!this.checked);
+// 	$('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+// 	checkboxClass: 'icheckbox_minimal-blue',
+// 	radioClass   : 'iradio_minimal-blue'
+// 	})
+// 	$("body").on('click','.parent-box',function()
+// 	{
+// 	var $parent = $(this).closest('div.availment-box');
+// 	$parent.find('.form-control').attr('enabled',this.checked);
+// 	$parent.find('.btn').attr('enabled',this.checked);
+// 	$parent.find('.form-control').attr('disabled',!this.checked);
+// 	$parent.find('.btn').attr('disabled',!this.checked);
+// 	});
+// });
 </script>
 <script>
     $(function () {
@@ -151,52 +151,66 @@ $(document).ready(function()
 		<div class="form-holder">
 			<div class="row type-of-availment-padding">
 				<div class="row availment-container box-container">
+					<?php $count  = 0; ?>
 					@foreach($_availment as $availment)
 					<div class="availment-box">
 						<div  class="table-responsive no-padding">
 							<table class="table table-bordered" >
 								<tr>
 									<p style="font-size: 20px;font-weight: bold;">
-										<input type="checkbox" id="availment_id" class="availment_id parent-box" name="availment_id[]" value="{{$availment->availment_id}}"/>
+										<input type="checkbox" class="availment_id parent-box" name="availment_id[]" value="{{$availment->availment_id}}"/>
 										{{$availment->availment_name}}
 									</p>
 								</tr>
-								
 								<tr>
-									<th class="col-md-5">PROCEDURES</th>
-									<th class="col-md-5" >CHARGES</th>
-									<th class="col-md-2">
-										
-									</th>
-								</tr>
-								
+						            <th class="col-md-3">PROCEDURES</th>
+						            {{-- <th class="col-md-3" >CHARGES</th>
+						            <th class="col-md-3">AMOUNT</th>
+						            <th class="col-md-2">LIMIT</th> --}}
+						            <th class="col-md-1"></th>
+						        </tr>
 								<tr class="table-row">
-									<td class="col-md-5">
+									<td >
 										<div class="input-group">
-											<select name="procedure_id_{{$availment->availment_id}}[]" class="form-control procedure_id procedure select2">
-												<option value="0">SELECT PROCEDURE</option>
-												@foreach($availment->procedure as $procedure)
-												<option value="{{$procedure->procedure_id}}">{{$procedure->procedure_name}}</option>
-												@endforeach
+											<span class="input-group-btn">
+												<button class="btn btn-success add-coverage-item" data-availment_id="{{$availment->availment_id}}" type="button" tabindex="-1">SELECT PROCEDURE</button>
+											</span>
+											<input type="text" class="form-control"/>
+										</div>
+									</td>
+									{{-- <td >
+										<select class="form-control select2 ">
+											<option value="">COVERED</option>
+											<option value="">NOT COVERED</option>
+											<option value="">NOT SPECIFIED</option>
+										</select>
+									</td>
+									<td >
+										<div class="input-group">
+											<select class="form-control select2 ">
+												<option value="">10, 000</option>
+												<option value="">20 000</option>
+												<option value="">30 000</option>
 											</select>
 											<span class="input-group-btn">
 												<button class="btn btn-secondary add-new-option" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span></button>
 											</span>
 										</div>
 									</td>
-									<td class="col-md-4">
+									<td ">
 										<div class="input-group">
-											<select name="availment_charges_id_{{$availment->availment_id}}[]" class="form-control select2 ">
-												@foreach($availment->availment_charges as $availment_charges)
-												<option value="{{$availment_charges->availment_charges_id}}">{{$availment_charges->availment_charges_name}}</option>
-												@endforeach
+											<select  class="form-control select2 ">
+												<option value="1">1</option>
+												<option value="2">2</option>
+												<option value="3">3</option>
 											</select>
 											<span class="input-group-btn">
 												<button class="btn btn-secondary add-new-option" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span></button>
 											</span>
 										</div>
-									</td>
-									<td class="col-md-2 last-td">
+									</td> --}}
+
+									<td >
 										<div class="btn-group" role="group" aria-label="Basic example">
 											<button type="button" data-number="2" class="btn btn-primary btn-sm add-row"><i class="fa fa-plus-circle"></i></button>
 											<button type="button" class="btn btn-danger btn-sm remove-row"><i class="fa fa-minus-circle"></i></button>

@@ -22,7 +22,10 @@ var filterData 		= new FormData();
 var searchData 		= new FormData();
 
 
+var coverageData    = new FormData();
 
+
+var coverageItemData	= [];
 var doctorProviderData	= [];
 var specialData 		= [];
 var availmentData 		= [];
