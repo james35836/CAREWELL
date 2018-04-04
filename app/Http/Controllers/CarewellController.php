@@ -1747,11 +1747,12 @@ class CarewellController extends ActiveAuthController
   }
   public function settings_coverage_plan_create_submit(Request $request)
   {
+    dd(Session::get('coverage_plan_item'));
     foreach(Session::get('coverage_plan_item')  as $data)
     {
       $james['data'] = $data;
     }
-    return 'THIS IS A DEMO ONLY ';
+    // return 'THIS IS A DEMO ONLY ';
     $insert_employee = array();
     foreach(Session::get('coverage_plan_item') as $key=>$tag)
                {    
