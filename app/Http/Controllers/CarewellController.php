@@ -1698,7 +1698,7 @@ class CarewellController extends ActiveAuthController
   {
     if(Session::has('coverage_plan_item'))
     {
-      Session::get('coverage_plan_item');
+       Session::get('coverage_plan_item');
        print_r(Session::get('coverage_plan_item'));
     }
     else
