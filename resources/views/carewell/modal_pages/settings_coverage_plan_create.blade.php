@@ -158,7 +158,6 @@
 							<table class="table table-bordered" >
 								<tr>
 									<p style="font-size: 20px;font-weight: bold;">
-										<input type="checkbox" class="availment_id parent-box" name="availment_id[]" value="{{$availment->availment_id}}"/>
 										{{$availment->availment_name}}
 									</p>
 								</tr>
