@@ -598,10 +598,16 @@ function globals()
 	{
 		$('body').on("click",".add-row", function()
 		{
+
 			var j = $(this).data('number');
+			var nj = j+1;
 			var $table = $(this).closest('table');
-			$nrow = $table.find('tr:eq('+j+')').clone().addClass('select');
-			$table.append($nrow);
+
+			$nrow = $table.find('tr:eq('+j+')').clone().appendTo($table);
+
+			// $table.append($nrow);
+			$nrow.find('button.add-row').attr('data-number', nj);
+
 			
 		});
 
@@ -609,6 +615,7 @@ function globals()
 		{
 			var $table = $(this).closest('table');
 			var count  = $table.find('tr.table-row').length;
+
 			if(count==1)
 			{
 				toastr.error('You cannot remove all rows.', 'Something went wrong!', {timeOut: 3000})

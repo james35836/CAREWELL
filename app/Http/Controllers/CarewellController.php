@@ -1714,7 +1714,7 @@ class CarewellController extends ActiveAuthController
   }
   public function settings_coverage_items_submit(Request $request)
   {
-    $array = array();
+    $array = array(0 => "first");
     if(Session::has('coverage_plan_item'))
     {
       $array                  = Session::get('coverage_plan_item');
