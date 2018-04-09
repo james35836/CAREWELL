@@ -1,5 +1,6 @@
 var billing_center 	= new billing_center();
 var billingMemberData = new FormData();
+var calPendingData    = new FormData();
 function billing_center()
 {
 	init();
@@ -27,10 +28,28 @@ function billing_center()
 			cal_close();
 			cal_close_confirm();
 			cal_close_submit();
-
+			cal_pending_confirm();
+			cal_pending_submit();
 
 		});
 
+	}
+	function cal_pending_confirm()
+	{
+		$('body').on('click','.cal-pending-confirm',function() 
+		{
+			var	confirmModalMessage = 'Are you sure you want to mark this CAL as pending?';
+			var confirmModalAction = 'cal-pending-submit';
+			globals.confirm_modals(confirmModalMessage,confirmModalAction);
+            calPendingData.append("cal_id", 					$(this).val());
+	    });
+	}
+	function cal_pending_submit()
+	{
+		$('body').on('click','.cal-pending-submit',function() 
+		{
+			globals.global_submit('cal-member','/billing/cal_import_template_submit',calPendingData);
+        });
 	}
 	function cal_close()
 	{

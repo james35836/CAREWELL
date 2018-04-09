@@ -178,6 +178,7 @@ transform: rotate(-90deg);
               <tr>
                 <th>DESCRIPTION ID</th>
                 <th>DESCRIPTION NAME</th>
+                <th>TYPE</th>
                 <th>STATUS</th>
                 <th>ACTION</th>
               </tr>
@@ -185,6 +186,7 @@ transform: rotate(-90deg);
               <tr>
                 <td>{{$procedure->procedure_id}}</td>
                 <td>{{$procedure->procedure_name}}</td>
+                <td>{{$procedure->type}}</td>
                 <td><span class="label label-success">active</span></td>
                 <td>
                   <div class="btn-group">
@@ -194,8 +196,7 @@ transform: rotate(-90deg);
                     <span class="sr-only">Toggle Dropdown</span>
                     </button>
                     <ul class="dropdown-menu" role="menu" style="position: absolute !important;">
-                      <li><button type="button" data-user_id="{{$procedure->procedure_id}}" class="btn btn-link view-user-details"><i class="fa fa-eye btn-icon"></i>  View User</button></li>
-                      <li><button type="button" data-id="{{$procedure->procedure_id}}" data-name="USER" class="btn btn-link restore" ><i class="fa fa-trash btn-icon"></i> Restore User </button></li>
+                      <li><button type="button" data-id="{{$procedure->procedure_id}}" data-name="PROCEDURE" class="btn btn-link restore" ><i class="fa fa-trash btn-icon"></i> Restore  </button></li>
                     </ul>
                   </div>
                 </td>
@@ -204,7 +205,7 @@ transform: rotate(-90deg);
             </table>
           </div>
           <div class="box-footer clearfix">
-            @include('globals.pagination', ['paginator' => $_diagnosis])
+            @include('globals.pagination', ['paginator' => $_procedure])
           </div>
         </div>
         <div role="tabpanel" class="tab-pane" id="diagnosisTab">

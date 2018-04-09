@@ -126,7 +126,7 @@ radioClass   : 'iradio_minimal-blue'
 		<div class="form-holder">
 			<div class="row type-of-availment-padding">
 				<div class="row availment-container">
-					@foreach($_coverage_plan_covered->where('availment_parent_id',0)  as $coverage_plan_covered)
+					@foreach($_coverage_plan_covered as $coverage_plan_covered)
 					<div class=" availment-box">
 						<div class="parent-availment ">
 							<p style="font-size: 20px;font-weight: bold;">
@@ -138,43 +138,25 @@ radioClass   : 'iradio_minimal-blue'
 									<tr>
 										<th class="col-md-5">PROCEDURE</th>
 										<th class="col-md-5" >CHARGE</th>
-										<th class="col-md-2"></th>
+										<th class="col-md-2">AMOUNT COVERED</th>
+										<th class="col-md-2">LIMIT</th>
+										
 									</tr>
 								</thead>
 								<tbody>
-									@foreach($coverage_plan_covered->child_plan_item as $child_plan_item)
+									@foreach($coverage_plan_covered->procedure as $procedure)
 									<tr class="table-row">
 										<td class="col-md-5">
-											<div class="input-group">
-												<select name="child_availment[]" class="form-control procedure select2">
-													<option value="0">{{$child_plan_item->procedure_name}}</option>
-													{{-- @foreach($coverage_plan_covered->child_availment as $child_availment)
-													<option value="{{$child_availment->availment_id}}">{{$child_availment->availment_name}}</option>
-													@endforeach --}}
-												</select>
-												<span class="input-group-btn">
-													<button class="btn btn-secondary add-new-option" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span></button>
-												</span>
-											</div>
+											{{$procedure->procedure_name}}
 										</td>
 										<td class="col-md-4">
-											<div class="input-group">
-												<select name="child_availment_charges[]" class="form-control select2 ">
-													<option value="0">{{$child_plan_item->availment_charges_name}}</option>
-													{{-- @foreach($coverage_plan_covered->availment_charges as $availment_charges)
-													<option value="{{$availment_charges->availment_charges_id}}">{{$availment_charges->availment_charges_name}}</option>
-													@endforeach --}}
-												</select>
-												<span class="input-group-btn">
-													<button class="btn btn-secondary add-new-option" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span></button>
-												</span>
-											</div>
+											{{$procedure->plan_charges}}
 										</td>
-										<td class="col-md-2 last-td">
-											<div class="btn-group" role="group" aria-label="Basic example">
-												<button type="button" class="btn btn-primary btn-sm add-row"><i class="fa fa-plus-circle"></i></button>
-												<button type="button" class="btn btn-danger btn-sm remove-row"><i class="fa fa-minus-circle"></i></button>
-											</div>
+										<td class="col-md-4">
+											{{$procedure->plan_covered_amount}}
+										</td>
+										<td class="col-md-4">
+											{{$procedure->plan_limit}}
 										</td>
 									</tr>
 									@endforeach

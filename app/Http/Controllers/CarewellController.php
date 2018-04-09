@@ -31,6 +31,9 @@ use App\Http\Model\TblCalModel;
 use App\Http\Model\TblCalInfoModel;
 use App\Http\Model\TblCalMemberModel;
 
+use App\Http\Model\TblNewMemberModel;
+use App\Http\Model\TblNewCalMemberModel;
+
 use App\Http\Model\TblMemberModel;
 use App\Http\Model\TblMemberCompanyModel;
 use App\Http\Model\TblMemberDependentModel;
@@ -977,9 +980,11 @@ class CarewellController extends ActiveAuthController
     $data['_cal_close']       = TblCalModel::where('tbl_cal.archived',1)->join('tbl_company','tbl_company.company_id','=','tbl_cal.company_id')->paginate(10);
     $data['_company']         = TblCompanyModel::where('archived',0)->get();
 
+
     foreach ($data['_cal_open'] as $key => $cal_open) 
     {
-      $data['_cal_open'][$key]['members']  =  TblCalMemberModel::where('cal_id',$cal_open->cal_id)->count();
+      $data['_cal_open'][$key]['new_member']= TblNewMemberModel::where('cal_id',$cal_open->cal_id)->count();
+      $data['_cal_open'][$key]['members']   =  TblCalMemberModel::where('cal_id',$cal_open->cal_id)->count();
     }
     foreach ($data['_cal_close'] as $key => $cal_close) 
     {
@@ -1011,11 +1016,19 @@ class CarewellController extends ActiveAuthController
   {
     $data['cal_check']        = TblCalModel::where('cal_id',$cal_id)->value('archived');
     $data['_cal_member']      = TblCalMemberModel::where('cal_id',$cal_id)->CalMember()->get();
+
+    $data['_cal_new_member']   = TblNewMemberModel::where('cal_id',$cal_id)
+                               ->join('tbl_new_cal_member','tbl_new_cal_member.new_member_id','=','tbl_new_member.new_member_id')
+                                ->get();
+
     if($data['cal_check']==0)
     {
-       $data['cal_details']   = TblCalModel::where('cal_id',$cal_id)
+      $data['cal_details']   = TblCalModel::where('cal_id',$cal_id)
                               ->join('tbl_company','tbl_company.company_id','=','tbl_cal.company_id')
                               ->first();
+      
+
+
     }
     else
     {
@@ -1199,7 +1212,7 @@ class CarewellController extends ActiveAuthController
         if($data['first_name']!=""&&$data['last_name']!=""&&$data['middle_name']!=""&&$data['birthdate']!="")
         {
           $checkingMember = TblMemberModel::MemberExist($data['first_name'],$data['middle_name'],$data['last_name'],$data['birthdate'])->first();
-          
+          $checkingNewMember = TblNewMemberModel::MemberExist($data['first_name'],$data['middle_name'],$data['last_name'],$data['birthdate'])->first();
           if($checkingMember!=null)
           {
               $checkCal       = TblCalMemberModel::CalMemberExist($checkingMember->member_id,$companyData->cal_id)->first();
@@ -1235,80 +1248,34 @@ class CarewellController extends ActiveAuthController
               }
 
           }
-          else
+          elseif($checkingNewMember==null)
           {
-            
-            
-            $member['member_first_name']        =   StaticFunctionController::nullableToString($data['first_name']);
-            $member['member_middle_name']       =   StaticFunctionController::nullableToString($data['middle_name']);
-            $member['member_last_name']         =   StaticFunctionController::nullableToString($data['last_name']);
-                                                $date = $data['birthdate'];
-            $member['member_birthdate']         =   date('d-m-Y', strtotime($date));  
-            $member['member_gender']            =   "N/A";
-            $member['member_marital_status']    =   "N/A";
-            $member['member_mother_maiden_name']=   "N/A";
-            $member['member_permanet_address']  =   "N/A";
-            $member['member_present_address']   =   "N/A";
-            $member['member_contact_number']    =   "N/A";
-            $member['member_email_address']     =   "N/A";
-            $member['member_created']           =   Carbon::now();
+            $new_member['member_first_name']            =   StaticFunctionController::nullableToString($data['first_name']);
+            $new_member['member_middle_name']           =   StaticFunctionController::nullableToString($data['middle_name']);
+            $new_member['member_last_name']             =   StaticFunctionController::nullableToString($data['last_name']);
+            $new_member['member_birthdate']             =   StaticFunctionController::nullableToString($data['birthdate']);
+            $new_member['member_payment_mode']          =   StaticFunctionController::nullableToString($data['mode_of_payment']);
+            $new_member['company_id']                   =   $companyData->company_id;
+            $new_member['deployment_id']                =   StaticFunctionController::getid($data['deployment'], 'deployment');
+            $new_member['coverage_plan_id']             =   StaticFunctionController::getid($data['coverage_plan'], 'coverage');
+            $new_member['cal_id']                       =   $companyData->cal_id;
 
-            $display_name                       =   $member['member_first_name']." ".$member['member_middle_name']." ".$member['member_last_name'];
+            $new_member_id = TblNewMemberModel::insertGetId($new_member);
 
-            $member['member_universal_id']      =   StaticFunctionController::generateUniversalId($display_name,$member['member_birthdate']);
-
-            $member_id                          =   TblMemberModel::insertGetId($member);
-
-            $dependent['dependent_full_name']    =   "N/A";
-            $dependent['dependent_birthdate']    =   "N/A";
-            $dependent['dependent_relationship'] =   "N/A";
-            $dependent['member_id']                     =   $member_id;
-            TblMemberDependentModel::insert($dependent);
-
-            $government['government_card_philhealth'] =   "N/A";
-            $government['government_card_sss']        =   "N/A";
-            $government['government_card_tin']        =   "N/A";
-            $government['government_card_hdmf']       =   "N/A";
-            $government['member_id']                         =   $member_id;
-            TblMemberGovernmentCardModel::insert($government);
-            
-            $company['member_carewell_id']        =   StaticFunctionController::generateCarewellId($companyData->company_code);
-            $company['member_employee_number']    =   "11";
-            $company['member_company_status']     =   "N/A";
-            $company['member_transaction_date']   =   Carbon::now();
-            $company['coverage_plan_id']          =   StaticFunctionController::getid($data['coverage_plan'], 'coverage');
-            $company['deployment_id']             =   StaticFunctionController::getid($data['deployment'], 'deployment');
-            $company['member_id']                 =   $member_id;
-            $company['company_id']                =   $companyData->company_id;
-            $company['member_payment_mode']       =   'SEMI-MONTHLY';
-
-            TblMemberCompanyModel::insert($company);
-
-            $checkCal     = TblCalMemberModel::CalMemberExist($member_id,$companyData->cal_id)->first();
-            $member_data  = TblMemberCompanyModel::where('member_id',$member_id)->where('archived',0)->first();
-            $last_payment = TblCalMemberModel::where('member_id',$member_id)->orderBy('cal_payment_end','DESC')->first();
-
-
-
-            if(count($last_payment)!=0)
-            {
-              $payment_date = $last_payment->cal_payment_end;
-            }
-            else
-            {
-              $payment_date = date('Y-m-d');
-            }
-            $period_date  = StaticFunctionController::getModeOfPayment($payment_date,$member_data->member_payment_mode,$member_data->coverage_plan_id,$data['payment_amount']);
+            $period_date  = StaticFunctionController::getModeOfPayment(date('Y-m-d'),$new_member['member_payment_mode'],$new_member['coverage_plan_id'],$data['payment_amount']);
 
             $cal_member['cal_payment_amount']     =   StaticFunctionController::nullableToString($data['payment_amount']);
             $cal_member['cal_payment_date']       =   Carbon::now();
             $cal_member['cal_payment_count']      =   $period_date['count'];
             $cal_member['cal_payment_start']      =   $period_date['start'];
             $cal_member['cal_payment_end']        =   $period_date['end'];
-            $cal_member['member_id']              =   $member_id;
-            $cal_member['cal_id']                 =   $companyData->cal_id;
+            $cal_member['new_member_id']          =   $new_member_id;
+            
 
-            TblCalMemberModel::insert($cal_member);
+            TblNewCalMemberModel::insert($cal_member);
+            
+            
+            
             $countNew++;
           }
         }
@@ -1369,7 +1336,6 @@ class CarewellController extends ActiveAuthController
   }
   public function billing_cal_close_submit(Request $request)
   {
-    
     $unique_name   = substr(str_shuffle("ABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0,5);
     $cal_info_attached_file = $request->file('cal_file');
     $fileCalRef = $unique_name.'-'.$cal_info_attached_file->getClientOriginalName();
@@ -1385,6 +1351,8 @@ class CarewellController extends ActiveAuthController
     $calCloseData->cal_info_created         =   Carbon::now();
     $calCloseData->cal_id                   =   $request->cal_id;
     $calCloseData->save();
+  
+    StaticFunctionController::getNewMember($request->cal_id);
 
     $update['archived'] = '1';
     TblCalModel::where('cal_id',$request->cal_id)->update($update);
@@ -1683,44 +1651,91 @@ class CarewellController extends ActiveAuthController
 
   public function settings_coverage_plan_create()
   {
-    Session::forget('coverage_plan_item');
+    Session::forget('annual');
+    Session::forget('os_consultation');
+    Session::forget('os_laboratory');
+    Session::forget('emergency');
+    Session::forget('confinement');
+    Session::forget('dental');
+    Session::forget('assistance');
     
     $data['_availment'] = TblAvailmentModel::where('availment_parent_id',0)->get();
     foreach ($data['_availment'] as $key => $availment) 
     {
-      $data['_availment'][$key]['procedure']    =  TblProcedureModel::where('archived',0)->get();
-      $data['_availment'][$key]['availment_charges']  =  TblAvailmentChargesModel::where('archived',0)->get();
+      if($availment->availment_name=='Annual Physical Examination')
+      {
+        $data['_availment'][$key]['name']    =  'annual';
+      }
+      else if($availment->availment_name=='Outpatient Services(consultation)')
+      {
+        $data['_availment'][$key]['name']    =  'os_consultation';
+      }
+      else if($availment->availment_name=='Outpatient Services(Laboratory)')
+      {
+        $data['_availment'][$key]['name']    =  'os_laboratory';
+      }
+      else if($availment->availment_name=='emergency')
+      {
+        $data['_availment'][$key]['name']    =  'emergency';
+      }
+      else if($availment->availment_name=='confinement')
+      {
+        $data['_availment'][$key]['name']    =  'confinement';
+      }
+      else if($availment->availment_name=='Dental')
+      {
+        $data['_availment'][$key]['name']    =  'dental';
+      }
+      else if($availment->availment_name=='Financial Assistance')
+      {
+        $data['_availment'][$key]['name']    =  'assistance';
+      }
     }
     return view('carewell.modal_pages.settings_coverage_plan_create',$data);
   }
 
-  public function settings_coverage_items($availment_id)
+  public function settings_coverage_items($availment_id,$session_name)
   {
-    if(Session::has('coverage_plan_item'))
+    $data['page']             =   'Coverage PLan';
+    $data['user']             =   StaticFunctionController::global();
+    $data['availment_id']     =   $availment_id;
+    $data['session_name']     =   $session_name;
+
+    
+    if(Session::has($session_name))
     {
-       Session::get('coverage_plan_item');
-       print_r(Session::get('coverage_plan_item'));
+      $array                  = array();
+      $data['_procedure']     =   TblProcedureModel::where('archived',0)->get();
+      foreach(Session::get($session_name) as $k=>$session_item)
+      {
+        if($session_item['availment_id']==$availment_id)
+        {
+          array_push($array,$session_item['procedure_id']);
+        }
+      } 
+      $count                  = count($array)-1;
+      for($i=0;  $i<=$count;  $i++)
+      {
+        foreach($data['_procedure'] as $key => $procedure)
+        {
+          $arr                = $array[$i];
+          if($arr  ==   $procedure->procedure_id)
+          {
+            $data['_procedure'][$key]['reference_number']    =  'hidden';
+          }
+        }
+      }
     }
     else
     {
-      Session::put('coverage_plan_item', array());
+      $data['_procedure']     =   TblProcedureModel::where('archived',0)->limit(10)->get();
+      Session::put($session_name, array());
     }
-    $data['page']           =   'Coverage PLan';
-    $data['user']           =   StaticFunctionController::global();
-    $data['availment_id']   =   $availment_id;
-    $data['_procedure']     =   TblProcedureModel::where('archived',0)->limit(10)->get();
-    
     return view('carewell.additional_pages.coverage_plan_item',$data);
   }
   public function settings_coverage_items_submit(Request $request)
   {
-    $array = array(0 => "first");
-    if(Session::has('coverage_plan_item'))
-    {
-      $array                  = Session::get('coverage_plan_item');
-    }
-    
-
+    $array                  = Session::get($request->session_name);
     
     $availment_id           = $request->availment_id;
     $plan_charges           = $request->plan_charges;
@@ -1736,34 +1751,24 @@ class CarewellController extends ActiveAuthController
       $insert['plan_limit']           = $plan_limit[$key];
       array_push($array, $insert);
     }
-    // dd($array);
-    Session::put('coverage_plan_item',$array);
-    // dd(Session::get('coverage_plan_item'));
-    
+    Session::put($request->session_name,$array);
     return StaticFunctionController::returnMessage('success','PROCEDURE');
-   
-    
-
+  }
+  public static function insert_all_session($session_name,$coverage_plan_id)
+  {
+    foreach(Session::get($session_name) as $key=>$item)
+    {    
+      $insert['procedure_id']         = $item['procedure_id'];
+      $insert['availment_id']         = $item['availment_id'];
+      $insert['plan_charges']         = $item['plan_charges'];
+      $insert['plan_covered_amount']  = $item['plan_covered_amount'];
+      $insert['plan_limit']           = $item['plan_limit'];
+      $insert['coverage_plan_id']     = $coverage_plan_id;
+      TblCoveragePlanProcedureModel::insert($insert);
+    }
   }
   public function settings_coverage_plan_create_submit(Request $request)
   {
-    dd(Session::get('coverage_plan_item'));
-    foreach(Session::get('coverage_plan_item')  as $data)
-    {
-      $james['data'] = $data;
-    }
-    // return 'THIS IS A DEMO ONLY ';
-    $insert_employee = array();
-    foreach(Session::get('coverage_plan_item') as $key=>$tag)
-               {    
-                    $insert['procedure_id']         = $tag;
-                    $insert['availment_id']         = $request->availment_id[$key];
-                    $insert['plan_charges']         = $request->plan_charges[$key];
-                    $insert['plan_covered_amount']  = $request->plan_covered_amount[$key];
-                    $insert['plan_limit']           = $request->plan_limit[$key];
-                    array_push($insert_employee, $insert);
-               }
-     dd($insert_employee);
 
     $coverageData = new TblCoveragePlanModel;
     $coverageData->coverage_plan_name             = $request->coverage_plan_name;
@@ -1780,115 +1785,45 @@ class CarewellController extends ActiveAuthController
     $coverageData->coverage_plan_processing_fee   = $request->coverage_plan_processing_fee;
     $coverageData->coverage_plan_created          = Carbon::now();
     $coverageData->save();
-   
-    
-    foreach($request->availment_id as $availment_id)
-    {
-      $planTagData = new TblCoveragePlanTagModel;
-      $planTagData->availment_id            = $availment_id;
-      $planTagData->coverage_plan_id        = $coverageData->coverage_plan_id;
-      $planTagData->save();
-      if($availment_id==1)
-      {
-        
-        foreach($request->procedure_id_1 as $key=>$procedure_id)
-        {
-          $procedureTagData = new TblCoveragePlanProcedureModel;
-          $procedureTagData->availment_charges_id  = $request->availment_charges_id_1[$key];
-          $procedureTagData->procedure_id          = $request->procedure_id_1[$key];
-          $procedureTagData->coverage_plan_tag_id  = $planTagData->coverage_plan_tag_id;
-          $procedureTagData->save();
-        }
-      }
-      else if($availment_id==2)
-      {
-        foreach($request->procedure_id_2 as $key=>$procedure_id)
-        {
 
-          $procedureTagData = new TblCoveragePlanProcedureModel;
-          $procedureTagData->availment_charges_id  = $request->availment_charges_id_2[$key];
-          $procedureTagData->procedure_id          = $procedure_id;
-          $procedureTagData->coverage_plan_tag_id  = $planTagData->coverage_plan_tag_id;
-          $procedureTagData->save();
-        }
-      }
-      else if($availment_id==3)
-      {
-        foreach($request->procedure_id_3 as $key=>$procedure_id)
-        {
-          $procedureTagData = new TblCoveragePlanProcedureModel;
-          $procedureTagData->availment_charges_id  = $request->availment_charges_id_3[$key];
-          $procedureTagData->procedure_id          = $procedure_id;
-          $procedureTagData->coverage_plan_tag_id  = $planTagData->coverage_plan_tag_id;
-          $procedureTagData->save();
-        }
-      }
-      else if($availment_id==4)
-      {
-        foreach($request->procedure_id_4 as $key=>$procedure_id)
-        {
-          $procedureTagData = new TblCoveragePlanProcedureModel;
-          $procedureTagData->availment_charges_id  = $request->availment_charges_id_4[$key];
-          $procedureTagData->procedure_id          = $procedure_id;
-          $procedureTagData->coverage_plan_tag_id  = $planTagData->coverage_plan_tag_id;
-          $procedureTagData->save();
-        }
-      }
-      else if($availment_id==5)
-      {
-        foreach($request->procedure_id_5 as $key=>$procedure_id)
-        {
-          $procedureTagData = new TblCoveragePlanProcedureModel;
-          $procedureTagData->availment_charges_id  = $request->availment_charges_id_5[$key];
-          $procedureTagData->procedure_id          = $procedure_id;
-          $procedureTagData->coverage_plan_tag_id  = $planTagData->coverage_plan_tag_id;
-          $procedureTagData->save();
-        }
-      }
-      else if($availment_id==6)
-      {
-        foreach($request->procedure_id_6 as $key=>$procedure_id)
-        {
-          $procedureTagData = new TblCoveragePlanProcedureModel;
-          $procedureTagData->availment_charges_id  = $request->availment_charges_id_6[$key];
-          $procedureTagData->procedure_id          = $procedure_id;
-          $procedureTagData->coverage_plan_tag_id  = $planTagData->coverage_plan_tag_id;
-          $procedureTagData->save();
-        }
-      }
-      else if($availment_id==7)
-      {
-        foreach($request->procedure_id_7 as $key=>$procedure_id)
-        {
-          $procedureTagData = new TblCoveragePlanProcedureModel;
-          $procedureTagData->availment_charges_id  = $request->availment_charges_id_7[$key];
-          $procedureTagData->procedure_id          = $procedure_id;
-          $procedureTagData->coverage_plan_tag_id  = $planTagData->coverage_plan_tag_id;
-          $procedureTagData->save();
-        }
-      }
-      
-      
-      
-    }
-    if($coverageData->save())
+
+    $session_array = array(0=>'annual',1=>'os_consultation',2=>'os_laboratory',3=>'emergency',4=>'confinement',5=>'dental',6=>'assistance');
+
+    for($i=0;  $i<=6;  $i++)
     {
-      return StaticFunctionController::returnMessage('success','COVERAGE PLAN');
+      $arr                = $session_array[$i];
+      if(Session::has($arr))
+      {
+        Self::insert_all_session($arr,$coverageData->coverage_plan_id);
+      }
     }
-  }
-  public function settings_coverage_plan_details($coverage_plan_id)
-  {
-    $data['coverage_plan_details']  = TblCoveragePlanModel::where('coverage_plan_id',$coverage_plan_id)->first();
-    $data['_coverage_plan_covered'] = TblCoveragePlanTagModel::where('coverage_plan_id',$coverage_plan_id)
-                                    ->join('tbl_availment','tbl_availment.availment_id','=','tbl_coverage_plan_tag.availment_id')
+    
+    
+    if($coverageData->save())     
+    {       
+      return StaticFunctionController::returnMessage('success','COVERAGE PLAN'); 
+    }
+  }   
+  public function settings_coverage_plan_details($coverage_plan_id)   
+  {     
+    $data['coverage_plan_details']  = TblCoveragePlanModel::where('coverage_plan_id',$coverage_plan_id)->first();     
+    $data['_coverage_plan_covered'] = TblCoveragePlanProcedureModel::where('coverage_plan_id',$coverage_plan_id)
+                                    ->where('tbl_coverage_plan_procedure.archived',0)
+                                    ->select(DB::raw('count(*) as totals, tbl_coverage_plan_procedure.availment_id,tbl_availment.availment_name'))
+                                    ->groupBy('availment_id')
+                                    ->join('tbl_availment','tbl_availment.availment_id','=','tbl_coverage_plan_procedure.availment_id') 
                                     ->get();
-    foreach($data['_coverage_plan_covered'] as $key=>$coverage_plan_covered)
+
+    foreach($data['_coverage_plan_covered'] as $key=>$availment)
     {
-      $data['_coverage_plan_covered'][$key]['child_plan_item']    =  TblCoveragePlanProcedureModel::where('coverage_plan_tag_id',$coverage_plan_covered->coverage_plan_tag_id)->CoveragePlanTag()->get();
-      $data['_coverage_plan_covered'][$key]['child_availment']    =  TblAvailmentModel::where('availment_parent_id',$coverage_plan_covered->availment_id)->get();
-      $data['_coverage_plan_covered'][$key]['availment_charges']  =  TblAvailmentChargesModel::where('archived',0)->get();
+      $data['_coverage_plan_covered'][$key]['procedure']   = TblCoveragePlanProcedureModel::where('availment_id',$availment->availment_id)
+                                    ->join('tbl_procedure','tbl_procedure.procedure_id','=','tbl_coverage_plan_procedure.procedure_id') 
+                                    ->get();
+
     }
-    // dd($data);
+    
+                                    
+    
     return view('carewell.modal_pages.settings_coverage_plan_details',$data);
 
   }

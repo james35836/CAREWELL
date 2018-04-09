@@ -163,52 +163,17 @@
 								</tr>
 								<tr>
 						            <th class="col-md-3">PROCEDURES</th>
-						            {{-- <th class="col-md-3" >CHARGES</th>
-						            <th class="col-md-3">AMOUNT</th>
-						            <th class="col-md-2">LIMIT</th> --}}
 						            <th class="col-md-1"></th>
 						        </tr>
 								<tr class="table-row">
 									<td >
 										<div class="input-group">
 											<span class="input-group-btn">
-												<button class="btn btn-success add-coverage-item" data-availment_id="{{$availment->availment_id}}" type="button" tabindex="-1">SELECT PROCEDURE</button>
+												<button class="btn btn-success add-coverage-item" data-name="{{$availment->name}}" data-availment_id="{{$availment->availment_id}}" type="button" tabindex="-1">SELECT PROCEDURE</button>
 											</span>
 											<input type="text" class="form-control"/>
 										</div>
 									</td>
-									{{-- <td >
-										<select class="form-control select2 ">
-											<option value="">COVERED</option>
-											<option value="">NOT COVERED</option>
-											<option value="">NOT SPECIFIED</option>
-										</select>
-									</td>
-									<td >
-										<div class="input-group">
-											<select class="form-control select2 ">
-												<option value="">10, 000</option>
-												<option value="">20 000</option>
-												<option value="">30 000</option>
-											</select>
-											<span class="input-group-btn">
-												<button class="btn btn-secondary add-new-option" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span></button>
-											</span>
-										</div>
-									</td>
-									<td ">
-										<div class="input-group">
-											<select  class="form-control select2 ">
-												<option value="1">1</option>
-												<option value="2">2</option>
-												<option value="3">3</option>
-											</select>
-											<span class="input-group-btn">
-												<button class="btn btn-secondary add-new-option" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span></button>
-											</span>
-										</div>
-									</td> --}}
-
 									<td >
 										<div class="btn-group" role="group" aria-label="Basic example">
 											<button type="button" data-number="2" class="btn btn-primary btn-sm add-row"><i class="fa fa-plus-circle"></i></button>

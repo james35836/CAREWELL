@@ -46,28 +46,28 @@ function settings_coverage()
 		{
 			if(globals.checking_null_validation(document.getElementById('coverage_plan_name').value,"PLAN NAME")=="")
 			{}	
-		 //    else if(globals.checking_null_validation(document.getElementById('coverage_plan_preexisting').value,"PLAN PREXISTING")=="")
-			// {}
-			// else if(globals.checking_null_validation(document.getElementById('coverage_plan_maximum_benefit').value,"PLAN MBL")=="")
-			// {}	
-			// else if(globals.checking_null_validation(document.getElementById('coverage_plan_annual_benefit').value,"PLAN ABL")=="")
-			// {}
-			// else if(globals.checking_null_validation(document.getElementById('coverage_plan_case_handling').value,"PLAN CASE HANDLING")=="")
-			// {}
-			// else if(globals.checking_null_validation(document.getElementById('coverage_plan_age_bracket').value,"PLAN AGE BRACKET")=="")
-			// {}
-			// else if(globals.checking_null_validation(document.getElementById('coverage_plan_mbl_illness').value,"PLAN ILLNESS")=="")
-			// {}
-			// else if(globals.checking_null_validation(document.getElementById('coverage_plan_mbl_year').value,"PLAN MBL/YEAR")=="")
-			// {}
-			// else if(globals.checking_null_validation(document.getElementById('coverage_plan_cari_fee').value,"PLAN CARD FEE")=="")
-			// {}
-			// else if(globals.checking_null_validation(document.getElementById('coverage_plan_hib').value,"PLAN HIB")=="")
-			// {}
-			// else if(globals.checking_null_validation(document.getElementById('coverage_plan_processing_fee').value,"PLAN PROCESSING FEE")=="")
-			// {}
-			// else if(globals.checking_null_validation(document.getElementById('coverage_plan_premium').value,"PLAN PREMIUM")=="")
-			// {}
+		    else if(globals.checking_null_validation(document.getElementById('coverage_plan_preexisting').value,"PLAN PREXISTING")=="")
+			{}
+			else if(globals.checking_null_validation(document.getElementById('coverage_plan_maximum_benefit').value,"PLAN MBL")=="")
+			{}	
+			else if(globals.checking_null_validation(document.getElementById('coverage_plan_annual_benefit').value,"PLAN ABL")=="")
+			{}
+			else if(globals.checking_null_validation(document.getElementById('coverage_plan_case_handling').value,"PLAN CASE HANDLING")=="")
+			{}
+			else if(globals.checking_null_validation(document.getElementById('coverage_plan_age_bracket').value,"PLAN AGE BRACKET")=="")
+			{}
+			else if(globals.checking_null_validation(document.getElementById('coverage_plan_mbl_illness').value,"PLAN ILLNESS")=="")
+			{}
+			else if(globals.checking_null_validation(document.getElementById('coverage_plan_mbl_year').value,"PLAN MBL/YEAR")=="")
+			{}
+			else if(globals.checking_null_validation(document.getElementById('coverage_plan_cari_fee').value,"PLAN CARD FEE")=="")
+			{}
+			else if(globals.checking_null_validation(document.getElementById('coverage_plan_hib').value,"PLAN HIB")=="")
+			{}
+			else if(globals.checking_null_validation(document.getElementById('coverage_plan_processing_fee').value,"PLAN PROCESSING FEE")=="")
+			{}
+			else if(globals.checking_null_validation(document.getElementById('coverage_plan_premium').value,"PLAN PREMIUM")=="")
+			{}
 			else
 			{
 				var	confirmModalMessage = 'Are you sure you want to add this plan?';
@@ -94,7 +94,7 @@ function settings_coverage()
 				},
 				url:'/settings/coverage/create_plan_submit',
 				method: "POST",
-                data:{data:data},
+                data:serializeData,
                 dataType: 'text',
                 success: function(data)
 				{
@@ -128,9 +128,10 @@ function settings_coverage()
     	$("body").on('click','.add-coverage-item',function()
 		{
 			var availment_id    = $(this).data('availment_id');
+			var session_name	= $(this).data('name');
 			var modalName 		= 'COVERAGE PLAN PROCEDURE';
 			var modalClass 		= 'coverage-plan-item';
-			var modalLink 		= '/settings/coverage/items/'+availment_id;
+			var modalLink 		= '/settings/coverage/items/'+availment_id+'/'+session_name;
 			var modalActionName	= 'ADD PROCEDURE';
 			var modalAction 	= 'coverage-item-submit';
 			var modalSize 		= 'modal-md';
@@ -153,19 +154,22 @@ function settings_coverage()
             	{
             		dates.push(this.value);
             		ajaxData.availemnt_id = document.getElementById('availment_id').value;
+            		ajaxData.session_name = document.getElementById('session_name').value;
+            		
 
             	}
             });
-            alert(dates);
-            alert(ajaxData.availemnt_id);
+            alert(ajaxData.session_name);
             for (var i = 0; i < dates.length; i++) 
 			{
 				datas.append('procedure_id[]', 		dates[i]);
 				datas.append('availment_id[]',   	ajaxData.availemnt_id);
+				
 				datas.append('plan_charges[]', 		document.getElementById('plan_charges').value);
 				datas.append('plan_covered_amount[]',document.getElementById('plan_covered_amount').value);
 				datas.append('plan_limit[]',         document.getElementById('plan_limit').value);
 			}
+			datas.append('session_name',   	ajaxData.session_name);
 			
 			// coverageData.append('availment_id', 		document.getElementById('availment_id').value);
 			// coverageData.append('plan_charges', 		document.getElementById('plan_charges').value);

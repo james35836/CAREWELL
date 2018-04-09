@@ -264,7 +264,7 @@ class AdminController extends ActiveAuthController
             $procedureData = new TblProcedureModel;
             $procedureData->procedure_name           = $data['procedure_name'];
             $procedureData->procedure_amount        = "0";
-            $procedureData->procedure_created        = Carbon::now();
+            $procedureData->type                    = $data['type'];
             
             $procedureData->save();
             

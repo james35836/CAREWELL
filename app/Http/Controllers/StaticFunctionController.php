@@ -20,6 +20,8 @@ use App\Http\Model\TblCalModel;
 use App\Http\Model\TblCalMemberModel;
 use App\Http\Model\TblCompanyTrunklineModel;
 
+use App\Http\Model\TblNewMemberModel;
+use App\Http\Model\TblNewCalMemberModel;
 
 
 use App\Http\Model\TblMemberModel;
@@ -62,6 +64,7 @@ use App\Http\Model\TblLaboratoryModel;
 
 use App\Http\Model\TblScheduleOfBenefitsModel;
 
+use Carbon\Carbon;
 
 class StaticFunctionController extends Controller
 {
@@ -528,7 +531,96 @@ class StaticFunctionController extends Controller
     $date['count']    = $premium_gross;
     return $date;
   }
+  public static function getNewMember($cal_id)
+  {
+    $data['new_member'] = TblNewMemberModel::where('cal_id',$cal_id)
+                ->join('tbl_new_cal_member','tbl_new_cal_member.new_member_id','=','tbl_new_member.new_member_id')
+                ->get();
+    $companyData        = TblCompanyModel::join('tbl_cal','tbl_cal.company_id','=','tbl_company.company_id')
+                        ->where('tbl_cal.cal_id',$cal_id)
+                        ->first();
 
+    
+    foreach($data['new_member'] as $new_member)
+    {
+
+        $member['member_first_name']        =   $new_member->member_first_name;
+        $member['member_middle_name']       =   $new_member->member_middle_name;
+        $member['member_last_name']         =   $new_member->member_last_name;
+                                            
+        $member['member_birthdate']         =   date('d-m-Y', strtotime($new_member->member_birthdate));  
+        $member['member_gender']            =   "N/A";
+        $member['member_marital_status']    =   "N/A";
+        $member['member_mother_maiden_name']=   "N/A";
+        $member['member_permanet_address']  =   "N/A";
+        $member['member_present_address']   =   "N/A";
+        $member['member_contact_number']    =   "N/A";
+        $member['member_email_address']     =   "N/A";
+        $member['member_created']           =   Carbon::now();
+
+        $display_name                       =   $member['member_first_name']." ".$member['member_middle_name']." ".$member['member_last_name'];
+
+        $member['member_universal_id']      =   StaticFunctionController::generateUniversalId($display_name,$member['member_birthdate']);
+
+        $member_id                          =   TblMemberModel::insertGetId($member);
+
+        $dependent['dependent_full_name']    =   "N/A";
+        $dependent['dependent_birthdate']    =   "N/A";
+        $dependent['dependent_relationship'] =   "N/A";
+        $dependent['member_id']                     =   $member_id;
+        TblMemberDependentModel::insert($dependent);
+
+        $government['government_card_philhealth'] =   "N/A";
+        $government['government_card_sss']        =   "N/A";
+        $government['government_card_tin']        =   "N/A";
+        $government['government_card_hdmf']       =   "N/A";
+        $government['member_id']                         =   $member_id;
+        TblMemberGovernmentCardModel::insert($government);
+        
+        $company['member_carewell_id']        =   StaticFunctionController::generateCarewellId($companyData->company_code);
+        $company['member_employee_number']    =   "000000";
+        $company['member_company_status']     =   "N/A";
+        $company['member_transaction_date']   =   Carbon::now();
+        $company['coverage_plan_id']          =   $new_member->coverage_plan_id;
+        $company['deployment_id']             =   $new_member->deployment_id;
+        $company['member_id']                 =   $member_id;
+        $company['company_id']                =   $companyData->company_id;
+        $company['member_payment_mode']       =   'SEMI-MONTHLY';
+
+        TblMemberCompanyModel::insert($company);
+
+        $checkCal     = TblCalMemberModel::CalMemberExist($member_id,$companyData->cal_id)->first();
+        $member_data  = TblMemberCompanyModel::where('member_id',$member_id)->where('archived',0)->first();
+        $last_payment = TblCalMemberModel::where('member_id',$member_id)->orderBy('cal_payment_end','DESC')->first();
+
+
+
+        if(count($last_payment)!=0)
+        {
+          $payment_date = $last_payment->cal_payment_end;
+        }
+        else
+        {
+          $payment_date = date('Y-m-d');
+        }
+        $period_date  = StaticFunctionController::getModeOfPayment($payment_date,$member_data->member_payment_mode,$member_data->coverage_plan_id,$new_member->cal_payment_amount);
+
+        $cal_member['cal_payment_amount']     =   $new_member->cal_payment_amount;
+        $cal_member['cal_payment_date']       =   Carbon::now();
+        $cal_member['cal_payment_count']      =   $period_date['count'];
+        $cal_member['cal_payment_start']      =   $period_date['start'];
+        $cal_member['cal_payment_end']        =   $period_date['end'];
+        $cal_member['member_id']              =   $member_id;
+        $cal_member['cal_id']                 =   $cal_id;
+
+        TblCalMemberModel::insert($cal_member);
+
+        TblNewMemberModel::where('new_member_id',$new_member->new_member_id)->delete();
+        TblNewCalMemberModel::where('new_member_id',$new_member->new_member_id)->delete();
+
+    }
+    
+  }
   public static function modeOfPaymentReference($mode_of_payment,$last_payment,$premium_gross)
   {
     $reference = number_format($premium_gross)%2;

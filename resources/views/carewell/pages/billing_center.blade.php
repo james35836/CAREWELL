@@ -1,10 +1,6 @@
 @extends('carewell.layout.layout')
 @section('content')
 <div class="container">
-  <?php
- 
-  ?>
-
   <div class="row">
     <div class=" col-md-3 col-xs-12 pull-right no-padding">
       <button class="btn btn-primary top-element create-cal" type="button" ><i class="fa fa-plus btn-icon "></i>CREATE CAL</button>
@@ -15,6 +11,7 @@
       <ul class="nav nav-tabs">
         <li class="active"><a href="#activeCompany" data-toggle="tab">OPEN  </a></li>
         <li><a href="#inActiveCompany" data-toggle="tab">CLOSE </a></li>
+        <li><a href="#pending" data-toggle="tab">PENDING </a></li>
       </ul>
       <div class="tab-content">
         <div class="tab-pane active" id="activeCompany">
@@ -55,7 +52,7 @@
                 <td>{{$cal_open->cal_reveneu_period_year}}</td>
                 <td>{{date("F j, Y",strtotime($cal_open->cal_payment_date))}}</td>
                 <td>{{$cal_open->cal_payment_mode}}</td>
-                <td>{{$cal_open->members}}</td>
+                <td>{{$cal_open->members +  $cal_open->new_member}}</td>
                 <td>{{date("F j, Y",strtotime($cal_open->cal_created))}}</td>
                 <td>
                   <div class="btn-group">
@@ -67,6 +64,7 @@
                     <ul class="dropdown-menu" role="menu" style="position: absolute !important;">
                       <li><button type="button" data-cal_id="{{$cal_open->cal_id}}" data-company_id="{{$cal_open->company_id}}" class="btn btn-link cal-view-details"><i class="fa fa-eye btn-icon"></i>  View Details</button></li>
                       <li><button type="button" data-cal_id="{{$cal_open->cal_id}}" class="btn btn-link close-cal"><i class="fa fa-trash btn-icon"></i> Mark as Close</button></li>
+                      <li><button type="button" data-cal_id="{{$cal_open->cal_id}}" class="btn btn-link cal-pending-confirm"><i class="fa fa-trash btn-icon"></i> Mark as Pending</button></li>
                     </ul>
                   </div>
                 </td>

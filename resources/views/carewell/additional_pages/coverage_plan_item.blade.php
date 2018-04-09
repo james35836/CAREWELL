@@ -1,5 +1,6 @@
 <form method="POST">
   <input type="hidden" id="availment_id" value="{{$availment_id}}"/>
+  <input type="hidden" id="session_name" value="{{$session_name}}"/>
   <div class="row">
     <div  class="table-responsive no-padding">
       <table class="table table-bordered" >
@@ -52,33 +53,22 @@
       </ul>
       <div class="tab-content">
         <div class="tab-pane active" id="lab">
-          {{-- <div class="row">
-            <div class="col-md-3 col-xs-12 pull-right">
-              <div class="input-group margin">
-                <input type="text" class="form-control " id="search_key">
-                <span class="input-group-btn">
-                  <button type="button" class="btn btn-default"><i class="fa fa-search"></i></button>
-                </span>
-              </div>
-            </div>
-          </div> --}}
           <div  class="table-responsive no-padding">
             <table class="table table-bordered" >
               <tr>
                 <th class="col-md-1"><input type="checkbox" class="checkAllCheckbox"></th>
                 <th class="col-md-4" >PRECEDURE</th>
-                <th class="col-md-4">TYPE</th>
-                <th class="col-md-3">AMOUNT</th>
-              </tr>
+               </tr>
               @foreach($_procedure as $procedure)
-              <tr class="table-row">
-                <td>
-                  <input type="checkbox" name="coverage_item[]" value="{{$procedure->procedure_id}}"/>
-                </td>
-                <td>{{$procedure->procedure_name}}</td>
-                <td>{{$procedure->procedure_name}}</td>
-                <td>{{$procedure->procedure_name}}</td>
-              </tr>
+                @if($procedure->reference_number=='hidden')
+                @else
+                <tr class="table-row">
+                  <td>
+                    <input type="checkbox" name="coverage_item[]" value="{{$procedure->procedure_id}}"/>
+                  </td>
+                  <td>{{$procedure->procedure_name}}</td>
+                </tr>
+                @endif
               @endforeach
             </table>
           </div>

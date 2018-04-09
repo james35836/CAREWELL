@@ -110,7 +110,7 @@ autoclose: true
 			<label>NUMBER OF MEMBER</label>
 		</div>
 		<div class="col-md-3  form-content">
-			<p style="font-size:20px;font-size: 25px;font-weight: bold;color: #157315;">{{$total_member}}</p>
+			<p style="font-size:20px;font-size: 25px;font-weight: bold;color: #157315;">{{$total_member+count($_cal_new_member)}}</p>
 		</div>
 		
 		<div class="col-md-3  form-content">
@@ -134,6 +134,19 @@ autoclose: true
 					<th>Paid Amount</th>
 					<th>Action</th>
 				</tr>
+				@foreach($_cal_new_member as $cal_new_member)
+				<tr>
+					<td><span class="label label-danger">NEW</span></td>
+					<td><span class="label label-danger">NEW</span></td>
+					<td>{{$cal_new_member->member_first_name." ".$cal_new_member->member_last_name}}</td>
+					<td>{{date("F j, Y",strtotime($cal_new_member->cal_payment_start))}}-{{date("F j, Y",strtotime($cal_new_member->cal_payment_end))}}</td>
+					<td>{{$cal_new_member->cal_payment_count}}</td>
+					<td>{{$cal_new_member->cal_payment_amount}}</td>
+					<td>
+						<button type="button" data-cal_member_id="{{$cal_new_member->cal_member_id}}" class="btn btn-danger btn-sm remove-cal-member"><i class="fa fa-minus-circle"></i></button>
+					</td>
+				</tr>
+				@endforeach
 				@foreach($_cal_member as $cal_member)
 				<tr>
 					<td>{{$cal_member->member_universal_id}}</td>
