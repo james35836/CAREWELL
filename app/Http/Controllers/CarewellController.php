@@ -1047,6 +1047,28 @@ class CarewellController extends ActiveAuthController
     $data['total_member']     = count($data['_cal_member']);
     return view('carewell.modal_pages.billing_cal_details',$data);
   }
+  public function billing_payment_breakdown($cal_member_id)
+  {
+    $data['payment'] = TblCalMemberModel::where('cal_member_id',$cal_member_id)->first();
+    $reference = $data['payment']->payment_amount/$data['payment']->payment_count;
+
+
+    $i = 0;
+  
+      for($i=0; $i<=$data['payment']->payment_count;  $i++)
+      {
+        
+          $date = date('Y-m-18', strtotime($last_payment));
+          $new_date = strtotime($date. '+'.$i.' months');
+
+          $first_cut_start[$i]  = date('Y-m-01', $new_date);
+          $first_cut_end[$i]    = date('Y-m-15', $new_date);
+
+          $second_cut_start[$i] = date('Y-m-16', $new_date);
+          $second_cut_end[$i]   = date('Y-m-t',   $new_date );
+      }
+
+  }
   public function billing_import_cal_members($cal_id,$company_id)
   {
     $data['cal_id']           = $cal_id;
@@ -1705,7 +1727,8 @@ class CarewellController extends ActiveAuthController
     if(Session::has($session_name))
     {
       $array                  = array();
-      $data['_procedure']     =   TblProcedureModel::where('archived',0)->get();
+      $data['_laboratory']  =   TblProcedureModel::where('archived',0)->where('type','LABORATORY')->get();
+      $data['_complex']     =   TblProcedureModel::where('archived',0)->where('type','COMPLEX')->get();
       foreach(Session::get($session_name) as $k=>$session_item)
       {
         if($session_item['availment_id']==$availment_id)
@@ -1716,19 +1739,28 @@ class CarewellController extends ActiveAuthController
       $count                  = count($array)-1;
       for($i=0;  $i<=$count;  $i++)
       {
-        foreach($data['_procedure'] as $key => $procedure)
+        foreach($data['_laboratory'] as $key => $procedure)
         {
           $arr                = $array[$i];
           if($arr  ==   $procedure->procedure_id)
           {
-            $data['_procedure'][$key]['reference_number']    =  'hidden';
+            $data['_laboratory'][$key]['reference_number']    =  'hidden';
+          }
+        }
+        foreach($data['_complex'] as $key => $procedure)
+        {
+          $arr                = $array[$i];
+          if($arr  ==   $procedure->procedure_id)
+          {
+            $data['_complex'][$key]['reference_number']    =  'hidden';
           }
         }
       }
     }
     else
     {
-      $data['_procedure']     =   TblProcedureModel::where('archived',0)->limit(10)->get();
+      $data['_laboratory']  =   TblProcedureModel::where('archived',0)->where('type','LABORATORY')->get();
+      $data['_complex']     =   TblProcedureModel::where('archived',0)->where('type','COMPLEX')->get();
       Session::put($session_name, array());
     }
     return view('carewell.additional_pages.coverage_plan_item',$data);

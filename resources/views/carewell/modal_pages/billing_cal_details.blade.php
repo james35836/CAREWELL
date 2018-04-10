@@ -140,7 +140,7 @@ autoclose: true
 					<td><span class="label label-danger">NEW</span></td>
 					<td>{{$cal_new_member->member_first_name." ".$cal_new_member->member_last_name}}</td>
 					<td>{{date("F j, Y",strtotime($cal_new_member->cal_payment_start))}}-{{date("F j, Y",strtotime($cal_new_member->cal_payment_end))}}</td>
-					<td>{{$cal_new_member->cal_payment_count}}</td>
+					<td class="payment-breakdown">{{$cal_new_member->cal_payment_count}}</td>
 					<td>{{$cal_new_member->cal_payment_amount}}</td>
 					<td>
 						<button type="button" data-cal_member_id="{{$cal_new_member->cal_member_id}}" class="btn btn-danger btn-sm remove-cal-member"><i class="fa fa-minus-circle"></i></button>
@@ -153,7 +153,7 @@ autoclose: true
 					<td>{{$cal_member->member_carewell_id}}</td>
 					<td>{{$cal_member->member_first_name." ".$cal_member->member_last_name}}</td>
 					<td>{{date("F j, Y",strtotime($cal_member->cal_payment_start))}}-{{date("F j, Y",strtotime($cal_member->cal_payment_end))}}</td>
-					<td>{{$cal_member->cal_payment_count}}</td>
+					<td class="payment-breakdown" data-count="{{$cal_member->cal_payment_count}}" data-cal_member_id= "{{$cal_member->cal_member_id}}" data-cal_id="{{$cal_member->cal_id}}">{{$cal_member->cal_payment_count}}</td>
 					<td>{{$cal_member->cal_payment_amount}}</td>
 					<td>
 						<button type="button" data-cal_member_id="{{$cal_member->cal_member_id}}" class="btn btn-danger btn-sm remove-cal-member"><i class="fa fa-minus-circle"></i></button>

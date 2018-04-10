@@ -1,3 +1,26 @@
+<script type="text/javascript">
+  $(".search-key").on("keyup", function() {
+    var value = $(this).val();
+    var $table = $(this).closest("table tr");
+
+    $("table."+$(this).data('name')+" tr").each(function(index) {
+        if (index !== 0) {
+
+            $row = $(this);
+
+            var id = $row.find("td.procedure").text();
+
+            if (id.indexOf(value) !== 0) {
+                $row.hide();
+            }
+            else {
+                $row.show();
+            }
+        }
+    });
+});
+</script>
+
 <form method="POST">
   <input type="hidden" id="availment_id" value="{{$availment_id}}"/>
   <input type="hidden" id="session_name" value="{{$session_name}}"/>
@@ -53,20 +76,27 @@
       </ul>
       <div class="tab-content">
         <div class="tab-pane active" id="lab">
+          <div class="row">
+            <div class="col-md-3 col-xs-12 pull-right">
+             
+                <input type="text" data-name="laboratory" class="top-element form-control search-key">
+                
+            </div>
+          </div>
           <div  class="table-responsive no-padding">
-            <table class="table table-bordered" >
+            <table class="table table-bordered laboratory" >
               <tr>
                 <th class="col-md-1"><input type="checkbox" class="checkAllCheckbox"></th>
                 <th class="col-md-4" >PRECEDURE</th>
                </tr>
-              @foreach($_procedure as $procedure)
-                @if($procedure->reference_number=='hidden')
+              @foreach($_laboratory as $laboratory)
+                @if($laboratory->reference_number=='hidden')
                 @else
                 <tr class="table-row">
                   <td>
-                    <input type="checkbox" name="coverage_item[]" value="{{$procedure->procedure_id}}"/>
+                    <input type="checkbox" name="coverage_item[]" value="{{$laboratory->procedure_id}}"/>
                   </td>
-                  <td>{{$procedure->procedure_name}}</td>
+                  <td class="procedure">{{$laboratory->procedure_name}}</td>
                 </tr>
                 @endif
               @endforeach
@@ -76,30 +106,23 @@
         <div class="tab-pane" id="comp">
           <div class="row">
             <div class="col-md-3 col-xs-12 pull-right">
-              <div class="input-group margin">
-                <input type="text" class="form-control">
-                <span class="input-group-btn">
-                  <button type="button" class="btn btn-default"><i class="fa fa-search"></i></button>
-                </span>
-              </div>
+              <input type="text" data-name="complex" class="top-element form-control search-key">
             </div>
           </div>
           <div  class="table-responsive no-padding">
-            <table class="table table-bordered" >
+            <table class="table table-bordered complex" >
               <tr>
                 <th class="col-md-1"><input type="checkbox" class="checkAllCheckbox"></th>
                 <th class="col-md-4" >PRECEDURE</th>
-                <th class="col-md-4">TYPE</th>
-                <th class="col-md-3">AMOUNT</th>
+                
               </tr>
-              @foreach($_procedure as $procedure)
+              @foreach($_complex as $complex)
               <tr class="table-row">
                 <td>
-                  <input type="checkbox" value="{{$procedure->procedure_id}}"/>
+                  <input type="checkbox" value="{{$complex->procedure_id}}"/>
                 </td>
-                <td>{{$procedure->procedure_name}}</td>
-                <td>{{$procedure->procedure_name}}</td>
-                <td>{{$procedure->procedure_name}}</td>
+                <td class="procedure">{{$complex->procedure_name}}</td>
+                
               </tr>
               @endforeach
             </table>

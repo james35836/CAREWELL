@@ -30,7 +30,24 @@ function billing_center()
 			cal_close_submit();
 			cal_pending_confirm();
 			cal_pending_submit();
+			payment_breakdown();
+		});
 
+	}
+	function payment_breakdown()
+	{
+		
+		$("body").on('click','.payment-breakdown',function()
+		{
+			
+			var cal_member_id = $(this).data('cal_member_id');
+			var modalName= 'PAYMENT BREAKDOWN';
+			var modalClass='payment';
+			var modalLink='/billing/payment_breakdown/'+cal_member_id;
+			var modalActionName='MARK AS CLOSE';
+			var modalAction='cal-close-confirm';
+			var modalSize = 'modal-sm';
+			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
 		});
 
 	}

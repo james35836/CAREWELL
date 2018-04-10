@@ -5,7 +5,7 @@
     <div class="col-md-3 col-xs-12 pull-right no-padding">
       <div class="dropdown">
         <button class="btn btn-primary top-element dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <i class="fa fa-plus btn-icon "></i>CREATE MEMBER
+        <i class="fa fa-plus btn-icon "></i>CREATE PROVIDER
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
           <button type="button" class="btn btn-link  create-provider"><i class="fa   fa-pencil-square btn-icon" ></i>CREATE PROVIDER</button>
