@@ -57,7 +57,7 @@ function company_center()
             $("select.coverage_plan_name").each(function(i, sel)
             {
             	var selectedPlan = $(sel).val();
-            	if(selectedPlan!="SELECT COVERAGE PLAN")
+        	if(selectedPlan!="SELECT COVERAGE PLAN")
             	{
             		coveragePlanData.push(selectedPlan);
             	}

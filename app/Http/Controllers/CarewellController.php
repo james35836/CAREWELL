@@ -187,13 +187,13 @@ class CarewellController extends ActiveAuthController
         $contractCompanyData->company_id       = $companyData->company_id;
         $contractCompanyData->save();
 
-        foreach($request->contactData as $company_number)
-        {
-          $numberData = new TblCompanyNumberModel;
-          $numberData->company_number = $company_number;
-          $numberData->company_id = $companyData->company_id;
-          $numberData->save();
-        }
+        // foreach($request->contactData as $company_number)
+        // {
+        //   $numberData = new TblCompanyNumberModel;
+        //   $numberData->company_number = $company_number;
+        //   $numberData->company_id = $companyData->company_id;
+        //   $numberData->save();
+        // }
         
         // foreach($request->file("contractData") as $contract_image_name)
         // {
@@ -225,6 +225,11 @@ class CarewellController extends ActiveAuthController
           $benefitsImageData->contract_benefits_name = '/schedule_of_benefits/';
           $benefitsImageData->contract_id = $contractCompanyData->contract_id;
           $benefitsImageData->save();
+
+          $numberData = new TblCompanyNumberModel;
+          $numberData->company_number = '$company_number';
+          $numberData->company_id = $companyData->company_id;
+          $numberData->save();
 
         foreach($request->coveragePlanData as $coverage_plan_id)
         {
