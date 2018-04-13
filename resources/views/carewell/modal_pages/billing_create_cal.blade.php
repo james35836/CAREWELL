@@ -25,7 +25,7 @@ autoclose: true
     </div>
     
   </div>
-  <div class="form-holder">
+  {{-- <div class="form-holder">
     <div class="col-md-3 form-content">
       <label>Payment Date</label>
     </div>
@@ -38,7 +38,7 @@ autoclose: true
       </div>
     </div>
     
-  </div>
+  </div> --}}
   <div class="form-holder">
     <div class="col-md-3 form-content">
       <label>Revenue Year</label>

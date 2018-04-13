@@ -70,13 +70,13 @@ $(document).ready(function()
 			}
 			
 	});
-	$('body').on('change','.final-diagnosis',function()
-	{
-		var val = $(this).val();
-		var text = $(this).find('option:selected').text();
-		var newData = $('body').find('select.assigned-diagnosis');
-		newData.append('<option value="'+val+'" selected="selected">'+text+'</option>');
-	});
+	// $('body').on('change','.final-diagnosis',function()
+	// {
+	// 	var val = $(this).val();
+	// 	var text = $(this).find('option:selected').text();
+	// 	var newData = $('body').find('select.assigned-diagnosis');
+	// 	newData.append('<option value="'+val+'" selected="selected">'+text+'</option>');
+	// });
 	$('body').on('click','.reembursementBtn',function()
 	{
 		$('.reemburse-provider').html('<input type="text" class="form-control" name="state_d" id="state_d">');
@@ -189,7 +189,7 @@ $(document).ready(function()
 		</div>
 		<div class="form-holder">
 			<div class="col-md-2 form-content">
-				<label>Initial Diagnosis</label>
+				<label>Admitting Diagnosis</label>
 			</div>
 			<div class="col-md-10 form-content">
 				<select class="form-control default-select2" id="initial_diagnosis_id" name="diagnosis_id" >
@@ -199,6 +199,9 @@ $(document).ready(function()
 					@endforeach
 				</select>
 			</div>
+		</div>
+		<div class="row">
+			
 		</div>
 		
 		<div class="form-holder">
@@ -233,7 +236,6 @@ $(document).ready(function()
 					<th>PHILHEALTH CHARITY/SWA</th>
 					<th>CHARGE TO PATIENT</th>
 					<th>CHARGE TO CAREWELL</th>
-					<th>ASSIGNED DIAGNOSIS</th>
 					<th>ACTION</th>
 				</tr>
 				<tr class="table-row">
@@ -249,11 +251,6 @@ $(document).ready(function()
 					<td><input type="text" value="0.0" name="procedure_philhealth[]" id="" class="philhealth form-control"/></td>
 					<td><input type="text" value="0.0" name="procedure_charge_patient[]" id="" class="charge-patient form-control"/></td>
 					<td><input type="text" value="0.0" name="procedure_charge_carewell[]" id="" class="charge-carewell form-control"/></td>
-					<td>
-						<select class="form-control select2 assigned-diagnosis" name="assigned_diagnosis_id[]">
-							<option value="0">DIAGNOSIS</option>
-						</select>
-					</td>
 					<td>
 						<div class="btn-group">
 							<button type="button" data-number="1" class="btn btn-primary btn-sm add-row"><i class="fa fa-plus"></i></button>

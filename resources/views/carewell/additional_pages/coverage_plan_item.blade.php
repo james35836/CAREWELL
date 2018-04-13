@@ -87,7 +87,7 @@
             <table class="table table-bordered laboratory" >
               <tr>
                 <th class="col-md-1"><input type="checkbox" class="checkAllCheckbox"></th>
-                <th class="col-md-4" >PRECEDURE</th>
+                <th class="col-md-4" >PROCEDURE</th>
                </tr>
               @foreach($_laboratory as $laboratory)
                 @if($laboratory->reference_number=='hidden')
@@ -113,7 +113,7 @@
             <table class="table table-bordered complex" >
               <tr>
                 <th class="col-md-1"><input type="checkbox" class="checkAllCheckbox"></th>
-                <th class="col-md-4" >PRECEDURE</th>
+                <th class="col-md-4" >PROCEDURE</th>
                 
               </tr>
               @foreach($_complex as $complex)

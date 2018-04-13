@@ -155,8 +155,7 @@ function billing_center()
 			{}
 			else if(globals.checking_null_validation(document.getElementById('cal_payment_mode').value,"MODE OF PAYMENT")=="")
 			{}
-			else if(globals.checking_null_validation(document.getElementById('cal_payment_date').value,"PAYMENT DATE")=="")
-			{}
+			
 			else
 			{
 				var	confirmModalMessage = 'Are you sure you want to add this CAL?';
@@ -166,7 +165,7 @@ function billing_center()
 				calData.append("company_id", 				document.getElementById('company_id').value);
 	            calData.append("cal_reveneu_period_year", 	document.getElementById('cal_reveneu_period_year').value);
 	            calData.append("cal_payment_mode", 			document.getElementById('cal_payment_mode').value);
-	            calData.append("cal_payment_date", 			document.getElementById('cal_payment_date').value);
+	            
 	            
             }
 			

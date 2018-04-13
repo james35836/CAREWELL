@@ -39,7 +39,7 @@
                 <th>CAL #</th>
                 <th>COMPANY</th>
                 <th>REVENEU YEAR</th>
-                <th>COVERAGE DATE START</th>
+                {{-- <th>PAYMENT DATE</th> --}}
                 <th>MODE OF PAYMENT</th>
                 <th># OF MEMBER</th>
                 <th>DATE CREATED</th>
@@ -50,7 +50,7 @@
                 <td>{{$cal_open->cal_number}}</td>
                 <td>{{$cal_open->company_name}}</td>
                 <td>{{$cal_open->cal_reveneu_period_year}}</td>
-                <td>{{date("F j, Y",strtotime($cal_open->cal_payment_date))}}</td>
+                {{-- <td>{{date("F j, Y",strtotime($cal_open->cal_payment_date))}}</td> --}}
                 <td>{{$cal_open->cal_payment_mode}}</td>
                 <td>{{$cal_open->members +  $cal_open->new_member}}</td>
                 <td>{{date("F j, Y",strtotime($cal_open->cal_created))}}</td>
@@ -101,7 +101,7 @@
                 <th>CAL #</th>
                 <th>COMPANY</th>
                 <th>REVENEU YEAR</th>
-                <th>COVERAGE DATE START</th>
+                {{-- <th>COVERAGE DATE START</th> --}}
                 <th>MODE OF PAYMENT</th>
                 <th># OF MEMBER</th>
                 <th>DATE CREATED</th>
@@ -112,7 +112,7 @@
                 <td>{{$cal_close->cal_number}}</td>
                 <td>{{$cal_close->company_name}}</td>
                 <td>{{$cal_close->cal_reveneu_period_year}}</td>
-                <td>{{date("F j, Y",strtotime($cal_close->cal_payment_date))}}</td>
+                {{-- <td>{{date("F j, Y",strtotime($cal_close->cal_payment_date))}}</td> --}}
                 <td>{{$cal_close->cal_payment_mode}}</td>
                 <td>{{$cal_close->members}}</td>
                 <td>{{date("F j, Y",strtotime($cal_close->cal_created))}}</td>
@@ -126,6 +126,7 @@
                     <ul class="dropdown-menu" role="menu" style="position: absolute !important;">
                       <li><button type="button" data-cal_id="{{$cal_close->cal_id}}" data-company_id="{{$cal_close->company_id}}" class="btn btn-link cal-view-details"><i class="fa fa-eye btn-icon"></i>  View Details</button></li>
                       <li><button type="button" data-cal_id="{{$cal_close->cal_id}}" class="btn btn-link close-cal"><i class="fa fa-trash btn-icon"></i> Mark as Close</button></li>
+                      <li><button type="button" data-cal_id="{{$cal_close->cal_id}}" class="btn btn-link cal-pending-confirm"><i class="fa fa-trash btn-icon"></i> Mark as Pending</button></li>
                     </ul>
                   </div>
                 </td>
@@ -162,7 +163,7 @@
                 <th>CAL #</th>
                 <th>COMPANY</th>
                 <th>REVENEU YEAR</th>
-                <th>COVERAGE DATE START</th>
+                {{-- <th>COVERAGE DATE START</th> --}}
                 <th>MODE OF PAYMENT</th>
                 <th># OF MEMBER</th>
                 <th>DATE CREATED</th>
@@ -173,7 +174,7 @@
                 <td>{{$cal_pending->cal_number}}</td>
                 <td>{{$cal_pending->company_name}}</td>
                 <td>{{$cal_pending->cal_reveneu_period_year}}</td>
-                <td>{{date("F j, Y",strtotime($cal_pending->cal_payment_date))}}</td>
+                {{-- <td>{{date("F j, Y",strtotime($cal_pending->cal_payment_date))}}</td> --}}
                 <td>{{$cal_pending->cal_payment_mode}}</td>
                 <td>{{$cal_pending->members}}</td>
                 <td>{{date("F j, Y",strtotime($cal_pending->cal_created))}}</td>

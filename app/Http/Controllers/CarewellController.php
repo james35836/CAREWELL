@@ -1036,7 +1036,7 @@ class CarewellController extends ActiveAuthController
     $companyCalData->cal_number                 =   StaticFunctionController::updateReferenceNumber('billing_cal');;
     $companyCalData->cal_reveneu_period_year    =   $request->cal_reveneu_period_year;
     $companyCalData->cal_payment_mode           =   $request->cal_payment_mode;
-    $companyCalData->cal_payment_date           =   $request->cal_payment_date;
+    $companyCalData->cal_payment_date           =   '$request->cal_payment_date';
     $companyCalData->cal_created                =   Carbon::now();
     $companyCalData->company_id                 =   $request->company_id;
     $companyCalData->save();
@@ -1048,11 +1048,11 @@ class CarewellController extends ActiveAuthController
     $data['cal_check']        = TblCalModel::where('cal_id',$cal_id)->value('archived');
     $data['_cal_member']      = TblCalMemberModel::where('cal_id',$cal_id)->CalMember()->get();
 
-    $data['_cal_new_member']   = TblNewMemberModel::where('cal_id',$cal_id)
-                               ->join('tbl_new_cal_member','tbl_new_cal_member.new_member_id','=','tbl_new_member.new_member_id')
-                                ->get();
+    $data['_cal_new_member']  = TblNewMemberModel::where('cal_id',$cal_id)
+                              ->join('tbl_new_cal_member','tbl_new_cal_member.new_member_id','=','tbl_new_member.new_member_id')
+                              ->get();
 
-    if($data['cal_check']==0)
+    if($data['cal_check']==0||$data['cal_check']==2)
     {
       $data['cal_details']   = TblCalModel::where('cal_id',$cal_id)
                               ->join('tbl_company','tbl_company.company_id','=','tbl_cal.company_id')
@@ -1144,7 +1144,7 @@ class CarewellController extends ActiveAuthController
     }
     $data['start']  = $array_start;
     $data['end']    = $array_end;
-    $data['ref']    = $premium_gross;
+    $data['ref']    = $premium_gross-1;
     $data['payment']= $reference;
       
     return view('carewell.modal_pages.billing_payment_breakdown',$data);

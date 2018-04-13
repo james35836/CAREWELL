@@ -652,11 +652,11 @@ class StaticFunctionController extends Controller
         $data['start']  = date('Y-m-16', strtotime($date));
         if($reference==0)
         {
-          $data['end']  = $second_cut_end[$premium_gross];
+          $data['end']  = $second_cut_end[$premium_gross-1];
         }
         else
         {
-          $data['end']  = $first_cut_end[$premium_gross];
+          $data['end']  = $first_cut_end[$premium_gross-1];
         }
       }
       else
@@ -664,11 +664,11 @@ class StaticFunctionController extends Controller
         $data['start']  = date('Y-m-01', strtotime($date. '+1 months'));
         if($reference==true)
         {
-          $data['end']  = $first_cut_end[$premium_gross];
+          $data['end']  = $first_cut_end[$premium_gross-1];
         }
         else
         {
-          $data['end']  = $second_cut_end[$premium_gross];
+          $data['end']  = $second_cut_end[$premium_gross-1];
         }
 
       }
