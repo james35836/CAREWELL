@@ -26,7 +26,7 @@
 								<td>{{$payment_history->cal_number}}</td>
 								<td>{{$payment_history->cal_payment_amount}}</td>
 								<td>{{date("F j, Y",strtotime($payment_history->cal_payment_date))}}</td>
-								<td>{{$payment_history->cal_payment_count}}</td>
+								<td class="payment-breakdown" style="cursor:pointer;" data-cal_member_id="{{$payment_history->cal_member_id}}">{{$payment_history->cal_payment_count}}</td>
 								<td>{{date("F j, Y",strtotime($payment_history->cal_payment_start))}} - {{date("F j, Y",strtotime($payment_history->cal_payment_end))}}</td>
 							</tr>
 							@endforeach
@@ -172,43 +172,52 @@
 						</div>
 					</div>
 					<div class="row box-globals">
-						<div class="form-holder">
-							<div class="row type-of-availment-padding">
-								<div class="row availment-container">
-									@foreach($_coverage_plan_covered->where('availment_parent_id',0)  as $coverage_plan_covered)
-									<div class=" availment-box">
-										<div class="parent-availment ">
-											<p style="font-size: 20px;font-weight: bold;">
-												{{$coverage_plan_covered->availment_name}}
-											</p>
-											<table class="table table-bordered availed-table">
-												<thead>
-													<tr>
-														<th class="col-md-5">PROCEDURE</th>
-														<th class="col-md-5" >CHARGE</th>
-													</tr>
-												</thead>
-												<tbody>
-													@foreach($coverage_plan_covered->child_plan_item as $child_plan_item)
-													<tr class="table-row">
-														<td class="col-md-5">
-															<input type="text" value="{{$child_plan_item->procedure_name}}" class="form-control">
-														</td>
-														<td class="col-md-4">
-															<input type="text" value="{{$child_plan_item->availment_charges_name}}" class="form-control">
-														</td>
-														
-													</tr>
-													@endforeach
-												</tbody>
-											</table>
-										</div>
-									</div>
+		<div class="form-holder">
+			<div class="row type-of-availment-padding">
+				<div class="row availment-container">
+					@foreach($_coverage_plan_covered as $coverage_plan_covered)
+					<div class=" availment-box">
+						<div class="parent-availment ">
+							<p style="font-size: 20px;font-weight: bold;">
+								{{-- <input type="checkbox" class="minimal" name="parent_availment[]" value="{{$coverage_plan_covered->availment_id}}"/> --}}
+								{{$coverage_plan_covered->availment_name}}
+							</p>
+							<table class="table table-bordered availed-table">
+								<thead>
+									<tr>
+										<th class="col-md-5">PROCEDURE</th>
+										<th class="col-md-5" >CHARGE</th>
+										<th class="col-md-2">AMOUNT COVERED</th>
+										<th class="col-md-2">LIMIT</th>
+										
+									</tr>
+								</thead>
+								<tbody>
+									@foreach($coverage_plan_covered->procedure as $procedure)
+									<tr class="table-row">
+										<td class="col-md-5">
+											{{$procedure->procedure_name}}
+										</td>
+										<td class="col-md-4">
+											{{$procedure->plan_charges}}
+										</td>
+										<td class="col-md-4">
+											{{$procedure->plan_covered_amount}}
+										</td>
+										<td class="col-md-4">
+											{{$procedure->plan_limit}}
+										</td>
+									</tr>
 									@endforeach
-								</div>
-							</div>
+								</tbody>
+							</table>
 						</div>
 					</div>
+					@endforeach
+				</div>
+			</div>
+		</div>
+	</div>
 					
 					
 					

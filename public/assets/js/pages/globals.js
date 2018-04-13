@@ -245,6 +245,37 @@ function globals()
 			}
 		});
 	}
+	this.global_single_submit = function (modalLink,modalData,tdCloser)
+	{
+		$(".confirm-modal-body").html("<div class='confirm-ajax-loader' style='display:none;text-align: center; padding:50px;'><img src='/assets/loader/loading.gif'/></div");
+	    $(".confirm-ajax-loader").show();
+	    $('.confirm-modal-title').html("MESSAGE");
+	    $(".confirm-modal-footer").html('');
+
+			$.ajax({
+				headers: {
+				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				},
+				url:modalLink,
+				method: "POST",
+		        data: modalData,
+		        contentType:false,
+	            cache:false,
+	            processData:false,
+				success: function(data)
+                {
+					setTimeout(function()
+					{
+						
+						tdCloser.remove();
+						
+						$(".confirm-modal-body").html(data);
+						$(".confirm-modal-footer").html(successButton);
+                        
+					}, 800);
+				}
+			});
+	}
 	this.global_submit_serialized = function(modalName,submitLink,submitData)
 	{
 		$('.confirm-modal').remove();

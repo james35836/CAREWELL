@@ -84,6 +84,7 @@ function availment_center()
                 success: function(data)
 				{
 					$('.member_id').val(data.member_id);
+					$('select#member_id').append('<option selected="selected">'+data.member_name+'</option>');
 					$('.member_name').val(data.member_name);
 					$('.member_universal_id').val(data.member_universal_id);
 					$('.member_carewell_id').val(data.member_carewell_id);

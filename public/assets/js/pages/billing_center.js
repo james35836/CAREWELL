@@ -44,9 +44,9 @@ function billing_center()
 			var modalName= 'PAYMENT BREAKDOWN';
 			var modalClass='payment';
 			var modalLink='/billing/payment_breakdown/'+cal_member_id;
-			var modalActionName='MARK AS CLOSE';
-			var modalAction='cal-close-confirm';
-			var modalSize = 'modal-sm';
+			var modalActionName='OK';
+			var modalAction='';
+			var modalSize = 'modal-mdsm';
 			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
 		});
 
@@ -58,14 +58,15 @@ function billing_center()
 			var	confirmModalMessage = 'Are you sure you want to mark this CAL as pending?';
 			var confirmModalAction = 'cal-pending-submit';
 			globals.confirm_modals(confirmModalMessage,confirmModalAction);
-            calPendingData.append("cal_id", 					$(this).val());
+            calPendingData.append("cal_id", 					$(this).data('cal_id'));
+            ajaxData.tdCloser = $(this).closest('tr');
 	    });
 	}
 	function cal_pending_submit()
 	{
 		$('body').on('click','.cal-pending-submit',function() 
 		{
-			globals.global_submit('cal-member','/billing/cal_import_template_submit',calPendingData);
+			globals.global_single_submit('/billing/cal_pending_submit',calPendingData,ajaxData.tdCloser);
         });
 	}
 	function cal_close()
@@ -249,8 +250,6 @@ function billing_center()
 	{
 		$('body').on('click','.remove-cal-member',function() 
 		{
-			
-			
 			var	confirmModalMessage = 'Are you sure you want to remove this member?';
 			var confirmModalAction = 'remove-cal-member-submit';
 			globals.confirm_modals(confirmModalMessage,confirmModalAction);
@@ -263,34 +262,8 @@ function billing_center()
 	{
 		$('body').on('click','.remove-cal-member-submit',function() 
 		{
-			$(".confirm-modal-body").html("<div class='confirm-ajax-loader' style='display:none;text-align: center; padding:50px;'><img src='/assets/loader/loading.gif'/></div");
-	        $(".confirm-ajax-loader").show();
-	        $('.confirm-modal-title').html("MESSAGE");
-	        $(".confirm-modal-footer").html('');
+			globals.global_single_submit('/billing/cal_member/remove',billingMemberData,ajaxData.tdCloser);
 
-			$.ajax({
-				headers: {
-				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-				},
-				url:'/billing/cal_member/remove',
-				method: "POST",
-		        data: billingMemberData,
-		        contentType:false,
-	            cache:false,
-	            processData:false,
-				success: function(data)
-                {
-					setTimeout(function()
-					{
-						$(".confirm-ajax-loader").remove();
-						ajaxData.tdCloser.remove();
-						
-						$(".confirm-modal-body").html(data);
-						$(".confirm-modal-footer").html(successButton);
-                        
-					}, 800);
-				}
-			});
-        });
+		});
 	}
 }

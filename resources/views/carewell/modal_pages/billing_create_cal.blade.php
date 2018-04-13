@@ -8,9 +8,7 @@ autoclose: true
 })
 })
 </script>
-  <a onclick="window.open('/settings/coverage/items', '_blank', 'location=yes,height=570,width=800,scrollbars=yes,status=yes');">
-  Share Page
-</a>
+  
 <div class=" row box-globals">
 
   <div class="form-holder">

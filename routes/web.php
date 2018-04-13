@@ -133,11 +133,17 @@ Route::get('/billing/import_cal_members/{cal_id}/{company_id}', 				'CarewellCon
 Route::get('/billing/cal_download_template/{cal_id}/{company_id}', 		    'CarewellController@billing_cal_download_template');
 Route::post('/billing/cal_import_template_submit', 		'CarewellController@billing_cal_import_template');
 
+Route::get('/billing/payment_breakdown/{cal_member_id}', 		'CarewellController@billing_payment_breakdown');
+
 
 
 Route::get('/billing/billing/statement', 			    'CarewellController@billing_billing_statement');
 
 Route::post('/billing/cal_member/remove', 				'CarewellController@billing_cal_member_remove');
+
+Route::post('/billing/cal_pending_submit', 				'CarewellController@billing_cal_pending_submit');
+
+
 
 Route::get('/billing/cal_close/{cal_id}', 				'CarewellController@billing_cal_close');
 Route::post('/billing/cal_close/sumbit',				'CarewellController@billing_cal_close_submit');

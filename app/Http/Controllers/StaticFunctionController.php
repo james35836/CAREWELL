@@ -520,17 +520,7 @@ class StaticFunctionController extends Controller
     }
     return $message; 
   }
-  public static function getModeOfPayment($last_payment,$mode_of_payment,$coverage_plan_id,$payment_amount)
-  {
-
-    $premium          = TblCoveragePlanModel::where('coverage_plan_id',$coverage_plan_id)->value('coverage_plan_premium');
-    $premium_gross    = number_format($payment_amount / number_format($premium));
-    $period           = self::modeOfPaymentReference($mode_of_payment,$last_payment,$premium_gross);
-    $date['start']    = $period['start'];
-    $date['end']      = $period['end'];
-    $date['count']    = $premium_gross;
-    return $date;
-  }
+  
   public static function getNewMember($cal_id)
   {
     $data['new_member'] = TblNewMemberModel::where('cal_id',$cal_id)
@@ -621,6 +611,17 @@ class StaticFunctionController extends Controller
     }
     
   }
+  public static function getModeOfPayment($last_payment,$mode_of_payment,$coverage_plan_id,$payment_amount)
+  {
+
+    $premium          = TblCoveragePlanModel::where('coverage_plan_id',$coverage_plan_id)->value('coverage_plan_premium');
+    $premium_gross    = number_format($payment_amount / number_format($premium));
+    $period           = self::modeOfPaymentReference($mode_of_payment,$last_payment,$premium_gross);
+    $date['start']    = $period['start'];
+    $date['end']      = $period['end'];
+    $date['count']    = $premium_gross;
+    return $date;
+  }
   public static function modeOfPaymentReference($mode_of_payment,$last_payment,$premium_gross)
   {
     $reference = number_format($premium_gross)%2;
@@ -651,11 +652,11 @@ class StaticFunctionController extends Controller
         $data['start']  = date('Y-m-16', strtotime($date));
         if($reference==0)
         {
-          $data['end']  = $second_cut_end[$ref];
+          $data['end']  = $second_cut_end[$premium_gross];
         }
         else
         {
-          $data['end']  = $first_cut_end[$ref];
+          $data['end']  = $first_cut_end[$premium_gross];
         }
       }
       else
@@ -663,11 +664,11 @@ class StaticFunctionController extends Controller
         $data['start']  = date('Y-m-01', strtotime($date. '+1 months'));
         if($reference==true)
         {
-          $data['end']  = $first_cut_end[$ref];
+          $data['end']  = $first_cut_end[$premium_gross];
         }
         else
         {
-          $data['end']  = $second_cut_end[$ref];
+          $data['end']  = $second_cut_end[$premium_gross];
         }
 
       }
