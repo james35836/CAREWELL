@@ -195,16 +195,16 @@ class CarewellController extends ActiveAuthController
         //   $numberData->save();
         // }
         
-        // foreach($request->file("contractData") as $contract_image_name)
-        // {
-        //   $fileContractRef = $unique_name.'-'.$contract_image_name->getClientOriginalName();
-        //   $contract_image_name->move('contract',$fileContractRef );
+        foreach($request->file("contractData") as $contract_image_name)
+        {
+          $fileContractRef = $unique_name.'-'.$contract_image_name->getClientOriginalName();
+          $contract_image_name->move('contract',$fileContractRef );
 
-        //   $contractImageData = new TblCompanyContractImageModel;
-        //   $contractImageData->contract_image_name = '/contract/'.$fileContractRef.'';
-        //   $contractImageData->contract_id = $contractCompanyData->contract_id;
-        //   $contractImageData->save();
-        // }
+          $contractImageData = new TblCompanyContractImageModel;
+          $contractImageData->contract_image_name = '/contract/'.$fileContractRef.'';
+          $contractImageData->contract_id = $contractCompanyData->contract_id;
+          $contractImageData->save();
+        }
         // foreach($request->file("benefitsData") as $contract_benefits_name)
         // {
         //   $fileContractBRef = $unique_name.'-'.$contract_benefits_name->getClientOriginalName();
@@ -216,10 +216,10 @@ class CarewellController extends ActiveAuthController
         //   $benefitsImageData->save();
         // }
 
-          $contractImageData = new TblCompanyContractImageModel;
-          $contractImageData->contract_image_name = '/contract/';
-          $contractImageData->contract_id = $contractCompanyData->contract_id;
-          $contractImageData->save();
+          // $contractImageData = new TblCompanyContractImageModel;
+          // $contractImageData->contract_image_name = '/contract/';
+          // $contractImageData->contract_id = $contractCompanyData->contract_id;
+          // $contractImageData->save();
 
           $benefitsImageData = new TblCompanyContractBenefitsModel;
           $benefitsImageData->contract_benefits_name = '/schedule_of_benefits/';
