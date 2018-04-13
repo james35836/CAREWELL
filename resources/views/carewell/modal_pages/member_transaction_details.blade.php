@@ -14,9 +14,9 @@
 								<th>Company</th>
 								<th>Cal Number</th>
 								<th>Payment Amount</th>
-								<th>Payment Date</th>
 								<th>Payment Count</th>
-								<th>Coverage Period</th>
+								<th>Date Coverage Start</th>
+								<th>Date Coverage End</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -25,9 +25,9 @@
 								<td>{{$payment_history->company_name}}</td>
 								<td>{{$payment_history->cal_number}}</td>
 								<td>{{$payment_history->cal_payment_amount}}</td>
-								<td>{{date("F j, Y",strtotime($payment_history->cal_payment_date))}}</td>
-								<td class="payment-breakdown" style="cursor:pointer;" data-cal_member_id="{{$payment_history->cal_member_id}}">{{$payment_history->cal_payment_count}}</td>
-								<td>{{date("F j, Y",strtotime($payment_history->cal_payment_start))}} - {{date("F j, Y",strtotime($payment_history->cal_payment_end))}}</td>
+								<td class="payment-breakdown" style="cursor:pointer;" data-cal_member_id="{{$payment_history->cal_member_id}}"><span class="label label-success" >{{$payment_history->cal_payment_count}}</span></td>
+								<td>{{date("F j, Y",strtotime($payment_history->cal_payment_start))}}</td>
+								<td>{{date("F j, Y",strtotime($payment_history->cal_payment_end))}}</td>
 							</tr>
 							@endforeach
 						</tbody>
