@@ -164,7 +164,7 @@ class MaintenanceController extends Controller
             $insert[0]["availment_parent_id"]    = 0;
             
             $insert[1]["availment_id"]    = 2;
-            $insert[1]["availment_name"]   = "Outpatient Services(consultation)";
+            $insert[1]["availment_name"]   = "Outpatient Services(Consultation)";
             $insert[1]["availment_parent_id"]    = 0;
 
             $insert[2]["availment_id"]    = 3;
@@ -172,20 +172,24 @@ class MaintenanceController extends Controller
             $insert[2]["availment_parent_id"]    = 0;
 
             $insert[3]["availment_id"]    = 4;
-            $insert[3]["availment_name"]   = "Emergency";
+            $insert[3]["availment_name"]   = "Minor Operation";
             $insert[3]["availment_parent_id"]    = 0;
 
             $insert[4]["availment_id"]    = 5;
-            $insert[4]["availment_name"]   = "Confinement";
+            $insert[4]["availment_name"]   = "Emergency Cases";
             $insert[4]["availment_parent_id"]    = 0;
 
             $insert[5]["availment_id"]    = 6;
-            $insert[5]["availment_name"]   = "Dental";
+            $insert[5]["availment_name"]   = "Confinement";
             $insert[5]["availment_parent_id"]    = 0;
 
             $insert[6]["availment_id"]    = 7;
-            $insert[6]["availment_name"]   = "Financial Assistance";
+            $insert[6]["availment_name"]   = "Dental";
             $insert[6]["availment_parent_id"]    = 0;
+
+            $insert[7]["availment_id"]    = 8;
+            $insert[7]["availment_name"]   = "Financial Assistance";
+            $insert[7]["availment_parent_id"]    = 0;
 
             
             

@@ -221,10 +221,7 @@ class CarewellController extends ActiveAuthController
           $contractImageData->contract_id = $contractCompanyData->contract_id;
           $contractImageData->save();
 
-          // $benefitsImageData = new TblCompanyContractBenefitsModel;
-          // $benefitsImageData->contract_benefits_name = '/schedule_of_benefits/';
-          // $benefitsImageData->contract_id = $contractCompanyData->contract_id;
-          // $benefitsImageData->save();
+        
 
           
         foreach($request->coveragePlanData as $coverage_plan_id)
@@ -1768,6 +1765,8 @@ class CarewellController extends ActiveAuthController
     Session::forget('confinement');
     Session::forget('dental');
     Session::forget('assistance');
+    Session::forget('minor_ops');
+    
     
     $data['_availment'] = TblAvailmentModel::where('availment_parent_id',0)->get();
     foreach ($data['_availment'] as $key => $availment) 
@@ -1776,7 +1775,7 @@ class CarewellController extends ActiveAuthController
       {
         $data['_availment'][$key]['name']    =  'annual';
       }
-      else if($availment->availment_name=='Outpatient Services(consultation)')
+      else if($availment->availment_name=='Outpatient Services(Consultation)')
       {
         $data['_availment'][$key]['name']    =  'os_consultation';
       }
@@ -1784,11 +1783,15 @@ class CarewellController extends ActiveAuthController
       {
         $data['_availment'][$key]['name']    =  'os_laboratory';
       }
-      else if($availment->availment_name=='emergency')
+      else if($availment->availment_name=='Minor Operation')
+      {
+        $data['_availment'][$key]['name']    =  'minor_ops';
+      }
+      else if($availment->availment_name=='Emergency Cases')
       {
         $data['_availment'][$key]['name']    =  'emergency';
       }
-      else if($availment->availment_name=='confinement')
+      else if($availment->availment_name=='Confinement')
       {
         $data['_availment'][$key]['name']    =  'confinement';
       }
