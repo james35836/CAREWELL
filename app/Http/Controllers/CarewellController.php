@@ -205,6 +205,12 @@ class CarewellController extends ActiveAuthController
         //   $contractImageData->contract_id = $contractCompanyData->contract_id;
         //   $contractImageData->save();
         // }
+        $contractImageData = new TblCompanyContractImageModel;
+          $contractImageData->contract_image_name = '/contract/';
+          $contractImageData->contract_id = $contractCompanyData->contract_id;
+          $contractImageData->save();
+
+          
         foreach($request->file("benefitsData") as $contract_benefits_name)
         {
           $fileContractBRef = $unique_name.'-'.$contract_benefits_name->getClientOriginalName();
@@ -216,10 +222,7 @@ class CarewellController extends ActiveAuthController
           $benefitsImageData->save();
         }
 
-          $contractImageData = new TblCompanyContractImageModel;
-          $contractImageData->contract_image_name = '/contract/';
-          $contractImageData->contract_id = $contractCompanyData->contract_id;
-          $contractImageData->save();
+          
 
         
 
