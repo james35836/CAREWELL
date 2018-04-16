@@ -1439,9 +1439,12 @@ class CarewellController extends ActiveAuthController
   {
     $update['archived'] = 2;//for pending cal
     $pending  = TblCalModel::where('cal_id',$request->cal_id)->update($update);
+    
+    StaticFunctionController::getNewMember($request->cal_id);
+
     if($pending)
     {
-      return '<center><b><span class="color-red">CAL successfully archived!</span></b></center>';
+      return '<center><b><span class="color-red">CAL successfully mark as Pending!</span></b></center>';
     }
     else
     {
