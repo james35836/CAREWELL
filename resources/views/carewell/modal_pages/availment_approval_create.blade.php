@@ -10,6 +10,9 @@ $(document).ready(function()
 	$('body').find('.get-availment-info').select2();
 	$('body').find('.get-provider-info').select2();
 	$('body').find('.default-select2').select2();
+
+	$('body').find('.my-select').select2();
+    
 	
 	
 	$('body').on('change','.gross-amount',function()
@@ -70,13 +73,6 @@ $(document).ready(function()
 			}
 			
 	});
-	// $('body').on('change','.final-diagnosis',function()
-	// {
-	// 	var val = $(this).val();
-	// 	var text = $(this).find('option:selected').text();
-	// 	var newData = $('body').find('select.assigned-diagnosis');
-	// 	newData.append('<option value="'+val+'" selected="selected">'+text+'</option>');
-	// });
 	$('body').on('click','.reembursementBtn',function()
 	{
 		$('.reemburse-provider').html('<input type="text" class="form-control" name="state_d" id="state_d">');
@@ -210,7 +206,7 @@ $(document).ready(function()
 			</div>
 			<div class="col-md-10 form-content form-element">
 				<div class="input-group my-element">
-					<select class="form-control final_diagnosis_id" id="final_diagnosis_id" name="final_diagnosis_id[]" >
+					<select class="form-control final_diagnosis_id my-select" id="final_diagnosis_id" name="final_diagnosis_id[]" >
 						<option value="0">SELECT DIAGNOSIS</option>
 						@foreach($_diagnosis as $diagnosis)
 						<option value="{{$diagnosis->diagnosis_id}}">{{$diagnosis->diagnosis_name}}</option>
@@ -399,14 +395,27 @@ $(document).ready(function()
 	
 	<div class="row box-globals">
 		<div class="form-holder">
+			
 			<div class="form-content col-md-2">
-				<label>Payee</label>
+				<label>Doctor Payee</label>
 			</div>
 			<div class="form-content col-md-10 form-element">
 				<div class="input-group my-element">
-					<select class="form-control payeeList" name="provider_payee_id[]" id="payeeList">
+					<select class="form-control doctor-payee" data-type="doctor" name="provider_payee_id[]" id="payeeList">
 						<option value="0">SELECT PAYEE</option>
 					</select>
+					<span class="input-group-btn">
+						<button class="btn btn-primary add-element" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span> </button>
+						<button class="btn btn-danger remove-element" type="button" tabindex="-1"><span class="fa fa-minus-circle" aria-hidden="true"></span> </button>
+					</span>
+				</div>
+			</div>
+			<div class="form-content col-md-2">
+				<label>Other Payee</label>
+			</div>
+			<div class="form-content col-md-10 form-element">
+				<div class="input-group my-element">
+					<input class="form-control other-payee" data-type="other"/>
 					<span class="input-group-btn">
 						<button class="btn btn-primary add-element" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span> </button>
 						<button class="btn btn-danger remove-element" type="button" tabindex="-1"><span class="fa fa-minus-circle" aria-hidden="true"></span> </button>

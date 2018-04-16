@@ -142,7 +142,7 @@ autoclose: true
 					<td>{{$cal_new_member->member_first_name." ".$cal_new_member->member_last_name}}</td>
 					<td>{{date("F j, Y",strtotime($cal_new_member->cal_payment_start))}}</td>
 					<td>{{date("F j, Y",strtotime($cal_new_member->cal_payment_end))}}</td>
-					<td class="payment-breakdown"><p style="color:blue">{{$cal_new_member->cal_payment_count}}</p></td>
+					<td class="payment-breakdown" data-ref="new" style="cursor:pointer;" data-count="{{$cal_new_member->cal_payment_count}}" data-cal_member_id= "{{$cal_new_member->cal_new_member_id}}" data-cal_id="{{$cal_new_member->cal_id}}"><span class="label label-success" >{{$cal_new_member->cal_payment_count}}</span></td>
 					<td>{{$cal_new_member->cal_payment_amount}}</td>
 					<td>
 						<button type="button" data-cal_member_id="{{$cal_new_member->cal_member_id}}" class="btn btn-danger btn-sm remove-cal-member"><i class="fa fa-minus-circle"></i></button>
@@ -156,7 +156,7 @@ autoclose: true
 					<td>{{$cal_member->member_first_name." ".$cal_member->member_last_name}}</td>
 					<td>{{date("F j, Y",strtotime($cal_member->cal_payment_start))}}</td>
 					<td>{{date("F j, Y",strtotime($cal_member->cal_payment_end))}}</td>
-					<td class="payment-breakdown" style="cursor:pointer;" data-count="{{$cal_member->cal_payment_count}}" data-cal_member_id= "{{$cal_member->cal_member_id}}" data-cal_id="{{$cal_member->cal_id}}"><span class="label label-success" >{{$cal_member->cal_payment_count}}</span></td>
+					<td class="payment-breakdown" data-ref="old" style="cursor:pointer;" data-count="{{$cal_member->cal_payment_count}}" data-cal_member_id= "{{$cal_member->cal_member_id}}" data-cal_id="{{$cal_member->cal_id}}"><span class="label label-success" >{{$cal_member->cal_payment_count}}</span></td>
 					<td>{{$cal_member->cal_payment_amount}}</td>
 					<td>
 						<button type="button" data-cal_member_id="{{$cal_member->cal_member_id}}" class="btn btn-danger btn-sm remove-cal-member"><i class="fa fa-minus-circle"></i></button>

@@ -25,7 +25,7 @@
 								<td>{{$payment_history->company_name}}</td>
 								<td>{{$payment_history->cal_number}}</td>
 								<td>{{$payment_history->cal_payment_amount}}</td>
-								<td class="payment-breakdown" style="cursor:pointer;" data-cal_member_id="{{$payment_history->cal_member_id}}"><span class="label label-success" >{{$payment_history->cal_payment_count}}</span></td>
+								<td class="payment-breakdown" style="cursor:pointer;" data-ref="old" data-cal_member_id="{{$payment_history->cal_member_id}}"><span class="label label-success" >{{$payment_history->cal_payment_count}}</span></td>
 								<td>{{date("F j, Y",strtotime($payment_history->cal_payment_start))}}</td>
 								<td>{{date("F j, Y",strtotime($payment_history->cal_payment_end))}}</td>
 							</tr>

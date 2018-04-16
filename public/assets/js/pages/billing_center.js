@@ -39,11 +39,11 @@ function billing_center()
 		
 		$("body").on('click','.payment-breakdown',function()
 		{
-			
+			var ref           = $(this).data('ref');
 			var cal_member_id = $(this).data('cal_member_id');
 			var modalName= 'PAYMENT BREAKDOWN';
 			var modalClass='payment';
-			var modalLink='/billing/payment_breakdown/'+cal_member_id;
+			var modalLink='/billing/payment_breakdown/'+cal_member_id+'/'+ref;
 			var modalActionName='OK';
 			var modalAction='';
 			var modalSize = 'modal-mdsm';

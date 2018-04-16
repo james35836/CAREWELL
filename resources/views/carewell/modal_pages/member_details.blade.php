@@ -156,7 +156,7 @@
 							<th>EMPLOYEE ID</th>
 							<th>COVERAGE PLAN</th>
 							<th>MODE OF PAYMENT</th>
-							<th>JOBSITE</th>
+							<th>DEPLOYMENT</th>
 							<th>STATUS</th>
 						</tr>
 						@foreach($_member_company as $member_company)
@@ -170,8 +170,6 @@
 							<td><span class="label label-success">active</span></td>
 						</tr>
 						@endforeach
-						<tr style="height:70px;">
-						</tr>
 					</table>
 				</div>
 	        </div>
@@ -204,8 +202,6 @@
 							</td>
 						</tr>
 						@endforeach
-						<tr style="height:70px;">
-						</tr>
 					</table>
 				</div>
 			</div>

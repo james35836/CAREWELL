@@ -663,8 +663,8 @@ function globals()
 		{
 			var $div = $(this).closest('div.form-element');
 			var $this = $(this);
-			$nelement = $div.find('div.my-element:first').clone();
-			$nelement.appendTo($div);
+			$nelement = $div.find('div.my-element:first').removeClass('my-select').clone().appendTo($div);
+			
 			
 		});
 		$('body').on("click",".remove-element", function()

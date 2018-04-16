@@ -116,7 +116,7 @@ class StaticFunctionController extends Controller
   {
     if($request->ajax())
     {
-        $provider_rvs  = TblProviderModel::where('provider_id',$request->provider_id)->value('provider_rvs');
+        $provider  = TblProviderModel::where('provider_id',$request->provider_id)->first();
         $data['_provider_doctor']  = TblDoctorProviderModel::where('tbl_doctor_provider.provider_id',$request->provider_id)
                               ->join('tbl_doctor','tbl_doctor.doctor_id','=','tbl_doctor_provider.doctor_id')
                               ->get();
@@ -126,16 +126,7 @@ class StaticFunctionController extends Controller
             $data['_provider_doctors']     .= '<option value='.$provider_doctor->doctor_id.'>'.$provider_doctor->doctor_first_name." ".$provider_doctor->doctor_last_name;
         }
 
-        $data['_payee'] = TblProviderPayeeModel::where('provider_id',$request->provider_id)->get();
-        
-        $data['_payee_list'] = '<option>-SELECT PAYEE-';
-        foreach($data['_payee'] as $payee)
-        {
-            $data['_payee_list']     .= '<option value='.$payee->provider_payee_id.'>'.$payee->provider_payee_name;
-        }
-
-
-        return  response()->json(array('first' => $data['_provider_doctors'],'second' => $data['_payee_list'],'third'=>$provider_rvs));
+        return  response()->json(array('first' => $data['_provider_doctors'],'second'=>$provider->provider_rvs,'third'=>$provider->provider_name));
     }
   }
   
@@ -160,11 +151,9 @@ class StaticFunctionController extends Controller
     {
         $coverage  = TblMemberCompanyModel::where('archived',0)->where('member_id',$request->member_id)->value('coverage_plan_id');
         
-        $coverage_plan_tag = TblCoveragePlanTagModel::where('coverage_plan_id',$coverage)->where('availment_id',$request->availment_id)->first();
-        $data['procedure'] = TblCoveragePlanProcedureModel::where('coverage_plan_tag_id',$coverage_plan_tag->coverage_plan_tag_id)
+        $data['procedure'] = TblCoveragePlanProcedureModel::where('coverage_plan_id',$coverage)
                         ->join('tbl_procedure','tbl_procedure.procedure_id','=','tbl_coverage_plan_procedure.procedure_id')
                         ->get();
-        
         $data['_procedureList'] = '<option>-SELECT DESCRIPTION-';
         foreach($data['procedure'] as $procedure)
         {

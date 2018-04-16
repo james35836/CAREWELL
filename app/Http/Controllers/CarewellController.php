@@ -1083,12 +1083,19 @@ class CarewellController extends ActiveAuthController
     $data['total_member']     = count($data['_cal_member']);
     return view('carewell.modal_pages.billing_cal_details',$data);
   }
-  public function billing_payment_breakdown($cal_member_id)
+  public function billing_payment_breakdown($cal_member_id,$str_ref)
   {
     $array_start    = array();
     $array_end      = array();
+    if($str_ref=='old')
+    {
+      $payment        = TblCalMemberModel::where('cal_member_id',$cal_member_id)->first();
+    }
+    else
+    {
+      $payment        = TblNewCalMemberModel::where('cal_new_member_id',$cal_member_id)->first();
+    }
     
-    $payment        = TblCalMemberModel::where('cal_member_id',$cal_member_id)->first();
     $reference      = $payment->cal_payment_amount/$payment->cal_payment_count;
     $premium_gross  = $payment->cal_payment_amount/$reference;
     $ref            = round($premium_gross/2);
@@ -1374,15 +1381,15 @@ class CarewellController extends ActiveAuthController
 
             $period_date  = StaticFunctionController::getModeOfPayment(date('Y-m-d'),$new_member['member_payment_mode'],$new_member['coverage_plan_id'],$data['payment_amount']);
 
-            $cal_member['cal_payment_amount']     =   StaticFunctionController::nullableToString($data['payment_amount']);
-            $cal_member['cal_payment_date']       =   Carbon::now();
-            $cal_member['cal_payment_count']      =   $period_date['count'];
-            $cal_member['cal_payment_start']      =   $period_date['start'];
-            $cal_member['cal_payment_end']        =   $period_date['end'];
-            $cal_member['new_member_id']          =   $new_member_id;
+            $cal_members['cal_payment_amount']     =   StaticFunctionController::nullableToString($data['payment_amount']);
+            $cal_members['cal_payment_date']       =   Carbon::now();
+            $cal_members['cal_payment_count']      =   $period_date['count'];
+            $cal_members['cal_payment_start']      =   $period_date['start'];
+            $cal_members['cal_payment_end']        =   $period_date['end'];
+            $cal_members['new_member_id']          =   $new_member_id;
             
 
-            TblNewCalMemberModel::insert($cal_member);
+            TblNewCalMemberModel::insert($cal_members);
             
             
             
@@ -1511,22 +1518,40 @@ class CarewellController extends ActiveAuthController
   {
     if($request->ajax())
     {
-        $data['member_info']  = TblMemberModel::where('tbl_member.member_id',$request->member_id)->Member()->first();
-        $data['_member']      = TblMemberModel::where('tbl_member.archived',0)->where('tbl_member_company.archived',0)->Member()->get();
-        $data['_availment']   = TblCoveragePlanTagModel::where('coverage_plan_id',$data['member_info']->coverage_plan_id)
-                              ->join('tbl_availment','tbl_availment.availment_id','=','tbl_coverage_plan_tag.availment_id')
-                              ->get();
-        $data['_availment_list'] = '<option value="0">-SELECT AVAILMENT-';
-        foreach($data['_availment'] as $availment)
-        {
-            $data['_availment_list']     .= '<option value='.$availment->availment_id.'>'.$availment->availment_name;
-        }
+      
+      $mem_cal = TblCalMemberModel::where('member_id',$request->member_id)->orderBy('cal_payment_end','DESC')->first();
+      
+      $date = strtotime($mem_cal->cal_payment_end);
+      $today = strtotime(date('Y-m-d'));
 
-        $data['_member_list'] = '<option value="0">-SELECT AVAILMENT-';
-        foreach($data['_member'] as $member)
-        {
-            $data['_member_list']     .= "<option value=".$member->member_id.">".$member->member_carewell_id."-".$member->member_first_name." ".$member->member_last_name;
-        }
+      $data['member_info']  = TblMemberModel::where('tbl_member.member_id',$request->member_id)->Member()->first();
+      $data['_member']      = TblMemberModel::where('tbl_member.archived',0)->where('tbl_member_company.archived',0)->Member()->get();
+      $data['_availment']   = TblCoveragePlanProcedureModel::where('coverage_plan_id',$data['member_info']->coverage_plan_id)
+                            ->join('tbl_availment','tbl_availment.availment_id','=','tbl_coverage_plan_procedure.availment_id')
+                            ->select([DB::RAW('DISTINCT(tbl_coverage_plan_procedure.availment_id)'),'tbl_availment.availment_name','tbl_availment.availment_id'])
+                            ->get();
+      $data['_availment_list'] = '<option value="0">-SELECT AVAILMENT-';
+      foreach($data['_availment'] as $availment)
+      {
+          $data['_availment_list']     .= '<option value='.$availment->availment_id.'>'.$availment->availment_name;
+      }
+
+      $data['_member_list'] = '<option value="0">-SELECT AVAILMENT-';
+      foreach($data['_member'] as $member)
+      {
+          $data['_member_list']     .= "<option value=".$member->member_id.">".$member->member_carewell_id."-".$member->member_first_name." ".$member->member_last_name;
+      }
+
+      if($date < $today)
+      {
+        return  response()->json(array(
+          'ref'                 => 'not_yet_paid',
+          'member_list'         => $data['_member_list']
+        ));
+      }
+      else 
+      {
+        
 
         return  response()->json(array(
           'member_name'         => $data['member_info']->member_first_name." ".$data['member_info']->member_middle_name." ".$data['member_info']->member_last_name,
@@ -1537,8 +1562,11 @@ class CarewellController extends ActiveAuthController
           'member_age'          => date_create($data['member_info']->member_birthdate)->diff(date_create('today'))->y,
           'member_id'           => $data['member_info']->member_id,
           'availment_list'      => $data['_availment_list'],
-          'member_list'         => $data['_member_list']
+          'member_list'         => $data['_member_list'],
+          'ref'                 => 'already_paid',
         ));
+      }
+        
     }
   // return view('carewell.additional_pages.availment_get_member_info',$data);
   }
