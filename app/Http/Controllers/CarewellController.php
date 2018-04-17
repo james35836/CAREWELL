@@ -1074,13 +1074,18 @@ class CarewellController extends ActiveAuthController
                               ->first();
     }
     $sum = 0;
+    $sums = 0;
     foreach($data['_cal_member'] as $amount)
     {
       $sum = $sum + $amount->cal_payment_amount;
     }
+    foreach($data['_cal_new_member'] as $amounts)
+    {
+      $sums = $sums + $amounts->cal_payment_amount;
+    }
 
-    $data['total_amount']     = $sum;
-    $data['total_member']     = count($data['_cal_member']);
+    $data['total_amount']     = $sum + $sums;
+    $data['total_member']     = count($data['_cal_member'])+count($data['_cal_new_member']);
     return view('carewell.modal_pages.billing_cal_details',$data);
   }
   public function billing_payment_breakdown($cal_member_id,$str_ref)

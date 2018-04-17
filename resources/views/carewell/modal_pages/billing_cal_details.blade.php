@@ -110,7 +110,7 @@ autoclose: true
 			<label>NUMBER OF MEMBER</label>
 		</div>
 		<div class="col-md-3  form-content">
-			<p style="font-size:20px;font-size: 25px;font-weight: bold;color: #157315;">{{$total_member+count($_cal_new_member)}}</p>
+			<p style="font-size:20px;font-size: 25px;font-weight: bold;color: #157315;">{{$total_member}}</p>
 		</div>
 		
 		<div class="col-md-3  form-content">
