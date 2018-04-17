@@ -65,7 +65,7 @@
 					</div>
 					<div class="form-holder ">
 						<div class="col-md-2 form-content">
-							<label>Schedule of Benifit</label>
+							<label>Schedule of Benefit</label>
 						</div>
 						<div class=" form-content col-md-10">
 							<input type="file" name="contract_benefits_name[]" id="contract_benefits_name" class="form-control" multiple/>

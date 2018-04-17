@@ -42,7 +42,7 @@
                 <th>APPROVAL #</th>
                 <th>UNIVERSAL ID</th>
                 <th>CAREWELL ID</th>
-                <th>PATIENT NAME</th>
+                <th>MEMBER NAME</th>
                 <th>COMPANY</th>
                 <th>PROVIDER</th>
                 <th>DATE ISSUED</th>
@@ -96,7 +96,7 @@
                 <th>APPROVAL #</th>
                 <th>UNIVERSAL ID</th>
                 <th>CAREWELL ID</th>
-                <th>PATIENT NAME</th>
+                <th>MEMBER NAME</th>
                 <th>COMPANY</th>
                 <th>PROVIDER</th>
                 <th>STATUS</th>

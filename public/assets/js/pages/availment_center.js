@@ -194,7 +194,7 @@ function availment_center()
             		finalDiagnosisData.push(selectedFinal);
             	}
             });
-            $("select.payeeList").each(function(i, sel)
+            $("select.doctor-payee").each(function(i, sel)
             {
             	var selectedPayee = $(sel).val();
             	if(selectedPayee!=0)

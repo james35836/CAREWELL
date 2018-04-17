@@ -1616,7 +1616,7 @@ class CarewellController extends ActiveAuthController
       $procedureData->procedure_philhealth      = $request->procedure_philhealth[$key];
       $procedureData->procedure_charge_patient  = $request->procedure_charge_patient[$key];
       $procedureData->procedure_charge_carewell = $request->procedure_charge_carewell[$key];
-      $procedureData->diagnosis_id     = $request->assigned_diagnosis_id[$key];
+      $procedureData->diagnosis_id              = 1;
       $procedureData->approval_id               = $approvalData->approval_id;
       $procedureData->save();
     }
@@ -1633,11 +1633,22 @@ class CarewellController extends ActiveAuthController
       $doctorData->approval_id                      = $approvalData->approval_id;
       $doctorData->save();
     }
-    foreach($request->provider_payee_id as $key=>$payee_id)
+    foreach($request->doctor_payee_id as $key=>$payee_id)
+    {
+      $payeeDocData = new TblApprovalPayeeModel;
+      $payeeDocData->payee_id     = $payee_id;
+      $payeeDocData->approval_id  = $approvalData->approval_id;
+      $payeeDocData->payee_name   = 'doctor';
+      $payeeDocData->type         = 'doctor';
+      $payeeDocData->save();
+    }
+    foreach($request->payee_name as $key=>$payee_name)
     {
       $payeeData = new TblApprovalPayeeModel;
-      $payeeData->payee_id        = $payee_id;
-      $payeeData->approval_id     = $approvalData->approval_id;
+      $payeeData->payee_id     = '0';
+      $payeeData->approval_id  = $approvalData->approval_id;
+      $payeeData->payee_name   = $payee_name;
+      $payeeData->type         = 'payee';
       $payeeData->save();
     }
     if($approvalData->save()&&$procedureData->save()&&$doctorData->save())
@@ -1790,7 +1801,8 @@ class CarewellController extends ActiveAuthController
     $data['page'] = 'Coverage PLan';
     $data['user'] = StaticFunctionController::global();
 
-    $data['_coverage_plan'] = TblCoveragePlanModel::paginate(10);
+    $data['_active_coverage_plan'] = TblCoveragePlanModel::where('archived',0)->paginate(10);
+    $data['_inactive_coverage_plan'] = TblCoveragePlanModel::where('archived',1)->paginate(10);
 
     return view('carewell.pages.settings_coverage_plan',$data);
   }

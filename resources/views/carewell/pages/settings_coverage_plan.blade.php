@@ -38,7 +38,7 @@
                 <th>PLAN ADDED</th>
                 <th>ACTION</th>
               </tr>
-              @foreach($_coverage_plan as $coverage_plan)
+              @foreach($_active_coverage_plan as $coverage_plan)
               <tr>
                 <td>{{$coverage_plan->coverage_plan_id}}</td>
                 <td>{{$coverage_plan->coverage_plan_name}}</td>
@@ -66,22 +66,14 @@
             </table>
           </div>
           <div class="box-footer clearfix">
-            @include('globals.pagination', ['paginator' => $_coverage_plan])
+            @include('globals.pagination', ['paginator' => $_active_coverage_plan])
           </div>
         </div>
         <!-- /.tab-pane -->
         <div class="tab-pane" id="inActiveCompany">
           <div class="row">
-            <div class=" col-md-3 col-xs-12 pull-left">
-              <select class="form-control top-element">
-                <option>SELECT PROVIDER</option>
-                {{--  @foreach($_provider as $provider)
-                <option value="{{$provider->provider_id}}">{{$provider->provider_name}}</option>
-                @endforeach --}}
-              </select>
-            </div>
             <div class="col-md-3 col-xs-12 pull-right">
-              <div class="input-group margin">
+              <div class="input-group top-element">
                 <input type="text" class="form-control">
                 <span class="input-group-btn">
                   <button type="button" class="btn btn-default"><i class="fa fa-search"></i></button>
@@ -102,7 +94,7 @@
                 <th>PLAN ADDED</th>
                 <th>ACTION</th>
               </tr>
-              @foreach($_coverage_plan as $coverage_plan)
+              @foreach($_inactive_coverage_plan as $coverage_plan)
               <tr>
                 <td>{{$coverage_plan->coverage_plan_id}}</td>
                 <td>{{$coverage_plan->coverage_plan_name}}</td>
@@ -130,7 +122,7 @@
             </table>
           </div>
           <div class="box-footer clearfix">
-            @include('globals.pagination', ['paginator' => $_coverage_plan])
+            @include('globals.pagination', ['paginator' => $_inactive_coverage_plan])
           </div>
         </div>
       </div>

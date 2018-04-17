@@ -73,13 +73,20 @@ $(document).ready(function()
 			}
 			
 	});
-	$('body').on('click','.reembursementBtn',function()
+	$('body').on('click','.reimbursementBtn',function()
 	{
 		$('.reemburse-provider').html('<input type="text" class="form-control" name="state_d" id="state_d">');
 		$('.doctorList').replaceWith('<input type="text" class="form-control" name="state_d" id="state_d">');
 		$('.payeeList').replaceWith('<input type="text" class="form-control" name="state_d" id="state_d">');
 	
 
+	});
+	$('body').on('change','.final_diagnosis_id',function()
+	{
+		var value = $(this).val();
+		var text = $(this).find(":selected").text();
+		alert(value);
+		$('select.charge_diagnosis').append('<option value="'+value+'" selected="selected">'+text+'</option>');
 	});
 });
 </script>
@@ -177,7 +184,7 @@ $(document).ready(function()
 				<label>Chief Complaint</label>
 			</div>
 			<div class="col-md-10 form-content">
-				<textarea name="approval_complaint" id="approval_complaint" cols="2" rows="3" class="form-control" >NOTHING TO COMPLAINT</textarea>
+				<textarea name="approval_complaint" id="approval_complaint" cols="2" rows="3" class="form-control" >NOTHING TO COMPLAIN</textarea>
 			</div>
 			
 		</div>
@@ -206,7 +213,7 @@ $(document).ready(function()
 			</div>
 			<div class="col-md-10 form-content form-element">
 				<div class="input-group my-element">
-					<select class="form-control final_diagnosis_id my-select" id="final_diagnosis_id" name="final_diagnosis_id[]" >
+					<select class="form-control final_diagnosis_id " id="final_diagnosis_id" name="final_diagnosis_id[]" >
 						<option value="0">SELECT DIAGNOSIS</option>
 						@foreach($_diagnosis as $diagnosis)
 						<option value="{{$diagnosis->diagnosis_id}}">{{$diagnosis->diagnosis_name}}</option>
@@ -220,6 +227,19 @@ $(document).ready(function()
 			</div>
 		</div>
 		<div class="row form-holder">
+		</div>
+		<div class="form-holder">
+			<div class="col-md-2 form-content">
+				<label>Charge : </label>
+			</div>
+			<div class="col-md-10 form-content">
+				<select class="form-control charge_diagnosis" id="charge_diagnosis" name="charge_diagnosis" >
+					<option value="0">CHARGE TO DIAGNOSIS</option>
+				</select>
+			</div>
+		</div>
+		<div class="row">
+			
 		</div>
 	</div>
 	
@@ -238,9 +258,6 @@ $(document).ready(function()
 					<td>
 						<select class="form-control select2 procedureList" name="procedure_id[]">
 							<option value="0">-Select Description-</option>
-							{{-- @foreach($_laboratory as $laboratory)
-							<option value="{{$laboratory->laboratory_id}}">{{$laboratory->laboratory_name}}</option>
-							@endforeach --}}
 						</select>
 					</td>
 					<td><input type="text"  value="0.0" name="procedure_gross_amount[]" id="laboratory_amount" class="gross-amount form-control"/></td>
@@ -401,7 +418,7 @@ $(document).ready(function()
 			</div>
 			<div class="form-content col-md-10 form-element">
 				<div class="input-group my-element">
-					<select class="form-control doctor-payee" data-type="doctor" name="provider_payee_id[]" id="payeeList">
+					<select class="form-control doctor-payee" data-type="doctor" name="doctor_payee_id[]" id="payeeList">
 						<option value="0">SELECT PAYEE</option>
 					</select>
 					<span class="input-group-btn">
@@ -415,7 +432,7 @@ $(document).ready(function()
 			</div>
 			<div class="form-content col-md-10 form-element">
 				<div class="input-group my-element">
-					<input class="form-control other-payee" data-type="other"/>
+					<input class="form-control other-payee" name="payee_name[]" data-type="other"/>
 					<span class="input-group-btn">
 						<button class="btn btn-primary add-element" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span> </button>
 						<button class="btn btn-danger remove-element" type="button" tabindex="-1"><span class="fa fa-minus-circle" aria-hidden="true"></span> </button>

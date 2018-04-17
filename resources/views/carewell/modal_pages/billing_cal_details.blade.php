@@ -122,48 +122,109 @@ autoclose: true
 	</div>
 </div>
 <div class="row box-globals">
-	<div class="form-holder">
-		<div class="box-body table-responsive no-padding">
-			<table class="table table-hover table-bordered">
-				<tr>
-					<th>Universal ID</th>
-					<th>Carewell ID</th>
-					<th>Name</th>
-					<th>Date Coverage Start</th>
-					<th>Date Coverage End</th>
-					<th>Period Count</th>
-					<th>Paid Amount</th>
-					<th>Action</th>
-				</tr>
-				@foreach($_cal_new_member as $cal_new_member)
-				<tr>
-					<td><span class="label label-danger">NEW</span></td>
-					<td><span class="label label-danger">NEW</span></td>
-					<td>{{$cal_new_member->member_first_name." ".$cal_new_member->member_last_name}}</td>
-					<td>{{date("F j, Y",strtotime($cal_new_member->cal_payment_start))}}</td>
-					<td>{{date("F j, Y",strtotime($cal_new_member->cal_payment_end))}}</td>
-					<td class="payment-breakdown" data-ref="new" style="cursor:pointer;" data-count="{{$cal_new_member->cal_payment_count}}" data-cal_member_id= "{{$cal_new_member->cal_new_member_id}}" data-cal_id="{{$cal_new_member->cal_id}}"><span class="label label-success" >{{$cal_new_member->cal_payment_count}}</span></td>
-					<td>{{$cal_new_member->cal_payment_amount}}</td>
-					<td>
-						<button type="button" data-cal_member_id="{{$cal_new_member->cal_member_id}}" class="btn btn-danger btn-sm remove-cal-member"><i class="fa fa-minus-circle"></i></button>
-					</td>
-				</tr>
-				@endforeach
-				@foreach($_cal_member as $cal_member)
-				<tr>
-					<td>{{$cal_member->member_universal_id}}</td>
-					<td>{{$cal_member->member_carewell_id}}</td>
-					<td>{{$cal_member->member_first_name." ".$cal_member->member_last_name}}</td>
-					<td>{{date("F j, Y",strtotime($cal_member->cal_payment_start))}}</td>
-					<td>{{date("F j, Y",strtotime($cal_member->cal_payment_end))}}</td>
-					<td class="payment-breakdown" data-ref="old" style="cursor:pointer;" data-count="{{$cal_member->cal_payment_count}}" data-cal_member_id= "{{$cal_member->cal_member_id}}" data-cal_id="{{$cal_member->cal_id}}"><span class="label label-success" >{{$cal_member->cal_payment_count}}</span></td>
-					<td>{{$cal_member->cal_payment_amount}}</td>
-					<td>
-						<button type="button" data-cal_member_id="{{$cal_member->cal_member_id}}" class="btn btn-danger btn-sm remove-cal-member"><i class="fa fa-minus-circle"></i></button>
-					</td>
-				</tr>
-				@endforeach
-			</table>
+	<div class="nav-tabs-custom">
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="#active" data-toggle="tab">ACTIVE</a></li>
+			<li><a href="#inActive" data-toggle="tab">INACTIVE</a></li>
+		</ul>
+		<div class="tab-content">
+			<div class="tab-pane active" id="active">
+				<div class="row">
+					
+					<div class="col-md-3 col-xs-12 pull-right">
+						<div class="input-group margin">
+							<input type="text" class="form-control " id="search_key">
+							<span class="input-group-btn">
+								<button type="button" class="btn btn-default"><i class="fa fa-search"></i></button>
+							</span>
+						</div>
+					</div>
+				</div>
+				<div class="box-body table-responsive no-padding">
+					<table class="table table-hover table-bordered">
+						<tr>
+							<th>Universal ID</th>
+							<th>Carewell ID</th>
+							<th>Name</th>
+							<th>Date Coverage Start</th>
+							<th>Date Coverage End</th>
+							<th>Period Count</th>
+							<th>Paid Amount</th>
+							<th>Action</th>
+						</tr>
+						@foreach($_cal_new_member as $cal_new_member)
+						<tr>
+							<td><span class="label label-danger">NEW</span></td>
+							<td><span class="label label-danger">NEW</span></td>
+							<td>{{$cal_new_member->member_first_name." ".$cal_new_member->member_last_name}}</td>
+							<td>{{date("F j, Y",strtotime($cal_new_member->cal_payment_start))}}</td>
+							<td>{{date("F j, Y",strtotime($cal_new_member->cal_payment_end))}}</td>
+							<td class="payment-breakdown" data-ref="new" style="cursor:pointer;" data-count="{{$cal_new_member->cal_payment_count}}" data-cal_member_id= "{{$cal_new_member->cal_new_member_id}}" data-cal_id="{{$cal_new_member->cal_id}}"><span class="label label-success" >{{$cal_new_member->cal_payment_count}}</span></td>
+							<td>{{$cal_new_member->cal_payment_amount}}</td>
+							<td>
+								<button type="button" data-cal_member_id="{{$cal_new_member->cal_member_id}}" class="btn btn-danger btn-sm remove-cal-member"><i class="fa fa-minus-circle"></i></button>
+							</td>
+						</tr>
+						@endforeach
+						@foreach($_cal_member as $cal_member)
+						<tr>
+							<td>{{$cal_member->member_universal_id}}</td>
+							<td>{{$cal_member->member_carewell_id}}</td>
+							<td>{{$cal_member->member_first_name." ".$cal_member->member_last_name}}</td>
+							<td>{{date("F j, Y",strtotime($cal_member->cal_payment_start))}}</td>
+							<td>{{date("F j, Y",strtotime($cal_member->cal_payment_end))}}</td>
+							<td class="payment-breakdown" data-ref="old" style="cursor:pointer;" data-count="{{$cal_member->cal_payment_count}}" data-cal_member_id= "{{$cal_member->cal_member_id}}" data-cal_id="{{$cal_member->cal_id}}"><span class="label label-success" >{{$cal_member->cal_payment_count}}</span></td>
+							<td>{{$cal_member->cal_payment_amount}}</td>
+							<td>
+								<button type="button" data-cal_member_id="{{$cal_member->cal_member_id}}" class="btn btn-danger btn-sm remove-cal-member"><i class="fa fa-minus-circle"></i></button>
+							</td>
+						</tr>
+						@endforeach
+					</table>
+				</div>
+			</div>
+			<div class="tab-pane" id="inActive">
+				<div class="row">
+					
+					<div class="col-md-3 col-xs-12 pull-right">
+						<div class="input-group margin">
+							<input type="text" class="form-control " id="search_key">
+							<span class="input-group-btn">
+								<button type="button" class="btn btn-default"><i class="fa fa-search"></i></button>
+							</span>
+						</div>
+					</div>
+				</div>
+				<div class="box-body table-responsive no-padding">
+					<table class="table table-hover table-bordered">
+						<tr>
+							<th>Universal ID</th>
+							<th>Carewell ID</th>
+							<th>Name</th>
+							<th>Date Coverage Start</th>
+							<th>Date Coverage End</th>
+							<th>Period Count</th>
+							<th>Paid Amount</th>
+							<th>Action</th>
+						</tr>
+						@foreach($_cal_new_member as $cal_new_member)
+						<tr>
+							<td><span class="label label-danger">NEW</span></td>
+							<td><span class="label label-danger">NEW</span></td>
+							<td>{{$cal_new_member->member_first_name." ".$cal_new_member->member_last_name}}</td>
+							<td>{{date("F j, Y",strtotime($cal_new_member->cal_payment_start))}}</td>
+							<td>{{date("F j, Y",strtotime($cal_new_member->cal_payment_end))}}</td>
+							<td class="payment-breakdown" data-ref="new" style="cursor:pointer;" data-count="{{$cal_new_member->cal_payment_count}}" data-cal_member_id= "{{$cal_new_member->cal_new_member_id}}" data-cal_id="{{$cal_new_member->cal_id}}"><span class="label label-success" >{{$cal_new_member->cal_payment_count}}</span></td>
+							<td>{{$cal_new_member->cal_payment_amount}}</td>
+							<td>
+								<button type="button" data-cal_member_id="{{$cal_new_member->cal_member_id}}" class="btn btn-danger btn-sm remove-cal-member"><i class="fa fa-minus-circle"></i></button>
+							</td>
+						</tr>
+						@endforeach
+						
+					</table>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
