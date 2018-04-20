@@ -58,7 +58,7 @@
 				<input type="text" name="coverage_plan_age_bracket" id="coverage_plan_age_bracket" class="form-control">
 			</div>
 			<div class="col-md-2 form-content">
-				<label>Case Handling FEE</label>
+				<label>Handling FEE</label>
 			</div>
 			<div class="col-md-4 form-content">
 				<input type="text" name="coverage_plan_case_handling" id="coverage_plan_case_handling" class="form-control">
@@ -163,7 +163,7 @@
 								</tr>
 								<tr>
 						            <th class="col-md-3">PROCEDURES</th>
-						            <th class="col-md-1"></th>
+						            <th class="col-md-1"><button type="button" data-number="2" class="btn btn-primary btn-sm add-row"><i class="fa fa-plus-circle"></i></button></th>
 						        </tr>
 								<tr class="table-row">
 									<td >
@@ -171,13 +171,12 @@
 											<span class="input-group-btn">
 												<button class="btn btn-success add-coverage-item" data-name="{{$availment->name}}" data-availment_id="{{$availment->availment_id}}" type="button" tabindex="-1">SELECT PROCEDURE</button>
 											</span>
-											<input type="text" class="form-control"/>
+											<input type="text" class="form-control countThis" />
 										</div>
 									</td>
 									<td >
 										<div class="btn-group" role="group" aria-label="Basic example">
-											<button type="button" data-number="2" class="btn btn-primary btn-sm add-row"><i class="fa fa-plus-circle"></i></button>
-											<button type="button" class="btn btn-danger btn-sm remove-row"><i class="fa fa-minus-circle"></i></button>
+											<button type="button" data-number="2" class="btn btn-danger btn-sm remove-row"><i class="fa fa-minus-circle"></i></button>
 										</div>
 									</td>
 								</tr>

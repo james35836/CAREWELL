@@ -123,7 +123,7 @@ text-align: center;
           <div class="col-md-4" >
             
               <p class="text-center">
-              <strong>LATEST INQUIRY</strong>
+              <strong>LATEST APPROVAL</strong>
             </p>
               <!-- /.box-header -->
               <div class="box-body" style="max-height: 200px;overflow-x: hidden;overflow-y: scroll;">
@@ -168,7 +168,16 @@ text-align: center;
             <div class="description-block border-right">
               <span class="description-percentage text-yellow"><i class="fa fa-caret-left"></i> 0%</span>
               <h5 class="description-header">$10,390.90</h5>
-              <span class="description-text">TOTAL PAYABLE</span>
+              <span class="description-text">TOTAL OUTSTANDING PAYABLE</span>
+            </div>
+            <!-- /.description-block -->
+          </div>
+          <!-- /.col -->
+          <div class="col-sm-3 col-xs-6">
+            <div class="description-block">
+              <span class="description-percentage text-red"><i class="fa fa-caret-down"></i> 18%</span>
+              <h5 class="description-header">1200</h5>
+              <span class="description-text">TOTAL PAID</span>
             </div>
             <!-- /.description-block -->
           </div>
@@ -181,15 +190,7 @@ text-align: center;
             </div>
             <!-- /.description-block -->
           </div>
-          <!-- /.col -->
-          <div class="col-sm-3 col-xs-6">
-            <div class="description-block">
-              <span class="description-percentage text-red"><i class="fa fa-caret-down"></i> 18%</span>
-              <h5 class="description-header">1200</h5>
-              <span class="description-text">MEMBER ONE YEAR</span>
-            </div>
-            <!-- /.description-block -->
-          </div>
+          
         </div>
         <!-- /.row -->
       </div>

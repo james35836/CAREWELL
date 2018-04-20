@@ -18,6 +18,9 @@ use App\Http\Model\TblCompanyCoveragePlanModel;
 use App\Http\Model\TblCompanyDeploymentModel;
 use App\Http\Model\TblCalModel;
 use App\Http\Model\TblCalMemberModel;
+use App\Http\Model\TblCalPaymentModel;
+
+
 use App\Http\Model\TblCompanyTrunklineModel;
 
 use App\Http\Model\TblNewMemberModel;
@@ -65,6 +68,8 @@ use App\Http\Model\TblLaboratoryModel;
 use App\Http\Model\TblScheduleOfBenefitsModel;
 
 use Carbon\Carbon;
+use Excel;
+use Session;
 
 class StaticFunctionController extends Controller
 {
@@ -316,10 +321,8 @@ class StaticFunctionController extends Controller
   }
   public static function birthdate($birthdate) 
   {
-    $date = $birthdate;
-    // $bdate = date_format($date,"m-y");
+    $date  = $birthdate;
     $bdate = date('m-y', strtotime($birthdate));
-    // dd($bdate);
     $final = str_replace(' ','',preg_replace('/[^a-z0-9\s]/i', '', $bdate));
     return $final;
     
@@ -448,7 +451,7 @@ class StaticFunctionController extends Controller
   }
   public static function archived_data($archived_id,$archived_name)
   {
-    $message = "";
+    $message              = "";
     $archived['archived'] = '1';
     switch ($archived_name) 
     {
@@ -513,8 +516,8 @@ class StaticFunctionController extends Controller
   public static function getNewMember($cal_id)
   {
     $data['new_member'] = TblNewMemberModel::where('cal_id',$cal_id)
-                ->join('tbl_new_cal_member','tbl_new_cal_member.new_member_id','=','tbl_new_member.new_member_id')
-                ->get();
+                        ->join('tbl_new_cal_member','tbl_new_cal_member.new_member_id','=','tbl_new_member.new_member_id')
+                        ->get();
     $companyData        = TblCompanyModel::join('tbl_cal','tbl_cal.company_id','=','tbl_company.company_id')
                         ->where('tbl_cal.cal_id',$cal_id)
                         ->first();
@@ -600,70 +603,60 @@ class StaticFunctionController extends Controller
     }
     
   }
-  public static function getModeOfPayment($last_payment,$mode_of_payment,$coverage_plan_id,$payment_amount)
+  public static function getModeOfPayment($member_id,$cal_member_id,$premium,$payment_count,$cal_id)
   {
-
-    $premium          = TblCoveragePlanModel::where('coverage_plan_id',$coverage_plan_id)->value('coverage_plan_premium');
-    $premium_gross    = number_format($payment_amount / number_format($premium));
-    $period           = self::modeOfPaymentReference($mode_of_payment,$last_payment,$premium_gross);
-    $date['start']    = $period['start'];
-    $date['end']      = $period['end'];
-    $date['count']    = $premium_gross;
-    return $date;
-  }
-  public static function modeOfPaymentReference($mode_of_payment,$last_payment,$premium_gross)
-  {
-    $reference = number_format($premium_gross)%2;
-    $period_paid = date('d',strtotime($last_payment));
-    $ref = round($premium_gross/2);
-
-    if($mode_of_payment=="SEMI-MONTHLY")
+    $cal              = TblCalModel::where('cal_id',$cal_id)->first();
+    
+    for($i = 1; $i<=$payment_count;  $i++)
     {
-      $i = 0;
-  
-      for($i=0; $i<=$premium_gross;  $i++)
+      if($i==1)
       {
-        
-          $date = date('Y-m-18', strtotime($last_payment));
-          $new_date = strtotime($date. '+'.$i.' months');
-
-          $first_cut_start[$i]  = date('Y-m-01', $new_date);
-          $first_cut_end[$i]    = date('Y-m-15', $new_date);
-
-          $second_cut_start[$i] = date('Y-m-16', $new_date);
-          $second_cut_end[$i]   = date('Y-m-t',   $new_date );
-      }
-      
-      
-      
-      if($period_paid<=15)
-      {
-        $data['start']  = date('Y-m-16', strtotime($date));
-        if($reference==0)
-        {
-          $data['end']  = $second_cut_end[$premium_gross-1];
-        }
-        else
-        {
-          $data['end']  = $first_cut_end[$premium_gross-1];
-        }
+        $member_cut['cal_payment_start']  = $cal->cal_payment_start;
+        $member_cut['cal_payment_end']    = $cal->cal_payment_end;
+        $member_cut['cal_payment_type']   = 'ORIGINAL';
+        $member_cut['cal_member_id']      = $cal_member_id;
+        $member_cut['member_id']          = $member_id;
+        TblCalPaymentModel::insert($member_cut);
       }
       else
       {
-        $data['start']  = date('Y-m-01', strtotime($date. '+1 months'));
-        if($reference==true)
-        {
-          $data['end']  = $first_cut_end[$premium_gross-1];
-        }
-        else
-        {
-          $data['end']  = $second_cut_end[$premium_gross-1];
-        }
-
+        $member_cut['cal_payment_start']  = 'start';
+        $member_cut['cal_payment_end']    = 'end';
+        $member_cut['cal_payment_type']   = 'ORIGINAL';
+        $member_cut['cal_member_id']      = $cal_member_id;
+        $member_cut['member_id']          = $member_id;
+        TblCalPaymentModel::insert($member_cut);
       }
-      return $data;
+
     }
+    return 0;
   }
-  
+  public static function getExportWarning()
+  {
+    if(Session::has('exportWarning'))
+    {
+      $excels['_member'] = Session::get('exportWarning');
+      $excels['data']  =   ['LAST NAME','FIRST NAME','MIDDLE NAME','TYPE'];
+      Excel::create('CAREWELL WARNING DATA', function($excel) use ($excels) 
+      {
+        $excel->sheet('template', function($sheet) use ($excels) 
+        {
+          $data = $excels['data'];
+          $sheet->fromArray($data, null, 'A1', false, false);
+          $sheet->freezeFirstRow();
+          $_member = $excels['_member'];
+          foreach($excels['_member'] as  $key => $member)
+          {
+            $key = $key+=2;
+            $sheet->setCellValue('A'.$key, $member['last']);
+            $sheet->setCellValue('B'.$key, $member['first']);
+            $sheet->setCellValue('C'.$key, $member['middle']);
+            $sheet->setCellValue('D'.$key, $member['type']);
+          }
+        });
+      })->download('xlsx');
+    }
+    
+  }
   
 }

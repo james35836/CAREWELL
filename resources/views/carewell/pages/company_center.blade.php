@@ -1,9 +1,10 @@
 @extends('carewell.layout.layout')
 @section('content')
+@include('carewell.modals.company_center_modals')
 <div class="container">
   <div class="row">
     <div class=" col-md-3 col-xs-12 pull-right no-padding">
-      <button class="btn btn-primary top-element create-company" type="button" ><i class="fa fa-plus btn-icon "></i>CREATE COMPANY</button>
+      <button class="btn btn-primary top-element prompt-modal" type="button" ><i class="fa fa-plus btn-icon "></i>CREATE COMPANY</button>
     </div>
   </div>
   <div class="row">

@@ -45,12 +45,12 @@
             <div class="box-body table-responsive no-padding">
               <table class="table table-hover table-bordered">
                 <tr>
-                  <th>UNIVERSAL ID</th>
-                  <th>FULL NAME</th>
-                  <th>CAREWELL ID</th>
-                  <th>COMPANY</th>
-                  <th>DATE ADDED</th>
-                  <th>ACTION</th>
+                  <th class="live-search">UNIVERSAL ID</th>
+                  <th class="live-search">FULL NAME</th>
+                  <th class="live-search">CAREWELL ID</th>
+                  <th class="live-search">COMPANY</th>
+                  <th class="live-search">DATE ADDED</th>
+                  <th class="live-search">ACTION</th>
                 </tr>
                 @foreach($_member_active as $member_active)
                 <tr>

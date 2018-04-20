@@ -16,10 +16,10 @@
 				<input type="text" name="company_email_address" id="company_email_address" class="form-control"/>
 			</div>
 			<div class="col-md-2 form-content">
-				<label>Contact Person</label>
+				<label>Tel/Mobile Number</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="text" name="company_contact_person" id="company_contact_person" class="form-control"/>
+				<input type="text" name="company_contact_number" id="company_contact_number" class="form-control"/>
 			</div>
 		</div>
 		<div class="form-holder">
@@ -31,21 +31,35 @@
 			</div>
 			
 		</div>
-		<div class="form-holder ">
+		<div class="form-holder">
 			<div class="col-md-2 form-content">
-				<label>Contact Number</label>
+				<label>Contact Person(1)</label>
 			</div>
-			<div class=" form-content col-md-10 form-element">
-				<div class="input-group my-element">
-					<input type="text" name="company_number[]" id="company_number" class="form-control"/>
-					<span class="input-group-btn">
-						<button class="btn btn-primary add-element" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span> </button>
-						<button class="btn btn-danger remove-element" type="button" tabindex="-1"><span class="fa fa-minus-circle" aria-hidden="true"></span> </button>
-					</span>
-				</div>
+			<div class="col-md-4 form-content">
+				<input type="text" name="contact_person_name" id="contact_person_name" class="form-control" placeholder="NAME"/>
 			</div>
-			
+			<div class="col-md-2 form-content">
+				<input type="text" name="contact_person_position" id="contact_person_position" class="form-control" placeholder="POSITION"/>
+			</div>
+			<div class="col-md-4 form-content">
+				<input type="text" name="contact_person_number" id="contact_person_number" class="form-control" placeholder="CONTACT NUMBER"/>
+			</div>
 		</div>
+		<div class="form-holder">
+			<div class="col-md-2 form-content">
+				<label>Contact Person(2)</label>
+			</div>
+			<div class="col-md-4 form-content">
+				<input type="text" name="contact_person_names" id="contact_person_names" class="form-control" placeholder="NAME"/>
+			</div>
+			<div class="col-md-2 form-content">
+				<input type="text" name="contact_person_positions" id="contact_person_positions" class="form-control" placeholder="POSITION"/>
+			</div>
+			<div class="col-md-4 form-content">
+				<input type="text" name="contact_person_numbers" id="contact_person_numbers" class="form-control" placeholder="CONTACT NUMBER"/>
+			</div>
+		</div>
+		
 	</div>
 	<div class="row box-globals" >
 		<div class="nav-tabs-custom">

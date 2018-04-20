@@ -1,18 +1,35 @@
+<script type="text/javascript">
+	$(function ()
+	{
+		$("body").on("click", ".date-select", function()
+		{
+			$(this).datepicker();
+			$(this).datepicker("show");
+		});
+	})
+</script>
 
 <div class="row box-globals" style="border:none !important">
+	@if($member_id!='disabled')
+	<div class="row">
+		<div class="col-md-6 col-xs-12 pull-right">
+			<button data-member_id="{{$member_id}}" class="btn-sm btn-primary top-element last-ten-payments">VIEW LAST TEN PAYMENTS</button>
+		</div>
+	</div>
+	@endif
 	<div class="form-holder">
-		<div class="box-body table-responsive no-padding">
+		<div class="table-responsive no-padding">
 			<table class="table table-hover table-bordered">
 				<tr>
 					<th>START</th>
 					<th>END</th>
-					<th>AMOUNT</th>
+					<th>ACTION</th>
 				</tr>
-				@foreach($start[$ref] as $key=>$start)
+				@foreach($_payment_breakdown as $key=>$payment_breakdown)
 				<tr>
-					<td>{{date("F j, Y",strtotime($start))}}</td>
-					<td>{{date("F j, Y",strtotime($end[$ref][$key]))}}</td>
-					<td><span class="label label-success">{{$payment}}</span></td>
+					<td><input type="text" class="form-control date-select cal_payment_start" value="{{$payment_breakdown->cal_payment_start}}"/></td>
+					<td><input type="text" class="form-control date-select cal_payment_end" value="{{$payment_breakdown->cal_payment_end}}"/></td>
+					<td><button type="button" class="btn btn-primary btn-sm update-payment-date" data-cal_payment_id="{{$payment_breakdown->cal_payment_id}}" {{$member_id}}>UPDATE</button></td>
 				</tr>
 				@endforeach
 			</table>

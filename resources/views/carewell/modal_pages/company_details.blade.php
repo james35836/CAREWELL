@@ -31,10 +31,10 @@ radioClass   : 'iradio_minimal-blue'
 			<input type="text" value="{{$company_details->company_email_address}}" name="company_email_address" id="company_email_address" class="form-control"/>
 		</div>
 		<div class="col-md-2 form-content">
-			<label>Contact Person</label>
+			<label>Tel/Mobile Number</label>
 		</div>
 		<div class="col-md-4 form-content">
-			<input type="text" value="{{$company_details->company_contact_person}}" name="company_contact_person" id="company_contact_person" class="form-control"/>
+			<input type="text" value="{{$company_details->company_contact_number}}" name="company_contact_number" id="company_contact_person" class="form-control"/>
 		</div>
 	</div>
 	<div class="form-holder">
@@ -46,26 +46,34 @@ radioClass   : 'iradio_minimal-blue'
 		</div>
 		
 	</div>
-	<div class="form-holder ">
-		<div class="col-md-2 form-content">
-			<label>Contact Number</label>
+	<div class="form-holder">
+			<div class="col-md-2 form-content">
+				<label>Contact Person(1)</label>
+			</div>
+			<div class="col-md-4 form-content">
+				<input type="text" value="{{$company_details->contact_person_name}}" name="contact_person_name" id="contact_person_name" class="form-control" placeholder="NAME"/>
+			</div>
+			<div class="col-md-2 form-content">
+				<input type="text" value="{{$company_details->contact_person_position}}" name="contact_person_position" id="contact_person_position" class="form-control" placeholder="POSITION"/>
+			</div>
+			<div class="col-md-4 form-content">
+				<input type="text" value="{{$company_details->contact_person_number}}" name="contact_person_number" id="contact_person_number" class="form-control" placeholder="CONTACT NUMBER"/>
+			</div>
 		</div>
-		
-		<div class="col-md-10 contact-number-form">
-			<table class="table table-bordered">
-				
-				<tbody>
-					@foreach($_company_number as $company_number)
-					<tr>
-						<td><input type="text" value="{{$company_number->company_number}}" name="company_number[]" id="company_number" class="form-control"/></td>
-					</tr>
-					@endforeach
-				</tbody>
-			</table>
-			
+		<div class="form-holder">
+			<div class="col-md-2 form-content">
+				<label>Contact Person(2)</label>
+			</div>
+			<div class="col-md-4 form-content">
+				<input type="text" value="{{$company_details->contact_person_names}}" name="contact_person_names" id="contact_person_names" class="form-control" placeholder="NAME"/>
+			</div>
+			<div class="col-md-2 form-content">
+				<input type="text" value="{{$company_details->contact_person_positions}}" name="contact_person_positions" id="contact_person_positions" class="form-control" placeholder="POSITION"/>
+			</div>
+			<div class="col-md-4 form-content">
+				<input type="text" value="{{$company_details->contact_person_numbers}}" name="contact_person_numbers" id="contact_person_numbers" class="form-control" placeholder="CONTACT NUMBER"/>
+			</div>
 		</div>
-		
-	</div>
 </div>
 <div class="row box-globals" >
 	<div class="nav-tabs-custom">

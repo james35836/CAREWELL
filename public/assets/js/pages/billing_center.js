@@ -31,8 +31,60 @@ function billing_center()
 			cal_pending_confirm();
 			cal_pending_submit();
 			payment_breakdown();
+			payment_breakdown_update();
+			last_ten_payments();
 		});
 
+	}
+	function last_ten_payments()
+	{
+		
+		$("body").on('click','.last-ten-payments',function()
+		{
+			
+			var member_id 	    = $(this).data('member_id');
+			var modalName     	= 'LAST TEN PAYMENT';
+			var modalClass    	= 'ten-payments';
+			var modalLink     	= '/billing/last_ten_payments/'+member_id;
+			var modalActionName	= 'OK';
+			var modalAction   	=  '';
+			var modalSize     	= 'modal-mdsm';
+			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
+		});
+	}
+	function payment_breakdown_update()
+	{
+		$("body").on('click','.update-payment-date',function()
+		{
+			var updatePayment = new FormData();
+
+			updatePayment.append("cal_payment_id", 	 $(this).data('cal_payment_id'));
+			updatePayment.append("cal_payment_start",$(this).closest('tr').find('.cal_payment_start').val());
+			updatePayment.append("cal_payment_end",  $(this).closest('tr').find('.cal_payment_end').val());
+			
+            ajaxData.this = $(this);
+			$(this).html('<i class="fa fa-spinner fa-pulse fa-fw"></i>');
+
+            
+            $.ajax({
+				headers: {
+				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				},
+				url:'/billing/payment_breakdown/update_payment_date',
+				method: "POST",
+	            data: updatePayment,
+	            contentType:false,
+	            cache:false,
+	            processData:false,
+	            success: function(data)
+				{
+					setTimeout(function()
+					{
+					   ajaxData.this.html('<i class="fa fa-'+data+' "></i>');
+					}, 1000);
+				}
+			});
+		});
 	}
 	function payment_breakdown()
 	{

@@ -146,7 +146,7 @@ function globals()
 						{
 							$('.global-modal-footer').show().removeClass().addClass('modal-footer '+modalClass+'-modal-footer');
                     		$('.global-footer-button').html(modalActionName).removeClass().addClass('btn btn-primary '+modalAction+'');
-                        }
+                    	}
 					 }, 800);
 				}
 			});
@@ -412,9 +412,12 @@ function globals()
 
         filtering();
         searching();
+
+        
         
         
 	}
+	
 	function filtering()
 	{
 		$('body').on('change','.filtering',function()
@@ -604,7 +607,7 @@ function globals()
 	
 	function table_sorter()
 	{
-		$('body').on('click','th',function()
+		$('body').on('click','th.live-search',function()
 		{
 			var table = $(this).parents('table').eq(0)
 		    var rows = table.find('tr:gt(0)').toArray().sort(comparer($(this).index()))
@@ -630,11 +633,14 @@ function globals()
 		$('body').on("click",".add-row", function()
 		{
 
-			var j = $(this).data('number');
-			var nj = j+1;
+			var j      = $(this).data('number');
+
+			var nj     = j+1;
+			
 			var $table = $(this).closest('table');
-			$nrow = $table.find('tr:eq('+j+')').clone().appendTo($table);
-			$nrow.find('button.add-row').attr('data-number', nj);
+			var number = $table.find('tr:last').find('button.remove-row').data('number');
+			$nrow      = $table.find('tr:eq(2)').clone().appendTo($table);
+			$nrow.find('button.remove-row').attr('data-number', number+1);
 
 			
 		});
@@ -644,8 +650,7 @@ function globals()
 			var $table = $(this).closest('table');
 			var count  = $table.find('tr.table-row').length;
 			var $tr 	= $(this).closest('tr');
-			var number  = $tr.find('button.add-row').data('number');
-			alert(number);
+			var number  = $(this).data('number');
 			if(count==1)
 			{
 				toastr.error('You cannot remove all rows.', 'Something went wrong!', {timeOut: 3000})

@@ -24,15 +24,20 @@ function company_center()
 
 	function create_company()
 	{
+		$('body').on('click','.prompt-modal',function()
+		{
+			$('.alert-modal').modal('show');
+        });
 		$("body").on('click','.create-company',function()
 		{
-			var company_id = $(this).data('company_id');
-			var modalName= 'CREATE COMPANY';
-			var modalClass='company';
-			var modalLink='/company/create_company';
-			var modalActionName='CREATE COMPANY';
-			var modalAction='create-company-confirm';
-			var modalSize = 'modal-lg';
+			$('.alert-modal').remove();
+			var company_id     = $(this).data('company_id');
+			var modalName      = 'CREATE COMPANY';
+			var modalClass     = 'company';
+			var modalLink      = '/company/create_company';
+			var modalActionName= 'CREATE COMPANY';
+			var modalAction    = 'create-company-confirm';
+			var modalSize      = 'modal-lg';
 			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
 		});
 		
@@ -42,13 +47,7 @@ function company_center()
 		$(document).on('click','.create-company-confirm',function() 
 		{
 			
-            $('input[name="company_number[]"]').each(function(i, num)
-            {
-            	if($(num).val()!="")
-            	{
-            		contactData.push(this.value);
-            	}
-            });
+            
 
             var countContract = document.getElementById('contract_image_name').files.length;
             var countBenefits = document.getElementById('contract_benefits_name').files.length;
@@ -73,16 +72,13 @@ function company_center()
             
             if(globals.checking_null_validation(document.getElementById('company_name').value,"COMPANY NAME")=="")
 			{}	
-		    else if(globals.checking_null_validation(document.getElementById('company_contact_person').value,"COMPANY CONTACT PERSON")=="")
+		    else if(globals.checking_null_validation(document.getElementById('company_contact_number').value,"COMPANY CONTACT PERSON")=="")
 			{}
 			else if(globals.checking_null_validation(document.getElementById('company_email_address').value,"COMPANY EMAIL ADDRESS")=="")
 			{}	
 			else if(globals.checking_null_validation(document.getElementById('company_address').value,"COMPANY ADDRESS")=="")
 			{}
-			else if(contactData==null||contactData=="")
-			{
-				globals.global_tostr('CONTACT NUMBER');
-			}
+			
 			else if(countContract == 0)
 			{
 				globals.global_tostr('CONTACT IMAGE');
@@ -102,14 +98,22 @@ function company_center()
 			
 			else
 			{
-				var	confirmModalMessage = 'Are you sure you want to add this company?';
-				var confirmModalAction = 'create-company-submit';
+				var	confirmModalMessage  = 'Are you sure you want to add this company?';
+				var confirmModalAction   = 'create-company-submit';
 				globals.confirm_modals(confirmModalMessage,confirmModalAction);
 				
 				companyData.append("company_name", 				document.getElementById('company_name').value);
 	            companyData.append("company_email_address", 	document.getElementById('company_email_address').value);
-	            companyData.append("company_contact_person", 	document.getElementById('company_contact_person').value);
+	            companyData.append("company_contact_number", 	document.getElementById('company_contact_number').value);
 	            companyData.append("company_address", 			document.getElementById('company_address').value);
+                
+                companyData.append("contact_person_name", 		document.getElementById('contact_person_name').value);
+	            companyData.append("contact_person_position", 	document.getElementById('contact_person_position').value);
+	            companyData.append("contact_person_number", 	document.getElementById('contact_person_number').value);
+
+	            companyData.append("contact_person_names", 		document.getElementById('contact_person_names').value);
+	            companyData.append("contact_person_positions", 	document.getElementById('contact_person_positions').value);
+	            companyData.append("contact_person_numbers", 	document.getElementById('contact_person_numbers').value);
 
 	            for (var i = 0; i < contactData.length; i++) 
 				{
@@ -147,13 +151,13 @@ function company_center()
 	{
 		$('body').on('click','.view-company-details',function() 
 		{
-			var company_id = $(this).data('company_id');
-			var modalName= 'COMPANY DETAILS';
-			var modalClass='company-details';
-			var modalLink='/company/company_details/'+company_id;
-			var modalActionName='SAVE CHANGES';
-			var modalAction='create-company-confirm';
-			var modalSize = 'modal-lg';
+			var company_id      = $(this).data('company_id');
+			var modalName       = 'COMPANY DETAILS';
+			var modalClass      ='company-details';
+			var modalLink       ='/company/company_details/'+company_id;
+			var modalActionName ='SAVE CHANGES';
+			var modalAction     ='create-company-confirm';
+			var modalSize       = 'modal-lg';
 			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
 		});
 	}

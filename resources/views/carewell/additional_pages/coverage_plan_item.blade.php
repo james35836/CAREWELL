@@ -24,6 +24,7 @@
 <form method="POST">
   <input type="hidden" id="availment_id" value="{{$availment_id}}"/>
   <input type="hidden" id="session_name" value="{{$session_name}}"/>
+  <input type="hidden" id="identifier" value="{{$identifier}}"/>
   <div class="row">
     <div  class="table-responsive no-padding">
       <table class="table table-bordered" >
@@ -94,7 +95,7 @@
                 @else
                 <tr class="table-row">
                   <td>
-                    <input type="checkbox" name="coverage_item[]" value="{{$laboratory->procedure_id}}"/>
+                    <input type="checkbox" name="coverage_item[]" value="{{$laboratory->procedure_id}}" {{$laboratory->labs}}/>
                   </td>
                   <td class="procedure">{{$laboratory->procedure_name}}</td>
                 </tr>
