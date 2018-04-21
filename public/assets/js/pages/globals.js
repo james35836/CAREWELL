@@ -51,7 +51,7 @@ var deploymentData	= [];
 var data            = "";
 var link            = "";
 
-var successButton	= '<button type="button" class="btn btn-default pull-left reload-btn" data-dismiss="modal">RELOAD</button>';
+var successButton	= '<button type="button" class="btn btn-default pull-right reload-btn" data-dismiss="modal">RELOAD</button><button type="button" class="btn btn-default pull-left" data-dismiss="modal">CLOSE</button>';
 
 var confirmModals 			= '<div  class="modal fade modal-top confirm-modal" id="" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">'
 						  +'<div class="confirm-modal-dialog modal-dialog modal-sm">'
@@ -95,13 +95,10 @@ var globalModals = '<div class="modal fade modal-top global-modal">'+
 		            '</div>'+
 		          '</div>'+
 		        '</div>';
-var dataOptionModals = '<div class="row box-globals">'+
+var dataOptionModals = '<div class="row">'+
 							'<div class="row form-holder ">'+
-								'<div class="col-md-4 form-content">'+
-									'<label>OPTION NAME</label>'+
-								'</div>'+
-								'<div class="col-md-8 form-content">'+
-									'<input type="text" id="new-option-name" class="form-control new-option-name">'+
+								'<div class="col-md-12 form-content">'+
+									'<input type="number" id="new-option-name" class="form-control new-option-name">'+
 								'</div>'+
 							'</div>'+
 						'</div>';
@@ -365,10 +362,10 @@ function globals()
 		$('.'+modalClass).remove();
         $(".append-modal").append(globalModals);
 		$('.global-modal').removeClass().addClass('modal fade modal-top '+modalClass);
-		$('.global-modal-dialog').removeClass().addClass('modal-dialog modal-'+modalClass);
+		$('.global-modal-dialog').removeClass().addClass('modal-dialog modal-sm');
 		$('.global-modal-content').removeClass().addClass('modal-content');
 		$('.global-modal-header').removeClass().addClass('modal-header');
-		$('.global-modal-title').html('ADD NEW OPTION');
+		$('.global-modal-title').html('NEW OPTION');
 		$('.global-modal-title').removeClass().addClass('modal-title second');
 		$('.global-modal-body').removeClass().addClass('modal-body');
 		$('.'+modalClass).modal('show');

@@ -114,7 +114,7 @@ class AdminController extends ActiveAuthController
       $userInfoData->user_gender          = $request->user_gender;
       $userInfoData->user_birthdate       = $request->user_birthdate;
       $userInfoData->user_contact_number  = $request->user_contact_number;
-      $userInfoData->user_number          = StaticFunctionController::updateReferenceNumber('user');
+      $userInfoData->user_number          = $request->user_id_number;
       $userInfoData->user_address         = $request->user_address;
       $userInfoData->user_created         = Carbon::now();
       $userInfoData->user_id              = $userData->user_id;

@@ -8,33 +8,19 @@
         @endforeach
       </select>
     </div>
-    <div class="col-md-6">
-      <select name=""  class="form-control import-element import-number-select" id="numRows">
-        <option>SELECT NUMBER ROWS</option>
-        <option >5</option>
-        <option >10</option>
-        <option >20</option>
-        <option >30</option>
-        <option >40</option>
-        <option >50</option>
-        <option >60</option>
-        <option >70</option>
-        <option >80</option>
-        <option >90</option>
-        <option >100</option>
-        <option >110</option>
-        <option >120</option>
-        <option >130</option>
-        <option >140</option>
-        <option >150</option>
-        <option >160</option>
-        <option >170</option>
-        <option >180</option>
-        <option >190</option>
-        <option >200</option>
-        <option >210</option>
-        <option >220</option>
-      </select>
+    <div class="col-md-6 ">
+      <div class="input-group import-element">
+          <select class="form-control " name=" import-number-select" id="import-element import-number-select">
+            <option>100</option>
+            <option>200</option>
+            <option>300</option>
+            <option>400</option>
+          </select>
+          <span class="input-group-btn">
+            <button class="btn btn-secondary add-option" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span></button>
+          </span>
+        </div>
+      
     </div>
   </div>
   <div class="row menu-content">

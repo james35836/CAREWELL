@@ -102,10 +102,10 @@
 			<div class="col-md-4 form-content">
 				<div class="input-group">
 					<select class="form-control " name="coverage_plan_annual_benefit" id="coverage_plan_annual_benefit">
-						<option>10,000</option>
-						<option>20,000</option>
-						<option>30,000</option>
-						<option>40,000</option>
+						<option value="10000">10,000</option>
+						<option value="20000">20,000</option>
+						<option value="30000">30,000</option>
+						<option value="40000">40,000</option>
 					</select>
 					<span class="input-group-btn">
 						<button class="btn btn-secondary add-option" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span></button>
@@ -118,10 +118,10 @@
 			<div class="col-md-4 form-content">
 				<div class="input-group">
 					<select class="form-control " name="coverage_plan_maximum_benefit" id="coverage_plan_maximum_benefit">
-						<option>10,000</option>
-						<option>20,000</option>
-						<option>30,000</option>
-						<option>40,000</option>
+						<option value="10000">10,000</option>
+						<option value="20000">20,000</option>
+						<option value="30000">30,000</option>
+						<option value="40000">40,000</option>
 					</select>
 					<span class="input-group-btn">
 						<button class="btn btn-secondary add-option" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span></button>
