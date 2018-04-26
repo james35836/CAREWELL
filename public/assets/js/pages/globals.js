@@ -647,7 +647,7 @@ function globals()
 			}
 			else
 			{
-				$nrow  = $table.find('tr:eq(2)').clone().appendTo($table);
+				$nrow  = $table.find('tr:eq(2)').clone().appendTo($table).find('.countThis').val('0 ITEMS');
 			}
 			
 			$nrow.find('button.remove-row').attr('data-number', number+1);
