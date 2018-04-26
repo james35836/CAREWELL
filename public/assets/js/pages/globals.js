@@ -656,8 +656,8 @@ function globals()
 
 		$('body').on("click",".remove-row", function()
 		{
-			var $table = $(this).closest('table');
-			var count  = $table.find('tr.table-row').length;
+			var $table  = $(this).closest('table');
+			var count   = $table.find('tr.table-row').length;
 			var $tr 	= $(this).closest('tr');
 			var number  = $(this).data('number');
 			if(count==1)
