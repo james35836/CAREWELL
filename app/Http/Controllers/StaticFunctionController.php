@@ -184,6 +184,7 @@ class StaticFunctionController extends Controller
 
     return $universal_id;
   }
+
   public static function generateCarewellId($company_code)
   {
     $member_company_count = TblMemberCompanyModel::count();
@@ -521,8 +522,6 @@ class StaticFunctionController extends Controller
     $companyData        = TblCompanyModel::join('tbl_cal','tbl_cal.company_id','=','tbl_company.company_id')
                         ->where('tbl_cal.cal_id',$cal_id)
                         ->first();
-
-    
     foreach($data['new_member'] as $new_member)
     {
 
@@ -574,9 +573,6 @@ class StaticFunctionController extends Controller
         $checkCal     = TblCalMemberModel::CalMemberExist($member_id,$companyData->cal_id)->first();
         $member_data  = TblMemberCompanyModel::where('member_id',$member_id)->where('archived',0)->first();
         $last_payment = TblCalMemberModel::where('member_id',$member_id)->orderBy('cal_payment_end','DESC')->first();
-
-
-
         if(count($last_payment)!=0)
         {
           $payment_date = $last_payment->cal_payment_end;
@@ -606,17 +602,31 @@ class StaticFunctionController extends Controller
   public static function getModeOfPayment($member_id,$cal_member_id,$premium,$payment_count,$cal_id)
   {
     $cal              = TblCalModel::where('cal_id',$cal_id)->first();
-    
+    $payment          = TblCalPaymentModel::where('member_id',$member_id)->orderBy('cal_payment_end','DESC')->first();
     for($i = 1; $i<=$payment_count;  $i++)
     {
+
       if($i==1)
       {
-        $member_cut['cal_payment_start']  = $cal->cal_payment_start;
-        $member_cut['cal_payment_end']    = $cal->cal_payment_end;
-        $member_cut['cal_payment_type']   = 'ORIGINAL';
-        $member_cut['cal_member_id']      = $cal_member_id;
-        $member_cut['member_id']          = $member_id;
-        TblCalPaymentModel::insert($member_cut);
+        if(strtotime($payment->cal_last_payment) >= strtotime($cal->cal_payment_start))
+        {
+          $member_cut['cal_payment_start']  = 'start';
+          $member_cut['cal_payment_end']    = 'end';
+          $member_cut['cal_payment_type']   = 'ORIGINAL';
+          $member_cut['cal_member_id']      = $cal_member_id;
+          $member_cut['member_id']          = $member_id;
+          TblCalPaymentModel::insert($member_cut);
+        }
+        else
+        {
+          $member_cut['cal_payment_start']  = $cal->cal_payment_start;
+          $member_cut['cal_payment_end']    = $cal->cal_payment_end;
+          $member_cut['cal_payment_type']   = 'ORIGINAL';
+          $member_cut['cal_member_id']      = $cal_member_id;
+          $member_cut['member_id']          = $member_id;
+          TblCalPaymentModel::insert($member_cut);
+        }
+        
       }
       else
       {
@@ -630,6 +640,25 @@ class StaticFunctionController extends Controller
 
     }
     return 0;
+  }
+  public static function checkIfMemberCanAvailed($payment_mode,$last_payment)
+  {
+    $date       = date('Y-m-d');
+    $last_date  = $last_payment;
+    $day        = date('d',strtotime($last_payment));
+    if($payment_mode=="SEMI-MONTHLY")
+    {
+      if( $day <= 15)
+      {
+        $new_date = date('Y-m-t', strtotime($last_payment) );
+      }
+      else
+      {
+        $new_date = date('Y-m-15', strtotime($last_payment . "+1 months"));
+      }
+    }
+    return $new_date;
+
   }
   public static function getExportWarning()
   {

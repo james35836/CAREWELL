@@ -13,9 +13,8 @@ class TblApprovalDoctorModel extends Model
     public function scopeApprovalDoctor($query)
     {
     	$query	->join('tbl_doctor_procedure','tbl_doctor_procedure.doctor_procedure_id','=','tbl_approval_doctor.doctor_procedure_id')
-              	->join('tbl_doctor','tbl_doctor.doctor_id','=','tbl_approval_doctor.doctor_id')
-              	->join('tbl_specialization','tbl_specialization.specialization_id','=','tbl_approval_doctor.specialization_id');
-    	return $query;
+              	->join('tbl_doctor','tbl_doctor.doctor_id','=','tbl_approval_doctor.doctor_id');
+        return $query;
     }
 }
 

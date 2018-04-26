@@ -117,7 +117,7 @@ function provider_center()
 	{
 		$('body').on('click','.import-provider-confirm',function()
 		{
-			if(document.getElementById('importProviderFile').files.length==0)
+			if(document.getElementById('importProviderFile').files.length!=0)
 			{
 				var	confirmModalMessage = 'Are you sure you want to import this file?';
 				var confirmModalAction = 'import-provider-submit';

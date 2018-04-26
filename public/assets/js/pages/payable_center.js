@@ -39,7 +39,28 @@ function payable_center()
     }
 	function create_payable()
 	{
+        $('body').on('click','.pagination_button',function() 
+		{
+			
+			$.ajax({
+				headers: {
+				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				},
+				url:'/payable/create_payable',
+				method: "get",
+                success: function(data)
+				{
+					setTimeout(function()
+					{
+						$('.global-ajax-loader').hide().removeClass().addClass('.modal-loader payable-ajax-loader');
+						$('.global-modal-body-content').show().removeClass().addClass('row box-holder  modal-body-content').html(data);
+						$('.global-modal-footer').show().removeClass().addClass('modal-footer payable-modal-footer');
+                    	$('.global-footer-button').html('CREATE PAYABLE').removeClass().addClass('btn btn-primary create-payable-confirm');
+                    }, 1000);
+				}
+			});
 
+		});
 		$('body').on('click','.create-payable',function() 
 		{
 			$('.payable-modal').remove();

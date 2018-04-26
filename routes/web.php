@@ -139,8 +139,6 @@ Route::post('/billing/payment_breakdown/update_payment_date', 	'CarewellControll
 Route::get('/billing/last_ten_payments/{member_id}', 	'CarewellController@billing_last_ten_payments');
 
 
-Route::get('/billing/billing/statement', 			    'CarewellController@billing_billing_statement');
-
 Route::post('/billing/cal_member/remove', 				'CarewellController@billing_cal_member_remove');
 
 Route::post('/billing/cal_pending_submit', 				'CarewellController@billing_cal_pending_submit');
@@ -156,8 +154,6 @@ Route::post('/billing/cal_close/sumbit',				'CarewellController@billing_cal_clos
 Route::get('/availment', 									'CarewellController@availment');
 Route::get('/availment/create_approval', 					'CarewellController@availment_create_approval');
 Route::post('/availment/get_member_info',		'CarewellController@availment_get_member_info');
-Route::get('/availment/get_member_procedure/{availment_id}','CarewellController@availment_get_member_procedure');
-Route::get('/availment/get_provider_doctor/{provider_id}','CarewellController@availment_get_provider_doctor');
 Route::post('/availment/create_approval/submit',			'CarewellController@availment_create_approval_submit');
 Route::get('/availment/approval_details/{approval_id}','CarewellController@availment_view_approval_details');
 

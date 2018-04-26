@@ -357,7 +357,7 @@ function globals()
 			}
 		});
 	}
-	this.option_modal  = function(modalClass,modalAction)
+	this.option_modal  = function(modalClass,modalAction,modalRef)
 	{
 		$('.'+modalClass).remove();
         $(".append-modal").append(globalModals);
@@ -376,7 +376,14 @@ function globals()
 		{
 
 			$('.global-ajax-loader').hide().removeClass().addClass('.modal-loader');
-			$('.global-modal-body-content').show().removeClass().addClass('row box-holder  modal-body-content').html(dataOptionModals);
+			if(modalRef=='string')
+			{
+				$('.global-modal-body-content').show().removeClass().addClass('row box-holder  modal-body-content').html(dataOptionModals).find('.new-option-name').attr('type','text');
+			}
+			else
+			{
+				$('.global-modal-body-content').show().removeClass().addClass('row box-holder  modal-body-content').html(dataOptionModals);
+			}
 			$('.global-modal-footer').show().removeClass().addClass('modal-footer');
         	$('.global-footer-button').html('ADD OPTION').removeClass().addClass('btn btn-primary '+modalAction);
         }, 1000);
@@ -580,7 +587,8 @@ function globals()
 		$('body').on('click','.add-option',function () 
 		{
 			ajaxData.newOption = $(this).closest('div').find('select');
-			globals.option_modal('add-option1','add-option-submit');
+			var modalRef       = $(this).data('ref');
+			globals.option_modal('add-option1','add-option-submit',modalRef);
 		});
 		$('body').on('click','.add-option-submit',function () 
 		{
@@ -629,17 +637,21 @@ function globals()
 	{
 		$('body').on("click",".add-row", function()
 		{
-
 			var j      = $(this).data('number');
-
 			var nj     = j+1;
-			
 			var $table = $(this).closest('table');
 			var number = $table.find('tr:last').find('button.remove-row').data('number');
-			$nrow      = $table.find('tr:eq(2)').clone().appendTo($table);
-			$nrow.find('button.remove-row').attr('data-number', number+1);
-
+			if($(this).data('ref')=='first')
+			{
+				$nrow  = $table.find('tr:eq(1)').clone().appendTo($table);
+			}
+			else
+			{
+				$nrow  = $table.find('tr:eq(2)').clone().appendTo($table);
+			}
 			
+			$nrow.find('button.remove-row').attr('data-number', number+1);
+		
 		});
 
 		$('body').on("click",".remove-row", function()
