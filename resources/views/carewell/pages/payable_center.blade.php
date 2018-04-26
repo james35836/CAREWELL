@@ -35,15 +35,15 @@
           <div class="box-body table-responsive no-padding">
             <table class="table table-hover table-bordered">
               <tr>
-                <th>ID</th>
-                <th>PROVIDER</th>
-                <th>SOA NUMBER</th>
-                <th>DATE RECEIVED</th>
-                <th>DUE DATE</th>
-                <th>APPROVAL NUMBER</th>
-                <th>PREPARED BY</th>
-                <th>PREPARATION DATE</th>
-                <th>ACTION</th>
+                <th class="live-search">ID</th>
+                <th class="live-search">PROVIDER</th>
+                <th class="live-search">SOA NUMBER</th>
+                <th class="live-search">DATE RECEIVED</th>
+                <th class="live-search">DUE DATE</th>
+                <th class="live-search">APPROVAL NUMBER</th>
+                <th class="live-search">PREPARED BY</th>
+                <th class="live-search">PREPARATION DATE</th>
+                <th class="live-search">ACTION</th>
               </tr>
               @foreach($_payable_open as $payable)
               <tr>
@@ -98,19 +98,19 @@
                     </div>
                   </div>
                 </div>
-              </div>
+              </div><button class="pagination_button" data-link="/provider?page=3">click</button>
               <div class="box-body table-responsive no-padding">
                 <table class="table table-hover table-bordered">
                   <tr>
-                    <th>ID</th>
-                    <th>PROVIDER</th>
-                    <th>SOA NUMBER</th>
-                    <th>DATE RECEIVED</th>
-                    <th>DUE DATE</th>
-                    <th>APPROVAL NUMBER</th>
-                    <th>PREPARED BY</th>
-                    <th>PREPARATION DATE</th>
-                    <th>ACTION</th>
+                    <th class="live-search">ID</th>
+                    <th class="live-search">PROVIDER</th>
+                    <th class="live-search">SOA NUMBER</th>
+                    <th class="live-search">DATE RECEIVED</th>
+                    <th class="live-search">DUE DATE</th>
+                    <th class="live-search">APPROVAL NUMBER</th>
+                    <th class="live-search">PREPARED BY</th>
+                    <th class="live-search">PREPARATION DATE</th>
+                    <th class="live-search">ACTION</th>
                   </tr>
                   @foreach($_payable_close as $payable)
                   <tr>

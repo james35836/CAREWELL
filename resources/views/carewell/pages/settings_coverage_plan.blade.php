@@ -32,7 +32,7 @@
                 <th>PLAN NAME</th>
                 <th>PLAN MBL</th>
                 <th>PLAN ABL</th>
-                <th>PLAN CASE HANDLING</th>
+                <th>PLAN HANDLING FEE</th>
                 <th>PLAN PRE-EXISTING</th>
                 <th>PLAN PREMIUM</th>
                 <th>PLAN ADDED</th>

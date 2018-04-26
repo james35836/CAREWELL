@@ -16,8 +16,7 @@ function availment_center()
 	{
 		$(document).ready(function()
 		{
-			
-            create_approval();
+			create_approval();
             create_approval_get_info();
             create_approval_confirm();
             create_approval_submit();
@@ -28,10 +27,10 @@ function availment_center()
 	}
 	this.get_total = function($this)
 	{
-		var amount = 0;
-		var philhealth = 0;
-		var patient = 0;
-		var carewell = 0;
+		var amount 		= 0;
+		var philhealth 	= 0;
+		var patient 	= 0;
+		var carewell 	= 0;
 		$this.find('.gross-amount').each(function() 
 		{
 			amount += Number($(this).val());
@@ -173,11 +172,7 @@ function availment_center()
 			
 		});
 
-		$('body').on('change','.doctorList',function() 
-		{
-			var doctor_id 	= $(this).val();
-			globals.get_information('/get/doctor_specialty',doctor_id,'.doctor-specialty','html');
-		});
+		
 
 		
 

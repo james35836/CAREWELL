@@ -39,10 +39,11 @@ class FrontController extends Controller
       {
         if(Crypt::decrypt($validate_login->user_password)==$password)
         {
-          Session::put('active','active_user_login');
-          Session::put('user_id',$validate_login->user_id);
           if($validate_login->archived==0)
           {
+            Session::put('active','active_user_login');
+            Session::put('user_id',$validate_login->user_id);
+            
             return Redirect::to('/dashboard');
           }
           else
