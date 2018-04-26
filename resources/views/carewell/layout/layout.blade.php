@@ -41,7 +41,7 @@
     <style>
       input
       {
-        text-transform: capitalize !important;
+        text-transform: capitalize ;
       }
       .transform-capitalize
       {

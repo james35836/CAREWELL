@@ -50,7 +50,6 @@
                   <th>PROVIDER</th>
                   <th>NAME</th>
                   <th>DATE ADDED</th>
-                  <th>STATUS</th>
                   <th>ACTION</th>
                 </tr>
                 @foreach($_doctor_active as $doctor_active)
@@ -63,9 +62,6 @@
                   </td>
                   <td>{{$doctor_active->doctor_full_name}}</td>
                   <td>{{date("F j, Y",strtotime($doctor_active->doctor_created))}}</td>
-                  <td>
-                    <span class="label label-success">active</span>
-                  </td>
                   <td>
                     <div class="btn-group">
                       <button type="button" class="btn btn-danger">Action</button>

@@ -128,7 +128,7 @@ class StaticFunctionController extends Controller
         $data['_provider_doctors'] = '<option>-SELECT DOCTOR-';
         foreach($data['_provider_doctor'] as $provider_doctor)
         {
-            $data['_provider_doctors']     .= '<option value='.$provider_doctor->doctor_id.'>'.$provider_doctor->doctor_first_name." ".$provider_doctor->doctor_last_name;
+            $data['_provider_doctors']     .= '<option value='.$provider_doctor->doctor_id.'>'.$provider_doctor->doctor_full_name;
         }
 
         return  response()->json(array('first' => $data['_provider_doctors'],'second'=>$provider->provider_rvs,'third'=>$provider->provider_name));

@@ -1064,12 +1064,12 @@ class CarewellController extends ActiveAuthController
           if($count_doctor == 0 &&StaticFunctionController::getid($data['provider_name'], 'provider') != null )
           {
             $doctor['doctor_number']            =   StaticFunctionController::updateReferenceNumber('doctor');
-            $doctor['doctor_first_name']        =   StaticFunctionController::nullableToString($data['doctor_first_name']);
-            $doctor['doctor_middle_name']       =   StaticFunctionController::nullableToString($data['doctor_middle_name']);
-            $doctor['doctor_last_name']         =   StaticFunctionController::nullableToString($data['doctor_last_name']);
-            $doctor['doctor_gender']            =   StaticFunctionController::nullableToString($data['doctor_gender']);
-            $doctor['doctor_contact_number']    =   StaticFunctionController::nullableToString($data['doctor_contact_number']);
-            $doctor['doctor_email_address']     =   StaticFunctionController::nullableToString($data['doctor_email_address']);
+            $doctor['doctor_first_name']        =   StaticFunctionController::nullableToString(ucwords($data['doctor_first_name']));
+            $doctor['doctor_middle_name']       =   StaticFunctionController::nullableToString(ucwords($data['doctor_middle_name']));
+            $doctor['doctor_last_name']         =   StaticFunctionController::nullableToString(ucwords($data['doctor_last_name']));
+            $doctor['doctor_gender']            =   StaticFunctionController::nullableToString(ucwords($data['doctor_gender']));
+            $doctor['doctor_contact_number']    =   StaticFunctionController::nullableToString(ucwords($data['doctor_contact_number']));
+            $doctor['doctor_email_address']     =   StaticFunctionController::nullableToString(ucwords($data['doctor_email_address']));
             $doctor['doctor_created']           =   Carbon::now();
            
             $doctor_id                          =   TblDoctorModel::insertGetId($doctor);
@@ -1460,11 +1460,11 @@ class CarewellController extends ActiveAuthController
           }
           elseif($checkingNewMember==null)
           {
-            $new_member['member_first_name']            =   StaticFunctionController::nullableToString($data['first_name']);
-            $new_member['member_middle_name']           =   StaticFunctionController::nullableToString($data['middle_name']);
-            $new_member['member_last_name']             =   StaticFunctionController::nullableToString($data['last_name']);
-            $new_member['member_birthdate']             =   StaticFunctionController::nullableToString($data['birthdate']);
-            $new_member['member_payment_mode']          =   StaticFunctionController::nullableToString($data['mode_of_payment']);
+            $new_member['member_first_name']            =   StaticFunctionController::nullableToString(ucwords($data['first_name']));
+            $new_member['member_middle_name']           =   StaticFunctionController::nullableToString(ucwords($data['middle_name']));
+            $new_member['member_last_name']             =   StaticFunctionController::nullableToString(ucwords($data['last_name']));
+            $new_member['member_birthdate']             =   StaticFunctionController::nullableToString(ucwords($data['birthdate']));
+            $new_member['member_payment_mode']          =   StaticFunctionController::nullableToString(ucwords($data['mode_of_payment']));
             $new_member['company_id']                   =   $companyData->company_id;
             $new_member['deployment_id']                =   StaticFunctionController::getid($data['deployment'], 'deployment');
             $new_member['coverage_plan_id']             =   StaticFunctionController::getid($data['coverage_plan'], 'coverage');
@@ -1537,7 +1537,7 @@ class CarewellController extends ActiveAuthController
     $remove = TblCalMemberModel::where('cal_member_id',$request->cal_member_id)->delete();
     if($remove)
     {
-      return '<center><b><span class="color-red">Member successfully removed!</span></b></center>';
+      return '<center><b><span class="color-red">Member Successfully Removed!</span></b></center>';
     }
     else
     {

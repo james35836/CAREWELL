@@ -18,6 +18,7 @@ function company_center()
             create_company_confirm();
             create_company_submit();
             action_view_company_details();
+            save_company_confirm();
 		});
 
 	}
@@ -44,7 +45,7 @@ function company_center()
 	}
 	function create_company_confirm()
 	{
-		$(document).on('click','.create-company-confirm',function() 
+		$('body').on('click','.create-company-confirm',function() 
 		{
 			
             
@@ -156,7 +157,21 @@ function company_center()
 			var modalClass      ='company-details';
 			var modalLink       ='/company/company_details/'+company_id;
 			var modalActionName ='SAVE CHANGES';
-			var modalAction     ='create-company-confirm';
+			var modalAction     ='save-company-confirm';
+			var modalSize       = 'modal-lg';
+			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
+		});
+	}
+	function save_company_confirm()
+	{
+		$('body').on('click','.save-company-confirm',function() 
+		{
+			var company_id      = $(this).data('company_id');
+			var modalName       = 'COMPANY DETAILS';
+			var modalClass      ='company-details';
+			var modalLink       ='/company/company_details/'+company_id;
+			var modalActionName ='SAVE CHANGES';
+			var modalAction     ='save-company-confirm';
 			var modalSize       = 'modal-lg';
 			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
 		});
