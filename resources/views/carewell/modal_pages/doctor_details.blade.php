@@ -30,26 +30,13 @@
 	})
 </script>
 <div class="row box-globals">
+
 	<div class="form-holder">
 		<div class="col-md-2 form-content">
-			<label>Last Name</label>
+			<label>Full Name</label>
 		</div>
 		<div class="col-md-4 form-content">
-			<input type="text" value="{{$doctor_details->doctor_last_name}}"  class="form-control" id="doctor_last_name"/>
-		</div>
-		<div class="col-md-2 form-content">
-			<label>First Name</label>
-		</div>
-		<div class="col-md-4 form-content">
-			<input type="text"  value="{{$doctor_details->doctor_first_name}}" class="form-control" id="doctor_first_name"/>
-		</div>
-	</div>
-	<div class="form-holder">
-		<div class="col-md-2 form-content">
-			<label>Middle Name</label>
-		</div>
-		<div class="col-md-4 form-content">
-			<input type="text"  value="{{$doctor_details->doctor_middle_name}}" class="form-control" id="doctor_middle_name"/>
+			<input type="text"  value="{{$doctor_details->doctor_full_name}}" class="form-control" id="doctor_middle_name"/>
 		</div>
 		<div class="col-md-2 form-content">
 			<label>Gender</label>
@@ -82,44 +69,10 @@
 	<!-- Custom Tabs -->
 	<div class="nav-tabs-custom">
 		<ul class="nav nav-tabs">
-			<li class="active my-tab"><a data-toggle="tab" href="#specialization">SPECIALIZATION</a></li>
-			<li class="my-tab"><a data-toggle="tab" href="#provider">NETWORK PROVIDER</a></li>
+			<li class="active my-tab"><a data-toggle="tab" href="#provider">NETWORK PROVIDER</a></li>
 		</ul>
 		<div class="tab-content" >
-			<div id="specialization" class="row tab-pane fade in active table-min-height" >
-				<div class="box-body table-responsive no-padding">
-					<table class="table table-hover table-bordered specialization-table">
-						<tr>
-							<th>SPECIALIZATION NAME</th>
-							<th></th>
-						</tr>
-						@foreach($_doctor_specialization as $doctor_specialization)
-						<tr class="table-row">
-							<td class="col-md-9">
-								<div class="input-group">
-									<select name="specialization_name[]" class="form-control select2 specialization_name">
-										<option value="{{$doctor_specialization->specialization_id}}">{{$doctor_specialization->specialization_name}}</option>
-										@foreach($_specialization as $specialization)
-										<option value="{{$specialization->specialization_id}}">{{$specialization->specialization_name}}</option>
-										@endforeach
-									</select>
-									<span class="input-group-btn">
-										<button class="btn btn-secondary add-new-option" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span> ADD ITEM</button>
-									</span>
-								</div>
-							</td>
-							<td class="col-md-3 last-td">
-								<div class="btn-group" role="group" aria-label="Basic example">
-									<button type="button" class="btn btn-primary btn-sm add-special"><i class="fa fa-plus-circle"></i></button>
-									<button type="button" class="btn btn-danger btn-sm remove-special"><i class="fa fa-minus-circle"></i></button>
-								</div>
-							</td>
-						</tr>
-						@endforeach
-					</table>
-				</div>
-			</div>
-			<div id="provider" class="row tab-pane fade table-min-height" >
+			<div id="provider"  class="row tab-pane fade in active table-min-height" >
 				<div class="box-body table-responsive no-padding">
 					<table class="table table-hover table-bordered specialization-table">
 						<tr>

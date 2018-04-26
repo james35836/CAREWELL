@@ -38,7 +38,6 @@
               <tr>
                 <th>PROVIDER NUMBER</th>
                 <th>PROVIDER NAME</th>
-                <th>PAYEE</th>
                 <th>DATE ADDED</th>
                 <th>ACTION</th>
               </tr>
@@ -46,11 +45,6 @@
               <tr>
                 <td>{{sprintf("%05d",$provider_active->provider_id)}}</td>
                 <td>{{$provider_active->provider_name}}</td>
-                <td>
-                  @foreach($provider_active->provider_payee as $payee)
-                  <span class="label label-default">{{$payee->provider_payee_name}}</span>
-                  @endforeach
-                </td>
                 <td>{{date("F j, Y",strtotime($provider_active->provider_created))}}</td>
                 <td>
                   <div class="btn-group">
@@ -91,7 +85,6 @@
               <tr>
                 <th>PROVIDER NUMBER</th>
                 <th>PROVIDER NAME</th>
-                <th>PAYEE</th>
                 <th>DATE ADDED</th>
                 <th>ACTION</th>
               </tr>
@@ -99,11 +92,6 @@
               <tr>
                 <td>{{sprintf("%05d",$provider_inactive->provider_id)}}</td>
                 <td>{{$provider_inactive->provider_name}}</td>
-                <td>
-                  @foreach($provider_inactive->provider_payee as $payee)
-                  <span class="label label-default">{{$payee->provider_payee_name}}</span>
-                  @endforeach
-                </td>
                 <td>{{date("F j, Y",strtotime($provider_inactive->provider_created))}}</td>
                 <td>
                   <div class="btn-group">
