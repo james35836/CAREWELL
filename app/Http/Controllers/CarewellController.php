@@ -706,60 +706,138 @@ class CarewellController extends ActiveAuthController
     $data['_provider_payee'] = TblProviderPayeeModel::where('provider_id',$provider_id)->get();
     $data['provider_details'] = TblProviderModel::where('tbl_provider.provider_id',$provider_id)->first();
     $data['_provider_doctor']  = TblDoctorProviderModel::where('tbl_doctor_provider.provider_id',$provider_id)->DoctorProvider()->get();
-    foreach ($data['_provider_doctor'] as $key => $doctor) 
-    {
-      $data['_provider_doctor'][$key]['doctor_specialization'] =  TblDoctorSpecializationModel::where('doctor_id',$doctor->doctor_id)
-                                                                ->join('tbl_specialization','tbl_specialization.specialization_id','=','tbl_doctor_specialization.specialization_id')
-                                                                ->get();
-    }
+
     return view('carewell.modal_pages.provider_details',$data);
   }
   public function provider_import()
   {
     return view('carewell.modal_pages.provider_import');
   }
+  public static function getIdNorName($name="",$str_param)
+  {
+    $ref = "";
+    $refer = "";
+    switch ($str_param) 
+    {
+      case 'provider':
+        $ref = TblProviderModel::where('provider_name', $name)->value('provider_id');
+        break;
+      case 'doctor':
+        $ref = TblDoctorModel::where('doctor_full_name', $name)->value('doctor_id');
+        break;
+    }
+    if($ref == null||$ref=="")
+    {    
+      $refer = $name;
+    }
+    else
+    {
+      $refer = $ref;
+    }
+  return $refer; 
+  }
+
   public function provider_import_submit(Request $request)
   {
+  // dd(TblDoctorModel::where('doctor_full_name','A Plus HealthCare Medical & Diagnostic Corporation')->count());
     $file   = $request->file('importProviderFile')->getRealPath();
     $_data  = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->all();
     $first  = $_data[0]; 
-    if(isset($first['provider_payee_name'])&&isset($first['provider_name']))
+    if(isset($first['provider_name'])&&isset($first['provider_payee']))
     {
       $count = 0;
       $countPayee = 0;
         foreach($_data as $data)
         {
-          $refNumber = StaticFunctionController::getIdNorName($data['provider_name'],'provider_payee');
-          if($refNumber==$data->provider_name)
+          if($data['provider_name']!=null)
           {
-            $providerData = new TblProviderModel;
-            $providerData->provider_name            = $data['provider_name'];
-            $providerData->provider_rvs             = $data['provider_rvs'];
-            $providerData->provider_contact_person  = "N/A";
-            $providerData->provider_telephone_number= "N/A";
-            $providerData->provider_mobile_number   = "N/A";
-            $providerData->provider_contact_email   = "N/A";
-            $providerData->provider_address         = "N/A";
-            $providerData->provider_created         = Carbon::now();
-            $providerData->save();
-            
-            $providerPayeeData = new TblProviderPayeeModel;
-            $providerPayeeData->provider_payee_name = $data['provider_payee_name'];
-            $providerPayeeData->provider_id = $providerData->provider_id;
-            $providerPayeeData->save();
-            $count++;
-          }
-          else
-          {
-            $providerPayeeData = new TblProviderPayeeModel;
-            $providerPayeeData->provider_payee_name = $data['provider_payee_name'];
-            $providerPayeeData->provider_id = $refNumber;
-            $providerPayeeData->save();
+            $refProviderId = TblProviderModel::where('provider_name', $data['provider_name'])->value('provider_id');
+            $refDoctorId   = TblDoctorModel::where('doctor_full_name', $data['provider_payee'])->value('doctor_id');
 
-            $countPayee++;
-          }
-        }    
+            if($refProviderId==null)
+            {
+              $providerData = new TblProviderModel;
+              $providerData->provider_name            = ucwords($data['provider_name']);
+              $providerData->provider_rvs             = $data['provider_rvs'];
+              $providerData->provider_contact_person  = "N/A";
+              $providerData->provider_telephone_number= "N/A";
+              $providerData->provider_mobile_number   = "N/A";
+              $providerData->provider_contact_email   = "N/A";
+              $providerData->provider_address         = "N/A";
+              $providerData->provider_created         = Carbon::now();
+              $providerData->save();
 
+               $count++;
+
+
+              if ($data['provider_name'] != $data['provider_payee'])
+              {
+                if($refDoctorId==null)
+                {
+                  $providerDoctorData = new TblDoctorModel;
+                  $providerDoctorData->doctor_full_name       = ucwords($data['provider_payee']);
+                  $providerDoctorData->doctor_number          = StaticFunctionController::updateReferenceNumber('doctor');
+                  $providerDoctorData->doctor_gender          = "N/A";
+                  $providerDoctorData->doctor_contact_number  = "N/A";
+                  $providerDoctorData->doctor_email_address   = "N/A";
+                  $providerDoctorData->doctor_created         = Carbon::now();
+                  $providerDoctorData->save();
+
+
+                  $insert['doctor_id'] = $providerDoctorData->doctor_id;
+                  $insert['provider_id'] = $providerData->provider_id;
+                  TblDoctorProviderModel::insert($insert);
+
+                   $countPayee++;
+                }
+                else
+                {
+                  $insert['doctor_id'] = $refDoctorId;
+                  $insert['provider_id'] = $providerData->provider_id;
+                  TblDoctorProviderModel::insert($insert);
+                }
+            }
+
+              // $count++;
+            }
+            else
+            {
+              if ($data['provider_name'] != $data['provider_payee'])
+              {
+                if($refDoctorId==null)
+                {
+                  $providerDoctorData = new TblDoctorModel;
+                  $providerDoctorData->doctor_full_name       = ucwords($data['provider_payee']);
+                  $providerDoctorData->doctor_number          = '1233';
+                  $providerDoctorData->doctor_gender          = "N/A";
+                  $providerDoctorData->doctor_contact_number  = "N/A";
+                  $providerDoctorData->doctor_email_address   = "N/A";
+                  $providerDoctorData->doctor_created         = Carbon::now();
+                  $providerDoctorData->save();
+
+                  $insert['doctor_id']   = $providerDoctorData->doctor_id;
+                  $insert['provider_id'] = $refProviderId;
+                  TblDoctorProviderModel::insert($insert);
+                   $countPayee++;
+                }
+                else
+                {
+                  if(TblDoctorProviderModel::where('doctor_id',$refDoctorId)->where('provider_id',$refProviderId)->count()>=1)
+                    {
+                      //row in tbl_doctor_provider that have $refDoctorId and $repProviderId exist
+                    }
+                    else
+                    {
+                      $insert['doctor_id']   = $refDoctorId;
+                      $insert['provider_id'] = $refProviderId;
+                      TblDoctorProviderModel::insert($insert);
+                    }
+                }
+              }
+            }
+          }            
+        }  
+         
         if($count == 0)
         {
           $message = '<center><b><span class="color-gray">There is nothing to insert</span></b></center>';
