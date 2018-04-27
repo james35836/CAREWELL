@@ -217,7 +217,8 @@ function billing_center()
 				calData.append("company_id", 				document.getElementById('company_id').value);
 	            calData.append("cal_reveneu_period_year", 	document.getElementById('cal_reveneu_period_year').value);
 	            calData.append("cal_payment_mode", 			document.getElementById('cal_payment_mode').value);
-	            
+	            calData.append("cal_payment_start", 		document.getElementById('cal_payment_start').value);
+	            calData.append("cal_payment_end", 			document.getElementById('cal_payment_end').value);
 	            
             }
 			

@@ -13,7 +13,7 @@
 				<label>Email Address</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input style="text-transform:lowercase;" type="text" name="company_email_address" id="company_email_address" class="form-control"/>
+				<input  type="text" name="company_email_address" id="company_email_address" class="form-control lowercase-text"/>
 			</div>
 			<div class="col-md-2 form-content">
 				<label>Tel/Mobile Number</label>

@@ -120,7 +120,7 @@
               @foreach($_complex as $complex)
               <tr class="table-row">
                 <td>
-                  <input type="checkbox" value="{{$complex->procedure_id}}"/>
+                  <input type="checkbox" name="coverage_item[]" value="{{$complex->procedure_id}}"/>
                 </td>
                 <td class="procedure">{{$complex->procedure_name}}</td>
                 

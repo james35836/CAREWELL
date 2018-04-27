@@ -298,6 +298,11 @@ class StaticFunctionController extends Controller
      
     return $refrenceNumber; 
   }
+  public static function  transformText($string)
+  {
+    $result =  ucwords(strtolower($string));
+    return $result;
+  }
   public static function nullableToString($data = null, $output = 'string')
   {
 
@@ -588,14 +593,21 @@ class StaticFunctionController extends Controller
 
       if($i==1)
       {
-        if(strtotime($payment->cal_last_payment) >= strtotime($cal->cal_payment_start))
-        {
-          $member_cut['cal_payment_start']  = 'start';
-          $member_cut['cal_payment_end']    = 'end';
-          $member_cut['cal_payment_type']   = 'ORIGINAL';
-          $member_cut['cal_member_id']      = $cal_member_id;
-          $member_cut['member_id']          = $member_id;
-          TblCalPaymentModel::insert($member_cut);
+        if($payment!=null)
+        {                           
+          if(strtotime($payment->cal_last_payment) >= strtotime($cal->cal_payment_start))
+          {
+            Self::insertMemberPayment($cal_member_id,$member_id);
+          }
+          else
+          {
+            $member_cut['cal_payment_start']  = $cal->cal_payment_start;
+            $member_cut['cal_payment_end']    = $cal->cal_payment_end;
+            $member_cut['cal_payment_type']   = 'ORIGINAL';
+            $member_cut['cal_member_id']      = $cal_member_id;
+            $member_cut['member_id']          = $member_id;
+            TblCalPaymentModel::insert($member_cut);
+          }
         }
         else
         {
@@ -606,29 +618,31 @@ class StaticFunctionController extends Controller
           $member_cut['member_id']          = $member_id;
           TblCalPaymentModel::insert($member_cut);
         }
-        
       }
       else
       {
-        $member_cut['cal_payment_start']  = 'start';
-        $member_cut['cal_payment_end']    = 'end';
-        $member_cut['cal_payment_type']   = 'ORIGINAL';
-        $member_cut['cal_member_id']      = $cal_member_id;
-        $member_cut['member_id']          = $member_id;
-        TblCalPaymentModel::insert($member_cut);
+        Self::insertMemberPayment($cal_member_id,$member_id);
       }
-
     }
     return 0;
   }
+  public static function insertMemberPayment($cal_member_id,$member_id)
+  {
+    $member_cut['cal_payment_start']  = 'start';
+    $member_cut['cal_payment_end']    = 'end';
+    $member_cut['cal_payment_type']   = 'ORIGINAL';
+    $member_cut['cal_member_id']      = $cal_member_id;
+    $member_cut['member_id']          = $member_id;
+    TblCalPaymentModel::insert($member_cut);
+  }
   public static function checkIfMemberCanAvailed($payment_mode,$last_payment)
   {
+
     $date       = date('Y-m-d');
-    $last_date  = $last_payment;
-    $day        = date('d',strtotime($last_payment));
+    $last_date  = date('d',strtotime($last_payment));
     if($payment_mode=="SEMI-MONTHLY")
     {
-      if( $day <= 15)
+      if( $last_date <= 15)
       {
         $new_date = date('Y-m-t', strtotime($last_payment) );
       }
@@ -636,6 +650,22 @@ class StaticFunctionController extends Controller
       {
         $new_date = date('Y-m-15', strtotime($last_payment . "+1 months"));
       }
+    }
+    else if($payment_mode=="MONTHLY")
+    {
+      $new_date = date('Y-m-'.$last_date.'', strtotime($last_payment . "+1 months"));
+    }
+    else if($payment_mode=="QUARTERLY")
+    {
+      $new_date = date('Y-m-'.$last_date.'', strtotime($last_payment . "+3 months"));
+    }
+    else if($payment_mode=="SEMESTRAL")
+    {
+      $new_date = date('Y-m-'.$last_date.'', strtotime($last_payment . "+6 months"));
+    }
+    else if($payment_mode=="ANNUAL")
+    {
+      $new_date = date('Y-m-'.$last_date.'', strtotime($last_payment . "+1 years"));
     }
     return $new_date;
 

@@ -51,6 +51,21 @@ table tr td
 			<input type="text" class="form-control" value="{{$cal_details->cal_reveneu_period_year}}"/>
 		</div>
 	</div>
+	<div class="form-holder">
+		<div class="col-md-3  form-content">
+			<label>PAYMENT START</label>
+		</div>
+		<div class="col-md-3  form-content">
+			<input type="text" class="form-control" value="{{$cal_details->cal_payment_start}}"/>
+		</div>
+		
+		<div class="col-md-3  form-content">
+			<label>PAYMENT END</label>
+		</div>
+		<div class="col-md-3  form-content">
+			<input type="text" class="form-control" value="{{$cal_details->cal_payment_end}}"/>
+		</div>
+	</div>
 </div>
 @if($cal_check==1)
 <div class=" row box-globals">

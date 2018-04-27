@@ -47,6 +47,10 @@
       {
         text-transform: capitalize !important;
       }
+      .lowercase-text
+      {
+        text-transform: lowercase !important;
+      }
     </style>
   </head>
   <body class="hold-transition skin-blue sidebar-collapse sidebar-mini">

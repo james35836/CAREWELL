@@ -172,12 +172,10 @@ function member_center()
 	
 	function export_template()
 	{
-
-		$('body').on('change','.import-number-select',function()
+		$('body').on('change','.import-member-number-select',function()
 		{
 			var company_id = $('.import-member-company-select').val();
 			var number     = $(this).val();
-			
 			if(company_id!='SELECT COMPANY'&&number!='SELECT NUMBER ROWS')
 			{
 				
@@ -188,17 +186,13 @@ function member_center()
 			{
 				document.getElementById('memberDownloadTemplate').disabled= true;
 			}
-			
 		});
 		$('body').on('change','.import-member-company-select',function()
-		{
+		{	
 			var company_id = $(this).val();
-			var number     = $('.import-number-select').val();
-			
-			
+			var number     = $('.import-member-number-select').val();
 			if(number!='SELECT NUMBER ROWS'&&company_id!='SELECT COMPANY')
 			{
-				
 				$('.download-link').attr('href', '/member/download_template/'+company_id+'/'+number);
 				document.getElementById('memberDownloadTemplate').disabled= false;
 			}
@@ -206,7 +200,6 @@ function member_center()
 			{
 				document.getElementById('memberDownloadTemplate').disabled= true;
 			}
-			
 		});
 	}
 	function import_member()
@@ -222,8 +215,7 @@ function member_center()
 			var modalSize = 'modal-import';
 			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
         });
-		
-    }
+	}
     function import_member_confirm()
 	{
 		$('body').on('click','.import-member-confirm',function()
@@ -234,16 +226,13 @@ function member_center()
 
 			memberFileData.append("importMemberFile", 	document.getElementById('importMemberFile').files[0]);
 		});
-		
 	}
-	
 	function import_member_submit()
 	{
 		$('body').on('click','.import-member-submit',function() 
 		{
 			globals.global_submit('member-import','/member/import_member/submit',memberFileData);
         });
-		
 	}
 	function member_adjustment()
 	{
@@ -296,12 +285,9 @@ function member_center()
 	            adjustmentData.append("deployment_id_adjustment", 	document.getElementById('deployment_id_adjustment').value);
 	            adjustmentData.append("employee_number_adjustment", document.getElementById('employee_number_adjustment').value);
 	            adjustmentData.append("member_id_adjustment", 		document.getElementById('member_id_adjustment').value);
-				
 			}
 		
 		});
-		
-
 	}
 	function member_adjustment_submit()
 	{
