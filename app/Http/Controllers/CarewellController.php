@@ -1895,15 +1895,26 @@ class CarewellController extends ActiveAuthController
 
     foreach ($data['_company'] as $key => $company) 
     {
-      $data['_company'][$key]['company_availment']  =  TblCompanyCoveragePlanModel::where('tbl_company_coverage_plan.company_id',$company->company_id)
-                                                    ->where('tbl_availment.availment_parent_id',0)
-                                                    ->join('tbl_coverage_plan','tbl_coverage_plan.coverage_plan_id','=','tbl_company_coverage_plan.coverage_plan_id')
-                                                    ->join('tbl_coverage_plan_tag','tbl_coverage_plan_tag.coverage_plan_id','=','tbl_coverage_plan.coverage_plan_id')
-                                                    ->join('tbl_availment','tbl_availment.availment_id','=','tbl_coverage_plan_tag.availment_id')
-                                                    ->get();
+      $data['_company'][$key]['company_availment']  =  TblAvailmentModel::get();
     }
 
     return view('carewell.pages.reports_availment',$data);
+  }
+  public function reports_breakdown()
+  {
+    $data['page']     = 'Breakdown Reports';
+    $data['_company'] = TblCompanyModel::where('archived',0)->paginate(10);
+    $data['user']     = StaticFunctionController::global();
+
+    return view('carewell.pages.reports_breakdown',$data);
+  }
+  public function reports_consolidation()
+  {
+    $data['page']     = 'Consolidation Reports';
+    $data['_availment'] = TblAvailmentModel::where('availment_parent_id',0)->get();
+    $data['user']     = StaticFunctionController::global();
+
+    return view('carewell.pages.reports_consolidation',$data);
   }
 
 
@@ -1971,7 +1982,6 @@ class CarewellController extends ActiveAuthController
   }
   public static function session_checker($session_name,$identifier)
   {
-    // dd(Session::get($session_name));
     $count = 0;
     foreach(Session::get($session_name) as $keys=>$session_items)
     {
@@ -1994,9 +2004,13 @@ class CarewellController extends ActiveAuthController
     $data['session_name']     =   $session_name;
     $data['identifier']       =   $identifier;
  
-    $data['_laboratory']  =   TblProcedureModel::where('archived',0)->where('type','LABORATORY')->get();
-    $data['_complex']     =   TblProcedureModel::where('archived',0)->where('type','COMPLEX')->get();
-    // dd(Self::session_checker($session_name,$identifier));
+    $data['_laboratory']      =   TblProcedureModel::where('archived',0)->where('type','LABORATORY')->get();
+    $data['_complex']         =   TblProcedureModel::where('archived',0)->where('type','COMPLEX')->get();
+    $data['_cardio']          =   TblProcedureModel::where('archived',0)->where('type','CARDIO')->get();
+    $data['_ctscan']          =   TblProcedureModel::where('archived',0)->where('type','CTSCAN')->get();
+    $data['_icunicu']         =   TblProcedureModel::where('archived',0)->where('type','ICUNICU')->get();
+    $data['_utz']             =   TblProcedureModel::where('archived',0)->where('type','UTZ')->get();
+    $data['_xray']            =   TblProcedureModel::where('archived',0)->where('type','XRAY')->get();
     if(Session::has($session_name))
     {
       $session_checker = Self::session_checker($session_name,$identifier);

@@ -262,7 +262,7 @@ class AdminController extends ActiveAuthController
           if($check==null&&$data['procedure_name']!="")
           {
             $procedureData = new TblProcedureModel;
-            $procedureData->procedure_name           = $data['procedure_name'];
+            $procedureData->procedure_name           = StaticFunctionController::transformText($data['procedure_name']);
             $procedureData->procedure_amount        = "0";
             $procedureData->type                    = $data['type'];
             

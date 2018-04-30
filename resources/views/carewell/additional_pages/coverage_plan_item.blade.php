@@ -72,11 +72,16 @@
   <div class="row">
     <div class="nav-tabs-custom">
       <ul class="nav nav-tabs">
-        <li class="active"><a href="#lab" data-toggle="tab">LABORATORY </a></li>
-        <li><a href="#comp" data-toggle="tab">COMPLEX </a></li>
+        <li class="active"><a href="#labTab" data-toggle="tab">LABORATORY </a></li>
+        <li><a href="#compTab" data-toggle="tab">COMPLEX </a></li>
+        <li><a href="#cardTab" data-toggle="tab">CARDIO </a></li>
+        <li><a href="#ctsTab" data-toggle="tab">CTSCAN </a></li>
+        <li><a href="#icunicuTab" data-toggle="tab">ICU/NICU </a></li>
+        <li><a href="#utzTab" data-toggle="tab">UTZ </a></li>
+        <li><a href="#xrayTab" data-toggle="tab">XRAY </a></li>
       </ul>
       <div class="tab-content">
-        <div class="tab-pane active" id="lab">
+        <div class="tab-pane active" id="labTab">
           <div class="row">
             <div class="col-md-3 col-xs-12 pull-right">
              
@@ -88,7 +93,7 @@
             <table class="table table-bordered laboratory" >
               <tr>
                 <th class="col-md-1"><input type="checkbox" class="checkAllCheckbox"></th>
-                <th class="col-md-4" >PROCEDURE</th>
+                <th class="col-md-4 live-search" >PROCEDURE</th>
                </tr>
               @foreach($_laboratory as $laboratory)
                 @if($laboratory->reference_number=='hidden')
@@ -104,7 +109,82 @@
             </table>
           </div>
         </div>
-        <div class="tab-pane" id="comp">
+        <div class="tab-pane" id="compTab">
+          <div class="row">
+            <div class="col-md-3 col-xs-12 pull-right">
+              <input type="text" data-name="complex" class="top-element form-control search-key">
+            </div>
+          </div>
+          <div  class="table-responsive no-padding">
+            <table class="table table-bordered complex" >
+              <tr>
+                <th class="col-md-1"><input type="checkbox" class="checkAllCheckbox"></th>
+                <th class="col-md-4 live-search"  >PROCEDURE</th>
+                
+              </tr>
+              @foreach($_complex as $complex)
+              <tr class="table-row">
+                <td>
+                  <input type="checkbox" name="coverage_item[]" value="{{$complex->procedure_id}}"/>
+                </td>
+                <td class="procedure">{{$complex->procedure_name}}</td>
+                
+              </tr>
+              @endforeach
+            </table>
+          </div>
+        </div>
+        <div class="tab-pane" id="cardTab">
+          <div class="row">
+            <div class="col-md-3 col-xs-12 pull-right">
+              <input type="text" data-name="complex" class="top-element form-control search-key">
+            </div>
+          </div>
+          <div  class="table-responsive no-padding">
+            <table class="table table-bordered complex" >
+              <tr>
+                <th class="col-md-1"><input type="checkbox" class="checkAllCheckbox"></th>
+                <th class="col-md-4 live-search" >PROCEDURE</th>
+                
+              </tr>
+              @foreach($_cardio as $cardio)
+              <tr class="table-row">
+                <td>
+                  <input type="checkbox" name="coverage_item[]" value="{{$cardio->procedure_id}}"/>
+                </td>
+                <td class="procedure">{{$cardio->procedure_name}}</td>
+                
+              </tr>
+              @endforeach
+            </table>
+          </div>
+        </div>
+        <div class="tab-pane" id="ctsTab">
+          <div class="row">
+            <div class="col-md-3 col-xs-12 pull-right">
+              <input type="text" data-name="complex" class="top-element form-control search-key">
+            </div>
+          </div>
+          <div  class="table-responsive no-padding">
+            <table class="table table-bordered complex" >
+              <tr>
+                <th class="col-md-1"><input type="checkbox" class="checkAllCheckbox"></th>
+                <th class="col-md-4 live-search" >PROCEDURE</th>
+                
+              </tr>
+              @foreach($_ctscan as $ctscan)
+              <tr class="table-row">
+                <td>
+                  <input type="checkbox" name="coverage_item[]" value="{{$ctscan->procedure_id}}"/>
+                </td>
+                <td class="procedure">{{$ctscan->procedure_name}}</td>
+                
+              </tr>
+              @endforeach
+            </table>
+          </div>
+        </div>
+        <div class="tab-pane" id="icunicuTab">
           <div class="row">
             <div class="col-md-3 col-xs-12 pull-right">
               <input type="text" data-name="complex" class="top-element form-control search-key">
@@ -117,12 +197,62 @@
                 <th class="col-md-4" >PROCEDURE</th>
                 
               </tr>
-              @foreach($_complex as $complex)
+              @foreach($_icunicu as $icunicu)
               <tr class="table-row">
                 <td>
-                  <input type="checkbox" name="coverage_item[]" value="{{$complex->procedure_id}}"/>
+                  <input type="checkbox" name="coverage_item[]" value="{{$icunicu->procedure_id}}"/>
                 </td>
-                <td class="procedure">{{$complex->procedure_name}}</td>
+                <td class="procedure">{{$icunicu->procedure_name}}</td>
+                
+              </tr>
+              @endforeach
+            </table>
+          </div>
+        </div>
+        <div class="tab-pane" id="utzTab">
+          <div class="row">
+            <div class="col-md-3 col-xs-12 pull-right">
+              <input type="text" data-name="complex" class="top-element form-control search-key">
+            </div>
+          </div>
+          <div  class="table-responsive no-padding">
+            <table class="table table-bordered complex" >
+              <tr>
+                <th class="col-md-1"><input type="checkbox" class="checkAllCheckbox"></th>
+                <th class="col-md-4 live-search" >PROCEDURE</th>
+                
+              </tr>
+              @foreach($_utz as $utz)
+              <tr class="table-row">
+                <td>
+                  <input type="checkbox" name="coverage_item[]" value="{{$utz->procedure_id}}"/>
+                </td>
+                <td class="procedure">{{$utz->procedure_name}}</td>
+                
+              </tr>
+              @endforeach
+            </table>
+          </div>
+        </div>
+        <div class="tab-pane" id="xrayTab">
+          <div class="row">
+            <div class="col-md-3 col-xs-12 pull-right">
+              <input type="text" data-name="complex" class="top-element form-control search-key">
+            </div>
+          </div>
+          <div  class="table-responsive no-padding">
+            <table class="table table-bordered complex" >
+              <tr>
+                <th class="col-md-1"><input type="checkbox" class="checkAllCheckbox"></th>
+                <th class="col-md-4 live-search" >PROCEDURE</th>
+                
+              </tr>
+              @foreach($_xray as $xray)
+              <tr class="table-row">
+                <td>
+                  <input type="checkbox" name="coverage_item[]" value="{{$xray->procedure_id}}"/>
+                </td>
+                <td class="procedure">{{$xray->procedure_name}}</td>
                 
               </tr>
               @endforeach
