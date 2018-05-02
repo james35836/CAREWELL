@@ -32,12 +32,6 @@
     <!-- TOASTR -->
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet">
-    
-    <script>
-    $( function() {
-      $( "#datepicker" ).datepicker();
-    } );
-    </script>
     <style>
       input
       {
@@ -366,12 +360,8 @@
 
 <!-- SCRIPT -->
 <script>
-
-  // $('body').find('select.filter').select2();
   $(function () {
-    //select2
     $('.select2').select2()
-    //Date picker
     $('.datepicker').datepicker({
       autoclose: true
     })
@@ -379,7 +369,7 @@
   $('body').on('hidden.bs.modal', function (e) {
       if($('.modal').hasClass('in')) 
       {
-      $('body').addClass('modal-open');
+        $('body').addClass('modal-open');
       }
       else
       {
@@ -397,6 +387,8 @@
       
       
     });
+    
+
   });
 
   
@@ -404,10 +396,13 @@
 </script>
 <script type="text/javascript">
   // To make Pace works on Ajax calls
-  $(document).ajaxStart(function () {
+  $(document).ajaxStart(function () 
+  {
     Pace.restart()
+
   })
-  $('.ajax').click(function () {
+  $('.ajax').click(function () 
+  {
     $.ajax({
       url: '#', success: function (result) {
         $('.ajax-content').html('<hr>Ajax Request Completed !')

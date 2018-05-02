@@ -58,9 +58,11 @@ function billing_center()
 		{
 			var updatePayment = new FormData();
 
-			updatePayment.append("cal_payment_id", 	 $(this).data('cal_payment_id'));
-			updatePayment.append("cal_payment_start",$(this).closest('tr').find('.cal_payment_start').val());
-			updatePayment.append("cal_payment_end",  $(this).closest('tr').find('.cal_payment_end').val());
+			updatePayment.append("cal_payment_id", 	 	$(this).data('cal_payment_id'));
+			updatePayment.append("cal_payment_start",	$(this).closest('tr').find('.cal_payment_start').val());
+			updatePayment.append("cal_payment_end",  	$(this).closest('tr').find('.cal_payment_end').val());
+			updatePayment.append("cal_new_member_id",	$(this).data('cal_new_member_id'));
+			updatePayment.append("ref", 	 			$(this).data('ref'));
 			
             ajaxData.this = $(this);
 			$(this).html('<i class="fa fa-spinner fa-pulse fa-fw"></i>');
@@ -191,10 +193,9 @@ function billing_center()
 			var modalActionName='CREATE CAL';
 			var modalAction='create-cal-confirm';
 			var modalSize = 'modal-md';
-			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
+            globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
 		});
-
-    }
+	}
     function create_cal_confirm()
 	{
 		$('body').on('click','.create-cal-confirm',function() 

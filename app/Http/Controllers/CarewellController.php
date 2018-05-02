@@ -1150,9 +1150,7 @@ class CarewellController extends ActiveAuthController
     $data['cal_check']        = TblCalModel::where('cal_id',$cal_id)->value('archived');
     $data['_cal_member']      = TblCalMemberModel::where('cal_id',$cal_id)->CalMember()->get();
 
-    $data['_cal_new_member']  = TblNewMemberModel::where('cal_id',$cal_id)
-                              ->join('tbl_new_cal_member','tbl_new_cal_member.new_member_id','=','tbl_new_member.new_member_id')
-                              ->get();
+    $data['_cal_new_member']  = TblNewMemberModel::where('cal_id',$cal_id)->get();
 
     if($data['cal_check']==0||$data['cal_check']==2)
     {
@@ -1184,8 +1182,19 @@ class CarewellController extends ActiveAuthController
   }
   public function billing_payment_breakdown($cal_member_id,$str_ref)
   {
-    $data['_payment_breakdown'] = TblCalPaymentModel::where('cal_member_id',$cal_member_id)->get();
-    $data['member_id']          = TblCalMemberModel::where('cal_member_id',$cal_member_id)->value('member_id');
+    if($str_ref=='old')
+    {
+      $data['_payment_breakdown'] = TblCalPaymentModel::where('cal_member_id',$cal_member_id)->get();
+      $data['member_id']          = TblCalMemberModel::where('cal_member_id',$cal_member_id)->value('member_id');
+      $data['ref']                = 'old';
+    }
+    else
+    {
+      $data['_payment_breakdown'] = TblNewCalMemberModel::where('new_member_id',$cal_member_id)->get();
+      $data['member_id']          = $cal_member_id;
+      $data['ref']                = 'new';
+    }
+    
     return view('carewell.modal_pages.billing_payment_breakdown',$data);
   }
   public function billing_last_ten_payments($member_id)
@@ -1204,7 +1213,15 @@ class CarewellController extends ActiveAuthController
     $update['cal_payment_start'] = date('Y-m-d', strtotime($request->cal_payment_start));
     $update['cal_payment_end']   = date('Y-m-d', strtotime($request->cal_payment_end));
     
-    $updateCheck = TblCalPaymentModel::where('cal_payment_id',$request->cal_payment_id)->update($update);
+    if($request->ref=='old')
+    {
+      $updateCheck = TblCalPaymentModel::where('cal_payment_id',$request->cal_payment_id)->update($update);
+    }
+    else
+    {
+      $updateCheck = TblNewCalMemberModel::where('cal_new_member_id',$request->cal_new_member_id)->update($update);
+    }
+    
 
 
     if($updateCheck)
@@ -1435,43 +1452,34 @@ class CarewellController extends ActiveAuthController
                 $payment_ref   = StaticFunctionController::getModeOfPayment($member_id,$cal_member_id,$premium,$payment_count,$cal_id);
                 $count++; 
               }
-
           }
           elseif($checkingNewMember==null)
           {
-            $new_member['member_first_name']            =   StaticFunctionController::nullableToString(ucwords($data['first_name']));
-            $new_member['member_middle_name']           =   StaticFunctionController::nullableToString(ucwords($data['middle_name']));
-            $new_member['member_last_name']             =   StaticFunctionController::nullableToString(ucwords($data['last_name']));
-            $new_member['member_birthdate']             =   StaticFunctionController::nullableToString(ucwords($data['birthdate']));
-            $new_member['member_payment_mode']          =   StaticFunctionController::nullableToString(ucwords($data['mode_of_payment']));
-            $new_member['company_id']                   =   $companyData->company_id;
-            $new_member['deployment_id']                =   StaticFunctionController::getid($data['deployment'], 'deployment');
-            $new_member['coverage_plan_id']             =   StaticFunctionController::getid($data['coverage_plan'], 'coverage');
-            $new_member['cal_id']                       =   $companyData->cal_id;
+            $coverage_plan_id  = StaticFunctionController::getid($data['coverage_plan'], 'coverage');
+            $payment_amount    = $data['payment_amount'];
+            $cal_id            = $companyData->cal_id;
+            $premium           = TblCoveragePlanModel::where('coverage_plan_id',$coverage_plan_id)->value('coverage_plan_premium');
+            $payment_count     = number_format($payment_amount / number_format($premium));
+
+            $new_member['member_first_name']      =   StaticFunctionController::nullableToString(ucwords($data['first_name']));
+            $new_member['member_middle_name']     =   StaticFunctionController::nullableToString(ucwords($data['middle_name']));
+            $new_member['member_last_name']       =   StaticFunctionController::nullableToString(ucwords($data['last_name']));
+            $new_member['member_birthdate']       =   StaticFunctionController::nullableToString(ucwords($data['birthdate']));
+            $new_member['member_payment_mode']    =   StaticFunctionController::nullableToString(ucwords($data['mode_of_payment']));
+            $new_member['company_id']             =   $companyData->company_id;
+            $new_member['deployment_id']          =   StaticFunctionController::getid($data['deployment'], 'deployment');
+            $new_member['coverage_plan_id']       =   StaticFunctionController::getid($data['coverage_plan'], 'coverage');
+            $new_member['cal_id']                 =   $companyData->cal_id;
+
+            $new_member['cal_payment_amount']     =   $payment_amount;
+            $new_member['cal_payment_date']       =   Carbon::now();
+            $new_member['cal_payment_count']      =   $payment_count;
+            $new_member['cal_payment_start']      =   'start';
+            $new_member['cal_payment_end']        =   'end';
 
             $new_member_id  = TblNewMemberModel::insertGetId($new_member);
             
-            $coverage_plan_id  = $new_member['coverage_plan_id'];
-            $payment_amount    = $data['payment_amount'];
-            $cal_id            = $companyData->cal_id;
-
-
-            $premium           = TblCoveragePlanModel::where('coverage_plan_id',$coverage_plan_id)->value('coverage_plan_premium');
-            $payment_count     = number_format($payment_amount / number_format($premium));
-            
-
-            $cal_members['cal_payment_amount']     =   $payment_amount;
-            $cal_members['cal_payment_date']       =   Carbon::now();
-            $cal_members['cal_payment_count']      =   $payment_count;
-            $cal_members['cal_payment_start']      =   'start';
-            $cal_members['cal_payment_end']        =   'end';
-            $cal_members['new_member_id']          =   $new_member_id;
-
-            $cal_member_id = TblNewCalMemberModel::insertGetId($cal_members);
-
-            $payment_ref   = StaticFunctionController::getModeOfPayment($cal_member_id,$premium,$payment_count,$cal_id);
-            
-            
+            $payment_ref   = StaticFunctionController::newMemberModeOfPayment($new_member_id,$payment_count,$cal_id);
             
             $countNew++;
           }
@@ -1535,7 +1543,7 @@ class CarewellController extends ActiveAuthController
     }
     else
     {
-      return "james";
+      return "error";
     }
   }
   public function billing_cal_close($cal_id)
