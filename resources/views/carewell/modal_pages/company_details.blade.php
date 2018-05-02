@@ -79,6 +79,7 @@ radioClass   : 'iradio_minimal-blue'
 	<div class="nav-tabs-custom">
 		<ul class="nav nav-tabs">
 			<li class="active my-tab"><a data-toggle="tab" href="#contract">CONTRACT DETAILS</a></li>
+			<li class="my-tab"><a data-toggle="tab" href="#coverage">COVERAGE PLAN</a></li>
 			<li class="my-tab"><a data-toggle="tab" href="#deployment">DEPLOYMENT</a></li>
 			<li class="my-tab"><a data-toggle="tab" href="#member">MEMBER LIST</a></li>
 		</ul>
@@ -132,28 +133,31 @@ radioClass   : 'iradio_minimal-blue'
 						</table>
 					</div>
 				</div>
+			</div>
+			<div id="coverage" class="row tab-pane fade table-min-height" >
 				<div class="form-holder ">
 					<div class="col-md-2 form-content">
-						<label>Coverage Plan</label>
+						<label>COVERAGE PLAN</label>
 					</div>
-					<div class=" form-content col-md-4">
+					<div class="col-md-10 deployment-number-form">
 						<table class="table table-bordered">
 							<thead>
 								<tr>
-									<th>COVERAGE</th>
+									<th>COVERAGE PLAN NAME</th>
+									<th>ACTION</th>
 								</tr>
 							</thead>
 							<tbody>
 								@foreach($_coverage_plan as $coverage_plan)
 								<tr>
 									<td>{{$coverage_plan->coverage_plan_name}}</td>
+									<td>VIEW  MEMBERS</td>
 								</tr>
 								@endforeach
 							</tbody>
 						</table>
 					</div>
 				</div>
-				
 			</div>
 			<div id="deployment" class="row tab-pane fade table-min-height" >
 				<div class="form-holder ">
@@ -172,7 +176,7 @@ radioClass   : 'iradio_minimal-blue'
 								@foreach($_company_deployment as $company_deployment)
 								<tr>
 									<td>{{$company_deployment->deployment_name}}</td>
-									<td>VIEW ALL MEMBERS</td>
+									<td>VIEW MEMBERS</td>
 								</tr>
 								@endforeach
 							</tbody>
@@ -200,7 +204,7 @@ radioClass   : 'iradio_minimal-blue'
 									<td>{{$company_member->member_carewell_id}}</td>
 									<td>{{$company_member->member_first_name." ".$company_member->member_last_name}}</td>
 									<td>{{$company_member->deployment_name}}</td>
-									<td>VIEW ALL MEMBERS</td>
+									<td>VIEW  MEMBERS</td>
 								</tr>
 								@endforeach
 							</tbody>

@@ -32,7 +32,6 @@
                 <th>PLAN NAME</th>
                 <th>PLAN MBL</th>
                 <th>PLAN ABL</th>
-                <th>PLAN HANDLING FEE</th>
                 <th>PLAN PRE-EXISTING</th>
                 <th>PLAN PREMIUM</th>
                 <th>PLAN ADDED</th>
@@ -44,7 +43,6 @@
                 <td>{{$coverage_plan->coverage_plan_name}}</td>
                 <td>{{$coverage_plan->coverage_plan_maximum_benefit}}</td>
                 <td>{{$coverage_plan->coverage_plan_annual_benefit}}</td>
-                <td>{{$coverage_plan->coverage_plan_case_handling}}</td>
                 <td>{{$coverage_plan->coverage_plan_preexisting}}</td>
                 <td>{{$coverage_plan->coverage_plan_premium}}</td>
                 <td>{{date("F j, Y",strtotime($coverage_plan->coverage_plan_created))}}</td>

@@ -85,22 +85,6 @@ text-align: center;
     <div class="box">
       <div class="box-header with-border">
         <h3 class="box-title">TOTAL PROGRESS..</h3>
-        <div class="box-tools pull-right">
-          <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-          </button>
-          <div class="btn-group">
-            <button type="button" class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown">
-            <i class="fa fa-wrench"></i></button>
-            <ul class="dropdown-menu" role="menu">
-              <li><a href="#">Action</a></li>
-              <li><a href="#">Another action</a></li>
-              <li><a href="#">Something else here</a></li>
-              <li class="divider"></li>
-              <li><a href="#">Separated link</a></li>
-            </ul>
-          </div>
-          <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-        </div>
       </div>
       <div class="box-body">
         <div class="row">
@@ -157,7 +141,6 @@ text-align: center;
         <div class="row">
           <div class="col-sm-3 col-xs-6">
             <div class="description-block border-right">
-              <span class="description-percentage text-green"><i class="fa fa-caret-up"></i> 17%</span>
               <h5 class="description-header">{{$total_approval}}</h5>
               <span class="description-text">TOTAL APPROVAL</span>
             </div>
@@ -166,7 +149,6 @@ text-align: center;
           <!-- /.col -->
           <div class="col-sm-3 col-xs-6">
             <div class="description-block border-right">
-              <span class="description-percentage text-yellow"><i class="fa fa-caret-left"></i> 0%</span>
               <h5 class="description-header">$10,390.90</h5>
               <span class="description-text">TOTAL OUTSTANDING PAYABLE</span>
             </div>
@@ -175,7 +157,6 @@ text-align: center;
           <!-- /.col -->
           <div class="col-sm-3 col-xs-6">
             <div class="description-block">
-              <span class="description-percentage text-red"><i class="fa fa-caret-down"></i> 18%</span>
               <h5 class="description-header">1200</h5>
               <span class="description-text">TOTAL PAID</span>
             </div>
@@ -184,7 +165,6 @@ text-align: center;
           <!-- /.col -->
           <div class="col-sm-3 col-xs-6">
             <div class="description-block border-right">
-              <span class="description-percentage text-green"><i class="fa fa-caret-up"></i> 20%</span>
               <h5 class="description-header">{{$member_inactive}}</h5>
               <span class="description-text">INACTIVE MEMBER</span>
             </div>

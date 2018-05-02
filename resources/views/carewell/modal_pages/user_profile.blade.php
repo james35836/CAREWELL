@@ -39,7 +39,8 @@
     border-radius: 30px;
     display: block;
     float: left;
-        width: 100%;
+    width: 100%;
+ 
 }
 
 .profile-pic {
@@ -55,9 +56,9 @@
 </style>
 <form class="profile-form">
 	<div class="row box-globals">
-		<div class="form-holder">
-			<div class=" col-md-4">
-				<div class="form-content">
+		<div class="col-md-4">
+			<div class="form-holder">
+				<div class="form-content ">
 					<img class="profile-pic" src="{{$user->user_profile}}" />
 					<input class="file-upload" id="new_profile" id="newFile" type="file" accept="image/*"/>
 					<input id="old_profile" value="{{$user->user_profile}}" type="hidden" />
@@ -67,7 +68,9 @@
 					<div class="upload-button 	btn btn-primary">Upload New Profile</div>
 				</div>
 			</div>
-			<div class=" col-md-8">
+		</div>
+		<div class="col-md-8">
+			<div class="form-holder">
 				<div class="form-content">
 					<label>USER ACCESS LEVEL</label>
 				</div>

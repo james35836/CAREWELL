@@ -100,6 +100,12 @@ class SearchController extends ActiveAuthController
 											    }
 			        	$output = view('carewell.filtering.doctor_filtering_active',$data);
 					break;
+					case 'availment':
+					    $data['_approval'] = $data['_approval']  = TblApprovalModel::where('tbl_approval.archived',0)->where('tbl_provider.provider_id',$id)->ApprovalInfo()->paginate(10);
+				        $output = view('carewell.filtering.availment_filtering_active',$data);
+					break;
+
+					
 				}
 		  	}
 		  	else if($request->val_archived==1)
@@ -122,6 +128,10 @@ class SearchController extends ActiveAuthController
 											                                                ->get();
 											    }
 			        	$output = view('carewell.filtering.doctor_filtering_inactive',$data);
+					break;
+					case 'availment':
+					    $data['_approval'] = $data['_approval']  = TblApprovalModel::where('tbl_approval.archived',0)->where('tbl_provider.provider_id',$id)->ApprovalInfo()->paginate(10);
+				        $output = view('carewell.filtering.availment_filtering_active',$data);
 					break;
 				}
 				
@@ -187,11 +197,7 @@ class SearchController extends ActiveAuthController
 					break;
 					case 'doctor':
 			        	$data['_doctor_active'] = TblDoctorModel::where('tbl_doctor.archived',0)
-			        						->where(function($query)use($key)
-				                            {
-				                                $query->where('tbl_doctor.doctor_last_name','like','%'.$key.'%');
-				                                $query->orWhere('tbl_doctor.doctor_first_name','like','%'.$key.'%');
-				                            })
+			        						->where('tbl_doctor.doctor_full_name','like','%'.$key.'%')
 			        						->paginate(10);
 					    foreach ($data['_doctor_active'] as $key => $doctor) 
 					    {
@@ -203,6 +209,13 @@ class SearchController extends ActiveAuthController
 					                                                		->get();
 					    }
 				        $output = view('carewell.filtering.doctor_filtering_active',$data);
+					break;
+					case 'availment':
+					    $data['_approval'] = $data['_approval']  = TblApprovalModel::where('tbl_approval.archived',0)
+					                                              ->where('tbl_approval.approval_number','like','%'.$key.'%')
+                                                                  ->orWhere('tbl_member.member_first_name','like','%'.$key.'%')
+					                                              ->ApprovalInfo()->paginate(10);
+				        $output = view('carewell.filtering.availment_filtering_active',$data);
 					break;
 				}
 		  	}

@@ -10,7 +10,7 @@
     </div>
     <div class="col-md-6 ">
       <div class="input-group import-element">
-          <select class="form-control " name=" import-number-select" id="import-element import-number-select">
+          <select class="form-control import-member-number-select" name="import-member-number-select" id="import-element import-member-number-select">
             <option>100</option>
             <option>200</option>
             <option>300</option>

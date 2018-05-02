@@ -647,17 +647,18 @@ function globals()
 			}
 			else
 			{
-				$nrow  = $table.find('tr:eq(2)').clone().appendTo($table).find('.countThis').val('0 ITEMS');
+				$nrow  = $table.find('tr:eq(2)').clone().appendTo($table);
 			}
 			
 			$nrow.find('button.remove-row').attr('data-number', number+1);
+			$nrow.find('.countThis').val('0 ITEMS');
 		
 		});
 
 		$('body').on("click",".remove-row", function()
 		{
-			var $table = $(this).closest('table');
-			var count  = $table.find('tr.table-row').length;
+			var $table  = $(this).closest('table');
+			var count   = $table.find('tr.table-row').length;
 			var $tr 	= $(this).closest('tr');
 			var number  = $(this).data('number');
 			if(count==1)

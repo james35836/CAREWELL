@@ -19,14 +19,8 @@ function dashboardv2()
 	{
 		dashboard_modals();
         latest_approval();
-
-        	
-		
-
-	}
-	
-
-	function latest_approval()
+    }
+    function latest_approval()
 	{
 		$("body").on('click','.latest-approval',function()
 		{

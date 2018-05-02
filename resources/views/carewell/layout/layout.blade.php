@@ -41,7 +41,15 @@
     <style>
       input
       {
+        text-transform: capitalize ;
+      }
+      .transform-capitalize
+      {
         text-transform: capitalize !important;
+      }
+      .lowercase-text
+      {
+        text-transform: lowercase !important;
       }
     </style>
   </head>
@@ -242,8 +250,14 @@
           <ul class="treeview-menu">
             <li><a href="/reports/availment"><i class="fa fa-circle-o"></i>AVAILMENT </a></li>
             <li><a href="#"><i class="fa fa-circle-o"></i>MONITORING</a></li>
+<<<<<<< HEAD
             <li><a href="#"><i class="fa fa-circle-o"></i>BREAKDOWN</a></li>
             <li><a href="/reports/ending_number_per_month"><i class="fa fa-circle-o"></i>ENDING NUMBER</a></li>
+=======
+            <li><a href="/reports/breakdown"><i class="fa fa-circle-o"></i>BREAKDOWN</a></li>
+            <li><a href="#"><i class="fa fa-circle-o"></i>ENDING NUMBER</a></li>
+            <li><a href="/reports/consolidation"><i class="fa fa-circle-o"></i>CONSOLIDATION</a></li>
+>>>>>>> 39a97d1b6a6e7c97124702b35a08a75a3b775bd6
             <li><a href="#"><i class="fa fa-circle-o"></i>SUMMARY</a></li>
           </ul>
         </li>

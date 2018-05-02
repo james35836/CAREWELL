@@ -49,13 +49,12 @@
 	<div class="box-globals">
 		<div class="row">
             <div class=" col-md-4 col-xs-12 pull-left">
-            	<div class="col-md-6">
+            	<div class="col-md-6 no-padding">
 					<input type="text" class="form-control datepicker" placeholder="FROM">
 				</div>
-				<div class="col-md-6">
+				<div class="col-md-6 no-padding">
 					<input type="text" class="form-control datepicker" placeholder="TO">
 				</div>
-               
             </div>
             <div class="col-md-3 col-xs-12 pull-right">
               <div class="input-group top-element">
@@ -75,7 +74,7 @@
 							<th>APPROVAL #</th>
 							<th>UNIVERSAL ID</th>
 							<th>CAREWELL ID</th>
-							<th>PATIENT NAME</th>
+							<th>MEMBER NAME</th>
 							<th>COMPANY</th>
 							<th>PROVIDER</th>
 							<th>STATUS</th>

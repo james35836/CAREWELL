@@ -28,7 +28,7 @@
 			<label>Email Address</label>
 		</div>
 		<div class="col-md-4 form-content">
-			<input type="text" class="form-control" id="doctor_email_address"/>
+			<input  type="text" class="form-control lowercase-text" id="doctor_email_address"/>
 		</div>
 		
 	</div>
