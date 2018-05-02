@@ -18,9 +18,11 @@ class TblCalMemberModel extends Model
     }
     public function scopePaymentHistory($query)
     {
-        $query  ->join('tbl_member','tbl_member.member_id','=','tbl_cal_member.member_id')
+        $query  ->join('tbl_member_company','tbl_member_company.member_id','=','tbl_cal_member.member_id')
                 ->join('tbl_cal','tbl_cal.cal_id','=','tbl_cal_member.cal_id')
-                ->join('tbl_company','tbl_company.company_id','=','tbl_cal.company_id');
+                ->join('tbl_cal_payment','tbl_cal_payment.cal_member_id','=','tbl_cal_member.cal_member_id')
+                ->where('tbl_member_company.archived',0)
+                ->orderBy('tbl_cal_payment.cal_payment_end','ASC');
         return $query;
     }
     public function scopeCalMember($query)

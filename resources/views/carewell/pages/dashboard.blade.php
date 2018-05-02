@@ -80,6 +80,7 @@ text-align: center;
     </div>
   </div>
 </div>
+
 <div class="row">
   <div class="col-md-12">
     <div class="box">
@@ -96,46 +97,39 @@ text-align: center;
               <script>
                 $(document).ready(function()
                 {
-                  dashboard.graph('#approvalChart',{{$January}},{{$February}},{{$March}},{{$April}},{{$May}},{{$June}},{{$July}},{{$August}},{{$September}},{{$October}},{{$November}},{{$December}});
+                  dashboard.barGraph('#approvalChart',{{$January}},{{$February}},{{$March}},{{$April}},{{$May}},{{$June}},{{$July}},{{$August}},{{$September}},{{$October}},{{$November}},{{$December}});
                 });
                 
               </script>
               <canvas id="approvalChart" style="height: 200px;"></canvas>
             </div>
-            
           </div>
           <div class="col-md-4" >
-            
-              <p class="text-center">
+            <p class="text-center">
               <strong>LATEST APPROVAL</strong>
             </p>
-              <!-- /.box-header -->
-              <div class="box-body" style="max-height: 200px;overflow-x: hidden;overflow-y: scroll;">
-                <table class="table table-bordered">
-                  <thead>
-                  <tr>
-                    <th >APPROVAL #</th>
-                    <th>MEMBER NAME</th>
-                    <th style="width: 40px">ACTION</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  @foreach($_approval as $approval)
-                  <tr>
-                    <td style="width: 147px !important;">{{$approval->approval_number}}</td>
-                    <td>{{$approval->member_first_name." ".$approval->member_last_name}}</td>
-                    <td><button class="btn btn-link latest-approval" data-approval_id="{{$approval->approval_id}}">view</button></td>
-                  </tr>
-                  @endforeach
-                  </tbody>
-                  
-                </table>
-              </div>
-            
+            <div class="box-body" style="max-height: 200px;overflow-x: hidden;overflow-y: scroll;">
+              <table class="table table-bordered">
+                <thead>
+                <tr>
+                  <th >APPROVAL #</th>
+                  <th>MEMBER NAME</th>
+                  <th style="width: 40px">ACTION</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach($_approval as $approval)
+                <tr>
+                  <td style="width: 147px !important;">{{$approval->approval_number}}</td>
+                  <td>{{$approval->member_first_name." ".$approval->member_last_name}}</td>
+                  <td><button class="btn btn-link latest-approval" data-approval_id="{{$approval->approval_id}}">view</button></td>
+                </tr>
+                @endforeach
+                </tbody>
+              </table>
+            </div>
           </div>
-          <!-- /.col -->
         </div>
-        <!-- /.row -->
       </div>
       <div class="box-footer">
         <div class="row">
@@ -144,35 +138,26 @@ text-align: center;
               <h5 class="description-header">{{$total_approval}}</h5>
               <span class="description-text">TOTAL APPROVAL</span>
             </div>
-            <!-- /.description-block -->
           </div>
-          <!-- /.col -->
           <div class="col-sm-3 col-xs-6">
             <div class="description-block border-right">
-              <h5 class="description-header">$10,390.90</h5>
+              <h5 class="description-header">&#8369; 10,390.90</h5>
               <span class="description-text">TOTAL OUTSTANDING PAYABLE</span>
             </div>
-            <!-- /.description-block -->
           </div>
-          <!-- /.col -->
           <div class="col-sm-3 col-xs-6">
             <div class="description-block">
-              <h5 class="description-header">1200</h5>
+              <h5 class="description-header">&#8369; 1200</h5>
               <span class="description-text">TOTAL PAID</span>
             </div>
-            <!-- /.description-block -->
           </div>
-          <!-- /.col -->
           <div class="col-sm-3 col-xs-6">
             <div class="description-block border-right">
               <h5 class="description-header">{{$member_inactive}}</h5>
               <span class="description-text">INACTIVE MEMBER</span>
             </div>
-            <!-- /.description-block -->
           </div>
-          
         </div>
-        <!-- /.row -->
       </div>
     </div>
   </div>

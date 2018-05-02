@@ -486,6 +486,9 @@ class StaticFunctionController extends Controller
       case 'DOCTOR':
         $check = TblDoctorModel::where('doctor_id',$restore_id)->update($restore);
         break;
+      case 'PROVIDER':
+        $check = TblProviderModel::where('provider_id',$restore_id)->update($restore);
+        break;
     }
 
     if($check==true)
@@ -551,8 +554,6 @@ class StaticFunctionController extends Controller
       $cal_member['cal_payment_amount']     =   $new_member->cal_payment_amount;
       $cal_member['cal_payment_date']       =   Carbon::now();
       $cal_member['cal_payment_count']      =   $new_member->cal_payment_count;
-      $cal_member['cal_payment_start']      =   'start';
-      $cal_member['cal_payment_end']        =   'end';
       $cal_member['member_id']              =   $member_id;
       $cal_member['cal_id']                 =   $cal_id;
       $cal_member_id = TblCalMemberModel::insertGetId($cal_member);

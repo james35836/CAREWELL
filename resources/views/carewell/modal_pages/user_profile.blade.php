@@ -59,7 +59,7 @@
 		<div class="col-md-4">
 			<div class="form-holder">
 				<div class="form-content ">
-					<img class="profile-pic" src="{{$user->user_profile}}" />
+					<img class="profile-pic profile-user-img img-responsive img-circle" src="{{$user->user_profile}}" />
 					<input class="file-upload" id="new_profile" id="newFile" type="file" accept="image/*"/>
 					<input id="old_profile" value="{{$user->user_profile}}" type="hidden" />
 					<input id="user_id" value="{{$user->user_id}}" type="hidden" />

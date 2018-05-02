@@ -414,6 +414,7 @@ function globals()
 
         table_sorter();
         table_action_add_remove();
+       
 
         filtering();
         searching();
@@ -510,7 +511,7 @@ function globals()
 					{
 						$(".confirm-ajax-loader").remove();
 						ajaxData.tdCloser.remove();
-						$(".confirm-modal-body").html('<center><b><span class="color-red"> '+ ajaxData.name +' RESTORE '+data+'!</span></b></center>');
+						$(".confirm-modal-body").html('<center><b><span class="color-red"> '+ ajaxData.name +' ARCHIVED '+data+'!</span></b></center>');
 						$(".confirm-modal-footer").html(successButton);
 	                    
 					}, 800);
@@ -673,6 +674,7 @@ function globals()
 			
 		});
 	}
+	
 	function add_remove_element()
 	{
 		$('body').on("click",".add-element", function()

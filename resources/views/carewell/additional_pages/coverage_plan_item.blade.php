@@ -18,7 +18,7 @@
             }
         }
     });
-});
+  });
 </script>
 
 <form method="POST">

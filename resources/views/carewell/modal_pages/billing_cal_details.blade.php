@@ -59,14 +59,14 @@ table tr td
 			<label>PAYMENT START</label>
 		</div>
 		<div class="col-md-3  form-content">
-			<input type="text" class="form-control" value="{{$cal_details->cal_payment_start}}"/>
+			<input type="text" class="form-control" value="{{$cal_details->cal_start}}"/>
 		</div>
 		
 		<div class="col-md-3  form-content">
 			<label>PAYMENT END</label>
 		</div>
 		<div class="col-md-3  form-content">
-			<input type="text" class="form-control" value="{{$cal_details->cal_payment_end}}"/>
+			<input type="text" class="form-control" value="{{$cal_details->cal_end}}"/>
 		</div>
 	</div>
 </div>
