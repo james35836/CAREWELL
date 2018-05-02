@@ -1908,6 +1908,25 @@ class CarewellController extends ActiveAuthController
 
     return view('carewell.pages.reports_availment',$data);
   }
+   public function reports_monitoring_end_per_month()
+  {
+    $data['page']     = 'Ending Number Per Month Reports';
+    $data['_company'] = TblCompanyModel::where('archived',0)->paginate(10);
+    $data['user']     = StaticFunctionController::global();
+
+    foreach ($data['_company'] as $key => $company) 
+    {
+      $data['_company'][$key]['company_availment']  =  TblCompanyCoveragePlanModel::where('tbl_company_coverage_plan.company_id',$company->company_id)
+                                                    ->where('tbl_availment.availment_parent_id',0)
+                                                    ->join('tbl_coverage_plan','tbl_coverage_plan.coverage_plan_id','=','tbl_company_coverage_plan.coverage_plan_id')
+                                                    ->join('tbl_coverage_plan_tag','tbl_coverage_plan_tag.coverage_plan_id','=','tbl_coverage_plan.coverage_plan_id')
+                                                    ->join('tbl_availment','tbl_availment.availment_id','=','tbl_coverage_plan_tag.availment_id')
+                                                    ->get();
+    }
+
+
+    return view('carewell.pages.reports_end_per_month',$data);
+  }
 
 
   /*SETTINGS*/
