@@ -36,17 +36,17 @@
         <tr class="table-row">
           <td >
             <select class="form-control select2" id="plan_charges">
-              <option value="c">COVERED</option>
-              <option value="n">NOT COVERED</option>
-              <option value="nc">NOT SPECIFIED</option>
+              <option value="COVERED">COVERED</option>
+              <option value="CHARGE TO MBL">CHARGE TO MBL</option>
+              <option value="NOT COVERED">NOT COVERED</option>
             </select>
           </td>
           <td>
             <div class="input-group">
               <select class="form-control select2" id="plan_covered_amount">
-                <option value="1000">10 000</option>
-                <option value="2000">20 000</option>
-                <option value="3000">30 000</option>
+                <option value="1000">10,000</option>
+                <option value="2000">20,000</option>
+                <option value="3000">30,000</option>
               </select>
               <span class="input-group-btn">
                 <button class="btn btn-secondary add-new-option" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span></button>
@@ -56,6 +56,7 @@
           <td>
             <div class="input-group">
               <select  class="form-control select2 " id="plan_limit">
+                <option value="NO LIMIT">NO LIMIT</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>

@@ -121,10 +121,10 @@ class StaticFunctionController extends Controller
   {
     if($request->ajax())
     {
-        $provider  = TblProviderModel::where('provider_id',$request->provider_id)->first();
-        $data['_provider_doctor']  = TblDoctorProviderModel::where('tbl_doctor_provider.provider_id',$request->provider_id)
-                              ->join('tbl_doctor','tbl_doctor.doctor_id','=','tbl_doctor_provider.doctor_id')
-                              ->get();
+        $provider                   = TblProviderModel::where('provider_id',$request->provider_id)->first();
+        $data['_provider_doctor']   = TblDoctorProviderModel::where('tbl_doctor_provider.provider_id',$request->provider_id)
+                                    ->join('tbl_doctor','tbl_doctor.doctor_id','=','tbl_doctor_provider.doctor_id')
+                                    ->get();
         $data['_provider_doctors'] = '<option>-SELECT DOCTOR-';
         foreach($data['_provider_doctor'] as $provider_doctor)
         {
@@ -139,10 +139,10 @@ class StaticFunctionController extends Controller
   {
     if($request->ajax())
     {
-        $data['_specialization']  = TblDoctorSpecializationModel::where('tbl_doctor_specialization.doctor_id',$request->value)
-                                    ->join('tbl_specialization','tbl_specialization.specialization_id','=','tbl_doctor_specialization.specialization_id')
-                                    ->get();
-        $data['_specializationList'] = '';
+        $data['_specialization']      = TblDoctorSpecializationModel::where('tbl_doctor_specialization.doctor_id',$request->value)
+                                      ->join('tbl_specialization','tbl_specialization.specialization_id','=','tbl_doctor_specialization.specialization_id')
+                                      ->get();
+        $data['_specializationList']  = '';
         foreach($data['_specialization'] as $specializationDoctor)
         {
             $data['_specializationList']     .= '<option value='.$specializationDoctor->specialization_id.'>'.$specializationDoctor->specialization_name;
@@ -154,11 +154,10 @@ class StaticFunctionController extends Controller
   {
     if($request->ajax())
     {
-        $coverage  = TblMemberCompanyModel::where('archived',0)->where('member_id',$request->member_id)->value('coverage_plan_id');
-        
-        $data['procedure'] = TblCoveragePlanProcedureModel::where('coverage_plan_id',$coverage)
-                        ->join('tbl_procedure','tbl_procedure.procedure_id','=','tbl_coverage_plan_procedure.procedure_id')
-                        ->get();
+        $coverage           = TblMemberCompanyModel::where('archived',0)->where('member_id',$request->member_id)->value('coverage_plan_id');
+        $data['procedure']  = TblCoveragePlanProcedureModel::where('coverage_plan_id',$coverage)
+                            ->join('tbl_procedure','tbl_procedure.procedure_id','=','tbl_coverage_plan_procedure.procedure_id')
+                            ->get();
         $data['_procedureList'] = '<option>-SELECT DESCRIPTION-';
         foreach($data['procedure'] as $procedure)
         {
@@ -356,18 +355,6 @@ class StaticFunctionController extends Controller
     }
     return $result;
   }
-  public static function yesNotoInt($stryn = 'Y')
-  {
-
-        $int = 0;
-        $stryn = strtoupper($stryn);
-        if($stryn == 'Y' || $stryn == 'YES' || $stryn == 'TRUE')
-        {
-             $int = 1;
-        }
-        return $int;
-  }
-  
   public static function getid($str_name = '', $str_param = '')
   {
     $id = 0;
@@ -419,21 +406,17 @@ class StaticFunctionController extends Controller
           $id = 1;
         }
         break;
-
-     
-
     }
-
     if($id == null)
     {    
       $id = 0;
     }
-  return $id; 
+    return $id; 
   }
   public static function getAge($birthdate)
   {
-    $age = date_create($birthdate)->diff(date_create('today'))->y;
-    return $age;
+    $age    = date_create($birthdate)->diff(date_create('today'))->y;
+    return  $age;
   }
   public static function archived_data($archived_id,$archived_name)
   {
@@ -584,7 +567,6 @@ class StaticFunctionController extends Controller
     $payment          = TblCalPaymentModel::where('member_id',$member_id)->orderBy('cal_payment_end','DESC')->first();
     for($i = 1; $i<=$payment_count;  $i++)
     {
-
       if($i==1)
       {
         if($payment!=null)
@@ -620,6 +602,15 @@ class StaticFunctionController extends Controller
     }
     return 0;
   }
+  public static function insertMemberPayment($cal_member_id,$member_id)
+  {
+    $member_cut['cal_payment_start']  = 'start';
+    $member_cut['cal_payment_end']    = 'end';
+    $member_cut['cal_payment_type']   = 'ORIGINAL';
+    $member_cut['cal_member_id']      = $cal_member_id;
+    $member_cut['member_id']          = $member_id;
+    TblCalPaymentModel::insert($member_cut);
+  }
   public static function newMemberModeOfPayment($member_id,$payment_count,$cal_id)
   {
     $cal              = TblCalModel::where('cal_id',$cal_id)->first();
@@ -644,15 +635,7 @@ class StaticFunctionController extends Controller
     }
     return 0;
   }
-  public static function insertMemberPayment($cal_member_id,$member_id)
-  {
-    $member_cut['cal_payment_start']  = 'start';
-    $member_cut['cal_payment_end']    = 'end';
-    $member_cut['cal_payment_type']   = 'ORIGINAL';
-    $member_cut['cal_member_id']      = $cal_member_id;
-    $member_cut['member_id']          = $member_id;
-    TblCalPaymentModel::insert($member_cut);
-  }
+  
   public static function checkIfMemberCanAvailed($payment_mode,$last_payment)
   {
 

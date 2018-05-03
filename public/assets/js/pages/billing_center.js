@@ -308,6 +308,7 @@ function billing_center()
 			globals.confirm_modals(confirmModalMessage,confirmModalAction);
 
 			billingMemberData.append("cal_member_id", 	$(this).data('cal_member_id'));
+			billingMemberData.append("ref", 			$(this).data('ref'));
 			ajaxData.tdCloser  = $(this).closest('tr');
 		});
 	}

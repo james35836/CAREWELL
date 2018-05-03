@@ -41,10 +41,10 @@
               <tr>
                 <td>{{$coverage_plan->coverage_plan_id}}</td>
                 <td>{{$coverage_plan->coverage_plan_name}}</td>
-                <td>{{$coverage_plan->coverage_plan_maximum_benefit}}</td>
-                <td>{{$coverage_plan->coverage_plan_annual_benefit}}</td>
+                <td>{{number_format($coverage_plan->coverage_plan_maximum_benefit)}}</td>
+                <td>{{number_format($coverage_plan->coverage_plan_annual_benefit)}}</td>
                 <td>{{$coverage_plan->coverage_plan_preexisting}}</td>
-                <td>{{$coverage_plan->coverage_plan_premium}}</td>
+                <td>{{number_format($coverage_plan->coverage_plan_premium)}}</td>
                 <td>{{date("F j, Y",strtotime($coverage_plan->coverage_plan_created))}}</td>
                 <td>
                   <div class="btn-group">

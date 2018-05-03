@@ -18,7 +18,6 @@ use App\Http\Model\TblCoveragePlanModel;
 use App\Http\Model\TblCoveragePlanTagModel;
 use App\Http\Model\TblCoveragePlanProcedureModel;
 
-
 use App\Http\Model\TblCompanyModel;
 use App\Http\Model\TblCompanyContractModel;
 use App\Http\Model\TblCompanyNumberModel;
@@ -66,20 +65,13 @@ use App\Http\Model\TblApprovalDiagnosisModel;
 use App\Http\Model\TblApprovalPayeeModel;
 use App\Http\Model\TblApprovalTotalModel;
 
-
-
-
 use App\Http\Model\TblLaboratoryModel;
-
 use App\Http\Model\TblDiagnosisModel;
-
 use App\Http\Model\TblProcedureModel;
-
 use App\Http\Model\TblScheduleOfBenefitsModel;
 
 use Excel;
 use Input;
-// use Request;
 use DB;
 use Carbon\Carbon;
 use Paginate;
@@ -329,8 +321,8 @@ class CarewellController extends ActiveAuthController
   public function member_transaction_details($member_id)
   {
 
-    $coverage = TblMemberCompanyModel::where('archived',0)->where('member_id',$member_id)->first();
-    
+    $coverage                       = TblMemberCompanyModel::where('archived',0)->where('member_id',$member_id)->first();
+    $data['_availment_history']     = TblApprovalModel::where('tbl_approval.member_id',$member_id)->AvailmentHistory()->get();
     $data['coverage_plan_details']  = TblCoveragePlanModel::where('coverage_plan_id',$coverage->coverage_plan_id)->first();     
     $data['_coverage_plan_covered'] = TblCoveragePlanProcedureModel::where('coverage_plan_id',$coverage->coverage_plan_id)
                                     ->where('tbl_coverage_plan_procedure.archived',0)
@@ -356,9 +348,7 @@ class CarewellController extends ActiveAuthController
     foreach($data['_payment_history'] as $key=>$payment)
     {
       $data['_payment_history'][$key]['amount'] = $payment->cal_payment_amount/$payment->cal_payment_count;
-      // $data['_payment_history'][$key]['amount'] = $payment->cal_payment_amount/$payment->cal_payment_count;
     }
-    $data['_availment_history'] = TblApprovalModel::where('tbl_approval.member_id',$member_id)->AvailmentHistory()->get();
     return view('carewell.modal_pages.member_transaction_details',$data);
   }
   public function member_import_member(Request $request)
@@ -1435,23 +1425,23 @@ class CarewellController extends ActiveAuthController
                 $name['type']   = 'NEED ADJUSTMENT';
                 array_push($exportArray,$name);
               }
-              $cal_member['cal_payment_amount']     =   $payment_amount;
-              $cal_member['cal_payment_date']       =   Carbon::now();
-              $cal_member['cal_payment_count']      =   $payment_count;
-              $cal_member['member_id']              =   $checkingMember->member_id;
-              $cal_member['cal_id']                 =   $companyData->cal_id;
-              $cal_member_id    = TblCalMemberModel::insertGetId($cal_member);
-              $payment_ref      = StaticFunctionController::getModeOfPayment($member_id,$cal_member_id,$premium,$payment_count,$cal_id);
+              $cal_member['cal_payment_amount']   =   $payment_amount;
+              $cal_member['cal_payment_date']     =   Carbon::now();
+              $cal_member['cal_payment_count']    =   $payment_count;
+              $cal_member['member_id']            =   $checkingMember->member_id;
+              $cal_member['cal_id']               =   $companyData->cal_id;
+              $cal_member_id                      =   TblCalMemberModel::insertGetId($cal_member);
+              $payment_ref                        =   StaticFunctionController::getModeOfPayment($member_id,$cal_member_id,$premium,$payment_count,$cal_id);
               $count++; 
             }
           }
           elseif($checkingNewMember==null)
           {
-            $coverage_plan_id  = StaticFunctionController::getid($data['coverage_plan'], 'coverage');
-            $payment_amount    = $data['payment_amount'];
-            $cal_id            = $companyData->cal_id;
-            $premium           = TblCoveragePlanModel::where('coverage_plan_id',$coverage_plan_id)->value('coverage_plan_premium');
-            $payment_count     = number_format($payment_amount / number_format($premium));
+            $coverage_plan_id                     =   StaticFunctionController::getid($data['coverage_plan'], 'coverage');
+            $payment_amount                       =   $data['payment_amount'];
+            $cal_id                               =   $companyData->cal_id;
+            $premium                              =   TblCoveragePlanModel::where('coverage_plan_id',$coverage_plan_id)->value('coverage_plan_premium');
+            $payment_count                        =   number_format($payment_amount / number_format($premium));
 
             $new_member['member_first_name']      =   StaticFunctionController::nullableToString(ucwords($data['first_name']));
             $new_member['member_middle_name']     =   StaticFunctionController::nullableToString(ucwords($data['middle_name']));
@@ -1505,7 +1495,15 @@ class CarewellController extends ActiveAuthController
 
   public function billing_cal_member_remove(Request $request)
   {
-    $remove = TblCalMemberModel::where('cal_member_id',$request->cal_member_id)->delete();
+    if($request->ref=="old")
+    {
+      $remove = TblCalMemberModel::where('cal_member_id',$request->cal_member_id)->delete();
+    }
+    else
+    {
+      $remove = TblNewMemberModel::where('new_member_id',$request->cal_member_id)->delete();
+                TblNewCalMemberModel::where('new_member_id',$request->cal_member_id)->delete();
+    }
     if($remove)
     {
       return '<center><b><span class="color-red">Member Successfully Removed!</span></b></center>';
@@ -1518,10 +1516,9 @@ class CarewellController extends ActiveAuthController
   }
   public function billing_cal_pending_submit(Request $request)
   {
+    StaticFunctionController::getNewMember($request->cal_id,2);
     $update['archived']   = 2;//for pending cal
     $pending              = TblCalModel::where('cal_id',$request->cal_id)->update($update);
-
-    StaticFunctionController::getNewMember($request->cal_id,2);
     $data['_cal_member']  = TblCalMemberModel::where('cal_id',$request->cal_id)->get();
     foreach($data['_cal_member'] as $key=>$cal_member)
     {

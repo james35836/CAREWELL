@@ -104,7 +104,7 @@ text-align: center;
               <canvas id="approvalChart" style="height: 300px;"></canvas>
             </div>
           </div>
-          <div class="col-md-4" >
+          <div class="col-md-4">
             <p class="text-center">
               <strong>LATEST APPROVAL</strong>
             </p>

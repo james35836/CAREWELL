@@ -26,7 +26,7 @@ function settings_developer()
 		$("body").on('click','.developer-modals',function()
 		{
 			var company_id = $(this).data('company_id');
-			var modalName= 'DEVELOPER MODAL';
+			var modalName= 'MAINTENANCE MODAL';
 			var modalClass='developer';
 			var modalLink='/settings/maintenance_modal';
 			var modalActionName='SUBMIT';
