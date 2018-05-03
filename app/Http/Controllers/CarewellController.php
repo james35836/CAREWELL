@@ -1936,7 +1936,6 @@ class CarewellController extends ActiveAuthController
     $data['user']     = StaticFunctionController::global();
 
     return view('carewell.pages.reports_consolidation',$data);
->>>>>>> 39a97d1b6a6e7c97124702b35a08a75a3b775bd6
   }
 
 

@@ -37,6 +37,12 @@
     $( function() {
       $( "#datepicker" ).datepicker();
     } );
+
+    $(document).ready(function()
+    {
+      $("body").find(".table tr td").find('button.btn-danger').css("margin-right","-4px");
+    });
+
     </script>
     <style>
       input
@@ -55,7 +61,7 @@
   </head>
   <body class="hold-transition skin-blue sidebar-collapse sidebar-mini">
     <div class="wrapper">
-      <header class="main-header">
+      <header style="position: fixed; width: 100%" class="main-header">
         <a href="/dashboard" class="logo">
           <span class="logo-mini"><b>C</b>W</span>
           <span class="logo-lg"><b>Carewell</b></span>
@@ -250,14 +256,11 @@
           <ul class="treeview-menu">
             <li><a href="/reports/availment"><i class="fa fa-circle-o"></i>AVAILMENT </a></li>
             <li><a href="#"><i class="fa fa-circle-o"></i>MONITORING</a></li>
-<<<<<<< HEAD
             <li><a href="#"><i class="fa fa-circle-o"></i>BREAKDOWN</a></li>
             <li><a href="/reports/ending_number_per_month"><i class="fa fa-circle-o"></i>ENDING NUMBER</a></li>
-=======
             <li><a href="/reports/breakdown"><i class="fa fa-circle-o"></i>BREAKDOWN</a></li>
             <li><a href="#"><i class="fa fa-circle-o"></i>ENDING NUMBER</a></li>
             <li><a href="/reports/consolidation"><i class="fa fa-circle-o"></i>CONSOLIDATION</a></li>
->>>>>>> 39a97d1b6a6e7c97124702b35a08a75a3b775bd6
             <li><a href="#"><i class="fa fa-circle-o"></i>SUMMARY</a></li>
           </ul>
         </li>

@@ -62,9 +62,9 @@
                   <td>
                     <div class="btn-group">
                       <button type="button" class="btn btn-danger">Action</button>
-                      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                      <span class="caret"></span>
-                      <span class="sr-only">Toggle Dropdown</span>
+                      <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
+                        <span class="caret"></span>
+                        <span class="sr-only">Toggle Dropdown</span>
                       </button>
                       <ul class="dropdown-menu" role="menu" style="position: absolute !important;">
                         <li><button type="button" data-member_id="{{$member_active->member_id}}" class="btn btn-link view-member-details"><i class="fa fa-eye btn-icon"></i>  View Member</button></li>
