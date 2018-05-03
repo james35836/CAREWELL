@@ -59,7 +59,7 @@
       }
     </style>
   </head>
-  <body class="hold-transition skin-blue sidebar-collapse sidebar-mini">
+  <body class="hold-transition skin-red sidebar-collapse sidebar-mini">
     <div class="wrapper">
       <header style="position: fixed; width: 100%" class="main-header">
         <a href="/dashboard" class="logo">
@@ -259,7 +259,6 @@
             <li><a href="#"><i class="fa fa-circle-o"></i>BREAKDOWN</a></li>
             <li><a href="/reports/ending_number_per_month"><i class="fa fa-circle-o"></i>ENDING NUMBER</a></li>
             <li><a href="/reports/breakdown"><i class="fa fa-circle-o"></i>BREAKDOWN</a></li>
-            <li><a href="#"><i class="fa fa-circle-o"></i>ENDING NUMBER</a></li>
             <li><a href="/reports/consolidation"><i class="fa fa-circle-o"></i>CONSOLIDATION</a></li>
             <li><a href="#"><i class="fa fa-circle-o"></i>SUMMARY</a></li>
           </ul>
@@ -374,12 +373,8 @@
 
 <!-- SCRIPT -->
 <script>
-
-  // $('body').find('select.filter').select2();
   $(function () {
-    //select2
     $('.select2').select2()
-    //Date picker
     $('.datepicker').datepicker({
       autoclose: true
     })
@@ -387,7 +382,7 @@
   $('body').on('hidden.bs.modal', function (e) {
       if($('.modal').hasClass('in')) 
       {
-      $('body').addClass('modal-open');
+        $('body').addClass('modal-open');
       }
       else
       {
@@ -405,6 +400,8 @@
       
       
     });
+    
+
   });
 
   
@@ -412,10 +409,13 @@
 </script>
 <script type="text/javascript">
   // To make Pace works on Ajax calls
-  $(document).ajaxStart(function () {
+  $(document).ajaxStart(function () 
+  {
     Pace.restart()
+
   })
-  $('.ajax').click(function () {
+  $('.ajax').click(function () 
+  {
     $.ajax({
       url: '#', success: function (result) {
         $('.ajax-content').html('<hr>Ajax Request Completed !')

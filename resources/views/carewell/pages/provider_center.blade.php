@@ -102,7 +102,7 @@
                   </button>
                   <ul class="dropdown-menu" role="menu" style="position: absolute !important;">
                     <li><button type="button" data-provider_id="{{$provider_inactive->provider_id}}" class="btn btn-link view-provider-details"><i class="fa fa-eye btn-icon"></i>  View Provider</button></li>
-                    <li><button type="button" class="btn btn-link restore" data-id="{{$provider_inactive->provider_id}}" data-name="PROVIDER" ><i class="fa fa-trash btn-icon"></i> Archived Provider</button></li>
+                    <li><button type="button" class="btn btn-link restore" data-id="{{$provider_inactive->provider_id}}" data-name="PROVIDER" ><i class="fa fa-undo btn-icon"></i> Restore Provider</button></li>
                   </ul>
                 </div>
                 </td>

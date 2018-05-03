@@ -107,7 +107,7 @@ function globals()
 {
 	this.global_modals = function(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize)
 	{
-
+  
 		$('.'+modalClass+'-modal').remove();
         $(".append-modal").append(globalModals);
 		$('.global-modal').removeClass().addClass('modal fade modal-top '+modalClass+'-modal');
@@ -137,7 +137,7 @@ function globals()
 						$('.global-modal-body-content').show().removeClass().addClass('row box-holder  modal-body-content').html(data);
 						if(modalSize=="modal-import")
 						{
-							$('.global-modal-footer').show().html("<button type='button' class='btn btn-default pull-left btn-close-import' data-dismiss='modal'>Close</button>");
+							$('.global-modal-footer').show().html(successButton);
                     	}
 						else
 						{
@@ -147,6 +147,7 @@ function globals()
 					 }, 800);
 				}
 			});
+
 	}
 	this.confirm_modals = function(confirmModalMessage,confirmModalAction)
 	{
@@ -413,6 +414,7 @@ function globals()
 
         table_sorter();
         table_action_add_remove();
+       
 
         filtering();
         searching();
@@ -509,7 +511,7 @@ function globals()
 					{
 						$(".confirm-ajax-loader").remove();
 						ajaxData.tdCloser.remove();
-						$(".confirm-modal-body").html('<center><b><span class="color-red"> '+ ajaxData.name +' RESTORE '+data+'!</span></b></center>');
+						$(".confirm-modal-body").html('<center><b><span class="color-red"> '+ ajaxData.name +' ARCHIVED '+data+'!</span></b></center>');
 						$(".confirm-modal-footer").html(successButton);
 	                    
 					}, 800);
@@ -672,6 +674,7 @@ function globals()
 			
 		});
 	}
+	
 	function add_remove_element()
 	{
 		$('body').on("click",".add-element", function()

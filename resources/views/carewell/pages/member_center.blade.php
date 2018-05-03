@@ -18,11 +18,11 @@
   <div class="row">
     <div class="nav-tabs-custom">
       <ul class="nav nav-tabs">
-        <li class="active"><a href="#activeCompany" data-toggle="tab">ACTIVE </a></li>
-        <li><a href="#inActiveCompany" data-toggle="tab">INACTIVE </a></li>
+        <li class="active"><a href="#activeTab" data-toggle="tab">ACTIVE </a></li>
+        <li><a href="#inActiveTab" data-toggle="tab">INACTIVE </a></li>
       </ul>
       <div class="tab-content">
-        <div class="tab-pane active" id="activeCompany">
+        <div class="tab-pane active" id="activeTab">
           <div class="row">
             <div class=" col-md-3 col-xs-12 pull-left">
               <select class="form-control top-element filtering" data-archived="0" data-name="member">
@@ -82,7 +82,7 @@
           </div>
         </div>
         <!-- /.tab-pane -->
-        <div class="tab-pane" id="inActiveCompany">
+        <div class="tab-pane" id="inActiveTab">
           <div class="row">
             <div class="col-md-3 col-xs-12 pull-left">
               <select class="form-control top-element filtering" data-archived="1" data-name="member">

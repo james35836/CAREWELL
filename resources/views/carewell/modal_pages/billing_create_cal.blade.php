@@ -69,7 +69,7 @@ autoclose: true
         <div class="input-group-addon">
           <i class="fa fa-calendar"></i>
         </div>
-        <input type="text" class="form-control pull-right datepicker" id="cal_payment_start">
+        <input type="text" class="form-control pull-right datepicker" id="cal_start">
       </div>
     </div>
     <div class="col-md-2 form-content">
@@ -80,7 +80,7 @@ autoclose: true
         <div class="input-group-addon">
           <i class="fa fa-calendar"></i>
         </div>
-        <input type="text" class="form-control pull-right datepicker" id="cal_payment_end">
+        <input type="text" class="form-control pull-right datepicker" id="cal_end">
       </div>
     </div>
   </div>

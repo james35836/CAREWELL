@@ -103,7 +103,14 @@ function doctor_center()
 			var modalLink='/doctor/view_doctor_details/'+doctor_id;
 			var modalActionName='SAVE CHANGES';
 			var modalAction='confirm';
-			var modalSize = 'modal-lg';
+			if($(this).data('size')=="md")
+			{
+				var modalSize = 'modal-md';
+			}
+			else
+			{
+				var modalSize = 'modal-lg';
+			}
 			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
 		});
 		

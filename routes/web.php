@@ -171,8 +171,8 @@ Route::get('/payable/payable_details/{payable_id}', 	'CarewellController@payable
 /*REPORTS*/
 Route::get('/reports', 									'CarewellController@reports');
 Route::get('/reports/availment', 					    'CarewellController@reports_availment');
-Route::get('/reports/ending_number_per_month', 					    'CarewellController@reports_monitoring_end_per_month');
-Route::get('/reports/breakdown', 					'CarewellController@reports_breakdown');
+Route::get('/reports/ending_number_per_month', 			'CarewellController@reports_monitoring_end_per_month');
+Route::get('/reports/breakdown', 						'CarewellController@reports_breakdown');
 
 Route::get('/reports/consolidation', 					'CarewellController@reports_consolidation');
 
