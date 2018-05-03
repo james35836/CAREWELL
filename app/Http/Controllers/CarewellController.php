@@ -1607,7 +1607,13 @@ class CarewellController extends ActiveAuthController
     if($request->ajax())
     {
       $today                = date('Y-m-d');
-      $mem_cal              = TblCalPaymentModel::where('member_id',$request->member_id)->where('archived',1)->orWhere('archived',2)->orderBy('cal_payment_end','DESC')->first();
+      $mem_cal              = TblCalPaymentModel::where('member_id',$request->member_id)
+                              ->where(function($query)use($key)
+                              {
+                                $query->orWhere('archived',2)->where('archived',1);
+                              })
+                              ->orderBy('cal_payment_end','DESC')
+                              ->first();
       $data['member_info']  = TblMemberModel::where('tbl_member.member_id',$request->member_id)->where('tbl_member_company.archived',0)->Member()->first();
       $data['_member']      = TblMemberModel::where('tbl_member.archived',0)->where('tbl_member_company.archived',0)->Member()->get();
       $data['_availment']   = TblCoveragePlanProcedureModel::where('coverage_plan_id',$data['member_info']->coverage_plan_id)
@@ -1625,6 +1631,7 @@ class CarewellController extends ActiveAuthController
                                                         {
                                                             $data['_member_list']    .= "<option value=".$member->member_id.">".$member->member_carewell_id."-".$member->member_first_name." ".$member->member_last_name;
                                                         }
+      
       if($mem_cal==null)
       {
         return  response()->json(array('ref' => 'not_yet_paid','member_list' => $data['_member_list']));
