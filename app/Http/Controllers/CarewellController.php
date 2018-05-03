@@ -1518,9 +1518,15 @@ class CarewellController extends ActiveAuthController
   }
   public function billing_cal_pending_submit(Request $request)
   {
-    $update['archived'] = 2;//for pending cal
-    $pending            = TblCalModel::where('cal_id',$request->cal_id)->update($update);
-    StaticFunctionController::getNewMember($request->cal_id);
+    $update['archived']   = 2;//for pending cal
+    $pending              = TblCalModel::where('cal_id',$request->cal_id)->update($update);
+
+    StaticFunctionController::getNewMember($request->cal_id,2);
+    $data['_cal_member']  = TblCalMemberModel::where('cal_id',$request->cal_id)->get();
+    foreach($data['_cal_member'] as $key=>$cal_member)
+    {
+      TblCalPaymentModel::where('cal_member_id',$cal_member->cal_member_id)->update($update);
+    }
     if($pending)
     {
       return '<center><b><span class="color-red">CAL successfully mark as Pending!</span></b></center>';
@@ -1561,7 +1567,7 @@ class CarewellController extends ActiveAuthController
     $calCloseData->cal_id                   =   $request->cal_id;
     $calCloseData->save();
   
-    StaticFunctionController::getNewMember($request->cal_id);
+    StaticFunctionController::getNewMember($request->cal_id,1);
 
     $update['archived']   = '1';
     $tblCal               = TblCalModel::where('cal_id',$request->cal_id)->update($update);
@@ -1608,9 +1614,11 @@ class CarewellController extends ActiveAuthController
     {
       $today                = date('Y-m-d');
       $mem_cal              = TblCalPaymentModel::where('member_id',$request->member_id)
-                              ->where(function($query)use($key)
+                              ->where(function($query)
                               {
-                                $query->orWhere('archived',2)->where('archived',1);
+                                $query->where('archived',1);
+                                $query->orWhere('archived',2);
+                                
                               })
                               ->orderBy('cal_payment_end','DESC')
                               ->first();
@@ -1631,7 +1639,6 @@ class CarewellController extends ActiveAuthController
                                                         {
                                                             $data['_member_list']    .= "<option value=".$member->member_id.">".$member->member_carewell_id."-".$member->member_first_name." ".$member->member_last_name;
                                                         }
-      
       if($mem_cal==null)
       {
         return  response()->json(array('ref' => 'not_yet_paid','member_list' => $data['_member_list']));

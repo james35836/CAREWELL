@@ -502,7 +502,7 @@ class StaticFunctionController extends Controller
     return $message; 
   }
   
-  public static function getNewMember($cal_id)
+  public static function getNewMember($cal_id,$status)
   {
     
     $data['new_member'] = TblNewMemberModel::where('cal_id',$cal_id)->get();
@@ -567,6 +567,7 @@ class StaticFunctionController extends Controller
           $member_cut['cal_payment_type']   = 'ORIGINAL';
           $member_cut['cal_member_id']      = $cal_member_id;
           $member_cut['member_id']          = $member_id;
+          $member_cut['archived']           = $status;
 
           TblCalPaymentModel::insert($member_cut);
         }
