@@ -1631,6 +1631,7 @@ class CarewellController extends ActiveAuthController
       }
       else
       {
+        print_r($data['member_info']->member_payment_mode,$mem_cal->cal_payment_end);
         $checkPayment = StaticFunctionController::checkIfMemberCanAvailed($data['member_info']->member_payment_mode,$mem_cal->cal_payment_end);
         if(strtotime($checkPayment)  < strtotime($today))
         {
