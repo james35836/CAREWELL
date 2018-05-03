@@ -184,7 +184,9 @@ table tr td
 							<td class="payment-breakdown" data-ref="new" data-cal_member_id= "{{$cal_new_member->new_member_id}}"><span class="label label-success" >{{$cal_new_member->cal_payment_count}}</span></td>
 							<td>{{$cal_new_member->cal_payment_amount}}</td>
 							<td>
-								<button type="button" data-cal_member_id="{{$cal_new_member->cal_member_id}}" class="btn btn-danger btn-sm remove-cal-member"><i class="fa fa-minus-circle"></i></button>
+								<button type="button" data-ref="new" data-cal_member_id="{{$cal_new_member->new_member_id}}" class="btn btn-danger btn-sm remove-cal-member" >
+									<i class="fa fa-minus-circle"></i>
+								</button>
 							</td>
 						</tr>
 						@endforeach
@@ -192,14 +194,13 @@ table tr td
 						<tr>
 							<td>{{$cal_member->member_universal_id}}</td>
 							<td>{{$cal_member->member_carewell_id}}</td>
-							<td>
-								<span class="first">{{ucfirst($cal_member->member_first_name)}}</span>
-								<span class="second">{{ucfirst($cal_member->member_last_name)}}</span>
-							</td>
+							<td>{{$cal_member->member_first_name}} {{$cal_member->member_last_name}}</td>
 							<td class="payment-breakdown" data-ref="old" data-count="{{$cal_member->cal_payment_count}}" data-cal_member_id= "{{$cal_member->cal_member_id}}" data-cal_id="{{$cal_member->cal_id}}"><span class="label label-success" >{{$cal_member->cal_payment_count}}</span></td>
 							<td>{{$cal_member->cal_payment_amount}}</td>
 							<td>
-								<button type="button" data-cal_member_id="{{$cal_member->cal_member_id}}" class="btn btn-danger btn-sm remove-cal-member"><i class="fa fa-minus-circle"></i></button>
+								<button type="button" data-ref="old" data-cal_member_id="{{$cal_member->cal_member_id}}" class="btn btn-danger btn-sm remove-cal-member" @if($cal_check==1) disabled @endif>
+									<i class="fa fa-minus-circle"></i>
+								</button>
 							</td>
 						</tr>
 						@endforeach
