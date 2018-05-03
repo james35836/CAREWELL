@@ -41,6 +41,7 @@
     $(document).ready(function()
     {
       $("body").find(".table tr td").find('button.btn-danger').css("margin-right","-4px");
+       $("body").find(".table tr td").find('button.btn-default').attr("class","btn btn-danger dropdown-toggle");
     });
 
     </script>
