@@ -101,14 +101,14 @@ text-align: center;
                 });
                 
               </script>
-              <canvas id="approvalChart" style="height: 200px;"></canvas>
+              <canvas id="approvalChart" style="height: 300px;"></canvas>
             </div>
           </div>
           <div class="col-md-4" >
             <p class="text-center">
               <strong>LATEST APPROVAL</strong>
             </p>
-            <div class="box-body" style="max-height: 200px;overflow-x: hidden;overflow-y: scroll;">
+            <div class="box-body" style="max-height: 300px;overflow-x: hidden;overflow-y: scroll;">
               <table class="table table-bordered">
                 <thead>
                 <tr>
