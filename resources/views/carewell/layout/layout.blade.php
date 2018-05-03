@@ -32,6 +32,18 @@
     <!-- TOASTR -->
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet">
+    
+    <script>
+    $( function() {
+      $( "#datepicker" ).datepicker();
+    } );
+
+    $(document).ready(function()
+    {
+      $("body").find(".table tr td").find('button.btn-danger').css("margin-right","-4px");
+    });
+
+    </script>
     <style>
       input
       {
@@ -49,7 +61,7 @@
   </head>
   <body class="hold-transition skin-red sidebar-collapse sidebar-mini">
     <div class="wrapper">
-      <header class="main-header">
+      <header style="position: fixed; width: 100%" class="main-header">
         <a href="/dashboard" class="logo">
           <span class="logo-mini"><b>C</b>W</span>
           <span class="logo-lg"><b>Carewell</b></span>
@@ -244,6 +256,7 @@
           <ul class="treeview-menu">
             <li><a href="/reports/availment"><i class="fa fa-circle-o"></i>AVAILMENT </a></li>
             <li><a href="#"><i class="fa fa-circle-o"></i>MONITORING</a></li>
+            <li><a href="#"><i class="fa fa-circle-o"></i>BREAKDOWN</a></li>
             <li><a href="/reports/ending_number_per_month"><i class="fa fa-circle-o"></i>ENDING NUMBER</a></li>
             <li><a href="/reports/breakdown"><i class="fa fa-circle-o"></i>BREAKDOWN</a></li>
             <li><a href="/reports/consolidation"><i class="fa fa-circle-o"></i>CONSOLIDATION</a></li>
