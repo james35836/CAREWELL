@@ -17,6 +17,7 @@ function settings_developer()
 			
 			developer_modal();
 			developer_modal_submit();
+			archived_maintenance_data();
          });
 
 	}
@@ -38,6 +39,15 @@ function settings_developer()
 	function developer_modal_submit()
 	{
 		$('body').on('click','.developer-modals-submit',function() 
+		{
+			formData.append("file_name", 			$('#JamesDev').val());
+			formData.append("importDeveloperFile", 	document.getElementById('importDeveloperFile').files[0]);
+			globals.global_submit('developer','/settings/maintenance_modal_submit',formData);
+        });
+	}
+	function archived_maintenance_data()
+	{
+		$('body').on('click','.archived-data',function() 
 		{
 			formData.append("file_name", 			$('#JamesDev').val());
 			formData.append("importDeveloperFile", 	document.getElementById('importDeveloperFile').files[0]);

@@ -140,7 +140,7 @@ class AdminController extends ActiveAuthController
       }
     }
   }
-  public function admin_view_user_deatils($user_id)
+  public function admin_view_user_details($user_id)
   {
     $data['user_details'] = TblUserModel::where('tbl_user.user_id',$user_id)
                           ->join('tbl_user_info','tbl_user_info.user_id','=','tbl_user.user_id')

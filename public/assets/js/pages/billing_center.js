@@ -1,6 +1,6 @@
-var billing_center 	= new billing_center();
-var billingMemberData = new FormData();
-var calPendingData    = new FormData();
+var billing_center 		= new billing_center();
+var billingMemberData 	= new FormData();
+var calPendingData    	= new FormData();
 function billing_center()
 {
 	init();
@@ -127,13 +127,13 @@ function billing_center()
 	{
 		$("body").on('click','.close-cal',function()
 		{
-			var cal_id = $(this).data('cal_id');
-			var modalName= 'COLLECTION DETAILS';
-			var modalClass='cal-close';
-			var modalLink='/billing/cal_close/'+cal_id;
-			var modalActionName='MARK AS CLOSE';
-			var modalAction='cal-close-confirm';
-			var modalSize = 'modal-lg';
+			var cal_id 			= $(this).data('cal_id');
+			var modalName 		= 'COLLECTION DETAILS';
+			var modalClass 		= 'cal-close';
+			var modalLink 		= '/billing/cal_close/'+cal_id;
+			var modalActionName = 'MARK AS CLOSE';
+			var modalAction 	= 'cal-close-confirm';
+			var modalSize 		= 'modal-lg';
 			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
 		});
 	}
@@ -238,13 +238,13 @@ function billing_center()
 	{
 		$("body").on('click','.cal-view-details',function()
 		{
-			var cal_id = $(this).data('cal_id');
-			var modalName= 'CAL DETAILS';
-			var modalClass='company';
-			var modalLink='/billing/cal_details/'+cal_id;
-			var modalActionName='SAVE CHANGES';
-			var modalAction='confirm';
-			var modalSize = 'modal-lg';
+			var cal_id 			= $(this).data('cal_id');
+			var modalName 		= 'CAL DETAILS';
+			var modalClass 		= 'company';
+			var modalLink 		= '/billing/cal_details/'+cal_id;
+			var modalActionName = 'SAVE CHANGES';
+			var modalAction 	= 'confirm';
+			var modalSize 		= 'modal-lg';
 			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
 		});
 
@@ -256,7 +256,6 @@ function billing_center()
 		{
 			var company_id = $(this).val();
 			$('.download-link').attr('href', '/member/download_template/'+company_id);
-			
 		});
 	}
 	function import_cal_members()
@@ -267,12 +266,12 @@ function billing_center()
 			var cal_id 		= $(this).data('member_cal_id');
 
 
-			var modalName= 'IMPORT MEMBER';
-			var modalClass='cal-member';
-			var modalLink='/billing/import_cal_members/'+cal_id+'/'+company_id;
-			var modalActionName='SAVE CHANGES';
-			var modalAction='confirm';
-			var modalSize = 'modal-import';
+			var modalName 		= 'IMPORT MEMBER';
+			var modalClass 		= 'cal-member';
+			var modalLink 		= '/billing/import_cal_members/'+cal_id+'/'+company_id;
+			var modalActionName	= 'SAVE CHANGES';
+			var modalAction 	= 'confirm';
+			var modalSize 		= 'modal-import';
 			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
         });
 
@@ -304,7 +303,7 @@ function billing_center()
 		$('body').on('click','.remove-cal-member',function() 
 		{
 			var	confirmModalMessage = 'Are you sure you want to remove this member?';
-			var confirmModalAction = 'remove-cal-member-submit';
+			var confirmModalAction 	= 'remove-cal-member-submit';
 			globals.confirm_modals(confirmModalMessage,confirmModalAction);
 
 			billingMemberData.append("cal_member_id", 	$(this).data('cal_member_id'));
