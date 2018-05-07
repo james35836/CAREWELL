@@ -2041,15 +2041,93 @@ class CarewellController extends ActiveAuthController
         foreach(Session::get($session_name) as $keys=>$session_items)
         {
           foreach($data['_laboratory'] as $pro=>$procedure)
-          if($session_items['procedure_id'] == $procedure->procedure_id)
           {
-            $data['_laboratory'][$pro]['labs'] = "checked";
+            if($session_items['procedure_id'] == $procedure->procedure_id&&$session_items['identifier']==$identifier)
+            {
+              $data['_laboratory'][$pro]['labs'] = "checked";
+            }
+            if($session_items['procedure_id'] == $procedure->procedure_id&&$session_items['identifier']!=$identifier)
+            {
+              $data['_laboratory'][$pro]['reference_number']    =  'hidden';
+            }
           }
+          
+          foreach($data['_complex'] as $pro=>$procedure)
+          {
+            if($session_items['procedure_id'] == $procedure->procedure_id)
+            {
+              $data['_complex'][$pro]['labs'] = "checked";
+            }
+            if($session_items['procedure_id'] == $procedure->procedure_id&&$session_items['identifier']!=$identifier)
+            {
+              $data['_complex'][$pro]['reference_number']    =  'hidden';
+            }
+          }
+          foreach($data['_cardio'] as $pro=>$procedure)
+          {
+            if($session_items['procedure_id'] == $procedure->procedure_id)
+            {
+              $data['_cardio'][$pro]['labs'] = "checked";
+            }
+            if($session_items['procedure_id'] == $procedure->procedure_id&&$session_items['identifier']!=$identifier)
+            {
+              $data['_cardio'][$pro]['reference_number']    =  'hidden';
+            }
+          }
+          
+          foreach($data['_ctscan'] as $pro=>$procedure)
+          {
+            if($session_items['procedure_id'] == $procedure->procedure_id)
+            {
+              $data['_ctscan'][$pro]['labs'] = "checked";
+            }
+            if($session_items['procedure_id'] == $procedure->procedure_id&&$session_items['identifier']!=$identifier)
+            {
+              $data['_ctscan'][$pro]['reference_number']    =  'hidden';
+            }
+          }
+          
+          foreach($data['_icunicu'] as $pro=>$procedure)
+          {
+            if($session_items['procedure_id'] == $procedure->procedure_id)
+            {
+              $data['_icunicu'][$pro]['labs'] = "checked";
+            }
+            if($session_items['procedure_id'] == $procedure->procedure_id&&$session_items['identifier']!=$identifier)
+            {
+              $data['_icunicu'][$pro]['reference_number']    =  'hidden';
+            }
+          }
+          
+          foreach($data['_utz'] as $pro=>$procedure)
+          {
+            if($session_items['procedure_id'] == $procedure->procedure_id)
+            {
+              $data['_utz'][$pro]['labs'] = "checked";
+            }
+            if($session_items['procedure_id'] == $procedure->procedure_id&&$session_items['identifier']!=$identifier)
+            {
+              $data['_utz'][$pro]['reference_number']    =  'hidden';
+            }
+          }
+          
+          foreach($data['_xray'] as $pro=>$procedure)
+          {
+            if($session_items['procedure_id'] == $procedure->procedure_id)
+            {
+              $data['_xray'][$pro]['labs'] = "checked";
+            }
+            if($session_items['procedure_id'] == $procedure->procedure_id&&$session_items['identifier']!=$identifier)
+            {
+              $data['_xray'][$pro]['reference_number']    =  'hidden';
+            }
+          }
+          
         }
       }
       else
       {
-        $array                  = array();
+        $array  = array();
         foreach(Session::get($session_name) as $k=>$session_item)
         {
           if($session_item['availment_id']==$availment_id)
@@ -2076,10 +2154,48 @@ class CarewellController extends ActiveAuthController
               $data['_complex'][$key]['reference_number']    =  'hidden';
             }
           }
+          foreach($data['_cardio'] as $key => $procedure)
+          {
+            $arr                = $array[$i];
+            if($arr  ==   $procedure->procedure_id)
+            {
+              $data['_cardio'][$key]['reference_number']    =  'hidden';
+            }
+          }
+          foreach($data['_ctscan'] as $key => $procedure)
+          {
+            $arr                = $array[$i];
+            if($arr  ==   $procedure->procedure_id)
+            {
+              $data['_ctscan'][$key]['reference_number']    =  'hidden';
+            }
+          }
+          foreach($data['_icunicu'] as $key => $procedure)
+          {
+            $arr                = $array[$i];
+            if($arr  ==   $procedure->procedure_id)
+            {
+              $data['_icunicu'][$key]['reference_number']    =  'hidden';
+            }
+          }
+          foreach($data['_utz'] as $key => $procedure)
+          {
+            $arr                = $array[$i];
+            if($arr  ==   $procedure->procedure_id)
+            {
+              $data['_utz'][$key]['reference_number']    =  'hidden';
+            }
+          }
+          foreach($data['_xray'] as $key => $procedure)
+          {
+            $arr                = $array[$i];
+            if($arr  ==   $procedure->procedure_id)
+            {
+              $data['_xray'][$key]['reference_number']    =  'hidden';
+            }
+          }
         }
       }
-      
-      
     }
     else
     {
@@ -2089,7 +2205,23 @@ class CarewellController extends ActiveAuthController
   }
   public function settings_coverage_items_submit(Request $request)
   {
-    $array                  = Session::get($request->session_name);
+    $identifiers      =  $request->identifier[0];
+    $session_name     = $request->session_name;
+    $session_checker  = Self::session_checker($session_name,$identifiers);
+    $session_array    = Session::get($session_name);
+    if($session_checker!=0)
+    {
+      foreach(Session::get($session_name) as $keys=>$session_items)
+      {
+        if($session_items['identifier']==$identifiers)
+        {
+          unset($session_array[$keys]);
+        }
+      }
+    }
+    Session::put($session_name,$session_array);
+
+    $array                  = Session::get($session_name);
     
     $availment_id           = $request->availment_id;
     $plan_charges           = $request->plan_charges;
@@ -2099,16 +2231,17 @@ class CarewellController extends ActiveAuthController
     $count = 0;
     foreach($request->procedure_id as $key=>$procedure_id)
     {
+
       $insert['procedure_id']         = $procedure_id;
       $insert['availment_id']         = $availment_id[$key];
       $insert['plan_charges']         = $plan_charges[$key];
-      $insert['plan_covered_amount']  = $plan_covered_amount[$key];
+      $insert['plan_covered_amount']  = $request->plan_covered_amount[$key];
       $insert['plan_limit']           = $plan_limit[$key];
       $insert['identifier']           = $identifier[$key];
       array_push($array, $insert);
       $count++;
     }
-    Session::put($request->session_name,$array);
+    Session::put($session_name,$array);
 
     return StaticFunctionController::returnMessage('success','PROCEDURE');
   }

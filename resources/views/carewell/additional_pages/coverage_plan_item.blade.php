@@ -22,9 +22,9 @@
 </script>
 
 <form method="POST">
-  <input type="hidden" id="availment_id" value="{{$availment_id}}"/>
-  <input type="hidden" id="session_name" value="{{$session_name}}"/>
-  <input type="hidden" id="identifier" value="{{$identifier}}"/>
+  <input type="hidden" id="availment_id"  value="{{$availment_id}}"/>
+  <input type="hidden" id="session_name"  value="{{$session_name}}"/>
+  <input type="hidden" id="identifier"    value="{{$identifier}}"/>
   <div class="row">
     <div  class="table-responsive no-padding">
       <table class="table table-bordered" >
@@ -124,13 +124,16 @@
                 
               </tr>
               @foreach($_complex as $complex)
+              @if($complex->reference_number=='hidden')
+              @else
               <tr class="table-row">
                 <td>
-                  <input type="checkbox" name="coverage_item[]" value="{{$complex->procedure_id}}"/>
+                  <input type="checkbox" name="coverage_item[]" value="{{$complex->procedure_id}}" {{$complex->labs}}/>
                 </td>
                 <td class="procedure">{{$complex->procedure_name}}</td>
                 
               </tr>
+              @endif
               @endforeach
             </table>
           </div>
@@ -149,13 +152,16 @@
                 
               </tr>
               @foreach($_cardio as $cardio)
+              @if($cardio->reference_number=='hidden')
+              @else
               <tr class="table-row">
                 <td>
-                  <input type="checkbox" name="coverage_item[]" value="{{$cardio->procedure_id}}"/>
+                  <input type="checkbox" name="coverage_item[]" value="{{$cardio->procedure_id}}" {{$cardio->labs}}/>
                 </td>
                 <td class="procedure">{{$cardio->procedure_name}}</td>
                 
               </tr>
+              @endif
               @endforeach
             </table>
           </div>
@@ -174,13 +180,16 @@
                 
               </tr>
               @foreach($_ctscan as $ctscan)
+              @if($ctscan->reference_number=='hidden')
+              @else
               <tr class="table-row">
                 <td>
-                  <input type="checkbox" name="coverage_item[]" value="{{$ctscan->procedure_id}}"/>
+                  <input type="checkbox" name="coverage_item[]" value="{{$ctscan->procedure_id}}" {{$ctscan->labs}}/>
                 </td>
                 <td class="procedure">{{$ctscan->procedure_name}}</td>
                 
               </tr>
+              @endif
               @endforeach
             </table>
           </div>
@@ -199,13 +208,16 @@
                 
               </tr>
               @foreach($_icunicu as $icunicu)
+              @if($icunicu->reference_number=='hidden')
+              @else
               <tr class="table-row">
                 <td>
-                  <input type="checkbox" name="coverage_item[]" value="{{$icunicu->procedure_id}}"/>
+                  <input type="checkbox" name="coverage_item[]" value="{{$icunicu->procedure_id}}" {{$icunicu->labs}}/>
                 </td>
                 <td class="procedure">{{$icunicu->procedure_name}}</td>
                 
               </tr>
+              @endif
               @endforeach
             </table>
           </div>
@@ -224,13 +236,16 @@
                 
               </tr>
               @foreach($_utz as $utz)
+              @if($utz->reference_number=='hidden')
+              @else
               <tr class="table-row">
                 <td>
-                  <input type="checkbox" name="coverage_item[]" value="{{$utz->procedure_id}}"/>
+                  <input type="checkbox" name="coverage_item[]" value="{{$utz->procedure_id}}" {{$utz->labs}}/>
                 </td>
                 <td class="procedure">{{$utz->procedure_name}}</td>
                 
               </tr>
+              @endif
               @endforeach
             </table>
           </div>
@@ -249,13 +264,16 @@
                 
               </tr>
               @foreach($_xray as $xray)
+              @if($xray->reference_number=='hidden')
+              @else
               <tr class="table-row">
                 <td>
-                  <input type="checkbox" name="coverage_item[]" value="{{$xray->procedure_id}}"/>
+                  <input type="checkbox" name="coverage_item[]" value="{{$xray->procedure_id}}" {{$xray->labs}}/>
                 </td>
                 <td class="procedure">{{$xray->procedure_name}}</td>
                 
               </tr>
+              @endif
               @endforeach
             </table>
           </div>
