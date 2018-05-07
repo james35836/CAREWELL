@@ -58,7 +58,7 @@ Route::POST('/user/change_password/submit', 			'UserController@user_change_passw
 Route::get('/settings/admin', 							'AdminController@admin_center');
 Route::get('/admin/create_user', 						'AdminController@admin_create_user');
 Route::POST('/admin/create_user/submit', 				'AdminController@admin_create_user_submit');
-Route::get('/admin/view_user_deatils/{user_id}', 		'AdminController@admin_view_user_deatils');
+Route::get('/admin/view_user_details/{user_id}', 		'AdminController@admin_view_user_details');
 
 Route::get('/settings/maintenance', 				    'AdminController@settings_maintenance');
 Route::get('/settings/maintenance_modal', 				'AdminController@settings_maintenance_modal');

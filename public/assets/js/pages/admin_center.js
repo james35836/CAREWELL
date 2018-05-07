@@ -101,7 +101,7 @@ function admin_center()
 			var user_id = $(this).data('user_id');
 			var modalName= 'USER DETAILS';
 			var modalClass='admin-details';
-			var modalLink='/admin/view_user_deatils/'+user_id;
+			var modalLink='/admin/view_user_details/'+user_id;
 			var modalActionName='SAVE CHANGES';
 			var modalAction='save-user-confirm';
 			var modalSize = 'modal-lg';
