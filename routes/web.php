@@ -72,6 +72,8 @@ Route::get('/company', 									'CarewellController@company');
 Route::get('/company/company_details/{company_id}', 	'CarewellController@company_details');
 Route::get('/company/create_company', 					'CarewellController@company_create_company');
 Route::post('/company/create_company/submit', 			'CarewellController@company_create_company_submit');
+Route::post('/company/update_company/submit', 			'CarewellController@company_update_company_submit');
+
 
 /*MEMBER*/
 Route::get('/member', 									'CarewellController@member');
@@ -86,6 +88,9 @@ Route::post('/member/import_member/submit', 			'CarewellController@member_import
 
 Route::get('/member/member_adjustment/{member_id}', 	'CarewellController@member_adjustment');
 Route::post('/member/member_adjustment/submit', 		'CarewellController@member_adjustment_submit');
+
+Route::post('/member/update_member/submit', 		'CarewellController@member_update_member_submit');
+
 
 
 
@@ -106,6 +111,7 @@ Route::post('/doctor/add_doctor/submit', 			    'CarewellController@add_doctor_s
 Route::get('/doctor/view_doctor_details/{doctor_id}', 	'CarewellController@doctor_view_details');
 Route::get('/doctor/download_template/{provider_id}/{number}', 	'CarewellController@doctor_download_template');
 Route::post('/doctor/import_doctor/submit', 			'CarewellController@doctor_import_doctor_submit');
+Route::post('/doctor/update_doctor/submit', 			'CarewellController@doctor_update_submit');
 
 /*BILLING*/
 Route::get('/billing', 									'CarewellController@billing');

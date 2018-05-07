@@ -26,6 +26,8 @@ function member_center()
 			member_adjustment();
 			member_adjustment_confirm();
 			member_adjustment_submit();
+			update_member_confirm();
+			update_member_submit();
 		});
 
 	}
@@ -147,7 +149,7 @@ function member_center()
 			var modalClass='member-details';
 			var modalLink='/member/view_member_details/'+member_id;
 			var modalActionName='SAVE CHANGES';
-			var modalAction='confirm';
+			var modalAction='update-member-confirm';
 			var modalSize = 'modal-lg';
 			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
 		});
@@ -168,6 +170,45 @@ function member_center()
 
 		
 	}
+
+	//edrich
+	function update_member_confirm()
+	{
+		$('body').on('click','.update-member-confirm',function() 
+		{
+			var	confirmModalMessage  = 'Are you sure you want to update this member?';
+			var confirmModalAction   = 'update-member-submit';
+			globals.confirm_modals(confirmModalMessage,confirmModalAction);
+
+			memberData.append("member_id", 				document.getElementById('member_id').value);
+			memberData.append("member_first_name", 				document.getElementById('member_first_name').value);
+			memberData.append("member_middle_name", 	document.getElementById('member_middle_name').value);
+			memberData.append("member_last_name", 	document.getElementById('member_last_name').value);
+			memberData.append("member_birthdate", 			document.getElementById('member_birthdate').value);               
+		   	memberData.append("member_gender", 		document.getElementById('member_gender').value);
+			memberData.append("member_marital_status", 	document.getElementById('member_marital_status').value);
+			memberData.append("member_mother_maiden_name", 	document.getElementById('member_mother_maiden_name').value);
+			memberData.append("member_contact_number", 		document.getElementById('member_contact_number').value);
+			memberData.append("member_email_address", 	document.getElementById('member_email_address').value);
+			memberData.append("member_permanet_address", 	document.getElementById('member_permanet_address').value);		
+			memberData.append("member_present_address", 	document.getElementById('member_present_address').value);
+
+			memberData.append("government_card_philhealth", 	document.getElementById('government_card_philhealth').value);
+			memberData.append("government_card_sss", 	document.getElementById('government_card_sss').value);
+			memberData.append("government_card_tin", 	document.getElementById('government_card_tin').value);
+			memberData.append("government_card_hdmf", 	document.getElementById('government_card_hdmf').value);
+		});
+	}
+
+	function update_member_submit()
+	{
+		$('body').on('click','.update-member-submit',function()  
+		{
+			globals.global_submit('member-details','/member/update_member/submit',memberData);
+        });
+		
+	}
+	//edrich
 	
 	
 	function export_template()

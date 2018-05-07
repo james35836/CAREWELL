@@ -18,7 +18,8 @@ function company_center()
             create_company_confirm();
             create_company_submit();
             action_view_company_details();
-            save_company_confirm();
+            update_company_confirm();
+            update_company_submit();
 		});
 
 	}
@@ -155,23 +156,46 @@ function company_center()
 			var modalClass      ='company-details';
 			var modalLink       ='/company/company_details/'+company_id;
 			var modalActionName ='SAVE CHANGES';
-			var modalAction     ='save-company-confirm';
+			var modalAction     ='update-company-confirm';
 			var modalSize       = 'modal-lg';
 			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
 		});
 	}
-	function save_company_confirm()
+	
+
+	function update_company_confirm()
 	{
-		$('body').on('click','.save-company-confirm',function() 
+		$('body').on('click','.update-company-confirm',function() 
 		{
-			var company_id      = $(this).data('company_id');
-			var modalName       = 'COMPANY DETAILS';
-			var modalClass      ='company-details';
-			var modalLink       ='/company/company_details/'+company_id;
-			var modalActionName ='SAVE CHANGES';
-			var modalAction     ='save-company-confirm';
-			var modalSize       = 'modal-lg';
-			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
+			var	confirmModalMessage  = 'Are you sure you want to update this company?';
+			var confirmModalAction   = 'update-company-submit';
+			globals.confirm_modals(confirmModalMessage,confirmModalAction);
+
+			companyData.append("company_id", 				document.getElementById('company_id').value);
+
+			companyData.append("company_name", 				document.getElementById('company_name').value);
+			companyData.append("company_email_address", 	document.getElementById('company_email_address').value);
+			companyData.append("company_contact_number", 	document.getElementById('company_contact_number').value);
+			companyData.append("company_address", 			document.getElementById('company_address').value);
+		                
+		   	companyData.append("contact_person_name", 		document.getElementById('contact_person_name').value);
+			companyData.append("contact_person_position", 	document.getElementById('contact_person_position').value);
+			companyData.append("contact_person_number", 	document.getElementById('contact_person_number').value);
+
+			companyData.append("contact_person_names", 		document.getElementById('contact_person_names').value);
+			companyData.append("contact_person_positions", 	document.getElementById('contact_person_positions').value);
+			companyData.append("contact_person_numbers", 	document.getElementById('contact_person_numbers').value);		
 		});
+
+		
+	}
+
+	function update_company_submit()
+	{
+		$('body').on('click','.update-company-submit',function()  
+		{
+			globals.global_submit('company-details','/company/update_company/submit',companyData);
+        });
+		
 	}
 }

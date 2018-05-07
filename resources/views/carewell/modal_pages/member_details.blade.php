@@ -33,6 +33,7 @@
 	})
 </script>
 <div class="row box-globals">
+	<input type="hidden" value="{{$member_details->member_id}}" id="member_id" name="">
 	<div class="col-md-8 pull-left top-label" style="">
 		<p>UNIVERSAL ID  : {{$member_details->member_universal_id}}</p>
 	</div>
@@ -129,7 +130,7 @@
 				<label>Mother Maiden Name</label>
 			</div>
 			<div class="col-md-10 form-content">
-				<input type="text" value="{{$member_details->member_mother_maiden_name}}" name="member_monther_maiden_name" id="member_monther_maiden_name" class="form-control"/>
+				<input type="text" value="{{$member_details->member_mother_maiden_name}}" name="member_monther_maiden_name" id="member_mother_maiden_name" class="form-control"/>
 			</div>
 		</div>
 	</form>
@@ -211,13 +212,13 @@
 						<label>PHIL-HEALTH </label>
 					</div>
 					<div class="col-md-4 form-content">
-						<input type="text" class="form-control" value="{{$member_government->government_card_philhealth}}"/>
+						<input type="text" class="form-control" value="{{$member_government->government_card_philhealth}}" id="government_card_philhealth"/>
 					</div>
 					<div class="col-md-2 form-content">
 						<label>SSS </label>
 					</div>
 					<div class="col-md-4 form-content">
-						<input type="text" class="form-control" value="{{$member_government->government_card_sss}}"/>
+						<input type="text" class="form-control" value="{{$member_government->government_card_sss}}" id="government_card_sss"/>
 					</div>
 				</div>
 				<div class="form-holder">
@@ -225,16 +226,19 @@
 						<label>TIN </label>
 					</div>
 					<div class="col-md-4 form-content">
-						<input type="text" class="form-control" value="{{$member_government->government_card_tin}}"/>
+						<input type="text" class="form-control" value="{{$member_government->government_card_tin}}" id="government_card_tin" />
 					</div>
 					<div class="col-md-2 form-content">
 						<label>HDMF </label>
 					</div>
 					<div class="col-md-4 form-content">
-						<input type="text" class="form-control" value="{{$member_government->government_card_hdmf}}"/>
+						<input type="text" class="form-control" value="{{$member_government->government_card_hdmf}}" id="government_card_hdmf"/>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
+
+
+

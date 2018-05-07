@@ -23,6 +23,7 @@ var searchData 		= new FormData();
 
 
 var coverageData    = new FormData();
+var memberData 		= new FormData();
 
 
 var coverageItemData	= [];

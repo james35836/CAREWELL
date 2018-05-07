@@ -162,6 +162,29 @@ class CarewellController extends ActiveAuthController
     $data['_payment_mode']    = TblPaymentModeModel::get();
     return view('carewell.modal_pages.company_create',$data);
   }
+
+  public function company_update_company_submit(Request $request)
+  {
+    $update['company_name'] = $request->company_name;
+    $update['company_email_address'] = $request->company_email_address;
+    $update['company_contact_number'] = $request->company_contact_number;
+    $update['company_address'] = $request->company_address;
+
+    $update['contact_person_name'] = $request->contact_person_name;
+    $update['contact_person_position'] = $request->contact_person_position;
+    $update['contact_person_number'] = $request->contact_person_number;
+    $update['contact_person_names'] = $request->contact_person_names;
+    $update['contact_person_positions'] = $request->contact_person_positions;
+    $update['contact_person_numbers'] = $request->contact_person_numbers;
+
+    $check =  TblCompanyModel::where('tbl_company.company_id',$request->company_id)
+              ->join('tbl_company_contact_person','tbl_company_contact_person.company_id','=','tbl_company.company_id')
+              ->update($update);
+
+    return 'company updated successfully';
+
+
+  }
   public function company_create_company_submit(Request $request)
   {
     
@@ -317,6 +340,30 @@ class CarewellController extends ActiveAuthController
 
     return view('carewell.modal_pages.member_details',$data);
   }
+
+  //edrich
+  public function member_update_member_submit(Request $request)
+  {
+    $update['member_first_name']          = $request->member_first_name;
+    $update['member_middle_name']         = $request->member_middle_name;
+    $update['member_last_name']           = $request->member_last_name;
+    $update['member_gender']              = $request->member_gender;
+    $update['member_marital_status']      = $request->member_marital_status;
+    $update['member_mother_maiden_name']  = $request->member_mother_maiden_name;
+    $update['member_contact_number']      = $request->member_contact_number;
+    $update['member_email_address']       = $request->member_email_address;
+    $update['member_permanet_address']    = $request->member_permanet_address;
+    $update['member_present_address']     = $request->member_present_address;
+
+
+    $check =  TblMemberModel::where('tbl_member.member_id',$request->member_id)
+    ->join('tbl_member_government_card','tbl_member_government_card.member_id','=','tbl_member.member_id')
+    ->update($update);
+
+    return 'member update successfully';
+  }
+
+  //edrich
 
   public function member_transaction_details($member_id)
   {
@@ -907,12 +954,25 @@ class CarewellController extends ActiveAuthController
 
     return view('carewell.modal_pages.doctor_details',$data);
   }
+
+    public function doctor_update_submit(Request $request)
+  {
+    $update['doctor_full_name'] = $request->doctor_full_name;
+    $update['doctor_gender'] = $request->doctor_gender;
+    $update['doctor_contact_number'] = $request->doctor_contact_number;
+    $update['doctor_contact_number'] = $request->doctor_contact_number;
+    $check =  TblDoctorModel::where('doctor_id',$request->doctor_id)->update($update);
+
+    return 'doctor update successfully';
+  }
+
   public function add_doctor()
   {
     $data['_provider']        = TblProviderModel::where('archived',0)->get();
     $data['_specialization']  = TblSpecializationModel::get();
     return view('carewell.modal_pages.doctor_create',$data);
   }
+
   public function add_doctor_submit(Request $request)
   {
     $doctorData = new TblDoctorModel;

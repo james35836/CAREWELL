@@ -23,6 +23,8 @@ function doctor_center()
             import_doctor_confirm();
 			import_doctor_submit();
 			view_doctor_details();
+			save_doctor_confirm();
+			update_doctor_submit();
 		});
 	}
 	function add_doctor()
@@ -102,7 +104,7 @@ function doctor_center()
 			var modalClass='doctor-details';
 			var modalLink='/doctor/view_doctor_details/'+doctor_id;
 			var modalActionName='SAVE CHANGES';
-			var modalAction='confirm';
+			var modalAction='save-doctor-confirm';
 			if($(this).data('size')=="md")
 			{
 				var modalSize = 'modal-md';
@@ -113,6 +115,32 @@ function doctor_center()
 			}
 			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
 		});
+		
+	}
+	function save_doctor_confirm()
+	{
+		$('body').on('click','.save-doctor-confirm',function() 
+		{
+			var	confirmModalMessage  = 'Are you sure you want to update this doctor?';
+			var confirmModalAction   = 'update-doctor-submit';
+			globals.confirm_modals(confirmModalMessage,confirmModalAction);
+
+			doctorData.append("doctor_id",     document.getElementById('doctor_id').value);
+			doctorData.append("doctor_full_name",     document.getElementById('doctor_full_name').value);
+	        doctorData.append("doctor_gender", 			document.getElementById('doctor_gender').value);
+	        doctorData.append("doctor_contact_number", 	document.getElementById('doctor_contact_number').value);
+	        doctorData.append("doctor_email_address", 	document.getElementById('doctor_email_address').value);
+		});
+
+		
+	}
+
+	function update_doctor_submit()
+	{
+		$('body').on('click','.update-doctor-submit',function()  
+		{
+			globals.global_submit('doctor-details','/doctor/update_doctor/submit',doctorData);
+        });
 		
 	}
 	

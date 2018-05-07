@@ -6,9 +6,9 @@ radioClass   : 'iradio_minimal-blue'
 })
 </script>
 <div class="row box-globals">
+	<input type="hidden" value="{{$company_details->company_id}}" id="company_id" name="">
 	<div class="form-holder">
-		
-		<div class="col-md-4 form-content pull-right top-label">
+			<div class="col-md-4 form-content pull-right top-label">
 			<label>COMPANY CODE : {{$company_details->company_code}}</label>
 		</div>
 		
@@ -34,7 +34,7 @@ radioClass   : 'iradio_minimal-blue'
 			<label>Tel/Mobile Number</label>
 		</div>
 		<div class="col-md-4 form-content">
-			<input type="text" value="{{$company_details->company_contact_number}}" name="company_contact_number" id="company_contact_person" class="form-control"/>
+			<input type="text" value="{{$company_details->company_contact_number}}" name="company_contact_number" id="company_contact_number" class="form-control"/>
 		</div>
 	</div>
 	<div class="form-holder">
