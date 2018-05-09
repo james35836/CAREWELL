@@ -165,93 +165,127 @@ class CarewellController extends ActiveAuthController
 
   public function company_update_company_submit(Request $request)
   {
-    $update['company_name'] = $request->company_name;
-    $update['company_email_address'] = $request->company_email_address;
-    $update['company_contact_number'] = $request->company_contact_number;
-    $update['company_address'] = $request->company_address;
-
-    $update['contact_person_name'] = $request->contact_person_name;
-    $update['contact_person_position'] = $request->contact_person_position;
-    $update['contact_person_number'] = $request->contact_person_number;
-    $update['contact_person_names'] = $request->contact_person_names;
+    $update['company_name']             = $request->company_name;
+    $update['company_email_address']    = $request->company_email_address;
+    $update['company_contact_number']   = $request->company_contact_number;
+    $update['company_address']          = $request->company_address;
+    $update['contact_person_name']      = $request->contact_person_name;
+    $update['contact_person_position']  = $request->contact_person_position;
+    $update['contact_person_number']    = $request->contact_person_number;
+    $update['contact_person_names']     = $request->contact_person_names;
     $update['contact_person_positions'] = $request->contact_person_positions;
-    $update['contact_person_numbers'] = $request->contact_person_numbers;
+    $update['contact_person_numbers']   = $request->contact_person_numbers;
 
     $check =  TblCompanyModel::where('tbl_company.company_id',$request->company_id)
               ->join('tbl_company_contact_person','tbl_company_contact_person.company_id','=','tbl_company.company_id')
               ->update($update);
 
     return 'company updated successfully';
-
-
   }
+  public function company_add_coverage_plan($company_id)
+  {
+    $data['company_id']       = $company_id;
+    $company_coverage         = TblCompanyCoveragePlanModel::where('company_id',$company_id)->get();
+    foreach($company_coverage as $coverage)
+    {
+      $data['_coverage_plan'] = TblCoveragePlanModel::where('coverage_plan_id','!=',$coverage->coverage_plan_id)->get();
+    }
+    return view('carewell.modal_pages.company_add_plan',$data);
+  }
+  public function  company_add_coverage_plan_submit(Request $request)
+  {
+    foreach($request->coveragePlanData as $coverage_plan_id)
+    {
+      $coverageData                   = new TblCompanyCoveragePlanModel;
+      $coverageData->coverage_plan_id = $coverage_plan_id;
+      $coverageData->company_id       = $request->company_id;
+      $coverageData->save();
+    }
+    return StaticFunctionController::returnMessage('success','COVERAGE PLAN');
+  }
+  public function company_add_deployment($company_id)
+  {
+    $data['company_id']       = $company_id;
+    return view('carewell.modal_pages.company_add_deployment',$data);
+  }
+  public function  company_add_deployment_submit(Request $request)
+  {
+    foreach($request->deploymentData as $deployment_name)
+    {
+      $deploymentCompanyData                  = new TblCompanyDeploymentModel;
+      $deploymentCompanyData->deployment_name = $deployment_name;
+      $deploymentCompanyData->company_id      = $request->company_id;
+      $deploymentCompanyData->save();
+    }
+    return StaticFunctionController::returnMessage('success','DEPLOYMENT');
+  }
+
   public function company_create_company_submit(Request $request)
   {
-    
-        $unique_name   = substr(str_shuffle("ABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0,5);
+    $unique_name   = substr(str_shuffle("ABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0,5);
         
-        $companyData = new TblCompanyModel;
-        $companyData->company_code            = StaticFunctionController::updateReferenceNumber('company');
-        $companyData->company_name            = $request->company_name;
-        $companyData->company_contact_number  = $request->company_contact_number;
-        $companyData->company_email_address   = $request->company_email_address;
-        $companyData->company_address         = $request->company_address;
-        $companyData->company_status          = 'active';
-        $companyData->company_created         = Carbon::now();
-        $companyData->company_parent_id       = 0;
-        $companyData->save();
+    $companyData = new TblCompanyModel;
+    $companyData->company_code            = StaticFunctionController::updateReferenceNumber('company');
+    $companyData->company_name            = $request->company_name;
+    $companyData->company_contact_number  = $request->company_contact_number;
+    $companyData->company_email_address   = $request->company_email_address;
+    $companyData->company_address         = $request->company_address;
+    $companyData->company_status          = 'active';
+    $companyData->company_created         = Carbon::now();
+    $companyData->company_parent_id       = 0;
+    $companyData->save();
 
-        $contractCompanyData = new TblCompanyContractModel;
-        $contractCompanyData->contract_number  = $companyData->company_code;
-        $contractCompanyData->contract_created = Carbon::now();
-        $contractCompanyData->company_id       = $companyData->company_id;
-        $contractCompanyData->save();
+    $contractCompanyData = new TblCompanyContractModel;
+    $contractCompanyData->contract_number  = $companyData->company_code;
+    $contractCompanyData->contract_created = Carbon::now();
+    $contractCompanyData->company_id       = $companyData->company_id;
+    $contractCompanyData->save();
 
-        $contactPerson = new TblCompanyContactPersonModel;
-        $contactPerson->contact_person_name     = StaticFunctionController::nullableToString($request->contact_person_name);
-        $contactPerson->contact_person_position = StaticFunctionController::nullableToString($request->contact_person_position);
-        $contactPerson->contact_person_number   = StaticFunctionController::nullableToString($request->contact_person_number);
-        $contactPerson->contact_person_names    = StaticFunctionController::nullableToString($request->contact_person_names);
-        $contactPerson->contact_person_positions= StaticFunctionController::nullableToString($request->contact_person_positions);
-        $contactPerson->contact_person_numbers  = StaticFunctionController::nullableToString($request->contact_person_numbers);
-        $contactPerson->company_id              = $companyData->company_id;
-        $contactPerson->save();
+    $contactPerson = new TblCompanyContactPersonModel;
+    $contactPerson->contact_person_name     = StaticFunctionController::nullableToString($request->contact_person_name);
+    $contactPerson->contact_person_position = StaticFunctionController::nullableToString($request->contact_person_position);
+    $contactPerson->contact_person_number   = StaticFunctionController::nullableToString($request->contact_person_number);
+    $contactPerson->contact_person_names    = StaticFunctionController::nullableToString($request->contact_person_names);
+    $contactPerson->contact_person_positions= StaticFunctionController::nullableToString($request->contact_person_positions);
+    $contactPerson->contact_person_numbers  = StaticFunctionController::nullableToString($request->contact_person_numbers);
+    $contactPerson->company_id              = $companyData->company_id;
+    $contactPerson->save();
         
-        foreach($request->file("contractData") as $contract_image_name)
-        {
-          $fileContractRef = $unique_name.'-'.$contract_image_name->getClientOriginalName();
-          $contract_image_name->move('contract',$fileContractRef );
+    foreach($request->file("contractData") as $contract_image_name)
+    {
+      $fileContractRef = $unique_name.'-'.$contract_image_name->getClientOriginalName();
+      $contract_image_name->move('contract',$fileContractRef );
 
-          $contractImageData = new TblCompanyContractImageModel;
-          $contractImageData->contract_image_name = '/contract/'.$fileContractRef.'';
-          $contractImageData->contract_id = $contractCompanyData->contract_id;
-          $contractImageData->save();
-        }
-        foreach($request->file("benefitsData") as $contract_benefits_name)
-        {
-          $fileContractBRef = $unique_name.'-'.$contract_benefits_name->getClientOriginalName();
-          $contract_benefits_name->move('schedule_of_benefits',$fileContractBRef );
+      $contractImageData = new TblCompanyContractImageModel;
+      $contractImageData->contract_image_name = '/contract/'.$fileContractRef.'';
+      $contractImageData->contract_id = $contractCompanyData->contract_id;
+      $contractImageData->save();
+    }
+    foreach($request->file("benefitsData") as $contract_benefits_name)
+    {
+      $fileContractBRef = $unique_name.'-'.$contract_benefits_name->getClientOriginalName();
+      $contract_benefits_name->move('schedule_of_benefits',$fileContractBRef );
 
-          $benefitsImageData = new TblCompanyContractBenefitsModel;
-          $benefitsImageData->contract_benefits_name = '/schedule_of_benefits/'.$fileContractBRef.'';
-          $benefitsImageData->contract_id = $contractCompanyData->contract_id;
-          $benefitsImageData->save();
-        }
-        foreach($request->coveragePlanData as $coverage_plan_id)
-        {
-          $coverageData = new TblCompanyCoveragePlanModel;
-          $coverageData->coverage_plan_id = $coverage_plan_id;
-          $coverageData->company_id = $companyData->company_id;
-          $coverageData->save();
-        }
-        foreach($request->deploymentData as $deployment_name)
-        {
-          $deploymentCompanyData = new TblCompanyDeploymentModel;
-          $deploymentCompanyData->deployment_name = $deployment_name;
-          $deploymentCompanyData->company_id = $companyData->company_id;
-          $deploymentCompanyData->save();
-        }
-   return StaticFunctionController::returnMessage('success','COMPANY');
+      $benefitsImageData = new TblCompanyContractBenefitsModel;
+      $benefitsImageData->contract_benefits_name = '/schedule_of_benefits/'.$fileContractBRef.'';
+      $benefitsImageData->contract_id = $contractCompanyData->contract_id;
+      $benefitsImageData->save();
+    }
+    foreach($request->coveragePlanData as $coverage_plan_id)
+    {
+      $coverageData = new TblCompanyCoveragePlanModel;
+      $coverageData->coverage_plan_id = $coverage_plan_id;
+      $coverageData->company_id = $companyData->company_id;
+      $coverageData->save();
+    }
+    foreach($request->deploymentData as $deployment_name)
+    {
+      $deploymentCompanyData = new TblCompanyDeploymentModel;
+      $deploymentCompanyData->deployment_name = $deployment_name;
+      $deploymentCompanyData->company_id = $companyData->company_id;
+      $deploymentCompanyData->save();
+    }
+    return StaticFunctionController::returnMessage('success','COMPANY');
   }
  
   /*MEMBER*/
@@ -356,9 +390,9 @@ class CarewellController extends ActiveAuthController
     $update['member_present_address']     = $request->member_present_address;
 
 
-    $check =  TblMemberModel::where('tbl_member.member_id',$request->member_id)
-    ->join('tbl_member_government_card','tbl_member_government_card.member_id','=','tbl_member.member_id')
-    ->update($update);
+    $check    =  TblMemberModel::where('tbl_member.member_id',$request->member_id)
+              ->join('tbl_member_government_card','tbl_member_government_card.member_id','=','tbl_member.member_id')
+              ->update($update);
 
     return 'member update successfully';
   }
@@ -2116,12 +2150,13 @@ class CarewellController extends ActiveAuthController
     $count = 0;
     foreach(Session::get($session_name) as $keys=>$session_items)
     {
-      if($session_items['identifier']==$identifier)
+      if(isset($session_items['identifier']))
       {
-        
-        $count++;
+        if($session_items['identifier']==$identifier)
+        {
+          $count++;
+        }
       }
-
     }
     return $count;
   }
@@ -2160,7 +2195,6 @@ class CarewellController extends ActiveAuthController
               $data['_laboratory'][$pro]['reference_number']    =  'hidden';
             }
           }
-          
           foreach($data['_complex'] as $pro=>$procedure)
           {
             if($session_items['procedure_id'] == $procedure->procedure_id)
@@ -2314,13 +2348,13 @@ class CarewellController extends ActiveAuthController
   }
   public function settings_coverage_items_submit(Request $request)
   {
+    
     $identifiers      =  $request->identifier[0];
-    $session_name     = $request->session_name;
-    $session_checker  = Self::session_checker($session_name,$identifiers);
-    $session_array    = Session::get($session_name);
-    if($session_checker!=0)
+    $session_name     =  $request->session_name;
+    $session_array    =  Session::get($session_name);
+    foreach(Session::get($session_name) as $keys=>$session_items)
     {
-      foreach(Session::get($session_name) as $keys=>$session_items)
+      if(isset($session_items['identifier']))
       {
         if($session_items['identifier']==$identifiers)
         {
@@ -2338,15 +2372,16 @@ class CarewellController extends ActiveAuthController
     $plan_limit             = $request->plan_limit;
     $identifier             = $request->identifier;
     $count = 0;
+    
     foreach($request->procedure_id as $key=>$procedure_id)
     {
-
+      
       $insert['procedure_id']         = $procedure_id;
-      $insert['availment_id']         = $availment_id[$key];
-      $insert['plan_charges']         = $plan_charges[$key];
-      $insert['plan_covered_amount']  = $request->plan_covered_amount[$key];
-      $insert['plan_limit']           = $plan_limit[$key];
-      $insert['identifier']           = $identifier[$key];
+      $insert['availment_id']         = $availment_id;
+      $insert['plan_charges']         = $plan_charges;
+      $insert['plan_covered_amount']  = $plan_covered_amount;
+      $insert['plan_limit']           = $plan_limit;
+      $insert['identifier']           = $identifier;
       array_push($array, $insert);
       $count++;
     }

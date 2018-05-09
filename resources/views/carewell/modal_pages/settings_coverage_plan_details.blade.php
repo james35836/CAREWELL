@@ -127,12 +127,12 @@ radioClass   : 'iradio_minimal-blue'
 			<div class="row type-of-availment-padding">
 				<div class="row availment-container">
 					@foreach($_coverage_plan_covered as $coverage_plan_covered)
+					<p style="font-size: 20px;font-weight: bold;">
+						{{$coverage_plan_covered->availment_name}}
+					</p>
 					<div class=" availment-box">
-						<div class="parent-availment ">
-							<p style="font-size: 20px;font-weight: bold;">
-								{{-- <input type="checkbox" class="minimal" name="parent_availment[]" value="{{$coverage_plan_covered->availment_id}}"/> --}}
-								{{$coverage_plan_covered->availment_name}}
-							</p>
+						<div class="table-responsive parent-availment ">
+							
 							<table class="table table-bordered availed-table">
 								<thead>
 									<tr>

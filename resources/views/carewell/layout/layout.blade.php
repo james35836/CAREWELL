@@ -58,9 +58,13 @@
       {
         text-transform: lowercase !important;
       }
+      span
+      {
+        cursor: pointer;
+      }
     </style>
   </head>
-  <body class="hold-transition skin-red sidebar-collapse sidebar-mini">
+  <body class="hold-transition skin-blue sidebar-collapse sidebar-mini">
     <div class="wrapper">
       <header style="position: fixed; width: 100%" class="main-header">
         <a href="/dashboard" class="logo">

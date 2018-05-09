@@ -1,10 +1,3 @@
-<script>
-//iCheck for checkbox and radio inputs
-$('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
-checkboxClass: 'icheckbox_minimal-blue',
-radioClass   : 'iradio_minimal-blue'
-})
-</script>
 <div class="row box-globals">
 	<input type="hidden" value="{{$company_details->company_id}}" id="company_id" name="">
 	<div class="form-holder">
@@ -28,7 +21,7 @@ radioClass   : 'iradio_minimal-blue'
 			<label>Email Address</label>
 		</div>
 		<div class="col-md-4 form-content">
-			<input type="text" value="{{$company_details->company_email_address}}" name="company_email_address" id="company_email_address" class="form-control"/>
+			<input type="text" value="{{$company_details->company_email_address}}" name="company_email_address" id="company_email_address" class="form-control lowercase-text"/>
 		</div>
 		<div class="col-md-2 form-content">
 			<label>Tel/Mobile Number</label>
@@ -144,14 +137,14 @@ radioClass   : 'iradio_minimal-blue'
 							<thead>
 								<tr>
 									<th>COVERAGE PLAN NAME</th>
-									<th>ACTION</th>
+									<th class="col-md-1 col-xs-2"><button data-company_id = "{{$company_details->company_id}}" class="btn-primary btn btn-sm add-company-plan"><i class="fa fa-plus"></i> ADD</button></th>
 								</tr>
 							</thead>
 							<tbody>
 								@foreach($_coverage_plan as $coverage_plan)
 								<tr>
-									<td>{{$coverage_plan->coverage_plan_name}}</td>
-									<td>VIEW  MEMBERS</td>
+									<td><span  class="label label-success ">{{$coverage_plan->coverage_plan_name}}</span></td>
+									<td><span data-coverage_plan_id="{{$coverage_plan->coverage_plan_id}}"  data-size="md" class="label label-info coverage-plan-details"><i class="fa fa-eye"></i> VIEW</span></td>
 								</tr>
 								@endforeach
 							</tbody>
@@ -169,14 +162,14 @@ radioClass   : 'iradio_minimal-blue'
 							<thead>
 								<tr>
 									<th>DEPLOYMENT NAME</th>
-									<th>ACTION</th>
+									<th class="col-md-1 col-xs-2"><button data-company_id = "{{$company_details->company_id}}" class="btn-primary btn btn-sm add-company-deployment"><i class="fa fa-plus"></i> ADD DEPLOYMENT</button></th>
 								</tr>
 							</thead>
 							<tbody>
 								@foreach($_company_deployment as $company_deployment)
 								<tr>
 									<td>{{$company_deployment->deployment_name}}</td>
-									<td>VIEW MEMBERS</td>
+									<td><span  data-size="md" class="label label-info company-deployment-member"><i class="fa fa-eye"></i> VIEW  MEMBERS</span></td>
 								</tr>
 								@endforeach
 							</tbody>

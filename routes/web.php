@@ -74,6 +74,11 @@ Route::get('/company/create_company', 					'CarewellController@company_create_co
 Route::post('/company/create_company/submit', 			'CarewellController@company_create_company_submit');
 Route::post('/company/update_company/submit', 			'CarewellController@company_update_company_submit');
 
+Route::get('/company/add_coverage_plan/{company_id}', 	'CarewellController@company_add_coverage_plan');
+Route::post('/company/add_coverage_plan/submit', 		'CarewellController@company_add_coverage_plan_submit');
+Route::get('/company/add_deployment/{company_id}', 		'CarewellController@company_add_deployment');
+Route::post('/company/add_deployment/submit', 			'CarewellController@company_add_deployment_submit');
+
 
 /*MEMBER*/
 Route::get('/member', 									'CarewellController@member');

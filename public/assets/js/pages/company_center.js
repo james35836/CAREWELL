@@ -20,6 +20,14 @@ function company_center()
             action_view_company_details();
             update_company_confirm();
             update_company_submit();
+
+            add_company_plan();
+            add_company_plan_confirm();
+            add_company_plan_submit();
+
+            add_company_deployment();
+            add_company_deployment_confirm();
+            add_company_deployment_submit();
 		});
 
 	}
@@ -28,11 +36,13 @@ function company_center()
 	{
 		$('body').on('click','.prompt-modal',function()
 		{
-			$('.alert-modal').modal('show');
+			var	confirmModalMessage  = 'PLEASE MAKE SURE THAT THE COVERAGE PLAN YOU NEED ARE ALREADY CREATED FOR THIS COMPANY!<br><br>ARE YOU SURE YOU WANT TO PROCEED?';
+			var confirmModalAction   = 'create-company';
+			globals.confirm_modals(confirmModalMessage,confirmModalAction);
         });
 		$("body").on('click','.create-company',function()
 		{
-			$('.alert-modal').remove();
+			$('.confirm-modal').remove();
 			var company_id     = $(this).data('company_id');
 			var modalName      = 'CREATE COMPANY';
 			var modalClass     = 'company';
@@ -153,10 +163,10 @@ function company_center()
 		{
 			var company_id      = $(this).data('company_id');
 			var modalName       = 'COMPANY DETAILS';
-			var modalClass      ='company-details';
-			var modalLink       ='/company/company_details/'+company_id;
-			var modalActionName ='SAVE CHANGES';
-			var modalAction     ='update-company-confirm';
+			var modalClass      = 'company-details';
+			var modalLink       = '/company/company_details/'+company_id;
+			var modalActionName = 'SAVE CHANGES';
+			var modalAction     = 'update-company-confirm';
 			var modalSize       = 'modal-lg';
 			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
 		});
@@ -196,6 +206,107 @@ function company_center()
 		{
 			globals.global_submit('company-details','/company/update_company/submit',companyData);
         });
-		
 	}
+	function add_company_plan()
+	{
+		$('body').on('click','.add-company-plan',function()
+		{
+			var company_id      = $(this).data('company_id');
+			var modalName       = 'ADD COVERAGE PLAN';
+			var modalClass      = 'company-add-plan';
+			var modalLink       = '/company/add_coverage_plan/'+company_id;
+			var modalActionName = 'SAVE CHANGES';
+			var modalAction     = 'add-company-plan-confirm';
+			var modalSize       = 'modal-md';
+			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
+		});
+	}
+	function add_company_plan_confirm()
+	{
+		$('body').on('click','.add-company-plan-confirm',function()
+		{
+			$("select.coverage_plan_name").each(function(i, sel)
+            {
+            	var selectedPlan = $(sel).val();
+        		if(selectedPlan!="SELECT COVERAGE PLAN")
+            	{
+            		coveragePlanData.push(selectedPlan);
+            	}
+            });
+            if(coveragePlanData==null||coveragePlanData=="")
+			{
+				globals.global_tostr('COVERAGE PLAN');
+			}
+			else
+			{
+				var	confirmModalMessage  = 'Are you sure you want to add this coverage plan?';
+				var confirmModalAction   = 'add-company-plan-submit';
+				globals.confirm_modals(confirmModalMessage,confirmModalAction);
+                
+                coverageData.append('company_id',      $('#company_id').val());
+				for (var i = 0; i < coveragePlanData.length; i++) 
+				{
+				    coverageData.append('coveragePlanData[]', coveragePlanData[i]);
+				}
+			}
+		});
+	}
+	function add_company_plan_submit()
+	{
+		$('body').on('click','.add-company-plan-submit',function()  
+		{
+			globals.global_submit('company-add-plan','/company/add_coverage_plan/submit',coverageData);
+        });
+	}
+	function add_company_deployment()
+	{
+		$('body').on('click','.add-company-deployment',function()
+		{
+			var company_id      = $(this).data('company_id');
+			var modalName       = 'ADD DEPLOYMENT';
+			var modalClass      = 'company-add-deployment';
+			var modalLink       = '/company/add_deployment/'+company_id;
+			var modalActionName = 'SAVE CHANGES';
+			var modalAction     = 'add-company-deployment-confirm';
+			var modalSize       = 'modal-md';
+			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
+		});
+	}
+    function add_company_deployment_confirm()
+    {
+    	$('body').on('click','.add-company-deployment-confirm',function()
+		{
+			$('input[name="deployment_name[]"]').each(function(i, dep)
+            {
+            	if($(dep).val()!="")
+            	{
+            		deploymentData.push(this.value);
+            	}
+            });
+            if(deploymentData==null||deploymentData=="")
+			{
+				globals.global_tostr('DEPLOYMENT');
+			}
+			else
+			{
+				var	confirmModalMessage  = 'Are you sure you want to add this DEPLOYMENT?';
+				var confirmModalAction   = 'add-company-deployment-submit';
+				globals.confirm_modals(confirmModalMessage,confirmModalAction);
+                
+                companyData.append('company_id',      $('#company_id').val());
+				for (var i = 0; i < deploymentData.length; i++) 
+				{
+				    companyData.append('deploymentData[]', deploymentData[i]);
+				}
+
+			}
+		});
+    }
+    function add_company_deployment_submit()
+    {
+    	$('body').on('click','.add-company-deployment-submit',function()  
+		{
+			globals.global_submit('company-add-deployment','/company/add_deployment/submit',companyData);
+        });
+    }
 }
