@@ -150,7 +150,7 @@ radioClass   : 'iradio_minimal-blue'
 							<tbody>
 								@foreach($_coverage_plan as $coverage_plan)
 								<tr>
-									<td>{{$coverage_plan->coverage_plan_name}}</td>
+									<td><span data-coverage_plan_id="{{$coverage_plan->coverage_plan_id}}" data-size="md" class="label label-info coverage-plan-details">{{$coverage_plan->coverage_plan_name}}</span></td>
 									<td>VIEW  MEMBERS</td>
 								</tr>
 								@endforeach

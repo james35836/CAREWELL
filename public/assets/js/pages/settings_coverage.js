@@ -113,12 +113,20 @@ function settings_coverage()
 		$("body").on('click','.coverage-plan-details',function()
 		{
 			var coverage_plan_id = $(this).data('coverage_plan_id');
+
 			var modalName        = 'COVERAGE PLAN DETAILS';
 			var modalClass       = 'coverage-details';
 			var modalLink        = '/settings/coverage/plan_details/'+coverage_plan_id;
 			var modalActionName  = 'SAVE CHANGES';
 			var modalAction      = 'create-company-confirm';
-			var modalSize        = 'modal-lg';
+			if($(this).data('size')=='md')
+			{
+				var modalSize        = 'modal-md';
+			}
+			else
+			{
+				var modalSize        = 'modal-lg';
+			}
 			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
 		});
     }
@@ -130,7 +138,6 @@ function settings_coverage()
 			var availment_id    = $(this).data('availment_id');
 			var session_name	= $(this).data('name');
 			var identifier      = $(this).closest('tr').find('button.remove-row').data('number');
-			alert(identifier);
 			var modalName 		= 'COVERAGE PLAN PROCEDURE';
 			var modalClass 		= 'coverage-plan-item';
 			var modalLink 		= '/settings/coverage/items/'+availment_id+'/'+session_name+'/'+identifier;

@@ -2067,12 +2067,13 @@ class CarewellController extends ActiveAuthController
     $count = 0;
     foreach(Session::get($session_name) as $keys=>$session_items)
     {
-      if($session_items['identifier']==$identifier)
+      if(isset($session_items['identifier']))
       {
-        
-        $count++;
+        if($session_items['identifier']==$identifier)
+        {
+          $count++;
+        }
       }
-
     }
     return $count;
   }
@@ -2266,12 +2267,11 @@ class CarewellController extends ActiveAuthController
   public function settings_coverage_items_submit(Request $request)
   {
     $identifiers      =  $request->identifier[0];
-    $session_name     = $request->session_name;
-    $session_checker  = Self::session_checker($session_name,$identifiers);
-    $session_array    = Session::get($session_name);
-    if($session_checker!=0)
+    $session_name     =  $request->session_name;
+    $session_array    =  Session::get($session_name);
+    foreach(Session::get($session_name) as $keys=>$session_items)
     {
-      foreach(Session::get($session_name) as $keys=>$session_items)
+      if(isset($session_items['identifier']))
       {
         if($session_items['identifier']==$identifiers)
         {
