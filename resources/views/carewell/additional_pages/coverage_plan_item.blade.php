@@ -91,23 +91,25 @@
             </div>
           </div>
           <div  class="table-responsive no-padding">
-            <table class="table table-bordered laboratory" >
+            <table class="table table-bordered complex" >
               <tr>
                 <th class="col-md-1"><input type="checkbox" class="checkAllCheckbox"></th>
-                <th class="col-md-4 live-search" >PROCEDURE</th>
-               </tr>
+                <th class="col-md-4 live-search"  >PROCEDURE</th>
+              </tr>
               @foreach($_laboratory as $laboratory)
-                @if($laboratory->reference_number=='hidden')
-                @else
-                <tr class="table-row">
-                  <td>
-                    <input type="checkbox" name="coverage_item[]" value="{{$laboratory->procedure_id}}" {{$laboratory->labs}}/>
-                  </td>
-                  <td class="procedure">{{$laboratory->procedure_name}}</td>
-                </tr>
-                @endif
+              @if($laboratory->reference_number=='hidden')
+              @else
+              <tr class="table-row">
+                <td>
+                  <input type="checkbox" name="coverage_item[]" value="{{$laboratory->procedure_id}}" {{$laboratory->labs}}/>
+                </td>
+                <td class="procedure">{{$laboratory->procedure_name}}</td>
+                
+              </tr>
+              @endif
               @endforeach
             </table>
+            
           </div>
         </div>
         <div class="tab-pane" id="compTab">

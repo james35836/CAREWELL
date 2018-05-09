@@ -2112,7 +2112,6 @@ class CarewellController extends ActiveAuthController
               $data['_laboratory'][$pro]['reference_number']    =  'hidden';
             }
           }
-          
           foreach($data['_complex'] as $pro=>$procedure)
           {
             if($session_items['procedure_id'] == $procedure->procedure_id)
@@ -2266,6 +2265,7 @@ class CarewellController extends ActiveAuthController
   }
   public function settings_coverage_items_submit(Request $request)
   {
+    
     $identifiers      =  $request->identifier[0];
     $session_name     =  $request->session_name;
     $session_array    =  Session::get($session_name);
@@ -2289,15 +2289,16 @@ class CarewellController extends ActiveAuthController
     $plan_limit             = $request->plan_limit;
     $identifier             = $request->identifier;
     $count = 0;
+    
     foreach($request->procedure_id as $key=>$procedure_id)
     {
-
+      
       $insert['procedure_id']         = $procedure_id;
-      $insert['availment_id']         = $availment_id[$key];
-      $insert['plan_charges']         = $plan_charges[$key];
-      $insert['plan_covered_amount']  = $request->plan_covered_amount[$key];
-      $insert['plan_limit']           = $plan_limit[$key];
-      $insert['identifier']           = $identifier[$key];
+      $insert['availment_id']         = $availment_id;
+      $insert['plan_charges']         = $plan_charges;
+      $insert['plan_covered_amount']  = $plan_covered_amount;
+      $insert['plan_limit']           = $plan_limit;
+      $insert['identifier']           = $identifier;
       array_push($array, $insert);
       $count++;
     }

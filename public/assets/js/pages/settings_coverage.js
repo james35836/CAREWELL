@@ -162,23 +162,26 @@ function settings_coverage()
             	if($(num).val()!="")
             	{
             		dates.push(this.value);
-            		ajaxData.availemnt_id = document.getElementById('availment_id').value;
+
+            		ajaxData.availment_id = document.getElementById('availment_id').value;
             		ajaxData.session_name = document.getElementById('session_name').value;
             		ajaxData.identifier   = document.getElementById('identifier').value;
-            	}
+
+            		ajaxData.plan_charges   = document.getElementById('plan_charges').value;
+            		ajaxData.plan_covered_amount   = document.getElementById('plan_covered_amount').value;
+            		ajaxData.plan_limit   = document.getElementById('plan_limit').value;
+                }
             });
             ajaxData.countThis.closest('tr').find('input.countThis').val(dates.length+' ITEMS');
-            
             for (var i = 0; i < dates.length; i++) 
 			{
-				datas.append('procedure_id[]', 		dates[i]);
-				datas.append('availment_id[]',   	ajaxData.availemnt_id);
-				datas.append('identifier[]',   	    ajaxData.identifier);
-				
-				datas.append('plan_charges[]', 		document.getElementById('plan_charges').value);
-				datas.append('plan_covered_amount[]',document.getElementById('plan_covered_amount').value);
-				datas.append('plan_limit[]',         document.getElementById('plan_limit').value);
+				datas.append('procedure_id[]', 			dates[i]);
 			}
+			datas.append('availment_id',   		ajaxData.availment_id);
+			datas.append('identifier',   	    	ajaxData.identifier);
+			datas.append('plan_charges', 			ajaxData.plan_charges);
+			datas.append('plan_covered_amount',	ajaxData.plan_covered_amount);
+			datas.append('plan_limit',         	ajaxData.plan_limit);
 			datas.append('session_name',   	ajaxData.session_name);
 			
 			globals.global_submit('coverage-plan-item','/settings/coverage/items_submit',datas);
