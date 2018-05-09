@@ -116,8 +116,6 @@ class SearchController extends ActiveAuthController
 					    $data['_approval'] = $data['_approval']  = TblApprovalModel::where('tbl_approval.archived',0)->where('tbl_provider.provider_id',$id)->ApprovalInfo()->paginate(10);
 				        $output = view('carewell.filtering.availment_filtering_active',$data);
 					break;
-
-					
 				}
 		  	}
 		  	else if($request->val_archived==1)
@@ -142,11 +140,11 @@ class SearchController extends ActiveAuthController
 			        	$output = view('carewell.filtering.doctor_filtering_inactive',$data);
 					break;
 					case 'billing':
-			        	$data['_cal_open']  =  TblCalModel::where('tbl_cal.archived',0)->where('tbl_cal.company_id', $id)->join('tbl_company','tbl_company.company_id','=','tbl_cal.company_id')->paginate(10);
-			        	foreach ($data['_cal_open'] as $key => $cal_open) 
+			        	$data['_cal_close']  =  TblCalModel::where('tbl_cal.archived',0)->where('tbl_cal.company_id', $id)->join('tbl_company','tbl_company.company_id','=','tbl_cal.company_id')->paginate(10);
+			        	foreach ($data['_cal_close'] as $key => $cal_close) 
 					    {
-					      $data['_cal_open'][$key]['new_member']= TblNewMemberModel::where('cal_id',$cal_open->cal_id)->count();
-					      $data['_cal_open'][$key]['members']   =  TblCalMemberModel::where('cal_id',$cal_open->cal_id)->count();
+					      $data['_cal_close'][$key]['new_member']= TblNewMemberModel::where('cal_id',$cal_close->cal_id)->count();
+					      $data['_cal_close'][$key]['members']   =  TblCalMemberModel::where('cal_id',$cal_close->cal_id)->count();
 					    }
 				        $output = view('carewell.filtering.billing_filtering_inactive',$data);
 					break;
@@ -157,9 +155,22 @@ class SearchController extends ActiveAuthController
 				}
 				
 		  	}
-		  	else
+		  	else if($request->val_archived==2)
 		  	{
-		  		$output="invalid";
+		  		switch ($reference) 
+			    {
+			 		
+					case 'billing':
+			        	$data['_cal_pending']  =  TblCalModel::where('tbl_cal.archived',2)->where('tbl_cal.company_id', $id)->join('tbl_company','tbl_company.company_id','=','tbl_cal.company_id')->paginate(10);
+			        	foreach ($data['_cal_pending'] as $key => $cal_pending) 
+					    {
+					      $data['_cal_pending'][$key]['new_member']= TblNewMemberModel::where('cal_id',$cal_pending->cal_id)->count();
+					      $data['_cal_pending'][$key]['members']   =  TblCalMemberModel::where('cal_id',$cal_pending->cal_id)->count();
+					    }
+				        $output = view('carewell.filtering.billing_filtering_pending',$data);
+					break;
+					
+				}
 		  	}
 		  	return  $output;
 	    }
@@ -295,7 +306,7 @@ class SearchController extends ActiveAuthController
 				        $output = view('carewell.filtering.member_filtering_inactive',$data);
 					break;
 					case 'billing':
-			        	$data['_cal_open'] 	= TblCalModel::join('tbl_company','tbl_company.company_id','=','tbl_cal.company_id')
+			        	$data['_cal_close'] 	= TblCalModel::join('tbl_company','tbl_company.company_id','=','tbl_cal.company_id')
 					        				->where('tbl_cal.archived',1)
 					        				->where(function($query)use($key)
 				                            {
@@ -303,10 +314,10 @@ class SearchController extends ActiveAuthController
 				                                $query->orWhere('tbl_company.company_name','like','%'.$key.'%');
 				                            })
 					        				->paginate(10);
-			        	foreach ($data['_cal_open'] as $key => $cal_open) 
+			        	foreach ($data['_cal_close'] as $key => $cal_close) 
 					    {
-					      $data['_cal_open'][$key]['new_member']= TblNewMemberModel::where('cal_id',$cal_open->cal_id)->count();
-					      $data['_cal_open'][$key]['members']   =  TblCalMemberModel::where('cal_id',$cal_open->cal_id)->count();
+					      $data['_cal_close'][$key]['new_member']= TblNewMemberModel::where('cal_id',$cal_close->cal_id)->count();
+					      $data['_cal_close'][$key]['members']   =  TblCalMemberModel::where('cal_id',$cal_close->cal_id)->count();
 					    }
 				        $output = view('carewell.filtering.billing_filtering_inactive',$data);
 					break;
@@ -343,9 +354,29 @@ class SearchController extends ActiveAuthController
 				}
 				
 		  	}
-		  	else
+		  	else if($request->val_archived==2)
 		  	{
-		  		$output="invalid";
+		  		switch ($reference) 
+			    {
+			    	
+					case 'billing':
+			        	$data['_cal_pending'] 	= TblCalModel::join('tbl_company','tbl_company.company_id','=','tbl_cal.company_id')
+					        				->where('tbl_cal.archived',2)
+					        				->where(function($query)use($key)
+				                            {
+				                                $query->where('tbl_cal.cal_number','like','%'.$key.'%');
+				                                $query->orWhere('tbl_company.company_name','like','%'.$key.'%');
+				                            })
+					        				->paginate(10);
+			        	foreach ($data['_cal_pending'] as $key => $cal_pending) 
+					    {
+					      $data['_cal_pending'][$key]['new_member']= TblNewMemberModel::where('cal_id',$cal_pending->cal_id)->count();
+					      $data['_cal_pending'][$key]['members']   =  TblCalMemberModel::where('cal_id',$cal_pending->cal_id)->count();
+					    }
+				        $output = view('carewell.filtering.billing_filtering_pending',$data);
+					break;
+					
+				}
 		  	}
 		  	return  $output;
 	    }
