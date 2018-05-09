@@ -33,6 +33,8 @@ var availmentData 		= [];
 var procedureData		= []; 
 var chargesData			= [];
 
+
+
 var finalDiagnosisData	= [];
 
 var payeeData			= [];

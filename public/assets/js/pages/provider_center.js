@@ -43,11 +43,11 @@ function provider_center()
 	{
 		$('body').on('click','.create-provider-confirm',function() 
 		{ 
-			$('input[name="payee_name[]"]').each(function(i, payee)
+			$('input[name="doctor_full_name[]"]').each(function(i, doctor)
             {
-            	if($(payee).val()!="")
+            	if($(doctor).val()!="")
             	{
-            		payeeData.push(this.value);
+            		doctorProviderData.push(this.value);
             	}
             	
             });
@@ -64,7 +64,7 @@ function provider_center()
 			{}
 			else if(globals.checking_null_validation(document.getElementById('provider_address').value,"PROVIDER ADDRESS")=="")
 			{}
-		    else if(payeeData==null||payeeData=="")
+		    else if(doctorProviderData==null||doctorProviderData=="")
 			{
 				toastr.error('Please add PAYEE at least one.', 'Something went wrong!', {timeOut: 3000})
 			}
@@ -82,9 +82,9 @@ function provider_center()
 	            providerData.append("provider_contact_email", 	document.getElementById('provider_contact_email').value);
 	            providerData.append("provider_address", 	    document.getElementById('provider_address').value);
 	            
-	            for (var i = 0; i < payeeData.length; i++) 
+	            for (var i = 0; i < doctorProviderData.length; i++) 
 				{
-				    providerData.append('payeeData[]', payeeData[i]);
+				    providerData.append('doctorProviderData[]', doctorProviderData[i]);
 				}
 	            
 			}
