@@ -104,7 +104,6 @@
                   <input type="checkbox" name="coverage_item[]" value="{{$laboratory->procedure_id}}" {{$laboratory->labs}}/>
                 </td>
                 <td class="procedure">{{$laboratory->procedure_name}}</td>
-                
               </tr>
               @endif
               @endforeach
