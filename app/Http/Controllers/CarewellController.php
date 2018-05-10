@@ -750,28 +750,76 @@ class CarewellController extends ActiveAuthController
     return view('carewell.modal_pages.provider_create');
   }
 
+  public static function chk_doctor_exist_insert_doctor_provider(Request $request,$chk_provider_name)
+  {
+    foreach($request->doctorProviderData as $doctor_full_name)
+      {
+        $chk_refProviderId  = TblProviderModel::where('provider_name',$chk_provider_name)->value('provider_id');
+
+        $refDoctorId   = TblDoctorModel::where('doctor_full_name', $doctor_full_name)->value('doctor_id');
+
+        if($refDoctorId == null)
+        {
+          $doctorData = new TblDoctorModel;
+          $doctorData->doctor_full_name       = StaticFunctionController::transformText($doctor_full_name);
+          $doctorData->doctor_number          = StaticFunctionController::updateReferenceNumber('doctor');
+          $doctorData->doctor_gender          = "N/A";
+          $doctorData->doctor_contact_number  = "N/A";
+          $doctorData->doctor_email_address   = "N/A";
+          $doctorData->doctor_created         = Carbon::now();
+          $doctorData->save();
+
+          $chk_refDoctorId   = TblDoctorModel::where('doctor_full_name',$doctor_full_name)->value('doctor_id');
+          
+         
+          $providerDoctorData = new TblDoctorProviderModel;
+          $providerDoctorData->doctor_id = $chk_refDoctorId;
+          $providerDoctorData->provider_id =  $chk_refProviderId;
+          $providerDoctorData->save();
+        }
+        else
+        {
+          $providerDoctorData = new TblDoctorProviderModel;
+          $providerDoctorData->doctor_id = $refDoctorId;
+          $providerDoctorData->provider_id =  $chk_refProviderId;
+          $providerDoctorData->save();
+        }
+      }
+  }
+
   public function provider_create_submit(Request $request)
   {
+    $returnMessage_popup = 0; // use to show popup as a parameter
     
-    $providerData = new TblProviderModel;
-    $providerData->provider_name            = $request->provider_name;
-    $providerData->provider_rvs             = $request->provider_rvs;
-    $providerData->provider_contact_person  = $request->provider_contact_person;
-    $providerData->provider_telephone_number= $request->provider_telephone_number;
-    $providerData->provider_mobile_number   = $request->provider_mobile_number;
-    $providerData->provider_contact_email   = $request->provider_contact_email;
-    $providerData->provider_address         = $request->provider_address;
-    $providerData->provider_created         = Carbon::now();
-    $providerData->save();
+    $refProviderId   = TblProviderModel::where('provider_name', $request->provider_name)->value('provider_id');
 
-    foreach($request->payeeData as $payee_name)
-    {
-      $providerPayeeData = new TblProviderPayeeModel;
-      $providerPayeeData->provider_payee_name = $payee_name;
-      $providerPayeeData->provider_id = $providerData->provider_id;
-      $providerPayeeData->save();
+    if($refProviderId == null) // if provider name does not exist
+    {    
+      $providerData = new TblProviderModel;
+      $providerData->provider_name            = $request->provider_name;
+      $providerData->provider_rvs             = $request->provider_rvs;
+      $providerData->provider_contact_person  = $request->provider_contact_person;
+      $providerData->provider_telephone_number= $request->provider_telephone_number;
+      $providerData->provider_mobile_number   = $request->provider_mobile_number;
+      $providerData->provider_contact_email   = $request->provider_contact_email;
+      $providerData->provider_address         = $request->provider_address;
+      $providerData->provider_created         = Carbon::now();
+      $providerData->save();
+
+      Self::chk_doctor_exist_insert_doctor_provider($request,$request->provider_name);
+
+      $returnMessage_popup = 1;
+
     }
-    if($providerData->save())
+    else
+    {
+      Self::chk_doctor_exist_insert_doctor_provider($request,$request->provider_name);
+
+      $returnMessage_popup = 1;
+    }
+
+
+    if($returnMessage_popup == 1)
     {
       return StaticFunctionController::returnMessage('success','PROVIDER');    
     }
@@ -779,9 +827,10 @@ class CarewellController extends ActiveAuthController
     {
       return StaticFunctionController::returnMessage('danger','PROVIDER'); 
     }
-    
 
+ 
   }
+    
   public function provider_details(Request $request,$provider_id)
   {
     $data['_provider_payee'] = TblProviderPayeeModel::where('provider_id',$provider_id)->get();
