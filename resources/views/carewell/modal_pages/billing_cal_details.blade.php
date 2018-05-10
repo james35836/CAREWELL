@@ -3,18 +3,18 @@ $(".search-key").on("keyup", function()
 {
     var value = $(this).val();
     var $table = $(this).closest("table tr");
-
-    $("table."+$(this).data('name')+" tr").each(function(index) {
-        if (index !== 0) {
-
-            $row = $(this);
-
-            var id = $row.find("td.member").text();
-
-            if (id.indexOf(value) !== 0) {
+    $("table."+$(this).data('name')+" tr").each(function(index) 
+    {
+        if (index !== 0) 
+        {
+        	$row = $(this);
+        	var id = $row.find("td.members").text();
+        	if (id.indexOf(value) !== 0) 
+        	{
                 $row.hide();
             }
-            else {
+            else 
+            {
                 $row.show();
             }
         }
@@ -186,18 +186,12 @@ table tr td
 		<div class="tab-content">
 			<div class="tab-pane active" id="active">
 				<div class="row">
-					
-					<div class="col-md-3 col-xs-12 pull-right">
-						<div class="input-group margin">
-							<input type="text" class="form-control " id="search_key">
-							<span class="input-group-btn">
-								<button type="button" class="btn btn-default"><i class="fa fa-search"></i></button>
-							</span>
-						</div>
-					</div>
-				</div>
+		            <div class="col-md-3 col-xs-12 pull-right">
+		             	<input type="text" data-name="active_cal_member" class="top-element form-control search-key">
+		            </div>
+		        </div>
 				<div class="box-body table-responsive no-padding">
-					<table class="table table-hover table-bordered">
+					<table class="table table-bordered active_cal_member">
 						<tr>
 							<th>Universal ID</th>
 							<th>Carewell ID</th>
@@ -212,7 +206,7 @@ table tr td
 						<tr>
 							<td><span class="label label-danger">NEW</span></td>
 							<td><span class="label label-danger">NEW</span></td>
-							<td class="member"><p class="transform-capitalize">{{$cal_new_member->member_first_name." ".$cal_new_member->member_last_name}}</p></td>
+							<td class="members"><p class="transform-capitalize">{{$cal_new_member->member_first_name." ".$cal_new_member->member_last_name}}</p></td>
 							<td>
 								<span class="label label-success payment-breakdown" data-ref="new" data-cal_member_id= "{{$cal_new_member->new_member_id}}" >{{$cal_new_member->cal_payment_count}}</span>
 							</td>
@@ -228,7 +222,7 @@ table tr td
 						<tr>
 							<td>{{$cal_member->member_universal_id}}</td>
 							<td>{{$cal_member->member_carewell_id}}</td>
-							<td  class="member">{{$cal_member->member_first_name}} {{$cal_member->member_last_name}}</td>
+							<td  class="members">{{$cal_member->member_first_name}} {{$cal_member->member_last_name}}</td>
 							<td>
 								<span class="label label-success payment-breakdown" data-ref="old" data-count="{{$cal_member->cal_payment_count}}" data-cal_member_id= "{{$cal_member->cal_member_id}}" data-cal_id="{{$cal_member->cal_id}}">{{$cal_member->cal_payment_count}}</span>
 							</td>
@@ -244,19 +238,13 @@ table tr td
 				</div>
 			</div>
 			<div class="tab-pane" id="inActive">
-				<div class="row">
-					
-					<div class="col-md-3 col-xs-12 pull-right">
-						<div class="input-group margin">
-							<input type="text" class="form-control" id="search_key">
-							<span class="input-group-btn">
-								<button type="button" class="btn btn-default"><i class="fa fa-search"></i></button>
-							</span>
-						</div>
-					</div>
-				</div>
+				<<div class="row">
+		            <div class="col-md-3 col-xs-12 pull-right">
+		             	<input type="text" data-name="inactive_cal_member" class="top-element form-control search-key">
+		            </div>
+		        </div>
 				<div class="box-body table-responsive no-padding">
-					<table class="table table-hover table-bordered">
+					<table class="table table-bordered inactive_cal_member">
 						<tr>
 							<th>Universal ID</th>
 							<th>Carewell ID</th>
@@ -271,7 +259,7 @@ table tr td
 						<tr>
 							<td>{{$cal_member_remove->member_universal_id}}</td>
 							<td>{{$cal_member_remove->member_carewell_id}}</td>
-							<td  class="member">{{$cal_member_remove->member_first_name}} {{$cal_member_remove->member_last_name}}</td>
+							<td  class="members">{{$cal_member_remove->member_first_name}} {{$cal_member_remove->member_last_name}}</td>
 							<td>
 								<span class="label label-success payment-breakdown" data-ref="old" data-count="{{$cal_member_remove->cal_payment_count}}" data-cal_member_id= "{{$cal_member_remove->cal_member_id}}" data-cal_id="{{$cal_member_remove->cal_id}}">{{$cal_member_remove->cal_payment_count}}</span>
 							</td>
