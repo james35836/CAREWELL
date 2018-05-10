@@ -1,11 +1,32 @@
-<script>
-$(function () {
-//select2
-$('.select2').select2()
-//Date picker
-$('.datepicker').datepicker({
-autoclose: true
-})
+<script type="text/javascript">
+$(".search-key").on("keyup", function() 
+{
+    var value = $(this).val();
+    var $table = $(this).closest("table tr");
+
+    $("table."+$(this).data('name')+" tr").each(function(index) {
+        if (index !== 0) {
+
+            $row = $(this);
+
+            var id = $row.find("td.member").text();
+
+            if (id.indexOf(value) !== 0) {
+                $row.hide();
+            }
+            else {
+                $row.show();
+            }
+        }
+    });
+});
+$(function () 
+{
+	$('.select2').select2();
+	$('.datepicker').datepicker(
+	{
+		autoclose: true
+	})
 })
 </script>
 <style>
@@ -174,14 +195,18 @@ table tr td
 							<th>Name</th>
 							<th>Period Count</th>
 							<th>Paid Amount</th>
+							@if($cal_check!=1) 
 							<th>Action</th>
+							@endif
 						</tr>
 						@foreach($_cal_new_member as $cal_new_member)
 						<tr>
 							<td><span class="label label-danger">NEW</span></td>
 							<td><span class="label label-danger">NEW</span></td>
-							<td ><p class="transform-capitalize">{{$cal_new_member->member_first_name." ".$cal_new_member->member_last_name}}</p></td>
-							<td class="payment-breakdown" data-ref="new" data-cal_member_id= "{{$cal_new_member->new_member_id}}"><span class="label label-success" >{{$cal_new_member->cal_payment_count}}</span></td>
+							<td class="member"><p class="transform-capitalize">{{$cal_new_member->member_first_name." ".$cal_new_member->member_last_name}}</p></td>
+							<td>
+								<span class="label label-success payment-breakdown" data-ref="new" data-cal_member_id= "{{$cal_new_member->new_member_id}}" >{{$cal_new_member->cal_payment_count}}</span>
+							</td>
 							<td>{{$cal_new_member->cal_payment_amount}}</td>
 							<td>
 								<button type="button" data-ref="new" data-cal_member_id="{{$cal_new_member->new_member_id}}" class="btn btn-danger btn-sm remove-cal-member" >
@@ -194,14 +219,16 @@ table tr td
 						<tr>
 							<td>{{$cal_member->member_universal_id}}</td>
 							<td>{{$cal_member->member_carewell_id}}</td>
-							<td>{{$cal_member->member_first_name}} {{$cal_member->member_last_name}}</td>
-							<td class="payment-breakdown" data-ref="old" data-count="{{$cal_member->cal_payment_count}}" data-cal_member_id= "{{$cal_member->cal_member_id}}" data-cal_id="{{$cal_member->cal_id}}"><span class="label label-success" >{{$cal_member->cal_payment_count}}</span></td>
-							<td>{{$cal_member->cal_payment_amount}}</td>
+							<td  class="member">{{$cal_member->member_first_name}} {{$cal_member->member_last_name}}</td>
 							<td>
-								<button type="button" data-ref="old" data-cal_member_id="{{$cal_member->cal_member_id}}" class="btn btn-danger btn-sm remove-cal-member" @if($cal_check==1) disabled @endif>
-									<i class="fa fa-minus-circle"></i>
-								</button>
+								<span class="label label-success payment-breakdown" data-ref="old" data-count="{{$cal_member->cal_payment_count}}" data-cal_member_id= "{{$cal_member->cal_member_id}}" data-cal_id="{{$cal_member->cal_id}}">{{$cal_member->cal_payment_count}}</span>
 							</td>
+							<td>{{$cal_member->cal_payment_amount}}</td>
+							@if($cal_check!=1) 
+							<td>
+								<button type="button" data-ref="old" data-cal_member_id="{{$cal_member->cal_member_id}}" class="btn btn-danger btn-sm remove-cal-member"><i class="fa fa-minus-circle"></i></button>
+							</td>
+							@endif
 						</tr>
 						@endforeach
 					</table>
@@ -212,7 +239,7 @@ table tr td
 					
 					<div class="col-md-3 col-xs-12 pull-right">
 						<div class="input-group margin">
-							<input type="text" class="form-control " id="search_key">
+							<input type="text" class="form-control" id="search_key">
 							<span class="input-group-btn">
 								<button type="button" class="btn btn-default"><i class="fa fa-search"></i></button>
 							</span>
@@ -225,24 +252,26 @@ table tr td
 							<th>Universal ID</th>
 							<th>Carewell ID</th>
 							<th>Name</th>
-							<th>Date Coverage Start</th>
-							<th>Date Coverage End</th>
 							<th>Period Count</th>
 							<th>Paid Amount</th>
+							@if($cal_check!=1) 
 							<th>Action</th>
+							@endif
 						</tr>
-						@foreach($_cal_new_member as $cal_new_member)
+						@foreach($_cal_member_remove as $cal_member_remove)
 						<tr>
-							<td><span class="label label-danger">NEW</span></td>
-							<td><span class="label label-danger">NEW</span></td>
-							<td>{{$cal_new_member->member_first_name." ".$cal_new_member->member_last_name}}</td>
-							<td>{{date("F j, Y",strtotime($cal_new_member->cal_payment_start))}}</td>
-							<td>{{date("F j, Y",strtotime($cal_new_member->cal_payment_end))}}</td>
-							<td class="payment-breakdown" data-ref="new" style="cursor:pointer;" data-count="{{$cal_new_member->cal_payment_count}}" data-cal_member_id= "{{$cal_new_member->cal_new_member_id}}" data-cal_id="{{$cal_new_member->cal_id}}"><span class="label label-success" >{{$cal_new_member->cal_payment_count}}</span></td>
-							<td>{{$cal_new_member->cal_payment_amount}}</td>
+							<td>{{$cal_member_remove->member_universal_id}}</td>
+							<td>{{$cal_member_remove->member_carewell_id}}</td>
+							<td  class="member">{{$cal_member_remove->member_first_name}} {{$cal_member_remove->member_last_name}}</td>
 							<td>
-								<button type="button" data-cal_member_id="{{$cal_new_member->cal_member_id}}" class="btn btn-danger btn-sm remove-cal-member"><i class="fa fa-minus-circle"></i></button>
+								<span class="label label-success payment-breakdown" data-ref="old" data-count="{{$cal_member_remove->cal_payment_count}}" data-cal_member_id= "{{$cal_member_remove->cal_member_id}}" data-cal_id="{{$cal_member_remove->cal_id}}">{{$cal_member_remove->cal_payment_count}}</span>
 							</td>
+							<td>{{$cal_member_remove->cal_payment_amount}}</td>
+							@if($cal_check!=1) 
+							<td>
+								<button type="button" data-ref="old" data-cal_member_id="{{$cal_member_remove->cal_member_id}}" class="btn btn-warning btn-sm restore-cal-member" ><i class="fa fa-undo"></i></button>
+							</td>
+							@endif
 						</tr>
 						@endforeach
 						

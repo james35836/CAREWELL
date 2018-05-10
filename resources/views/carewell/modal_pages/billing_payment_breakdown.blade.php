@@ -23,7 +23,9 @@
 				<tr>
 					<th>START</th>
 					<th>END</th>
+					@if($archived==0||$archived==2)
 					<th>ACTION</th>
+					@endif
 				</tr>
 				@foreach($_payment_breakdown as $key=>$payment_breakdown)
 				<tr>
@@ -34,9 +36,11 @@
 					<td><input type="text" class="form-control date-select cal_payment_start" value="{{$payment_breakdown->cal_payment_start}}"/></td>
 					<td><input type="text" class="form-control date-select cal_payment_end" value="{{$payment_breakdown->cal_payment_end}}"/></td>
 					@endif
+					@if($archived==0||$archived==2)
 					<td>
 						<button type="button" class="btn btn-primary btn-sm update-payment-date" data-cal_new_member_id="{{$payment_breakdown->cal_new_member_id}}" data-cal_payment_id="{{$payment_breakdown->cal_payment_id}}" data-ref="{{$ref}}">UPDATE</button>
 					</td>
+					@endif
 				</tr>
 				@endforeach
 			</table>

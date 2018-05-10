@@ -23,8 +23,7 @@ function billing_center()
 			import_cal_members();
 			import_cal_member_confirm();
 			import_cal_member_submit();
-			remove_cal_member();
-			remove_cal_member_submit();
+			
 			cal_close();
 			cal_close_confirm();
 			cal_close_submit();
@@ -33,6 +32,12 @@ function billing_center()
 			payment_breakdown();
 			payment_breakdown_update();
 			last_ten_payments();
+
+			remove_cal_member();
+			remove_cal_member_submit();
+
+			restore_cal_member();
+			restore_cal_member_submit();
 		});
 
 	}
@@ -316,6 +321,27 @@ function billing_center()
 		$('body').on('click','.remove-cal-member-submit',function() 
 		{
 			globals.global_single_submit('/billing/cal_member/remove',billingMemberData,ajaxData.tdCloser);
+
+		});
+	}
+	function restore_cal_member()
+	{
+		$('body').on('click','.restore-cal-member',function() 
+		{
+			var	confirmModalMessage = 'Are you sure you want to restore this member?';
+			var confirmModalAction 	= 'restore-cal-member-submit';
+			globals.confirm_modals(confirmModalMessage,confirmModalAction);
+
+			billingMemberData.append("cal_member_id", 	$(this).data('cal_member_id'));
+			billingMemberData.append("ref", 			$(this).data('ref'));
+			ajaxData.tdCloser  = $(this).closest('tr');
+		});
+	}
+	function restore_cal_member_submit()
+	{
+		$('body').on('click','.restore-cal-member-submit',function() 
+		{
+			globals.global_single_submit('/billing/cal_member/restore',billingMemberData,ajaxData.tdCloser);
 
 		});
 	}

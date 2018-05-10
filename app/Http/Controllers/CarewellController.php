@@ -1235,13 +1235,12 @@ class CarewellController extends ActiveAuthController
   public function billing_cal_details($cal_id)
   {
     $data['cal_check']        = TblCalModel::where('cal_id',$cal_id)->value('archived');
-    $data['_cal_member']      = TblCalMemberModel::where('cal_id',$cal_id)->CalMember()->get();
-
+    $data['_cal_member']      = TblCalMemberModel::where('tbl_cal_member.cal_id',$cal_id)->where('tbl_cal_member.archived',0)->CalMember()->get();
+    $data['_cal_member_remove']=TblCalMemberModel::where('tbl_cal_member.cal_id',$cal_id)->where('tbl_cal_member.archived',1)->CalMember()->get();
     $data['_cal_new_member']  = TblNewMemberModel::where('cal_id',$cal_id)->get();
-
     if($data['cal_check']==0||$data['cal_check']==2)
     {
-      $data['cal_details']   = TblCalModel::where('cal_id',$cal_id)
+      $data['cal_details']    = TblCalModel::where('cal_id',$cal_id)
                               ->join('tbl_company','tbl_company.company_id','=','tbl_cal.company_id')
                               ->first();
     }
@@ -1252,8 +1251,8 @@ class CarewellController extends ActiveAuthController
                               ->join('tbl_cal_info','tbl_cal_info.cal_id','=','tbl_cal.cal_id')
                               ->first();
     }
-    $sum = 0;
-    $sums = 0;
+    $sum      = 0;
+    $sums     = 0;
     foreach($data['_cal_member'] as $amount)
     {
       $sum = $sum + $amount->cal_payment_amount;
@@ -1262,7 +1261,6 @@ class CarewellController extends ActiveAuthController
     {
       $sums = $sums + $amounts->cal_payment_amount;
     }
-
     $data['total_amount']     = $sum + $sums;
     $data['total_member']     = count($data['_cal_member'])+count($data['_cal_new_member']);
     return view('carewell.modal_pages.billing_cal_details',$data);
@@ -1271,15 +1269,20 @@ class CarewellController extends ActiveAuthController
   {
     if($str_ref=='old')
     {
+      $TblCalMember               = TblCalMemberModel::where('cal_member_id',$cal_member_id);
       $data['_payment_breakdown'] = TblCalPaymentModel::where('cal_member_id',$cal_member_id)->get();
-      $data['member_id']          = TblCalMemberModel::where('cal_member_id',$cal_member_id)->value('member_id');
+      $data['member_id']          = $TblCalMember->value('member_id');
       $data['ref']                = 'old';
+      $cal_id                     = $TblCalMember->value('cal_id');
+      $data['archived']           = TblCalModel::where('cal_id',$cal_id)->value('archived');                   
     }
     else
     {
       $data['_payment_breakdown'] = TblNewCalMemberModel::where('new_member_id',$cal_member_id)->get();
       $data['member_id']          = $cal_member_id;
       $data['ref']                = 'new';
+      $cal_id                     = TblNewMemberModel::where('new_member_id',$cal_member_id)->value('cal_id');
+      $data['archived']           = TblCalModel::where('cal_id',$cal_id)->value('archived');  
     }
     
     return view('carewell.modal_pages.billing_payment_breakdown',$data);
@@ -1292,6 +1295,8 @@ class CarewellController extends ActiveAuthController
                                 ->limit(10)
                                 ->get();
     $data['member_id']          = 'disabled';
+    $data['ref']                = 'old';
+    $data['archived']           = 1;  
     return view('carewell.modal_pages.billing_payment_breakdown',$data);
   }
   public function billing_update_payment_date(Request $request)
@@ -1308,9 +1313,6 @@ class CarewellController extends ActiveAuthController
     {
       $updateCheck = TblNewCalMemberModel::where('cal_new_member_id',$request->cal_new_member_id)->update($update);
     }
-    
-
-
     if($updateCheck)
     {
       return "check";
@@ -1591,7 +1593,8 @@ class CarewellController extends ActiveAuthController
   {
     if($request->ref=="old")
     {
-      $remove = TblCalMemberModel::where('cal_member_id',$request->cal_member_id)->delete();
+      $archived['archived'] = 1;
+      $remove = TblCalMemberModel::where('cal_member_id',$request->cal_member_id)->update($archived);
     }
     else
     {
@@ -1607,6 +1610,12 @@ class CarewellController extends ActiveAuthController
       return "james";
     }
 
+  }
+  public function billing_cal_member_restore(Request $request)
+  {
+    $archived['archived'] = 0;
+    $remove               = TblCalMemberModel::where('cal_member_id',$request->cal_member_id)->update($archived);
+    return '<center><b><span class="color-red">Member Successfully Restored!</span></b></center>';
   }
   public function billing_cal_pending_submit(Request $request)
   {
