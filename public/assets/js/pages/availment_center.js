@@ -99,6 +99,23 @@ function availment_center()
 						$('.availment-transaction-details').data('member_id','');
 						$('.availment-transaction-details').attr("disabled", "true");
 					}
+					else if(data.ref == 'not_updated')
+					{
+						$('select#member_id').append('<option selected="selected"></option>');
+						toastr.error('Member payment is not yet updated. Please Check member payment.', 'Something went wrong!', {timeOut: 4000})
+					    $('.member_id').val('');
+						$('select#member_id').append('<option selected="selected"></option>');
+						$('.member_name').val('');
+						$('.member_universal_id').val('');
+						$('.member_carewell_id').val('');
+						$('.member_birthdate').val('');
+						$('.member_age').val('');
+						$('.company_name').val('');
+						$('.get-availment-info').html('SELECT AVAILMENT');
+						$('.member_list').html(data.member_list);
+						$('.availment-transaction-details').data('member_id','');
+						$('.availment-transaction-details').attr("disabled", "true");
+					}
 					else
 					{
 						$('.member_id').val(data.member_id);

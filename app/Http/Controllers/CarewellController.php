@@ -1796,7 +1796,11 @@ class CarewellController extends ActiveAuthController
       {
         print_r($data['member_info']->member_payment_mode,$mem_cal->cal_payment_end);
         $checkPayment = StaticFunctionController::checkIfMemberCanAvailed($data['member_info']->member_payment_mode,$mem_cal->cal_payment_end);
-        if(strtotime($checkPayment)  < strtotime($today))
+        if($checkPayment=="not_updated")
+        {
+          return  response()->json(array('ref' => 'not_updated','member_list' => $data['_member_list']));
+        }
+        else if(strtotime($checkPayment)  < strtotime($today))
         {
           return  response()->json(array('ref' => 'not_yet_paid','member_list' => $data['_member_list']));
         }
@@ -1972,7 +1976,6 @@ class CarewellController extends ActiveAuthController
 
   public function payable_create()
   {
-
     $data['_provider']  = TblProviderModel::where('archived',0)->get();
     $data['_approval']  = TblApprovalModel::where('tbl_member_company.archived',0)->ApprovalInfo()->paginate(10);
     return view('carewell.modal_pages.payable_create',$data);

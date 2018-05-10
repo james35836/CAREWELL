@@ -641,7 +641,11 @@ class StaticFunctionController extends Controller
 
     $date       = date('Y-m-d');
     $last_date  = date('d',strtotime($last_payment));
-    if($payment_mode=="SEMI-MONTHLY")
+    if($last_payment=="end")
+    {
+      $new_date = "not_updated";
+    }
+    else if($payment_mode=="SEMI-MONTHLY")
     {
       if( $last_date <= 15)
       {
@@ -668,6 +672,7 @@ class StaticFunctionController extends Controller
     {
       $new_date = date('Y-m-'.$last_date.'', strtotime($last_payment . "+1 years"));
     }
+
     return $new_date;
 
   }
