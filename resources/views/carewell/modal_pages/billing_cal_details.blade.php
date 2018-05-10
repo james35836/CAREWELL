@@ -56,10 +56,19 @@ table tr td
 			<label>COMPANY NAME </label>
 		</div>
 		<div class="col-md-9 form-content">
-			<input type="text" class="form-control" value="{{$cal_details->company_name}}" disabled/>
+			<input type="text" class="form-control" value="{{$cal_details->company_name}}"/>
 		</div>
-		
 	</div>
+	@if($cal_check==2)
+	<div class="form-holder">
+		<div class="col-md-3  form-content">
+			<label>REMARKS</label>
+		</div>
+		<div class="col-md-9 form-content">
+			<textarea  cols="2" rows="3" class="form-control">{{$cal_details->cal_remarks}}</textarea>
+		</div>
+	</div>
+	@endif
 	<div class="form-holder">
 		<div class="col-md-3  form-content">
 			<label>MODE OF PAYMENT</label>

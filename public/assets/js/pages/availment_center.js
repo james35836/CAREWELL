@@ -94,6 +94,7 @@ function availment_center()
 						$('.member_birthdate').val('');
 						$('.member_age').val('');
 						$('.company_name').val('');
+						$('.member_employee_number').val('');
 						$('.get-availment-info').html('SELECT AVAILMENT');
 						$('.member_list').html(data.member_list);
 						$('.availment-transaction-details').data('member_id','');
@@ -110,6 +111,7 @@ function availment_center()
 						$('.member_carewell_id').val('');
 						$('.member_birthdate').val('');
 						$('.member_age').val('');
+						$('.member_employee_number').val(data.member_employee_number);
 						$('.company_name').val('');
 						$('.get-availment-info').html('SELECT AVAILMENT');
 						$('.member_list').html(data.member_list);
@@ -125,6 +127,7 @@ function availment_center()
 						$('.member_carewell_id').val(data.member_carewell_id);
 						$('.member_birthdate').val(data.member_birthdate);
 						$('.member_age').val(data.member_age);
+						$('.member_employee_number').val(data.member_employee_number);
 						$('.company_name').val(data.company_name);
 						$('.get-availment-info').html(data.availment_list);
 						$('.member_list').html(data.member_list);
@@ -198,25 +201,8 @@ function availment_center()
 	{
 		$('body').on('click','.create-approval-confirm',function() 
 		{
-			$("select.final_diagnosis_id").each(function(i, sel)
-            {
-            	var selectedFinal = $(sel).val();
-            	if(selectedFinal!=0)
-            	{
-            		finalDiagnosisData.push(selectedFinal);
-            	}
-            });
-            $("select.doctor-payee").each(function(i, sel)
-            {
-            	var selectedPayee = $(sel).val();
-            	if(selectedPayee!=0)
-            	{
-            		payeeData.push(selectedPayee);
-            	}
-            });
-            
-
-			if(document.getElementById('member_id').value==0)
+			
+            if(document.getElementById('member_id').value==0)
 			{
 				globals.global_tostr('MEMBER');
 			}	
@@ -233,28 +219,45 @@ function availment_center()
 			else if(document.getElementById('initial_diagnosis_id').value==0)
 			{
 				globals.global_tostr('INITIAL DIAGNOSIS');
-			}	
-			else if(finalDiagnosisData==null||finalDiagnosisData=="")
-			{
-				globals.global_tostr('FINAL DIAGNOSIS');
 			}
-			else if(payeeData==null||payeeData=="")
+			else if(document.getElementById('approval_date_availed').value==0)
 			{
-				globals.global_tostr('PAYEE');
+				globals.global_tostr('AVAILMENT DATE');
 			}
-			
 			else 
 			{
-				var	confirmModalMessage = 'Are you sure you want to add this approval?';
-				var confirmModalAction = 'create-approval-submit';
-				globals.confirm_modals(confirmModalMessage,confirmModalAction);
-
-				ajaxData = $(".approval-submit-form").serialize();
+				$("select.final_diagnosis_id").each(function(i, sel)
+	            {
+	            	var selectedFinal = $(sel).val();
+	            	if(selectedFinal!=0)
+	            	{
+	            		finalDiagnosisData.push(selectedFinal);
+	            	}
+	            });
+	            $("select.doctor-payee").each(function(i, sel)
+	            {
+	            	var selectedPayee = $(sel).val();
+	            	if(selectedPayee!=0)
+	            	{
+	            		payeeData.push(selectedPayee);
+	            	}
+	            });
+	            if(finalDiagnosisData==null||finalDiagnosisData=="")
+				{
+					globals.global_tostr('FINAL DIAGNOSIS');
+				}
+				else if(payeeData==null||payeeData=="")
+				{
+					globals.global_tostr('PAYEE');
+				}
+				else
+				{
+					var	confirmModalMessage = 'Are you sure you want to add this approval?';
+					var confirmModalAction = 'create-approval-submit';
+					globals.confirm_modals(confirmModalMessage,confirmModalAction);
+					ajaxData = $(".approval-submit-form").serialize();
+				}
 			}
-
-
-			
-			
 		});
 	}
 	function create_approval_submit()

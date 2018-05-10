@@ -87,7 +87,14 @@ function billing_center()
 				{
 					setTimeout(function()
 					{
-					   ajaxData.this.html('<i class="fa fa-'+data+' "></i>');
+						if($data=="overlapping")
+						{
+							ajaxData.this.html('DATE OVERLAPPING');
+						}
+						else
+						{
+							ajaxData.this.html('<i class="fa fa-'+data+' "></i>');
+						}
 					}, 1000);
 				}
 			});
@@ -114,7 +121,7 @@ function billing_center()
 	{
 		$('body').on('click','.cal-pending-confirm',function() 
 		{
-			var	confirmModalMessage = 'Are you sure you want to mark this CAL as pending?';
+			var	confirmModalMessage = 'Are you sure you want to mark this CAL as pending?<br><br><textarea class="cal_remarks form-control" cols="2" rows="3">REMARKS</textarea>';
 			var confirmModalAction = 'cal-pending-submit';
 			globals.confirm_modals(confirmModalMessage,confirmModalAction);
             calPendingData.append("cal_id", 					$(this).data('cal_id'));
@@ -125,6 +132,8 @@ function billing_center()
 	{
 		$('body').on('click','.cal-pending-submit',function() 
 		{
+			
+			calPendingData.append("cal_remarks", $('.cal_remarks').val());
 			globals.global_single_submit('/billing/cal_pending_submit',calPendingData,ajaxData.tdCloser);
         });
 	}

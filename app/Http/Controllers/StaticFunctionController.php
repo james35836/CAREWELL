@@ -635,13 +635,43 @@ class StaticFunctionController extends Controller
     }
     return 0;
   }
-  
+  public static function checkPaymentUpdate($date_start,$date_end,$member_id,$ref)
+  {
+    $start         = strtotime($date_start);
+    $end           = strtotime($date_end);
+    $count         = 0;
+    if($ref=="old")
+    {
+      $_payment  = TblCalPaymentModel::where('member_id',$member_id)
+                ->where(function($query)
+                  {
+                    $query->where('archived',1)->orWhere('archived',2);
+                  })
+                ->get();
+      foreach($_payment as $key=>$payment)
+      {
+        if($payment->cal_payment_start!=="start"&&$payment->cal_payment_start!="end")
+        {
+          $payment_start = strtotime($payment->cal_payment_start);
+          $payment_end   = strtotime($payment->cal_payment_end);
+          if((($start > $payment_start) && ($start < $payment_end))||(($end > $payment_start) && ($end < $payment_end)))
+          {
+            $count++;
+          }
+        }
+      }
+    }
+    else
+    {
+
+    }
+    return $count;
+  }
   public static function checkIfMemberCanAvailed($payment_mode,$last_payment)
   {
 
     $date       = date('Y-m-d');
     $last_date  = date('d',strtotime($last_payment));
-    // dd($last_payment);
     if($last_payment=="end")
     {
       $new_date = "not_updated";
