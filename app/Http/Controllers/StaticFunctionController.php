@@ -577,8 +577,8 @@ class StaticFunctionController extends Controller
           }
           else
           {
-            $member_cut['cal_payment_start']  = $cal->cal_payment_start;
-            $member_cut['cal_payment_end']    = $cal->cal_payment_end;
+            $member_cut['cal_payment_start']  = $cal->cal_start;
+            $member_cut['cal_payment_end']    = $cal->cal_end;
             $member_cut['cal_payment_type']   = 'ORIGINAL';
             $member_cut['cal_member_id']      = $cal_member_id;
             $member_cut['member_id']          = $member_id;
@@ -641,6 +641,7 @@ class StaticFunctionController extends Controller
 
     $date       = date('Y-m-d');
     $last_date  = date('d',strtotime($last_payment));
+    // dd($last_payment);
     if($last_payment=="end")
     {
       $new_date = "not_updated";
