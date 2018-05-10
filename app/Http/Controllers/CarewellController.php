@@ -918,14 +918,9 @@ class CarewellController extends ActiveAuthController
   }
   public function add_doctor_submit(Request $request)
   {
-
-    
-
     $doctorData = new TblDoctorModel;
     $doctorData->doctor_number          = StaticFunctionController::updateReferenceNumber('doctor');
-    $doctorData->doctor_first_name      = $request->doctor_first_name;
-    $doctorData->doctor_middle_name     = $request->doctor_middle_name;
-    $doctorData->doctor_last_name       = $request->doctor_last_name;
+    $doctorData->doctor_full_name      = $request->doctor_full_name;
     $doctorData->doctor_gender          = $request->doctor_gender;
     $doctorData->doctor_contact_number  = $request->doctor_contact_number;
     $doctorData->doctor_email_address   = $request->doctor_email_address;
@@ -942,13 +937,6 @@ class CarewellController extends ActiveAuthController
       $providerData->save();
     }
 
-    foreach($request->specialData as $specialization)
-    {
-      $specializationData = new TblDoctorSpecializationModel;
-      $specializationData->specialization_id = $specialization;
-      $specializationData->doctor_id         = $doctorData->doctor_id;
-      $specializationData->save();
-    }
     if($doctorData->save())
     {
       return StaticFunctionController::returnMessage('success','DOCTOR');    
