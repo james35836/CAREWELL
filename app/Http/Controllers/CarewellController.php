@@ -294,8 +294,8 @@ class CarewellController extends ActiveAuthController
   	$data['page']                 = 'Member';
     $data['user']                 = StaticFunctionController::global();
     $data['_company']             = TblCompanyModel::where('archived',0)->get();
-    $data['_member_active']       = TblMemberModel::where('tbl_member.archived',0)->Member()->orderBy('tbl_member.member_id','ASC')->paginate(10, ['*'], 'active');
-    $data['_member_inactive']     = TblMemberModel::where('tbl_member.archived',1)->Member()->orderBy('tbl_member.member_id','ASC')->paginate(10, ['*'], 'inactive');
+    $data['_member_active']       = TblMemberModel::where('tbl_member.archived',0)->where('tbl_member_company.archived',0)->Member()->orderBy('tbl_member.member_id','ASC')->paginate(10, ['*'], 'active');
+    $data['_member_inactive']     = TblMemberModel::where('tbl_member.archived',1)->where('tbl_member_company.archived',0)->Member()->orderBy('tbl_member.member_id','ASC')->paginate(10, ['*'], 'inactive');
   	return view('carewell.pages.member_center',$data);
   }
   public function member_create_member()
@@ -698,24 +698,27 @@ class CarewellController extends ActiveAuthController
   {
     $data['member_id']  = $member_id;
     $data['_company']   = TblCompanyModel::where('archived',0)->get();
+    $data['_payment']   = TblPaymentModeModel::where('archived',0)->get();
 
     return view('carewell.modal_pages.member_adjustment',$data);
   }
   public function member_adjustment_submit(Request $request)
   {
-    $update['archived']= 1;
-    $memberCompany     = TblMemberCompanyModel::where('member_id',$request->member_id_adjustment)->update($update);
     $companyData       = TblCompanyModel::where('company_id',$request->company_id_adjustment)->first();
     $companyMemberData = new TblMemberCompanyModel;
     $companyMemberData->member_carewell_id      = StaticFunctionController::generateCarewellId($companyData->company_code);
     $companyMemberData->member_employee_number  = $request->employee_number_adjustment;
     $companyMemberData->member_company_status   = "active";
+    $companyMemberData->member_payment_mode     = $request->member_payment_mode_adjustment;
     $companyMemberData->member_transaction_date = Carbon::now();
     $companyMemberData->coverage_plan_id        = $request->coverage_plan_id_adjustment;
     $companyMemberData->deployment_id           = $request->deployment_id_adjustment;
     $companyMemberData->member_id               = $request->member_id_adjustment;
     $companyMemberData->company_id              = $companyData->company_id;
     $companyMemberData->save();
+
+    $update['archived'] = 1;
+    $memberCompany      = TblMemberCompanyModel::where('member_company_id','!=',$companyMemberData->member_company_id)->where('member_id',$request->member_id_adjustment)->update($update);
 
     if($companyMemberData->save())
     {
@@ -1563,6 +1566,9 @@ class CarewellController extends ActiveAuthController
             else
             {
               $coverage_plan_id = StaticFunctionController::getid($data['coverage_plan'], 'coverage');
+              $deployment_id    = StaticFunctionController::getid($data['deployment'], 'deployment');
+              
+              
               $payment_amount   = $data['payment_amount'];
               $cal_id           = $companyData->cal_id;
               $member_id        = $checkingMember->member_id;
@@ -1583,6 +1589,14 @@ class CarewellController extends ActiveAuthController
               $cal_member['cal_id']               =   $companyData->cal_id;
               $cal_member_id                      =   TblCalMemberModel::insertGetId($cal_member);
               $payment_ref                        =   StaticFunctionController::getModeOfPayment($member_id,$cal_member_id,$premium,$payment_count,$cal_id);
+              if($coverage_plan_id!=$member_data->coverage_plan_id)
+              {
+                StaticFunctionController::archivedCurrentCompany($checkingMember->member_id,$coverage_plan_id,'coverage_plan');
+              }
+              else if($deployment_id!=$member_data->deployment_id)
+              {
+                StaticFunctionController::archivedCurrentCompany($checkingMember->member_id,$deployment_id,'deployment');
+              }
               $count++; 
             }
           }

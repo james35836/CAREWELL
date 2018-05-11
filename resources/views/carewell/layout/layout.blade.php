@@ -261,7 +261,6 @@
           <ul class="treeview-menu">
             <li><a href="/reports/availment"><i class="fa fa-circle-o"></i>AVAILMENT </a></li>
             <li><a href="#"><i class="fa fa-circle-o"></i>MONITORING</a></li>
-            <li><a href="#"><i class="fa fa-circle-o"></i>BREAKDOWN</a></li>
             <li><a href="/reports/ending_number_per_month"><i class="fa fa-circle-o"></i>ENDING NUMBER</a></li>
             <li><a href="/reports/breakdown"><i class="fa fa-circle-o"></i>BREAKDOWN</a></li>
             <li><a href="/reports/consolidation"><i class="fa fa-circle-o"></i>CONSOLIDATION</a></li>

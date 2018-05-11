@@ -279,13 +279,13 @@ function member_center()
 	{
 		$("body").on('click','.member-adjustment',function() 
 		{
-			var member_id = $(this).data('member_id');
-			var modalName= 'ADJUSTMENT ';
-			var modalClass='member-adjustment';
-			var modalLink='/member/member_adjustment/'+member_id;
-			var modalActionName='SAVE CHANGES';
-			var modalAction='member-adjustment-confirm';
-			var modalSize = 'modal-md';
+			var member_id 		= $(this).data('member_id');
+			var modalName 		= 'CHANGE COMPANY ';
+			var modalClass 		= 'member-adjustment';
+			var modalLink 		= '/member/member_adjustment/'+member_id;
+			var modalActionName = 'SAVE CHANGES';
+			var modalAction 	= 'member-adjustment-confirm';
+			var modalSize 		= 'modal-md';
 			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
         });
         $('body').on('change','#company_id_adjustment',function() 
@@ -321,20 +321,19 @@ function member_center()
 				globals.confirm_modals(confirmModalMessage,confirmModalAction);
 
 
-				adjustmentData.append("company_id_adjustment", 		document.getElementById('company_id_adjustment').value);
-	            adjustmentData.append("coverage_plan_id_adjustment",document.getElementById('coverage_plan_id_adjustment').value);
-	            adjustmentData.append("deployment_id_adjustment", 	document.getElementById('deployment_id_adjustment').value);
-	            adjustmentData.append("employee_number_adjustment", document.getElementById('employee_number_adjustment').value);
-	            adjustmentData.append("member_id_adjustment", 		document.getElementById('member_id_adjustment').value);
+				adjustmentData.append("company_id_adjustment", 			document.getElementById('company_id_adjustment').value);
+	            adjustmentData.append("coverage_plan_id_adjustment",	document.getElementById('coverage_plan_id_adjustment').value);
+	            adjustmentData.append("deployment_id_adjustment", 		document.getElementById('deployment_id_adjustment').value);
+	            adjustmentData.append("employee_number_adjustment", 	document.getElementById('employee_number_adjustment').value);
+	            adjustmentData.append("member_id_adjustment", 			document.getElementById('member_id_adjustment').value);
+	            adjustmentData.append("member_payment_mode_adjustment", document.getElementById('member_payment_mode_adjustment').value);
 			}
-		
 		});
 	}
 	function member_adjustment_submit()
 	{
 		$('body').on('click','.member-adjustment-submit',function() 
 		{
-
 			globals.global_submit('member-adjustment','/member/member_adjustment/submit',adjustmentData);
         });
 	}

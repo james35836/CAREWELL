@@ -39,6 +39,19 @@
 				<input type="text" placeholder="THIS FIELD IS REQUIRED"  name="employee_number_adjustment" id="employee_number_adjustment" class="form-control"/>
 			</div>
 		</div>
+		<div class="row"></div>
+		<div class="form-holder ">
+			<div class="col-md-2 form-content">
+				<label>MODE OF PAYMENT</label>
+			</div>
+			<div class="col-md-4 form-content">
+				<select name="member_payment_mode_adjustment" id="member_payment_mode_adjustment" class="form-control">
+					@foreach($_payment as $payment)
+					<option>{{$payment->payment_mode_name}}</option>
+					@endforeach
+				</select>
+			</div>
+		</div>
 		
 	</form>
 </div>

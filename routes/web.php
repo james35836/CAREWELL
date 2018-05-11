@@ -94,7 +94,7 @@ Route::post('/member/import_member/submit', 			'CarewellController@member_import
 Route::get('/member/member_adjustment/{member_id}', 	'CarewellController@member_adjustment');
 Route::post('/member/member_adjustment/submit', 		'CarewellController@member_adjustment_submit');
 
-Route::post('/member/update_member/submit', 		'CarewellController@member_update_member_submit');
+Route::post('/member/update_member/submit', 			'CarewellController@member_update_member_submit');
 
 
 

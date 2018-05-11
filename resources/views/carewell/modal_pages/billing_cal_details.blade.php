@@ -238,7 +238,7 @@ table tr td
 				</div>
 			</div>
 			<div class="tab-pane" id="inActive">
-				<<div class="row">
+				<div class="row">
 		            <div class="col-md-3 col-xs-12 pull-right">
 		             	<input type="text" data-name="inactive_cal_member" class="top-element form-control search-key">
 		            </div>

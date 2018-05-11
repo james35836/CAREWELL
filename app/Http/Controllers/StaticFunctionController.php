@@ -451,6 +451,40 @@ class StaticFunctionController extends Controller
     }
     return $message; 
   }
+  public static function archivedCurrentCompany($member_id,$ref_id,$ref)
+  {
+    $member_company = TblMemberCompanyModel::where('member_id',$member_id)->where('archived',0)->first();
+    
+    switch ($ref) 
+    {
+      case 'coverage_plan':
+        $company['member_carewell_id']        =   $member_company->member_carewell_id;
+        $company['member_employee_number']    =   $member_company->member_employee_number;
+        $company['member_company_status']     =   $member_company->member_company_status;
+        $company['member_transaction_date']   =   Carbon::now();
+        $company['member_id']                 =   $member_company->member_id;
+        $company['company_id']                =   $member_company->company_id;
+        $company['member_payment_mode']       =   $member_company->member_payment_mode;
+        $company['deployment_id']             =   $member_company->deployment_id;
+        $company['coverage_plan_id']          =   $ref_id;
+        $member_company_id = TblMemberCompanyModel::insertGetId($company);
+        break;
+      case 'deployment':
+        $company['member_carewell_id']        =   $member_company->member_carewell_id;
+        $company['member_employee_number']    =   $member_company->member_employee_number;
+        $company['member_company_status']     =   $member_company->member_company_status;
+        $company['member_transaction_date']   =   Carbon::now();
+        $company['member_id']                 =   $member_company->member_id;
+        $company['company_id']                =   $member_company->company_id;
+        $company['member_payment_mode']       =   $member_company->member_payment_mode;
+        $company['coverage_plan_id']          =   $member_company->coverage_plan_id;
+        $company['deployment_id']             =   $ref_id;
+        $member_company_id = TblMemberCompanyModel::insertGetId($company);
+        break;
+    }
+    $update['archived'] = 1;
+    TblMemberCompanyModel::where('member_id',$member_id)->where('member_company_id','!=',$member_company_id)->update($update);
+  }
   public static function restore_data($restore_id,$restore_name)
   {
     $message = "";
@@ -557,9 +591,7 @@ class StaticFunctionController extends Controller
 
         TblNewMemberModel::where('new_member_id',$new_member->new_member_id)->delete();
         TblNewCalMemberModel::where('new_member_id',$new_member->new_member_id)->delete();
-
     }
-    
   }
   public static function getModeOfPayment($member_id,$cal_member_id,$premium,$payment_count,$cal_id)
   {
@@ -571,7 +603,7 @@ class StaticFunctionController extends Controller
       {
         if($payment!=null)
         {                           
-          if(strtotime($payment->cal_last_payment) >= strtotime($cal->cal_payment_start))
+          if(strtotime($payment->cal_last_payment) >= strtotime($cal->cal_start))
           {
             Self::insertMemberPayment($cal_member_id,$member_id);
           }
@@ -587,8 +619,8 @@ class StaticFunctionController extends Controller
         }
         else
         {
-          $member_cut['cal_payment_start']  = $cal->cal_payment_start;
-          $member_cut['cal_payment_end']    = $cal->cal_payment_end;
+          $member_cut['cal_payment_start']  = $cal->cal_start;
+          $member_cut['cal_payment_end']    = $cal->cal_end;
           $member_cut['cal_payment_type']   = 'ORIGINAL';
           $member_cut['cal_member_id']      = $cal_member_id;
           $member_cut['member_id']          = $member_id;
@@ -619,8 +651,8 @@ class StaticFunctionController extends Controller
       if($i==1)
       {
         
-        $member_cut['cal_payment_start']  = $cal->cal_payment_start;
-        $member_cut['cal_payment_end']    = $cal->cal_payment_end;
+        $member_cut['cal_payment_start']  = $cal->cal_start;
+        $member_cut['cal_payment_end']    = $cal->cal_end;
         $member_cut['new_member_id']      = $member_id;
         TblNewCalMemberModel::insert($member_cut);
         
