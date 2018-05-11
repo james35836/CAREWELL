@@ -6,7 +6,7 @@ $(document).ready(function()
 	radioClass   : 'iradio_minimal-blue'
 	});
 	$('body').find('.get-member-info').select2();
-	
+	$('.date-picker').datepicker();
 	$('body').find('.get-availment-info').select2();
 	$('body').find('.get-provider-info').select2();
 	$('body').find('.default-select2').select2();
@@ -133,10 +133,10 @@ $(document).ready(function()
 					<input type="text" class="form-control member_birthdate" disabled/>
 				</div>
 				<div class="col-md-2 form-content">
-					<label>Age</label>
+					<label>Employee Number</label>
 				</div>
 				<div class="col-md-4 form-content">
-					<input type="text" class="form-control member_age" disabled/>
+					<input type="text" class="form-control member_employee_number" disabled/>
 				</div>
 			</div>
 			<div class="form-holder">
@@ -149,8 +149,17 @@ $(document).ready(function()
 	
 	<div class="row box-globals">
 		<div class="form-holder col-md-12 no-padding">
-			<div class="pull-right col-md-3 col-xs-12">
-				<button type="button" class="btn btn-primary top-element reembursementBtn" ><i class="fa fa-upload btn-icon"></i> REIMBURSEMENT</button>
+			<div class="col-md-3 form-content">
+				<button type="button" class="btn btn-primary top-element reimbursementBtn" ><i class="fa fa-upload btn-icon"></i> REIMBURSEMENT</button>
+			</div>
+			<div class="col-md-3 form-content">
+				
+			</div>
+			<div class="col-md-2 form-content">
+				<label>Availment Date</label>
+			</div>
+			<div class="col-md-4 form-content">
+				<input type="text" name="approval_date_availed" id="approval_date_availed" class="form-control date-picker" value="{{date('m-d-Y')}}"/>
 			</div>
 		</div>
 		<div class="form-holder">

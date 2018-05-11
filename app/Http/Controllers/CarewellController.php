@@ -1273,6 +1273,7 @@ class CarewellController extends ActiveAuthController
     $companyCalData->cal_number                 =   StaticFunctionController::updateReferenceNumber('billing_cal');;
     $companyCalData->cal_reveneu_period_year    =   $request->cal_reveneu_period_year;
     $companyCalData->cal_payment_mode           =   $request->cal_payment_mode;
+    $companyCalData->cal_remarks                =   'REMARKS';
     $companyCalData->cal_start                  =   $request->cal_start;
     $companyCalData->cal_end                    =   $request->cal_end;
     $companyCalData->cal_created                =   Carbon::now();
@@ -1284,13 +1285,12 @@ class CarewellController extends ActiveAuthController
   public function billing_cal_details($cal_id)
   {
     $data['cal_check']        = TblCalModel::where('cal_id',$cal_id)->value('archived');
-    $data['_cal_member']      = TblCalMemberModel::where('cal_id',$cal_id)->CalMember()->get();
-
+    $data['_cal_member']      = TblCalMemberModel::where('tbl_cal_member.cal_id',$cal_id)->where('tbl_cal_member.archived',0)->CalMember()->get();
+    $data['_cal_member_remove']=TblCalMemberModel::where('tbl_cal_member.cal_id',$cal_id)->where('tbl_cal_member.archived',1)->CalMember()->get();
     $data['_cal_new_member']  = TblNewMemberModel::where('cal_id',$cal_id)->get();
-
     if($data['cal_check']==0||$data['cal_check']==2)
     {
-      $data['cal_details']   = TblCalModel::where('cal_id',$cal_id)
+      $data['cal_details']    = TblCalModel::where('cal_id',$cal_id)
                               ->join('tbl_company','tbl_company.company_id','=','tbl_cal.company_id')
                               ->first();
     }
@@ -1301,8 +1301,8 @@ class CarewellController extends ActiveAuthController
                               ->join('tbl_cal_info','tbl_cal_info.cal_id','=','tbl_cal.cal_id')
                               ->first();
     }
-    $sum = 0;
-    $sums = 0;
+    $sum      = 0;
+    $sums     = 0;
     foreach($data['_cal_member'] as $amount)
     {
       $sum = $sum + $amount->cal_payment_amount;
@@ -1311,7 +1311,6 @@ class CarewellController extends ActiveAuthController
     {
       $sums = $sums + $amounts->cal_payment_amount;
     }
-
     $data['total_amount']     = $sum + $sums;
     $data['total_member']     = count($data['_cal_member'])+count($data['_cal_new_member']);
     return view('carewell.modal_pages.billing_cal_details',$data);
@@ -1320,15 +1319,20 @@ class CarewellController extends ActiveAuthController
   {
     if($str_ref=='old')
     {
+      $TblCalMember               = TblCalMemberModel::where('cal_member_id',$cal_member_id);
       $data['_payment_breakdown'] = TblCalPaymentModel::where('cal_member_id',$cal_member_id)->get();
-      $data['member_id']          = TblCalMemberModel::where('cal_member_id',$cal_member_id)->value('member_id');
+      $data['member_id']          = $TblCalMember->value('member_id');
       $data['ref']                = 'old';
+      $cal_id                     = $TblCalMember->value('cal_id');
+      $data['archived']           = TblCalModel::where('cal_id',$cal_id)->value('archived');                   
     }
     else
     {
       $data['_payment_breakdown'] = TblNewCalMemberModel::where('new_member_id',$cal_member_id)->get();
       $data['member_id']          = $cal_member_id;
       $data['ref']                = 'new';
+      $cal_id                     = TblNewMemberModel::where('new_member_id',$cal_member_id)->value('cal_id');
+      $data['archived']           = TblCalModel::where('cal_id',$cal_id)->value('archived');  
     }
     
     return view('carewell.modal_pages.billing_payment_breakdown',$data);
@@ -1341,33 +1345,37 @@ class CarewellController extends ActiveAuthController
                                 ->limit(10)
                                 ->get();
     $data['member_id']          = 'disabled';
+    $data['ref']                = 'old';
+    $data['archived']           = 1;  
     return view('carewell.modal_pages.billing_payment_breakdown',$data);
   }
   public function billing_update_payment_date(Request $request)
   {
     
-    $update['cal_payment_start'] = date('Y-m-d', strtotime($request->cal_payment_start));
-    $update['cal_payment_end']   = date('Y-m-d', strtotime($request->cal_payment_end));
-    
+    $update['cal_payment_start']  = date('Y-m-d', strtotime($request->cal_payment_start));
+    $update['cal_payment_end']    = date('Y-m-d', strtotime($request->cal_payment_end));
+    $update['cal_payment_type']   = "UPDATED";
     if($request->ref=='old')
     {
-      $updateCheck = TblCalPaymentModel::where('cal_payment_id',$request->cal_payment_id)->update($update);
+      $TblCalPaymentModel   = TblCalPaymentModel::where('cal_payment_id',$request->cal_payment_id);
+      $member_id            = $TblCalPaymentModel->value('member_id');
+      $check                = StaticFunctionController::checkPaymentUpdate($update['cal_payment_start'],$update['cal_payment_end'],$member_id,'old');
+      if($check==0)
+      {
+        $updateCheck        = $TblCalPaymentModel->update($update);
+        $message            = "check";
+      }
+      else
+      {
+        $message = "overlapping"; 
+      }
     }
     else
     {
       $updateCheck = TblNewCalMemberModel::where('cal_new_member_id',$request->cal_new_member_id)->update($update);
+      $message    = "times";
     }
-    
-
-
-    if($updateCheck)
-    {
-      return "check";
-    }
-    else
-    {
-      return "times";
-    }
+    return $message;
     
   }
   public function billing_import_cal_members($cal_id,$company_id)
@@ -1640,7 +1648,8 @@ class CarewellController extends ActiveAuthController
   {
     if($request->ref=="old")
     {
-      $remove = TblCalMemberModel::where('cal_member_id',$request->cal_member_id)->delete();
+      $archived['archived'] = 1;
+      $remove = TblCalMemberModel::where('cal_member_id',$request->cal_member_id)->update($archived);
     }
     else
     {
@@ -1657,15 +1666,23 @@ class CarewellController extends ActiveAuthController
     }
 
   }
+  public function billing_cal_member_restore(Request $request)
+  {
+    $archived['archived'] = 0;
+    $remove               = TblCalMemberModel::where('cal_member_id',$request->cal_member_id)->update($archived);
+    return '<center><b><span class="color-red">Member Successfully Restored!</span></b></center>';
+  }
   public function billing_cal_pending_submit(Request $request)
   {
     StaticFunctionController::getNewMember($request->cal_id,2);
-    $update['archived']   = 2;//for pending cal
-    $pending              = TblCalModel::where('cal_id',$request->cal_id)->update($update);
-    $data['_cal_member']  = TblCalMemberModel::where('cal_id',$request->cal_id)->get();
+    $update['archived']     = 2; //for pending cal
+    $update['cal_remarks']  = $request->cal_remarks;
+    $pending                = TblCalModel::where('cal_id',$request->cal_id)->update($update);
+    $data['_cal_member']    = TblCalMemberModel::where('cal_id',$request->cal_id)->get();
     foreach($data['_cal_member'] as $key=>$cal_member)
     {
-      TblCalPaymentModel::where('cal_member_id',$cal_member->cal_member_id)->update($update);
+      $member['archived']   = 2;
+      TblCalPaymentModel::where('cal_member_id',$cal_member->cal_member_id)->update($member);
     }
     if($pending)
     {
@@ -1678,7 +1695,7 @@ class CarewellController extends ActiveAuthController
   }
   public function billing_cal_close($cal_id)
   {
-    $data['cal_info'] = TblCalModel::where('cal_id',$cal_id)->first();
+    $data['cal_info']     = TblCalModel::where('cal_id',$cal_id)->first();
     $data['_cal_member']  = TblCalMemberModel::where('cal_id',$cal_id)->get();
     $sum = 0;
     foreach($data['_cal_member'] as $amount)
@@ -1749,7 +1766,6 @@ class CarewellController extends ActiveAuthController
   }
   public function  availment_get_member_info(Request $request)
   {
-
     if($request->ajax())
     {
       $today                = date('Y-m-d');
@@ -1787,7 +1803,11 @@ class CarewellController extends ActiveAuthController
       {
         print_r($data['member_info']->member_payment_mode,$mem_cal->cal_payment_end);
         $checkPayment = StaticFunctionController::checkIfMemberCanAvailed($data['member_info']->member_payment_mode,$mem_cal->cal_payment_end);
-        if(strtotime($checkPayment)  < strtotime($today))
+        if($checkPayment=="not_updated")
+        {
+          return  response()->json(array('ref' => 'not_updated','member_list' => $data['_member_list']));
+        }
+        else if(strtotime($checkPayment)  < strtotime($today))
         {
           return  response()->json(array('ref' => 'not_yet_paid','member_list' => $data['_member_list']));
         }
@@ -1798,6 +1818,7 @@ class CarewellController extends ActiveAuthController
             'company_name'        => $data['member_info']->company_name,
             'member_universal_id' => $data['member_info']->member_universal_id,
             'member_carewell_id'  => $data['member_info']->member_carewell_id,
+            'member_employee_number'  => $data['member_info']->member_employee_number,
             'member_birthdate'    => $data['member_info']->member_birthdate,
             'member_age'          => date_create($data['member_info']->member_birthdate)->diff(date_create('today'))->y,
             'member_id'           => $data['member_info']->member_id,
@@ -1818,6 +1839,7 @@ class CarewellController extends ActiveAuthController
     $approvalData = new TblApprovalModel;
     $approvalData->approval_number            = StaticFunctionController::updateReferenceNumber('approval');
     $approvalData->approval_complaint         = $request->approval_complaint;
+    $approvalData->approval_date_availed      = $request->approval_date_availed;
     $approvalData->approval_created           = Carbon::now();
     $approvalData->charge_diagnosis_id        = $request->charge_diagnosis_id;
     $approvalData->diagnosis_id               = $request->diagnosis_id;
@@ -1860,43 +1882,47 @@ class CarewellController extends ActiveAuthController
       $doctorData->approval_id                      = $approvalData->approval_id;
       $doctorData->save();
     }
-    foreach($request->doctor_payee_id as $key=>$payee_id)
+    if($request->doctor_payee_id!=null)
     {
-      $payeeDocData = new TblApprovalPayeeModel;
-      $payeeDocData->payee_id     = $payee_id;
-      $payeeDocData->approval_id  = $approvalData->approval_id;
-      $payeeDocData->payee_name   = 'doctor';
-      $payeeDocData->type         = 'doctor';
-      $payeeDocData->save();
+      foreach($request->doctor_payee_id as $key=>$payee_id)
+      {
+        $payeeDocData = new TblApprovalPayeeModel;
+        $payeeDocData->payee_id     = $payee_id;
+        $payeeDocData->approval_id  = $approvalData->approval_id;
+        $payeeDocData->payee_name   = 'doctor';
+        $payeeDocData->type         = 'doctor';
+        $payeeDocData->save();
+      }
     }
-    foreach($request->payee_name as $key=>$payee_name)
+    if($request->payee_name!=null)
     {
-      $payeeData = new TblApprovalPayeeModel;
-      $payeeData->payee_id     = '0';
-      $payeeData->approval_id  = $approvalData->approval_id;
-      $payeeData->payee_name   = $payee_name;
-      $payeeData->type         = 'payee';
-      $payeeData->save();
+      foreach($request->payee_name as $key=>$payee_name)
+      {
+        $payeeData = new TblApprovalPayeeModel;
+        $payeeData->payee_id     = '0';
+        $payeeData->approval_id  = $approvalData->approval_id;
+        $payeeData->payee_name   = $payee_name;
+        $payeeData->type         = 'payee';
+        $payeeData->save();
+      }
     }
+    $totalData = new TblApprovalTotalModel;
+    $totalData->total_gross_amount    = StaticFunctionController::nullableToString($request->procedure_total_gross_amount,'int');
+    $totalData->total_philhealth      = StaticFunctionController::nullableToString($request->procedure_total_philhealth,'int');
+    $totalData->total_charge_patient  = StaticFunctionController::nullableToString($request->procedure_total_charge_patient,'int');
+    $totalData->total_charge_carewell = StaticFunctionController::nullableToString($request->procedure_total_charge_carewell,'int');
+    $totalData->total_type            = 'procedure';
+    $totalData->approval_id           = $approvalData->approval_id;
+    $totalData->save();
 
-    
-      $totalData = new TblApprovalTotalModel;
-      $totalData->total_gross_amount    = StaticFunctionController::nullableToString($request->procedure_total_gross_amount,'int');
-      $totalData->total_philhealth      = StaticFunctionController::nullableToString($request->procedure_total_philhealth,'int');
-      $totalData->total_charge_patient  = StaticFunctionController::nullableToString($request->procedure_total_charge_patient,'int');
-      $totalData->total_charge_carewell = StaticFunctionController::nullableToString($request->procedure_total_charge_carewell,'int');
-      $totalData->total_type            = 'procedure';
-      $totalData->approval_id           = $approvalData->approval_id;
-      $totalData->save();
-
-      $totalDoctorData = new TblApprovalTotalModel;
-      $totalDoctorData->total_gross_amount    = StaticFunctionController::nullableToString($request->doctor_total_gross_amount,'int');
-      $totalDoctorData->total_philhealth      = StaticFunctionController::nullableToString($request->doctor_total_philhealth,'int');
-      $totalDoctorData->total_charge_patient  = StaticFunctionController::nullableToString($request->doctor_total_charge_patient,'int');
-      $totalDoctorData->total_charge_carewell = StaticFunctionController::nullableToString($request->doctor_total_charge_carewell,'int');
-      $totalDoctorData->total_type            = 'doctor';
-      $totalDoctorData->approval_id           = $approvalData->approval_id;
-      $totalDoctorData->save();
+    $totalDoctorData = new TblApprovalTotalModel;
+    $totalDoctorData->total_gross_amount    = StaticFunctionController::nullableToString($request->doctor_total_gross_amount,'int');
+    $totalDoctorData->total_philhealth      = StaticFunctionController::nullableToString($request->doctor_total_philhealth,'int');
+    $totalDoctorData->total_charge_patient  = StaticFunctionController::nullableToString($request->doctor_total_charge_patient,'int');
+    $totalDoctorData->total_charge_carewell = StaticFunctionController::nullableToString($request->doctor_total_charge_carewell,'int');
+    $totalDoctorData->total_type            = 'doctor';
+    $totalDoctorData->approval_id           = $approvalData->approval_id;
+    $totalDoctorData->save();
 
     if($approvalData->save()&&$procedureData->save()&&$doctorData->save())
     {
@@ -1963,7 +1989,6 @@ class CarewellController extends ActiveAuthController
 
   public function payable_create()
   {
-
     $data['_provider']  = TblProviderModel::where('archived',0)->get();
     $data['_approval']  = TblApprovalModel::where('tbl_member_company.archived',0)->ApprovalInfo()->paginate(10);
     return view('carewell.modal_pages.payable_create',$data);

@@ -23,8 +23,7 @@ function billing_center()
 			import_cal_members();
 			import_cal_member_confirm();
 			import_cal_member_submit();
-			remove_cal_member();
-			remove_cal_member_submit();
+			
 			cal_close();
 			cal_close_confirm();
 			cal_close_submit();
@@ -33,6 +32,12 @@ function billing_center()
 			payment_breakdown();
 			payment_breakdown_update();
 			last_ten_payments();
+
+			remove_cal_member();
+			remove_cal_member_submit();
+
+			restore_cal_member();
+			restore_cal_member_submit();
 		});
 
 	}
@@ -82,7 +87,14 @@ function billing_center()
 				{
 					setTimeout(function()
 					{
-					   ajaxData.this.html('<i class="fa fa-'+data+' "></i>');
+						if($data=="overlapping")
+						{
+							ajaxData.this.html('DATE OVERLAPPING');
+						}
+						else
+						{
+							ajaxData.this.html('<i class="fa fa-'+data+' "></i>');
+						}
 					}, 1000);
 				}
 			});
@@ -109,7 +121,7 @@ function billing_center()
 	{
 		$('body').on('click','.cal-pending-confirm',function() 
 		{
-			var	confirmModalMessage = 'Are you sure you want to mark this CAL as pending?';
+			var	confirmModalMessage = 'Are you sure you want to mark this CAL as pending?<br><br><textarea class="cal_remarks form-control" cols="2" rows="3">REMARKS</textarea>';
 			var confirmModalAction = 'cal-pending-submit';
 			globals.confirm_modals(confirmModalMessage,confirmModalAction);
             calPendingData.append("cal_id", 					$(this).data('cal_id'));
@@ -120,6 +132,8 @@ function billing_center()
 	{
 		$('body').on('click','.cal-pending-submit',function() 
 		{
+			
+			calPendingData.append("cal_remarks", $('.cal_remarks').val());
 			globals.global_single_submit('/billing/cal_pending_submit',calPendingData,ajaxData.tdCloser);
         });
 	}
@@ -316,6 +330,27 @@ function billing_center()
 		$('body').on('click','.remove-cal-member-submit',function() 
 		{
 			globals.global_single_submit('/billing/cal_member/remove',billingMemberData,ajaxData.tdCloser);
+
+		});
+	}
+	function restore_cal_member()
+	{
+		$('body').on('click','.restore-cal-member',function() 
+		{
+			var	confirmModalMessage = 'Are you sure you want to restore this member?';
+			var confirmModalAction 	= 'restore-cal-member-submit';
+			globals.confirm_modals(confirmModalMessage,confirmModalAction);
+
+			billingMemberData.append("cal_member_id", 	$(this).data('cal_member_id'));
+			billingMemberData.append("ref", 			$(this).data('ref'));
+			ajaxData.tdCloser  = $(this).closest('tr');
+		});
+	}
+	function restore_cal_member_submit()
+	{
+		$('body').on('click','.restore-cal-member-submit',function() 
+		{
+			globals.global_single_submit('/billing/cal_member/restore',billingMemberData,ajaxData.tdCloser);
 
 		});
 	}

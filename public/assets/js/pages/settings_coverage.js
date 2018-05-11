@@ -178,11 +178,11 @@ function settings_coverage()
 				datas.append('procedure_id[]', 			dates[i]);
 			}
 			datas.append('availment_id',   		ajaxData.availment_id);
-			datas.append('identifier',   	    	ajaxData.identifier);
-			datas.append('plan_charges', 			ajaxData.plan_charges);
+			datas.append('identifier',   	    ajaxData.identifier);
+			datas.append('plan_charges', 		ajaxData.plan_charges);
 			datas.append('plan_covered_amount',	ajaxData.plan_covered_amount);
 			datas.append('plan_limit',         	ajaxData.plan_limit);
-			datas.append('session_name',   	ajaxData.session_name);
+			datas.append('session_name',   		ajaxData.session_name);
 			
 			globals.global_submit('coverage-plan-item','/settings/coverage/items_submit',datas);
         });

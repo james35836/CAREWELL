@@ -1,21 +1,21 @@
 <script type="text/javascript">
-  $(".search-key").on("keyup", function() {
-    var value = $(this).val();
-    var $table = $(this).closest("table tr");
+  $(".search-key").on("keyup", function() 
+  {
+    var value   = $(this).val();
+    var $table  = $(this).closest("table tr");
 
     $("table."+$(this).data('name')+" tr").each(function(index) {
-        if (index !== 0) {
-
-            $row = $(this);
-
-            var id = $row.find("td.procedure").text();
-
-            if (id.indexOf(value) !== 0) {
-                $row.hide();
-            }
-            else {
-                $row.show();
-            }
+        if (index !== 0) 
+        {
+          $row = $(this);var id = $row.find("td.procedure").text();
+          if (id.indexOf(value) !== 0) 
+          {
+              $row.hide();
+          }
+          else 
+          {
+              $row.show();
+          }
         }
     });
   });
@@ -91,7 +91,7 @@
             </div>
           </div>
           <div  class="table-responsive no-padding">
-            <table class="table table-bordered complex" >
+            <table class="table table-bordered laboratory">
               <tr>
                 <th class="col-md-1"><input type="checkbox" class="checkAllCheckbox"></th>
                 <th class="col-md-4 live-search"  >PROCEDURE</th>

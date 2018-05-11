@@ -174,6 +174,14 @@ $(document).ready(function()
 		</div>
 	</div>
 	<div class="row box-globals">
+		<div class="form-holder col-md-12 no-padding">
+			<div class="col-md-2 form-content">
+				<label>Availment Date</label>
+			</div>
+			<div class="col-md-4 form-content">
+				<input type="text" class="form-control" value="{{$approval_details->approval_date_availed}}" />
+			</div>
+		</div>
 		<div class="form-holder">
 			<div class="col-md-2 form-content">
 				<label>Network Provider</label>
