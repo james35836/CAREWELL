@@ -265,6 +265,7 @@
             <li><a href="/reports/ending_number_per_month"><i class="fa fa-circle-o"></i>ENDING NUMBER</a></li>
             <li><a href="/reports/breakdown"><i class="fa fa-circle-o"></i>BREAKDOWN</a></li>
             <li><a href="/reports/consolidation"><i class="fa fa-circle-o"></i>CONSOLIDATION</a></li>
+            <li><a href="/reports/member_cal"><i class="fa fa-circle-o"></i>MEMBER CAL</a></li>
             <li><a href="#"><i class="fa fa-circle-o"></i>SUMMARY</a></li>
           </ul>
         </li>
@@ -374,6 +375,7 @@
 <script src="/assets/js/pages/settings_center.js"></script>
 <script src="/assets/js/pages/settings_coverage.js"></script>
 <script src="/assets/js/pages/settings_developer.js"></script>
+<script src="/assets/js/pages/settings_reports.js"></script>
 
 
 <!-- SCRIPT -->

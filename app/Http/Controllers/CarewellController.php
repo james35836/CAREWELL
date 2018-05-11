@@ -2082,6 +2082,25 @@ class CarewellController extends ActiveAuthController
     return view('carewell.pages.reports_consolidation',$data);
   }
 
+    public function reports_member_cal()
+  {
+    $data['page']     = 'Member CAL Reports';
+    $data['_member']  = TblMemberModel::where('tbl_member.archived',0)->where('tbl_member_company.archived',0)->Member()->paginate(10);
+    $data['user']     =  StaticFunctionController::global();
+
+    return view('carewell.pages.reports_member_cal',$data);
+  }
+
+  public function reports_member_cal_month_detail($member_id)
+  {
+
+    $data['_member'] = TblCalPaymentModel::where('member_id',$member_id)->get();
+    
+    return view('carewell.modal_pages.reports_member_monthly_report',$data);
+
+  }
+
+
 
   /*SETTINGS*/
   public function settings_coverage_plan()

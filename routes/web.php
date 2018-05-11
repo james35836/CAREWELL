@@ -159,6 +159,8 @@ Route::get('/reports/ending_number_per_month', 			'CarewellController@reports_mo
 Route::get('/reports/breakdown', 						'CarewellController@reports_breakdown');
 
 Route::get('/reports/consolidation', 					'CarewellController@reports_consolidation');
+Route::get('/reports/member_cal',						'CarewellController@reports_member_cal');
+Route::get('/reports/member_cal/month_detail/{member_id}',						'CarewellController@reports_member_cal_month_detail');
 
 /*SETTINGS*/
 
