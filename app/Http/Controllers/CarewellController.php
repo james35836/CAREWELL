@@ -1593,6 +1593,7 @@ class CarewellController extends ActiveAuthController
               $member_id        = $checkingMember->member_id;
               $premium          = TblCoveragePlanModel::where('coverage_plan_id',$coverage_plan_id)->value('coverage_plan_premium');
               $payment_count    = number_format($payment_amount / number_format($premium));
+              $payment_mode     = $member_data->member_payment_mode;
               if($payment_count > 1)
               {
                 $name['first']  = $data['first_name'];
@@ -1607,7 +1608,7 @@ class CarewellController extends ActiveAuthController
               $cal_member['member_id']            =   $checkingMember->member_id;
               $cal_member['cal_id']               =   $companyData->cal_id;
               $cal_member_id                      =   TblCalMemberModel::insertGetId($cal_member);
-              $payment_ref                        =   StaticFunctionController::getModeOfPayment($member_id,$cal_member_id,$premium,$payment_count,$cal_id);
+              $payment_ref                        =   StaticFunctionController::paymentDateComputation($member_id,$cal_member_id,$payment_count,$payment_mode);
               if($coverage_plan_id!=$member_data->coverage_plan_id)
               {
                 StaticFunctionController::archivedCurrentCompany($checkingMember->member_id,$coverage_plan_id,'coverage_plan');

@@ -1,6 +1,26 @@
 @extends('carewell.layout.layout')
 @section('content')
 <div class="container">
+<?php
+
+$date = date('2018-05-10');
+$count = 0;
+$reference = "+1 years";
+for($i=1;$i<=5;$i++)
+{
+  $day      = date('d',strtotime($date));
+  $new_day  = $day+1;
+  $result   = date('Y-m-d',strtotime($reference,strtotime($date)));
+  $start    = date('Y-m-'.$new_day,strtotime($date));
+  $end      = date('Y-m-'.$day,strtotime($result));
+  $date     = $end;
+  $count++;
+  echo $count."---====----".$start."---------------".$end."<br>";
+}
+
+?>
+</div>
+<div class="container">
   <div class="row">
     <div class="col-md-3 col-xs-12 pull-right no-padding">
       <div class="dropdown">

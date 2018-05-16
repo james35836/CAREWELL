@@ -766,5 +766,109 @@ class StaticFunctionController extends Controller
     }
     
   }
+  public static function paymentDateComputation($member_id,$cal_member_id,$payment_count,$payment_mode)
+  {
+    $payment          = TblCalPaymentModel::where('member_id',$member_id)->orderBy('cal_payment_end','DESC')->first();
+    if($payment)
+    {
+      $date           = $payment->cal_payment_end;
+    }
+    else
+    {
+      $date           = date('Y-m-d');
+    }
+    $count            = 0;
+    if($payment_mode  == "SEMI-MONTHLY")
+    {
+      for($i = 1; $i <= $payment_count; $i++)
+      {
+        $day = date('d',strtotime($date));
+        if($day>=15)
+        {
+          $result = date('Y-m-d',strtotime("+1 months",strtotime($date)));
+          $start  = date('Y-m-26',strtotime($date));
+          $end    = date('Y-m-10',strtotime($result));
+          $date   = $end;
+          $count++;
+        }
+        else
+        {
+          $result = date('Y-m-d',strtotime("+1 months",strtotime($date)));
+          $start  = date('Y-m-11',strtotime($result));
+          $end    = date('Y-m-25',strtotime($result));
+          $date   = $end;
+          $count++;
+        }
+        StaticFunctionController::insertMemberPayment_v2($cal_member_id,$member_id,$start,$end);
+      }
+    }
+    else if($payment_mode == "MONTHLY")
+    {
+      for($i = 1; $i <= $payment_count; $i++)
+      {
+        $day      = date('d',strtotime($date));
+        $new_day  = $day+1;
+        $result   = date('Y-m-d',strtotime("+1 months",strtotime($date)));
+        $start    = date('Y-m-'.$new_day,strtotime($date));
+        $end      = date('Y-m-'.$day,strtotime($result));
+        $date     = $end;
+        $count++;
+        StaticFunctionController::insertMemberPayment_v2($cal_member_id,$member_id,$start,$end);
+      }
+    }
+    else if($payment_mode == "QUARTERLY")
+    {
+      for($i = 1; $i <= $payment_count; $i++)
+      {
+        $day      = date('d',strtotime($date));
+        $new_day  = $day+1;
+        $result   = date('Y-m-d',strtotime("+3 months",strtotime($date)));
+        $start    = date('Y-m-'.$new_day,strtotime($date));
+        $end      = date('Y-m-'.$day,strtotime($result));
+        $date     = $end;
+        $count++;
+        StaticFunctionController::insertMemberPayment_v2($cal_member_id,$member_id,$start,$end);
+      }
+    }
+    else if($payment_mode == "SEMESTRAL")
+    {
+      for($i = 1; $i <= $payment_count; $i++)
+      {
+        $day      = date('d',strtotime($date));
+        $new_day  = $day+1;
+        $result   = date('Y-m-d',strtotime("+6 months",strtotime($date)));
+        $start    = date('Y-m-'.$new_day,strtotime($date));
+        $end      = date('Y-m-'.$day,strtotime($result));
+        $date     = $end;
+        $count++;
+        StaticFunctionController::insertMemberPayment_v2($cal_member_id,$member_id,$start,$end);
+      }
+    }
+    else if($payment_mode == "ANNUAL")
+    {
+      for($i = 1; $i <= $payment_count; $i++)
+      {
+        $day      = date('d',strtotime($date));
+        $new_day  = $day+1;
+        $result   = date('Y-m-d',strtotime("+1 years",strtotime($date)));
+        $start    = date('Y-m-'.$new_day,strtotime($date));
+        $end      = date('Y-m-'.$day,strtotime($result));
+        $date     = $end;
+        $count++;
+        StaticFunctionController::insertMemberPayment_v2($cal_member_id,$member_id,$start,$end);
+      }
+    }
+    
+  }
+  public static function insertMemberPayment_v2($cal_member_id,$member_id,$start,$end)
+  {
+    $member_cut['cal_payment_start']  = $start;
+    $member_cut['cal_payment_end']    = $end;
+    $member_cut['cal_payment_type']   = 'ORIGINAL';
+    $member_cut['cal_member_id']      = $cal_member_id;
+    $member_cut['member_id']          = $member_id;
+    TblCalPaymentModel::insert($member_cut);
+  }
+
   
 }
