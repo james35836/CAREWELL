@@ -1248,17 +1248,20 @@ class CarewellController extends ActiveAuthController
     foreach ($data['_cal_open'] as $key => $cal_open) 
     {
       $data['_cal_open'][$key]['new_member']= TblNewMemberModel::where('cal_id',$cal_open->cal_id)->count();
-      $data['_cal_open'][$key]['members']   =  TblCalMemberModel::where('cal_id',$cal_open->cal_id)->count();
+      $data['_cal_open'][$key]['members']   = TblCalMemberModel::where('cal_id',$cal_open->cal_id)->count();
+      $data['_cal_open'][$key]['reference'] = 'show';
     }
     foreach ($data['_cal_close'] as $key => $cal_close) 
     {
       $data['_cal_close'][$key]['new_member']= TblNewMemberModel::where('cal_id',$cal_close->cal_id)->count();
       $data['_cal_close'][$key]['members']   =  TblCalMemberModel::where('cal_id',$cal_close->cal_id)->count();
+      $data['_cal_close'][$key]['reference'] = 'none';
     }
     foreach ($data['_cal_pending'] as $key => $cal_pending) 
     {
       $data['_cal_pending'][$key]['new_member']= TblNewMemberModel::where('cal_id',$cal_pending->cal_id)->count();
       $data['_cal_pending'][$key]['members']   =  TblCalMemberModel::where('cal_id',$cal_pending->cal_id)->count();
+      $data['_cal_pending'][$key]['reference'] = 'show';
     }
 
   	return view('carewell.pages.billing_center',$data);

@@ -1,12 +1,16 @@
-<script>
-$(function () {
-//select2
-$('.select2').select2()
-//Date picker
-$('.datepicker').datepicker({
-autoclose: true
-})
-})
+<script type="text/javascript">
+    $(function () 
+    {
+        $("#cal_reveneu_period_year").datepicker({
+            format: "yyyy",
+            viewMode: "years", 
+            minViewMode: "years"
+        });
+        $('.datepicker').datepicker(
+        {
+        autoclose: true
+        });
+    });
 </script>
 
 <div class=" row box-globals">
@@ -30,24 +34,8 @@ autoclose: true
       <label>Revenue Year</label>
     </div>
     <div class="col-md-4 form-content">
-      <select name="" id="cal_reveneu_period_year" class="form-control">
-        <option >2015</option>
-        <option >2016</option>
-        <option >2017</option>
-        <option >2018</option>
-        <option >2019</option>
-        <option >2020</option>
-        <option >2021</option>
-        <option >2022</option>
-        <option >2023</option>
-        <option >2024</option>
-        <option >2025</option>
-        <option >2026</option>
-        <option >2027</option>
-        <option >2028</option>
-      </select>
+      <input type="text" id="cal_reveneu_period_year" class="form-control">
     </div>
-    
     <div class="col-md-2 form-content">
       <label>Payment Mode</label>
     </div>

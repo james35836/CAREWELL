@@ -302,6 +302,19 @@
         @endif
       </ol>
     </section>
+    @if(Session::has('exportWarning'))
+    <script>
+      $( function() {
+        toastr.error('There is a warning message, <br>Please Click Here!.', 'Something went wrong!', {timeOut: 10000})
+      });
+    </script>
+    @else
+     <script>
+      $( function() {
+        toastr.error('There is a warning message, <br>Please Click Here!.', 'Something went wrong!', {timeOut: 10000})
+      });
+    </script>
+    @endif
     <!-- Main content -->
     <section class="content">
       

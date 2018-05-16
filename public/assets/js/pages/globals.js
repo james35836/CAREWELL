@@ -144,8 +144,15 @@ function globals()
                     	}
 						else
 						{
-							$('.global-modal-footer').show().removeClass().addClass('modal-footer '+modalClass+'-modal-footer');
-                    		$('.global-footer-button').html(modalActionName).removeClass().addClass('btn btn-primary '+modalAction+'');
+						    $footer = $('.global-modal-footer').show().removeClass().addClass('modal-footer '+modalClass+'-modal-footer');
+							if(modalActionName=="none")
+							{
+								$footer.html('<button type="button" class="btn btn-default pull-left" data-dismiss="modal">CLOSE</button>').show();
+							}
+							else
+							{
+								$footer.find('.global-footer-button').html(modalActionName).removeClass().addClass('btn btn-primary '+modalAction+'');	
+							}
                     	}
 					 }, 800);
 				}

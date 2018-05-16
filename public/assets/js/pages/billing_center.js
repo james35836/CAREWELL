@@ -252,11 +252,19 @@ function billing_center()
 	{
 		$("body").on('click','.cal-view-details',function()
 		{
+
 			var cal_id 			= $(this).data('cal_id');
 			var modalName 		= 'CAL DETAILS';
 			var modalClass 		= 'company';
 			var modalLink 		= '/billing/cal_details/'+cal_id;
-			var modalActionName = 'SAVE CHANGES';
+			if($(this).data('reference')=="none")
+			{
+				var modalActionName = 'none';
+			}
+			else
+			{
+				var modalActionName = 'SAVE CHANGES';
+			}
 			var modalAction 	= 'confirm';
 			var modalSize 		= 'modal-lg';
 			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);

@@ -61,7 +61,7 @@
                       <span class="sr-only">Toggle Dropdown</span>
                       </button>
                       <ul class="dropdown-menu" role="menu" style="position: absolute !important;">
-                        <li><button type="button" data-cal_id="{{$cal_open->cal_id}}" data-company_id="{{$cal_open->company_id}}" class="btn btn-link cal-view-details"><i class="fa fa-eye btn-icon"></i>  View Details</button></li>
+                        <li><button type="button" data-cal_id="{{$cal_open->cal_id}}" data-reference="{{$cal_open->reference}}" data-company_id="{{$cal_open->company_id}}" class="btn btn-link cal-view-details"><i class="fa fa-eye btn-icon"></i>  View Details</button></li>
                         <?php $total = $cal_open->members + $cal_open->new_member; ?>
                         @if($total!=0)
                         <li><button type="button" data-cal_id="{{$cal_open->cal_id}}" class="btn btn-link close-cal"><i class="fa fa-trash btn-icon"></i> Mark as Close</button></li>
@@ -126,7 +126,7 @@
                       <span class="sr-only">Toggle Dropdown</span>
                       </button>
                       <ul class="dropdown-menu" role="menu" style="position: absolute !important;">
-                        <li><button type="button" data-cal_id="{{$cal_pending->cal_id}}" data-company_id="{{$cal_pending->company_id}}" class="btn btn-link cal-view-details"><i class="fa fa-eye btn-icon"></i>  View Details</button></li>
+                        <li><button type="button" data-cal_id="{{$cal_pending->cal_id}}" data-reference="{{$cal_pending->reference}}" data-company_id="{{$cal_pending->company_id}}" class="btn btn-link cal-view-details"><i class="fa fa-eye btn-icon"></i>  View Details</button></li>
                         <li><button type="button" data-cal_id="{{$cal_pending->cal_id}}" class="btn btn-link close-cal"><i class="fa fa-trash btn-icon"></i> Mark as Close</button></li>
                       </ul>
                     </div>
@@ -187,7 +187,7 @@
                       <span class="sr-only">Toggle Dropdown</span>
                       </button>
                       <ul class="dropdown-menu" role="menu" style="position: absolute !important;">
-                        <li><button type="button" data-cal_id="{{$cal_close->cal_id}}" data-company_id="{{$cal_close->company_id}}" class="btn btn-link cal-view-details"><i class="fa fa-eye btn-icon"></i>  View Details</button></li>
+                        <li><button type="button" data-cal_id="{{$cal_close->cal_id}}" data-reference="{{$cal_close->reference}}" data-company_id="{{$cal_close->company_id}}" class="btn btn-link cal-view-details"><i class="fa fa-eye btn-icon"></i>  View Details</button></li>
                       </ul>
                     </div>
                   </td>
