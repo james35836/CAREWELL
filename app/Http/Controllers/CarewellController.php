@@ -991,6 +991,22 @@ class CarewellController extends ActiveAuthController
     })->download('xlsx');
   }
 
+  //edrich
+  public function provider_update_provider_submit(Request $request)
+  {
+    $update['provider_name']              = $request->provider_name;
+    $update['provider_rvs']               = $request->provider_rvs;
+    $update['provider_contact_person']    = $request->provider_contact_person;
+    $update['provider_contact_email']     = $request->provider_contact_email;
+    $update['provider_telephone_number']  = $request->provider_telephone_number;
+    $update['provider_mobile_number']     = $request->provider_mobile_number;
+    $update['provider_address']           = $request->provider_address;
+    $check =  TblProviderModel::where('provider_id',$request->provider_id)->update($update);
+
+    return 'provider update successfully';
+
+  }
+
   /*DOCTOR*/
   public function doctor(Request $request)
   {
@@ -2116,16 +2132,109 @@ class CarewellController extends ActiveAuthController
     return view('carewell.pages.reports_member_cal',$data);
   }
 
-  public function reports_member_cal_month_detail($member_id)
+  public function reports_member_cal_detail($ref,$member_id)
   {
+   
+    $data['ref'] = $ref;
+    if($ref == 'monthly')
+    {
+       $data['date'] = $key = date('Y-m'); 
+       $data['member_id'] = $member_id;
+      $data['link'] = '/reports/member_cal/excel_report/'.$ref.'/'.$key.'/'.$member_id;
+        $data['_member'] = TblCalPaymentModel::where('member_id',$member_id)
+                            ->where('archived',1)
+                            ->where('cal_payment_start','like','%'.$key.'%')
+                            ->get();
 
-    $data['_member'] = TblCalPaymentModel::where('member_id',$member_id)->get();
-    
-    return view('carewell.modal_pages.reports_member_monthly_report',$data);
+        foreach ($data['_member'] as $key => $member)
+        {
+          $cal_amount = TblCalMemberModel::where('cal_member_id',$member->member_id)
+                        ->where('archived',0)
+                        ->first();
+          $data['_member'][$key]['amount'] = $cal_amount->cal_payment_amount/$cal_amount->cal_payment_count;
+        }
+    }
+    else if($ref == 'yearly')
+    {
+       $data['date'] = $key = date('Y'); 
+       dd($data['date']);
+       $data['member_id'] = $member_id;
+            $data['link'] = '/reports/member_cal/excel_report/'.$ref.'/'.$key.'/'.$member_id;
+        $data['_member'] = TblCalPaymentModel::where('member_id',$member_id)
+                            ->where('archived',1)
+                            ->where('cal_payment_start','like','%'.$key.'%')
+                            ->get();
+
+        foreach ($data['_member'] as $key => $member)
+        {
+          $cal_amount = TblCalMemberModel::where('cal_member_id',$member->member_id)
+                        ->where('archived',0)
+                        ->first();
+          $data['_member'][$key]['amount'] = $cal_amount->cal_payment_amount/$cal_amount->cal_payment_count;
+        }
+    }
+    else
+    {
+      //all
+    }
+
+   
+
+    return view('carewell.modal_pages.reports_member_cal_report',$data);
 
   }
 
+  public function reports_member_cal_month_filter_date(Request $request)
+  {
+    $key = $request->val_key;
+    //dd($key);
+    $data['link'] = '/reports/member_cal/month_detail/excel_report/'.$key.'/'.$request->member_id;
+    $data['member_id'] = $member_id = $request->member_id;
+    $data['_member'] = TblCalPaymentModel::where('member_id',$member_id)
+                        ->where('archived',1)
+                        ->where('cal_payment_start','like','%'.$key.'%')
+                        // ->where('cal_payment_start','like','%'.$request->val_key.'%')
+                        ->get();
 
+    foreach($data['_member'] as $key => $member)
+    {
+      $cal_amount = TblCalMemberModel::where('cal_member_id',$member->member_id)
+                    ->where('archived',0)
+                    ->first();
+      $data['_member'][$key]['amount'] = $cal_amount->cal_payment_amount/$cal_amount->cal_payment_count;
+    }
+   return view('carewell.additional_pages.reports_monthly_report_filter',$data);
+  
+  }
+
+  public function reports_export_excel($val_key,$member_id)
+  {
+    $key = $val_key;
+    //dd($key);
+    $data['member_id'] = $member_id;
+    $data['_member'] = TblCalPaymentModel::where('member_id',$member_id)
+                        ->where('archived',1)
+                        ->where('cal_payment_start','like','%'.$key.'%')
+                        // ->where('cal_payment_start','like','%'.$request->val_key.'%')
+                        ->get();
+
+    foreach($data['_member'] as $key => $member)
+    {
+      $cal_amount = TblCalMemberModel::where('cal_member_id',$member->member_id)
+                    ->where('archived',0)
+                    ->first();
+      $data['_member'][$key]['amount'] = $cal_amount->cal_payment_amount/$cal_amount->cal_payment_count;
+    }
+
+    Excel::create("MEMBER MONTHLY REPORT",function($excel) use ($data)
+      {
+        $excel->sheet('clients',function($sheet) use ($data)
+        {
+          $sheet->loadView('carewell.additional_pages.reports_member_monthly_excel',$data);
+        });
+      })->download('xls');
+
+  }
 
   /*SETTINGS*/
   public function settings_coverage_plan()

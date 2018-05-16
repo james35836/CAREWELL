@@ -25,6 +25,7 @@ return  t;
 });
 });
 </script>
+
 <div class="container">
   <div class="row">
     <div class="">
@@ -34,36 +35,16 @@ return  t;
           <li class="active"><a href="#open" data-toggle="tab">MONTHLY MONITORING</a></li>        
         </ul>
         <div class="tab-content">
-          <div class="tab-pane active" id="open">
-            <div class="row top-element">
-              <div class="col-md-3 col-xs-12 pull-right">
-                <div class="input-group ">
-                  <input type="text" class="form-control">
-                  <span class="input-group-btn">
-                    <button type="button" class="btn btn-default"><i class="fa fa-search"></i></button>
-                  </span>
-                </div>
-              </div>
-            </div>
             <div class="table-responsive no-padding">
-              <table class="table table-hover table-bordered sum_table">
+              <table class="table table-hover table-bordered">
                 <tr class="titlerow">
                   <th>UNIVERSAL ID</th>
                   <th>CAREWELL ID</th>
                   <th>EMPLOYEE NUMBER</th>
                   <th>MEMBER NAME</th>
                   <th>MONTHLY REPORTS</th>
-                  <th>FEB</th>
-                  <th>MAR</th>
-                  <th>APR</th>
-                  <th>MAY</th>
-                  <th>JUNE</th>
-                  <th>JULY</th>
-                  <th>AUG</th>
-                  <th>SEP</th>
-                  <th>OCT</th>
-                  <th>NOV</th>
-                  <th>DEC</th>
+                  <th>YEARLY REPORTS</th>
+                  <th>ALL REPORTS</th>
                 </tr>
                 @foreach($_member as $member)
                 <tr>
@@ -71,44 +52,17 @@ return  t;
                   <td>{{$member->member_carewell_id}}</td>
                   <td>{{$member->member_employee_number}}</td>
                   <td>{{$member->member_first_name}} {{$member->member_last_name}}</td>
-                  <td><span class="label label-success member-monthly-report" data-member_id="{{$member->member_id}}">view report</span></td>
-                  <td>DIGIMA</td>
-                  <td>DEC-NOV</td>
-                  <td>DEC-NOV</td>
-                  <td>DEC-NOV</td>
-                  <td>DEC-NOV</td>
-                  <td>CAL 01</td>
-                  <td>DEC-NOV</td>
-                  <td>DEC-NOV</td>
-                  <td>DIGIMA</td>
-                  <td>DIGIMA</td>
-                  <td><span class="label label-success">active</span></td>
-                  <td><span class="label label-success pop-up-lg action-span" data-modalname="APPROVAL DETAILS" data-link="/medical/approval/details">view details</span></td>
+                  <td><span class="label label-success member-report" data-ref="monthly" data-title="MONTHLY REPORTS"  data-member_id="{{$member->member_id}}">VIEW MONTHLY REPORTS</span></td>
+                  <td><span class="label label-primary member-report" data-ref="yearly" data-title="YEARLY REPORTS" data-member_id="{{$member->member_id}}">VIEW YEARLY REPORTS</span></td>
+                  <td><span class="label label-warning member-report" data-ref="all_data" data-title="ALL REPORTS"  data-member_id="{{$member->member_id}}">VIEW ALL REPORTS</span></td>
                 </tr>
                 @endforeach
-                <tr>
-                  <td></td>
-                  <td>TOTAL</td>
-                  <td>0.0</td>
-                  <td>0.0</td>
-                  <td>0.0</td>
-                  <td>0.0</td>
-                  <td>0.0</td>
-                  <td>0.0</td>
-                  <td>0.0</td>
-                  <td>0.0</td>
-                  <td>0.0</td>
-                  <td>0.0</td>
-                  <td>0.0</td>
-                  <td>0.0</td>
-                  <td></td>
-                </tr>
               </table>
             </div>
             <div class="box-footer clearfix">
               @include('globals.pagination', ['paginator' => $_member])
             </div>
-          </div>
+        </div>
           <!-- /.tab-pane -->
         </div>
       </div>

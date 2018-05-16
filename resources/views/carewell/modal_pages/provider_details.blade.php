@@ -1,4 +1,5 @@
 <div class="row box-globals">
+	<input type="text" value="{{$provider_details->provider_id}}" id="provider_id" name="">
 	<div class="form-holder">
 		<div class="col-md-2 form-content">
 			<label>Provider Name</label>

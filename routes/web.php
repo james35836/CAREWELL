@@ -108,6 +108,8 @@ Route::get('/provider/import_provider', 				'CarewellController@provider_import'
 Route::post('/provider/import_provider/submit', 		'CarewellController@provider_import_submit');
 Route::get('/provider/export_template', 				'CarewellController@provider_export_template');
 
+Route::post('/provider/update_provider/submit', 'CarewellController@provider_update_provider_submit');
+
 /*DOCTOR*/
 Route::get('/doctor', 									'CarewellController@doctor');
 Route::get('/doctor/add_doctor', 					    'CarewellController@add_doctor');
@@ -161,7 +163,12 @@ Route::get('/reports/breakdown', 						'CarewellController@reports_breakdown');
 
 Route::get('/reports/consolidation', 					'CarewellController@reports_consolidation');
 Route::get('/reports/member_cal',						'CarewellController@reports_member_cal');
-Route::get('/reports/member_cal/month_detail/{member_id}',						'CarewellController@reports_member_cal_month_detail');
+Route::get('/reports/member_cal/{ref}/{member_id}',						'CarewellController@reports_member_cal_detail');
+
+Route::post('/reports/member_cal/date_filter/{ref}',						'CarewellController@reports_member_cal_month_filter_date');
+
+Route::get('/reports/member_cal/excel_report/{ref}/{val_key}/{member_id}', 'CarewellController@reports_export_excel');
+
 
 /*SETTINGS*/
 

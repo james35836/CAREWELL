@@ -22,6 +22,8 @@ function provider_center()
             import_provider_confirm();
             import_provider_submit();
             view_provider_details();
+            update_provider_confirm();
+            update_provider_submit();
 		});
 
 	}
@@ -144,11 +146,41 @@ function provider_center()
 			var modalClass='provider-details';
 			var modalLink='/provider/provider_details/'+provider_id;
 			var modalActionName='SAVE CHANGES';
-			var modalAction='confirm';
+			var modalAction='update-provider-confirm';
 			var modalSize = 'modal-lg';
 			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
 		});
 		
 	}
+
+	//edrich
+	function update_provider_confirm()
+	{
+		$('body').on('click','.update-provider-confirm',function() 
+		{
+			var	confirmModalMessage  = 'Are you sure you want to update this provider?';
+			var confirmModalAction   = 'update-provider-submit';
+			globals.confirm_modals(confirmModalMessage,confirmModalAction);
+
+			providerData.append("provider_id", 				document.getElementById('provider_id').value);
+			providerData.append("provider_name", 				document.getElementById('provider_name').value);
+			providerData.append("provider_rvs", 				document.getElementById('provider_rvs').value);
+			providerData.append("provider_contact_person", 				document.getElementById('provider_contact_person').value);
+			providerData.append("provider_contact_email", 				document.getElementById('provider_contact_email').value);
+			providerData.append("provider_telephone_number", 				document.getElementById('provider_telephone_number').value);
+			providerData.append("provider_mobile_number", 				document.getElementById('provider_mobile_number').value);
+			providerData.append("provider_address", 				document.getElementById('provider_address').value);
+		});
+	}
+
+	function update_provider_submit()
+	{
+		$('body').on('click','.update-provider-submit',function()  
+		{
+			globals.global_submit('provider-details','/provider/update_provider/submit',providerData);
+        });
+		
+	}
+	//edrich
 	
 }
