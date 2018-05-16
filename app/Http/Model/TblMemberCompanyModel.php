@@ -3,7 +3,7 @@
 namespace App\Http\Model;
 
 use Illuminate\Database\Eloquent\Model;
-
+use DB;
 class TblMemberCompanyModel extends Model
 {
     protected $table = 'tbl_member_company';
@@ -12,10 +12,12 @@ class TblMemberCompanyModel extends Model
 
     public function scopeMemberCompany($query)
     {
-    	$query  ->join('tbl_member','tbl_member.member_id','=','tbl_member_company.member_id')
+    	$query  ->select(DB::raw('tbl_member_company.archived as inactive,tbl_member_company.*,tbl_coverage_plan.*,tbl_member.*,tbl_company.*,tbl_company_deployment.*'))
+              ->join('tbl_member','tbl_member.member_id','=','tbl_member_company.member_id')
               ->join('tbl_coverage_plan','tbl_coverage_plan.coverage_plan_id','=','tbl_member_company.coverage_plan_id')
               ->join('tbl_company','tbl_company.company_id','=','tbl_member_company.company_id')
-              ->join('tbl_company_deployment','tbl_company_deployment.deployment_id','=','tbl_member_company.deployment_id');
+              ->join('tbl_company_deployment','tbl_company_deployment.deployment_id','=','tbl_member_company.deployment_id')
+              ->orderBy('tbl_member_company.member_company_id','DESC');
         return $query;
                               
     }

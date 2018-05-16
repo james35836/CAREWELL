@@ -1,37 +1,3 @@
-<script>
-	$(document).ready(function() 
-	{
-		$(document).on("click",".addDependent", function() 
-		{
-			$(".dependent-form").append('<tr><td><input type="text" name="member_dependent_full_name[]" id="member_dependent_full_name" class="form-control"/></td><td><input type="text" name="member_dependent_birthdate[]" id="member_dependent_birthdate[]" class="date-picker form-control datepicker"/></td><td><select  name="member_dependent_relationship[]" id="member_dependent_relationship[]" class="form-control"><option>FATHER</option><option>MOTHER</option><option>CHILD</option><option>SPOUSE</option><option>UNCLE</option><option>AUNT</option><option>BROTHER</option><option>SISTER</option><option>GRANDFATHER</option><option>GRANDMOTHER</option><option>NEPHEW</option><option>NIECE</option><option>COUSIN</option></select></td></tr>');
-		});
-		$(document).on("click",".removeDependent", function() 
-		{
-			if ($(".dependent-form tr").length >2)
-			{
-				$(".dependent-form tr:last").remove();
-			}
-			else
-			{
-				toastr.error('You cannot remove all rows.', 'Something went wrong!', {timeOut: 3000})
-			}
-			
-		});
-	});
-	$(function ()
-	{
-		//select2
-		$('.select2').select2()
-		//Date picker
-		
-		$("body").on("click", ".datepicker", function(){
-
-	        $(this).datepicker();
-	        $(this).datepicker("show");
-	        
-	    });
-	})
-</script>
 <div class="row box-globals">
 	<input type="hidden" value="{{$member_details->member_id}}" id="member_id" name="">
 	<div class="col-md-8 pull-left top-label" style="">
@@ -146,7 +112,7 @@
 			<div id="company" class="row tab-pane fade in active table-min-height">
 				<div class="row ">
 			    <div class=" col-md-3 pull-right">
-			      <button type="button" class="btn btn-primary  button-lg member-adjustment" data-member_id="{{$member_details->member_id}}"><i class="fa fa-plus btn-icon "></i>CREATE ADJUSTMENT</button>
+			      <button type="button" class="btn btn-primary  button-lg member-adjustment" data-member_id="{{$member_details->member_id}}"><i class="fa fa-plus btn-icon "></i>CHANGE COMPANY</button>
 			    </div>
 			  </div>
 				<div class="box-body table-responsive no-padding">
@@ -159,6 +125,7 @@
 							<th>MODE OF PAYMENT</th>
 							<th>DEPLOYMENT</th>
 							<th>STATUS</th>
+							<th>DATE CHANGE</th>
 						</tr>
 						@foreach($_member_company as $member_company)
 						<tr>
@@ -168,7 +135,14 @@
 							<td>{{$member_company->coverage_plan_name}}</td>
 							<td>{{$member_company->member_payment_mode}}</td>
 							<td>{{$member_company->deployment_name}}</td>
-							<td><span class="label label-success">active</span></td>
+							<td>
+								@if($member_company->inactive==0)
+								<span class="label label-success">active</span>
+								@else
+								<span class="label label-danger">inactive</span>
+								@endif
+							</td>
+							<td>{{date("F j, Y",strtotime($member_company->member_transaction_date))}}</td>
 						</tr>
 						@endforeach
 					</table>
