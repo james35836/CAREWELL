@@ -135,7 +135,7 @@ function globals()
                 success: function(data)
                 {
 					setTimeout(function()
-					{
+					{   
 						$('.global-ajax-loader').hide().removeClass().addClass('.modal-loader '+modalClass+'-ajax-loader');
 						$('.global-modal-body-content').show().removeClass().addClass('row box-holder  modal-body-content').html(data);
 						if(modalSize=="modal-import")
@@ -152,9 +152,13 @@ function globals()
 							else
 							{
 								$footer.find('.global-footer-button').html(modalActionName).removeClass().addClass('btn btn-primary '+modalAction+'');	
+							    if(modalActionName=="SAVE CHANGES")
+								{
+									// $('button.'+modalAction).attr('disabled','true');
+								}
 							}
                     	}
-					 }, 800);
+					 }, 700);
 				}
 			});
 
@@ -399,6 +403,28 @@ function globals()
         	$('.global-footer-button').html('ADD OPTION').removeClass().addClass('btn btn-primary '+modalAction);
         }, 1000);
 	}
+	this.global_input_email = function(inputs)
+	{
+		var re = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+		var is_email=re.test(inputs.val());
+		if(is_email)
+		{
+			// inputs.removeClass("invalid").addClass("valid");
+			return "success";
+		}
+		else
+		{
+			// inputs.removeClass("valid").addClass("invalid");
+			return "error";
+		}
+	}
+	this.toLocation = function(url) 
+    {
+        var a = document.createElement('a');
+        a.href = url;
+        return a;
+    };
+
 	
 	
 	init();
@@ -429,10 +455,66 @@ function globals()
         filtering();
         searching();
 
-        
-        
-        
+        event_run_paginate();
+        enable_element();
+    }
+    function enable_element()
+    {
+    	$('body').on('click','button.enable-element',function()
+    	{
+    		$(this).closest('div.modal-body').find('input,select,textarea').removeAttr('readonly');
+    	});
+    }
+    function event_run_paginate()
+	{
+        $('body').on('click', '.pagination a', function(e) 
+        {
+            e.preventDefault();
+            var href= $(this).data('href');
+            var url = paginate_ajax.toLocation(href);
+            var domain = url.protocol + "//" + url.hostname;
+            
+            var load_data = $(this).closest('.load-data');
+            
+            load_data.find('tr').css('opacity', '0.2');
+            
+            if (window.location.href.indexOf("https") != -1)
+            {
+                var url = $(this).attr('href').replace("http", "https");
+            }
+            else
+            {
+                var url = $(this).attr('href');
+            }
+
+            load_data.each(function() 
+            {
+                $.each(this.attributes, function() 
+                {
+                    if(this.specified && this.name != "class" && this.name != "style") 
+                    {
+                        url = href.replace(domain,'');
+                    }
+                });
+            });
+            getArticles(url, load_data);
+        });
 	}
+
+    function getArticles(url, load_data) 
+    {
+        target = load_data.data("target");
+        console.log(target);
+        load_data.load(url+" div."+target, function()
+        {
+            if (typeof loading_done == 'function')
+            {
+                
+            }
+        })
+    }
+
+	
 	
 	function filtering()
 	{

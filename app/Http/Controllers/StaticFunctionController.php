@@ -84,7 +84,7 @@ class StaticFunctionController extends Controller
   {
     if($alert_message=="success")
     {
-      return "<div class='alert alert-success' style='text-align: center;'>".$str_name." Added Successfully!</div>";
+      return "<div class='alert alert-success' style='text-align: center;'>".$str_name." Added/Updated Successfully!</div>";
     }
     else
     {
@@ -94,7 +94,6 @@ class StaticFunctionController extends Controller
 
   public function getCompanyInfo(Request $request)
   {
-    
     if($request->ajax())
     {
         $data['_coverage']  = TblCompanyCoveragePlanModel::where('tbl_company_coverage_plan.company_id',$request->value)
@@ -487,7 +486,7 @@ class StaticFunctionController extends Controller
   }
   public static function restore_data($restore_id,$restore_name)
   {
-    $message = "";
+    $message             = "";
     $restore['archived'] = '0';
     switch ($restore_name) 
     {

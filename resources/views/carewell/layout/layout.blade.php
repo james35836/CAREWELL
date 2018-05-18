@@ -34,9 +34,13 @@
     <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet">
     
     <script>
-    $( function() {
-      $( "#datepicker" ).datepicker();
-    } );
+    function string_only(event) 
+    {
+      var value   = String.fromCharCode(event.which);
+      var pattern   = new RegExp(/[a-zåäö ]/i);
+      return pattern.test(value);
+    }
+    
 
     $(document).ready(function()
     {
@@ -58,9 +62,17 @@
       {
         text-transform: lowercase !important;
       }
+      input[type="email"]
+      {
+        text-transform: lowercase !important;
+      }
       span
       {
         cursor: pointer;
+      }
+      input.invalid, textarea.invalid
+      {
+        border: 2px solid red;
       }
     </style>
   </head>
@@ -310,11 +322,11 @@
       });
     </script>
     @else
-     <script>
+     {{-- <script>
       $( function() {
         toastr.error('There is a warning message, <br>Please Click Here!.', 'Something went wrong!', {timeOut: 10000})
       });
-    </script>
+    </script> --}}
     @endif
     <!-- Main content -->
     <section class="content">
@@ -373,6 +385,7 @@
 <!-- PAGES -->
 <script src="/assets/js/pages/user_center.js"></script>
 <script src="/assets/js/pages/globals.js"></script>
+
 <script src="/assets/js/pages/dashboardv2.js"></script>
 <script src="/assets/js/pages/dashboard.js"></script>
 <script src="/assets/js/pages/admin_center.js"></script>
@@ -389,9 +402,10 @@
 <script src="/assets/js/pages/settings_developer.js"></script>
 <script src="/assets/js/pages/settings_reports.js"></script>
 
-
+<script src="/assets/js/pages/paginate_ajax_multiple.js"></script>
 <!-- SCRIPT -->
 <script>
+
   $(function () {
     $('.select2').select2()
     $('.datepicker').datepicker({

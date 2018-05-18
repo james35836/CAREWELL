@@ -1,26 +1,6 @@
 @extends('carewell.layout.layout')
 @section('content')
 <div class="container">
-<?php
-
-$date = date('2018-05-10');
-$count = 0;
-$reference = "+1 years";
-for($i=1;$i<=5;$i++)
-{
-  $day      = date('d',strtotime($date));
-  $new_day  = $day+1;
-  $result   = date('Y-m-d',strtotime($reference,strtotime($date)));
-  $start    = date('Y-m-'.$new_day,strtotime($date));
-  $end      = date('Y-m-'.$day,strtotime($result));
-  $date     = $end;
-  $count++;
-  echo $count."---====----".$start."---------------".$end."<br>";
-}
-
-?>
-</div>
-<div class="container">
   <div class="row">
     <div class="col-md-3 col-xs-12 pull-right no-padding">
       <div class="dropdown">
@@ -33,7 +13,6 @@ for($i=1;$i<=5;$i++)
         </div>
       </div>
     </div>
-    
   </div>
   <div class="row">
     <div class="nav-tabs-custom">
@@ -61,7 +40,7 @@ for($i=1;$i<=5;$i++)
               </div>
             </div>
           </div>
-          <div id="showTable">
+          <div id="showTable" class="load-data load-active-member" data-target="load-active-member">
             <div class="box-body table-responsive no-padding">
               <table class="table table-hover table-bordered">
                 <tr>
@@ -97,7 +76,7 @@ for($i=1;$i<=5;$i++)
               </table>
             </div>
             <div class="box-footer clearfix">
-              @include('globals.pagination', ['paginator' => $_member_active])
+              @include('globals.pagination_v2', ['paginator' => $_member_active])
             </div>
           </div>
         </div>
@@ -121,7 +100,7 @@ for($i=1;$i<=5;$i++)
               </div>
             </div>
           </div>
-          <div id="showTable">
+          <div id="showTable" class="load-data load-inactive-member" data-target="load-inactive-member">
             <div class="box-body table-responsive no-padding">
               <table class="table table-hover table-bordered">
                 <tr>
@@ -157,7 +136,7 @@ for($i=1;$i<=5;$i++)
               </table>
             </div>
             <div class="box-footer clearfix">
-              @include('globals.pagination', ['paginator' => $_member_inactive])
+              @include('globals.pagination_v2', ['paginator' => $_member_inactive])
             </div>
           </div>
         </div>

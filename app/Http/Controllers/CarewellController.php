@@ -146,7 +146,7 @@ class CarewellController extends ActiveAuthController
                                   ->where('tbl_member_company.archived',0)
                                   ->join('tbl_member','tbl_member.member_id','=','tbl_member_company.member_id')
                                   ->join('tbl_company_deployment','tbl_company_deployment.deployment_id','=','tbl_member_company.deployment_id')
-                                  ->get();
+                                  ->paginate(10);
     $data['company_contract']     = TblCompanyContractModel::where('company_id',$company_id)
                                   ->first();
     $data['_contract_images']     = TblCompanyContractImageModel::where('archived',0)->where('contract_id',$data['company_contract']->contract_id)->get();
@@ -313,13 +313,13 @@ class CarewellController extends ActiveAuthController
     $memberData->member_middle_name         = $request->member_middle_name;
     $memberData->member_last_name           = $request->member_last_name;
     $memberData->member_birthdate           = date('d-m-Y', strtotime($request->member_birthdate));
-    $memberData->member_gender              = $request->member_gender;
-    $memberData->member_marital_status      = $request->member_marital_status;
-    $memberData->member_mother_maiden_name  = $request->member_mother_maiden_name;
-    $memberData->member_contact_number      = $request->member_contact_number;
-    $memberData->member_email_address       = $request->member_email_address;
-    $memberData->member_permanet_address    = $request->member_permanet_address;
-    $memberData->member_present_address     = $request->member_present_address;
+    $memberData->member_gender              = StaticFunctionController::nullableToString($request->member_gender);
+    $memberData->member_marital_status      = StaticFunctionController::nullableToString($request->member_marital_status);
+    $memberData->member_mother_maiden_name  = StaticFunctionController::nullableToString($request->member_mother_maiden_name);
+    $memberData->member_contact_number      = StaticFunctionController::nullableToString($request->member_contact_number);
+    $memberData->member_email_address       = StaticFunctionController::nullableToString($request->member_email_address);
+    $memberData->member_permanet_address    = StaticFunctionController::nullableToString($request->member_permanet_address);
+    $memberData->member_present_address     = StaticFunctionController::nullableToString($request->member_present_address);
     $memberData->member_created             = Carbon::now();
     
     $display_name                           = $memberData->member_first_name." ".$memberData->member_middle_name." ".$memberData->member_last_name;
@@ -330,18 +330,18 @@ class CarewellController extends ActiveAuthController
     foreach($request->dependent_full_name as $key=>$data)
     {
       $dependentData = new TblMemberDependentModel;
-      $dependentData->dependent_full_name    = $request->dependent_full_name[$key];
-      $dependentData->dependent_birthdate    = $request->dependent_birthdate[$key];
-      $dependentData->dependent_relationship = $request->dependent_relationship[$key];
+      $dependentData->dependent_full_name    = StaticFunctionController::nullableToString($request->dependent_full_name[$key]);
+      $dependentData->dependent_birthdate    = StaticFunctionController::nullableToString($request->dependent_birthdate[$key]);
+      $dependentData->dependent_relationship = StaticFunctionController::nullableToString($request->dependent_relationship[$key]);
       $dependentData->member_id              = $memberData->member_id;
       $dependentData->save();
     }
 
     $governmentData = new TblMemberGovernmentCardModel;
-    $governmentData->government_card_philhealth  = $request->government_card_philhealth;
-    $governmentData->government_card_sss         = $request->government_card_sss;
-    $governmentData->government_card_tin         = $request->government_card_tin;
-    $governmentData->government_card_hdmf        = $request->government_card_hdmf;
+    $governmentData->government_card_philhealth  = StaticFunctionController::nullableToString($request->government_card_philhealth);
+    $governmentData->government_card_sss         = StaticFunctionController::nullableToString($request->government_card_sss);
+    $governmentData->government_card_tin         = StaticFunctionController::nullableToString($request->government_card_tin);
+    $governmentData->government_card_hdmf        = StaticFunctionController::nullableToString($request->government_card_hdmf);
     $governmentData->member_id                   = $memberData->member_id;
     $governmentData->save();
     
@@ -388,13 +388,23 @@ class CarewellController extends ActiveAuthController
     $update['member_email_address']       = $request->member_email_address;
     $update['member_permanet_address']    = $request->member_permanet_address;
     $update['member_present_address']     = $request->member_present_address;
-
+  
+    $update['government_card_philhealth'] = $request->government_card_philhealth;
+    $update['government_card_sss']        = $request->government_card_sss;
+    $update['government_card_tin']        = $request->government_card_tin;
+    $update['government_card_hdmf']       = $request->government_card_hdmf;
 
     $check    =  TblMemberModel::where('tbl_member.member_id',$request->member_id)
               ->join('tbl_member_government_card','tbl_member_government_card.member_id','=','tbl_member.member_id')
               ->update($update);
-
-    return 'member update successfully';
+    if($check)
+    {
+      return StaticFunctionController::returnMessage('success','MEMBER');
+    }
+    else
+    {
+      return StaticFunctionController::returnMessage('danger','MEMBER');
+    }
   }
 
   //edrich
@@ -914,7 +924,6 @@ class CarewellController extends ActiveAuthController
                 $providerDoctorData->doctor_created         = Carbon::now();
                 $providerDoctorData->save();
 
-
                 $insert['doctor_id'] = $providerDoctorData->doctor_id;
                 $insert['provider_id'] = $providerData->provider_id;
                 TblDoctorProviderModel::insert($insert);
@@ -953,15 +962,15 @@ class CarewellController extends ActiveAuthController
               }
               else
               {
-                if(TblDoctorProviderModel::where('doctor_id',$refDoctorId)->where('provider_id',$refProviderId)->count()>=1)
-                {
-                  //row in tbl_doctor_provider that have $refDoctorId and $repProviderId exist
-                }
-                else
+                if(TblDoctorProviderModel::where('doctor_id',$refDoctorId)->where('provider_id',$refProviderId)->count()==0)
                 {
                   $insert['doctor_id']   = $refDoctorId;
                   $insert['provider_id'] = $refProviderId;
                   TblDoctorProviderModel::insert($insert);
+                }
+                else
+                {
+                  
                 }
               }
             }
@@ -990,6 +999,34 @@ class CarewellController extends ActiveAuthController
         $data = $excels['data'];
         $sheet->fromArray($data, null, 'A1', false, false);
         $sheet->freezeFirstRow();
+
+        for($row = 1, $rowcell = 2; $row <= 1000; $row++, $rowcell++)
+        {
+          /* STATUS*/
+          $status_cell = $sheet->getCell('C'.$rowcell)->getDataValidation();
+          $status_cell->setType(\PHPExcel_Cell_DataValidation::TYPE_LIST);
+          $status_cell->setErrorStyle(\PHPExcel_Cell_DataValidation::STYLE_INFORMATION);
+          $status_cell->setAllowBlank(false);
+          $status_cell->setShowInputMessage(true);
+          $status_cell->setShowErrorMessage(true);
+          $status_cell->setShowDropDown(true);
+          $status_cell->setErrorTitle('Input error');
+          $status_cell->setError('Value is not in list.');
+          $status_cell->setFormula1('status');
+        }
+      });
+      $excel->sheet('reference', function($sheet) use($excels) 
+      {
+        /* STATUS REFERENCES */
+        $sheet->SetCellValue("C1", "status");
+        $sheet->SetCellValue("C2", '2001');
+        $sheet->SetCellValue("C3", '2009');
+        /*STATUS*/
+        $sheet->_parent->addNamedRange(
+            new \PHPExcel_NamedRange(
+            'status', $sheet, 'C2:C3'
+            )
+        );
       });
     })->download('xlsx');
   }
@@ -1006,7 +1043,7 @@ class CarewellController extends ActiveAuthController
     $update['provider_address']           = $request->provider_address;
     $check =  TblProviderModel::where('provider_id',$request->provider_id)->update($update);
 
-    return 'provider update successfully';
+    return StaticFunctionController::returnMessage('success','PROVIDER');    
 
   }
 
@@ -1044,7 +1081,6 @@ class CarewellController extends ActiveAuthController
   
   public function doctor_view_details(Request $request,$doctor_id)
   {
-    $data['_provider']              = TblProviderModel::where('archived',0)->get();
     $data['_specialization']        = TblSpecializationModel::where('archived',0)->get();
     $data['doctor_details']         = TblDoctorModel::where('doctor_id',$doctor_id)->first();
     $data['_doctor_specialization'] = TblDoctorSpecializationModel::where('doctor_id',$doctor_id)
@@ -1057,15 +1093,15 @@ class CarewellController extends ActiveAuthController
     return view('carewell.modal_pages.doctor_details',$data);
   }
 
-    public function doctor_update_submit(Request $request)
+  public function doctor_update_submit(Request $request)
   {
-    $update['doctor_full_name'] = $request->doctor_full_name;
-    $update['doctor_gender'] = $request->doctor_gender;
-    $update['doctor_contact_number'] = $request->doctor_contact_number;
-    $update['doctor_contact_number'] = $request->doctor_contact_number;
+    $update['doctor_full_name']     = $request->doctor_full_name;
+    $update['doctor_gender']        = $request->doctor_gender;
+    $update['doctor_contact_number']= $request->doctor_contact_number;
+    $update['doctor_email_address'] = $request->doctor_email_address;
     $check =  TblDoctorModel::where('doctor_id',$request->doctor_id)->update($update);
 
-    return 'doctor update successfully';
+    return StaticFunctionController::returnMessage('success','DOCTOR');    
   }
 
   public function add_doctor()
@@ -1250,6 +1286,24 @@ class CarewellController extends ActiveAuthController
       }
 
   }
+  public function doctor_add_doctor_provider($doctor_id)
+  {
+    $data['doctor_id'] = $doctor_id;
+    $data['_provider'] = TblProviderModel::where('archived',0)->get();
+    return view('carewell.modal_pages.doctor_add_provider',$data);
+  }
+  public function doctor_add_doctor_provider_submit(Request $request)
+  {
+    foreach($request->doctorProviderData as $provider_id)
+    {
+      $providerData              = new TblDoctorProviderModel;
+      $providerData->provider_id = $provider_id;
+      $providerData->doctor_id   = $request->doctor_id;
+      $providerData->save();
+    }
+    return StaticFunctionController::returnMessage('success','PROVIDER');
+  }
+  
   /*BILLING*/
   public function billing()
   {

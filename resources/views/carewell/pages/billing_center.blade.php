@@ -33,7 +33,7 @@
               </div>
             </div>
           </div>
-          <div id="showTable">
+          <div id="showTable" class="load-data load-open-cal" data-target="load-open-cal">
             <div class="box-body table-responsive no-padding">
               <table class="table table-hover table-bordered">
                 <tr>
@@ -75,7 +75,7 @@
               </table>
             </div>
             <div class="box-footer clearfix">
-              @include('globals.pagination', ['paginator' => $_cal_open])
+              @include('globals.pagination_v2', ['paginator' => $_cal_open])
             </div>
           </div>
         </div>
@@ -98,7 +98,7 @@
               </div>
             </div>
           </div>
-          <div id="showTable">
+          <div id="showTable" class="load-data load-pending-cal" data-target="load-pending-cal">
             <div class="box-body table-responsive no-padding">
               <table class="table table-hover table-bordered">
                 <tr>
@@ -137,7 +137,7 @@
             </div>
           </div>
           <div class="box-footer clearfix">
-            @include('globals.pagination', ['paginator' => $_cal_pending])
+            @include('globals.pagination_v2', ['paginator' => $_cal_pending])
           </div>
         </div>
         <div class="tab-pane" id="close">
@@ -159,7 +159,7 @@
               </div>
             </div>
           </div>
-          <div id="showTable">
+          <div id="showTable" class="load-data load-close-cal" data-target="load-close-cal">
             <div class="box-body table-responsive no-padding">
               <table class="table table-hover table-bordered">
                 <tr>
@@ -196,7 +196,7 @@
               </table>
             </div>
             <div class="box-footer clearfix">
-              @include('globals.pagination', ['paginator' => $_cal_close])
+              @include('globals.pagination_v2', ['paginator' => $_cal_close])
             </div>
           </div>
         </div>

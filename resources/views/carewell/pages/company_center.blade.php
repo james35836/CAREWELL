@@ -25,7 +25,7 @@
               </div>
             </div>
           </div>
-          <div id="showTable">
+          <div id="showTable" class="load-data load-active-company" data-target="load-active-company">
             <div class="box-body table-responsive no-padding">
               <table class="table table-hover table-bordered">
                 <tr>
@@ -65,7 +65,7 @@
               </table>
             </div>
             <div class="box-footer clearfix">
-              @include('globals.pagination', ['paginator' => $_company_active])
+              @include('globals.pagination_v2', ['paginator' => $_company_active])
             </div>
           </div>
         </div>
@@ -81,7 +81,7 @@
               </div>
             </div>
           </div>
-          <div id="showTable">
+          <div id="showTable" class="load-data load-inactive-company" data-target="load-inactive-company">
           <div class="box-body table-responsive no-padding">
             <table class="table table-hover table-bordered">
               <tr>
@@ -121,7 +121,7 @@
             </table>
           </div>
           <div class="box-footer clearfix">
-            @include('globals.pagination', ['paginator' => $_company_inactive])
+            @include('globals.pagination_v2', ['paginator' => $_company_inactive])
           </div>
         </div>
         </div>

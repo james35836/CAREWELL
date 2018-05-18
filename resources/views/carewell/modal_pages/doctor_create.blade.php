@@ -1,3 +1,6 @@
+<script>
+	$('input.string-only').keypress('keypress', string_only);//function in layout name string_only
+</script>
 <div class="row box-globals">
 
 	<div class="form-holder">
@@ -5,7 +8,7 @@
 			<label>Full Name</label>
 		</div>
 		<div class="col-md-4 form-content">
-			<input type="text" class="form-control" id="doctor_full_name"/>
+			<input type="text" class="form-control string-only" id="doctor_full_name"/>
 		</div>
 		<div class="col-md-2 form-content">
 			<label>Gender</label>
@@ -22,15 +25,18 @@
 			<label>Contact Number</label>
 		</div>
 		<div class="col-md-4 form-content">
-			<input type="text" class="form-control" id="doctor_contact_number"/>
+			<div class="input-group">
+			    <input type="text" class="form-control" id="doctor_area_code" placeholder="+63"/>
+			    <span class="input-group-addon">-</span>
+			    <input type="number" class="form-control" id="doctor_contact_number" placeholder="9876543210"/>
+			</div>
 		</div>
 		<div class="col-md-2 form-content">
 			<label>Email Address</label>
 		</div>
 		<div class="col-md-4 form-content">
-			<input  type="text" class="form-control lowercase-text" id="doctor_email_address"/>
+			<input  type="email" class="form-control" id="doctor_email_address"/>
 		</div>
-		
 	</div>
 </div>
 <div class="row box-globals" >

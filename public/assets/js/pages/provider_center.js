@@ -141,13 +141,20 @@ function provider_center()
 	{
 		$('body').on('click','.view-provider-details',function()
 		{
-			var provider_id = $(this).data('provider_id');
-			var modalName= 'PROVIDER DETAILS';
-			var modalClass='provider-details';
-			var modalLink='/provider/provider_details/'+provider_id;
-			var modalActionName='SAVE CHANGES';
-			var modalAction='update-provider-confirm';
-			var modalSize = 'modal-lg';
+			var provider_id 		= $(this).data('provider_id');
+			var modalName 			= 'PROVIDER DETAILS';
+			var modalClass 			= 'provider-details';
+			var modalLink 			= '/provider/provider_details/'+provider_id;
+			var modalActionName 	= 'SAVE CHANGES';
+			var modalAction 		= 'update-provider-confirm';
+			if($(this).data('size')=='md')
+			{
+				var modalSize        = 'modal-md';
+			}
+			else
+			{
+				var modalSize        = 'modal-lg';
+			}
 			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
 		});
 		

@@ -120,6 +120,11 @@ Route::get('/doctor/download_template/{provider_id}/{number}', 	'CarewellControl
 Route::post('/doctor/import_doctor/submit', 			'CarewellController@doctor_import_doctor_submit');
 Route::post('/doctor/update_doctor/submit', 			'CarewellController@doctor_update_submit');
 
+Route::get('/doctor/add_doctor_provider/{doctor_id}', 	'CarewellController@doctor_add_doctor_provider');
+Route::post('/doctor/add_doctor_provider/submit', 		'CarewellController@doctor_add_doctor_provider_submit');
+
+
+
 /*BILLING*/
 Route::get('/billing', 									'CarewellController@billing');
 Route::get('/billing/create_cal', 						'CarewellController@billing_create_cal');
