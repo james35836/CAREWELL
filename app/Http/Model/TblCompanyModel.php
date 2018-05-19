@@ -24,5 +24,15 @@ class TblCompanyModel extends Model
         return $query;
 
     }
+    public function scopeCompanyContact($query)
+    {
+        $query->join('tbl_company_contact_person','tbl_company_contact_person.company_id','=','tbl_company.company_id');
+        return $query;
+    }
+    public function scopeCompanyCal($query)
+    {
+        $query->join('tbl_cal','tbl_cal.company_id','=','tbl_company.company_id');
+        return $query;
+    }
 }
 

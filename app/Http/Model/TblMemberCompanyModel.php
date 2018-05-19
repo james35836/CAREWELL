@@ -21,4 +21,11 @@ class TblMemberCompanyModel extends Model
         return $query;
                               
     }
+    public function scopeCompanyMember($query)
+    {
+      $query  ->where('tbl_member_company.archived',0)
+              ->join('tbl_member','tbl_member.member_id','=','tbl_member_company.member_id')
+              ->join('tbl_company_deployment','tbl_company_deployment.deployment_id','=','tbl_member_company.deployment_id');
+        return $query;
+    }
 }

@@ -19,6 +19,10 @@ function billing_center()
 			create_cal_confirm();
 			create_cal_submit();
 			cal_view_details();
+
+			cal_details_update_confirm();
+			cal_details_update_submit();
+
 			download_cal_template();
 			import_cal_members();
 			import_cal_member_confirm();
@@ -234,10 +238,8 @@ function billing_center()
 	            calData.append("cal_payment_mode", 			document.getElementById('cal_payment_mode').value);
 	            calData.append("cal_start", 				document.getElementById('cal_start').value);
 	            calData.append("cal_end", 					document.getElementById('cal_end').value);
-	            
-            }
-			
-        });
+	        }
+		});
 	}
 	
 	function create_cal_submit()
@@ -255,7 +257,7 @@ function billing_center()
 
 			var cal_id 			= $(this).data('cal_id');
 			var modalName 		= 'CAL DETAILS';
-			var modalClass 		= 'company';
+			var modalClass 		= 'cal-details';
 			var modalLink 		= '/billing/cal_details/'+cal_id;
 			if($(this).data('reference')=="none")
 			{
@@ -265,14 +267,47 @@ function billing_center()
 			{
 				var modalActionName = 'SAVE CHANGES';
 			}
-			var modalAction 	= 'confirm';
+			var modalAction 	= 'update-cal-details-confirm';
 			var modalSize 		= 'modal-lg';
 			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
 		});
-
-		
 	}
-	function download_cal_template()
+	function cal_details_update_confirm()
+	{
+		$('body').on('click','.update-cal-details-confirm',function() 
+		{
+			if(document.getElementById('company_id').value=="0")
+			{
+				globals.global_tostr('COMPANY');
+			}
+			else if(globals.checking_null_validation(document.getElementById('cal_reveneu_period_year').value,"REVENUE YEAR")=="")
+			{}
+			else if(globals.checking_null_validation(document.getElementById('cal_payment_mode').value,"MODE OF PAYMENT")=="")
+			{}
+			
+			else
+			{
+				var	confirmModalMessage = 'Are you sure you want to add this CAL?';
+				var confirmModalAction = 'update-cal-details-submit';
+				globals.confirm_modals(confirmModalMessage,confirmModalAction);
+		 
+				calData.append("company_id", 				document.getElementById('company_id').value);
+	            calData.append("cal_reveneu_period_year", 	document.getElementById('cal_reveneu_period_year').value);
+	            calData.append("cal_payment_mode", 			document.getElementById('cal_payment_mode').value);
+	            calData.append("cal_start", 				document.getElementById('cal_start').value);
+	            calData.append("cal_end", 					document.getElementById('cal_end').value);
+	        	calData.append("cal_id",                    document.getElementById('cal_id').value);
+	        }
+		});
+	}    
+	function cal_details_update_submit()
+	{
+		$('body').on('click','.update-cal-details-submit',function()
+		{
+			globals.global_submit('cal-details','/billing/update_cal_details/sumbit',calData);
+        });
+	}
+    function download_cal_template()
 	{
 		$(document).on('change','.download-cal-select',function()
 		{

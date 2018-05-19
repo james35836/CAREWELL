@@ -354,6 +354,29 @@ class StaticFunctionController extends Controller
     }
     return $result;
   }
+  public static function getIdNorName($name="",$str_param)
+  {
+    $ref = "";
+    $refer = "";
+    switch ($str_param) 
+    {
+      case 'provider':
+        $ref = TblProviderModel::where('provider_name', $name)->value('provider_id');
+        break;
+      case 'doctor':
+        $ref = TblDoctorModel::where('doctor_full_name', $name)->value('doctor_id');
+        break;
+    }
+    if($ref == null||$ref=="")
+    {    
+      $refer = $name;
+    }
+    else
+    {
+      $refer = $ref;
+    }
+  return $refer; 
+  }
   public static function getid($str_name = '', $str_param = '')
   {
     $id = 0;

@@ -100,13 +100,14 @@ class CarewellController extends ActiveAuthController
     $data['November']   =  TblApprovalModel::where('approval_created','LIKE','%'.date('Y-11').'%')->count();
     $data['December']   =  TblApprovalModel::where('approval_created','LIKE','%'.date('Y-12').'%')->count();
    
-    $data['company_active']    = TblCompanyModel::where('archived',0)->count();
-    $data['member_active']     = TblMemberModel::where('archived',0)->count();
-    $data['member_inactive']     = TblMemberModel::where('archived',1)->count();
-
-    $data['provider_active']   = TblProviderModel::where('archived',0)->count();
+    $data['company_active']   = TblCompanyModel::where('archived',0)->count();
+    $data['member_active']    = TblMemberModel::where('archived',0)->count();
+    $data['member_inactive']  = TblMemberModel::where('archived',1)->count();
+    $data['provider_active']  = TblProviderModel::where('archived',0)->count();
     
-    $data['_approval']  = TblApprovalModel::where('tbl_approval.archived',0)->ApprovalInfo()->orderBy('approval_created','DESC')->get();
+    $data['_approval']        = TblApprovalModel::where('tbl_approval.archived',0)
+                              ->join('tbl_member','tbl_member.member_id','=','tbl_approval.member_id')
+                              ->orderBy('approval_created','DESC')->get();
     $data['total_approval'] =  count($data['_approval']);
     return view('carewell.pages.dashboard',$data);
   }
@@ -117,47 +118,32 @@ class CarewellController extends ActiveAuthController
     $data['user']               = StaticFunctionController::global();
     $data['_company_active']    = TblCompanyModel::where('tbl_company.archived',0)->Company()->paginate(10);
     $data['_company_inactive']  = TblCompanyModel::where('tbl_company.archived',1)->Company()->paginate(10);
+    
     foreach ($data['_company_active'] as $key => $company) 
     {
-      $data['_company_active'][$key]['coverage_plan']  = TblCompanyCoveragePlanModel::where('company_id',$company->company_id)
-                                                ->join('tbl_coverage_plan','tbl_coverage_plan.coverage_plan_id','=','tbl_company_coverage_plan.coverage_plan_id')
-                                                ->get();
+      $data['_company_active'][$key]['coverage_plan']   = TblCompanyCoveragePlanModel::CoveragePlan()->where('company_id',$company->company_id)->get();
+      $data['_company_active'][$key]['member']          = TblMemberCompanyModel::where('company_id',$company->company_id)->where('archived',0)->count();
     }
     foreach ($data['_company_inactive'] as $key => $company) 
     {
-      $data['_company_inactive'][$key]['coverage_plan']  = TblCompanyCoveragePlanModel::where('company_id',$company->company_id)
-                                                ->join('tbl_coverage_plan','tbl_coverage_plan.coverage_plan_id','=','tbl_company_coverage_plan.coverage_plan_id')
-                                                ->get();
+      $data['_company_inactive'][$key]['coverage_plan'] = TblCompanyCoveragePlanModel::CoveragePlan()->where('company_id',$company->company_id)->get();
     }
   	return view('carewell.pages.company_center',$data);
   }
   public function company_details($company_id)
   {
-    $data['_payment_mode']        = TblPaymentModeModel::get();
-    $data['company_details']      = TblCompanyModel::where('tbl_company.company_id',$company_id)
-                                  ->join('tbl_company_contact_person','tbl_company_contact_person.company_id','=','tbl_company.company_id')
-                                  ->first();
+    $data['company_details']      = TblCompanyModel::where('tbl_company.company_id',$company_id)->CompanyContact()->first();
     $data['_company_deployment']  = TblCompanyDeploymentModel::where('company_id',$company_id)->get();
-    $data['_company_number']      = TblCompanyNumberModel::where('company_id',$company_id)->get();
-    $data['_coverage_plan']       = TblCompanyCoveragePlanModel::where('company_id',$company_id)
-                                  ->join('tbl_coverage_plan','tbl_coverage_plan.coverage_plan_id','=','tbl_company_coverage_plan.coverage_plan_id')
-                                  ->get();
-    $data['_company_member']      = TblMemberCompanyModel::where('tbl_member_company.company_id',$company_id)
-                                  ->where('tbl_member_company.archived',0)
-                                  ->join('tbl_member','tbl_member.member_id','=','tbl_member_company.member_id')
-                                  ->join('tbl_company_deployment','tbl_company_deployment.deployment_id','=','tbl_member_company.deployment_id')
-                                  ->paginate(10);
-    $data['company_contract']     = TblCompanyContractModel::where('company_id',$company_id)
-                                  ->first();
+    $data['_coverage_plan']       = TblCompanyCoveragePlanModel::where('company_id',$company_id)->CoveragePlan()->get();
+    $data['_company_member']      = TblMemberCompanyModel::where('tbl_member_company.company_id',$company_id)->CompanyMember()->paginate(10);
+    $data['company_contract']     = TblCompanyContractModel::where('company_id',$company_id)->first();
     $data['_contract_images']     = TblCompanyContractImageModel::where('archived',0)->where('contract_id',$data['company_contract']->contract_id)->get();
     $data['_benefits_images']     = TblCompanyContractBenefitsModel::where('archived',0)->where('contract_id',$data['company_contract']->contract_id)->get();
     
     return view('carewell.modal_pages.company_details',$data);
-
   }
   public function company_create_company()
   {
-
     $data['_coverage_plan']   = TblCoveragePlanModel::where('archived',0)->get();
     $data['_payment_mode']    = TblPaymentModeModel::get();
     return view('carewell.modal_pages.company_create',$data);
@@ -176,11 +162,9 @@ class CarewellController extends ActiveAuthController
     $update['contact_person_positions'] = $request->contact_person_positions;
     $update['contact_person_numbers']   = $request->contact_person_numbers;
 
-    $check =  TblCompanyModel::where('tbl_company.company_id',$request->company_id)
-              ->join('tbl_company_contact_person','tbl_company_contact_person.company_id','=','tbl_company.company_id')
-              ->update($update);
+    $check =  TblCompanyModel::where('tbl_company.company_id',$request->company_id)->CompanyContact()->update($update);
 
-    return 'company updated successfully';
+    return StaticFunctionController::returnMessage('success','COMPANY');
   }
   public function company_add_coverage_plan($company_id)
   {
@@ -394,9 +378,7 @@ class CarewellController extends ActiveAuthController
     $update['government_card_tin']        = $request->government_card_tin;
     $update['government_card_hdmf']       = $request->government_card_hdmf;
 
-    $check    =  TblMemberModel::where('tbl_member.member_id',$request->member_id)
-              ->join('tbl_member_government_card','tbl_member_government_card.member_id','=','tbl_member.member_id')
-              ->update($update);
+    $check    =  TblMemberModel::where('tbl_member.member_id',$request->member_id)->MemberCards()->update($update);
     if($check)
     {
       return StaticFunctionController::returnMessage('success','MEMBER');
@@ -406,36 +388,18 @@ class CarewellController extends ActiveAuthController
       return StaticFunctionController::returnMessage('danger','MEMBER');
     }
   }
-
   //edrich
-
   public function member_transaction_details($member_id)
   {
 
     $coverage                       = TblMemberCompanyModel::where('archived',0)->where('member_id',$member_id)->first();
     $data['_availment_history']     = TblApprovalModel::where('tbl_approval.member_id',$member_id)->AvailmentHistory()->get();
     $data['coverage_plan_details']  = TblCoveragePlanModel::where('coverage_plan_id',$coverage->coverage_plan_id)->first();     
-    $data['_coverage_plan_covered'] = TblCoveragePlanProcedureModel::where('coverage_plan_id',$coverage->coverage_plan_id)
-                                    ->where('tbl_coverage_plan_procedure.archived',0)
-                                    ->select(DB::raw('count(*) as totals, tbl_coverage_plan_procedure.availment_id,tbl_availment.availment_name'))
-                                    ->groupBy('availment_id')
-                                    ->join('tbl_availment','tbl_availment.availment_id','=','tbl_coverage_plan_procedure.availment_id') 
-                                    ->get();
+    $data['_coverage_plan_covered'] = TblCoveragePlanProcedureModel::where('coverage_plan_id',$coverage->coverage_plan_id)->CoveragePlan()->get();
     foreach($data['_coverage_plan_covered'] as $key=>$availment)
     {
-      $data['_coverage_plan_covered'][$key]['procedure']   = TblCoveragePlanProcedureModel::where('availment_id',$availment->availment_id)
-                                    ->join('tbl_procedure','tbl_procedure.procedure_id','=','tbl_coverage_plan_procedure.procedure_id') 
-                                    ->get();
+      $data['_coverage_plan_covered'][$key]['procedure']   = TblCoveragePlanProcedureModel::where('availment_id',$availment->availment_id)->Procedure()->get();
     }
-    $data['_payment_history']   = TblCalMemberModel::where('tbl_cal_member.member_id',$member_id)
-                                ->where(function($query)
-                                          {
-                                            $query->where('tbl_cal.archived',1);
-                                            $query->orWhere('tbl_cal.archived',2);
-                                          }
-                                        )
-                                ->PaymentHistory()
-                                ->get();
     foreach($data['_payment_history'] as $key=>$payment)
     {
       $data['_payment_history'][$key]['amount'] = $payment->cal_payment_amount/$payment->cal_payment_count;
@@ -746,12 +710,11 @@ class CarewellController extends ActiveAuthController
     $data['page']              = 'Network Provider';
     $data['user']              = StaticFunctionController::global();
     $data['_provider_active']  = TblProviderModel::where('archived',0)->paginate(10);
+    $data['_provider_inactive']  = TblProviderModel::where('archived',1)->paginate(10);
     foreach ($data['_provider_active'] as $key => $provider) 
     {
       $data['_provider_active'][$key]['provider_payee'] =  TblProviderPayeeModel::where('provider_id',$provider->provider_id)->get();
     }
-
-    $data['_provider_inactive']  = TblProviderModel::where('archived',1)->paginate(10);
     foreach ($data['_provider_inactive'] as $key => $provider) 
     {
       $data['_provider_inactive'][$key]['provider_payee'] =  TblProviderPayeeModel::where('provider_id',$provider->provider_id)->get();
@@ -846,9 +809,9 @@ class CarewellController extends ActiveAuthController
     
   public function provider_details(Request $request,$provider_id)
   {
-    $data['_provider_payee'] = TblProviderPayeeModel::where('provider_id',$provider_id)->get();
+    $data['_provider_payee']  = TblProviderPayeeModel::where('provider_id',$provider_id)->get();
     $data['provider_details'] = TblProviderModel::where('tbl_provider.provider_id',$provider_id)->first();
-    $data['_provider_doctor']  = TblDoctorProviderModel::where('tbl_doctor_provider.provider_id',$provider_id)->DoctorProvider()->get();
+    $data['_provider_doctor'] = TblDoctorProviderModel::where('tbl_doctor_provider.provider_id',$provider_id)->DoctorProvider()->get();
 
     return view('carewell.modal_pages.provider_details',$data);
   }
@@ -856,29 +819,7 @@ class CarewellController extends ActiveAuthController
   {
     return view('carewell.modal_pages.provider_import');
   }
-  public static function getIdNorName($name="",$str_param)
-  {
-    $ref = "";
-    $refer = "";
-    switch ($str_param) 
-    {
-      case 'provider':
-        $ref = TblProviderModel::where('provider_name', $name)->value('provider_id');
-        break;
-      case 'doctor':
-        $ref = TblDoctorModel::where('doctor_full_name', $name)->value('doctor_id');
-        break;
-    }
-    if($ref == null||$ref=="")
-    {    
-      $refer = $name;
-    }
-    else
-    {
-      $refer = $ref;
-    }
-  return $refer; 
-  }
+  
 
   public function provider_import_submit(Request $request)
   {
@@ -937,8 +878,6 @@ class CarewellController extends ActiveAuthController
                 TblDoctorProviderModel::insert($insert);
               }
             }
-
-            // $count++;
           }
           else
           {
@@ -1043,53 +982,32 @@ class CarewellController extends ActiveAuthController
     $update['provider_address']           = $request->provider_address;
     $check =  TblProviderModel::where('provider_id',$request->provider_id)->update($update);
 
-    return StaticFunctionController::returnMessage('success','PROVIDER');    
-
+    return StaticFunctionController::returnMessage('success','PROVIDER');
   }
 
   /*DOCTOR*/
   public function doctor(Request $request)
   {
-    $data['page']       = 'Doctor';
-    $data['user']       = StaticFunctionController::global();
-    $data['_provider']  = TblProviderModel::where('archived',0)->get();
-    
-    $data['_doctor_active']    = TblDoctorModel::where('archived',0)->paginate(10);
+    $data['page']             = 'Doctor';
+    $data['user']             = StaticFunctionController::global();
+    $data['_provider']        = TblProviderModel::where('archived',0)->get();
+    $data['_doctor_active']   = TblDoctorModel::where('archived',0)->paginate(10);
+    $data['_doctor_inactive'] = TblDoctorModel::where('archived',1)->paginate(10);
     foreach ($data['_doctor_active'] as $key => $doctor) 
     {
-      $data['_doctor_active'][$key]['specialization']  =  TblDoctorSpecializationModel::where('doctor_id',$doctor->doctor_id)
-                                                ->join('tbl_specialization','tbl_specialization.specialization_id','=','tbl_doctor_specialization.specialization_id')
-                                                ->get();
-      $data['_doctor_active'][$key]['provider']        =  TblDoctorProviderModel::where('doctor_id',$doctor->doctor_id)
-                                                ->join('tbl_provider','tbl_provider.provider_id','=','tbl_doctor_provider.provider_id')
-                                                ->get();
+      $data['_doctor_active'][$key]['provider']   =  TblDoctorProviderModel::where('doctor_id',$doctor->doctor_id)->Provider()->get();
     }
-
-    $data['_doctor_inactive']    = TblDoctorModel::where('archived',1)->paginate(10);
     foreach ($data['_doctor_inactive'] as $key => $doctor) 
     {
-      $data['_doctor_inactive'][$key]['specialization']  =  TblDoctorSpecializationModel::where('doctor_id',$doctor->doctor_id)
-                                                ->join('tbl_specialization','tbl_specialization.specialization_id','=','tbl_doctor_specialization.specialization_id')
-                                                ->get();
-      $data['_doctor_inactive'][$key]['provider']        =  TblDoctorProviderModel::where('doctor_id',$doctor->doctor_id)
-                                                ->join('tbl_provider','tbl_provider.provider_id','=','tbl_doctor_provider.provider_id')
-                                                ->get();
+      $data['_doctor_inactive'][$key]['provider'] =  TblDoctorProviderModel::where('doctor_id',$doctor->doctor_id)->Provider()->get();
     }
     return view('carewell.pages.doctor_center',$data);
-
   }
   
   public function doctor_view_details(Request $request,$doctor_id)
   {
-    $data['_specialization']        = TblSpecializationModel::where('archived',0)->get();
     $data['doctor_details']         = TblDoctorModel::where('doctor_id',$doctor_id)->first();
-    $data['_doctor_specialization'] = TblDoctorSpecializationModel::where('doctor_id',$doctor_id)
-                                    ->join('tbl_specialization','tbl_specialization.specialization_id','=','tbl_doctor_specialization.specialization_id')
-                                    ->get();
-    $data['_doctor_provider']       = TblDoctorProviderModel::where('tbl_doctor_provider.doctor_id',$doctor_id)
-                                    ->join('tbl_provider','tbl_provider.provider_id','=','tbl_doctor_provider.provider_id')
-                                    ->get();
-
+    $data['_doctor_provider']       = TblDoctorProviderModel::where('tbl_doctor_provider.doctor_id',$doctor_id)->Provider()->get();
     return view('carewell.modal_pages.doctor_details',$data);
   }
 
@@ -1121,9 +1039,6 @@ class CarewellController extends ActiveAuthController
     $doctorData->doctor_email_address   = $request->doctor_email_address;
     $doctorData->doctor_created         = Carbon::now();
     $doctorData->save();
-
-    
-
     foreach($request->doctorProviderData as $provider)
     {
       $providerData = new TblDoctorProviderModel;
@@ -1318,19 +1233,19 @@ class CarewellController extends ActiveAuthController
     foreach ($data['_cal_open'] as $key => $cal_open) 
     {
       $data['_cal_open'][$key]['new_member']= TblNewMemberModel::where('cal_id',$cal_open->cal_id)->count();
-      $data['_cal_open'][$key]['members']   = TblCalMemberModel::where('cal_id',$cal_open->cal_id)->count();
+      $data['_cal_open'][$key]['members']   = TblCalMemberModel::where('cal_id',$cal_open->cal_id)->where('archived',0)->count();
       $data['_cal_open'][$key]['reference'] = 'show';
     }
     foreach ($data['_cal_close'] as $key => $cal_close) 
     {
       $data['_cal_close'][$key]['new_member']= TblNewMemberModel::where('cal_id',$cal_close->cal_id)->count();
-      $data['_cal_close'][$key]['members']   =  TblCalMemberModel::where('cal_id',$cal_close->cal_id)->count();
+      $data['_cal_close'][$key]['members']   =  TblCalMemberModel::where('cal_id',$cal_close->cal_id)->where('archived',0)->count();
       $data['_cal_close'][$key]['reference'] = 'none';
     }
     foreach ($data['_cal_pending'] as $key => $cal_pending) 
     {
       $data['_cal_pending'][$key]['new_member']= TblNewMemberModel::where('cal_id',$cal_pending->cal_id)->count();
-      $data['_cal_pending'][$key]['members']   =  TblCalMemberModel::where('cal_id',$cal_pending->cal_id)->count();
+      $data['_cal_pending'][$key]['members']   =  TblCalMemberModel::where('cal_id',$cal_pending->cal_id)->where('archived',0)->count();
       $data['_cal_pending'][$key]['reference'] = 'show';
     }
 
@@ -1338,8 +1253,7 @@ class CarewellController extends ActiveAuthController
   }
   public function billing_create_cal()
   {
-    $data['_company']         = TblCompanyModel::get();
-    $data['_cal_company']     = TblCalModel::get();
+    $data['_company']         = TblCompanyModel::where('archived',0)->get();
     $data['_period']          = TblPaymentModeModel::get();
     return view('carewell.modal_pages.billing_create_cal',$data);
   }
@@ -1360,25 +1274,23 @@ class CarewellController extends ActiveAuthController
   }
   public function billing_cal_details($cal_id)
   {
-    $data['cal_check']        = TblCalModel::where('cal_id',$cal_id)->value('archived');
-    $data['_cal_member']      = TblCalMemberModel::where('tbl_cal_member.cal_id',$cal_id)->where('tbl_cal_member.archived',0)->CalMember()->get();
-    $data['_cal_member_remove']=TblCalMemberModel::where('tbl_cal_member.cal_id',$cal_id)->where('tbl_cal_member.archived',1)->CalMember()->get();
-    $data['_cal_new_member']  = TblNewMemberModel::where('cal_id',$cal_id)->get();
+    $sum                          = 0;
+    $sums                         = 0;
+    $data['_company']             = TblCompanyModel::where('archived',0)->get();
+    $data['_period']              = TblPaymentModeModel::get();
+    $data['cal_check']            = TblCalModel::where('cal_id',$cal_id)->value('archived');
+    $data['_cal_member']          = TblCalMemberModel::where('tbl_cal_member.cal_id',$cal_id)->where('tbl_cal_member.archived',0)->CalMember()->get();
+    $data['_cal_member_remove']   = TblCalMemberModel::where('tbl_cal_member.cal_id',$cal_id)->where('tbl_cal_member.archived',1)->CalMember()->get();
+    $data['_cal_new_member']      = TblNewMemberModel::where('cal_id',$cal_id)->get();
     if($data['cal_check']==0||$data['cal_check']==2)
     {
-      $data['cal_details']    = TblCalModel::where('cal_id',$cal_id)
-                              ->join('tbl_company','tbl_company.company_id','=','tbl_cal.company_id')
-                              ->first();
+      $data['cal_details']    = TblCalModel::where('tbl_cal.cal_id',$cal_id)->CalInfo(0)->first();
     }
     else
     {
-      $data['cal_details']    = TblCalModel::where('tbl_cal.cal_id',$cal_id)
-                              ->join('tbl_company','tbl_company.company_id','=','tbl_cal.company_id')
-                              ->join('tbl_cal_info','tbl_cal_info.cal_id','=','tbl_cal.cal_id')
-                              ->first();
+      $data['cal_details']    = TblCalModel::where('tbl_cal.cal_id',$cal_id)->CalInfo(1)->first();
     }
-    $sum      = 0;
-    $sums     = 0;
+    
     foreach($data['_cal_member'] as $amount)
     {
       $sum = $sum + $amount->cal_payment_amount;
@@ -1390,6 +1302,16 @@ class CarewellController extends ActiveAuthController
     $data['total_amount']     = $sum + $sums;
     $data['total_member']     = count($data['_cal_member'])+count($data['_cal_new_member']);
     return view('carewell.modal_pages.billing_cal_details',$data);
+  }
+  public function billing_update_cal_details_submit(Request $request)
+  {
+    $companyCalData['cal_reveneu_period_year']  =   $request->cal_reveneu_period_year;
+    $companyCalData['cal_payment_mode']         =   $request->cal_payment_mode;
+    $companyCalData['cal_start']                =   $request->cal_start;
+    $companyCalData['cal_end']                  =   $request->cal_end;
+    $companyCalData['company_id']               =   $request->company_id;
+    $check  = TblCalModel::where('cal_id',$request->cal_id)->update($companyCalData);
+    return StaticFunctionController::returnMessage('success','CAL');
   }
   public function billing_payment_breakdown($cal_member_id,$str_ref)
   {
@@ -1415,11 +1337,7 @@ class CarewellController extends ActiveAuthController
   }
   public function billing_last_ten_payments($member_id)
   {
-    $data['_payment_breakdown'] = TblCalPaymentModel::where('member_id',$member_id)
-                                ->where('archived',1)
-                                ->orderBy('cal_payment_end','DESC')
-                                ->limit(10)
-                                ->get();
+    $data['_payment_breakdown'] = TblCalPaymentModel::where('member_id',$member_id)->where('archived',1)->orderBy('cal_payment_end','DESC')->limit(10)->get();
     $data['member_id']          = 'disabled';
     $data['ref']                = 'old';
     $data['archived']           = 1;  
@@ -1473,9 +1391,7 @@ class CarewellController extends ActiveAuthController
 
     $excels['_payment']       = TblPaymentModeModel::where('archived',0)->get();
     $excels['_deployment']    = TblCompanyDeploymentModel::where('tbl_company_deployment.company_id',$company_id)->get();
-    $excels['_coverage']      = TblCompanyCoveragePlanModel::where('tbl_company_coverage_plan.company_id',$company_id)
-                              ->join('tbl_coverage_plan','tbl_coverage_plan.coverage_plan_id','=','tbl_company_coverage_plan.coverage_plan_id')
-                              ->get();
+    $excels['_coverage']      = TblCompanyCoveragePlanModel::where('tbl_company_coverage_plan.company_id',$company_id)->CoveragePlan()->get();
     $excels['_member']        = TblMemberCompanyModel::where('tbl_member_company.archived',0)
                               ->where('tbl_member_company.company_id',$company_id)
                               ->where('tbl_member_company.member_payment_mode',$cal_template->cal_payment_mode)
@@ -1603,11 +1519,7 @@ class CarewellController extends ActiveAuthController
     
     $file               = $request->file('importCalMemberFile')->getRealPath();
     $_data              = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->all();
-    $companyData        = TblCompanyModel::join('tbl_cal','tbl_cal.company_id','=','tbl_company.company_id')
-                        ->where('tbl_company.company_id',$request->company_id)
-                        ->where('tbl_cal.cal_id',$request->cal_id)
-                        ->first();
-
+    $companyData        = TblCompanyModel::CompanyCal()->where('tbl_company.company_id',$request->company_id)->where('tbl_cal.cal_id',$request->cal_id)->first();
     $first              = $_data[0]; 
     
     if(isset($first['last_name'])&&isset($first['first_name'])&&isset($first['middle_name'])&&isset($first['birthdate']))
@@ -1783,9 +1695,10 @@ class CarewellController extends ActiveAuthController
   }
   public function billing_cal_close($cal_id)
   {
+    $sum                  = 0;
     $data['cal_info']     = TblCalModel::where('cal_id',$cal_id)->first();
     $data['_cal_member']  = TblCalMemberModel::where('cal_id',$cal_id)->get();
-    $sum = 0;
+    
     foreach($data['_cal_member'] as $amount)
     {
       $sum = $sum + $amount->cal_payment_amount;
@@ -1839,9 +1752,7 @@ class CarewellController extends ActiveAuthController
   }
   public function availment_create_approval()
   {
-    $data['_member']          = TblMemberModel::join('tbl_member_company','tbl_member_company.member_id','=','tbl_member.member_id')
-                              ->where('tbl_member_company.archived',0)
-                              ->get();
+    $data['_member']          = TblMemberModel::MemberCompany()->where('tbl_member_company.archived',0)->get();
     $data['_provider']        = TblProviderModel::where('archived',0)->get();
     $data['_availment']       = TblAvailmentModel::where('availment_parent_id',0)->get();
     $data['_procedure_doctor']= TblDoctorProcedureModel::where('archived',0)->get();
@@ -2033,16 +1944,13 @@ class CarewellController extends ActiveAuthController
     $data['_final_diagnosis'] = TblApprovalDiagnosisModel::where('approval_id',$approval_id)
                               ->join('tbl_diagnosis','tbl_diagnosis.diagnosis_id','=','tbl_approval_diagnosis.diagnosis_id')
                               ->get();
-    $data['_availed']         = TblApprovalProcedureModel::where('tbl_approval_procedure.approval_id',$approval_id)
-                              ->join('tbl_procedure','tbl_procedure.procedure_id','=','tbl_approval_procedure.procedure_id')
-                              ->join('tbl_diagnosis','tbl_diagnosis.diagnosis_id','=','tbl_approval_procedure.diagnosis_id')
-                              ->get();
+    $data['_availed']         = TblApprovalProcedureModel::where('tbl_approval_procedure.approval_id',$approval_id)->ProcedureDiagnosis()->get();
     $data['_doctor_assigned'] = TblApprovalDoctorModel::where('tbl_approval_doctor.approval_id',$approval_id)->ApprovalDoctor()->get();
-    $data['_payee_doctor']           = TblApprovalPayeeModel::where('approval_id',$approval_id)
+    $data['_payee_doctor']    = TblApprovalPayeeModel::where('approval_id',$approval_id)
                               ->where('type','doctor')
                               ->join('tbl_doctor','tbl_doctor.doctor_id','=','tbl_approval_payee.payee_id')
                               ->get();
-    $data['_payee_other']           = TblApprovalPayeeModel::where('approval_id',$approval_id)
+    $data['_payee_other']     = TblApprovalPayeeModel::where('approval_id',$approval_id)
                               ->where('type','payee')
                               ->get();
     $data['total_procedure']  = TblApprovalTotalModel::where('approval_id',$approval_id)->where('total_type','procedure')->first();
@@ -2115,24 +2023,16 @@ class CarewellController extends ActiveAuthController
   {
     $data['_provider']          = TblProviderModel::where('archived',0)->get();
     $data['payable_details']    = TblPayableModel::where('tbl_payable.payable_id',$payable_id)->PayableInfo()->first();
-    $data['_payable_approval']  =  TblPayableApprovalModel::where('payable_id',$payable_id)->where('tbl_member_company.archived',0)->PayableApproval()->get();
+    $data['_payable_approval']  = TblPayableApprovalModel::where('payable_id',$payable_id)->where('tbl_member_company.archived',0)->PayableApproval()->get();
 
     foreach ($data['_payable_approval'] as $key => $payable_approval) 
     {
-      $data['_payable_approval'][$key]['availed']   =  TblApprovalProcedureModel::where('tbl_approval_procedure.approval_id',$payable_approval->approval_id)
-                                                    ->join('tbl_procedure','tbl_procedure.procedure_id','=','tbl_approval_procedure.procedure_id')
-                                                    ->get();
-      $data['_payable_approval'][$key]['doctor']    =  TblApprovalDoctorModel::where('tbl_approval_doctor.approval_id',$payable_approval->approval_id)
-                                                    ->join('tbl_doctor','tbl_doctor.doctor_id','=','tbl_approval_doctor.doctor_id')
-                                                    ->get();
-      $data['_payable_approval'][$key]['doctor_fee']=  TblApprovalDoctorModel::where('tbl_approval_doctor.approval_id',$payable_approval->approval_id)
-                                                    ->sum('approval_doctor_charge_carewell');
-                                                    
-      $data['_payable_approval'][$key]['charge_carewell']= TblApprovalDoctorModel::where('tbl_approval_doctor.approval_id',$payable_approval->approval_id)
-                                                    ->sum('approval_doctor_charge_carewell');                                          
-                                                          
+      $TblApprovalDoctorModel                             = TblApprovalDoctorModel::where('tbl_approval_doctor.approval_id',$payable_approval->approval_id);
+      $data['_payable_approval'][$key]['availed']         = TblApprovalProcedureModel::where('tbl_approval_procedure.approval_id',$payable_approval->approval_id)->Procedure()->get();
+      $data['_payable_approval'][$key]['doctor']          = $TblApprovalDoctorModel->join('tbl_doctor','tbl_doctor.doctor_id','=','tbl_approval_doctor.doctor_id')->get();
+      $data['_payable_approval'][$key]['doctor_fee']      = $TblApprovalDoctorModel->sum('approval_doctor_charge_carewell');
+      $data['_payable_approval'][$key]['charge_carewell'] = $TblApprovalDoctorModel->sum('approval_doctor_charge_carewell');                                          
     }
-    // dd($data['_payable_approval'][$key]['doctor_fee']);
     return view('carewell.modal_pages.payable_details',$data);
   }
   /*REPORTS*/
@@ -2311,12 +2211,10 @@ class CarewellController extends ActiveAuthController
   /*SETTINGS*/
   public function settings_coverage_plan()
   {
-    $data['page'] = 'Coverage PLan';
-    $data['user'] = StaticFunctionController::global();
-
-    $data['_active_coverage_plan'] = TblCoveragePlanModel::where('archived',0)->paginate(10);
-    $data['_inactive_coverage_plan'] = TblCoveragePlanModel::where('archived',1)->paginate(10);
-
+    $data['page']                     = 'Coverage PLan';
+    $data['user']                     = StaticFunctionController::global();
+    $data['_active_coverage_plan']    = TblCoveragePlanModel::where('archived',0)->paginate(10);
+    $data['_inactive_coverage_plan']  = TblCoveragePlanModel::where('archived',1)->paginate(10);
     return view('carewell.pages.settings_coverage_plan',$data);
   }
 
@@ -2629,7 +2527,6 @@ class CarewellController extends ActiveAuthController
   }
   public function settings_coverage_plan_create_submit(Request $request)
   {
-
     $coverageData = new TblCoveragePlanModel;
     $coverageData->coverage_plan_name             = $request->coverage_plan_name;
     $coverageData->coverage_plan_preexisting      = $request->coverage_plan_preexisting;
@@ -2645,8 +2542,6 @@ class CarewellController extends ActiveAuthController
     $coverageData->coverage_plan_processing_fee   = $request->coverage_plan_processing_fee;
     $coverageData->coverage_plan_created          = Carbon::now();
     $coverageData->save();
-
-
     $session_array = array(0=>'annual',1=>'os_consultation',2=>'os_laboratory',3=>'emergency',4=>'confinement',5=>'dental',6=>'assistance');
 
     for($i=0;  $i<=6;  $i++)
@@ -2657,8 +2552,6 @@ class CarewellController extends ActiveAuthController
         Self::insert_all_session($arr,$coverageData->coverage_plan_id);
       }
     }
-    
-    
     if($coverageData->save())     
     {       
       return StaticFunctionController::returnMessage('success','COVERAGE PLAN'); 
@@ -2673,31 +2566,22 @@ class CarewellController extends ActiveAuthController
                                     ->groupBy('availment_id')
                                     ->join('tbl_availment','tbl_availment.availment_id','=','tbl_coverage_plan_procedure.availment_id') 
                                     ->get();
-
     foreach($data['_coverage_plan_covered'] as $key=>$availment)
     {
       $data['_coverage_plan_covered'][$key]['procedure']   = TblCoveragePlanProcedureModel::where('availment_id',$availment->availment_id)
                                     ->join('tbl_procedure','tbl_procedure.procedure_id','=','tbl_coverage_plan_procedure.procedure_id') 
                                     ->get();
-
     }
-    
-                                    
-    
     return view('carewell.modal_pages.settings_coverage_plan_details',$data);
-
   }
-
   /*ARCHIVED*/
   public function archived_submit(Request $request)
   {
-    
     return StaticFunctionController::archived_data($request->archived_id,$request->archived_name);
   }
   /*RESTORE*/
   public function restore_submit(Request $request)
   {
-    
     return StaticFunctionController::restore_data($request->restore_id,$request->restore_name);
   }
 }

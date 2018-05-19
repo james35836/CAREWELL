@@ -130,6 +130,10 @@ Route::get('/billing', 									'CarewellController@billing');
 Route::get('/billing/create_cal', 						'CarewellController@billing_create_cal');
 Route::post('/billing/create_cal/sumbit', 				'CarewellController@billing_create_cal_submit');
 Route::get('/billing/cal_details/{cal_id}', 			'CarewellController@billing_cal_details');
+
+Route::post('/billing/update_cal_details/sumbit', 		'CarewellController@billing_update_cal_details_submit');
+
+
 Route::get('/billing/import_cal_members/{cal_id}/{company_id}',    'CarewellController@billing_import_cal_members');
 Route::get('/billing/cal_download_template/{cal_id}/{company_id}', 'CarewellController@billing_cal_download_template');
 Route::post('/billing/cal_import_template_submit', 		'CarewellController@billing_cal_import_template');

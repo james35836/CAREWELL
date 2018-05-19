@@ -17,5 +17,10 @@ class TblDoctorProviderModel extends Model
         return $query;
                               
     }
+    public function  scopeProvider($query)
+    {
+    	$query->join('tbl_provider','tbl_provider.provider_id','=','tbl_doctor_provider.provider_id');
+    	return $query;
+    }
  
 }
