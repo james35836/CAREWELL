@@ -193,7 +193,7 @@
 										<th>CAREWELL ID</th>
 										<th>MEMBER NAME</th>
 										<th>DEPLOYMENT</th>
-										<th>ACTION</th>
+										<th>COVERAGE PLAN</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -203,7 +203,7 @@
 										<td>{{$company_member->member_carewell_id}}</td>
 										<td>{{$company_member->member_first_name." ".$company_member->member_last_name}}</td>
 										<td>{{$company_member->deployment_name}}</td>
-										<td>VIEW  MEMBERS</td>
+										<td>{{$company_member->coverage_plan_name}}</td>
 									</tr>
 									@endforeach
 								</tbody>
