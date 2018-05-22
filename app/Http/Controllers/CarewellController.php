@@ -305,9 +305,7 @@ class CarewellController extends ActiveAuthController
     $memberData->member_permanet_address    = StaticFunctionController::nullableToString($request->member_permanet_address);
     $memberData->member_present_address     = StaticFunctionController::nullableToString($request->member_present_address);
     $memberData->member_created             = Carbon::now();
-    
     $display_name                           = $memberData->member_first_name." ".$memberData->member_middle_name." ".$memberData->member_last_name;
-    
     $memberData->member_universal_id        = StaticFunctionController::generateUniversalId($display_name,$memberData->member_birthdate);
     $memberData->save();
 
@@ -1734,16 +1732,13 @@ class CarewellController extends ActiveAuthController
     {
       TblCalPaymentModel::where('cal_member_id',$cal_member->cal_member_id)->update($update);
     }
-
-    return StaticFunctionController::returnMessage('success','CAL CLOSED');    
-
+    return StaticFunctionController::returnMessage('success','CAL CLOSED');
   }
 
   /*MEDICAL*/
   public function availment()
   {
-
-  	$data['page']       = 'Availment';
+    $data['page']       = 'Availment';
     $data['_company']   = TblCompanyModel::where('archived',0)->get();
     $data['_provider']  = TblProviderModel::where('archived',0)->get();
     $data['user']       = StaticFunctionController::global();
@@ -1965,22 +1960,20 @@ class CarewellController extends ActiveAuthController
     $data['user']            = StaticFunctionController::global();
     $data['_provider']       = TblProviderModel::where('archived',0)->get();
     $data['_payable_open']   = TblPayableModel::where('tbl_payable.archived',0)->PayableInfo()->paginate(10);
+    $data['_payable_close']  = TblPayableModel::where('tbl_payable.archived',1)->PayableInfo()->paginate(10);
     foreach ($data['_payable_open'] as $key => $payable) 
     {
       $data['_payable_open'][$key]['approval_number']    =  TblPayableApprovalModel::where('payable_id',$payable->payable_id)
                                                     ->join('tbl_approval','tbl_approval.approval_id','=','tbl_payable_approval.approval_id')
                                                     ->get();
     }
-
-    $data['_payable_close']   = TblPayableModel::where('tbl_payable.archived',1)->PayableInfo()->paginate(10);
     foreach ($data['_payable_close'] as $key => $payable) 
     {
       $data['_payable_close'][$key]['approval_number']    =  TblPayableApprovalModel::where('payable_id',$payable->payable_id)
                                                     ->join('tbl_approval','tbl_approval.approval_id','=','tbl_payable_approval.approval_id')
                                                     ->get();
     }
-
-  	return view('carewell.pages.payable_center',$data);
+    return view('carewell.pages.payable_center',$data);
   }
 
   public function payable_create()
@@ -2058,7 +2051,7 @@ class CarewellController extends ActiveAuthController
     return view('carewell.pages.reports_availment',$data);
   }
 
-   public function reports_monitoring_end_per_month()
+  public function reports_monitoring_end_per_month()
   {
     $data['page']     = 'Ending Number Per Month Reports';
     $data['_company'] = TblCompanyModel::where('archived',0)->paginate(10);
@@ -2073,8 +2066,6 @@ class CarewellController extends ActiveAuthController
                                                     ->join('tbl_availment','tbl_availment.availment_id','=','tbl_coverage_plan_tag.availment_id')
                                                     ->get();
     }
-
-
     return view('carewell.pages.reports_end_per_month',$data);
   }
   
@@ -2088,9 +2079,9 @@ class CarewellController extends ActiveAuthController
   }
   public function reports_consolidation()
   {
-    $data['page']     = 'Consolidation Reports';
+    $data['page']       = 'Consolidation Reports';
     $data['_availment'] = TblAvailmentModel::where('availment_parent_id',0)->get();
-    $data['user']     = StaticFunctionController::global();
+    $data['user']       = StaticFunctionController::global();
 
     return view('carewell.pages.reports_consolidation',$data);
   }

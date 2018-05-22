@@ -88,7 +88,7 @@
 				<label>Email Address</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="text" name="member_email_address" id="member_email_address" class="form-control"/>
+				<input type="email" name="member_email_address" id="member_email_address" class="form-control"/>
 			</div>
 			<div class="col-md-2 form-content">
 				<label>Contact Number</label>

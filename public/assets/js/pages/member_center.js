@@ -29,38 +29,9 @@ function member_center()
 			update_member_confirm();
 			update_member_submit();
 
-			pagin();
+			
 		});
 
-	}
-	function pagin()
-	{
-		$('body').on('click','.create-member-submit',function() 
-	    {
-	    	$('.confirm-modal').remove();
-            $(".member-modal-body").html("<div class='member-ajax-loader' style='display:none;text-align: center; padding:50px;'><img src='/assets/loader/loading.gif'/></div");
-            $('.member-ajax-loader').show();
-	        $.ajax({
-	          	headers: {
-	              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-	        	},
-		        url:'/member/create_member/submit',
-		        method: "POST",
-		        data: ajaxData,
-		        dataType:"text",
-		        success: function(data)
-		        {
-		            setTimeout(function()
-					{
-						$('.member-ajax-loader').hide();
-						$('.member-modal-dialog').removeClass().addClass('modal-sm modal-dialog')
-						$('.member-modal-body').html(data);
-						$('.member-modal-footer').html(successButton);
-					}, 1000);
-		           
-		        }
-	        });
-	     });
 	}
 	
 	function create_member()
