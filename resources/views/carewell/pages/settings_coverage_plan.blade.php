@@ -37,7 +37,7 @@
                 <th>PLAN ADDED</th>
                 <th>ACTION</th>
               </tr>
-              @foreach($_active_coverage_plan as $coverage_plan)
+              {{-- @foreach($_active_coverage_plan as $coverage_plan)
               <tr>
                 <td>{{$coverage_plan->coverage_plan_id}}</td>
                 <td>{{$coverage_plan->coverage_plan_name}}</td>
@@ -60,11 +60,11 @@
                   </div>
                 </td>
               </tr>
-              @endforeach
+              @endforeach --}}
             </table>
           </div>
           <div class="box-footer clearfix">
-            @include('globals.pagination', ['paginator' => $_active_coverage_plan])
+            {{-- @include('globals.pagination', ['paginator' => $_active_coverage_plan]) --}}
           </div>
         </div>
         <!-- /.tab-pane -->
@@ -92,7 +92,7 @@
                 <th>PLAN ADDED</th>
                 <th>ACTION</th>
               </tr>
-              @foreach($_inactive_coverage_plan as $coverage_plan)
+              {{-- @foreach($_inactive_coverage_plan as $coverage_plan)
               <tr>
                 <td>{{$coverage_plan->coverage_plan_id}}</td>
                 <td>{{$coverage_plan->coverage_plan_name}}</td>
@@ -116,15 +116,14 @@
                   </div>
                 </td>
               </tr>
-              @endforeach
+              @endforeach --}}
             </table>
           </div>
           <div class="box-footer clearfix">
-            @include('globals.pagination', ['paginator' => $_inactive_coverage_plan])
+            {{-- @include('globals.pagination', ['paginator' => $_inactive_coverage_plan]) --}}
           </div>
         </div>
       </div>
-      <!-- /.tab-content -->
     </div>
   </div>
 </div>
