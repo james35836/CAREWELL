@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Carewell |  {{$page}}</title>
+    <link rel="icon" href="/assets/carewell.ico" type="image/ico" />
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <!-- TOP -->
@@ -40,7 +41,13 @@
       var pattern   = new RegExp(/[a-zåäö ]/i);
       return pattern.test(value);
     }
-    
+    function integer_only(event) 
+    {
+      $(this).val($(this).val().replace(/[^\d].+/, ""));
+      if ((event.which < 48 || event.which > 57)) {
+          event.preventDefault();
+      }
+    }
 
     $(document).ready(function()
     {

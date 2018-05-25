@@ -1,5 +1,6 @@
 <script>
 	$('input.string-only').keypress('keypress', string_only);//function in layout name string_only
+	$('input.integer-only').keypress('keypress', integer_only);
 </script>
 <div class="row box-globals">
 	<input type="hidden" id="doctor_id" value="{{$doctor_details->doctor_id}}">
@@ -22,8 +23,14 @@
 		<div class="col-md-4 form-content">
 			<select class="form-control" id="doctor_gender" readonly>
 				<option>{{$doctor_details->doctor_gender}}</option>
+				@if($doctor_details->doctor_gender!="MALE"&&$doctor_details->doctor_gender!="FEMALE")
 				<option>MALE</option>
 				<option>FEMALE</option>
+				@elseif($doctor_details->doctor_gender!="MALE")
+				<option>MALE</option>
+				@elseif($doctor_details->doctor_gender!="FEMALE")
+				<option>FEMALE</option>
+				@endif
 			</select>
 		</div>
 	</div>

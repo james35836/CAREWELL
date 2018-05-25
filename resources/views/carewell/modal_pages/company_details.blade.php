@@ -1,3 +1,7 @@
+<script>
+	$('input.string-only').keypress('keypress', string_only);//function in layout name string_only
+    $('input.integer-only').keypress('keypress', integer_only);
+</script>
 <div class="row box-globals">
 	<input type="hidden" value="{{$company_details->company_id}}" id="company_id" name="">
 	<div class="form-holder">
@@ -49,13 +53,13 @@
 			<label>Contact Person(1)</label>
 		</div>
 		<div class="col-md-4 form-content">
-			<input type="text" value="{{$company_details->contact_person_name}}" name="contact_person_name" id="contact_person_name" class="form-control" placeholder="NAME" readonly/>
+			<input type="text" value="{{$company_details->contact_person_name}}" name="contact_person_name" id="contact_person_name" class="form-control string-only" placeholder="NAME" readonly/>
 		</div>
 		<div class="col-md-2 form-content">
-			<input type="text" value="{{$company_details->contact_person_position}}" name="contact_person_position" id="contact_person_position" class="form-control" placeholder="POSITION" readonly/>
+			<input type="text" value="{{$company_details->contact_person_position}}" name="contact_person_position" id="contact_person_position" class="form-control string-only" placeholder="POSITION" readonly/>
 		</div>
 		<div class="col-md-4 form-content">
-			<input type="text" value="{{$company_details->contact_person_number}}" name="contact_person_number" id="contact_person_number" class="form-control" placeholder="CONTACT NUMBER" readonly/>
+			<input type="text" value="{{$company_details->contact_person_number}}" name="contact_person_number" id="contact_person_number" class="form-control integer-only" placeholder="CONTACT NUMBER" readonly/>
 		</div>
 	</div>
 	<div class="form-holder">
@@ -63,13 +67,13 @@
 			<label>Contact Person(2)</label>
 		</div>
 		<div class="col-md-4 form-content">
-			<input type="text" value="{{$company_details->contact_person_names}}" name="contact_person_names" id="contact_person_names" class="form-control" placeholder="NAME" readonly/>
+			<input type="text" value="{{$company_details->contact_person_names}}" name="contact_person_names" id="contact_person_names" class="form-control string-only" placeholder="NAME" readonly/>
 		</div>
 		<div class="col-md-2 form-content">
-			<input type="text" value="{{$company_details->contact_person_positions}}" name="contact_person_positions" id="contact_person_positions" class="form-control" placeholder="POSITION" readonly/>
+			<input type="text" value="{{$company_details->contact_person_positions}}" name="contact_person_positions" id="contact_person_positions" class="form-control string-only" placeholder="POSITION" readonly/>
 		</div>
 		<div class="col-md-4 form-content">
-			<input type="text" value="{{$company_details->contact_person_numbers}}" name="contact_person_numbers" id="contact_person_numbers" class="form-control" placeholder="CONTACT NUMBER" readonly/>
+			<input type="text" value="{{$company_details->contact_person_numbers}}" name="contact_person_numbers" id="contact_person_numbers" class="form-control integer-only" placeholder="CONTACT NUMBER" readonly/>
 		</div>
 	</div>
 </div>
@@ -88,7 +92,9 @@
 						<label>Contract Number</label>
 					</div>
 					<div class="col-md-4 form-content">
-						<input type="text" value="{{$company_contract->contract_number}}" id="contract_number" class="form-control"/>
+						<center>
+							<p style="font-size:20px;">{{$company_contract->contract_number}}</p>
+						</center>
 					</div>
 				</div>
 				<div class="form-holder ">

@@ -47,7 +47,7 @@
 				<label>Premium</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="text" name="coverage_plan_premium" id="coverage_plan_premium" class="form-control">
+				<input type="number" name="coverage_plan_premium" id="coverage_plan_premium" class="form-control">
 			</div>
 		</div>
 		<div class="row form-holder ">

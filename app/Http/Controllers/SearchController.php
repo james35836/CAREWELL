@@ -91,15 +91,12 @@ class SearchController extends ActiveAuthController
 					break;
 
 					case 'doctor':
-			        	$data['_doctor_active']    = TblDoctorProviderModel::where('tbl_doctor_provider.archived',0)->where('tbl_doctor_provider.provider_id',$id)->DoctorProvider()->paginate(10);
+			        	$data['_doctor_active']    = TblDoctorProviderModel::where('tbl_doctor.archived',1)->where('tbl_doctor_provider.archived',0)->where('tbl_doctor_provider.provider_id',$id)->DoctorProvider()->paginate(10);
 											    foreach ($data['_doctor_active'] as $key => $doctor) 
 											    {
-											      	$data['_doctor_active'][$key]['specialization']  =  TblDoctorSpecializationModel::where('doctor_id',$doctor->doctor_id)
-											                                                ->join('tbl_specialization','tbl_specialization.specialization_id','=','tbl_doctor_specialization.specialization_id')
-											                                                ->get();
-											      	$data['_doctor_active'][$key]['provider']        =  TblDoctorProviderModel::where('doctor_id',$doctor->doctor_id)
-											                                                ->join('tbl_provider','tbl_provider.provider_id','=','tbl_doctor_provider.provider_id')
-											                                                ->get();
+											      	$data['_doctor_active'][$key]['provider']  	=  TblDoctorProviderModel::where('doctor_id',$doctor->doctor_id)
+											                                                	->join('tbl_provider','tbl_provider.provider_id','=','tbl_doctor_provider.provider_id')
+											                                                	->get();
 											    }
 			        	$output = view('carewell.filtering.doctor_filtering_active',$data);
 					break;
@@ -127,17 +124,14 @@ class SearchController extends ActiveAuthController
 	        			$output = view('carewell.filtering.member_filtering_inactive',$data);
 					break;
 					case 'doctor':
-			        	$data['_doctor_inactive']    = TblDoctorProviderModel::where('tbl_doctor_provider.archived',1)->where('tbl_doctor_provider.provider_id',$id)->DoctorProvider()->paginate(10);
-											    foreach ($data['_doctor_inactive'] as $key => $doctor) 
-											    {
-											      	$data['_doctor_inactive'][$key]['specialization']  =  TblDoctorSpecializationModel::where('doctor_id',$doctor->doctor_id)
-											                                                ->join('tbl_specialization','tbl_specialization.specialization_id','=','tbl_doctor_specialization.specialization_id')
-											                                                ->get();
-											      	$data['_doctor_inactive'][$key]['provider']        =  TblDoctorProviderModel::where('doctor_id',$doctor->doctor_id)
-											                                                ->join('tbl_provider','tbl_provider.provider_id','=','tbl_doctor_provider.provider_id')
-											                                                ->get();
-											    }
-			        	$output = view('carewell.filtering.doctor_filtering_inactive',$data);
+			        	$data['_doctor_inactive']    = TblDoctorProviderModel::where('tbl_doctor.archived',1)->where('tbl_doctor_provider.archived',0)->where('tbl_doctor_provider.provider_id',$id)->DoctorProvider()->paginate(10);
+					    foreach ($data['_doctor_inactive'] as $key => $doctor) 
+					    {
+					      	$data['_doctor_inactive'][$key]['provider']        =  TblDoctorProviderModel::where('doctor_id',$doctor->doctor_id)
+					                                                ->join('tbl_provider','tbl_provider.provider_id','=','tbl_doctor_provider.provider_id')
+					                                                ->get();
+					    }
+					    $output = view('carewell.filtering.doctor_filtering_inactive',$data);
 					break;
 					case 'billing':
 			        	$data['_cal_close']  =  TblCalModel::where('tbl_cal.archived',0)->where('tbl_cal.company_id', $id)->join('tbl_company','tbl_company.company_id','=','tbl_cal.company_id')->paginate(10);
@@ -334,20 +328,13 @@ class SearchController extends ActiveAuthController
 					break;
 					case 'doctor':
 				        $data['_doctor_inactive'] = TblDoctorModel::where('tbl_doctor.archived',1)
-				        						->where(function($query)use($key)
-					                            {
-					                                $query->where('tbl_doctor.doctor_last_name','like','%'.$key.'%');
-					                                $query->orWhere('tbl_doctor.doctor_first_name','like','%'.$key.'%');
-					                            })
-				        						->paginate(10);
+			        						->where('tbl_doctor.doctor_full_name','like','%'.$key.'%')
+			        						->paginate(10);
 					    foreach ($data['_doctor_inactive'] as $key => $doctor) 
 					    {
-					      $data['_doctor_inactive'][$key]['specialization']  =  TblDoctorSpecializationModel::where('doctor_id',$doctor->doctor_id)
-					                                                ->join('tbl_specialization','tbl_specialization.specialization_id','=','tbl_doctor_specialization.specialization_id')
-					                                                ->get();
-					      $data['_doctor_inactive'][$key]['provider']        =  TblDoctorProviderModel::where('doctor_id',$doctor->doctor_id)
-					                                                ->join('tbl_provider','tbl_provider.provider_id','=','tbl_doctor_provider.provider_id')
-					                                                ->get();
+					      $data['_doctor_inactive'][$key]['provider']   =  TblDoctorProviderModel::where('doctor_id',$doctor->doctor_id)
+					                                                	->join('tbl_provider','tbl_provider.provider_id','=','tbl_doctor_provider.provider_id')
+					                                                	->get();
 					    }
 				        $output = view('carewell.filtering.doctor_filtering_inactive',$data);
 					break;

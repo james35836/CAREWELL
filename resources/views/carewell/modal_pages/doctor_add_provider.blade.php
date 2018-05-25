@@ -9,7 +9,9 @@
 				<select name="provider_name[]" class="provider_name form-control ">
 					<option>SELECT PROVIDER</option>
 					@foreach($_provider as $provider)
+					@if($provider->ref!="hidden")
 					<option value="{{$provider->provider_id}}">{{$provider->provider_name}}</option>
+					@endif
 					@endforeach
 				</select>
 				<span class="input-group-btn">

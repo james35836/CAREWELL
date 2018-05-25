@@ -172,9 +172,9 @@ Route::get('/reports/breakdown', 						'CarewellController@reports_breakdown');
 
 Route::get('/reports/consolidation', 					'CarewellController@reports_consolidation');
 Route::get('/reports/member_cal',						'CarewellController@reports_member_cal');
-Route::get('/reports/member_cal/{ref}/{member_id}',						'CarewellController@reports_member_cal_detail');
+Route::get('/reports/member_cal/{ref}/{member_id}',		'CarewellController@reports_member_cal_detail');
 
-Route::post('/reports/member_cal/date_filter/{ref}',						'CarewellController@reports_member_cal_month_filter_date');
+Route::post('/reports/member_cal/date_filter/{ref}',	'CarewellController@reports_member_cal_month_filter_date');
 
 Route::get('/reports/member_cal/excel_report/{ref}/{val_key}/{member_id}', 'CarewellController@reports_export_excel');
 

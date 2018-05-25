@@ -168,11 +168,19 @@ class CarewellController extends ActiveAuthController
   }
   public function company_add_coverage_plan($company_id)
   {
+
     $data['company_id']       = $company_id;
-    $company_coverage         = TblCompanyCoveragePlanModel::where('company_id',$company_id)->get();
-    foreach($company_coverage as $coverage)
+    $_coverage                = TblCompanyCoveragePlanModel::where('company_id',$company_id)->get();
+    $data['_coverage_plan']   = TblCoveragePlanModel::where('archived',0)->get();
+    foreach($_coverage as $keys=>$coverage_plan)
     {
-      $data['_coverage_plan'] = TblCoveragePlanModel::where('coverage_plan_id','!=',$coverage->coverage_plan_id)->get();
+      foreach($data['_coverage_plan'] as $key=>$coverage)
+      {
+        if($coverage->coverage_plan_id==$coverage_plan->coverage_plan_id)
+        {
+          $data['_coverage_plan'][$key]['ref']="hidden";
+        }
+      }
     }
     return view('carewell.modal_pages.company_add_plan',$data);
   }
@@ -1016,8 +1024,10 @@ class CarewellController extends ActiveAuthController
     $update['doctor_contact_number']= $request->doctor_contact_number;
     $update['doctor_email_address'] = $request->doctor_email_address;
     $check =  TblDoctorModel::where('doctor_id',$request->doctor_id)->update($update);
-
-    return StaticFunctionController::returnMessage('success','DOCTOR');    
+    if($check)
+    {
+      return StaticFunctionController::returnMessage('success','DOCTOR');   
+    } 
   }
 
   public function add_doctor()
@@ -1202,19 +1212,43 @@ class CarewellController extends ActiveAuthController
   public function doctor_add_doctor_provider($doctor_id)
   {
     $data['doctor_id'] = $doctor_id;
+    $_doctor_provider  = TblDoctorProviderModel::where('doctor_id',$doctor_id)->get();  
     $data['_provider'] = TblProviderModel::where('archived',0)->get();
+    foreach($_doctor_provider as $keys=>$doctor_provider)
+    {
+      foreach($data['_provider'] as $key=>$provider)
+      {
+        if($provider->provider_id==$doctor_provider->provider_id)
+        {
+          $data['_provider'][$key]['ref']="hidden";
+        }
+      }
+    }
     return view('carewell.modal_pages.doctor_add_provider',$data);
   }
   public function doctor_add_doctor_provider_submit(Request $request)
   {
+    $countInsert   = 0;
+    $countReject   = 0;
     foreach($request->doctorProviderData as $provider_id)
     {
-      $providerData              = new TblDoctorProviderModel;
-      $providerData->provider_id = $provider_id;
-      $providerData->doctor_id   = $request->doctor_id;
-      $providerData->save();
+      $doctor_provider  = TblDoctorProviderModel::where('provider_id',$provider_id)->where('doctor_id',$request->doctor_id)->count();  
+      if($doctor_provider==0)
+      {
+        $providerData              = new TblDoctorProviderModel;
+        $providerData->provider_id = $provider_id;
+        $providerData->doctor_id   = $request->doctor_id;
+        $providerData->save();
+        
+        $countInsert++;
+      }
+      else
+      {
+        $countReject++;
+      }
     }
-    return StaticFunctionController::returnMessage('success','PROVIDER');
+    return '<center><b><span class="color-red">'.$countInsert.' inserted<br>'. $countReject.' rejected</span></b></center>';
+    
   }
   
   /*BILLING*/

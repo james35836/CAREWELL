@@ -182,18 +182,32 @@ function doctor_center()
 	{
 		$('body').on('click','.save-doctor-confirm',function() 
 		{
-			var	confirmModalMessage  = 'Are you sure you want to update this doctor?';
-			var confirmModalAction   = 'update-doctor-submit';
-			globals.confirm_modals(confirmModalMessage,confirmModalAction);
+			var inputs = $('#doctor_email_address');
+			if(globals.checking_null_validation(document.getElementById('doctor_full_name').value,"FULL NAME")=="")
+			{}
+			else if(globals.checking_null_validation(document.getElementById('doctor_gender').value,"GENDER")=="")
+			{}
+			else if(globals.checking_null_validation(document.getElementById('doctor_contact_number').value,"CONTACT NUMBER")=="")
+			{}
+		    else if(globals.checking_null_validation(document.getElementById('doctor_email_address').value,"EMAIL ADDRESS")=="")
+			{}
+		    else if(globals.global_input_email(inputs)=="error")
+			{
+				toastr.error('Email is in a wrong format.', 'Something went wrong!', {timeOut: 3000})
+			}
+			else
+			{
+				var	confirmModalMessage  = 'Are you sure you want to update this doctor?';
+				var confirmModalAction   = 'update-doctor-submit';
+				globals.confirm_modals(confirmModalMessage,confirmModalAction);
 
-			doctorData.append("doctor_id",     document.getElementById('doctor_id').value);
-			doctorData.append("doctor_full_name",     document.getElementById('doctor_full_name').value);
-	        doctorData.append("doctor_gender", 			document.getElementById('doctor_gender').value);
-	        doctorData.append("doctor_contact_number", 	document.getElementById('doctor_contact_number').value);
-	        doctorData.append("doctor_email_address", 	document.getElementById('doctor_email_address').value);
+				doctorData.append("doctor_id",     			document.getElementById('doctor_id').value);
+				doctorData.append("doctor_full_name",     	document.getElementById('doctor_full_name').value);
+		        doctorData.append("doctor_gender", 			document.getElementById('doctor_gender').value);
+		        doctorData.append("doctor_contact_number", 	document.getElementById('doctor_contact_number').value);
+		        doctorData.append("doctor_email_address", 	document.getElementById('doctor_email_address').value);
+			}
 		});
-
-		
 	}
 
 	function update_doctor_submit()
