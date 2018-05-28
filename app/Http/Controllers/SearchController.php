@@ -263,6 +263,10 @@ class SearchController extends ActiveAuthController
 									                            ->paginate(10);
 				        $output = view('carewell.filtering.availment_filtering_active',$data);
 					break;
+					case 'coverage_plan':
+					    $data['_active_coverage_plan']    = TblCoveragePlanModel::where('archived',0)->where('coverage_plan_name','like','%'.$key.'%')->paginate(10);
+				        $output = view('carewell.filtering.coverage_filtering_active',$data);
+					break;
 				}
 		  	}
 		  	else if($request->val_archived==1)
@@ -337,6 +341,10 @@ class SearchController extends ActiveAuthController
 					                                                	->get();
 					    }
 				        $output = view('carewell.filtering.doctor_filtering_inactive',$data);
+					break;
+					case 'coverage_plan':
+					    $data['_active_coverage_plan']    = TblCoveragePlanModel::where('archived',1)->where('coverage_plan_name','like','%'.$key.'%')->paginate(10);
+				        $output = view('carewell.filtering.coverage_filtering_inactive',$data);
 					break;
 				}
 				

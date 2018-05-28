@@ -444,19 +444,21 @@ function globals()
 		reload_page();
 
 		archived_data();
-        restore_data();
+        	restore_data();
 
-        add_remove_element();
+        	add_remove_element();
 
-        table_sorter();
-        table_action_add_remove();
+        	table_sorter();
+        	table_action_add_remove();
        
 
-        filtering();
-        searching();
+        	filtering();
+        	searching();
 
-        event_run_paginate();
-        enable_element();
+        	event_run_paginate();
+        	enable_element();
+
+        	
     }
     function enable_element()
     {
@@ -585,20 +587,20 @@ function globals()
 		$('body').on('click','.archived-submit',function() 
 		{
 			$(".confirm-modal-body").html('<h1 style="text-align:center;"><i class="fa fa-spinner fa-pulse fa-fw"></i></h1>');
-	        $(".confirm-ajax-loader").show();
-	        $('.confirm-modal-title').html("MESSAGE");
-	        $.ajax({
+	          $(".confirm-ajax-loader").show();
+	        	$('.confirm-modal-title').html("MESSAGE");
+	        	$.ajax({
 				headers: {
 				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 				},
 				url:'/archived/submit',
 				method: "POST",
-		        data: archivedData,
-		        contentType:false,
-	            cache:false,
-	            processData:false,
+		        	data: archivedData,
+		        	contentType:false,
+	            	cache:false,
+	            	processData:false,
 				success: function(data)
-	            {
+	            	{
 					setTimeout(function()
 					{
 						$(".confirm-ajax-loader").remove();
@@ -623,25 +625,24 @@ function globals()
 			restoreData.append("restore_name", 	$(this).data('name'));
 			ajaxData.tdCloser  	= $(this).closest('tr');
 			ajaxData.name 		= $(this).data('name');
-			
 		});
 		$('body').on('click','.restore-submit',function() 
 		{
 			$(".confirm-modal-body").html('<h1 style="text-align:center;"><i class="fa fa-spinner fa-pulse fa-fw"></i></h1>');
-	        $(".confirm-ajax-loader").show();
-	        $('.confirm-modal-title').html("MESSAGE");
-	        $.ajax({
+	        	$(".confirm-ajax-loader").show();
+	        	$('.confirm-modal-title').html("MESSAGE");
+	        	$.ajax({
 				headers: {
 				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 				},
 				url:'/restore/submit',
 				method: "POST",
-		        data: restoreData,
-		        contentType:false,
-	            cache:false,
-	            processData:false,
+		        	data: restoreData,
+		       	contentType:false,
+	            	cache:false,
+	            	processData:false,
 				success: function(data)
-	            {
+	            	{
 					setTimeout(function()
 					{
 						$(".confirm-ajax-loader").remove();
@@ -653,25 +654,24 @@ function globals()
 					}, 800);
 				}
 			});
-			
-        });
+		});
 	}
 	
-    function reload_page()
-    {
-    	$('body').on('click','.reload-btn',function()
+    	function reload_page()
     	{
-    		location.reload();
-    	});
-    }
-    function check_all_checkbox()
-    {
-    	$('body').on('click','.checkAllCheckbox',function (e) 
+	    	$('body').on('click','.reload-btn',function()
+	    	{
+	    		location.reload();
+	    	});
+    	}
+    	function check_all_checkbox()
     	{
+    		$('body').on('click','.checkAllCheckbox',function (e) 
+    		{
 		    $(this).closest('table').find('td input:checkbox').prop('checked', this.checked);
 		});
-    }
-    function add_select_option()
+    	}
+    	function add_select_option()
 	{
 		$('body').on("click",".add-new-option",function()
 		{
@@ -686,22 +686,20 @@ function globals()
 		});
 		$('body').on('click','.add-option-submit',function () 
 		{
-			
-            var newopt 	= $('.new-option-name').val();
-            var newData = ajaxData.newOption;
-            $('.add-option1').remove();
-            if (newopt == '') 
-            {
-                toastr.error('Add option first before submit.', 'Something went wrong!', {timeOut: 3000})
-                return;
-            }
-            else
-            {
-            	newData.append('<option selected="selected">'+newopt+'</option>');
-        		$('.add-option-modal').remove();
-        	}
-
-        });
+			var newopt 	= $('.new-option-name').val();
+            	var newData = ajaxData.newOption;
+            	$('.add-option1').remove();
+            	if (newopt == '') 
+            	{
+                	toastr.error('Add option first before submit.', 'Something went wrong!', {timeOut: 3000})
+                	return;
+            	}
+            	else
+            	{
+            		newData.append('<option selected="selected">'+newopt+'</option>');
+        			$('.add-option-modal').remove();
+        		}
+        	});
 	}
 	
 	function table_sorter()
@@ -709,10 +707,10 @@ function globals()
 		$('body').on('click','th.live-search',function()
 		{
 			var table = $(this).parents('table').eq(0)
-		    var rows = table.find('tr:gt(0)').toArray().sort(comparer($(this).index()))
-		    this.asc = !this.asc
-		    if (!this.asc){rows = rows.reverse()}
-		    for (var i = 0; i < rows.length; i++){table.append(rows[i])}
+		    	var rows = table.find('tr:gt(0)').toArray().sort(comparer($(this).index()))
+		    	this.asc = !this.asc
+		    	if (!this.asc){rows = rows.reverse()}
+		    	for (var i = 0; i < rows.length; i++){table.append(rows[i])}
 		});
 		function comparer(index) 
 		{
@@ -746,9 +744,7 @@ function globals()
 			
 			$nrow.find('button.remove-row').attr('data-number', number+1);
 			$nrow.find('.countThis').val('0 ITEMS');
-		
 		});
-
 		$('body').on("click",".remove-row", function()
 		{
 			var $table  = $(this).closest('table');
@@ -763,7 +759,6 @@ function globals()
 			{
 				$(this).closest("tr").remove();
 			}
-			
 		});
 	}
 	
@@ -771,10 +766,9 @@ function globals()
 	{
 		$('body').on("click",".add-element", function()
 		{
-			var $div = $(this).closest('div.form-element');
+			var $div  = $(this).closest('div.form-element');
 			var $this = $(this);
 			$nelement = $div.find('div.my-element:first').removeClass('my-select').clone().appendTo($div);
-			
 			
 		});
 		$('body').on("click",".remove-element", function()
@@ -789,8 +783,8 @@ function globals()
 			{
 				$(this).closest("div.my-element").remove();
 			}
-			
 		});
 	}
+	
 	
 }

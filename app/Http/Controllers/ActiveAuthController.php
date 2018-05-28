@@ -16,6 +16,7 @@ class ActiveAuthController extends Controller
 	{
 		if(!session('active') || !session('user_id'))
 	    {
+	    	
 	    	Session::flash('error', 'Session Expired');
 			return Redirect::to("/")->send();
 	    }
