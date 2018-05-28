@@ -170,6 +170,8 @@ Route::post('/reports/member_cal/date_filter/{ref}',						'CarewellController@re
 Route::get('/reports/member_cal/excel_report/{ref}/{val_key}/{member_id}', 'CarewellController@reports_export_excel');
 
 
+Route::post('/reports/member_cal/wew', 'TestController@test_search');
+
 /*SETTINGS*/
 
 Route::get('/settings/coverage', 				    	'CarewellController@settings_coverage_plan');

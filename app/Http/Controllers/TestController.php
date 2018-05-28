@@ -25,6 +25,11 @@ class TestController extends Controller
     return $user;
   }
 
+  public function test_search(Request $request)
+  {
+    dd($request->search_member_cal);
+  }
+
  public function export_pdf()
  {
       $data["page"] = "Monthly Government Forms";

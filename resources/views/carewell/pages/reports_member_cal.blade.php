@@ -32,10 +32,18 @@ return  t;
       <!-- Custom Tabs -->
       <div class="nav-tabs-custom">
         <ul class="nav nav-tabs">
-          <li class="active"><a href="#open" data-toggle="tab">MONTHLY MONITORING</a></li>        
+          <li class="active"><a href="#open" data-toggle="tab">PAYMENT MONITORING</a></li>        
         </ul>
         <div class="tab-content">
             <div class="table-responsive no-padding">
+              <div class="col-md-3 col-xs-12 pull-right">
+                <div class="input-group ">
+                  <input type="text" id= "search_member_cal" class="form-control">
+                  <span class="input-group-btn">
+                    <button type="button" class="btn btn-default"><i class="fa fa-search"></i></button>
+                  </span>
+                </div>
+              </div>
               <table class="table table-hover table-bordered">
                 <tr class="titlerow">
                   <th>UNIVERSAL ID</th>

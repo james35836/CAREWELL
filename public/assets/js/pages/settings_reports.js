@@ -17,6 +17,8 @@ function settings_reports()
 		{
 			member_report();
 			searching();
+			//try
+			search_member_cal();
 
 		});
 
@@ -64,6 +66,37 @@ function settings_reports()
 			});
 		});
 	}
+
+	//try
+	function search_member_cal()
+	{
+		$('#search_member_cal').keyup(function()
+		{
+			var data = new FormData();
+
+			data.append('search_member_cal', $(this).val());
+
+			$.ajax({
+				headers: {
+				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				},
+				url:'/reports/member_cal/wew',
+				method: "POST",
+		        data: data,
+		        contentType:false,
+	            cache:false,
+	            processData:false,
+
+				success: function(data)
+				{
+					table.html(data);
+				}
+			});
+		});
+
+
+	}
+	//try
 
 	function download_cal_template()
 	{
