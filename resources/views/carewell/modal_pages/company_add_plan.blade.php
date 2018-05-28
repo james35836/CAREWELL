@@ -10,7 +10,9 @@
 					<select class="form-control coverage_plan_name" name="coverage_plan_name[]" id="coverage_plan">
 						<option>SELECT COVERAGE</option>
 						@foreach($_coverage_plan as $coverage_plan)
+						@if($coverage_plan->ref!="hidden")
 						<option value="{{$coverage_plan->coverage_plan_id}}">{{$coverage_plan->coverage_plan_name}}</option>
+						@endif
 						@endforeach
 					</select>
 					<span class="input-group-btn">

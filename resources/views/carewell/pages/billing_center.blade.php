@@ -33,7 +33,7 @@
               </div>
             </div>
           </div>
-          <div id="showTable">
+          <div id="showTable" class="load-data load-open-cal" data-target="load-open-cal">
             <div class="box-body table-responsive no-padding">
               <table class="table table-hover table-bordered">
                 <tr>
@@ -61,7 +61,7 @@
                       <span class="sr-only">Toggle Dropdown</span>
                       </button>
                       <ul class="dropdown-menu" role="menu" style="position: absolute !important;">
-                        <li><button type="button" data-cal_id="{{$cal_open->cal_id}}" data-company_id="{{$cal_open->company_id}}" class="btn btn-link cal-view-details"><i class="fa fa-eye btn-icon"></i>  View Details</button></li>
+                        <li><button type="button" data-cal_id="{{$cal_open->cal_id}}" data-reference="{{$cal_open->reference}}" data-company_id="{{$cal_open->company_id}}" class="btn btn-link cal-view-details"><i class="fa fa-eye btn-icon"></i>  View Details</button></li>
                         <?php $total = $cal_open->members + $cal_open->new_member; ?>
                         @if($total!=0)
                         <li><button type="button" data-cal_id="{{$cal_open->cal_id}}" class="btn btn-link close-cal"><i class="fa fa-trash btn-icon"></i> Mark as Close</button></li>
@@ -75,7 +75,7 @@
               </table>
             </div>
             <div class="box-footer clearfix">
-              @include('globals.pagination', ['paginator' => $_cal_open])
+              @include('globals.pagination_v2', ['paginator' => $_cal_open])
             </div>
           </div>
         </div>
@@ -98,7 +98,7 @@
               </div>
             </div>
           </div>
-          <div id="showTable">
+          <div id="showTable" class="load-data load-pending-cal" data-target="load-pending-cal">
             <div class="box-body table-responsive no-padding">
               <table class="table table-hover table-bordered">
                 <tr>
@@ -126,7 +126,7 @@
                       <span class="sr-only">Toggle Dropdown</span>
                       </button>
                       <ul class="dropdown-menu" role="menu" style="position: absolute !important;">
-                        <li><button type="button" data-cal_id="{{$cal_pending->cal_id}}" data-company_id="{{$cal_pending->company_id}}" class="btn btn-link cal-view-details"><i class="fa fa-eye btn-icon"></i>  View Details</button></li>
+                        <li><button type="button" data-cal_id="{{$cal_pending->cal_id}}" data-reference="{{$cal_pending->reference}}" data-company_id="{{$cal_pending->company_id}}" class="btn btn-link cal-view-details"><i class="fa fa-eye btn-icon"></i>  View Details</button></li>
                         <li><button type="button" data-cal_id="{{$cal_pending->cal_id}}" class="btn btn-link close-cal"><i class="fa fa-trash btn-icon"></i> Mark as Close</button></li>
                       </ul>
                     </div>
@@ -137,7 +137,7 @@
             </div>
           </div>
           <div class="box-footer clearfix">
-            @include('globals.pagination', ['paginator' => $_cal_pending])
+            @include('globals.pagination_v2', ['paginator' => $_cal_pending])
           </div>
         </div>
         <div class="tab-pane" id="close">
@@ -159,7 +159,7 @@
               </div>
             </div>
           </div>
-          <div id="showTable">
+          <div id="showTable" class="load-data load-close-cal" data-target="load-close-cal">
             <div class="box-body table-responsive no-padding">
               <table class="table table-hover table-bordered">
                 <tr>
@@ -187,7 +187,7 @@
                       <span class="sr-only">Toggle Dropdown</span>
                       </button>
                       <ul class="dropdown-menu" role="menu" style="position: absolute !important;">
-                        <li><button type="button" data-cal_id="{{$cal_close->cal_id}}" data-company_id="{{$cal_close->company_id}}" class="btn btn-link cal-view-details"><i class="fa fa-eye btn-icon"></i>  View Details</button></li>
+                        <li><button type="button" data-cal_id="{{$cal_close->cal_id}}" data-reference="{{$cal_close->reference}}" data-company_id="{{$cal_close->company_id}}" class="btn btn-link cal-view-details"><i class="fa fa-eye btn-icon"></i>  View Details</button></li>
                       </ul>
                     </div>
                   </td>
@@ -196,7 +196,7 @@
               </table>
             </div>
             <div class="box-footer clearfix">
-              @include('globals.pagination', ['paginator' => $_cal_close])
+              @include('globals.pagination_v2', ['paginator' => $_cal_close])
             </div>
           </div>
         </div>

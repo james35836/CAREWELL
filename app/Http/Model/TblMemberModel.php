@@ -25,5 +25,15 @@ class TblMemberModel extends Model
               // ->where('member_birthdate',$member_birthdate);
         return $query;
     }
+    public function scopeMemberCards($query)
+    {
+        $query ->join('tbl_member_government_card','tbl_member_government_card.member_id','=','tbl_member.member_id');
+        return $query;
+    }
+    public function scopeMemberCompany($query)
+    {
+        $query->join('tbl_member_company','tbl_member_company.member_id','=','tbl_member.member_id');
+        return $query;
+    }
     
 }

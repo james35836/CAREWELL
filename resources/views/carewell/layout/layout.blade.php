@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Carewell |  {{$page}}</title>
+    <link rel="icon" href="/assets/carewell.ico" type="image/ico" />
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <!-- TOP -->
@@ -34,9 +35,19 @@
     <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet">
     
     <script>
-    $( function() {
-      $( "#datepicker" ).datepicker();
-    } );
+    function string_only(event) 
+    {
+      var value   = String.fromCharCode(event.which);
+      var pattern   = new RegExp(/[a-zåäö ]/i);
+      return pattern.test(value);
+    }
+    function integer_only(event) 
+    {
+      $(this).val($(this).val().replace(/[^\d].+/, ""));
+      if ((event.which < 48 || event.which > 57)) {
+          event.preventDefault();
+      }
+    }
 
     $(document).ready(function()
     {
@@ -58,9 +69,17 @@
       {
         text-transform: lowercase !important;
       }
+      input[type="email"]
+      {
+        text-transform: lowercase !important;
+      }
       span
       {
         cursor: pointer;
+      }
+      input.invalid, textarea.invalid
+      {
+        border: 2px solid red;
       }
     </style>
   </head>
@@ -303,6 +322,19 @@
         @endif
       </ol>
     </section>
+    @if(Session::has('exportWarning'))
+    <script>
+      $( function() {
+        toastr.error('There is a warning message, <br>Please Click Here!.', 'Something went wrong!', {timeOut: 10000})
+      });
+    </script>
+    @else
+     {{-- <script>
+      $( function() {
+        toastr.error('There is a warning message, <br>Please Click Here!.', 'Something went wrong!', {timeOut: 10000})
+      });
+    </script> --}}
+    @endif
     <!-- Main content -->
     <section class="content">
       
@@ -360,6 +392,7 @@
 <!-- PAGES -->
 <script src="/assets/js/pages/user_center.js"></script>
 <script src="/assets/js/pages/globals.js"></script>
+
 <script src="/assets/js/pages/dashboardv2.js"></script>
 <script src="/assets/js/pages/dashboard.js"></script>
 <script src="/assets/js/pages/admin_center.js"></script>
@@ -376,9 +409,10 @@
 <script src="/assets/js/pages/settings_developer.js"></script>
 <script src="/assets/js/pages/settings_reports.js"></script>
 
-
+<script src="/assets/js/pages/paginate_ajax_multiple.js"></script>
 <!-- SCRIPT -->
 <script>
+
   $(function () {
     $('.select2').select2()
     $('.datepicker').datepicker({

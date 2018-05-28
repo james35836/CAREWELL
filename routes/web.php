@@ -120,11 +120,20 @@ Route::get('/doctor/download_template/{provider_id}/{number}', 	'CarewellControl
 Route::post('/doctor/import_doctor/submit', 			'CarewellController@doctor_import_doctor_submit');
 Route::post('/doctor/update_doctor/submit', 			'CarewellController@doctor_update_submit');
 
+Route::get('/doctor/add_doctor_provider/{doctor_id}', 	'CarewellController@doctor_add_doctor_provider');
+Route::post('/doctor/add_doctor_provider/submit', 		'CarewellController@doctor_add_doctor_provider_submit');
+
+
+
 /*BILLING*/
 Route::get('/billing', 									'CarewellController@billing');
 Route::get('/billing/create_cal', 						'CarewellController@billing_create_cal');
 Route::post('/billing/create_cal/sumbit', 				'CarewellController@billing_create_cal_submit');
 Route::get('/billing/cal_details/{cal_id}', 			'CarewellController@billing_cal_details');
+
+Route::post('/billing/update_cal_details/sumbit', 		'CarewellController@billing_update_cal_details_submit');
+
+
 Route::get('/billing/import_cal_members/{cal_id}/{company_id}',    'CarewellController@billing_import_cal_members');
 Route::get('/billing/cal_download_template/{cal_id}/{company_id}', 'CarewellController@billing_cal_download_template');
 Route::post('/billing/cal_import_template_submit', 		'CarewellController@billing_cal_import_template');
@@ -163,9 +172,9 @@ Route::get('/reports/breakdown', 						'CarewellController@reports_breakdown');
 
 Route::get('/reports/consolidation', 					'CarewellController@reports_consolidation');
 Route::get('/reports/member_cal',						'CarewellController@reports_member_cal');
-Route::get('/reports/member_cal/{ref}/{member_id}',						'CarewellController@reports_member_cal_detail');
+Route::get('/reports/member_cal/{ref}/{member_id}',		'CarewellController@reports_member_cal_detail');
 
-Route::post('/reports/member_cal/date_filter/{ref}',						'CarewellController@reports_member_cal_month_filter_date');
+Route::post('/reports/member_cal/date_filter/{ref}',	'CarewellController@reports_member_cal_month_filter_date');
 
 Route::get('/reports/member_cal/excel_report/{ref}/{val_key}/{member_id}', 'CarewellController@reports_export_excel');
 

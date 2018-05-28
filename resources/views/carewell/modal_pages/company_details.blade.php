@@ -1,19 +1,28 @@
+<script>
+	$('input.string-only').keypress('keypress', string_only);//function in layout name string_only
+    $('input.integer-only').keypress('keypress', integer_only);
+</script>
 <div class="row box-globals">
 	<input type="hidden" value="{{$company_details->company_id}}" id="company_id" name="">
 	<div class="form-holder">
-			<div class="col-md-4 form-content pull-right top-label">
+		<div class="col-md-4 form-content pull-right top-label">
 			<label>COMPANY CODE : {{$company_details->company_code}}</label>
 		</div>
 		
 	</div>
 </div>
 <div class="row box-globals">
+	<div class="form-holder col-md-12 col-xs-12">
+	    <div class=" col-md-1 col-xs-6 pull-right no-padding">
+	      <button class="btn btn-default top-element enable-element" type="button" ><i class="fa fa-pencil-square-o btn-icon "></i>EDIT</button>
+	    </div>
+	</div>
 	<div class="form-holder">
 		<div class="col-md-2 form-content">
 			<label>Company Name</label>
 		</div>
 		<div class="col-md-10 form-content">
-			<input type="text" value="{{$company_details->company_name}}" name="company_name" id="company_name"  class="form-control"/>
+			<input type="text" value="{{$company_details->company_name}}" name="company_name" id="company_name"  class="form-control" readonly/>
 		</div>
 	</div>
 	<div class="form-holder">
@@ -21,13 +30,13 @@
 			<label>Email Address</label>
 		</div>
 		<div class="col-md-4 form-content">
-			<input type="text" value="{{$company_details->company_email_address}}" name="company_email_address" id="company_email_address" class="form-control lowercase-text"/>
+			<input type="email" value="{{$company_details->company_email_address}}" name="company_email_address" id="company_email_address" class="form-control" readonly/>
 		</div>
 		<div class="col-md-2 form-content">
 			<label>Tel/Mobile Number</label>
 		</div>
 		<div class="col-md-4 form-content">
-			<input type="text" value="{{$company_details->company_contact_number}}" name="company_contact_number" id="company_contact_number" class="form-control"/>
+			<input type="text" value="{{$company_details->company_contact_number}}" name="company_contact_number" id="company_contact_number" class="form-control" readonly/>
 		</div>
 	</div>
 	<div class="form-holder">
@@ -35,38 +44,38 @@
 			<label>Company Address</label>
 		</div>
 		<div class="col-md-10 form-content">
-			<textarea name="company_address" id="company_address" class="form-control" rows="3" cols="10">{{$company_details->company_address}}</textarea>
+			<textarea name="company_address" id="company_address" class="form-control" rows="3" cols="10" readonly>{{$company_details->company_address}}</textarea>
 		</div>
 		
 	</div>
 	<div class="form-holder">
-			<div class="col-md-2 form-content">
-				<label>Contact Person(1)</label>
-			</div>
-			<div class="col-md-4 form-content">
-				<input type="text" value="{{$company_details->contact_person_name}}" name="contact_person_name" id="contact_person_name" class="form-control" placeholder="NAME"/>
-			</div>
-			<div class="col-md-2 form-content">
-				<input type="text" value="{{$company_details->contact_person_position}}" name="contact_person_position" id="contact_person_position" class="form-control" placeholder="POSITION"/>
-			</div>
-			<div class="col-md-4 form-content">
-				<input type="text" value="{{$company_details->contact_person_number}}" name="contact_person_number" id="contact_person_number" class="form-control" placeholder="CONTACT NUMBER"/>
-			</div>
+		<div class="col-md-2 form-content">
+			<label>Contact Person(1)</label>
 		</div>
-		<div class="form-holder">
-			<div class="col-md-2 form-content">
-				<label>Contact Person(2)</label>
-			</div>
-			<div class="col-md-4 form-content">
-				<input type="text" value="{{$company_details->contact_person_names}}" name="contact_person_names" id="contact_person_names" class="form-control" placeholder="NAME"/>
-			</div>
-			<div class="col-md-2 form-content">
-				<input type="text" value="{{$company_details->contact_person_positions}}" name="contact_person_positions" id="contact_person_positions" class="form-control" placeholder="POSITION"/>
-			</div>
-			<div class="col-md-4 form-content">
-				<input type="text" value="{{$company_details->contact_person_numbers}}" name="contact_person_numbers" id="contact_person_numbers" class="form-control" placeholder="CONTACT NUMBER"/>
-			</div>
+		<div class="col-md-4 form-content">
+			<input type="text" value="{{$company_details->contact_person_name}}" name="contact_person_name" id="contact_person_name" class="form-control string-only" placeholder="NAME" readonly/>
 		</div>
+		<div class="col-md-2 form-content">
+			<input type="text" value="{{$company_details->contact_person_position}}" name="contact_person_position" id="contact_person_position" class="form-control string-only" placeholder="POSITION" readonly/>
+		</div>
+		<div class="col-md-4 form-content">
+			<input type="text" value="{{$company_details->contact_person_number}}" name="contact_person_number" id="contact_person_number" class="form-control integer-only" placeholder="CONTACT NUMBER" readonly/>
+		</div>
+	</div>
+	<div class="form-holder">
+		<div class="col-md-2 form-content">
+			<label>Contact Person(2)</label>
+		</div>
+		<div class="col-md-4 form-content">
+			<input type="text" value="{{$company_details->contact_person_names}}" name="contact_person_names" id="contact_person_names" class="form-control string-only" placeholder="NAME" readonly/>
+		</div>
+		<div class="col-md-2 form-content">
+			<input type="text" value="{{$company_details->contact_person_positions}}" name="contact_person_positions" id="contact_person_positions" class="form-control string-only" placeholder="POSITION" readonly/>
+		</div>
+		<div class="col-md-4 form-content">
+			<input type="text" value="{{$company_details->contact_person_numbers}}" name="contact_person_numbers" id="contact_person_numbers" class="form-control integer-only" placeholder="CONTACT NUMBER" readonly/>
+		</div>
+	</div>
 </div>
 <div class="row box-globals" >
 	<div class="nav-tabs-custom">
@@ -83,7 +92,9 @@
 						<label>Contract Number</label>
 					</div>
 					<div class="col-md-4 form-content">
-						<input type="text" value="{{$company_contract->contract_number}}" id="contract_number" class="form-control"/>
+						<center>
+							<p style="font-size:20px;">{{$company_contract->contract_number}}</p>
+						</center>
 					</div>
 				</div>
 				<div class="form-holder ">
@@ -178,30 +189,36 @@
 				</div>
 			</div>
 			<div id="member" class="row tab-pane fade table-min-height" >
-				<div class="form-holder ">
-					<div class="table-responsive">
-						<table class="table table-bordered">
-							<thead>
-								<tr>
-									<th>UNIVERSAL ID</th>
-									<th>CAREWELL ID</th>
-									<th>MEMBER NAME</th>
-									<th>DEPLOYMENT</th>
-									<th>ACTION</th>
-								</tr>
-							</thead>
-							<tbody>
-								@foreach($_company_member as $company_member)
-								<tr>
-									<td>{{$company_member->member_universal_id}}</td>
-									<td>{{$company_member->member_carewell_id}}</td>
-									<td>{{$company_member->member_first_name." ".$company_member->member_last_name}}</td>
-									<td>{{$company_member->deployment_name}}</td>
-									<td>VIEW  MEMBERS</td>
-								</tr>
-								@endforeach
-							</tbody>
-						</table>
+				<div class="form-holder">
+					<div class="load-data load-company-member" data-target="load-company-member">
+						<div class="table-responsive">
+							<table class="table table-bordered">
+								<thead>
+									<tr>
+										<th>UNIVERSAL ID</th>
+										<th>CAREWELL ID</th>
+										<th>MEMBER NAME</th>
+										<th>DEPLOYMENT</th>
+										<th>COVERAGE PLAN</th>
+									</tr>
+								</thead>
+								<tbody>
+									@foreach($_company_member as $company_member)
+									<tr>
+										<td>{{$company_member->member_universal_id}}</td>
+										<td>{{$company_member->member_carewell_id}}</td>
+										<td>{{$company_member->member_first_name." ".$company_member->member_last_name}}</td>
+										<td>{{$company_member->deployment_name}}</td>
+										<td>{{$company_member->coverage_plan_name}}</td>
+									</tr>
+									@endforeach
+								</tbody>
+							</table>
+						</div>
+						<div class="box-footer clearfix">
+							@include('globals.pagination_v2', ['paginator' => $_company_member])
+						</div>
+						
 					</div>
 				</div>
 			</div>

@@ -35,7 +35,7 @@
               </div>
             </div>
           </div>
-          <div id="showTable">
+          <div id="showTable" class="load-data load-active-approval" data-target="load-active-approval">
             <div class="box-body table-responsive no-padding">
               <table class="table table-hover table-bordered">
                 <tr>
@@ -75,7 +75,7 @@
               </table>
             </div>
             <div class="box-footer clearfix">
-              @include('globals.pagination', ['paginator' => $_approval])
+              @include('globals.pagination_v2', ['paginator' => $_approval])
             </div>
           </div>
         </div>
@@ -98,7 +98,7 @@
               </div>
             </div>
           </div>
-          <div id="showTable">
+          <div id="showTable" class="load-data load-pending-approval" data-target="load-pending-approval">
             <div class="box-body table-responsive no-padding">
               <table class="table table-hover table-bordered">
                 <tr>
@@ -161,7 +161,7 @@
               </div>
             </div>
           </div>
-          <div id="showTable">
+          <div id="showTable" class="load-data load-inactive-approval" data-target="load-inactive-approval">
             <div class="box-body table-responsive no-padding">
               <table class="table table-hover table-bordered">
                 <tr>

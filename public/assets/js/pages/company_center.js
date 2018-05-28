@@ -66,10 +66,13 @@ function company_center()
 			{}
 			else if(globals.checking_null_validation(document.getElementById('company_email_address').value,"COMPANY EMAIL ADDRESS")=="")
 			{}	
+		    else if(globals.global_input_email($('#company_email_address'))=="error")
+		    {
+		    	toastr.error('Email is in a wrong format.', 'Something went wrong!', {timeOut: 3000})
+		    }
 			else if(globals.checking_null_validation(document.getElementById('company_address').value,"COMPANY ADDRESS")=="")
 			{}
-			
-			else if(countContract == 0)
+		    else if(countContract == 0)
 			{
 				globals.global_tostr('CONTACT IMAGE');
 			}
@@ -177,27 +180,40 @@ function company_center()
 	{
 		$('body').on('click','.update-company-confirm',function() 
 		{
-			var	confirmModalMessage  = 'Are you sure you want to update this company?';
-			var confirmModalAction   = 'update-company-submit';
-			globals.confirm_modals(confirmModalMessage,confirmModalAction);
+			if(globals.checking_null_validation(document.getElementById('company_name').value,"COMPANY NAME")=="")
+			{}	
+		    else if(globals.checking_null_validation(document.getElementById('company_contact_number').value,"COMPANY CONTACT PERSON")=="")
+			{}
+			else if(globals.checking_null_validation(document.getElementById('company_email_address').value,"COMPANY EMAIL ADDRESS")=="")
+			{}	
+		    else if(globals.global_input_email($('#company_email_address'))=="error")
+		    {
+		    	toastr.error('Email is in a wrong format.', 'Something went wrong!', {timeOut: 3000})
+		    }
+			else if(globals.checking_null_validation(document.getElementById('company_address').value,"COMPANY ADDRESS")=="")
+			{}
+		    else
+		    {
+		    	var	confirmModalMessage  = 'Are you sure you want to update this company?';
+				var confirmModalAction   = 'update-company-submit';
+				globals.confirm_modals(confirmModalMessage,confirmModalAction);
 
-			companyData.append("company_id", 				document.getElementById('company_id').value);
+				companyData.append("company_id", 				document.getElementById('company_id').value);
 
-			companyData.append("company_name", 				document.getElementById('company_name').value);
-			companyData.append("company_email_address", 	document.getElementById('company_email_address').value);
-			companyData.append("company_contact_number", 	document.getElementById('company_contact_number').value);
-			companyData.append("company_address", 			document.getElementById('company_address').value);
-		                
-		   	companyData.append("contact_person_name", 		document.getElementById('contact_person_name').value);
-			companyData.append("contact_person_position", 	document.getElementById('contact_person_position').value);
-			companyData.append("contact_person_number", 	document.getElementById('contact_person_number').value);
+				companyData.append("company_name", 				document.getElementById('company_name').value);
+				companyData.append("company_email_address", 	document.getElementById('company_email_address').value);
+				companyData.append("company_contact_number", 	document.getElementById('company_contact_number').value);
+				companyData.append("company_address", 			document.getElementById('company_address').value);
+			                
+			   	companyData.append("contact_person_name", 		document.getElementById('contact_person_name').value);
+				companyData.append("contact_person_position", 	document.getElementById('contact_person_position').value);
+				companyData.append("contact_person_number", 	document.getElementById('contact_person_number').value);
 
-			companyData.append("contact_person_names", 		document.getElementById('contact_person_names').value);
-			companyData.append("contact_person_positions", 	document.getElementById('contact_person_positions').value);
-			companyData.append("contact_person_numbers", 	document.getElementById('contact_person_numbers').value);		
+				companyData.append("contact_person_names", 		document.getElementById('contact_person_names').value);
+				companyData.append("contact_person_positions", 	document.getElementById('contact_person_positions').value);
+				companyData.append("contact_person_numbers", 	document.getElementById('contact_person_numbers').value);		
+		    }
 		});
-
-		
 	}
 
 	function update_company_submit()

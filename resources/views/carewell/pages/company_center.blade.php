@@ -25,7 +25,7 @@
               </div>
             </div>
           </div>
-          <div id="showTable">
+          <div id="showTable" class="load-data load-active-company" data-target="load-active-company">
             <div class="box-body table-responsive no-padding">
               <table class="table table-hover table-bordered">
                 <tr>
@@ -56,7 +56,11 @@
                       </button>
                       <ul class="dropdown-menu" role="menu" style="position: absolute !important;">
                         <li><button type="button" data-company_id="{{$company_active->company_id}}" class="btn btn-link view-company-details"><i class="fa fa-eye btn-icon"></i>  View Company</button></li>
+                        @if($company_active->member==0)
                         <li><button type="button" class="btn btn-link archived" data-id="{{$company_active->company_id}}" data-name="COMPANY"><i class="fa fa-trash btn-icon"></i> Archived Company</button></li>
+                        @else
+                        <li><button type="button" class="btn btn-link archived" data-id="{{$company_active->company_id}}" data-name="COMPANY" disabled><i class="fa fa-trash btn-icon"></i> Archived Company</button></li>
+                        @endif
                       </ul>
                     </div>
                   </td>
@@ -65,7 +69,7 @@
               </table>
             </div>
             <div class="box-footer clearfix">
-              @include('globals.pagination', ['paginator' => $_company_active])
+              @include('globals.pagination_v2', ['paginator' => $_company_active])
             </div>
           </div>
         </div>
@@ -81,7 +85,7 @@
               </div>
             </div>
           </div>
-          <div id="showTable">
+          <div id="showTable" class="load-data load-inactive-company" data-target="load-inactive-company">
           <div class="box-body table-responsive no-padding">
             <table class="table table-hover table-bordered">
               <tr>
@@ -121,7 +125,7 @@
             </table>
           </div>
           <div class="box-footer clearfix">
-            @include('globals.pagination', ['paginator' => $_company_inactive])
+            @include('globals.pagination_v2', ['paginator' => $_company_inactive])
           </div>
         </div>
         </div>

@@ -23,10 +23,15 @@ $(".search-key").on("keyup", function()
 $(function () 
 {
 	$('.select2').select2();
-	$('.datepicker').datepicker(
-	{
-		autoclose: true
-	})
+	$("#cal_reveneu_period_year").datepicker({
+        format: "yyyy",
+        viewMode: "years", 
+        minViewMode: "years"
+    });
+    $('.datepicker').datepicker(
+    {
+    autoclose: true
+    });
 })
 </script>
 <style>
@@ -34,11 +39,6 @@ table tr td
 {
  text-transform:capitalize !important;
 }
-.payment-breakdown
-{
-	cursor:pointer;
-}
-
 </style>
 <div class=" row box-globals">
 	<div class="col-md-8 pull-left top-label" style="">
@@ -51,12 +51,25 @@ table tr td
 	@endif
 </div>
 <div class="row box-globals">
+	<input type="hidden" id="cal_id" value="{{$cal_details->cal_id}}"/>
+	@if($cal_check==0&&$total_member==0)
+	<div class="form-holder col-md-12 col-xs-12">
+	    <div class=" col-md-1 col-xs-6 pull-right no-padding">
+	      <button class="btn btn-default top-element enable-element" type="button" ><i class="fa fa-pencil-square-o btn-icon "></i>EDIT</button>
+	    </div>
+	</div>
+	@endif
 	<div class="form-holder">
 		<div class="col-md-3  form-content">
 			<label>COMPANY NAME </label>
 		</div>
 		<div class="col-md-9 form-content">
-			<input type="text" class="form-control" value="{{$cal_details->company_name}}"/>
+			<select name="" id="company_id" class="form-control" readonly>
+		        <option value="{{$cal_details->company_id}}">{{$cal_details->company_name}}</option>
+		        @foreach($_company as $company)
+		        <option value="{{$company->company_id}}" >{{$company->company_name}}</option>
+		        @endforeach
+		    </select>
 		</div>
 	</div>
 	@if($cal_check==2)
@@ -65,7 +78,7 @@ table tr td
 			<label>REMARKS</label>
 		</div>
 		<div class="col-md-9 form-content">
-			<textarea  cols="2" rows="3" class="form-control">{{$cal_details->cal_remarks}}</textarea>
+			<textarea  cols="2" rows="3" class="form-control" readonly>{{$cal_details->cal_remarks}}</textarea>
 		</div>
 	</div>
 	@endif
@@ -74,14 +87,19 @@ table tr td
 			<label>MODE OF PAYMENT</label>
 		</div>
 		<div class="col-md-3  form-content">
-			<input type="text" class="form-control" value="{{$cal_details->cal_payment_mode}}"/>
+			<select name="" id="cal_payment_mode" class="form-control" readonly>
+				<option>{{$cal_details->cal_payment_mode}}</option>
+		        @foreach($_period as $period)
+		        <option>{{$period->payment_mode_name}}</option>
+		        @endforeach
+		    </select>
 		</div>
 		
 		<div class="col-md-3  form-content">
 			<label>REVENUE YEAR</label>
 		</div>
 		<div class="col-md-3  form-content">
-			<input type="text" class="form-control" value="{{$cal_details->cal_reveneu_period_year}}"/>
+			<input type="text" id="cal_reveneu_period_year" class="form-control" value="{{$cal_details->cal_reveneu_period_year}}" readonly/>
 		</div>
 	</div>
 	<div class="form-holder">
@@ -89,14 +107,14 @@ table tr td
 			<label>PAYMENT START</label>
 		</div>
 		<div class="col-md-3  form-content">
-			<input type="text" class="form-control" value="{{$cal_details->cal_start}}"/>
+			<input type="text" id="cal_start" class="form-control datepicker" value="{{$cal_details->cal_start}}" readonly/>
 		</div>
 		
 		<div class="col-md-3  form-content">
 			<label>PAYMENT END</label>
 		</div>
 		<div class="col-md-3  form-content">
-			<input type="text" class="form-control" value="{{$cal_details->cal_end}}"/>
+			<input type="text" id="cal_end" class="form-control datepicker" value="{{$cal_details->cal_end}}" readonly/>
 		</div>
 	</div>
 </div>

@@ -22,6 +22,11 @@ class TblCalMemberModel extends Model
                 ->join('tbl_cal','tbl_cal.cal_id','=','tbl_cal_member.cal_id')
                 ->join('tbl_cal_payment','tbl_cal_payment.cal_member_id','=','tbl_cal_member.cal_member_id')
                 ->where('tbl_member_company.archived',0)
+                ->where(function($query)
+                  {
+                    $query->where('tbl_cal.archived',1);
+                    $query->orWhere('tbl_cal.archived',2);
+                  })
                 ->orderBy('tbl_cal_payment.cal_payment_end','ASC');
         return $query;
     }

@@ -1,17 +1,22 @@
 <div class="row box-globals">
-	<input type="text" value="{{$provider_details->provider_id}}" id="provider_id" name="">
+	<input type="hidden" value="{{$provider_details->provider_id}}" id="provider_id" name="">
+	<div class="form-holder col-md-12 col-xs-12">
+	    <div class=" col-md-1 col-xs-6 pull-right no-padding">
+	      <button class="btn btn-default top-element enable-element" type="button" ><i class="fa fa-pencil-square-o btn-icon "></i>EDIT</button>
+	    </div>
+	</div>
 	<div class="form-holder">
 		<div class="col-md-2 form-content">
 			<label>Provider Name</label>
 		</div>
 		<div class="col-md-4 form-content">
-			<input type="text" value="{{$provider_details->provider_name}}" id="provider_name" class="form-control"/>
+			<input type="text" value="{{$provider_details->provider_name}}" id="provider_name" class="form-control" readonly/>
 		</div>
 		<div class="col-md-2 form-content">
-			<label>Provider Rate/RVS</label>
+			<label>Rate/RVS</label>
 		</div>
 		<div class="col-md-4 form-content">
-			<input type="text" value="{{$provider_details->provider_rvs}}" id="provider_rvs" class="form-control"/>
+			<input type="text" value="{{$provider_details->provider_rvs}}" id="provider_rvs" class="form-control" readonly/>
 		</div>
 	</div>
 	<div class="form-holder">
@@ -19,28 +24,28 @@
 			<label>Contact Person</label>
 		</div>
 		<div class="col-md-4 form-content">
-			<input type="text" value="{{$provider_details->provider_contact_person}}"  id="provider_contact_person" class="form-control"/>
+			<input type="text" value="{{$provider_details->provider_contact_person}}"  id="provider_contact_person" class="form-control" readonly/>
 		</div>
 		<div class="col-md-2 form-content">
 			<label>Email Address</label>
 		</div>
 		<div class="col-md-4 form-content">
-			<input type="text" value="{{$provider_details->provider_contact_email}}"  id="provider_contact_email" class="form-control"/>
+			<input type="text" value="{{$provider_details->provider_contact_email}}"  id="provider_contact_email" class="form-control" readonly/>
 		</div>
 	</div>
 	
 	<div class="form-holder">
 		<div class="col-md-2 form-content">
-			<label>Telephone Number</label>
+			<label>Telephone #</label>
 		</div>
 		<div class="col-md-4 form-content">
-			<input type="text" value="{{$provider_details->provider_telephone_number}}"  id="provider_telephone_number" class="form-control"/>
+			<input type="text" value="{{$provider_details->provider_telephone_number}}"  id="provider_telephone_number" class="form-control" readonly/>
 		</div>
 		<div class="col-md-2 form-content">
 			<label> Mobile Number</label>
 		</div>
 		<div class="col-md-4 form-content">
-			<input type="text" value="{{$provider_details->provider_mobile_number}}"  id="provider_mobile_number" class="form-control"/>
+			<input type="text" value="{{$provider_details->provider_mobile_number}}"  id="provider_mobile_number" class="form-control" readonly/>
 		</div>
 	</div>
 	
@@ -49,7 +54,7 @@
 			<label>Address</label>
 		</div>
 		<div class="col-md-10 form-content">
-			<textarea cols="30" rows="3" id="provider_address" class="form-control">{{$provider_details->provider_address}}</textarea>
+			<textarea cols="30" rows="3" id="provider_address" class="form-control" readonly>{{$provider_details->provider_address}}</textarea>
 		</div>
 	</div>
 </div>

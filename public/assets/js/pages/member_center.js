@@ -28,6 +28,8 @@ function member_center()
 			member_adjustment_submit();
 			update_member_confirm();
 			update_member_submit();
+
+			
 		});
 
 	}
@@ -36,12 +38,12 @@ function member_center()
 	{
 		$("body").on('click','.create-member',function()
 		{
-			var modalName= 'CREATE MEMBER';
-			var modalClass='member';
-			var modalLink='/member/create_member';
-			var modalActionName='CREATE MEMBER';
-			var modalAction='create-member-confirm';
-			var modalSize = 'modal-lg';
+			var modalName 		= 'CREATE MEMBER';
+			var modalClass 		= 'member';
+			var modalLink 		= '/member/create_member';
+			var modalActionName = 'CREATE MEMBER';
+			var modalAction 	= 'create-member-confirm';
+			var modalSize 		= 'modal-lg';
 			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
         });
 
@@ -66,25 +68,7 @@ function member_center()
 			{}
 			else if(globals.checking_null_validation(document.getElementById('member_birthdate').value,"BIRTHDATE")=="")
 			{}
-			else if(document.getElementById('member_gender').value=="SELECT GENDER")
-			{
-				globals.global_tostr('GENDER');
-			}
-		    else if(document.getElementById('member_marital_status').value=="SELECT STATUS")
-			{
-				globals.global_tostr('STATUS');
-			}
-			else if(globals.checking_null_validation(document.getElementById('member_mother_maiden_name').value,"MOTHER MAIDEN NAME")=="")
-			{}
-		    else if(globals.checking_null_validation(document.getElementById('member_contact_number').value,"CONTACT NUMBER")=="")
-			{}
-			else if(globals.checking_null_validation(document.getElementById('member_email_address').value,"EMAIL ADDRESS")=="")
-			{}
-			else if(globals.checking_null_validation(document.getElementById('member_permanet_address').value,"PERMANENT ADDRESS")=="")
-			{}
-		    else if(globals.checking_null_validation(document.getElementById('member_present_address').value,"PRESENT ADDRESS")=="")
-			{}
-			else if(globals.checking_null_validation(document.getElementById('member_employee_number').value,"EMPLOYEE NUMBER")=="")
+		    else if(globals.checking_null_validation(document.getElementById('member_employee_number').value,"EMPLOYEE NUMBER")=="")
 			{}
 			else if(document.getElementById('company_id').value=="0")
 			{
@@ -98,7 +82,6 @@ function member_center()
 			{
 				globals.global_tostr('DEPLOYMENT');
 			}
-		
 			else
 			{
 				var	confirmModalMessage = 'Are you sure you want to add this MEMBER?';

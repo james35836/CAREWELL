@@ -4,9 +4,7 @@
       <th>DOCTOR ID</th>
       <th>PROVIDER</th>
       <th>NAME</th>
-      <th>SPECIALIZATION</th>
       <th>DATE ADDED</th>
-      <th>STATUS</th>
       <th>ACTION</th>
     </tr>
     @foreach($_doctor_inactive as $doctor_inactive)
@@ -17,16 +15,8 @@
         <span class="label label-default">{{$provider->provider_name}}</span>
         @endforeach
       </td>
-      <td>{{$doctor_inactive->doctor_first_name}} {{$doctor_inactive->doctor_last_name}}</td>
-      <td>
-        @foreach($doctor_inactive->specialization as $specialization)
-        <span class="label label-default">{{$specialization->specialization_name}}</span>
-        @endforeach
-      </td>
+      <td>{{$doctor_inactive->doctor_full_name}}</td>
       <td>{{date("F j, Y",strtotime($doctor_inactive->doctor_created))}}</td>
-      <td>
-        <span class="label label-success">active</span>
-      </td>
       <td>
         <div class="btn-group">
           <button type="button" class="btn btn-danger">Action</button>
@@ -45,5 +35,5 @@
   </table>
 </div>
 <div class="box-footer clearfix">
-  @include('globals.pagination', ['paginator' => $_doctor_inactive])
+  @include('globals.pagination_v2', ['paginator' => $_doctor_inactive])
 </div>

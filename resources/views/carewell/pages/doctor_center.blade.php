@@ -2,6 +2,11 @@
 @section('content')
 <div class="container">
   <div class="row">
+    <div class=" col-md-3 col-xs-12 pull-right no-padding">
+      <button class="btn btn-primary top-element add-doctor" type="button" ><i class="fa fa-plus btn-icon "></i>ADD DOCTOR</button>
+    </div>
+  </div>
+  {{-- <div class="row">
     <div class="col-md-3 col-xs-12 pull-right no-padding">
       <div class="dropdown">
         <button class="btn btn-primary top-element dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -14,7 +19,7 @@
       </div>
     </div>
     
-  </div>
+  </div> --}}
   
   <div class="row">
     <div class="nav-tabs-custom">
@@ -42,7 +47,7 @@
               </div>
             </div>
           </div>
-          <div id="showTable">
+          <div id="showTable" class="load-data load-active-doctor" data-target="load-active-doctor">
             <div class="box-body table-responsive no-padding">
               <table class="table table-hover table-bordered">
                 <tr>
@@ -80,7 +85,7 @@
               </table>
             </div>
             <div class="box-footer clearfix">
-              @include('globals.pagination', ['paginator' => $_doctor_active])
+              @include('globals.pagination_v2', ['paginator' => $_doctor_active])
             </div>
           </div>
         </div>
@@ -104,7 +109,7 @@
               </div>
             </div>
           </div>
-          <div id="showTable">
+          <div id="showTable" class="load-data load-inactive-doctor" data-target="load-inactive-doctor">
             <div class="box-body table-responsive no-padding">
               <table class="table table-hover table-bordered">
                 <tr>
@@ -133,7 +138,7 @@
                       </button>
                       <ul class="dropdown-menu" role="menu" style="position: absolute !important;">
                         <li><button type="button" data-doctor_id="{{$doctor_inactive->doctor_id}}" class="btn btn-link view-doctor-details"><i class="fa fa-eye btn-icon"></i>  View Doctor</button></li>
-                        <li><button type="button" data-id="{{$doctor_active->doctor_id}}" data-name="DOCTOR" class="btn btn-link restore"><i class="fa fa-trash btn-icon"></i> Restore Doctor</button></li>
+                        <li><button type="button" data-id="{{$doctor_inactive->doctor_id}}" data-name="DOCTOR" class="btn btn-link restore"><i class="fa fa-trash btn-icon"></i> Restore Doctor</button></li>
                       </ul>
                     </div>
                   </td>
@@ -142,7 +147,7 @@
               </table>
             </div>
             <div class="box-footer clearfix">
-              @include('globals.pagination', ['paginator' => $_doctor_inactive])
+              @include('globals.pagination_v2', ['paginator' => $_doctor_inactive])
             </div>
           </div>
         </div>

@@ -13,7 +13,6 @@
         </div>
       </div>
     </div>
-    
   </div>
   <div class="row">
     <div class="nav-tabs-custom">
@@ -41,7 +40,7 @@
               </div>
             </div>
           </div>
-          <div id="showTable">
+          <div id="showTable" class="load-data load-active-member" data-target="load-active-member">
             <div class="box-body table-responsive no-padding">
               <table class="table table-hover table-bordered">
                 <tr>
@@ -77,7 +76,7 @@
               </table>
             </div>
             <div class="box-footer clearfix">
-              @include('globals.pagination', ['paginator' => $_member_active])
+              @include('globals.pagination_v2', ['paginator' => $_member_active])
             </div>
           </div>
         </div>
@@ -101,7 +100,7 @@
               </div>
             </div>
           </div>
-          <div id="showTable">
+          <div id="showTable" class="load-data load-inactive-member" data-target="load-inactive-member">
             <div class="box-body table-responsive no-padding">
               <table class="table table-hover table-bordered">
                 <tr>
@@ -137,7 +136,7 @@
               </table>
             </div>
             <div class="box-footer clearfix">
-              @include('globals.pagination', ['paginator' => $_member_inactive])
+              @include('globals.pagination_v2', ['paginator' => $_member_inactive])
             </div>
           </div>
         </div>

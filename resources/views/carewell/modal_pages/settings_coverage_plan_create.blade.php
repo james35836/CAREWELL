@@ -47,7 +47,7 @@
 				<label>Premium</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="text" name="coverage_plan_premium" id="coverage_plan_premium" class="form-control">
+				<input type="number" name="coverage_plan_premium" id="coverage_plan_premium" class="form-control">
 			</div>
 		</div>
 		<div class="row form-holder ">
@@ -61,7 +61,7 @@
 				<label>Handling FEE</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="text" name="coverage_plan_case_handling" id="coverage_plan_case_handling" class="form-control">
+				<input type="number" name="coverage_plan_case_handling" id="coverage_plan_case_handling" class="form-control">
 			</div>
 		</div>
 		<div class="row form-holder ">
@@ -69,13 +69,13 @@
 				<label>Processing Fee</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="text" name="coverage_plan_processing_fee" id="coverage_plan_processing_fee" class="form-control">
+				<input type="number" name="coverage_plan_processing_fee" id="coverage_plan_processing_fee" class="form-control">
 			</div>
 			<div class="col-md-2 form-content">
 				<label>CARD Fee</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="text" name="coverage_plan_cari_fee" id="coverage_plan_cari_fee" class="form-control">
+				<input type="number" name="coverage_plan_cari_fee" id="coverage_plan_cari_fee" class="form-control">
 			</div>
 		</div>
 		<div class="row form-holder ">
@@ -83,7 +83,7 @@
 				<label>HIB</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="text" name="coverage_plan_hib" id="coverage_plan_hib" class="form-control">
+				<input type="number" name="coverage_plan_hib" id="coverage_plan_hib" class="form-control">
 			</div>
 			<div class="col-md-2 form-content">
 				<label>Pre-Existing</label>
