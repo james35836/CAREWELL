@@ -256,7 +256,7 @@ class SearchController extends ActiveAuthController
 				        	$output = view('carewell.filtering.billing_filtering_active',$data);
 					break;
 					case 'availment':
-					    $data['_approval'] = $data['_approval'] = TblApprovalModel::where('tbl_approval.archived',0)
+					     $data['_approval_active'] = TblApprovalModel::where('tbl_approval.archived',0)->where('tbl_member_company.archived',0)
 				    										->where(function($query)use($key)
 								                            	{
 								                                	$query->where('tbl_approval.approval_number','like','%'.$key.'%');
@@ -347,16 +347,16 @@ class SearchController extends ActiveAuthController
 				        $output = view('carewell.filtering.doctor_filtering_inactive',$data);
 					break;
 					case 'availment':
-					    	$data['_approval'] = $data['_approval'] = TblApprovalModel::where('tbl_approval.archived',1)
-				    										->where(function($query)use($key)
-								                            	{
-								                                	$query->where('tbl_approval.approval_number','like','%'.$key.'%');
-                                                               			$query->orWhere('tbl_member.member_first_name','like','%'.$key.'%');
-                                                               			$query->orWhere('tbl_company.company_name','like','%'.$key.'%');
-                                                               			$query->orWhere('tbl_provider.provider_name','like','%'.$key.'%');
-								                            	})
-								                            	->ApprovalInfo()
-								                            	->paginate(10);
+					    	$data['_approval_inactive']   = TblApprovalModel::where('tbl_approval.archived',1)->where('tbl_member_company.archived',0)
+		    										->where(function($query)use($key)
+						                            	{
+						                                	$query->where('tbl_approval.approval_number','like','%'.$key.'%');
+                                                     			$query->orWhere('tbl_member.member_first_name','like','%'.$key.'%');
+                                                     			$query->orWhere('tbl_company.company_name','like','%'.$key.'%');
+                                                     			$query->orWhere('tbl_provider.provider_name','like','%'.$key.'%');
+						                            	})
+						                            	->ApprovalInfo()
+						                            	->paginate(10);
 				        	$output = view('carewell.filtering.availment_filtering_inactive',$data);
 					break;
 					case 'coverage_plan':
@@ -388,16 +388,16 @@ class SearchController extends ActiveAuthController
 				        	$output = view('carewell.filtering.billing_filtering_pending',$data);
 					break;
 					case 'availment':
-					    	$data['_approval'] = $data['_approval'] = TblApprovalModel::where('tbl_approval.archived',1)
-				    										->where(function($query)use($key)
-								                            	{
-								                                	$query->where('tbl_approval.approval_number','like','%'.$key.'%');
-                                                               			$query->orWhere('tbl_member.member_first_name','like','%'.$key.'%');
-                                                               			$query->orWhere('tbl_company.company_name','like','%'.$key.'%');
-                                                               			$query->orWhere('tbl_provider.provider_name','like','%'.$key.'%');
-								                            	})
-								                            	->ApprovalInfo()
-								                            	->paginate(10);
+	    	                    $data['_approval_pending']  	= TblApprovalModel::where('tbl_approval.archived',2)->where('tbl_member_company.archived',0)
+		    										->where(function($query)use($key)
+						                            	{
+						                                	$query->where('tbl_approval.approval_number','like','%'.$key.'%');
+		                                           			$query->orWhere('tbl_member.member_first_name','like','%'.$key.'%');
+		                                           			$query->orWhere('tbl_company.company_name','like','%'.$key.'%');
+		                                           			$query->orWhere('tbl_provider.provider_name','like','%'.$key.'%');
+						                            	})
+						                            	->ApprovalInfo()
+						                            	->paginate(10);
 				        	$output = view('carewell.filtering.availment_filtering_pending',$data);
 					break;
 					
