@@ -96,7 +96,7 @@ $(document).ready(function()
 			<p>APPROVAL ID  : {{$approval_details->approval_number}}</p>
 		</div>
 		<div class="col-md-4 pull-right">
-			<a href="/availment/approval_export_pdf/{{$approval_details->approval_id}}"><button type="button" data-transaction_member_id="{{$approval_details->approval_id}}" class="btn btn-primary top-element" ><i class="fa fa-file-pdf-o btn-icon"></i>EXPORT PDF</button></a>
+			<a target="_new_page" href="/availment/approval_export_pdf/{{$approval_details->approval_id}}"><button type="button" data-transaction_member_id="{{$approval_details->approval_id}}" class="btn btn-primary top-element" ><i class="fa fa-file-pdf-o btn-icon"></i>EXPORT PDF</button></a>
 		</div>
 	</div>
 	<div class="row box-globals" >
