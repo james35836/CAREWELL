@@ -658,7 +658,7 @@ public function member_import_member_submit(Request $request)
 
 		if($count == 0&&$countError==0)
 		{
-			$message = '<center><b><span class="color-gray">There is nothing to insert</span></b></center>';
+			$message = '<center><b><span class="color-gray">There is nothing to insert, Please check if all fields has CAREWELL ID</span></b></center>';
 		}
 		else
 		{
