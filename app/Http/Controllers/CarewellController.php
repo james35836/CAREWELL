@@ -820,8 +820,8 @@ public function provider_import_submit(Request $request)
 	$first  = $_data[0]; 
 	if(isset($first['provider_name'])&&isset($first['provider_payee']))
 	{
-		$count = 0;
-		$countPayee = 0;
+		$count      	= 0;
+		$countPayee 	= 0;
 		foreach($_data as $data)
 		{
 			if($data['provider_name']!=null)
@@ -1693,25 +1693,23 @@ public function billing_cal_member_restore(Request $request)
 public function billing_cal_pending_submit(Request $request)
 {
 	StaticFunctionController::getNewMember($request->cal_id,2);
-    $update['archived']     = 2; //for pending cal
-    $update['cal_remarks']  = $request->cal_remarks;
-    $pending                = TblCalModel::where('cal_id',$request->cal_id)->update($update);
-    $data['_cal_member']    = TblCalMemberModel::where('cal_id',$request->cal_id)->get();
-    foreach($data['_cal_member'] as $key=>$cal_member)
-    {
-    	$member['archived']   = 2;
-    	TblCalPaymentModel::where('cal_member_id',$cal_member->cal_member_id)->update($member);
-    }
-    if($pending)
-    {
-    	return '<center><b><span class="color-red">CAL successfully mark as Pending!</span></b></center>';
-    }
-    else
-    {
-
-    	return "error";
-// >>>>>>> 8bb1253ef608861fb859c95d09b82190819e3c90
-    }
+    	$update['archived']     = 2; //for pending cal
+    	$update['cal_remarks']  = $request->cal_remarks;
+    	$pending                = TblCalModel::where('cal_id',$request->cal_id)->update($update);
+    	$data['_cal_member']    = TblCalMemberModel::where('cal_id',$request->cal_id)->get();
+    	foreach($data['_cal_member'] as $key=>$cal_member)
+    	{
+    		$member['archived']   = 2;
+    		TblCalPaymentModel::where('cal_member_id',$cal_member->cal_member_id)->update($member);
+    	}
+    	if($pending)
+    	{
+    		return '<center><b><span class="color-red">CAL successfully mark as Pending!</span></b></center>';
+    	}
+    	else
+    	{
+    		return "error";
+    	}
 }
 public function billing_cal_close($cal_id)
 {
