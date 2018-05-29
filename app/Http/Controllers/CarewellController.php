@@ -571,85 +571,88 @@ public function member_import_member_submit(Request $request)
 		$countError = 0;
 		foreach($_data as $data)
 		{
-			$companyID        = StaticFunctionController::getid($data['company_code'], 'company');
-			$companyData      = TblCompanyModel::where('company_id',$companyID)->first();
-			$count_member     = TblMemberModel::MemberExist($data['member_first_name'],$data['member_middle_name'],$data['member_last_name'])->first();
-			$carewellCheck    = TblMemberCompanyModel::where('member_carewell_id',$data['carewell_id'])->count();
-			if($carewellCheck!=0)
+			if($data['carewell_id']!=null||$data['carewell_id']!="")
 			{
-				$name['first']  = $data['member_first_name'];
-				$name['middle'] = $data['member_middle_name'];
-				$name['last']   = $data['member_last_name'];
-				$name['type']   = 'CAREWELL ID EXIST';
-				array_push($exportArray,$name);
-				$countError++;
-			}
-			else if($data['carewell_id']!=null&&$companyData!=null&&$count_member ==null && $data['member_birthdate']!=null&&StaticFunctionController::getid($data['company_code'], 'company') != null )
-			{
-				$member['member_first_name']        =   StaticFunctionController::transformText($data['member_first_name']);
-				$member['member_middle_name']       =   StaticFunctionController::transformText($data['member_middle_name']);
-				$member['member_last_name']         =   StaticFunctionController::transformText($data['member_last_name']);
-				$member['member_birthdate']         =   date('d-m-Y', strtotime($data['member_birthdate'])); 
-				$member['member_gender']            =   "N/A";
-				$member['member_marital_status']    =   "N/A";
-				$member['member_mother_maiden_name']=   "N/A";
-				$member['member_contact_number']    =   "N/A";
-				$member['member_email_address']     =   "N/A";
-				$member['member_permanet_address']  =   "N/A";
-				$member['member_present_address']   =   "N/A";
-				$member['member_created']           =   Carbon::now();
-				if($data['status']=="ACTIVE")
+				$companyID        = StaticFunctionController::getid($data['company_code'], 'company');
+				$companyData      = TblCompanyModel::where('company_id',$companyID)->first();
+				$count_member     = TblMemberModel::MemberExist($data['member_first_name'],$data['member_middle_name'],$data['member_last_name'])->first();
+				$carewellCheck    = TblMemberCompanyModel::where('member_carewell_id',$data['carewell_id'])->count();
+				if($carewellCheck!=0)
 				{
-					$member['archived']           =   0;
+					$name['first']  = $data['member_first_name'];
+					$name['middle'] = $data['member_middle_name'];
+					$name['last']   = $data['member_last_name'];
+					$name['type']   = 'CAREWELL ID EXIST';
+					array_push($exportArray,$name);
+					$countError++;
+				}
+				else if($data['carewell_id']!=null&&$companyData!=null&&$count_member ==null && $data['member_birthdate']!=null&&StaticFunctionController::getid($data['company_code'], 'company') != null )
+				{
+					$member['member_first_name']        =   StaticFunctionController::transformText($data['member_first_name']);
+					$member['member_middle_name']       =   StaticFunctionController::transformText($data['member_middle_name']);
+					$member['member_last_name']         =   StaticFunctionController::transformText($data['member_last_name']);
+					$member['member_birthdate']         =   date('d-m-Y', strtotime($data['member_birthdate'])); 
+					$member['member_gender']            =   "N/A";
+					$member['member_marital_status']    =   "N/A";
+					$member['member_mother_maiden_name']=   "N/A";
+					$member['member_contact_number']    =   "N/A";
+					$member['member_email_address']     =   "N/A";
+					$member['member_permanet_address']  =   "N/A";
+					$member['member_present_address']   =   "N/A";
+					$member['member_created']           =   Carbon::now();
+					if($data['status']=="ACTIVE")
+					{
+						$member['archived']           =   0;
+					}
+					else
+					{
+						$member['archived']           =   1;
+					}
+					$display_name                       =   $member['member_first_name']." ".$member['member_middle_name']." ".$member['member_last_name'];
+					$member['member_universal_id']      =   StaticFunctionController::generateUniversalId($display_name,$member['member_birthdate']);
+					$member_id                          =   TblMemberModel::insertGetId($member);
+
+					$dependent['dependent_full_name']   =   "N/A";
+					$dependent['dependent_birthdate']   =   "N/A";
+					$dependent['dependent_relationship']=   "N/A";
+					$dependent['member_id']             =   $member_id;
+					TblMemberDependentModel::insert($dependent);
+
+					$government['government_card_philhealth'] =   "N/A";
+					$government['government_card_sss']        =   "N/A";
+					$government['government_card_tin']        =   "N/A";
+					$government['government_card_hdmf']       =   "N/A";
+					$government['member_id']                  =   $member_id;
+					
+					TblMemberGovernmentCardModel::insert($government);
+
+					$company['member_carewell_id']        =   StaticFunctionController::nullableToString($data['carewell_id']);
+					$company['member_employee_number']    =   "11";
+					$company['member_company_status']     =   "N/A";
+					$company['member_transaction_date']   =   Carbon::now();
+					$company['coverage_plan_id']          =   StaticFunctionController::getid($data['coverage_plan'], 'coverage');
+					$company['deployment_id']             =   StaticFunctionController::getid($data['deployment'], 'deployment');
+					$company['member_id']                 =   $member_id;
+					$company['company_id']                =   $companyData->company_id;
+					$company['member_payment_mode']       =   StaticFunctionController::nullableToString($data['mode_of_payment']);
+					
+					TblMemberCompanyModel::insert($company);
+					
+					$count++;
 				}
 				else
 				{
-					$member['archived']           =   1;
+					$name['first']  = $data['member_first_name'];
+					$name['middle']   = $data['member_middle_name'];
+					$name['last'] = $data['member_last_name'];
+					$name['type']   = 'ALL FILEDS ARE REQUIRED - PLEASE CHECK';
+					array_push($exportArray,$name);
+					$countError++;
 				}
-				$display_name                       =   $member['member_first_name']." ".$member['member_middle_name']." ".$member['member_last_name'];
-				$member['member_universal_id']      =   StaticFunctionController::generateUniversalId($display_name,$member['member_birthdate']);
-				$member_id                          =   TblMemberModel::insertGetId($member);
-
-				$dependent['dependent_full_name']   =   "N/A";
-				$dependent['dependent_birthdate']   =   "N/A";
-				$dependent['dependent_relationship']=   "N/A";
-				$dependent['member_id']             =   $member_id;
-				TblMemberDependentModel::insert($dependent);
-
-				$government['government_card_philhealth'] =   "N/A";
-				$government['government_card_sss']        =   "N/A";
-				$government['government_card_tin']        =   "N/A";
-				$government['government_card_hdmf']       =   "N/A";
-				$government['member_id']                  =   $member_id;
-				
-				TblMemberGovernmentCardModel::insert($government);
-
-				$company['member_carewell_id']        =   StaticFunctionController::nullableToString($data['carewell_id']);
-				$company['member_employee_number']    =   "11";
-				$company['member_company_status']     =   "N/A";
-				$company['member_transaction_date']   =   Carbon::now();
-				$company['coverage_plan_id']          =   StaticFunctionController::getid($data['coverage_plan'], 'coverage');
-				$company['deployment_id']             =   StaticFunctionController::getid($data['deployment'], 'deployment');
-				$company['member_id']                 =   $member_id;
-				$company['company_id']                =   $companyData->company_id;
-				$company['member_payment_mode']       =   StaticFunctionController::nullableToString($data['mode_of_payment']);
-				
-				TblMemberCompanyModel::insert($company);
-				
-				$count++;
-			}
-			else
-			{
-				$name['first']  = $data['member_first_name'];
-				$name['middle']   = $data['member_middle_name'];
-				$name['last'] = $data['member_last_name'];
-				$name['type']   = 'ALL FILEDS ARE REQUIRED - PLEASE CHECK';
-				array_push($exportArray,$name);
-				$countError++;
-			}
-			if(count($exportArray)>0)
-			{
-				Session::put('exportWarning',$exportArray);
+				if(count($exportArray)>0)
+				{
+					Session::put('exportWarning',$exportArray);
+				}
 			}
 		}    
 
