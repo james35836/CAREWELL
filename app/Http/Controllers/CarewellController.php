@@ -1382,6 +1382,9 @@ public function billing_update_payment_date(Request $request)
 	$update['cal_payment_start']  = date('Y-m-d', strtotime($request->cal_payment_start));
 	$update['cal_payment_end']    = date('Y-m-d', strtotime($request->cal_payment_end));
 	$update['cal_payment_type']   = "UPDATED";
+
+	$updates['cal_payment_start']  = date('Y-m-d', strtotime($request->cal_payment_start));
+	$updates['cal_payment_end']    = date('Y-m-d', strtotime($request->cal_payment_end));
 	if($request->ref=='old')
 	{
 		$TblCalPaymentModel   = TblCalPaymentModel::where('cal_payment_id',$request->cal_payment_id);
@@ -1399,8 +1402,8 @@ public function billing_update_payment_date(Request $request)
 	}
 	else
 	{
-		$updateCheck = TblNewCalMemberModel::where('cal_new_member_id',$request->cal_new_member_id)->update($update);
-		$message    = "times";
+		$updateCheck = TblNewCalMemberModel::where('cal_new_member_id',$request->cal_new_member_id)->update($updates);
+		$message    = "check";
 	}
 	return $message;
 	
