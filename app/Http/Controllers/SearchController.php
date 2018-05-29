@@ -110,8 +110,8 @@ class SearchController extends ActiveAuthController
 				        $output = view('carewell.filtering.billing_filtering_active',$data);
 					break;
 					case 'availment':
-					     $data['_approval_inactive']  	= TblApprovalModel::where('tbl_approval.archived',0)->where('tbl_provider.provider_id',$id)->where('tbl_member_company.archived',0)->ApprovalInfo()->paginate(10);
-					    	$output = view('carewell.filtering.availment_filtering_inactive',$data);
+					     $data['_approval_active']  	= TblApprovalModel::where('tbl_approval.archived',0)->where('tbl_provider.provider_id',$id)->where('tbl_member_company.archived',0)->ApprovalInfo()->paginate(10);
+					    	$output = view('carewell.filtering.availment_filtering_active',$data);
 					break;
 				}
 		  	}
@@ -143,8 +143,8 @@ class SearchController extends ActiveAuthController
 				        	$output = view('carewell.filtering.billing_filtering_inactive',$data);
 					break;
 					case 'availment':
-					     $data['_approval_active']  	= TblApprovalModel::where('tbl_approval.archived',1)->where('tbl_provider.provider_id',$id)->where('tbl_member_company.archived',0)->ApprovalInfo()->paginate(10);
-					    	$output = view('carewell.filtering.availment_filtering_active',$data);
+					     $data['_approval_inactive']  	= TblApprovalModel::where('tbl_approval.archived',1)->where('tbl_provider.provider_id',$id)->where('tbl_member_company.archived',0)->ApprovalInfo()->paginate(10);
+					    	$output = view('carewell.filtering.availment_filtering_inactive',$data);
 					break;
 				}
 				
@@ -165,7 +165,7 @@ class SearchController extends ActiveAuthController
 					break;
 					case 'availment':
 					     $data['_approval_active']  	= TblApprovalModel::where('tbl_approval.archived',2)->where('tbl_provider.provider_id',$id)->where('tbl_member_company.archived',0)->ApprovalInfo()->paginate(10);
-					    	$output = view('carewell.filtering.availment_filtering_active',$data);
+					    	$output = view('carewell.filtering.availment_filtering_pending',$data);
 					break;
 				}
 		  	}
