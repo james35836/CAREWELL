@@ -2093,7 +2093,7 @@ public function payable_create_submit(Request $request)
           if($payApprovalData->save())
           {
           	$archived['archived'] = '2';
-			TblApprovalModel::where('tbl_approval.aproval_id',$approval_id)->update($archived);
+			TblApprovalModel::where('tbl_approval.approval_id',$approval_id)->update($archived);
           }
 	}
 	if($payableDatas->save())
