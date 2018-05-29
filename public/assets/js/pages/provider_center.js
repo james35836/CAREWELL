@@ -31,12 +31,12 @@ function provider_center()
 	{
 		$("body").on('click','.create-provider',function() 
 		{
-			var modalName= 'CREATE PROVIDER';
-			var modalClass='provider';
-			var modalLink='/provider/create_provider';
-			var modalActionName='CREATE PROVIDER';
-			var modalAction='create-provider-confirm';
-			var modalSize = 'modal-lg';
+			var modalName 		= 'CREATE PROVIDER';
+			var modalClass 	= 'provider';
+			var modalLink 		= '/provider/create_provider';
+			var modalActionName = 'CREATE PROVIDER';
+			var modalAction 	= 'create-provider-confirm';
+			var modalSize  	= 'modal-lg';
 			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
         });
 		
@@ -45,15 +45,7 @@ function provider_center()
 	{
 		$('body').on('click','.create-provider-confirm',function() 
 		{ 
-			$('input[name="doctor_full_name[]"]').each(function(i, doctor)
-            {
-            	if($(doctor).val()!="")
-            	{
-            		doctorProviderData.push(this.value);
-            	}
-            	
-            });
-			
+			var inputs = $('#provider_contact_email');
 			if(globals.checking_null_validation(document.getElementById('provider_name').value,"PROVIDER NAME")=="")
 			{}	
 			else if(globals.checking_null_validation(document.getElementById('provider_contact_person').value,"PROVIDER CONTACT PERSON")=="")
@@ -66,29 +58,42 @@ function provider_center()
 			{}
 			else if(globals.checking_null_validation(document.getElementById('provider_address').value,"PROVIDER ADDRESS")=="")
 			{}
-		    else if(doctorProviderData==null||doctorProviderData=="")
+			else if(globals.global_input_email(inputs)=="error")
 			{
-				toastr.error('Please add PAYEE at least one.', 'Something went wrong!', {timeOut: 3000})
+				toastr.error('Email is in a wrong format.', 'Something went wrong!', {timeOut: 3000})
 			}
-            else
+		     else
 			{
-				var	confirmModalMessage = 'Are you sure you want to add this provider?';
-				var confirmModalAction = 'create-provider-submit';
-				globals.confirm_modals(confirmModalMessage,confirmModalAction);
-
-				providerData.append("provider_name", 			document.getElementById('provider_name').value);
-				providerData.append("provider_rvs", 			document.getElementById('provider_rvs').value);
-	            providerData.append("provider_contact_person", 	document.getElementById('provider_contact_person').value);
-	            providerData.append("provider_telephone_number",document.getElementById('provider_telephone_number').value);
-	            providerData.append("provider_mobile_number", 	document.getElementById('provider_mobile_number').value);
-	            providerData.append("provider_contact_email", 	document.getElementById('provider_contact_email').value);
-	            providerData.append("provider_address", 	    document.getElementById('provider_address').value);
-	            
-	            for (var i = 0; i < doctorProviderData.length; i++) 
+				$('input[name="doctor_full_name[]"]').each(function(i, doctor)
+	            	{
+	            		if($(doctor).val()!="")
+	            		{
+	            			doctorProviderData.push(this.value);
+	            		}
+	            	});
+	            	if(doctorProviderData==null||doctorProviderData=="")
 				{
-				    providerData.append('doctorProviderData[]', doctorProviderData[i]);
+					toastr.error('Please add PAYEE at least one.', 'Something went wrong!', {timeOut: 3000})
 				}
-	            
+				else
+				{
+					var	confirmModalMessage = 'Are you sure you want to add this provider?';
+					var confirmModalAction = 'create-provider-submit';
+					globals.confirm_modals(confirmModalMessage,confirmModalAction);
+
+					providerData.append("provider_name", 			document.getElementById('provider_name').value);
+					providerData.append("provider_rvs", 			document.getElementById('provider_rvs').value);
+		               providerData.append("provider_contact_person", 	document.getElementById('provider_contact_person').value);
+		            	providerData.append("provider_telephone_number",  document.getElementById('provider_telephone_number').value);
+		            	providerData.append("provider_mobile_number", 	document.getElementById('provider_mobile_number').value);
+		            	providerData.append("provider_contact_email", 	document.getElementById('provider_contact_email').value);
+		            	providerData.append("provider_address", 	     document.getElementById('provider_address').value);
+		            
+		            	for (var i = 0; i < doctorProviderData.length; i++) 
+					{
+					    providerData.append('doctorProviderData[]', doctorProviderData[i]);
+					}
+				}
 			}
 		});
 	}

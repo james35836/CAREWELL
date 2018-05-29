@@ -1,21 +1,21 @@
 <script>
 	$('input.string-only').keypress('keypress', string_only);//function in layout name string_only
 	$('input.integer-only').keypress('keypress', integer_only);
-	$(document).ready(function() 
-	{
-		$("body").on('change','.coverage_plan_name',function() 
-		{
-			var selected = $("option:selected", $(this)).val();
-			$(".coverage_plan_name option").each(function() 
-			{
-				$(this).show();
-			});
-			$(".coverage_plan_name").each(function() 
-			{
-				$("option[value='" + selected + "']", $(this)).attr("disabled", true);
-			});
-		});
-	});
+	// $(document).ready(function() 
+	// {
+	// 	$("body").on('change','.coverage_plan_name',function() 
+	// 	{
+	// 		var selected = $("option:selected", $(this)).val();
+	// 		$(".coverage_plan_name option").each(function() 
+	// 		{
+	// 			$(this).show();
+	// 		});
+	// 		$(".coverage_plan_name").each(function() 
+	// 		{
+	// 			$("option[value='" + selected + "']", $(this)).attr("disabled", true);
+	// 		});
+	// 	});
+	// });
 </script>
 <form class="company-form" method="post">
 	<div class="row box-globals">

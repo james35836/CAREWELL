@@ -718,7 +718,7 @@ public function provider()
 	$data['page']              = 'Network Provider';
 	$data['user']              = StaticFunctionController::global();
 	$data['_provider_active']  = TblProviderModel::where('archived',0)->paginate(10);
-	$data['_provider_inactive']  = TblProviderModel::where('archived',1)->paginate(10);
+	$data['_provider_inactive']= TblProviderModel::where('archived',1)->paginate(10);
 	foreach ($data['_provider_active'] as $key => $provider) 
 	{
 		$data['_provider_active'][$key]['provider_payee'] =  TblProviderPayeeModel::where('provider_id',$provider->provider_id)->get();
@@ -734,15 +734,14 @@ public function provider_create()
 	return view('carewell.modal_pages.provider_create');
 }
 
-public static function chk_doctor_exist_insert_doctor_provider(Request $request,$chk_provider_name)
+
+public static function provider_add_tag_doctor($doctorProviderData,$provider_id)
 {
-	foreach($request->doctorProviderData as $doctor_full_name)
+	$doctorInsert = 0;
+     foreach($doctorProviderData as $doctor_full_name)
 	{
-		$chk_refProviderId  = TblProviderModel::where('provider_name',$chk_provider_name)->value('provider_id');
-
-		$refDoctorId   = TblDoctorModel::where('doctor_full_name', $doctor_full_name)->value('doctor_id');
-
-		if($refDoctorId == null)
+		$doctor_id = StaticFunctionController::getIdNorName($doctor_full_name,'doctor');
+		if($doctor_id==$doctor_full_name)
 		{
 			$doctorData = new TblDoctorModel;
 			$doctorData->doctor_full_name       = StaticFunctionController::transformText($doctor_full_name);
@@ -753,66 +752,51 @@ public static function chk_doctor_exist_insert_doctor_provider(Request $request,
 			$doctorData->doctor_created         = Carbon::now();
 			$doctorData->save();
 
-			$chk_refDoctorId   = TblDoctorModel::where('doctor_full_name',$doctor_full_name)->value('doctor_id');
-			
-			
 			$providerDoctorData = new TblDoctorProviderModel;
-			$providerDoctorData->doctor_id = $chk_refDoctorId;
-			$providerDoctorData->provider_id =  $chk_refProviderId;
+			$providerDoctorData->doctor_id 	= $doctorData->doctor_id;
+			$providerDoctorData->provider_id 	= $provider_id;
 			$providerDoctorData->save();
+
+			$doctorInsert++;
 		}
 		else
 		{
 			$providerDoctorData = new TblDoctorProviderModel;
-			$providerDoctorData->doctor_id = $refDoctorId;
-			$providerDoctorData->provider_id =  $chk_refProviderId;
+			$providerDoctorData->doctor_id 	= $doctor_id;
+			$providerDoctorData->provider_id 	= $provider_id;
 			$providerDoctorData->save();
+			
+			$doctorInsert++;
 		}
 	}
+	return $doctorInsert;
 }
 
 public function provider_create_submit(Request $request)
 {
-    $returnMessage_popup = 0; // use to show popup as a parameter
-    
-    $refProviderId   = TblProviderModel::where('provider_name', $request->provider_name)->value('provider_id');
-
-    if($refProviderId == null) // if provider name does not exist
-    {    
-    	$providerData = new TblProviderModel;
-    	$providerData->provider_name            = $request->provider_name;
-    	$providerData->provider_rvs             = $request->provider_rvs;
-    	$providerData->provider_contact_person  = $request->provider_contact_person;
-    	$providerData->provider_telephone_number= $request->provider_telephone_number;
-    	$providerData->provider_mobile_number   = $request->provider_mobile_number;
-    	$providerData->provider_contact_email   = $request->provider_contact_email;
-    	$providerData->provider_address         = $request->provider_address;
-    	$providerData->provider_created         = Carbon::now();
-    	$providerData->save();
-
-    	Self::chk_doctor_exist_insert_doctor_provider($request,$request->provider_name);
-
-    	$returnMessage_popup = 1;
-
-    }
-    else
-    {
-    	Self::chk_doctor_exist_insert_doctor_provider($request,$request->provider_name);
-
-    	$returnMessage_popup = 1;
-    }
-
-
-    if($returnMessage_popup == 1)
-    {
-    	return StaticFunctionController::returnMessage('success','PROVIDER');    
-    }
-    else
-    {
-    	return StaticFunctionController::returnMessage('danger','PROVIDER'); 
-    }
-
-    
+     $provider_id = StaticFunctionController::getIdNorName($request->provider_name,'provider');
+    	if($provider_id==$request->provider_name)
+    	{
+    		$providerData = new TblProviderModel;
+	    	$providerData->provider_name            = $request->provider_name;
+	    	$providerData->provider_rvs             = $request->provider_rvs;
+	    	$providerData->provider_contact_person  = $request->provider_contact_person;
+	    	$providerData->provider_telephone_number= $request->provider_telephone_number;
+	    	$providerData->provider_mobile_number   = $request->provider_mobile_number;
+	    	$providerData->provider_contact_email   = $request->provider_contact_email;
+	    	$providerData->provider_address         = $request->provider_address;
+	    	$providerData->provider_created         = Carbon::now();
+	    	$providerData->save();
+          $notif    = "Provider Inserted";
+    	     $inserted = Self::provider_add_tag_doctor($request->doctorProviderData,$providerData->provider_id);
+    	}
+    	else
+    	{
+    		$inserted = Self::provider_add_tag_doctor($request->doctorProviderData,$provider_id);
+          $notif    = "Provider Exist";
+	}
+     return "<div class='alert alert-success' style='text-align: center;'>".$notif." and ".$inserted." doctors tag!</div>";
+	
 }
 
 public function provider_details(Request $request,$provider_id)
@@ -836,16 +820,16 @@ public function provider_import_submit(Request $request)
 	$first  = $_data[0]; 
 	if(isset($first['provider_name'])&&isset($first['provider_payee']))
 	{
-		$count = 0;
-		$countPayee = 0;
+		$count      	= 0;
+		$countPayee 	= 0;
 		foreach($_data as $data)
 		{
 			if($data['provider_name']!=null)
 			{
-				$refProviderId = TblProviderModel::where('provider_name', $data['provider_name'])->value('provider_id');
-				$refDoctorId   = TblDoctorModel::where('doctor_full_name', $data['provider_payee'])->value('doctor_id');
+				$provider_id = TblProviderModel::where('provider_name', $data['provider_name'])->value('provider_id');
+				$doctor_id   = TblDoctorModel::where('doctor_full_name', $data['provider_payee'])->value('doctor_id');
 
-				if($refProviderId==null)
+				if($provider_id==null)
 				{
 					$providerData = new TblProviderModel;
 					$providerData->provider_name            = StaticFunctionController::transformText($data['provider_name']);
@@ -862,7 +846,7 @@ public function provider_import_submit(Request $request)
 
 					if ($data['provider_name'] != $data['provider_payee'])
 					{
-						if($refDoctorId==null)
+						if($doctor_id==null)
 						{
 							$providerDoctorData = new TblDoctorModel;
 							$providerDoctorData->doctor_full_name       = StaticFunctionController::transformText($data['provider_payee']);
@@ -881,7 +865,7 @@ public function provider_import_submit(Request $request)
 						}
 						else
 						{
-							$insert['doctor_id'] = $refDoctorId;
+							$insert['doctor_id'] = $doctor_id;
 							$insert['provider_id'] = $providerData->provider_id;
 							TblDoctorProviderModel::insert($insert);
 						}
@@ -891,11 +875,11 @@ public function provider_import_submit(Request $request)
 				{
 					if ($data['provider_name'] != $data['provider_payee'])
 					{
-						if($refDoctorId==null)
+						if($doctor_id==null)
 						{
 							$providerDoctorData = new TblDoctorModel;
 							$providerDoctorData->doctor_full_name       = StaticFunctionController::transformText($data['provider_payee']);
-							$providerDoctorData->doctor_number          = '1233';
+							$providerDoctorData->doctor_number          = StaticFunctionController::updateReferenceNumber('doctor');
 							$providerDoctorData->doctor_gender          = "N/A";
 							$providerDoctorData->doctor_contact_number  = "N/A";
 							$providerDoctorData->doctor_email_address   = "N/A";
@@ -903,16 +887,16 @@ public function provider_import_submit(Request $request)
 							$providerDoctorData->save();
 
 							$insert['doctor_id']   = $providerDoctorData->doctor_id;
-							$insert['provider_id'] = $refProviderId;
+							$insert['provider_id'] = $provider_id;
 							TblDoctorProviderModel::insert($insert);
 							$countPayee++;
 						}
 						else
 						{
-							if(TblDoctorProviderModel::where('doctor_id',$refDoctorId)->where('provider_id',$refProviderId)->count()==0)
+							if(TblDoctorProviderModel::where('doctor_id',$doctor_id)->where('provider_id',$provider_id)->count()==0)
 							{
-								$insert['doctor_id']   = $refDoctorId;
-								$insert['provider_id'] = $refProviderId;
+								$insert['doctor_id']   = $doctor_id;
+								$insert['provider_id'] = $provider_id;
 								TblDoctorProviderModel::insert($insert);
 							}
 							else
@@ -1710,25 +1694,23 @@ public function billing_cal_member_restore(Request $request)
 public function billing_cal_pending_submit(Request $request)
 {
 	StaticFunctionController::getNewMember($request->cal_id,2);
-    $update['archived']     = 2; //for pending cal
-    $update['cal_remarks']  = $request->cal_remarks;
-    $pending                = TblCalModel::where('cal_id',$request->cal_id)->update($update);
-    $data['_cal_member']    = TblCalMemberModel::where('cal_id',$request->cal_id)->get();
-    foreach($data['_cal_member'] as $key=>$cal_member)
-    {
-    	$member['archived']   = 2;
-    	TblCalPaymentModel::where('cal_member_id',$cal_member->cal_member_id)->update($member);
-    }
-    if($pending)
-    {
-    	return '<center><b><span class="color-red">CAL successfully mark as Pending!</span></b></center>';
-    }
-    else
-    {
-
-    	return "error";
-// >>>>>>> 8bb1253ef608861fb859c95d09b82190819e3c90
-    }
+    	$update['archived']     = 2; //for pending cal
+    	$update['cal_remarks']  = $request->cal_remarks;
+    	$pending                = TblCalModel::where('cal_id',$request->cal_id)->update($update);
+    	$data['_cal_member']    = TblCalMemberModel::where('cal_id',$request->cal_id)->get();
+    	foreach($data['_cal_member'] as $key=>$cal_member)
+    	{
+    		$member['archived']   = 2;
+    		TblCalPaymentModel::where('cal_member_id',$cal_member->cal_member_id)->update($member);
+    	}
+    	if($pending)
+    	{
+    		return '<center><b><span class="color-red">CAL successfully mark as Pending!</span></b></center>';
+    	}
+    	else
+    	{
+    		return "error";
+    	}
 }
 public function billing_cal_close($cal_id)
 {

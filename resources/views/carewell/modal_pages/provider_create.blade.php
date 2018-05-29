@@ -28,7 +28,7 @@
 			<label>Email Address</label>
 		</div>
 		<div class="col-md-4 form-content">
-			<input type="text" id="provider_contact_email" class="form-control"/>
+			<input type="email" id="provider_contact_email" class="form-control"/>
 		</div>
 	</div>
 	

@@ -37,11 +37,11 @@ function doctor_center()
 		{
 			var doctor_id       = $(this).data('doctor_id');
 			var modalName 		= 'ADD DOCTOR PROVIDER';
-			var modalClass 		= 'add-doctor-provider-modal';
+			var modalClass 	= 'add-doctor-provider-modal';
 			var modalLink 		= '/doctor/add_doctor_provider/'+doctor_id;
 			var modalActionName = 'ADD DOCTOR PROVIDER';
 			var modalAction 	= 'add-doctor-provider-confirm';
-			var modalSize  		= 'modal-md';
+			var modalSize  	= 'modal-md';
 			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
         });
 	}
@@ -87,11 +87,11 @@ function doctor_center()
 		$("body").on('click','.add-doctor',function()
 		{
 			var modalName 		= 'ADD DOCTOR';
-			var modalClass 		='doctor';
+			var modalClass 	='doctor';
 			var modalLink 		='/doctor/add_doctor';
 			var modalActionName ='ADD DOCTOR';
 			var modalAction 	='add-doctor-confirm';
-			var modalSize  	    = 'modal-lg';
+			var modalSize  	= 'modal-lg';
 			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
         });
 	}
