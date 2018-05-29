@@ -11,6 +11,8 @@ var calData 		= new FormData();
 var calCloseData	= new FormData();
 var calFileData 	= new FormData();
 
+var payableData 	= new FormData();
+
 var userProfileData = new FormData();
 var passwordData 	= new FormData();
 var userData 		= new FormData();

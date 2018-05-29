@@ -15,11 +15,11 @@ function member_center()
 		$(document).ready(function()
 		{
 			export_template();
-            import_member();
-            create_member();
-            create_member_confirm();
-            create_member_submit();
-            import_member_confirm();
+            	import_member();
+            	create_member();
+            	create_member_confirm();
+           	create_member_submit();
+            	import_member_confirm();
 			import_member_submit();
 			view_member_details();
 			view_member_transaction_details();
@@ -39,13 +39,13 @@ function member_center()
 		$("body").on('click','.create-member',function()
 		{
 			var modalName 		= 'CREATE MEMBER';
-			var modalClass 		= 'member';
+			var modalClass      = 'member';
 			var modalLink 		= '/member/create_member';
 			var modalActionName = 'CREATE MEMBER';
 			var modalAction 	= 'create-member-confirm';
 			var modalSize 		= 'modal-lg';
 			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
-        });
+          });
 
 		$('body').on('change','.select_company',function() 
 		{
@@ -62,13 +62,13 @@ function member_center()
 			
 			if(globals.checking_null_validation(document.getElementById('member_first_name').value,"FIRST NAME")=="")
 			{}
-		    else if(globals.checking_null_validation(document.getElementById('member_middle_name').value,"MIDDLE NAME")=="")
+		    	else if(globals.checking_null_validation(document.getElementById('member_middle_name').value,"MIDDLE NAME")=="")
 			{}
 			else if(globals.checking_null_validation(document.getElementById('member_last_name').value,"LAST NAME")=="")
 			{}
 			else if(globals.checking_null_validation(document.getElementById('member_birthdate').value,"BIRTHDATE")=="")
 			{}
-		    else if(globals.checking_null_validation(document.getElementById('member_employee_number').value,"EMPLOYEE NUMBER")=="")
+		    	else if(globals.checking_null_validation(document.getElementById('member_employee_number').value,"EMPLOYEE NUMBER")=="")
 			{}
 			else if(document.getElementById('company_id').value=="0")
 			{

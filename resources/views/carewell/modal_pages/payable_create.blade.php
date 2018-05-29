@@ -45,58 +45,52 @@
 	</div>
 	
 </div>
-<div class="payable-create-table" id="payable-create-table">
-	<div class="box-globals">
-		<div class="row">
-            <div class=" col-md-4 col-xs-12 pull-left">
-            	<div class="col-md-6 no-padding">
-					<input type="text" class="form-control datepicker" placeholder="FROM">
-				</div>
-				<div class="col-md-6 no-padding">
-					<input type="text" class="form-control datepicker" placeholder="TO">
-				</div>
-            </div>
-            <div class="col-md-3 col-xs-12 pull-right">
-              <div class="input-group top-element">
-                <input type="text" class="form-control " id="search_key">
-                <span class="input-group-btn">
-                  <button type="button" class="btn btn-default"><i class="fa fa-search"></i></button>
-                </span>
-              </div>
-            </div>
-          </div>
-		<div class="row">
-			<div class="col-xs-12">
-				<div class="box-body table-responsive no-padding">
-					<table class="table table-hover table-bordered">
-						<tr>
-							<th><input type="checkbox" class="checkAllCheckbox"></th>
-							<th>APPROVAL #</th>
-							<th>UNIVERSAL ID</th>
-							<th>CAREWELL ID</th>
-							<th>MEMBER NAME</th>
-							<th>COMPANY</th>
-							<th>PROVIDER</th>
-							<th>STATUS</th>
-						</tr>
-						@foreach($_approval as $approval)
-						<tr>
-							<td><input type="checkbox" ></td>
-							<td>{{$approval->approval_number}}</td>
-							<td>{{$approval->member_universal_id}}</td>
-							<td>{{$approval->member_carewell_id}}</td>
-							<td>{{$approval->member_first_name." ".$approval->member_last_name }}</td>
-							<td>{{$approval->company_name}}</td>
-							<td>{{$approval->provider_name}}</td>
-							<td><span class="label label-success">active</span></td>
-						</tr>
-						@endforeach
-					</table>
-				</div>
-				<div class="box-footer clearfix">
-					@include('globals.pagination', ['paginator' => $_approval])
-				</div>
+<div class="row box-globals">
+	<div class="form-holder">
+		<div class=" col-md-4 col-xs-12 pull-left">
+			<div class="input-group top-element">
+			    <input type="text" class="form-control datepicker" id="payable_from"/>
+			    <span class="input-group-addon">TO</span>
+			    <input type="text" class="form-control datepicker" id="payable_to"/>
 			</div>
 		</div>
+		<div class="col-md-3 col-xs-12 pull-right">
+              	<div class="input-group top-element">
+               	<input type="text" class="form-control search-approval-key">
+                	<span class="input-group-btn">
+                  		<button type="button" class="btn btn-default search-approval" ><i class="fa fa-search"></i></button>
+                	</span>
+              	</div>
+          </div>
+	</div>
+	<div class="form-holder">
+		<div class="load-data load-member-approval" data-target="load-member-approval">
+			<div class="box-body table-responsive no-padding">
+	              	<table class="table table-hover table-bordered">
+		               <tr>
+		               	<th><input type="checkbox" class="checkAllCheckbox"></th>
+		                  	<th class="live-search">APPROVAL #</th>
+		                  	<th class="live-search">UNIVERSAL ID</th>
+		                  	<th class="live-search">CAREWELL ID</th>
+		                  	<th class="live-search">MEMBER NAME</th>
+		                  	<th class="live-search">COMPANY</th>
+		                  	<th class="live-search">PROVIDER</th>
+		                  	<th class="live-search">DATE ISSUED</th>
+		               </tr>
+		               @foreach($_approval_active as $approval_active)
+		               <tr>
+		               	<td><input type="checkbox" ></td>
+		                  	<td><span class="label label-success view-approval-details" data-size="md" data-approval_id="{{$approval_active->approval_id}}">{{$approval_active->approval_number}}</span></td>
+		                  	<td>{{$approval_active->member_universal_id}}</td>
+		                  	<td>{{$approval_active->member_carewell_id}}</td>
+		                  	<td>{{$approval_active->member_first_name." ".$approval_active->member_last_name }}</td>
+		                  	<td>{{$approval_active->company_name}}</td>
+		                  	<td>{{$approval_active->provider_name}}</td>
+		                  	<td>{{date("F j, Y",strtotime($approval_active->approval_created))}}</td>
+		               </tr>
+		               @endforeach
+	              	</table>
+	          </div>
+	     </div>
 	</div>
 </div>

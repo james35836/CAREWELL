@@ -1164,9 +1164,9 @@ public function doctor_import_doctor_submit(Request $request)
 			$providerData = TblProviderModel::where('provider_id',$providerID)->first();
 
 			$count_doctor = TblDoctorModel::where('doctor_first_name',StaticFunctionController::nullableToString($data['doctor_first_name']))
-			->where('doctor_last_name', StaticFunctionController::nullableToString($data['doctor_last_name']))
-			->where('doctor_middle_name',StaticFunctionController::nullableToString($data['doctor_middle_name']))
-			->count();
+						->where('doctor_last_name', StaticFunctionController::nullableToString($data['doctor_last_name']))
+						->where('doctor_middle_name',StaticFunctionController::nullableToString($data['doctor_middle_name']))
+						->count();
 			if($count_doctor == 0 &&StaticFunctionController::getid($data['provider_name'], 'provider') != null )
 			{
 				$doctor['doctor_number']            =   StaticFunctionController::updateReferenceNumber('doctor');
@@ -1412,22 +1412,22 @@ public function billing_import_cal_members($cal_id,$company_id)
 }
 public function billing_cal_download_template($cal_id,$company_id)
 {
-	$excels['number_of_rows'] = 10;
-	$excels['company_id']     = $company_id;
-	$cal_template             = TblCalModel::where('cal_id',$cal_id)
-	->join('tbl_company','tbl_company.company_id','=','tbl_cal.company_id')
-	->first();
-	$excels['company_name']   = $cal_template->company_name;
-	$excels['company_id']     = $cal_template->company_id;
-	$excels['cal_number']     = $cal_template->cal_number;
+	$excels['number_of_rows'] 	= 10;
+	$excels['company_id']     	= $company_id;
+	$cal_template             	= TblCalModel::where('cal_id',$cal_id)
+							->join('tbl_company','tbl_company.company_id','=','tbl_cal.company_id')
+							->first();
+	$excels['company_name']   	= $cal_template->company_name;
+	$excels['company_id']     	= $cal_template->company_id;
+	$excels['cal_number']     	= $cal_template->cal_number;
 
-	$excels['_payment']       = TblPaymentModeModel::where('archived',0)->get();
-	$excels['_deployment']    = TblCompanyDeploymentModel::where('tbl_company_deployment.company_id',$company_id)->get();
-	$excels['_coverage']      = TblCompanyCoveragePlanModel::where('tbl_company_coverage_plan.company_id',$company_id)->CoveragePlan()->get();
-	$excels['_member']        = TblMemberCompanyModel::where('tbl_member_company.archived',0)
-	->where('tbl_member_company.company_id',$company_id)
-	->where('tbl_member_company.member_payment_mode',$cal_template->cal_payment_mode)
-	->MemberCompany()
+	$excels['_payment']       	= TblPaymentModeModel::where('archived',0)->get();
+	$excels['_deployment']    	= TblCompanyDeploymentModel::where('tbl_company_deployment.company_id',$company_id)->get();
+	$excels['_coverage']      	= TblCompanyCoveragePlanModel::where('tbl_company_coverage_plan.company_id',$company_id)->CoveragePlan()->get();
+	$excels['_member']        	= TblMemberCompanyModel::where('tbl_member_company.archived',0)
+							->where('tbl_member_company.company_id',$company_id)
+							->where('tbl_member_company.member_payment_mode',$cal_template->cal_payment_mode)
+							->MemberCompany()
 	->get();
 	$excels['count_member']   =   count($excels['_member'])+10;
 	$excels['data'] = ['LAST NAME','FIRST NAME','MIDDLE NAME','BIRTHDATE','COVERAGE PLAN','DEPLOYMENT','MODE OF PAYMENT','PAYMENT AMOUNT'];
@@ -1772,11 +1772,13 @@ public function billing_cal_close_submit(Request $request)
 /*MEDICAL*/
 public function availment()
 {
-	$data['page']       = 'Availment';
-	$data['_company']   = TblCompanyModel::where('archived',0)->get();
-	$data['_provider']  = TblProviderModel::where('archived',0)->get();
-	$data['user']       = StaticFunctionController::global();
-	$data['_approval']  = TblApprovalModel::where('tbl_member_company.archived',0)->ApprovalInfo()->paginate(10);
+	$data['page']       		= 'Availment';
+	$data['_company']  			= TblCompanyModel::where('archived',0)->get();
+	$data['_provider']  		= TblProviderModel::where('archived',0)->get();
+	$data['user']       		= StaticFunctionController::global();
+	$data['_approval_active']  	= TblApprovalModel::where('tbl_approval.archived',0)->where('tbl_member_company.archived',0)->ApprovalInfo()->paginate(10);
+	$data['_approval_pending']  	= TblApprovalModel::where('tbl_approval.archived',2)->where('tbl_member_company.archived',0)->ApprovalInfo()->paginate(10);
+	$data['_approval_inactive']  	= TblApprovalModel::where('tbl_approval.archived',1)->where('tbl_member_company.archived',0)->ApprovalInfo()->paginate(10);
 	return view('carewell.pages.availment_center',$data);
 }
 public function availment_create_approval()
@@ -1796,22 +1798,22 @@ public function  availment_get_member_info(Request $request)
 {
 	if($request->ajax())
 	{
-		$today                = date('Y-m-d');
-		$mem_cal              = TblCalPaymentModel::where('member_id',$request->member_id)
-		->where(function($query)
-		{
-			$query->where('archived',1);
-			$query->orWhere('archived',2);
-			
-		})
-		->orderBy('cal_payment_end','DESC')
-		->first();
-		$data['member_info']  = TblMemberModel::where('tbl_member.member_id',$request->member_id)->where('tbl_member_company.archived',0)->Member()->first();
-		$data['_member']      = TblMemberModel::where('tbl_member.archived',0)->where('tbl_member_company.archived',0)->Member()->get();
-		$data['_availment']   = TblCoveragePlanProcedureModel::where('coverage_plan_id',$data['member_info']->coverage_plan_id)
-		->join('tbl_availment','tbl_availment.availment_id','=','tbl_coverage_plan_procedure.availment_id')
-		->select([DB::RAW('DISTINCT(tbl_coverage_plan_procedure.availment_id)'),'tbl_availment.availment_name','tbl_availment.availment_id'])
-		->get();
+		$today                	= date('Y-m-d');
+		$mem_cal              	= TblCalPaymentModel::where('member_id',$request->member_id)
+							->where(function($query)
+							{
+								$query->where('archived',1);
+								$query->orWhere('archived',2);
+								
+							})
+							->orderBy('cal_payment_end','DESC')
+							->first();
+		$data['member_info']  	= TblMemberModel::where('tbl_member.member_id',$request->member_id)->where('tbl_member_company.archived',0)->Member()->first();
+		$data['_member']     	= TblMemberModel::where('tbl_member.archived',0)->where('tbl_member_company.archived',0)->Member()->get();
+		$data['_availment']   	= TblCoveragePlanProcedureModel::where('coverage_plan_id',$data['member_info']->coverage_plan_id)
+							->join('tbl_availment','tbl_availment.availment_id','=','tbl_coverage_plan_procedure.availment_id')
+							->select([DB::RAW('DISTINCT(tbl_coverage_plan_procedure.availment_id)'),'tbl_availment.availment_name','tbl_availment.availment_id'])
+							->get();
 		$data['_availment_list']  = '<option value="0">-SELECT AVAILMENT-';
 		foreach($data['_availment'] as $availment)
 		{
@@ -1968,20 +1970,20 @@ public function availment_view_approval_details($approval_id)
 	
 	$data['approval_details'] = TblApprovalModel::where('tbl_approval.approval_id',$approval_id)->ApprovalDetails()->first();
 	$data['charge_diagnosis'] = TblApprovalModel::where('tbl_approval.approval_id',$approval_id)
-	->join('tbl_diagnosis','tbl_diagnosis.diagnosis_id','=','tbl_approval.charge_diagnosis_id')
-	->first();
+						->join('tbl_diagnosis','tbl_diagnosis.diagnosis_id','=','tbl_approval.charge_diagnosis_id')
+						->first();
 	$data['_final_diagnosis'] = TblApprovalDiagnosisModel::where('approval_id',$approval_id)
-	->join('tbl_diagnosis','tbl_diagnosis.diagnosis_id','=','tbl_approval_diagnosis.diagnosis_id')
-	->get();
+						->join('tbl_diagnosis','tbl_diagnosis.diagnosis_id','=','tbl_approval_diagnosis.diagnosis_id')
+						->get();
 	$data['_availed']         = TblApprovalProcedureModel::where('tbl_approval_procedure.approval_id',$approval_id)->ProcedureDiagnosis()->get();
 	$data['_doctor_assigned'] = TblApprovalDoctorModel::where('tbl_approval_doctor.approval_id',$approval_id)->ApprovalDoctor()->get();
 	$data['_payee_doctor']    = TblApprovalPayeeModel::where('approval_id',$approval_id)
-	->where('type','doctor')
-	->join('tbl_doctor','tbl_doctor.doctor_id','=','tbl_approval_payee.payee_id')
-	->get();
-	$data['_payee_other']     = TblApprovalPayeeModel::where('approval_id',$approval_id)
-	->where('type','payee')
-	->get();
+						->where('type','doctor')
+						->join('tbl_doctor','tbl_doctor.doctor_id','=','tbl_approval_payee.payee_id')
+	                         ->get();
+	$data['_payee_other']    = TblApprovalPayeeModel::where('approval_id',$approval_id)
+						->where('type','payee')
+						->get();
 	$data['total_procedure']  = TblApprovalTotalModel::where('approval_id',$approval_id)->where('total_type','procedure')->first();
 	$data['total_doctor']     = TblApprovalTotalModel::where('approval_id',$approval_id)->where('total_type','doctor')->first();
 	return view('carewell.modal_pages.availment_approval_details',$data);
@@ -2013,13 +2015,18 @@ public function payable()
 public function payable_create()
 {
 	$data['_provider']  = TblProviderModel::where('archived',0)->get();
-	$data['_approval']  = TblApprovalModel::where('tbl_member_company.archived',0)->ApprovalInfo()->paginate(10);
+	$data['_approval_active']  = TblApprovalModel::where('tbl_member_company.archived',0)->where('tbl_approval.archived',0)->ApprovalInfo()->get();
 	return view('carewell.modal_pages.payable_create',$data);
 }
 
 public function payable_create_get_approval($provider_id)
 {
-	$data['_approval']  = TblApprovalModel::where('tbl_provider.provider_id',$provider_id)->where('tbl_approval.archived',0)->ApprovalInfo()->paginate(10);
+	$data['_approval_active']  = TblApprovalModel::where('tbl_approval.provider_id',$provider_id)->where('tbl_member_company.archived',0)->where('tbl_approval.archived',0)->ApprovalInfo()->get();
+	return view('carewell.additional_pages.payable_get_approval',$data);
+}
+public function payable_search_approval(Request $request)
+{
+	$data['_approval_active']  = TblApprovalModel::where('approval_number','like','%'.$request->key.'%')->where('tbl_approval.provider_id',$request->provider_id)->where('tbl_member_company.archived',0)->where('tbl_approval.archived',0)->ApprovalInfo()->get();
 	return view('carewell.additional_pages.payable_get_approval',$data);
 }
 public function payable_create_submit(Request $request)
@@ -2039,6 +2046,11 @@ public function payable_create_submit(Request $request)
 		$payApprovalData->approval_id = $approval_id; 
 		$payApprovalData->payable_id  = $payableDatas->payable_id;
 		$payApprovalData->save();
+          if($payApprovalData->save())
+          {
+          	$archived['archived'] = '2';
+			TblApprovalModel::where('tbl_approval.aproval_id',$approval_id)->update($archived);
+          }
 	}
 	if($payableDatas->save())
 	{
@@ -2094,11 +2106,11 @@ public function reports_monitoring_end_per_month()
 	foreach ($data['_company'] as $key => $company) 
 	{
 		$data['_company'][$key]['company_availment']  =  TblCompanyCoveragePlanModel::where('tbl_company_coverage_plan.company_id',$company->company_id)
-		->where('tbl_availment.availment_parent_id',0)
-		->join('tbl_coverage_plan','tbl_coverage_plan.coverage_plan_id','=','tbl_company_coverage_plan.coverage_plan_id')
-		->join('tbl_coverage_plan_tag','tbl_coverage_plan_tag.coverage_plan_id','=','tbl_coverage_plan.coverage_plan_id')
-		->join('tbl_availment','tbl_availment.availment_id','=','tbl_coverage_plan_tag.availment_id')
-		->get();
+												->where('tbl_availment.availment_parent_id',0)
+												->join('tbl_coverage_plan','tbl_coverage_plan.coverage_plan_id','=','tbl_company_coverage_plan.coverage_plan_id')
+												->join('tbl_coverage_plan_tag','tbl_coverage_plan_tag.coverage_plan_id','=','tbl_coverage_plan.coverage_plan_id')
+												->join('tbl_availment','tbl_availment.availment_id','=','tbl_coverage_plan_tag.availment_id')
+												->get();
 	}
 	return view('carewell.pages.reports_end_per_month',$data);
 }
@@ -2586,11 +2598,11 @@ public function settings_coverage_plan_details($coverage_plan_id)
 {     
 	$data['coverage_plan_details']  = TblCoveragePlanModel::where('coverage_plan_id',$coverage_plan_id)->first();     
 	$data['_coverage_plan_covered'] = TblCoveragePlanProcedureModel::where('coverage_plan_id',$coverage_plan_id)
-	->where('tbl_coverage_plan_procedure.archived',0)
-	->select(DB::raw('count(*) as totals, tbl_coverage_plan_procedure.availment_id,tbl_availment.availment_name'))
-	->groupBy('availment_id')
-	->join('tbl_availment','tbl_availment.availment_id','=','tbl_coverage_plan_procedure.availment_id') 
-	->get();
+								->where('tbl_coverage_plan_procedure.archived',0)
+								->select(DB::raw('count(*) as totals, tbl_coverage_plan_procedure.availment_id,tbl_availment.availment_name'))
+								->groupBy('availment_id')
+								->join('tbl_availment','tbl_availment.availment_id','=','tbl_coverage_plan_procedure.availment_id') 
+								->get();
 	foreach($data['_coverage_plan_covered'] as $key=>$availment)
 	{
 		$data['_coverage_plan_covered'][$key]['procedure']   = TblCoveragePlanProcedureModel::where('availment_id',$availment->availment_id)
