@@ -2194,7 +2194,6 @@ public function reports_member_cal_detail($ref,$member_id)
 	else if($ref == 'yearly')
 	{
 		$data['date'] = $key = date('Y'); 
-		dd($data['date']);
 		$data['member_id'] = $member_id;
 		$data['link'] = '/reports/member_cal/excel_report/'.$ref.'/'.$key.'/'.$member_id;
 		$data['_member'] = TblCalPaymentModel::where('member_id',$member_id)
