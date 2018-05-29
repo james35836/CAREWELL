@@ -718,7 +718,7 @@ public function provider()
 	$data['page']              = 'Network Provider';
 	$data['user']              = StaticFunctionController::global();
 	$data['_provider_active']  = TblProviderModel::where('archived',0)->paginate(10);
-	$data['_provider_inactive']  = TblProviderModel::where('archived',1)->paginate(10);
+	$data['_provider_inactive']= TblProviderModel::where('archived',1)->paginate(10);
 	foreach ($data['_provider_active'] as $key => $provider) 
 	{
 		$data['_provider_active'][$key]['provider_payee'] =  TblProviderPayeeModel::where('provider_id',$provider->provider_id)->get();
@@ -734,15 +734,14 @@ public function provider_create()
 	return view('carewell.modal_pages.provider_create');
 }
 
-public static function chk_doctor_exist_insert_doctor_provider(Request $request,$chk_provider_name)
+
+public static function provider_add_tag_doctor($doctorProviderData,$provider_id)
 {
-	foreach($request->doctorProviderData as $doctor_full_name)
+	$doctorInsert = 0;
+     foreach($doctorProviderData as $doctor_full_name)
 	{
-		$chk_refProviderId  = TblProviderModel::where('provider_name',$chk_provider_name)->value('provider_id');
-
-		$refDoctorId   = TblDoctorModel::where('doctor_full_name', $doctor_full_name)->value('doctor_id');
-
-		if($refDoctorId == null)
+		$doctor_id = StaticFunctionController::getIdNorName($doctor_full_name,'doctor');
+		if($doctor_id==$doctor_full_name)
 		{
 			$doctorData = new TblDoctorModel;
 			$doctorData->doctor_full_name       = StaticFunctionController::transformText($doctor_full_name);
@@ -753,66 +752,51 @@ public static function chk_doctor_exist_insert_doctor_provider(Request $request,
 			$doctorData->doctor_created         = Carbon::now();
 			$doctorData->save();
 
-			$chk_refDoctorId   = TblDoctorModel::where('doctor_full_name',$doctor_full_name)->value('doctor_id');
-			
-			
 			$providerDoctorData = new TblDoctorProviderModel;
-			$providerDoctorData->doctor_id = $chk_refDoctorId;
-			$providerDoctorData->provider_id =  $chk_refProviderId;
+			$providerDoctorData->doctor_id 	= $doctorData->doctor_id;
+			$providerDoctorData->provider_id 	= $provider_id;
 			$providerDoctorData->save();
+
+			$doctorInsert++;
 		}
 		else
 		{
 			$providerDoctorData = new TblDoctorProviderModel;
-			$providerDoctorData->doctor_id = $refDoctorId;
-			$providerDoctorData->provider_id =  $chk_refProviderId;
+			$providerDoctorData->doctor_id 	= $doctor_id;
+			$providerDoctorData->provider_id 	= $provider_id;
 			$providerDoctorData->save();
+			
+			$doctorInsert++;
 		}
 	}
+	return $doctorInsert;
 }
 
 public function provider_create_submit(Request $request)
 {
-    $returnMessage_popup = 0; // use to show popup as a parameter
-    
-    $refProviderId   = TblProviderModel::where('provider_name', $request->provider_name)->value('provider_id');
+     $provider_id = StaticFunctionController::getIdNorName($request->provider_name,'provider');
+    	if($provider_id==$request->provider_name)
+    	{
+    		$providerData = new TblProviderModel;
+	    	$providerData->provider_name            = $request->provider_name;
+	    	$providerData->provider_rvs             = $request->provider_rvs;
+	    	$providerData->provider_contact_person  = $request->provider_contact_person;
+	    	$providerData->provider_telephone_number= $request->provider_telephone_number;
+	    	$providerData->provider_mobile_number   = $request->provider_mobile_number;
+	    	$providerData->provider_contact_email   = $request->provider_contact_email;
+	    	$providerData->provider_address         = $request->provider_address;
+	    	$providerData->provider_created         = Carbon::now();
+	    	$providerData->save();
+          $notif    = "Provider Inserted";
+    	     $inserted = Self::provider_add_tag_doctor($request->doctorProviderData,$providerData->provider_id);
+    	}
+    	else
+    	{
+    		$inserted = Self::provider_add_tag_doctor($request->doctorProviderData,$provider_id);
+          $notif    = "Provider Exist";
+	}
 
-    if($refProviderId == null) // if provider name does not exist
-    {    
-    	$providerData = new TblProviderModel;
-    	$providerData->provider_name            = $request->provider_name;
-    	$providerData->provider_rvs             = $request->provider_rvs;
-    	$providerData->provider_contact_person  = $request->provider_contact_person;
-    	$providerData->provider_telephone_number= $request->provider_telephone_number;
-    	$providerData->provider_mobile_number   = $request->provider_mobile_number;
-    	$providerData->provider_contact_email   = $request->provider_contact_email;
-    	$providerData->provider_address         = $request->provider_address;
-    	$providerData->provider_created         = Carbon::now();
-    	$providerData->save();
-
-    	Self::chk_doctor_exist_insert_doctor_provider($request,$request->provider_name);
-
-    	$returnMessage_popup = 1;
-
-    }
-    else
-    {
-    	Self::chk_doctor_exist_insert_doctor_provider($request,$request->provider_name);
-
-    	$returnMessage_popup = 1;
-    }
-
-
-    if($returnMessage_popup == 1)
-    {
-    	return StaticFunctionController::returnMessage('success','PROVIDER');    
-    }
-    else
-    {
-    	return StaticFunctionController::returnMessage('danger','PROVIDER'); 
-    }
-
-    
+	return '<center><b><span class="label label-success">'.$notif.' and '.$inserted.' doctors tag</span></b></center>';
 }
 
 public function provider_details(Request $request,$provider_id)
