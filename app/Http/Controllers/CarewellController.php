@@ -1049,6 +1049,7 @@ public function add_doctor_submit(Request $request)
 	$doctorData->doctor_email_address   = $request->doctor_email_address;
 	$doctorData->doctor_created         = Carbon::now();
 	$doctorData->save();
+
 	foreach($request->doctorProviderData as $provider)
 	{
 		$providerData = new TblDoctorProviderModel;
@@ -1785,6 +1786,7 @@ public function availment()
 	$data['_approval_inactive']  	= TblApprovalModel::where('tbl_approval.archived',1)->where('tbl_member_company.archived',0)->ApprovalInfo()->paginate(10);
 	return view('carewell.pages.availment_center',$data);
 }
+
 public function availment_create_approval()
 {
 	$data['_member']          = TblMemberModel::MemberCompany()->where('tbl_member_company.archived',0)->get();

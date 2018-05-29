@@ -1,20 +1,20 @@
 <script>
 	$('input.string-only').keypress('keypress', string_only);//function in layout name string_only
-	$(document).ready(function() 
-	{
-		$("body").on('change','.provider_name',function() 
-		{
-			var selected = $("option:selected", $(this)).val();
-			$(".provider_name option").each(function() 
-			{
-				$(this).show();
-			});
-			$(".provider_name").each(function() 
-			{
-				$("option[value='" + selected + "']", $(this)).attr("disabled", true);
-			});
-		});
-	});
+	// $(document).ready(function() 
+	// {
+	// 	$("body").on('change','.provider_name',function() 
+	// 	{
+	// 		var selected = $("option:selected", $(this)).val();
+	// 		$(".provider_name option").each(function() 
+	// 		{
+	// 			$(this).show();
+	// 		});
+	// 		$(".provider_name").each(function() 
+	// 		{
+	// 			$("option[value='" + selected + "']", $(this)).attr("disabled", true);
+	// 		});
+	// 	});
+	// });
 </script>
 <div class="row box-globals">
 

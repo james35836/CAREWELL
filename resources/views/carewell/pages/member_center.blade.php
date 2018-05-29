@@ -1,4 +1,4 @@
-\@extends('carewell.layout.layout')
+@extends('carewell.layout.layout')
 @section('content')
 <div class="container">
   <div class="row">
