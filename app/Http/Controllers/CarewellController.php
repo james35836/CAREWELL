@@ -574,12 +574,12 @@ public function member_import_member_submit(Request $request)
 			$companyID        = StaticFunctionController::getid($data['company_code'], 'company');
 			$companyData      = TblCompanyModel::where('company_id',$companyID)->first();
 			$count_member     = TblMemberModel::MemberExist($data['member_first_name'],$data['member_middle_name'],$data['member_last_name'])->first();
-			$carewellCheck    = TblMemberCompanyModel::where('member_carewell_id',$data['carewell_id'])->first();
-			if($carewellCheck!=null)
+			$carewellCheck    = TblMemberCompanyModel::where('member_carewell_id',$data['carewell_id'])->count();
+			if($carewellCheck!=0)
 			{
 				$name['first']  = $data['member_first_name'];
-				$name['last']   = $data['member_middle_name'];
-				$name['middle'] = $data['member_last_name'];
+				$name['middle'] = $data['member_middle_name'];
+				$name['last']   = $data['member_last_name'];
 				$name['type']   = 'CAREWELL ID EXIST';
 				array_push($exportArray,$name);
 				$countError++;
@@ -641,9 +641,9 @@ public function member_import_member_submit(Request $request)
 			else
 			{
 				$name['first']  = $data['member_first_name'];
-				$name['last']   = $data['member_middle_name'];
-				$name['middle'] = $data['member_last_name'];
-				$name['type']   = 'CAREWELL EXIST';
+				$name['middle']   = $data['member_middle_name'];
+				$name['last'] = $data['member_last_name'];
+				$name['type']   = 'ALL FILEDS ARE REQUIRED - PLEASE CHECK';
 				array_push($exportArray,$name);
 				$countError++;
 			}
