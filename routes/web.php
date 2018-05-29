@@ -81,20 +81,20 @@ Route::post('/company/add_deployment/submit', 			'CarewellController@company_add
 
 
 /*MEMBER*/
-Route::get('/member', 									'CarewellController@member');
+Route::get('/member', 								'CarewellController@member');
 Route::get('/member/create_member', 					'CarewellController@member_create_member');
-Route::post('/member/create_member/submit', 			'CarewellController@member_create_member_submit');
+Route::post('/member/create_member/submit', 				'CarewellController@member_create_member_submit');
 
-Route::get('/member/view_member_details/{member_id}', 	'CarewellController@member_details');
-Route::get('/member/transaction_details/{member_id}',   'CarewellController@member_transaction_details');
+Route::get('/member/view_member_details/{member_id}', 		'CarewellController@member_details');
+Route::get('/member/transaction_details/{member_id}',   	'CarewellController@member_transaction_details');
 Route::get('/member/download_template/{company_id}/{number}', 	'CarewellController@member_download_template');
 Route::get('/member/import_member', 					'CarewellController@member_import_member');
-Route::post('/member/import_member/submit', 			'CarewellController@member_import_member_submit');
+Route::post('/member/import_member/submit', 				'CarewellController@member_import_member_submit');
 
-Route::get('/member/member_adjustment/{member_id}', 	'CarewellController@member_adjustment');
-Route::post('/member/member_adjustment/submit', 		'CarewellController@member_adjustment_submit');
+Route::get('/member/member_adjustment/{member_id}', 		'CarewellController@member_adjustment');
+Route::post('/member/member_adjustment/submit', 			'CarewellController@member_adjustment_submit');
 
-Route::post('/member/update_member/submit', 			'CarewellController@member_update_member_submit');
+Route::post('/member/update_member/submit', 				'CarewellController@member_update_member_submit');
 
 
 
@@ -102,25 +102,25 @@ Route::post('/member/update_member/submit', 			'CarewellController@member_update
 /*PROVIDER*/
 Route::get('/provider', 								'CarewellController@provider');
 Route::get('/provider/create_provider', 				'CarewellController@provider_create');
-Route::post('/provider/create_provider/submit', 		'CarewellController@provider_create_submit');
+Route::post('/provider/create_provider/submit', 			'CarewellController@provider_create_submit');
 Route::get('/provider/provider_details/{provider_id}', 	'CarewellController@provider_details');
 Route::get('/provider/import_provider', 				'CarewellController@provider_import');
-Route::post('/provider/import_provider/submit', 		'CarewellController@provider_import_submit');
+Route::post('/provider/import_provider/submit', 			'CarewellController@provider_import_submit');
 Route::get('/provider/export_template', 				'CarewellController@provider_export_template');
 
 Route::post('/provider/update_provider/submit', 'CarewellController@provider_update_provider_submit');
 
 /*DOCTOR*/
-Route::get('/doctor', 									'CarewellController@doctor');
-Route::get('/doctor/add_doctor', 					    'CarewellController@add_doctor');
+Route::get('/doctor', 								'CarewellController@doctor');
+Route::get('/doctor/add_doctor', 					    	'CarewellController@add_doctor');
 Route::get('/doctor/import_doctor', 					'CarewellController@import_doctor');
-Route::post('/doctor/add_doctor/submit', 			    'CarewellController@add_doctor_submit');
-Route::get('/doctor/view_doctor_details/{doctor_id}', 	'CarewellController@doctor_view_details');
+Route::post('/doctor/add_doctor/submit', 			    	'CarewellController@add_doctor_submit');
+Route::get('/doctor/view_doctor_details/{doctor_id}', 		'CarewellController@doctor_view_details');
 Route::get('/doctor/download_template/{provider_id}/{number}', 	'CarewellController@doctor_download_template');
-Route::post('/doctor/import_doctor/submit', 			'CarewellController@doctor_import_doctor_submit');
-Route::post('/doctor/update_doctor/submit', 			'CarewellController@doctor_update_submit');
+Route::post('/doctor/import_doctor/submit', 				'CarewellController@doctor_import_doctor_submit');
+Route::post('/doctor/update_doctor/submit', 				'CarewellController@doctor_update_submit');
 
-Route::get('/doctor/add_doctor_provider/{doctor_id}', 	'CarewellController@doctor_add_doctor_provider');
+Route::get('/doctor/add_doctor_provider/{doctor_id}', 		'CarewellController@doctor_add_doctor_provider');
 Route::post('/doctor/add_doctor_provider/submit', 		'CarewellController@doctor_add_doctor_provider_submit');
 
 
@@ -129,7 +129,7 @@ Route::post('/doctor/add_doctor_provider/submit', 		'CarewellController@doctor_a
 Route::get('/billing', 									'CarewellController@billing');
 Route::get('/billing/create_cal', 						'CarewellController@billing_create_cal');
 Route::post('/billing/create_cal/sumbit', 				'CarewellController@billing_create_cal_submit');
-Route::get('/billing/cal_details/{cal_id}', 			'CarewellController@billing_cal_details');
+Route::get('/billing/cal_details/{cal_id}', 				'CarewellController@billing_cal_details');
 
 Route::post('/billing/update_cal_details/sumbit', 		'CarewellController@billing_update_cal_details_submit');
 
@@ -147,9 +147,10 @@ Route::get('/billing/cal_close/{cal_id}', 				'CarewellController@billing_cal_cl
 Route::post('/billing/cal_close/sumbit',				'CarewellController@billing_cal_close_submit');
 
 /*MEDICAL*/
-Route::get('/availment', 								'CarewellController@availment');
+Route::get('/availment', 							'CarewellController@availment');
 Route::get('/availment/create_approval', 				'CarewellController@availment_create_approval');
 Route::post('/availment/get_member_info',				'CarewellController@availment_get_member_info');
+
 Route::post('/availment/create_approval/submit',		'CarewellController@availment_create_approval_submit');
 Route::get('/availment/approval_details/{approval_id}', 'CarewellController@availment_view_approval_details');
 Route::get('/availment/approval_export_pdf/{approval_id}', 'CarewellController@approval_export_pdf');
@@ -157,18 +158,21 @@ Route::get('/availment/approval_export_pdf/{approval_id}', 'CarewellController@a
 
 
 
+
 /*PAYABLE*/
-Route::get('/payable', 									'CarewellController@payable');
+Route::get('/payable', 								'CarewellController@payable');
 Route::get('/payable/create_payable', 					'CarewellController@payable_create');
 Route::get('/payable/get_approval/{provider_id}', 		'CarewellController@payable_create_get_approval');
+Route::post('/payable/search_approval', 				'CarewellController@payable_search_approval');
+
 Route::post('/payable/create_payable/submit', 			'CarewellController@payable_create_submit');
-Route::get('/payable/payable_details/{payable_id}', 	'CarewellController@payable_details');
+Route::get('/payable/payable_details/{payable_id}', 		'CarewellController@payable_details');
 
 
 
 /*REPORTS*/
-Route::get('/reports', 									'CarewellController@reports');
-Route::get('/reports/availment', 					    'CarewellController@reports_availment');
+Route::get('/reports', 								'CarewellController@reports');
+Route::get('/reports/availment', 					    	'CarewellController@reports_availment');
 Route::get('/reports/ending_number_per_month', 			'CarewellController@reports_monitoring_end_per_month');
 Route::get('/reports/breakdown', 						'CarewellController@reports_breakdown');
 
@@ -176,7 +180,7 @@ Route::get('/reports/consolidation', 					'CarewellController@reports_consolidat
 Route::get('/reports/member_cal',						'CarewellController@reports_member_cal');
 Route::get('/reports/member_cal/{ref}/{member_id}',		'CarewellController@reports_member_cal_detail');
 
-Route::post('/reports/member_cal/date_filter/{ref}',	'CarewellController@reports_member_cal_month_filter_date');
+Route::post('/reports/member_cal/date_filter/{ref}',		'CarewellController@reports_member_cal_month_filter_date');
 
 Route::get('/reports/member_cal/excel_report/{ref}/{val_key}/{member_id}', 'CarewellController@reports_export_excel');
 
@@ -185,26 +189,26 @@ Route::post('/reports/member_cal/wew', 'TestController@test_search');
 
 /*SETTINGS*/
 
-Route::get('/settings/coverage', 				    	'CarewellController@settings_coverage_plan');
+Route::get('/settings/coverage', 				    		'CarewellController@settings_coverage_plan');
 Route::get('/settings/coverage/create_plan', 			'CarewellController@settings_coverage_plan_create');
 
 Route::get('/settings/coverage/items/{availment_id}/{session_name}/{identifier}','CarewellController@settings_coverage_items');
 Route::post('/settings/coverage/items_submit', 			'CarewellController@settings_coverage_items_submit');
 
 
-Route::post('/settings/coverage/create_plan_submit', 	'CarewellController@settings_coverage_plan_create_submit');
+Route::post('/settings/coverage/create_plan_submit', 		'CarewellController@settings_coverage_plan_create_submit');
 Route::get('/settings/coverage/plan_details/{coverage_plan_id}', 			'CarewellController@settings_coverage_plan_details');
 
 
 /*ARCHIVED*/
 Route::POST('/archived/submit', 						'CarewellController@archived_submit');
 /*RESTORE*/
-Route::POST('/restore/submit', 							'CarewellController@restore_submit');
+Route::POST('/restore/submit', 						'CarewellController@restore_submit');
 
 /*MAINTENANCE*/
-Route::get('/developer/maintenance', 				    'MaintenanceController@developer_maintenance');
-Route::get('/developer/truncate', 				    	'MaintenanceController@developer_truncate');
-Route::get('/developer/credential', 				    'MaintenanceController@developer_credential');
+Route::get('/developer/maintenance', 				    	'MaintenanceController@developer_maintenance');
+Route::get('/developer/truncate', 				    		'MaintenanceController@developer_truncate');
+Route::get('/developer/credential', 				    	'MaintenanceController@developer_credential');
 
 
 

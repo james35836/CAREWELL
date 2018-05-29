@@ -187,6 +187,8 @@ $(document).ready(function()
 				<input type="text" readonly class="form-control" value="{{$approval_details->approval_date_availed}}" />
 			</div>
 		</div>
+		<div class="row form-holder">
+		</div>
 		<div class="form-holder">
 			<div class="col-md-2 form-content">
 				<label>Network Provider</label>
@@ -201,6 +203,8 @@ $(document).ready(function()
 				<input type="text" readonly class="form-control" value="{{$approval_details->availment_name}}" />
 			</div>
 		</div>
+		<div class="row form-holder">
+		</div>
 		<div class="form-holder">
 			<div class="col-md-2 form-content">
 				<label>Cheif Complaint</label>
@@ -209,6 +213,8 @@ $(document).ready(function()
 				<textarea name="approval_complaint" readonly id="approval_complaint" cols="2" rows="3" class="form-control" >{{$approval_details->approval_complaint}}</textarea>
 			</div>
 		</div>
+		<div class="row form-holder">
+		</div>
 		<div class="form-holder">
 			<div class="col-md-2 form-content">
 				<label>Initial Diagnosis</label>
@@ -216,6 +222,8 @@ $(document).ready(function()
 			<div class="col-md-10 form-content">
 				<input type="text" readonly class="form-control" value="{{$approval_details->diagnosis_name}}" />
 			</div>
+		</div>
+		<div class="row form-holder">
 		</div>
 		<div class="form-holder">
 			<div class="col-md-2 form-content">
@@ -228,7 +236,8 @@ $(document).ready(function()
 				</div>
 				@endforeach
 			</div>
-			
+		</div>
+		<div class="row form-holder">
 		</div>
 		<div class="form-holder">
 			<div class="col-md-2 form-content">

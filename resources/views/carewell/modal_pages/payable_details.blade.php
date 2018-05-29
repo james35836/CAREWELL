@@ -8,18 +8,23 @@
 	})
 </script>
 <div class="row box-globals">
+	<div class="form-holder col-md-12 col-xs-12">
+	    <div class=" col-md-1 col-xs-6 pull-right no-padding">
+	      <button class="btn btn-default top-element enable-element" type="button" ><i class="fa fa-pencil-square-o btn-icon "></i>EDIT</button>
+	    </div>
+	</div>
 	<div class="form-holder">
 		<div class="col-md-2 form-content">
 			<label>PROVIDER</label>
 		</div>
 		<div class="col-md-4 form-content">
-			<input type="text" value="{{$payable_details->provider_name}}" class="form-control" id="provider_name"/>
+			<input type="text" value="{{$payable_details->provider_name}}" class="form-control" id="provider_name" readonly/>
 		</div>
 		<div class="col-md-2 form-content">
 			<label>SOA #</label>
 		</div>
 		<div class="col-md-4 form-content">
-			<input type="text" value="{{$payable_details->payable_soa_number}}" class="form-control" id="payable_soa_number"/>
+			<input type="text" value="{{$payable_details->payable_soa_number}}" class="form-control" id="payable_soa_number" readonly/>
 		</div>
 	</div>
 	<div class="form-holder">
@@ -27,13 +32,13 @@
 			<label>Recieved</label>
 		</div>
 		<div class="col-md-4 form-content">
-			<input type="text" value="{{$payable_details->payable_recieved}}""  class="form-control datepicker" id="payable_recieved"/>
+			<input type="text" value="{{$payable_details->payable_recieved}}""  class="form-control datepicker" id="payable_recieved" readonly/>
 		</div>
 		<div class="col-md-2 form-content">
 			<label>Due</label>
 		</div>
 		<div class="col-md-4 form-content">
-			<input type="text"  value="{{$payable_details->payable_due}}"  class="form-control datepicker" id="payable_due"/>
+			<input type="text"  value="{{$payable_details->payable_due}}"  class="form-control datepicker" id="payable_due" readonly/>
 		</div>
 	</div>
 	<div class="form-holder">
@@ -41,13 +46,13 @@
 			<label>Preperation Date</label>
 		</div>
 		<div class="col-md-4 form-content">
-			<input type="text"  value="{{date("F j, Y",strtotime($payable_details->payable_created))}}"  class="form-control" id="doctor_middle_name"/>
+			<input type="text"  value="{{date("F j, Y",strtotime($payable_details->payable_created))}}"  class="form-control" id="doctor_middle_name" readonly/>
 		</div>
 		<div class="col-md-2 form-content">
 			<label>Prepared by</label>
 		</div>
 		<div class="col-md-4 form-content">
-			<input type="text" value="{{$payable_details->user_first_name." ".$payable_details->user_last_name }}" class="form-control" id="doctor_middle_name"/>
+			<input type="text" value="{{$payable_details->user_first_name." ".$payable_details->user_last_name }}" class="form-control" id="doctor_middle_name" readonly/>
 		</div>
 	</div>
 </div>

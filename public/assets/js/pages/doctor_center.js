@@ -16,11 +16,11 @@ function doctor_center()
 		$(document).ready(function()
 		{
 			add_doctor();
-            add_doctor_confirm();
-            add_doctor_submit();
-            export_doctor_template();
-            import_doctor();
-            import_doctor_confirm();
+            	add_doctor_confirm();
+            	add_doctor_submit();
+            	export_doctor_template();
+            	import_doctor();
+            	import_doctor_confirm();
 			import_doctor_submit();
 			view_doctor_details();
 			save_doctor_confirm();
@@ -50,14 +50,14 @@ function doctor_center()
 		$('body').on('click','.add-doctor-provider-confirm',function()
 		{
 			$("select.provider_name").each(function(i, sel)
-            {
-            	var selectedProvider = $(sel).val();
-        		if(selectedProvider!="SELECT PROVIDER")
             	{
-            		doctorProviderData.push(selectedProvider);
-            	}
-            });
-            if(doctorProviderData==null||doctorProviderData=="")
+	            	var selectedProvider = $(sel).val();
+	        		if(selectedProvider!="SELECT PROVIDER")
+	            	{
+	            		doctorProviderData.push(selectedProvider);
+	            	}
+            	});
+            	if(doctorProviderData==null||doctorProviderData=="")
 			{
 				globals.global_tostr('PROVIDER');
 			}
@@ -67,7 +67,7 @@ function doctor_center()
 				var confirmModalAction   = 'add-doctor-provider-submit';
 				globals.confirm_modals(confirmModalMessage,confirmModalAction);
                 
-                providerData.append('doctor_id',      $('#doctor_id').val());
+                	providerData.append('doctor_id',      $('#doctor_id').val());
 				for (var i = 0; i < doctorProviderData.length; i++) 
 				{
 				    providerData.append('doctorProviderData[]', doctorProviderData[i]);
@@ -80,7 +80,7 @@ function doctor_center()
 		$('body').on('click','.add-doctor-provider-submit',function()  
 		{
 			globals.global_submit('add-doctor-provider-modal','/doctor/add_doctor_provider/submit',providerData);
-        });
+          });
 	}
 	function add_doctor()
 	{
@@ -107,11 +107,11 @@ function doctor_center()
 			{}
 			else if(globals.checking_null_validation(document.getElementById('doctor_contact_number').value,"CONTACT NUMBER")=="")
 			{}
-		    else if(globals.checking_null_validation(document.getElementById('doctor_area_code').value,"AREA CODE")=="")
+		     else if(globals.checking_null_validation(document.getElementById('doctor_area_code').value,"AREA CODE")=="")
 			{}
-		    else if(globals.checking_null_validation(document.getElementById('doctor_email_address').value,"EMAIL ADDRESS")=="")
+		     else if(globals.checking_null_validation(document.getElementById('doctor_email_address').value,"EMAIL ADDRESS")=="")
 			{}
-		    else if(globals.global_input_email(inputs)=="error")
+		     else if(globals.global_input_email(inputs)=="error")
 			{
 				toastr.error('Email is in a wrong format.', 'Something went wrong!', {timeOut: 3000})
 			}
@@ -189,9 +189,9 @@ function doctor_center()
 			{}
 			else if(globals.checking_null_validation(document.getElementById('doctor_contact_number').value,"CONTACT NUMBER")=="")
 			{}
-		    else if(globals.checking_null_validation(document.getElementById('doctor_email_address').value,"EMAIL ADDRESS")=="")
+		    	else if(globals.checking_null_validation(document.getElementById('doctor_email_address').value,"EMAIL ADDRESS")=="")
 			{}
-		    else if(globals.global_input_email(inputs)=="error")
+		    	else if(globals.global_input_email(inputs)=="error")
 			{
 				toastr.error('Email is in a wrong format.', 'Something went wrong!', {timeOut: 3000})
 			}
@@ -203,9 +203,9 @@ function doctor_center()
 
 				doctorData.append("doctor_id",     			document.getElementById('doctor_id').value);
 				doctorData.append("doctor_full_name",     	document.getElementById('doctor_full_name').value);
-		        doctorData.append("doctor_gender", 			document.getElementById('doctor_gender').value);
-		        doctorData.append("doctor_contact_number", 	document.getElementById('doctor_contact_number').value);
-		        doctorData.append("doctor_email_address", 	document.getElementById('doctor_email_address').value);
+		        	doctorData.append("doctor_gender", 			document.getElementById('doctor_gender').value);
+		        	doctorData.append("doctor_contact_number", 	document.getElementById('doctor_contact_number').value);
+		        	doctorData.append("doctor_email_address", 	document.getElementById('doctor_email_address').value);
 			}
 		});
 	}
@@ -215,7 +215,7 @@ function doctor_center()
 		$('body').on('click','.update-doctor-submit',function()  
 		{
 			globals.global_submit('doctor-details','/doctor/update_doctor/submit',doctorData);
-        });
+        	});
 		
 	}
 	
@@ -269,10 +269,10 @@ function doctor_center()
 			var modalAction='import-doctor-confirm';
 			var modalSize = 'modal-import';
 			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
-        });
+        	});
 		
-    }
-    function import_doctor_confirm()
+    	}
+    	function import_doctor_confirm()
 	{
 		$('body').on('click','.import-doctor-confirm',function() 
 		{
@@ -289,6 +289,6 @@ function doctor_center()
 		$('body').on('click','.import-doctor-submit',function() 
 		{
 			globals.global_submit('doctor-import','/doctor/import_doctor/submit',doctorFileData);
-        });
+        	});
 	}
 }

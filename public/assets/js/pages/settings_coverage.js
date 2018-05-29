@@ -17,11 +17,11 @@ function settings_coverage()
 			
 			create_coverage_plan();
 			create_coverage_plan_confirm();
-            create_coverage_plan_submit();
+            	create_coverage_plan_submit();
 
-            coverage_plan_details();
-            coverage_add_item();
-            coverage_add_item_submit();
+            	coverage_plan_details();
+            	coverage_add_item();
+            	coverage_add_item_submit();
 
 		});
 
@@ -85,17 +85,17 @@ function settings_coverage()
 		$('body').on('click','.create-coverage-plan-submit',function() 
 		{
 			$('.confirm-modal').remove();
-            $(".coverage-plan-modal-body").html("<div class='coverage-plan-ajax-loader' style='display:none;text-align: center; padding:50px;'><img src='/assets/loader/loading.gif'/></div");
-            $('.coverage-plan-ajax-loader').show();
-            $.ajax({
+            	$(".coverage-plan-modal-body").html("<div class='coverage-plan-ajax-loader' style='display:none;text-align: center; padding:50px;'><img src='/assets/loader/loading.gif'/></div");
+            	$('.coverage-plan-ajax-loader').show();
+            	$.ajax({
 				headers: {
 				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 				},
 				url:'/settings/coverage/create_plan_submit',
 				method: "POST",
-                data:serializeData,
-                dataType: 'text',
-                success: function(data)
+                	data:serializeData,
+                	dataType: 'text',
+                	success: function(data)
 				{
 					setTimeout(function()
 					{
@@ -139,7 +139,7 @@ function settings_coverage()
 			var session_name	= $(this).data('name');
 			var identifier      = $(this).closest('tr').find('button.remove-row').data('number');
 			var modalName 		= 'COVERAGE PLAN PROCEDURE';
-			var modalClass 		= 'coverage-plan-item';
+			var modalClass      = 'coverage-plan-item';
 			var modalLink 		= '/settings/coverage/items/'+availment_id+'/'+session_name+'/'+identifier;
 			var modalActionName	= 'ADD PROCEDURE';
 			var modalAction 	= 'coverage-item-submit';
@@ -153,27 +153,26 @@ function settings_coverage()
     }
     function coverage_add_item_submit()
     {
-    	$('body').on('click','.coverage-item-submit',function() 
+    		$('body').on('click','.coverage-item-submit',function() 
 		{
 			var datas = new FormData();
 			var dates = [];
 			$('input[name="coverage_item[]"]:checked').each(function(i, num)
-            {
-            	if($(num).val()!="")
             	{
-            		dates.push(this.value);
+	            	if($(num).val()!="")
+	            	{
+	            		dates.push(this.value);
 
-            		ajaxData.availment_id = document.getElementById('availment_id').value;
-            		ajaxData.session_name = document.getElementById('session_name').value;
-            		ajaxData.identifier   = document.getElementById('identifier').value;
-
-            		ajaxData.plan_charges   = document.getElementById('plan_charges').value;
-            		ajaxData.plan_covered_amount   = document.getElementById('plan_covered_amount').value;
-            		ajaxData.plan_limit   = document.getElementById('plan_limit').value;
-                }
-            });
-            ajaxData.countThis.closest('tr').find('input.countThis').val(dates.length+' ITEMS');
-            for (var i = 0; i < dates.length; i++) 
+	            		ajaxData.availment_id 		= document.getElementById('availment_id').value;
+	            		ajaxData.session_name 		= document.getElementById('session_name').value;
+	            		ajaxData.identifier   		= document.getElementById('identifier').value;
+	            		ajaxData.plan_charges 		= document.getElementById('plan_charges').value;
+	            		ajaxData.plan_covered_amount  = document.getElementById('plan_covered_amount').value;
+	            		ajaxData.plan_limit   		= document.getElementById('plan_limit').value;
+	               }
+            	});
+            	ajaxData.countThis.closest('tr').find('input.countThis').val(dates.length+' ITEMS');
+            	for (var i = 0; i < dates.length; i++) 
 			{
 				datas.append('procedure_id[]', 			dates[i]);
 			}
@@ -185,8 +184,8 @@ function settings_coverage()
 			datas.append('session_name',   		ajaxData.session_name);
 			
 			globals.global_submit('coverage-plan-item','/settings/coverage/items_submit',datas);
-        });
-    }
+        	});
+    	}
 	
 }
 

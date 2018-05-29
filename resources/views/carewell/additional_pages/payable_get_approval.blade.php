@@ -1,47 +1,26 @@
-<div class="box-globals">
-		<div class="row">
-			<div class="col-xs-12">
-				<div class="box-header">
-					<h3 class="box-title medical-btn-sample">APPROVAL LIST</h3>
-					<div class="box-tools">
-						<div class="input-group input-group-sm" style="width: 150px;">
-							<input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
-							<div class="input-group-btn">
-								<button type="submit" class="btn btn-default"><i class="fa fa-search" ></i></button>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- /.box-header -->
-				<div class="box-body table-responsive no-padding">
-					<table class="table table-hover table-bordered">
-						<tr>
-							<th><input type="checkbox"  class="checkAllCheckbox"></th>
-							<th>APPROVAL #</th>
-							<th>UNIVERSAL ID</th>
-							<th>CAREWELL ID</th>
-							<th>PATIENT NAME</th>
-							<th>COMPANY</th>
-							<th>STATUS</th>
-						</tr>
-						@foreach($_approval as $approval)
-						<tr>
-							<td><input type="checkbox" name="approval_id" value="{{$approval->approval_id}}"></td>
-							<td>{{$approval->approval_number}}</td>
-							<td>{{$approval->member_universal_id}}</td>
-							<td>{{$approval->member_carewell_id}}</td>
-							<td>{{$approval->member_first_name." ".$approval->member_last_name }}</td>
-							<td>{{$approval->company_name}}</td>
-							<td><span class="label label-success">active</span></td>
-						</tr>
-						@endforeach
-						<tr style="height:70px;">
-						</tr>
-					</table>
-				</div>
-				<div class="box-footer clearfix">
-					@include('globals.pagination', ['paginator' => $_approval])
-				</div>
-			</div>
-		</div>
-	</div>
+<div class="box-body table-responsive no-padding">
+    	<table class="table table-hover table-bordered">
+          <tr>
+          	<th><input type="checkbox"  class="checkAllCheckbox"></th>
+             	<th class="live-search">APPROVAL #</th>
+             	<th class="live-search">UNIVERSAL ID</th>
+             	<th class="live-search">CAREWELL ID</th>
+             	<th class="live-search">MEMBER NAME</th>
+             	<th class="live-search">COMPANY</th>
+             	<th class="live-search">PROVIDER</th>
+             	<th class="live-search">DATE ISSUED</th>
+          </tr>
+          @foreach($_approval_active as $approval_active)
+          <tr>
+          	<td><input type="checkbox" name="approval_id[]" value="{{$approval_active->approval_id}}"></td>
+             	<td><span class="label label-success view-approval-details" data-size="md" data-approval_id="{{$approval_active->approval_id}}">{{$approval_active->approval_number}}</span></td>
+             	<td>{{$approval_active->member_universal_id}}</td>
+             	<td>{{$approval_active->member_carewell_id}}</td>
+             	<td>{{$approval_active->member_first_name." ".$approval_active->member_last_name }}</td>
+             	<td>{{$approval_active->company_name}}</td>
+             	<td>{{$approval_active->provider_name}}</td>
+             	<td>{{date("F j, Y",strtotime($approval_active->approval_created))}}</td>
+          </tr>
+          @endforeach
+    	</table>
+</div>
