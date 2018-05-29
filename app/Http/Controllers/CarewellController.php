@@ -1028,27 +1028,38 @@ public function add_doctor()
 
 public function add_doctor_submit(Request $request)
 {
-	$doctorData = new TblDoctorModel;
-	$doctorData->doctor_number          = StaticFunctionController::updateReferenceNumber('doctor');
-	$doctorData->doctor_full_name       = $request->doctor_full_name;
-	$doctorData->doctor_gender          = $request->doctor_gender;
-	$doctorData->doctor_contact_number  = $request->doctor_contact_number;
-	$doctorData->doctor_email_address   = $request->doctor_email_address;
-	$doctorData->doctor_created         = Carbon::now();
-	$doctorData->save();
-
-	foreach($request->doctorProviderData as $provider)
+	$check_name = TblDoctorModel::where('doctor_full_name',$request->doctor_full_name)->count();
+	if($check_name==0)
 	{
-		$providerData = new TblDoctorProviderModel;
-		$providerData->provider_id  = $provider;
-		$providerData->doctor_id    = $doctorData->doctor_id;
-		$providerData->save();
-	}
+		$doctorData = new TblDoctorModel;
+		$doctorData->doctor_number          = StaticFunctionController::updateReferenceNumber('doctor');
+		$doctorData->doctor_full_name       = $request->doctor_full_name;
+		$doctorData->doctor_gender          = $request->doctor_gender;
+		$doctorData->doctor_contact_number  = $request->doctor_contact_number;
+		$doctorData->doctor_email_address   = $request->doctor_email_address;
+		$doctorData->doctor_created         = Carbon::now();
+		$doctorData->save();
 
-	if($doctorData->save())
-	{
-		return StaticFunctionController::returnMessage('success','DOCTOR');    
+		foreach($request->doctorProviderData as $provider_id)
+		{
+			$check = TblDoctorProviderModel::where('provider_id',$provider_id)->where('doctor_id',$doctorData->doctor_id)->count();
+			if($check==0)
+			{
+				$providerData = new TblDoctorProviderModel;
+				$providerData->provider_id  = $provider_id;
+				$providerData->doctor_id    = $doctorData->doctor_id;
+				$providerData->save();
+			}
+		}
+		$message = StaticFunctionController::returnMessage('success','DOCTOR');    
 	}
+	else
+	{
+		$message = '<center><b><span class="color-gray">Doctor Name Exist</span></b></center>';
+	}
+	
+	return $message;
+	
 }
 public function import_doctor()
 {
