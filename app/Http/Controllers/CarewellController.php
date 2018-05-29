@@ -795,8 +795,8 @@ public function provider_create_submit(Request $request)
     		$inserted = Self::provider_add_tag_doctor($request->doctorProviderData,$provider_id);
           $notif    = "Provider Exist";
 	}
-
-	return '<center><b><span class="label label-success">'.$notif.' and '.$inserted.' doctors tag</span></b></center>';
+     return "<div class='alert alert-success' style='text-align: center;'>".$notif." and ".$inserted." doctors tag!</div>";
+	
 }
 
 public function provider_details(Request $request,$provider_id)
@@ -826,10 +826,10 @@ public function provider_import_submit(Request $request)
 		{
 			if($data['provider_name']!=null)
 			{
-				$refProviderId = TblProviderModel::where('provider_name', $data['provider_name'])->value('provider_id');
-				$refDoctorId   = TblDoctorModel::where('doctor_full_name', $data['provider_payee'])->value('doctor_id');
+				$provider_id = TblProviderModel::where('provider_name', $data['provider_name'])->value('provider_id');
+				$doctor_id   = TblDoctorModel::where('doctor_full_name', $data['provider_payee'])->value('doctor_id');
 
-				if($refProviderId==null)
+				if($provider_id==null)
 				{
 					$providerData = new TblProviderModel;
 					$providerData->provider_name            = StaticFunctionController::transformText($data['provider_name']);
@@ -846,7 +846,7 @@ public function provider_import_submit(Request $request)
 
 					if ($data['provider_name'] != $data['provider_payee'])
 					{
-						if($refDoctorId==null)
+						if($doctor_id==null)
 						{
 							$providerDoctorData = new TblDoctorModel;
 							$providerDoctorData->doctor_full_name       = StaticFunctionController::transformText($data['provider_payee']);
@@ -865,7 +865,7 @@ public function provider_import_submit(Request $request)
 						}
 						else
 						{
-							$insert['doctor_id'] = $refDoctorId;
+							$insert['doctor_id'] = $doctor_id;
 							$insert['provider_id'] = $providerData->provider_id;
 							TblDoctorProviderModel::insert($insert);
 						}
@@ -875,11 +875,11 @@ public function provider_import_submit(Request $request)
 				{
 					if ($data['provider_name'] != $data['provider_payee'])
 					{
-						if($refDoctorId==null)
+						if($doctor_id==null)
 						{
 							$providerDoctorData = new TblDoctorModel;
 							$providerDoctorData->doctor_full_name       = StaticFunctionController::transformText($data['provider_payee']);
-							$providerDoctorData->doctor_number          = '1233';
+							$providerDoctorData->doctor_number          = StaticFunctionController::updateReferenceNumber('doctor');
 							$providerDoctorData->doctor_gender          = "N/A";
 							$providerDoctorData->doctor_contact_number  = "N/A";
 							$providerDoctorData->doctor_email_address   = "N/A";
@@ -887,16 +887,16 @@ public function provider_import_submit(Request $request)
 							$providerDoctorData->save();
 
 							$insert['doctor_id']   = $providerDoctorData->doctor_id;
-							$insert['provider_id'] = $refProviderId;
+							$insert['provider_id'] = $provider_id;
 							TblDoctorProviderModel::insert($insert);
 							$countPayee++;
 						}
 						else
 						{
-							if(TblDoctorProviderModel::where('doctor_id',$refDoctorId)->where('provider_id',$refProviderId)->count()==0)
+							if(TblDoctorProviderModel::where('doctor_id',$doctor_id)->where('provider_id',$provider_id)->count()==0)
 							{
-								$insert['doctor_id']   = $refDoctorId;
-								$insert['provider_id'] = $refProviderId;
+								$insert['doctor_id']   = $doctor_id;
+								$insert['provider_id'] = $provider_id;
 								TblDoctorProviderModel::insert($insert);
 							}
 							else

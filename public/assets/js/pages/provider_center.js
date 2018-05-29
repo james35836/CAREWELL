@@ -45,6 +45,7 @@ function provider_center()
 	{
 		$('body').on('click','.create-provider-confirm',function() 
 		{ 
+			var inputs = $('#provider_contact_email');
 			if(globals.checking_null_validation(document.getElementById('provider_name').value,"PROVIDER NAME")=="")
 			{}	
 			else if(globals.checking_null_validation(document.getElementById('provider_contact_person').value,"PROVIDER CONTACT PERSON")=="")
@@ -57,6 +58,10 @@ function provider_center()
 			{}
 			else if(globals.checking_null_validation(document.getElementById('provider_address').value,"PROVIDER ADDRESS")=="")
 			{}
+			else if(globals.global_input_email(inputs)=="error")
+			{
+				toastr.error('Email is in a wrong format.', 'Something went wrong!', {timeOut: 3000})
+			}
 		     else
 			{
 				$('input[name="doctor_full_name[]"]').each(function(i, doctor)
