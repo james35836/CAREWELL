@@ -658,7 +658,7 @@ public function member_import_member_submit(Request $request)
 
 		if($count == 0&&$countError==0)
 		{
-			$message = '<center><b><span class="color-gray">There is nothing to insert, Please check if all fields has CAREWELL ID</span></b></center>';
+			$message = '<center><b><span class="color-gray">There is nothing to insert, Please check if all rows has CAREWELL ID</span></b></center>';
 		}
 		else
 		{
@@ -1564,8 +1564,8 @@ public function billing_cal_import_template(Request $request)
 					if($checkCal!=null)
 					{
 						$name['first']  = $data['first_name'];
-						$name['last']   = $data['middle_name'];
-						$name['middle'] = $data['last_name'];
+						$name['middle'] = $data['middle_name'];
+						$name['last']   = $data['last_name'];
 						$name['type']   = 'EXISTING IN CAL';
 						array_push($exportArray,$name);
 						$countExist++;
@@ -1580,13 +1580,13 @@ public function billing_cal_import_template(Request $request)
 						$cal_id           = $companyData->cal_id;
 						$member_id        = $checkingMember->member_id;
 						$premium          = TblCoveragePlanModel::where('coverage_plan_id',$coverage_plan_id)->value('coverage_plan_premium');
-						$payment_count    = number_format($payment_amount / number_format($premium));
+						$payment_count    = number_format(str_replace(',','',$payment_amount) / number_format($premium));
 						$payment_mode     = $member_data->member_payment_mode;
 						if($payment_count > 1)
 						{
 							$name['first']  = $data['first_name'];
-							$name['last']   = $data['middle_name'];
-							$name['middle'] = $data['last_name'];
+							$name['middle'] = $data['middle_name'];
+							$name['last']   = $data['last_name'];
 							$name['type']   = 'NEED ADJUSTMENT';
 							array_push($exportArray,$name);
 						}

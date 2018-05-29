@@ -91,7 +91,7 @@ function billing_center()
 				{
 					setTimeout(function()
 					{
-						if($data=="overlapping")
+						if(data=="overlapping")
 						{
 							ajaxData.this.html('DATE OVERLAPPING');
 						}

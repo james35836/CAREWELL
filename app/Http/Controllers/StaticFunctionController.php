@@ -790,14 +790,16 @@ class StaticFunctionController extends Controller
   }
   public static function paymentDateComputation($member_id,$cal_member_id,$payment_count,$payment_mode)
   {
-    $payment          = TblCalPaymentModel::where('member_id',$member_id)->orderBy('cal_payment_end','DESC')->first();
+    $payment          = TblCalPaymentModel::where('member_id',$member_id)->where('archived',0)->orderBy('cal_payment_end','DESC')->first();
+    $cal              = TblCalMemberModel::where('cal_member_id',$cal_member_id)->join('tbl_cal','tbl_cal.cal_id','=','tbl_cal_member.cal_id')->first();
+
     if($payment)
     {
       $date           = $payment->cal_payment_end;
     }
     else
     {
-      $date           = date('Y-m-d');
+      $date           = $cal->cal_start;
     }
     $count            = 0;
     if($payment_mode  == "SEMI-MONTHLY")
