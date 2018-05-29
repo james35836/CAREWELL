@@ -7,7 +7,7 @@
 
 	.group_border
 	{
-		border: solid 1px black;
+		border-bottom: solid 2px black;
 	}
 
 	.set_table
@@ -23,6 +23,10 @@
 		margin: auto;
 		border-collapse: collapse;
 		border: solid 1px black;
+	}
+	td
+	{
+		padding-left: 5px;
 	}
 	.td_width
 	{
@@ -42,6 +46,7 @@
 	.td_align_text_static
 	{
 		font-size:13px;
+		/*padding-left: 5px;*/
 	}
 	@page {
     size: Legal;
@@ -53,9 +58,10 @@
 
 <div class="all">
 
-	<p class="group_borderx" style="text-align: left!important">APPROVAL ID  : <strong>{{$approval_details->approval_number}}</strong></p>
+	<p class="group_border" style="text-align: left!important">APPROVAL ID  : <strong>{{$approval_details->approval_number}}</strong></p>
 
 	<div class="group_borderx">
+		<p><strong>-CALLER INFORMATION-</strong></p>
 		<table class="set_table">
 			<tr>
 				<td class="td_align_text_static">Caller Name:</td>
@@ -72,9 +78,8 @@
 		</table>
 	</div>
 
-	<br>
-
 	<div class="group_borderx">
+		<p><strong>-MEMBER INFORMATION-</strong></p>
 		<table class="set_table">
 			<tr>
 				<td class="td_align_text_static">Name:</td>
@@ -96,10 +101,9 @@
 			</tr>
 		</table>
 	</div>
-		
-	<br>
 	
 	<div class="group_borderx">
+		<p><strong>-AVAILMENT INFORMATION-</strong></p>
 		<table class="set_table">
 			<tr>
 				<td colspan="1" class="td_align_text_static">Availment Date:</td>
@@ -134,10 +138,8 @@
 		</table>
 	</div>
 
-	<br>
-
 	<div class="group_borderx">
-		<p style="text-align:center;"><strong>PROCEDURE</strong></p>
+		<p style="text-align:center;"><strong>-PROCEDURE-</strong></p>
 			<table class="set_table">
 				<thead>
 					<tr class="align_text_td">
@@ -177,10 +179,8 @@
 			</table>
 	</div>
 
-	<br>
-
 	<div class="group_borderx">
-		<p><strong>PHYSICIAN</strong></p>
+		<p><strong>-PHYSICIAN-</strong></p>
 			<table>
 				<thead>
 					<tr class="align_text_td">
@@ -226,10 +226,8 @@
 			</table>
 	</div>
 
-	<br>
-
 	<div class="group_borderx">
-		<p><strong>PAYEE</strong></p>
+		<p><strong>-PAYEE-</strong></p>
 		<table class="set_table">
 			<tr>
 				<td colspan="1" class="td_width td_align_text_static">Doctor Payee:</td>
