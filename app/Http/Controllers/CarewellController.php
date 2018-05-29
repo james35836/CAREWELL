@@ -78,6 +78,8 @@ use Paginate;
 use Crypt;
 use Session;
 
+use PDF;
+
 class CarewellController extends ActiveAuthController
 {
   /*DASHBOARD*/
@@ -2008,6 +2010,47 @@ class CarewellController extends ActiveAuthController
                                                     ->get();
     }
     return view('carewell.pages.payable_center',$data);
+  }
+
+  public function approval_export_pdf($approval_id)
+  {
+    $data['_provider']        = TblProviderModel::where('archived',0)->get();
+    
+    $data['approval_details'] = TblApprovalModel::where('tbl_approval.approval_id',$approval_id)->ApprovalDetails()->first();
+    $data['charge_diagnosis'] = TblApprovalModel::where('tbl_approval.approval_id',$approval_id)
+                              ->join('tbl_diagnosis','tbl_diagnosis.diagnosis_id','=','tbl_approval.charge_diagnosis_id')
+                              ->first();
+    $data['_final_diagnosis'] = TblApprovalDiagnosisModel::where('approval_id',$approval_id)
+                              ->join('tbl_diagnosis','tbl_diagnosis.diagnosis_id','=','tbl_approval_diagnosis.diagnosis_id')
+                              ->get();
+    $data['_availed']         = TblApprovalProcedureModel::where('tbl_approval_procedure.approval_id',$approval_id)->ProcedureDiagnosis()->get();
+    $data['_doctor_assigned'] = TblApprovalDoctorModel::where('tbl_approval_doctor.approval_id',$approval_id)->ApprovalDoctor()->get();
+    $data['_payee_doctor']    = TblApprovalPayeeModel::where('approval_id',$approval_id)
+                              ->where('type','doctor')
+                              ->join('tbl_doctor','tbl_doctor.doctor_id','=','tbl_approval_payee.payee_id')
+                              ->get();
+    $data['_payee_other']     = TblApprovalPayeeModel::where('approval_id',$approval_id)
+                              ->where('type','payee')
+                              ->get();
+    $data['total_procedure']  = TblApprovalTotalModel::where('approval_id',$approval_id)->where('total_type','procedure')->first();
+    $data['total_doctor']     = TblApprovalTotalModel::where('approval_id',$approval_id)->where('total_type','doctor')->first();
+
+     //$data["page"] = "Monthly Government Forms";
+      // $year = 2017;
+      // $shop_id = 7;
+      // $contri_info = TblApprovalModel::get();
+      // $data['company_id1'] = 1;
+      // $data["contri_info"] = 2; 
+      // $data["month"] = 33;
+      // $data["month_name"] = 44;
+      // $data["year"] = $year;
+      // $data['_company'] = TblApprovalModel::get();
+
+      //$format["title"] = $data['page'];
+      $format["format"] = "Legal";
+      $format["default_font"] = "sans-serif";
+      $pdf = PDF::loadView('carewell.additional_pages.approval_export_pdf', $data, [], $format);
+      return $pdf->stream('document.pdf');
   }
 
   public function payable_create()

@@ -152,6 +152,8 @@ Route::get('/availment/create_approval', 				'CarewellController@availment_creat
 Route::post('/availment/get_member_info',				'CarewellController@availment_get_member_info');
 Route::post('/availment/create_approval/submit',		'CarewellController@availment_create_approval_submit');
 Route::get('/availment/approval_details/{approval_id}', 'CarewellController@availment_view_approval_details');
+Route::get('/availment/approval_export_pdf/{approval_id}', 'CarewellController@approval_export_pdf');
+
 
 
 
