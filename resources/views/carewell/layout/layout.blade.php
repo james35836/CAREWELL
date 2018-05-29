@@ -34,28 +34,7 @@
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet">
     
-    <script>
-    function string_only(event) 
-    {
-      var value   = String.fromCharCode(event.which);
-      var pattern   = new RegExp(/[a-zåäö ]/i);
-      return pattern.test(value);
-    }
-    function integer_only(event) 
-    {
-      $(this).val($(this).val().replace(/[^\d].+/, ""));
-      if ((event.which < 48 || event.which > 57)) {
-          event.preventDefault();
-      }
-    }
-
-    $(document).ready(function()
-    {
-      $("body").find(".table tr td").find('button.btn-danger').css("margin-right","-4px");
-      // $("body").find(".table tr td").find('button.btn-default').attr("class","btn btn-danger dropdown-toggle");
-    });
-
-    </script>
+    
     <style>
       input
       {
@@ -81,6 +60,10 @@
       {
         border: 2px solid red;
       }
+      /*.pagination
+      {
+        border-radius: none !important;
+      }*/
     </style>
   </head>
   <body class="hold-transition skin-blue sidebar-collapse sidebar-mini">
@@ -412,14 +395,8 @@
 <script src="/assets/js/pages/paginate_ajax_multiple.js"></script>
 <!-- SCRIPT -->
 <script>
-
-  $(function () {
-    $('.select2').select2()
-    $('.datepicker').datepicker({
-      autoclose: true
-    })
-  })
-  $('body').on('hidden.bs.modal', function (e) {
+  $('body').on('hidden.bs.modal', function (e) 
+  {
       if($('.modal').hasClass('in')) 
       {
         $('body').addClass('modal-open');
@@ -431,24 +408,17 @@
   });
   $(document).ready(function()
   {
+    $('.select2').select2();
+    $('.datepicker').datepicker({autoclose: true});
     $('body').on('click','li.treeview',function()
     {
       if($(this).hasClass('menu-open'))
       {
         $(this).closest('treeview').find('ul.treeview-menu').css('display','block');
       }
-      
-      
     });
-    
-
+    $("body").find(".table tr td").find('button.btn-danger').css("margin-right","-4px");
   });
-
-  
- 
-</script>
-<script type="text/javascript">
-  // To make Pace works on Ajax calls
   $(document).ajaxStart(function () 
   {
     Pace.restart()
@@ -462,6 +432,23 @@
       }
     })
   })
+  
+ 
+</script>
+<script>
+    function string_only(event) 
+    {
+      var value   = String.fromCharCode(event.which);
+      var pattern   = new RegExp(/[a-zåäö ]/i);
+      return pattern.test(value);
+    }
+    function integer_only(event) 
+    {
+      $(this).val($(this).val().replace(/[^\d].+/, ""));
+      if ((event.which < 48 || event.which > 57)) {
+          event.preventDefault();
+      }
+    }
 </script>
 </body>
 </html>

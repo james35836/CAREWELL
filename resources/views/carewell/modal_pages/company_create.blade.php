@@ -1,6 +1,21 @@
 <script>
 	$('input.string-only').keypress('keypress', string_only);//function in layout name string_only
 	$('input.integer-only').keypress('keypress', integer_only);
+	$(document).ready(function() 
+	{
+		$("body").on('change','.coverage_plan_name',function() 
+		{
+			var selected = $("option:selected", $(this)).val();
+			$(".coverage_plan_name option").each(function() 
+			{
+				$(this).show();
+			});
+			$(".coverage_plan_name").each(function() 
+			{
+				$("option[value='" + selected + "']", $(this)).attr("disabled", true);
+			});
+		});
+	});
 </script>
 <form class="company-form" method="post">
 	<div class="row box-globals">
@@ -33,7 +48,6 @@
 			<div class="col-md-10 form-content">
 				<textarea name="company_address" id="company_address" class="form-control" rows="5" cols="10"></textarea>
 			</div>
-			
 		</div>
 		<div class="form-holder">
 			<div class="col-md-2 form-content">
@@ -63,7 +77,6 @@
 				<input type="text" name="contact_person_numbers" id="contact_person_numbers" class="form-control integer-only" placeholder="CONTACT NUMBER"/>
 			</div>
 		</div>
-		
 	</div>
 	<div class="row box-globals" >
 		<div class="nav-tabs-custom">
@@ -106,11 +119,8 @@
 									<button class="btn btn-danger remove-element" type="button" tabindex="-1"><span class="fa fa-minus-circle" aria-hidden="true"></span> </button>
 								</span>
 							</div>
-							
 						</div>
 					</div>
-					
-					
 				</div>
 				<div id="deployment" class="row tab-pane fade table-min-height" >
 					<div class="form-holder ">
@@ -125,10 +135,8 @@
 									<button class="btn btn-danger remove-element" type="button" tabindex="-1"><span class="fa fa-minus-circle" aria-hidden="true"></span> </button>
 								</span>
 							</div>
-							
 						</div>
 					</div>
-					
 				</div>
 			</div>
 		</div>

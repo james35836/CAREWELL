@@ -72,7 +72,7 @@
 				<input type="number" name="coverage_plan_processing_fee" id="coverage_plan_processing_fee" class="form-control">
 			</div>
 			<div class="col-md-2 form-content">
-				<label>CARD Fee</label>
+				<label>Card Fee</label>
 			</div>
 			<div class="col-md-4 form-content">
 				<input type="number" name="coverage_plan_cari_fee" id="coverage_plan_cari_fee" class="form-control">
