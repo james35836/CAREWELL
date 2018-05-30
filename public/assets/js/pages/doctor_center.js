@@ -99,9 +99,12 @@ function doctor_center()
 	{
 		$('body').on('click','.add-doctor-confirm',function()
 		{
-            
-			var inputs = $('#doctor_email_address');
-			if(globals.checking_null_validation(document.getElementById('doctor_full_name').value,"FULL NAME")=="")
+			var check = globals.checkArrayValues($("select.provider_name"));
+			if(check=="Exist")
+               {
+               	toastr.error('Duplicated entry, Please check provider.', 'Something went wrong!', {timeOut: 3000});
+               }
+               else if(globals.checking_null_validation(document.getElementById('doctor_full_name').value,"FULL NAME")=="")
 			{}
 			else if(globals.checking_null_validation(document.getElementById('doctor_gender').value,"GENDER")=="")
 			{}
@@ -111,20 +114,20 @@ function doctor_center()
 			{}
 		     else if(globals.checking_null_validation(document.getElementById('doctor_email_address').value,"EMAIL ADDRESS")=="")
 			{}
-		     else if(globals.global_input_email(inputs)=="error")
+		     else if(globals.global_input_email($('#doctor_email_address'))=="error")
 			{
 				toastr.error('Email is in a wrong format.', 'Something went wrong!', {timeOut: 3000})
 			}
 			else
 			{
 				$("select.provider_name").each(function(i, pro)
-	            {
-	            	var selectedProvider = $(pro).val();
-	            	if(selectedProvider!="SELECT PROVIDER")
-	            	{
-	            		doctorProviderData.push(selectedProvider);
-	            	}
-	            });
+	               {
+		            	var selectedProvider = $(pro).val();
+		            	if(selectedProvider!="SELECT PROVIDER")
+		            	{
+		            		doctorProviderData.push(selectedProvider);
+		            	}
+	               });
 				if(doctorProviderData==null||doctorProviderData=="")
 				{
 					toastr.error('Please select PROVIDER at least one.', 'Something went wrong!', {timeOut: 3000})
@@ -140,10 +143,10 @@ function doctor_center()
 					    doctorData.append('doctorProviderData[]', doctorProviderData[i]);
 					}
 
-		            doctorData.append("doctor_full_name",     	document.getElementById('doctor_full_name').value);
-		            doctorData.append("doctor_gender", 			document.getElementById('doctor_gender').value);
-		            doctorData.append("doctor_contact_number", 	document.getElementById('doctor_area_code').value+" "+document.getElementById('doctor_contact_number').value);
-		            doctorData.append("doctor_email_address", 	document.getElementById('doctor_email_address').value);
+		            	doctorData.append("doctor_full_name",     	document.getElementById('doctor_full_name').value);
+		            	doctorData.append("doctor_gender", 			document.getElementById('doctor_gender').value);
+		            	doctorData.append("doctor_contact_number", 	document.getElementById('doctor_area_code').value+" "+document.getElementById('doctor_contact_number').value);
+		            	doctorData.append("doctor_email_address", 	document.getElementById('doctor_email_address').value);
 				}
 			}
 		});
