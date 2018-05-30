@@ -66,6 +66,11 @@
 						@foreach($_doctor_provider as $doctor_provider)
 						<tr class="table-row">
 							<td>{{$doctor_provider->provider_name}}</td>
+							@if($doctor_provider->doctor_archive == 0)
+								<td><span class="label label-success">active</span></td>
+							@else
+								<td><span class="label label-danger">inactive</span></td>
+							@endif
 							<td><span  data-size="md" data-provider_id="{{$doctor_provider->provider_id}}" class="label label-info view-provider-details"><i class="fa fa-eye"></i> VIEW  PROVIDER</span></td>
 						</tr>
 						@endforeach

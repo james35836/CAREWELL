@@ -92,6 +92,7 @@ class StaticFunctionController extends Controller
         }
     }
 
+
     public function getCompanyInfo(Request $request)
     {
         if($request->ajax())
@@ -123,6 +124,7 @@ class StaticFunctionController extends Controller
             $provider                   = TblProviderModel::where('provider_id',$request->provider_id)->first();
             $data['_provider_doctor']   = TblDoctorProviderModel::where('tbl_doctor_provider.provider_id',$request->provider_id)
                                         ->join('tbl_doctor','tbl_doctor.doctor_id','=','tbl_doctor_provider.doctor_id')
+                                        ->where('tbl_doctor_provider.archived',0)
                                         ->get();
             $data['_provider_doctors'] = '<option>-SELECT DOCTOR-';
             foreach($data['_provider_doctor'] as $provider_doctor)
@@ -538,7 +540,118 @@ class StaticFunctionController extends Controller
         {
           $message = "FAILED";
         }
+<<<<<<< HEAD
+        break;
+    }
+    if($id == null)
+    {    
+      $id = 0;
+    }
+    return $id; 
+  }
+  public static function getAge($birthdate)
+  {
+    $age    = date_create($birthdate)->diff(date_create('today'))->y;
+    return  $age;
+  }
+  public static function archived_data($archived_id,$archived_name)
+  {
+    $message              = "";
+    $archived['archived'] = '1';
+    switch ($archived_name) 
+    {
+      case 'USER':
+        $check = TblUserModel::where('user_id', $archived_id)->update($archived);
+        break;
+      case 'COMPANY':
+        $check = TblCompanyModel::where('company_id',$archived_id)->update($archived);
+        break;
+      case 'MEMBER':
+        $check = TblMemberModel::where('member_id',$archived_id)->update($archived);
+        break;
+      case 'PROVIDER':
+        $check = TblProviderModel::where('provider_id',$archived_id)->update($archived);
+        $check_doctor_provider = TblDoctorProviderModel::where('provider_id',$archived_id)->update($archived);
+        break;
+      case 'DOCTOR':
+        $check = TblDoctorModel::where('doctor_id',$archived_id)->update($archived);
+        break;
+    }
+
+    if($check==true)
+    {    
+      $message = "SUCCESSFULLY";
+    }
+    else
+    {
+      $message = "FAILED";
+    }
+    return $message; 
+  }
+  public static function archivedCurrentCompany($member_id,$ref_id,$ref)
+  {
+    $member_company = TblMemberCompanyModel::where('member_id',$member_id)->where('archived',0)->first();
+    
+    switch ($ref) 
+    {
+      case 'coverage_plan':
+        $company['member_carewell_id']        =   $member_company->member_carewell_id;
+        $company['member_employee_number']    =   $member_company->member_employee_number;
+        $company['member_company_status']     =   $member_company->member_company_status;
+        $company['member_transaction_date']   =   Carbon::now();
+        $company['member_id']                 =   $member_company->member_id;
+        $company['company_id']                =   $member_company->company_id;
+        $company['member_payment_mode']       =   $member_company->member_payment_mode;
+        $company['deployment_id']             =   $member_company->deployment_id;
+        $company['coverage_plan_id']          =   $ref_id;
+        $member_company_id = TblMemberCompanyModel::insertGetId($company);
+        break;
+      case 'deployment':
+        $company['member_carewell_id']        =   $member_company->member_carewell_id;
+        $company['member_employee_number']    =   $member_company->member_employee_number;
+        $company['member_company_status']     =   $member_company->member_company_status;
+        $company['member_transaction_date']   =   Carbon::now();
+        $company['member_id']                 =   $member_company->member_id;
+        $company['company_id']                =   $member_company->company_id;
+        $company['member_payment_mode']       =   $member_company->member_payment_mode;
+        $company['coverage_plan_id']          =   $member_company->coverage_plan_id;
+        $company['deployment_id']             =   $ref_id;
+        $member_company_id = TblMemberCompanyModel::insertGetId($company);
+        break;
+    }
+    $update['archived'] = 1;
+    TblMemberCompanyModel::where('member_id',$member_id)->where('member_company_id','!=',$member_company_id)->update($update);
+  }
+  public static function restore_data($restore_id,$restore_name)
+  {
+    $message             = "";
+    $restore['archived'] = '0';
+    switch ($restore_name) 
+    {
+      case 'USER':
+        $check = TblUserModel::where('user_id', $restore_id)->update($restore);
+        break;
+      case 'COMPANY':
+        $check = TblCompanyModel::where('company_id',$restore_id)->update($restore);
+        break;
+      case 'MEMBER':
+        $check = TblMemberModel::where('member_id',$restore_id)->update($restore);
+        break;
+      case 'DOCTOR':
+        $check = TblDoctorModel::where('doctor_id',$restore_id)->update($restore);
+        break;
+      case 'PROVIDER':
+        $check = TblProviderModel::where('provider_id',$restore_id)->update($restore);
+        $check_doctor_provider = TblDoctorProviderModel::where('provider_id',$restore_id)->update($restore);
+        break;
+    }
+
+    if($check==true)
+    {    
+      $message = "SUCCESSFULLY";
+=======
         return $message; 
+>>>>>>> 4667d705513eb357d4a0c02f305114099a3c03a0
     }
   
     public static function getNewMember($cal_id,$status)
