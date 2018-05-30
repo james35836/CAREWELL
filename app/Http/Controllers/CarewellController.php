@@ -833,8 +833,6 @@ public function provider_import()
 {
 	return view('carewell.modal_pages.provider_import');
 }
-
-
 public function provider_import_submit(Request $request)
 {
 	$file   = $request->file('importProviderFile')->getRealPath();
