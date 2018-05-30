@@ -90,7 +90,12 @@
 										<td>{{$provider_doctor->doctor_id}}</td>
 										<td class="word">{{$provider_doctor->doctor_full_name}}</td>
 									    <td>{{date("F j, Y",strtotime($provider_doctor->doctor_created))}}</td>
-										<td><span class="label label-success">active</span></td>
+									    @if($provider_doctor->doctor_archive == 0)
+									    	<td><span class="label label-success">active</span></td>
+									    @else
+									    	<td><span class="label label-danger">inactive</span></td>
+									    @endif
+										
 										<td><button data-doctor_id="{{$provider_doctor->doctor_id}}" data-size="md" class="btn btn-link view-doctor-details btn-sm">VIEW MORE</button></td>
 									</tr>
 									@endforeach

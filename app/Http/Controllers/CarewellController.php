@@ -808,6 +808,11 @@ public function provider_details(Request $request,$provider_id)
 	$data['provider_details'] = TblProviderModel::where('tbl_provider.provider_id',$provider_id)->first();
 	$data['_provider_doctor'] = TblDoctorProviderModel::where('tbl_doctor_provider.provider_id',$provider_id)->DoctorProvider()->get();
 
+foreach ($data['_provider_doctor'] as $key => $provider) 
+  {
+    $data['_provider_doctor'][$key]['doctor_archive'] =  TblDoctorProviderModel::where('provider_id',$provider->provider_id)->value('archived');
+  }
+
 	return view('carewell.modal_pages.provider_details',$data);
 }
 public function provider_import()
@@ -985,16 +990,20 @@ public function doctor(Request $request)
 {
 	$data['page']             = 'Doctor';
 	$data['user']             = StaticFunctionController::global();
-	$data['_provider']        = TblProviderModel::where('archived',0)->get();
+	$data['_provider']        = TblProviderModel::get();
 	$data['_doctor_active']   = TblDoctorModel::where('archived',0)->paginate(10);
 	$data['_doctor_inactive'] = TblDoctorModel::where('archived',1)->paginate(10);
 	foreach ($data['_doctor_active'] as $key => $doctor) 
 	{
-		$data['_doctor_active'][$key]['provider']   =  TblDoctorProviderModel::where('doctor_id',$doctor->doctor_id)->Provider()->get();
+		$data['_doctor_active'][$key]['provider']   =  TblDoctorProviderModel::where('doctor_id',$doctor->doctor_id)
+                                                  ->where('tbl_doctor_provider.archived',0)
+                                                  ->Provider()->get();
 	}
 	foreach ($data['_doctor_inactive'] as $key => $doctor) 
 	{
-		$data['_doctor_inactive'][$key]['provider'] =  TblDoctorProviderModel::where('doctor_id',$doctor->doctor_id)->Provider()->get();
+		$data['_doctor_inactive'][$key]['provider'] =  TblDoctorProviderModel::where('doctor_id',$doctor->doctor_id)
+                                                  ->where('tbl_doctor_provider.archived',0)
+                                                  ->Provider()->get();
 	}
 	return view('carewell.pages.doctor_center',$data);
 }
@@ -1003,6 +1012,12 @@ public function doctor_view_details(Request $request,$doctor_id)
 {
 	$data['doctor_details']         = TblDoctorModel::where('doctor_id',$doctor_id)->first();
 	$data['_doctor_provider']       = TblDoctorProviderModel::where('tbl_doctor_provider.doctor_id',$doctor_id)->Provider()->get();
+
+  foreach ($data['_doctor_provider'] as $key => $doctor) 
+  {
+    // $data['_doctor_provider'][$key]['doctor_archive'] =  TblDoctorProviderModel::where('doctor_id',$doctor_id)->value('archived');
+    $data['_doctor_provider'][$key]['doctor_archive'] = TblDoctorProviderModel::where('provider_id',$doctor->provider_id)->value('archived');
+  }
 	return view('carewell.modal_pages.doctor_details',$data);
 }
 

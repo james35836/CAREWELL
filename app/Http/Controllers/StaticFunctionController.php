@@ -122,6 +122,7 @@ class StaticFunctionController extends Controller
     {
         $provider                   = TblProviderModel::where('provider_id',$request->provider_id)->first();
         $data['_provider_doctor']   = TblDoctorProviderModel::where('tbl_doctor_provider.provider_id',$request->provider_id)
+        							->where('tbl_doctor_provider.archived',0)
                                     ->join('tbl_doctor','tbl_doctor.doctor_id','=','tbl_doctor_provider.doctor_id')
                                     ->get();
         $data['_provider_doctors'] = '<option>-SELECT DOCTOR-';
@@ -457,6 +458,7 @@ class StaticFunctionController extends Controller
         break;
       case 'PROVIDER':
         $check = TblProviderModel::where('provider_id',$archived_id)->update($archived);
+        $check_doctor_provider = TblDoctorProviderModel::where('provider_id',$archived_id)->update($archived);
         break;
       case 'DOCTOR':
         $check = TblDoctorModel::where('doctor_id',$archived_id)->update($archived);
@@ -527,6 +529,7 @@ class StaticFunctionController extends Controller
         break;
       case 'PROVIDER':
         $check = TblProviderModel::where('provider_id',$restore_id)->update($restore);
+        $check_doctor_provider = TblDoctorProviderModel::where('provider_id',$restore_id)->update($restore);
         break;
     }
 
