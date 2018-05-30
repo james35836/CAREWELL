@@ -185,7 +185,7 @@ Route::post('/reports/member_cal/date_filter/{ref}',		'CarewellController@report
 Route::get('/reports/member_cal/excel_report/{ref}/{val_key}/{member_id}', 'CarewellController@reports_export_excel');
 
 
-Route::post('/reports/member_cal/wew', 'TestController@test_search');
+Route::post('/reports/member_cal/get_report', 'TestController@test_search');
 
 /*SETTINGS*/
 

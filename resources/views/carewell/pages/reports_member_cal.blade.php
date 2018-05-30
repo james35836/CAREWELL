@@ -44,32 +44,36 @@ return  t;
                   </span>
                 </div>
               </div>
-              <table class="table table-hover table-bordered">
-                <tr class="titlerow">
-                  <th>UNIVERSAL ID</th>
-                  <th>CAREWELL ID</th>
-                  <th>EMPLOYEE NUMBER</th>
-                  <th>MEMBER NAME</th>
-                  <th>MONTHLY REPORTS</th>
-                  <th>YEARLY REPORTS</th>
-                  <th>ALL REPORTS</th>
-                </tr>
-                @foreach($_member as $member)
-                <tr>
-                  <td>{{$member->member_universal_id}}</td>
-                  <td>{{$member->member_carewell_id}}</td>
-                  <td>{{$member->member_employee_number}}</td>
-                  <td>{{$member->member_first_name}} {{$member->member_last_name}}</td>
-                  <td><span class="label label-success member-report" data-ref="monthly" data-title="MONTHLY REPORTS"  data-member_id="{{$member->member_id}}">VIEW MONTHLY REPORTS</span></td>
-                  <td><span class="label label-primary member-report" data-ref="yearly" data-title="YEARLY REPORTS" data-member_id="{{$member->member_id}}">VIEW YEARLY REPORTS</span></td>
-                  <td><span class="label label-warning member-report" data-ref="all_data" data-title="ALL REPORTS"  data-member_id="{{$member->member_id}}">VIEW ALL REPORTS</span></td>
-                </tr>
-                @endforeach
-              </table>
-            </div>
-            <div class="box-footer clearfix">
-              @include('globals.pagination', ['paginator' => $_member])
-            </div>
+               <div id="showTable" class="load-data load-active-company" data-target="load-active-company">
+                  <div class="box-body table-responsive no-padding">
+                    <table class="table table-hover table-bordered">
+                      <tr class="titlerow">
+                        <th>UNIVERSAL ID</th>
+                        <th>CAREWELL ID</th>
+                        <th>EMPLOYEE NUMBER</th>
+                        <th>MEMBER NAME</th>
+                        <th>COMPANY NAME</th>
+                        <th>ALL REPORTS</th>
+                      </tr>
+                      @foreach($_member as $member)
+                      <tr>
+                        <td>{{$member->member_universal_id}}</td>
+                        <td>{{$member->member_carewell_id}}</td>
+                        <td>{{$member->member_employee_number}}</td>
+                        <td>{{$member->member_first_name}} {{$member->member_last_name}}</td>
+                        <td>{{$member->company_name}}</td>
+                        <td><span class="label label-success member-report" data-ref="monthly" data-title="MONTHLY REPORTS"  data-member_id="{{$member->member_id}}">VIEW ALL REPORTS</span></td>
+                      </tr>
+                      @endforeach
+                    </table>
+                </div>
+                <div class="box-footer clearfix">
+                    @include('globals.pagination_v2', ['paginator' => $_member])
+                </div>
+             </div>
+             
+            
+            </div>  
         </div>
           <!-- /.tab-pane -->
         </div>

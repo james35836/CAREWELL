@@ -45,15 +45,28 @@
 
 				<table class="table table-hover table-bordered">
 					<tr class="titlerow">
-						<th>Date Paid</th>
-						<th>Amount</th>
+						<th>Year</th>
+						<th>January</th>
+						<th>February</th>
+						<th>March</th>
+						<th>April</th>
+						<th>May</th>
+						<th>June</th>
+						<th>July</th>
+						<th>August</th>
+						<th>September</th>
+						<th>October</th>
+						<th>November</th>
+						<th>December</th>
 					</tr>
-					@foreach($_member as $member)
+					<!-- @foreach($_member as $member)
+					@foreach($$member->year as $year)
 					<tr>
-						<td>{{$member->cal_payment_start}}</td>
-						<td>{{$member->amount}}</td>
+						<td>{{date('Y',$year)}}</td>
+						
 					</tr>
 					@endforeach
+					@endforeach -->
 
 				</table>	
 				
