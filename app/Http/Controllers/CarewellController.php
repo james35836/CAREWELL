@@ -2205,6 +2205,30 @@ public function reports_consolidation()
 
 	return view('carewell.pages.reports_consolidation',$data);
 }
+public function reports_payment_report()
+{
+	$data['page']       = 'Payment Reports';
+	$data['user']       = StaticFunctionController::global();
+	$data['_company']   = TblCompanyModel::where('archived',0)->paginate(10);
+	$data['_member']    = TblMemberModel::where('tbl_member.archived',0)->where('tbl_member_company.archived',0)->Member()->paginate(10);
+	return view('carewell.pages.reports_payment_report',$data);
+}
+public function reports_payment_report_member($member_id)
+{
+	$data['date'] 		= $key = date('Y-m'); 
+	$data['member_id'] 	= $member_id;
+	$data['link'] 		= '/reports/member_cal/excel_report/sem/'.$key.'/'.$member_id;
+	$data['_payment'] = TblCalPaymentModel::select(DB::raw("YEAR(cal_payment_start) as year"))->groupby('year')->where('member_id',$member_id)->orderBy('year','ASC')->get();
+	foreach($data['_payment'] as $key=> $year)
+	{
+		$data['_payment'][$key]['cal_payment'] = TblCalPaymentModel::whereYear('tbl_cal_payment.cal_payment_start', '=', $year->year)
+		 								->join('tbl_cal_member','tbl_cal_member.cal_member_id','=','tbl_cal_payment.cal_member_id')
+		 								->join('tbl_cal','tbl_cal.cal_id','=','tbl_cal_member.cal_id')
+		                                        ->orderBy('cal_payment_start','ASC')->get();
+		
+	}
+	return view('carewell.modal_pages.reports_payment_report_member',$data);
+}
 
 public function reports_member_cal()
 {

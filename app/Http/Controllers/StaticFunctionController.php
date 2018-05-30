@@ -769,26 +769,27 @@ class StaticFunctionController extends Controller
     {
         if(Session::has('exportWarning'))
         {
-          $excels['_member'] = Session::get('exportWarning');
-          $excels['data']  =   ['LAST NAME','FIRST NAME','MIDDLE NAME','TYPE'];
-          Excel::create('CAREWELL WARNING DATA', function($excel) use ($excels) 
-          {
-            $excel->sheet('template', function($sheet) use ($excels) 
+            $excels['_member'] = Session::get('exportWarning');
+            $excels['data']  =   ['LAST NAME','FIRST NAME','MIDDLE NAME','TYPE'];
+            Excel::create('CAREWELL WARNING DATA', function($excel) use ($excels) 
             {
-              $data = $excels['data'];
-              $sheet->fromArray($data, null, 'A1', false, false);
-              $sheet->freezeFirstRow();
-              $_member = $excels['_member'];
-              foreach($excels['_member'] as  $key => $member)
-              {
-                $key = $key+=2;
-                $sheet->setCellValue('A'.$key, $member['last']);
-                $sheet->setCellValue('B'.$key, $member['first']);
-                $sheet->setCellValue('C'.$key, $member['middle']);
-                $sheet->setCellValue('D'.$key, $member['type']);
-              }
-            });
-          })->download('xlsx');
+                $excel->sheet('template', function($sheet) use ($excels) 
+                {
+                    $data = $excels['data'];
+                    $sheet->fromArray($data, null, 'A1', false, false);
+                    $sheet->freezeFirstRow();
+                    $_member = $excels['_member'];
+                    foreach($excels['_member'] as  $key => $member)
+                    {
+                        $key = $key+=2;
+                        $sheet->setCellValue('A'.$key, $member['last']);
+                        $sheet->setCellValue('B'.$key, $member['first']);
+                        $sheet->setCellValue('C'.$key, $member['middle']);
+                        $sheet->setCellValue('D'.$key, $member['type']);
+                    }
+                });
+            })->download('xlsx');
+            Session::forget('exportWarning');
         }
     
     }

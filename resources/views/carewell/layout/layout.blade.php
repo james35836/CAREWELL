@@ -263,6 +263,7 @@
           <ul class="treeview-menu">
             <li><a href="/reports/availment"><i class="fa fa-circle-o"></i>AVAILMENT </a></li>
             <li><a href="#"><i class="fa fa-circle-o"></i>MONITORING</a></li>
+            <li><a href="/reports/payment_report"><i class="fa fa-circle-o"></i>PAYMENT REPORT</a></li>
             <li><a href="/reports/ending_number_per_month"><i class="fa fa-circle-o"></i>ENDING NUMBER</a></li>
             <li><a href="/reports/breakdown"><i class="fa fa-circle-o"></i>BREAKDOWN</a></li>
             <li><a href="/reports/consolidation"><i class="fa fa-circle-o"></i>CONSOLIDATION</a></li>
@@ -386,11 +387,13 @@
 <script src="/assets/js/pages/provider_center.js"></script>
 <script src="/assets/js/pages/doctor_center.js"></script>
 <script src="/assets/js/pages/payable_center.js"></script>
+<script src="/assets/js/pages/reports_payment.js"></script>
 {{-- <script src="/assets/js/pages/report_center.js"></script> --}}
 <script src="/assets/js/pages/settings_center.js"></script>
 <script src="/assets/js/pages/settings_coverage.js"></script>
 <script src="/assets/js/pages/settings_developer.js"></script>
 <script src="/assets/js/pages/settings_reports.js"></script>
+
 
 <script src="/assets/js/pages/paginate_ajax_multiple.js"></script>
 <!-- SCRIPT -->

@@ -175,8 +175,14 @@ Route::get('/reports', 								'CarewellController@reports');
 Route::get('/reports/availment', 					    	'CarewellController@reports_availment');
 Route::get('/reports/ending_number_per_month', 			'CarewellController@reports_monitoring_end_per_month');
 Route::get('/reports/breakdown', 						'CarewellController@reports_breakdown');
-
 Route::get('/reports/consolidation', 					'CarewellController@reports_consolidation');
+
+Route::get('/reports/payment_report', 					'CarewellController@reports_payment_report');
+Route::get('/reports/payment_report/{member_id}', 		'CarewellController@reports_payment_report_member');
+
+
+
+
 Route::get('/reports/member_cal',						'CarewellController@reports_member_cal');
 Route::get('/reports/member_cal/{ref}/{member_id}',		'CarewellController@reports_member_cal_detail');
 
