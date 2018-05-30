@@ -421,13 +421,52 @@ function globals()
 		}
 	}
 	this.toLocation = function(url) 
-    {
+     {
         var a = document.createElement('a');
         a.href = url;
         return a;
-    };
+     };
 
-	
+	this.checkArrayValue = function(value,arr)
+	{
+	   	var status = 'Not exist';
+	 
+	   	for(var i=0; i<arr.length; i++)
+	   	{
+		   	var name = arr[i];
+		   	if(name == value)
+		   	{
+			    	status = 'Exist';
+			    	break;
+		   	}
+		}
+	 	return status;
+ 	}
+ 	this.checkArrayValues = function(array_name)
+ 	{
+ 		var array = [];
+ 		var check = "";
+ 		array_name.each(function(i, pro)
+          {
+            	var selected = $(pro).val();
+            	if(selected!="0")
+            	{
+            		check = globals.checkArrayValue(selected,array);
+            		if(check=="Exist")
+	       		{
+	       			return false;
+	       		}
+	       		else
+	       		{
+	       			array.push(selected);
+	       		}
+            	}
+          });
+          return check;
+ 	}
+ 	
+			
+			
 	
 	init();
 	function init()
