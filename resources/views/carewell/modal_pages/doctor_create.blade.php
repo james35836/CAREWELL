@@ -1,20 +1,13 @@
 <script>
 	$('input.string-only').keypress('keypress', string_only);//function in layout name string_only
-	// $(document).ready(function() 
-	// {
-	// 	$("body").on('change','.provider_name',function() 
-	// 	{
-	// 		var selected = $("option:selected", $(this)).val();
-	// 		$(".provider_name option").each(function() 
-	// 		{
-	// 			$(this).show();
-	// 		});
-	// 		$(".provider_name").each(function() 
-	// 		{
-	// 			$("option[value='" + selected + "']", $(this)).attr("disabled", true);
-	// 		});
-	// 	});
-	// });
+	$(document).ready(function(){
+	$("select").change(function(e){
+	    $("select option").removeAttr('disabled');
+	    $("select").each(function(i,s){
+	       $("select").not(s).find("option[value="+$(s).val()+"]").attr('disabled','disabled');
+	    });
+	});
+});
 </script>
 <div class="row box-globals">
 
@@ -68,7 +61,7 @@
 					</div>
 					<div class="form-content col-md-10 form-element">
 						<div class="input-group my-element">
-							<select name="provider_name[]" class="provider_name form-control ">
+							<select name="provider_name[]" class="provider_name form-control option-remove">
 								<option>SELECT PROVIDER</option>
 								@foreach($_provider as $provider)
 								<option value="{{$provider->provider_id}}">{{$provider->provider_name}}</option>
