@@ -146,8 +146,19 @@ class CarewellController extends ActiveAuthController
 	}
 	public function company_create_company()
 	{
-		$data['_coverage_plan']   = TblCoveragePlanModel::where('archived',0)->get();
 		$data['_payment_mode']    = TblPaymentModeModel::get();
+		$_coverage                = TblCompanyCoveragePlanModel::where('archived',0)->get();
+		$data['_coverage_plan']   = TblCoveragePlanModel::where('archived',0)->get();
+		foreach($_coverage as $keys=>$coverage_plan)
+		{
+			foreach($data['_coverage_plan'] as $key=>$coverage)
+			{
+				if($coverage->coverage_plan_id==$coverage_plan->coverage_plan_id)
+				{
+					$data['_coverage_plan'][$key]['ref']="hidden";
+				}
+			}
+		}
 		return view('carewell.modal_pages.company_create',$data);
 	}
 
@@ -170,9 +181,8 @@ class CarewellController extends ActiveAuthController
 	}
 	public function company_add_coverage_plan($company_id)
 	{
-
 		$data['company_id']       = $company_id;
-		$_coverage                = TblCompanyCoveragePlanModel::where('company_id',$company_id)->get();
+		$_coverage                = TblCompanyCoveragePlanModel::where('archived',0)->get();
 		$data['_coverage_plan']   = TblCoveragePlanModel::where('archived',0)->get();
 		foreach($_coverage as $keys=>$coverage_plan)
 		{
@@ -190,10 +200,14 @@ class CarewellController extends ActiveAuthController
 	{
 		foreach($request->coveragePlanData as $coverage_plan_id)
 		{
-			$coverageData                   = new TblCompanyCoveragePlanModel;
-			$coverageData->coverage_plan_id = $coverage_plan_id;
-			$coverageData->company_id       = $request->company_id;
-			$coverageData->save();
+			$check  = TblCompanyCoveragePlanModel::where('coverage_plan_id',$coverage_plan_id)->count();
+			if($check==0)
+			{
+				$coverageData                   = new TblCompanyCoveragePlanModel;
+				$coverageData->coverage_plan_id = $coverage_plan_id;
+				$coverageData->company_id       = $request->company_id;
+				$coverageData->save();
+			}
 		}
 		return StaticFunctionController::returnMessage('success','COVERAGE PLAN');
 	}
