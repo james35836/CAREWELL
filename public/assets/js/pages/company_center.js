@@ -231,7 +231,7 @@ function company_center()
 			var modalName       = 'ADD COVERAGE PLAN';
 			var modalClass      = 'company-add-plan';
 			var modalLink       = '/company/add_coverage_plan/'+company_id;
-			var modalActionName = 'SAVE CHANGES';
+			var modalActionName = 'ADD PLAN';
 			var modalAction     = 'add-company-plan-confirm';
 			var modalSize       = 'modal-md';
 			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
@@ -282,7 +282,7 @@ function company_center()
 			var modalName       = 'ADD DEPLOYMENT';
 			var modalClass      = 'company-add-deployment';
 			var modalLink       = '/company/add_deployment/'+company_id;
-			var modalActionName = 'SAVE CHANGES';
+			var modalActionName = 'ADD DEPLOYMENT';
 			var modalAction     = 'add-company-deployment-confirm';
 			var modalSize       = 'modal-md';
 			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);

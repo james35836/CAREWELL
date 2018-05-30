@@ -146,8 +146,19 @@ class CarewellController extends ActiveAuthController
 	}
 	public function company_create_company()
 	{
-		$data['_coverage_plan']   = TblCoveragePlanModel::where('archived',0)->get();
 		$data['_payment_mode']    = TblPaymentModeModel::get();
+		$_coverage                = TblCompanyCoveragePlanModel::where('archived',0)->get();
+		$data['_coverage_plan']   = TblCoveragePlanModel::where('archived',0)->get();
+		foreach($_coverage as $keys=>$coverage_plan)
+		{
+			foreach($data['_coverage_plan'] as $key=>$coverage)
+			{
+				if($coverage->coverage_plan_id==$coverage_plan->coverage_plan_id)
+				{
+					$data['_coverage_plan'][$key]['ref']="hidden";
+				}
+			}
+		}
 		return view('carewell.modal_pages.company_create',$data);
 	}
 
@@ -170,9 +181,8 @@ class CarewellController extends ActiveAuthController
 	}
 	public function company_add_coverage_plan($company_id)
 	{
-
 		$data['company_id']       = $company_id;
-		$_coverage                = TblCompanyCoveragePlanModel::where('company_id',$company_id)->get();
+		$_coverage                = TblCompanyCoveragePlanModel::where('archived',0)->get();
 		$data['_coverage_plan']   = TblCoveragePlanModel::where('archived',0)->get();
 		foreach($_coverage as $keys=>$coverage_plan)
 		{
@@ -190,10 +200,14 @@ class CarewellController extends ActiveAuthController
 	{
 		foreach($request->coveragePlanData as $coverage_plan_id)
 		{
-			$coverageData                   = new TblCompanyCoveragePlanModel;
-			$coverageData->coverage_plan_id = $coverage_plan_id;
-			$coverageData->company_id       = $request->company_id;
-			$coverageData->save();
+			$check  = TblCompanyCoveragePlanModel::where('coverage_plan_id',$coverage_plan_id)->count();
+			if($check==0)
+			{
+				$coverageData                   = new TblCompanyCoveragePlanModel;
+				$coverageData->coverage_plan_id = $coverage_plan_id;
+				$coverageData->company_id       = $request->company_id;
+				$coverageData->save();
+			}
 		}
 		return StaticFunctionController::returnMessage('success','COVERAGE PLAN');
 	}
@@ -1397,6 +1411,9 @@ public function billing_update_payment_date(Request $request)
 	$update['cal_payment_start']  = date('Y-m-d', strtotime($request->cal_payment_start));
 	$update['cal_payment_end']    = date('Y-m-d', strtotime($request->cal_payment_end));
 	$update['cal_payment_type']   = "UPDATED";
+
+	$updates['cal_payment_start']  = date('Y-m-d', strtotime($request->cal_payment_start));
+	$updates['cal_payment_end']    = date('Y-m-d', strtotime($request->cal_payment_end));
 	if($request->ref=='old')
 	{
 		$TblCalPaymentModel   = TblCalPaymentModel::where('cal_payment_id',$request->cal_payment_id);
@@ -1414,8 +1431,8 @@ public function billing_update_payment_date(Request $request)
 	}
 	else
 	{
-		$updateCheck = TblNewCalMemberModel::where('cal_new_member_id',$request->cal_new_member_id)->update($update);
-		$message    = "times";
+		$updateCheck = TblNewCalMemberModel::where('cal_new_member_id',$request->cal_new_member_id)->update($updates);
+		$message    = "check";
 	}
 	return $message;
 	
