@@ -1621,6 +1621,7 @@ public function billing_cal_import_template(Request $request)
 						$cal_id           = $companyData->cal_id;
 						$member_id        = $checkingMember->member_id;
 						$premium          = TblCoveragePlanModel::where('coverage_plan_id',$coverage_plan_id)->value('coverage_plan_premium');
+						
 						$payment_count    = number_format(str_replace(',','',$payment_amount) / number_format($premium));
 						$payment_mode     = $member_data->member_payment_mode;
 						if($payment_count > 1)
@@ -1647,6 +1648,7 @@ public function billing_cal_import_template(Request $request)
 							StaticFunctionController::archivedCurrentCompany($checkingMember->member_id,$deployment_id,'deployment');
 						}
 						$count++; 
+					     
 					}
 				}
 				elseif($checkingNewMember==null)
