@@ -2221,46 +2221,25 @@ public function reports_member_cal_detail($ref,$member_id)
 	$data['ref'] = $ref;
 	if($ref == 'monthly')
 	{
-		$data['date'] = $key = date('Y-m'); 
-		$data['member_id'] = $member_id;
-		$data['link'] = '/reports/member_cal/excel_report/'.$ref.'/'.$key.'/'.$member_id;
-		$data['_member'] = TblCalPaymentModel::where('member_id',$member_id)
-		->where('archived',1)
-		->where('cal_payment_start','like','%'.$key.'%')
-		->get();
 
-		foreach ($data['_member'] as $key => $member)
-		{
-			$cal_amount = TblCalMemberModel::where('cal_member_id',$member->member_id)
-			->where('archived',0)
-			->first();
-			$data['_member'][$key]['amount'] = $cal_amount->cal_payment_amount/$cal_amount->cal_payment_count;
-		}
-	}
-	else if($ref == 'yearly')
-	{
-		$data['date'] = $key = date('Y'); 
-		$data['member_id'] = $member_id;
-		$data['link'] = '/reports/member_cal/excel_report/'.$ref.'/'.$key.'/'.$member_id;
-		$data['_member'] = TblCalPaymentModel::where('member_id',$member_id)
-		->where('archived',1)
-		->where('cal_payment_start','like','%'.$key.'%')
-		->get();
+		$data['date'] 		= $key = date('Y-m'); 
+		$data['member_id'] 	= $member_id;
+		$data['link'] 		= '/reports/member_cal/excel_report/'.$ref.'/'.$key.'/'.$member_id;
+		$data['_member'] 	= TblCalMemberModel::where('member_id',1)
+							->where('archived',1)
+							->get();
+		// foreach ($data['_member'] as $key => $member)
+		// {
 
-		foreach ($data['_member'] as $key => $member)
-		{
-			$cal_amount = TblCalMemberModel::where('cal_member_id',$member->member_id)
-			->where('archived',0)
-			->first();
-			$data['_member'][$key]['amount'] = $cal_amount->cal_payment_amount/$cal_amount->cal_payment_count;
-		}
-	}
-	else
-	{
-      //all
-	}
+		// 	$data['_member'][$key]['year'] 	= TblCalPaymentModel::where('member_id',$member->member_id)->orderBy('cal_payment_start','ASC')->get();
+		// 	$data['_member'][$key]['cal'] 		= TblCalModel::where('cal_id',$member->cal_id)->first();
 
-	
+
+
+		// }
+
+		//dd($data);
+	}
 
 	return view('carewell.modal_pages.reports_member_cal_report',$data);
 

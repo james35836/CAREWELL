@@ -12,8 +12,19 @@
 			<div class="table-responsive no-padding">
 				<table class="table table-hover table-bordered">
 					<tr class="titlerow">
-						<th>Date Paid</th>
-						<th>Amount</th>
+						<th>Year</th>
+						<th>January</th>
+						<th>February</th>
+						<th>March</th>
+						<th>April</th>
+						<th>May</th>
+						<th>June</th>
+						<th>July</th>
+						<th>August</th>
+						<th>September</th>
+						<th>October</th>
+						<th>November</th>
+						<th>December</th>
 					</tr>
 					@foreach($_member as $member)
 					<tr>

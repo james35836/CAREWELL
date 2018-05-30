@@ -35,7 +35,7 @@ function settings_reports()
 			var modalLink       = '/reports/member_cal/'+ref+'/'+member_id;
 			var modalActionName = 'EXPORT TO EXCEL';
 			var modalAction     = 'monthly-excel-report';
-			var modalSize       = 'modal-md-sm';
+			var modalSize       = 'modal-lg';
 			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
         });
     }
@@ -80,7 +80,7 @@ function settings_reports()
 				headers: {
 				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 				},
-				url:'/reports/member_cal/wew',
+				url:'/reports/member_cal/get_report',
 				method: "POST",
 		        data: data,
 		        contentType:false,
