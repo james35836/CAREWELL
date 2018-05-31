@@ -2246,7 +2246,6 @@ public function reports_payment_member_excel($new_year,$payment_mode,$member_id)
           $data['_payment'][$key]['cal_payment'] = $TblCalPaymentModel->CalInfo()->get();
         	$date                                  = $TblCalPaymentModel->first();
 		$data['_payment'][$key]['colspan']     = StaticFunctionController::moth_reference($date->cal_payment_start);
-		
 	}
 
 	Excel::create("MEMBER PAYMENT REPORT",function($excel) use ($data)
