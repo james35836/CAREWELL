@@ -3,7 +3,7 @@
 namespace App\Http\Model;
 
 use Illuminate\Database\Eloquent\Model;
-
+use DB;
 class TblCoveragePlanProcedureModel extends Model
 {
     protected $table = 'tbl_coverage_plan_procedure';

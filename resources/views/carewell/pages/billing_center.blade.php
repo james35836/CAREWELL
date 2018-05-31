@@ -175,7 +175,7 @@
                                 <tr>
                                     <td>{{$cal_close->cal_number}}</td>
                                     <td>{{$cal_close->company_name}}</td>
-                                    <td>{{$cal_close->cal_reveneu_period_year}}<8/td>
+                                    <td>{{$cal_close->cal_reveneu_period_year}}</td>
                                     <td>{{$cal_close->cal_payment_mode}}</td>
                                     <td>{{$cal_close->members}}</td>
                                     <td>{{date("F j, Y",strtotime($cal_close->cal_created))}}</td>
