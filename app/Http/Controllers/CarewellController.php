@@ -1775,32 +1775,41 @@ public function billing_cal_close($cal_id)
 }
 public function billing_cal_close_submit(Request $request)
 {
-	$unique_name            = substr(str_shuffle("ABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0,5);
-	$cal_info_attached_file = $request->file('cal_file');
-	$fileCalRef             = $unique_name.'-'.$cal_info_attached_file->getClientOriginalName();
-	$cal_info_attached_file->move('cal_file',$fileCalRef );
-
-	$calCloseData                           =   new TblCalInfoModel;
-	$calCloseData->cal_info_attached_file   =   '/cal_file/'.$fileCalRef.'';
-	$calCloseData->cal_info_check_number    =   $request->cal_info_check_number;
-	$calCloseData->cal_info_collection_date =   $request->cal_info_collection_date;
-	$calCloseData->cal_info_check_date      =   $request->cal_info_check_date;
-	$calCloseData->cal_info_or_number       =   $request->cal_info_or_number;
-	$calCloseData->cal_info_amount          =   $request->cal_info_amount;
-	$calCloseData->cal_info_created         =   Carbon::now();
-	$calCloseData->cal_id                   =   $request->cal_id;
-	$calCloseData->save();
-	
-	StaticFunctionController::getNewMember($request->cal_id,1);
-
-	$update['archived']   = '1';
-	$tblCal               = TblCalModel::where('cal_id',$request->cal_id)->update($update);
-	$data['_cal_member']  = TblCalMemberModel::where('cal_id',$request->cal_id)->get();
-	foreach($data['_cal_member'] as $key=>$cal_member)
+	$check  = TblCalInfoModel::where('cal_info_check_number',$request->cal_info_check_number)->orWhere('cal_info_or_number',$request->cal_info_or_number)->count();
+	if($check==0)
 	{
-		TblCalPaymentModel::where('cal_member_id',$cal_member->cal_member_id)->update($update);
+		$unique_name            = substr(str_shuffle("ABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0,5);
+		$cal_info_attached_file = $request->file('cal_file');
+		$fileCalRef             = $unique_name.'-'.$cal_info_attached_file->getClientOriginalName();
+		$cal_info_attached_file->move('cal_file',$fileCalRef );
+
+		$calCloseData                           =   new TblCalInfoModel;
+		$calCloseData->cal_info_attached_file   =   '/cal_file/'.$fileCalRef.'';
+		$calCloseData->cal_info_check_number    =   $request->cal_info_check_number;
+		$calCloseData->cal_info_collection_date =   $request->cal_info_collection_date;
+		$calCloseData->cal_info_check_date      =   $request->cal_info_check_date;
+		$calCloseData->cal_info_or_number       =   $request->cal_info_or_number;
+		$calCloseData->cal_info_amount          =   $request->cal_info_amount;
+		$calCloseData->cal_info_created         =   Carbon::now();
+		$calCloseData->cal_id                   =   $request->cal_id;
+		$calCloseData->save();
+		
+		StaticFunctionController::getNewMember($request->cal_id,1);
+
+		$update['archived']   = '1';
+		$tblCal               = TblCalModel::where('cal_id',$request->cal_id)->update($update);
+		$data['_cal_member']  = TblCalMemberModel::where('cal_id',$request->cal_id)->get();
+		foreach($data['_cal_member'] as $key=>$cal_member)
+		{
+			TblCalPaymentModel::where('cal_member_id',$cal_member->cal_member_id)->update($update);
+		}
+		return StaticFunctionController::returnMessage('success','CAL CLOSED');
 	}
-	return StaticFunctionController::returnMessage('success','CAL CLOSED');
+	else
+	{
+		return StaticFunctionController::customMessage('danger','OR number or Check Number Exist');
+	}
+	
 }
 
 /*MEDICAL*/
@@ -2016,9 +2025,7 @@ public function availment_view_approval_details($approval_id)
 						->where('type','doctor')
 						->join('tbl_doctor','tbl_doctor.doctor_id','=','tbl_approval_payee.payee_id')
 	                         ->get();
-	$data['_payee_other']    = TblApprovalPayeeModel::where('approval_id',$approval_id)
-						->where('type','payee')
-						->get();
+	$data['_payee_other']    = TblApprovalPayeeModel::where('approval_id',$approval_id)->where('type','payee')->get();
 	$data['total_procedure']  = TblApprovalTotalModel::where('approval_id',$approval_id)->where('total_type','procedure')->first();
 	$data['total_doctor']     = TblApprovalTotalModel::where('approval_id',$approval_id)->where('total_type','doctor')->first();
 	return view('carewell.modal_pages.availment_approval_details',$data);
@@ -2236,7 +2243,7 @@ public function reports_payment_report_member($member_id)
 	$payment_mode 		= 'SEMI-MONTHLY';
 	$data['member_id'] 	= $member_id;
 	$data['link'] 		= '/reports/payment_report/excel/'.$new_year.'/'.$payment_mode.'/'.$member_id;
-	$data['_payment']   = TblCalPaymentModel::->where('tbl_cal_payment','tbl_cal_payment.archived',0)->where('member_id',$member_id)->select(DB::raw("YEAR(cal_payment_start) as year"))->groupby('year')->orderBy('year','ASC')->get();
+	$data['_payment']   = TblCalPaymentModel::where('tbl_cal_payment','tbl_cal_payment.archived',0)->where('member_id',$member_id)->select(DB::raw("YEAR(cal_payment_start) as year"))->groupby('year')->orderBy('year','ASC')->get();
 	foreach($data['_payment'] as $key=> $year)
 	{
 		$TblCalPaymentModel = TblCalPaymentModel::where('tbl_cal_payment.member_id',$member_id)->orderBy('cal_payment_start','ASC')

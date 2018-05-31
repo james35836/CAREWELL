@@ -91,6 +91,10 @@ class StaticFunctionController extends Controller
           return "<div class='alert alert-danger' style='text-align: center;'>".$str_name." transaction Failed!</div>";
         }
     }
+    public static function customMessage($class,$message)
+    {
+        return "<div class='alert alert-".$class."' style='text-align: center;'>".$message."!</div>";
+    }
 
 
     public function getCompanyInfo(Request $request)
