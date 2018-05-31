@@ -65,17 +65,17 @@ Route::get('/settings/maintenance_modal', 				'AdminController@settings_maintena
 Route::post('/settings/maintenance_modal_submit', 		'AdminController@settings_maintenance_modal_submit');
 
 /*DASHBOARD*/
-Route::get('/dashboard', 								'CarewellController@dashboard');
+Route::get('/dashboard', 						     'CarewellController@dashboard');
 
 /*COMPANY*/
-Route::get('/company', 									'CarewellController@company');
-Route::get('/company/company_details/{company_id}', 	'CarewellController@company_details');
+Route::get('/company', 							     'CarewellController@company');
+Route::get('/company/company_details/{company_id}', 	     'CarewellController@company_details');
 Route::get('/company/create_company', 					'CarewellController@company_create_company');
 Route::post('/company/create_company/submit', 			'CarewellController@company_create_company_submit');
 Route::post('/company/update_company/submit', 			'CarewellController@company_update_company_submit');
 
-Route::get('/company/add_coverage_plan/{company_id}', 	'CarewellController@company_add_coverage_plan');
-Route::post('/company/add_coverage_plan/submit', 		'CarewellController@company_add_coverage_plan_submit');
+Route::get('/company/add_coverage_plan/{company_id}', 	     'CarewellController@company_add_coverage_plan');
+Route::post('/company/add_coverage_plan/submit', 		     'CarewellController@company_add_coverage_plan_submit');
 Route::get('/company/add_deployment/{company_id}', 		'CarewellController@company_add_deployment');
 Route::post('/company/add_deployment/submit', 			'CarewellController@company_add_deployment_submit');
 

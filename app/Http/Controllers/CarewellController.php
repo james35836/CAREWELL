@@ -415,6 +415,7 @@ class CarewellController extends ActiveAuthController
 	{
 
 		$coverage                       = TblMemberCompanyModel::where('archived',0)->where('member_id',$member_id)->first();
+		$data['_payment_history']       = TblCalMemberModel::where('tbl_cal_member.member_id',$member_id)->PaymentHistory()->get();
 		$data['_availment_history']     = TblApprovalModel::where('tbl_approval.member_id',$member_id)->AvailmentHistory()->get();
 		$data['coverage_plan_details']  = TblCoveragePlanModel::where('coverage_plan_id',$coverage->coverage_plan_id)->first();     
 		$data['_coverage_plan_covered'] = TblCoveragePlanProcedureModel::where('coverage_plan_id',$coverage->coverage_plan_id)->CoveragePlan()->get();
