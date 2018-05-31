@@ -2149,6 +2149,21 @@ public function payable_details($payable_id)
 	}
 	return view('carewell.modal_pages.payable_details',$data);
 }
+public function payable_update_submit(Request $request)
+{
+	$update['payable_soa_number'] = $request->payable_soa_number;
+	$update['payable_recieved'] 	= $request->payable_recieved;
+	$update['payable_due'] 		= $request->payable_due;
+	$check = TblPayableModel::where('payable_id',$request->payable_id)->update($update);
+	if($check)
+	{
+          return StaticFunctionController::returnMessage('success','PAYABLE');
+	}
+	else
+	{
+          return StaticFunctionController::returnMessage('danger','PAYABLE');
+	}
+}
 /*REPORTS*/
 public function reports()
 {

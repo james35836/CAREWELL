@@ -69,7 +69,7 @@
                                         </button>
                                         <ul class="dropdown-menu" role="menu" style="position: absolute !important;">
                                             <li><button type="button" data-payable_id="{{$payable->payable_id}}" class="btn btn-link view-payable-details"><i class="fa fa-eye btn-icon"></i>  View Payable</button></li>
-                                            <li><button type="button" class="btn btn-link"><i class="fa fa-trash btn-icon"></i> Archived Payable</button></li>
+                                            <li><button type="button" class="btn btn-link"><i class="fa fa-trash btn-icon"></i> Mark as Close</button></li>
                                         </ul>
                                     </div>
                                 </td>
@@ -136,7 +136,7 @@
                                                 </button>
                                                 <ul class="dropdown-menu" role="menu" style="position: absolute !important;">
                                                     <li><button type="button" data-payable_id="{{$payable->payable_id}}" class="btn btn-link view-payable-details"><i class="fa fa-eye btn-icon"></i>  View Payable</button></li>
-                                                    <li><button type="button" class="btn btn-link"><i class="fa fa-trash btn-icon"></i> Archived Payable</button></li>
+                                                    
                                                 </ul>
                                             </div>
                                         </td>

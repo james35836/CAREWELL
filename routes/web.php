@@ -168,6 +168,7 @@ Route::post('/payable/search_approval', 				'CarewellController@payable_search_a
 Route::post('/payable/create_payable/submit', 			'CarewellController@payable_create_submit');
 Route::get('/payable/payable_details/{payable_id}', 		'CarewellController@payable_details');
 
+Route::post('/payable/update_payable/submit', 			'CarewellController@payable_update_submit');
 
 
 /*REPORTS*/
