@@ -2236,11 +2236,12 @@ public function reports_payment_report_member($member_id)
 	$payment_mode 		= 'SEMI-MONTHLY';
 	$data['member_id'] 	= $member_id;
 	$data['link'] 		= '/reports/payment_report/excel/'.$new_year.'/'.$payment_mode.'/'.$member_id;
-	$data['_payment']   = TblCalPaymentModel::where('member_id',$member_id)->select(DB::raw("YEAR(cal_payment_start) as year"))->groupby('year')->orderBy('year','ASC')->get();
+	$data['_payment']   = TblCalPaymentModel::->where('tbl_cal_payment','tbl_cal_payment.archived',0)->where('member_id',$member_id)->select(DB::raw("YEAR(cal_payment_start) as year"))->groupby('year')->orderBy('year','ASC')->get();
 	foreach($data['_payment'] as $key=> $year)
 	{
 		$TblCalPaymentModel = TblCalPaymentModel::where('tbl_cal_payment.member_id',$member_id)->orderBy('cal_payment_start','ASC')
-		                                        ->whereYear('tbl_cal_payment.cal_payment_start', '=', $year->year);
+		                                        ->whereYear('tbl_cal_payment.cal_payment_start', '=', $year->year)
+		                                        ->where('tbl_cal_payment','tbl_cal_payment.archived',0);
           
           $data['_payment'][$key]['cal_payment'] = $TblCalPaymentModel->CalInfo()->get();
         	$date                                  = $TblCalPaymentModel->first();
