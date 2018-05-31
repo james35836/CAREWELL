@@ -2213,114 +2213,51 @@ public function reports_payment_report()
 	$data['_member']    = TblMemberModel::where('tbl_member.archived',0)->where('tbl_member_company.archived',0)->Member()->paginate(10);
 	return view('carewell.pages.reports_payment_report',$data);
 }
+
 public function reports_payment_report_member($member_id)
 {
-	$data['date'] 		= $key = date('Y-m'); 
+	$new_year           = date('Y'); 
+	$payment_mode 		= 'SEMI-MONTHLY';
 	$data['member_id'] 	= $member_id;
-	$data['link'] 		= '/reports/member_cal/excel_report/sem/'.$key.'/'.$member_id;
-	$data['_payment'] = TblCalPaymentModel::select(DB::raw("YEAR(cal_payment_start) as year"))->groupby('year')->where('member_id',$member_id)->orderBy('year','ASC')->get();
+	$data['link'] 		= '/reports/payment_report/excel/'.$new_year.'/'.$payment_mode.'/'.$member_id;
+	$data['_payment']   = TblCalPaymentModel::where('member_id',$member_id)->select(DB::raw("YEAR(cal_payment_start) as year"))->groupby('year')->orderBy('year','ASC')->get();
 	foreach($data['_payment'] as $key=> $year)
 	{
-		$data['_payment'][$key]['cal_payment'] = TblCalPaymentModel::whereYear('tbl_cal_payment.cal_payment_start', '=', $year->year)
-		 								->join('tbl_cal_member','tbl_cal_member.cal_member_id','=','tbl_cal_payment.cal_member_id')
-		 								->join('tbl_cal','tbl_cal.cal_id','=','tbl_cal_member.cal_id')
-		                                        ->orderBy('cal_payment_start','ASC')->get();
+		$TblCalPaymentModel = TblCalPaymentModel::where('tbl_cal_payment.member_id',$member_id)->orderBy('cal_payment_start','ASC')
+		                                        ->whereYear('tbl_cal_payment.cal_payment_start', '=', $year->year);
+          
+          $data['_payment'][$key]['cal_payment'] = $TblCalPaymentModel->CalInfo()->get();
+        	$date                                  = $TblCalPaymentModel->first();
+		$data['_payment'][$key]['colspan']     = StaticFunctionController::moth_reference($date->cal_payment_start);
 		
 	}
 	return view('carewell.modal_pages.reports_payment_report_member',$data);
 }
-
-public function reports_member_cal()
+public function reports_payment_member_excel($new_year,$payment_mode,$member_id)
 {
-	$data['page']     = 'Member CAL Reports';
-	$data['_member']  = TblMemberModel::where('tbl_member.archived',0)->where('tbl_member_company.archived',0)->Member()->paginate(10);
-	$data['user']     =  StaticFunctionController::global();
-
-	return view('carewell.pages.reports_member_cal',$data);
-}
-
-public function reports_member_cal_detail($ref,$member_id)
-{
-	
-	$data['ref'] = $ref;
-	if($ref == 'monthly')
+	$data['member_id'] 	= $member_id;
+	$data['link'] 		= '/reports/payment_report/excel/'.$new_year.'/'.$payment_mode.'/'.$member_id;
+	$data['_payment']   = TblCalPaymentModel::where('member_id',$member_id)->select(DB::raw("YEAR(cal_payment_start) as year"))->groupby('year')->orderBy('year','ASC')->get();
+	foreach($data['_payment'] as $key=> $year)
 	{
-
-		$data['date'] 		= $key = date('Y-m'); 
-		$data['member_id'] 	= $member_id;
-		$data['link'] 		= '/reports/member_cal/excel_report/'.$ref.'/'.$key.'/'.$member_id;
-		$data['_member'] 	= TblCalMemberModel::where('member_id',1)
-							->where('archived',1)
-							->get();
-		// foreach ($data['_member'] as $key => $member)
-		// {
-
-		// 	$data['_member'][$key]['year'] 	= TblCalPaymentModel::where('member_id',$member->member_id)->orderBy('cal_payment_start','ASC')->get();
-		// 	$data['_member'][$key]['cal'] 		= TblCalModel::where('cal_id',$member->cal_id)->first();
-
-
-
-		// }
-
-		//dd($data);
+		$TblCalPaymentModel = TblCalPaymentModel::where('tbl_cal_payment.member_id',$member_id)->orderBy('cal_payment_start','ASC')
+		                                        ->whereYear('tbl_cal_payment.cal_payment_start', '=', $year->year);
+          
+          $data['_payment'][$key]['cal_payment'] = $TblCalPaymentModel->CalInfo()->get();
+        	$date                                  = $TblCalPaymentModel->first();
+		$data['_payment'][$key]['colspan']     = StaticFunctionController::moth_reference($date->cal_payment_start);
+		
 	}
 
-	return view('carewell.modal_pages.reports_member_cal_report',$data);
-
-}
-
-public function reports_member_cal_month_filter_date(Request $request)
-{
-	$key = $request->val_key;
-    //dd($key);
-	$data['link'] = '/reports/member_cal/month_detail/excel_report/'.$key.'/'.$request->member_id;
-	$data['member_id'] = $member_id = $request->member_id;
-	$data['_member'] = TblCalPaymentModel::where('member_id',$member_id)
-	->where('archived',1)
-	->where('cal_payment_start','like','%'.$key.'%')
-                        // ->where('cal_payment_start','like','%'.$request->val_key.'%')
-	->get();
-
-	foreach($data['_member'] as $key => $member)
-	{
-		$cal_amount = TblCalMemberModel::where('cal_member_id',$member->member_id)
-		->where('archived',0)
-		->first();
-		$data['_member'][$key]['amount'] = $cal_amount->cal_payment_amount/$cal_amount->cal_payment_count;
-	}
-	return view('carewell.additional_pages.reports_monthly_report_filter',$data);
-	
-}
-
-public function reports_export_excel($val_key,$member_id)
-{
-	$key = $val_key;
-    //dd($key);
-	$data['member_id'] = $member_id;
-	$data['_member'] = TblCalPaymentModel::where('member_id',$member_id)
-	->where('archived',1)
-	->where('cal_payment_start','like','%'.$key.'%')
-                        // ->where('cal_payment_start','like','%'.$request->val_key.'%')
-	->get();
-
-	foreach($data['_member'] as $key => $member)
-	{
-		$cal_amount = TblCalMemberModel::where('cal_member_id',$member->member_id)
-		->where('archived',0)
-		->first();
-		$data['_member'][$key]['amount'] = $cal_amount->cal_payment_amount/$cal_amount->cal_payment_count;
-	}
-
-	Excel::create("MEMBER MONTHLY REPORT",function($excel) use ($data)
+	Excel::create("MEMBER PAYMENT REPORT",function($excel) use ($data)
 	{
 		$excel->sheet('clients',function($sheet) use ($data)
 		{
-			$sheet->loadView('carewell.additional_pages.reports_member_monthly_excel',$data);
+			$sheet->loadView('carewell.additional_pages.reports_member_payment_excel',$data);
 		});
 	})->download('xls');
 
 }
-
 /*SETTINGS*/
 public function settings_coverage_plan()
 {

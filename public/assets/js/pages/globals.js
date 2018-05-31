@@ -114,7 +114,7 @@ function globals()
 	{
   
 		$('.'+modalClass+'-modal').remove();
-        $(".append-modal").append(globalModals);
+        	$(".append-modal").append(globalModals);
 		$('.global-modal').removeClass().addClass('modal fade modal-top '+modalClass+'-modal');
 		$('.global-modal-dialog').removeClass().addClass(''+modalClass+'-modal-dialog modal-dialog '+modalSize);
 		$('.global-modal-content').removeClass().addClass('modal-content');
@@ -124,18 +124,18 @@ function globals()
 		$('.global-modal-body').removeClass().addClass('modal-body '+modalClass+'-modal-body');
 		$('.'+modalClass+'-modal').modal('show');
 		$('.global-ajax-loader').show();
-        $('.global-modal-body-content').hide();
-        $('.global-modal-footer').hide();
+        	$('.global-modal-body-content').hide();
+        	$('.global-modal-footer').hide();
 
-        $.ajax({
+        	$.ajax({
 				headers: {
 				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 				},
 
 				url:modalLink,
 				method: "get",
-                success: function(data)
-                {
+	               success: function(data)
+	               {
 					setTimeout(function()
 					{   
 						$('.global-ajax-loader').hide().removeClass().addClass('.modal-loader '+modalClass+'-ajax-loader');
@@ -143,7 +143,7 @@ function globals()
 						if(modalSize=="modal-import")
 						{
 							$('.global-modal-footer').show().html(successButton);
-                    	}
+                    		}
 						else
 						{
 						    $footer = $('.global-modal-footer').show().removeClass().addClass('modal-footer '+modalClass+'-modal-footer');
@@ -159,8 +159,8 @@ function globals()
 									// $('button.'+modalAction).attr('disabled','true');
 								}
 							}
-                    	}
-					 }, 700);
+                    		}
+					}, 700);
 				}
 			});
 

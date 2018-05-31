@@ -660,15 +660,37 @@ class StaticFunctionController extends Controller
         }
         return 0;
     }
-  public static function insertMemberPayment($cal_member_id,$member_id)
-  {
-    $member_cut['cal_payment_start']  = 'start';
-    $member_cut['cal_payment_end']    = 'end';
-    $member_cut['cal_payment_type']   = 'ORIGINAL';
-    $member_cut['cal_member_id']      = $cal_member_id;
-    $member_cut['member_id']          = $member_id;
-    TblCalPaymentModel::insert($member_cut);
-  }
+    public static function moth_reference($date)
+    {
+        $month     = date('m',strtotime($date));
+        $new_month = 0;
+        for ($i=1; $i <=12; $i++) 
+        { 
+            if($month == sprintf("%02d",$i))
+            {
+               $new_month = sprintf("%02d",$i);
+               break;
+            }
+        }
+        if($month<=15)
+        {
+            $colspan = ($new_month*2)-2;
+        }
+        else
+        {
+            $colspan = ($new_month*2)-1;
+        }
+        return $colspan;
+    }
+    public static function insertMemberPayment($cal_member_id,$member_id)
+    {
+        $member_cut['cal_payment_start']  = 'start';
+        $member_cut['cal_payment_end']    = 'end';
+        $member_cut['cal_payment_type']   = 'ORIGINAL';
+        $member_cut['cal_member_id']      = $cal_member_id;
+        $member_cut['member_id']          = $member_id;
+        TblCalPaymentModel::insert($member_cut);
+    }
   public static function newMemberModeOfPayment($member_id,$payment_count,$cal_id)
   {
     $cal              = TblCalModel::where('cal_id',$cal_id)->first();

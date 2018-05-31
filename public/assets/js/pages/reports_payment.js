@@ -13,15 +13,15 @@ function reports_payment()
 	{
 		$(document).ready(function()
 		{
-			member_report();
-			searching();
+			member_payment_report();
+			member_payment_report_filter();
 			//try
 			search_member_cal();
 
 		});
 
 	}
-	function member_report()
+	function member_payment_report()
 	{
 
 		$("body").on('click','.member-report',function()
@@ -31,19 +31,19 @@ function reports_payment()
 			var modalName       = $(this).data('title');
 			var modalClass      = 'reports-plan';
 			var modalLink       = '/reports/payment_report/'+member_id;
-			var modalActionName = 'EXPORT TO EXCEL';
+			var modalActionName = 'none';
 			var modalAction     = 'monthly-excel-report';
 			var modalSize       = 'modal-lg';
 			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
         });
-    }
+    	}
 
-    function searching()
+     function member_payment_report_filter()
 	{
-		$('body').on('change','#datepicker',function()
+		$('body').on('change','#yearFilter',function()
 		{
 			var ref				= $(this).data('ref');
-			var table = 						$('#showMonthlyReport');
+			var table = 						$('#showPaymentReport');
 			searchData.append("val_key", 		$(this).val());
 			searchData.append("member_id", 		$(this).data('member_id'));
 
@@ -53,10 +53,10 @@ function reports_payment()
 				},
 				url:'/reports/member_cal/date_filter/'+ref,
 				method: "POST",
-		        data: searchData,
-		        contentType:false,
-	            cache:false,
-	            processData:false,
+		        	data: searchData,
+		        	contentType:false,
+	            	cache:false,
+	            	processData:false,
 				success: function(data)
 				{
 					table.html(data);
@@ -80,10 +80,10 @@ function reports_payment()
 				},
 				url:'/reports/member_cal/get_report',
 				method: "POST",
-		        data: data,
-		        contentType:false,
-	            cache:false,
-	            processData:false,
+		        	data: data,
+		        	contentType:false,
+	            	cache:false,
+	            	processData:false,
 
 				success: function(data)
 				{

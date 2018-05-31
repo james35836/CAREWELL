@@ -181,6 +181,9 @@ Route::get('/reports/payment_report', 					'CarewellController@reports_payment_r
 Route::get('/reports/payment_report/{member_id}', 		'CarewellController@reports_payment_report_member');
 
 
+Route::get('/reports/payment_report/excel/{new_year}/{payment_mode}/{member_id}', 'CarewellController@reports_payment_member_excel');
+
+
 
 
 Route::get('/reports/member_cal',						'CarewellController@reports_member_cal');
