@@ -267,7 +267,6 @@
             <li><a href="/reports/ending_number_per_month"><i class="fa fa-circle-o"></i>ENDING NUMBER</a></li>
             <li><a href="/reports/breakdown"><i class="fa fa-circle-o"></i>BREAKDOWN</a></li>
             <li><a href="/reports/consolidation"><i class="fa fa-circle-o"></i>CONSOLIDATION</a></li>
-            <li><a href="/reports/member_cal"><i class="fa fa-circle-o"></i>MEMBER CAL</a></li>
             <li><a href="#"><i class="fa fa-circle-o"></i>SUMMARY</a></li>
           </ul>
         </li>
