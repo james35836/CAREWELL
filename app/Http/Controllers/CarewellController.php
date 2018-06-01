@@ -1277,7 +1277,6 @@ public function doctor_add_doctor_provider_submit(Request $request)
 		}
 	}
 	return '<center><b><span class="color-red">'.$countInsert.' inserted<br>'. $countReject.' rejected</span></b></center>';
-	
 }
 
 /*BILLING*/
@@ -1309,7 +1308,6 @@ public function billing()
 		$data['_cal_pending'][$key]['members']   =  TblCalMemberModel::where('cal_id',$cal_pending->cal_id)->where('archived',0)->count();
 		$data['_cal_pending'][$key]['reference'] = 'show';
 	}
-
 	return view('carewell.pages.billing_center',$data);
 }
 public function billing_create_cal()
@@ -1622,37 +1620,47 @@ public function billing_cal_import_template(Request $request)
 						$cal_id           = $companyData->cal_id;
 						$member_id        = $checkingMember->member_id;
 						$premium          = TblCoveragePlanModel::where('coverage_plan_id',$coverage_plan_id)->value('coverage_plan_premium');
-						
-						$payment_count    = number_format(str_replace(',','',$payment_amount) / number_format($premium));
-						$payment_mode     = $member_data->member_payment_mode;
-						if($payment_count > 1)
+						if($payment_amount%$premium == 0)
+						{
+							$payment_count    = number_format(str_replace(',','',$payment_amount) / number_format($premium));
+							$payment_mode     = $member_data->member_payment_mode;
+							if($payment_count > 1)
+							{
+								$name['first']  = $data['first_name'];
+								$name['middle'] = $data['middle_name'];
+								$name['last']   = $data['last_name'];
+								$name['type']   = 'NEED ADJUSTMENT';
+								array_push($exportArray,$name);
+							}
+							$cal_member['cal_payment_amount']   =   $payment_amount;
+							$cal_member['cal_payment_date']     =   Carbon::now();
+							$cal_member['cal_payment_count']    =   $payment_count;
+							$cal_member['member_id']            =   $checkingMember->member_id;
+							$cal_member['cal_id']               =   $companyData->cal_id;
+							$cal_member_id                      =   TblCalMemberModel::insertGetId($cal_member);
+							$payment_ref                        =   StaticFunctionController::paymentDateComputation($member_id,$cal_member_id,$payment_count,$payment_mode);
+							if($coverage_plan_id!=$member_data->coverage_plan_id)
+							{
+								StaticFunctionController::archivedCurrentCompany($checkingMember->member_id,$coverage_plan_id,'coverage_plan');
+							}
+							else if($deployment_id!=$member_data->deployment_id)
+							{
+								StaticFunctionController::archivedCurrentCompany($checkingMember->member_id,$deployment_id,'deployment');
+							}
+							$count++; 
+						}
+						else
 						{
 							$name['first']  = $data['first_name'];
 							$name['middle'] = $data['middle_name'];
 							$name['last']   = $data['last_name'];
-							$name['type']   = 'NEED ADJUSTMENT';
+							$name['type']   = 'Check Payment Amount';
 							array_push($exportArray,$name);
 						}
-						$cal_member['cal_payment_amount']   =   $payment_amount;
-						$cal_member['cal_payment_date']     =   Carbon::now();
-						$cal_member['cal_payment_count']    =   $payment_count;
-						$cal_member['member_id']            =   $checkingMember->member_id;
-						$cal_member['cal_id']               =   $companyData->cal_id;
-						$cal_member_id                      =   TblCalMemberModel::insertGetId($cal_member);
-						$payment_ref                        =   StaticFunctionController::paymentDateComputation($member_id,$cal_member_id,$payment_count,$payment_mode);
-						if($coverage_plan_id!=$member_data->coverage_plan_id)
-						{
-							StaticFunctionController::archivedCurrentCompany($checkingMember->member_id,$coverage_plan_id,'coverage_plan');
-						}
-						else if($deployment_id!=$member_data->deployment_id)
-						{
-							StaticFunctionController::archivedCurrentCompany($checkingMember->member_id,$deployment_id,'deployment');
-						}
-						$count++; 
 					     
 					}
 				}
-				elseif($checkingNewMember==null)
+				else if($checkingNewMember==null)
 				{
 					$coverage_plan_id                     =   StaticFunctionController::getid($data['coverage_plan'], 'coverage');
 					$payment_amount                       =   $data['payment_amount'];
@@ -1685,7 +1693,6 @@ public function billing_cal_import_template(Request $request)
 		if(count($exportArray)>0)
 		{
 			Session::put('exportWarning',$exportArray);
-
 		}
 		if($count == 0&&$countExist==0&&$countNew==0)
 		{
@@ -2243,12 +2250,12 @@ public function reports_payment_report_member($member_id)
 	$payment_mode 		= 'SEMI-MONTHLY';
 	$data['member_id'] 	= $member_id;
 	$data['link'] 		= '/reports/payment_report/excel/'.$new_year.'/'.$payment_mode.'/'.$member_id;
-	$data['_payment']   = TblCalPaymentModel::where('tbl_cal_payment','tbl_cal_payment.archived',0)->where('member_id',$member_id)->select(DB::raw("YEAR(cal_payment_start) as year"))->groupby('year')->orderBy('year','ASC')->get();
+	$data['_payment']   = TblCalPaymentModel::where('tbl_cal_payment.archived',0)->where('member_id',$member_id)->select(DB::raw("YEAR(cal_payment_start) as year"))->groupby('year')->orderBy('year','ASC')->get();
 	foreach($data['_payment'] as $key=> $year)
 	{
 		$TblCalPaymentModel = TblCalPaymentModel::where('tbl_cal_payment.member_id',$member_id)->orderBy('cal_payment_start','ASC')
 		                                        ->whereYear('tbl_cal_payment.cal_payment_start', '=', $year->year)
-		                                        ->where('tbl_cal_payment','tbl_cal_payment.archived',0);
+		                                        ->where('tbl_cal_payment.archived',0);
           
           $data['_payment'][$key]['cal_payment'] = $TblCalPaymentModel->CalInfo()->get();
         	$date                                  = $TblCalPaymentModel->first();

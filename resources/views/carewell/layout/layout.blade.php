@@ -307,11 +307,9 @@
       </ol>
     </section>
     @if(Session::has('exportWarning'))
-    <script>
-      $( function() {
-        toastr.error('There is a warning message, <br>Please Click Here!.', 'Something went wrong!', {timeOut: 10000})
-      });
-    </script>
+    <div class="container">
+      please click here <a href="/get/export/warning">go</a>
+    </div>
     @else
      {{-- <script>
       $( function() {

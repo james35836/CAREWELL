@@ -38,7 +38,7 @@ Route::any('/get/company_info', 						'StaticFunctionController@getCompanyInfo')
 Route::any('/get/provider_info', 						'StaticFunctionController@getProviderInfo');
 Route::any('/get/availment_info', 						'StaticFunctionController@getAvailmentInfo');
 Route::any('/get/doctor_specialty', 					'StaticFunctionController@getDoctorSpecialty');
-Route::any('/get/export/warning',                       'StaticFunctionController@getExportWarning');
+Route::any('/get/export/warning',                           'StaticFunctionController@getExportWarning');
 /*FILETERING*/
 
 Route::post('/page/filtering', 							'SearchController@pageFiltering');
