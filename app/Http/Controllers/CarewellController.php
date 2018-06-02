@@ -737,14 +737,7 @@ public function provider()
 	$data['user']              = StaticFunctionController::global();
 	$data['_provider_active']  = TblProviderModel::where('archived',0)->paginate(10);
 	$data['_provider_inactive']= TblProviderModel::where('archived',1)->paginate(10);
-	foreach ($data['_provider_active'] as $key => $provider) 
-	{
-		$data['_provider_active'][$key]['provider_payee'] =  TblProviderPayeeModel::where('provider_id',$provider->provider_id)->get();
-	}
-	foreach ($data['_provider_inactive'] as $key => $provider) 
-	{
-		$data['_provider_inactive'][$key]['provider_payee'] =  TblProviderPayeeModel::where('provider_id',$provider->provider_id)->get();
-	}
+
 	return view('carewell.pages.provider_center',$data);
 }
 public function provider_create()
@@ -822,17 +815,52 @@ public function provider_details(Request $request,$provider_id)
 	$data['_provider_payee']  = TblProviderPayeeModel::where('provider_id',$provider_id)->get();
 	$data['provider_details'] = TblProviderModel::where('tbl_provider.provider_id',$provider_id)->first();
 	$data['_provider_doctor'] = TblDoctorProviderModel::where('tbl_doctor_provider.provider_id',$provider_id)->DoctorProvider()->get();
-
-foreach ($data['_provider_doctor'] as $key => $provider) 
-  {
-    $data['_provider_doctor'][$key]['doctor_archive'] =  TblDoctorProviderModel::where('provider_id',$provider->provider_id)->value('archived');
-  }
+    
+	foreach ($data['_provider_doctor'] as $key => $doctor) 
+  	{
+    		$data['_provider_doctor'][$key]['doctor_archive'] =  TblDoctorModel::where('doctor_id',$doctor->doctor_id)->value('archived');
+  	}
 
 	return view('carewell.modal_pages.provider_details',$data);
 }
 public function provider_import()
 {
 	return view('carewell.modal_pages.provider_import');
+}
+public static function provider_doctor_insert($provider_name,$provider_id,$doctor_name,$doctor_id)
+{
+	$countPayee = 0;
+	if ($provider_name != $doctor_name)
+	{
+		if($doctor_id==null)
+		{
+			$providerDoctorData = new TblDoctorModel;
+			$providerDoctorData->doctor_full_name       = StaticFunctionController::transformText($doctor_name);
+			$providerDoctorData->doctor_number          = StaticFunctionController::updateReferenceNumber('doctor');
+			$providerDoctorData->doctor_gender          = "N/A";
+			$providerDoctorData->doctor_contact_number  = "N/A";
+			$providerDoctorData->doctor_email_address   = "N/A";
+			$providerDoctorData->doctor_created         = Carbon::now();
+			$providerDoctorData->save();
+
+			$insert['doctor_id']   = $providerDoctorData->doctor_id;
+			$insert['provider_id'] = $provider_id;
+			TblDoctorProviderModel::insert($insert);
+			$countPayee++;
+		}
+		else
+		{
+			if(TblDoctorProviderModel::where('doctor_id',$doctor_id)->where('provider_id',$provider_id)->count()==0)
+			{
+				$insert['doctor_id']   = $doctor_id;
+				$insert['provider_id'] = $provider_id;
+				TblDoctorProviderModel::insert($insert);
+
+				$countPayee++;
+			}
+		}
+	}
+	return $countPayee;
 }
 public function provider_import_submit(Request $request)
 {
@@ -847,9 +875,10 @@ public function provider_import_submit(Request $request)
 		{
 			if($data['provider_name']!=null)
 			{
-				$provider_id = TblProviderModel::where('provider_name', $data['provider_name'])->value('provider_id');
-				$doctor_id   = TblDoctorModel::where('doctor_full_name', $data['provider_payee'])->value('doctor_id');
-
+				$provider_id 		= TblProviderModel::where('provider_name', $data['provider_name'])->value('provider_id');
+				$doctor_id   		= TblDoctorModel::where('doctor_full_name', $data['provider_payee'])->value('doctor_id');
+                    $provider_name  	= $data['provider_name'];
+                    $doctor_name    	= $data['provider_payee'];
 				if($provider_id==null)
 				{
 					$providerData = new TblProviderModel;
@@ -865,67 +894,11 @@ public function provider_import_submit(Request $request)
 
 					$count++;
 
-					if ($data['provider_name'] != $data['provider_payee'])
-					{
-						if($doctor_id==null)
-						{
-							$providerDoctorData = new TblDoctorModel;
-							$providerDoctorData->doctor_full_name       = StaticFunctionController::transformText($data['provider_payee']);
-							$providerDoctorData->doctor_number          = StaticFunctionController::updateReferenceNumber('doctor');
-							$providerDoctorData->doctor_gender          = "N/A";
-							$providerDoctorData->doctor_contact_number  = "N/A";
-							$providerDoctorData->doctor_email_address   = "N/A";
-							$providerDoctorData->doctor_created         = Carbon::now();
-							$providerDoctorData->save();
-
-							$insert['doctor_id'] = $providerDoctorData->doctor_id;
-							$insert['provider_id'] = $providerData->provider_id;
-							TblDoctorProviderModel::insert($insert);
-
-							$countPayee++;
-						}
-						else
-						{
-							$insert['doctor_id'] = $doctor_id;
-							$insert['provider_id'] = $providerData->provider_id;
-							TblDoctorProviderModel::insert($insert);
-						}
-					}
+					$countPayee = Self::provider_doctor_insert($provider_name,$providerData->provider_id,$doctor_name,$doctor_id);
 				}
 				else
 				{
-					if ($data['provider_name'] != $data['provider_payee'])
-					{
-						if($doctor_id==null)
-						{
-							$providerDoctorData = new TblDoctorModel;
-							$providerDoctorData->doctor_full_name       = StaticFunctionController::transformText($data['provider_payee']);
-							$providerDoctorData->doctor_number          = StaticFunctionController::updateReferenceNumber('doctor');
-							$providerDoctorData->doctor_gender          = "N/A";
-							$providerDoctorData->doctor_contact_number  = "N/A";
-							$providerDoctorData->doctor_email_address   = "N/A";
-							$providerDoctorData->doctor_created         = Carbon::now();
-							$providerDoctorData->save();
-
-							$insert['doctor_id']   = $providerDoctorData->doctor_id;
-							$insert['provider_id'] = $provider_id;
-							TblDoctorProviderModel::insert($insert);
-							$countPayee++;
-						}
-						else
-						{
-							if(TblDoctorProviderModel::where('doctor_id',$doctor_id)->where('provider_id',$provider_id)->count()==0)
-							{
-								$insert['doctor_id']   = $doctor_id;
-								$insert['provider_id'] = $provider_id;
-								TblDoctorProviderModel::insert($insert);
-							}
-							else
-							{
-								
-							}
-						}
-					}
+					$countPayee = Self::provider_doctor_insert($provider_name,$provider_id,$doctor_name,$doctor_id);
 				}
 			}            
 		}  
@@ -2152,7 +2125,7 @@ public function payable_details($payable_id)
 	$data['_provider']          = TblProviderModel::where('archived',0)->get();
 	$data['payable_details']    = TblPayableModel::where('tbl_payable.payable_id',$payable_id)->PayableInfo()->first();
 	$data['_payable_approval']  = TblPayableApprovalModel::where('payable_id',$payable_id)->where('tbl_member_company.archived',0)->PayableApproval()->get();
-
+     $data['link']               = "payable/payable_details/export_excel/".$payable_id;
 	foreach ($data['_payable_approval'] as $key => $payable_approval) 
 	{
 		$TblApprovalDoctorModel                             = TblApprovalDoctorModel::where('tbl_approval_doctor.approval_id',$payable_approval->approval_id);
@@ -2162,6 +2135,30 @@ public function payable_details($payable_id)
 		$data['_payable_approval'][$key]['charge_carewell'] = $TblApprovalDoctorModel->sum('approval_doctor_charge_carewell');                                          
 	}
 	return view('carewell.modal_pages.payable_details',$data);
+}
+public function payable_details_export_excel($payable_id)
+{
+	$data['_provider']          = TblProviderModel::where('archived',0)->get();
+	$data['payable_details']    = TblPayableModel::where('tbl_payable.payable_id',$payable_id)->PayableInfo()->first();
+	$data['_payable_approval']  = TblPayableApprovalModel::where('payable_id',$payable_id)->where('tbl_member_company.archived',0)->PayableApproval()->get();
+     $data['link']               = "/payable/payable_details/export_excel/".$payable_id;
+	foreach ($data['_payable_approval'] as $key => $payable_approval) 
+	{
+		$TblApprovalDoctorModel                             = TblApprovalDoctorModel::where('tbl_approval_doctor.approval_id',$payable_approval->approval_id);
+		$data['_payable_approval'][$key]['availed']         = TblApprovalProcedureModel::where('tbl_approval_procedure.approval_id',$payable_approval->approval_id)->Procedure()->get();
+		$data['_payable_approval'][$key]['doctor']          = $TblApprovalDoctorModel->join('tbl_doctor','tbl_doctor.doctor_id','=','tbl_approval_doctor.doctor_id')->get();
+		$data['_payable_approval'][$key]['doctor_fee']      = $TblApprovalDoctorModel->sum('approval_doctor_charge_carewell');
+		$data['_payable_approval'][$key]['charge_carewell'] = $TblApprovalDoctorModel->sum('approval_doctor_charge_carewell');                                          
+	}
+
+	Excel::create("PAYABLE - ".$data['payable_details']->provider_name,function($excel) use ($data)
+	{
+		$excel->sheet('clients',function($sheet) use ($data)
+		{
+			$sheet->loadView('carewell.additional_pages.payable_details_export_excel',$data);
+		});
+	})->download('xls');
+	
 }
 public function payable_update_submit(Request $request)
 {
@@ -2560,6 +2557,7 @@ public function settings_coverage_items_submit(Request $request)
 		if(isset($session_items['identifier']))
 		{
 			if($session_items['identifier']==$identifiers)
+
 			{
 				unset($session_array[$keys]);
 			}
@@ -2578,7 +2576,6 @@ public function settings_coverage_items_submit(Request $request)
 	
 	foreach($request->procedure_id as $key=>$procedure_id)
 	{
-		
 		$insert['procedure_id']         = $procedure_id;
 		$insert['availment_id']         = $availment_id;
 		$insert['plan_charges']         = $plan_charges;

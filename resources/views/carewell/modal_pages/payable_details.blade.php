@@ -65,7 +65,9 @@
 					<h4 class="box-title medical-btn-sample">APPROVAL LIST</h4>
 				</div>
 				<div class="col-md-3 col-xs-12 pull-right">
-					<button type="submit" class="btn btn-primary top-element"><i class="fa fa-file-excel-o" ></i> EXPORT TO EXCEL</button>
+					<a href="{{$link}}">
+						<button type="submit" class="btn btn-primary top-element"><i class="fa fa-file-excel-o" ></i> EXPORT TO EXCEL</button>
+					</a>
 				</div>
 			</div>
 		</div>
