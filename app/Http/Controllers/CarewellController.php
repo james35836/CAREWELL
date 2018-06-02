@@ -1595,7 +1595,7 @@ public function billing_cal_import_template(Request $request)
 						$premium          = TblCoveragePlanModel::where('coverage_plan_id',$coverage_plan_id)->value('coverage_plan_premium');
 						if($payment_amount%$premium == 0)
 						{
-							$payment_count    = number_format(str_replace(',','',$payment_amount) / number_format($premium));
+							$payment_count    = str_replace(',','',$payment_amount) /$premium;
 							$payment_mode     = $member_data->member_payment_mode;
 							if($payment_count > 1)
 							{
