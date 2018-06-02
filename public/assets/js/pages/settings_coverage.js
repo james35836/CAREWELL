@@ -117,8 +117,8 @@ function settings_coverage()
 			var modalName        = 'COVERAGE PLAN DETAILS';
 			var modalClass       = 'coverage-details';
 			var modalLink        = '/settings/coverage/plan_details/'+coverage_plan_id;
-			var modalActionName  = 'SAVE CHANGES';
-			var modalAction      = 'create-company-confirm';
+			var modalActionName  = 'MARK AS NEW';
+			var modalAction      = 'new-coverage-plan';
 			if($(this).data('size')=='md')
 			{
 				var modalSize        = 'modal-md';
@@ -177,8 +177,8 @@ function settings_coverage()
 				datas.append('procedure_id[]', 			dates[i]);
 			}
 			datas.append('availment_id',   		ajaxData.availment_id);
-			datas.append('identifier',   	    ajaxData.identifier);
-			datas.append('plan_charges', 		ajaxData.plan_charges);
+			datas.append('identifier',   	          ajaxData.identifier);
+			datas.append('plan_charges', 		     ajaxData.plan_charges);
 			datas.append('plan_covered_amount',	ajaxData.plan_covered_amount);
 			datas.append('plan_limit',         	ajaxData.plan_limit);
 			datas.append('session_name',   		ajaxData.session_name);

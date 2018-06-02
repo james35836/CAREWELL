@@ -2645,9 +2645,9 @@ public function settings_coverage_plan_details($coverage_plan_id)
 								->get();
 	foreach($data['_coverage_plan_covered'] as $key=>$availment)
 	{
-		$data['_coverage_plan_covered'][$key]['procedure']   = TblCoveragePlanProcedureModel::where('availment_id',$availment->availment_id)
-		->join('tbl_procedure','tbl_procedure.procedure_id','=','tbl_coverage_plan_procedure.procedure_id') 
-		->get();
+		$data['_coverage_plan_covered'][$key]['procedure']   = TblCoveragePlanProcedureModel::where('availment_id',$availment->availment_id)->where('coverage_plan_id',$coverage_plan_id)
+								->join('tbl_procedure','tbl_procedure.procedure_id','=','tbl_coverage_plan_procedure.procedure_id') 
+								->get();
 	}
 	return view('carewell.modal_pages.settings_coverage_plan_details',$data);
 }
