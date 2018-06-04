@@ -22,6 +22,9 @@ function availment_center()
             	create_approval_submit();
             	availment_transaction_details();
             	approval_details();
+            	update_approval_confirm();
+            	update_approval_submit();
+
         });
 
 	}
@@ -306,7 +309,7 @@ function availment_center()
 			var modalClass 		= 'approval-details';
 			var modalLink 			= '/availment/approval_details/'+approval_id;
 			var modalActionName 	= 'SAVE CHANGES';
-			var modalAction 		= 'create-approval-confirm';
+			var modalAction 		= 'update-approval-confirm';
 			if($(this).data('size')=='md')
 			{
 				var modalSize        = 'modal-md';
@@ -318,4 +321,92 @@ function availment_center()
 			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
         });
 	} 
+
+	 function update_approval_confirm()
+	{
+		$('body').on('click','.update-approval-confirm',function() 
+		{
+            if(document.getElementById('provider_id').value==0)
+			{
+				globals.global_tostr('PROVIDER');
+			}
+			else if(document.getElementById('availment_id').value==0)
+			{
+				globals.global_tostr('AVAILMENT');
+			}
+		    else if(globals.checking_null_validation(document.getElementById('approval_complaint').value,"COMPLAINT")=="")
+			{}
+			else if(document.getElementById('initial_diagnosis_id').value==0)
+			{
+				globals.global_tostr('INITIAL DIAGNOSIS');
+			}
+			else if(document.getElementById('approval_date_availed').value==0)
+			{
+				globals.global_tostr('AVAILMENT DATE');
+			}
+			else 
+			{
+				$("select.final_diagnosis_id").each(function(i, sel)
+	            {
+	            	var selectedFinal = $(sel).val();
+	            	if(selectedFinal!=0)
+	            	{
+	            		finalDiagnosisData.push(selectedFinal);
+	            	}
+	            });
+	            $("select.doctor-payee").each(function(i, sel)
+	            {
+	            	var selectedPayee = $(sel).val();
+	            	if(selectedPayee!=0)
+	            	{
+	            		payeeData.push(selectedPayee);
+	            	}
+	            });
+	            if(finalDiagnosisData==null||finalDiagnosisData=="")
+				{
+					globals.global_tostr('FINAL DIAGNOSIS');
+				}
+				else if(payeeData==null||payeeData=="")
+				{
+					globals.global_tostr('PAYEE');
+				}
+				else
+				{
+					var	confirmModalMessage = 'Are you sure you want to add this approval?';
+					var confirmModalAction = 'update-approval-submit';
+					globals.confirm_modals(confirmModalMessage,confirmModalAction);
+					ajaxData = $(".approval-submit-form").serialize();
+				}
+			}
+		});
+	}
+
+	function update_approval_submit()
+	{
+		$('body').on('click','.update-approval-submit',function() 
+	    {
+	    		$('.confirm-modal').remove();
+            	$(".approval-modal-body").html("<div class='approval-ajax-loader' style='display:none;text-align: center; padding:50px;'><img src='/assets/loader/loading.gif'/></div");
+            	$('.approval-ajax-loader').show();
+	        	$.ajax({
+	          	headers: {
+	              		'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+	        		},
+		        	url:'/availment/update_approval/submit',
+		        	method: "POST",
+		        	data: ajaxData,
+		        	dataType:"text",
+		        	success: function(data)
+		        	{
+		            	setTimeout(function()
+					{
+						$('.approval-ajax-loader').hide();
+						$('.approval-modal-dialog').removeClass().addClass('modal-sm modal-dialog')
+						$('.approval-modal-body').html(data);
+						$('.approval-modal-footer').html(successButton);
+					}, 1000);
+		          }
+	        	});
+	     });
+	}
 }

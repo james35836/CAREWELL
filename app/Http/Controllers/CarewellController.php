@@ -1998,6 +1998,12 @@ public function availment_create_approval_submit(Request $request)
 	}
 	
 }
+
+public function availment_update_approval_submit()
+{
+	dd('wew');
+}
+
 public function availment_view_approval_details($approval_id)
 {
 	$data['_provider']        = TblProviderModel::where('archived',0)->get();
@@ -2020,8 +2026,20 @@ public function availment_view_approval_details($approval_id)
 						->get();
 	$data['total_procedure']  = TblApprovalTotalModel::where('approval_id',$approval_id)->where('total_type','procedure')->first();
 	$data['total_doctor']     = TblApprovalTotalModel::where('approval_id',$approval_id)->where('total_type','doctor')->first();
+
+	$availment_id = TblApprovalModel::where("approval_id",$approval_id)->value('availment_id');
+
+	$data['_procedure'] = TblCoveragePlanProcedureModel::where("availment_id",$availment_id)
+	->join("tbl_procedure","tbl_procedure.procedure_id","=","tbl_coverage_plan_procedure.procedure_id")
+	->get();
+	// edrich
+	//$data['_diagnosis']       = TblDiagnosisModel::where('archived',0)->get();
+	//$data['_availment']       = TblAvailmentModel::where('availment_parent_id',0)->get();
+	// edrich
+
 	return view('carewell.modal_pages.availment_approval_details',$data);
 }
+
   public function approval_export_pdf($approval_id)
   {
     $data['_provider']        = TblProviderModel::where('archived',0)->get();
