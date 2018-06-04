@@ -38,7 +38,7 @@ Route::any('/get/company_info', 						'StaticFunctionController@getCompanyInfo')
 Route::any('/get/provider_info', 						'StaticFunctionController@getProviderInfo');
 Route::any('/get/availment_info', 						'StaticFunctionController@getAvailmentInfo');
 Route::any('/get/doctor_specialty', 					'StaticFunctionController@getDoctorSpecialty');
-Route::any('/get/export/warning',                       'StaticFunctionController@getExportWarning');
+Route::any('/get/export/warning',                           'StaticFunctionController@getExportWarning');
 /*FILETERING*/
 
 Route::post('/page/filtering', 							'SearchController@pageFiltering');
@@ -65,17 +65,17 @@ Route::get('/settings/maintenance_modal', 				'AdminController@settings_maintena
 Route::post('/settings/maintenance_modal_submit', 		'AdminController@settings_maintenance_modal_submit');
 
 /*DASHBOARD*/
-Route::get('/dashboard', 								'CarewellController@dashboard');
+Route::get('/dashboard', 						     'CarewellController@dashboard');
 
 /*COMPANY*/
-Route::get('/company', 									'CarewellController@company');
-Route::get('/company/company_details/{company_id}', 	'CarewellController@company_details');
+Route::get('/company', 							     'CarewellController@company');
+Route::get('/company/company_details/{company_id}', 	     'CarewellController@company_details');
 Route::get('/company/create_company', 					'CarewellController@company_create_company');
 Route::post('/company/create_company/submit', 			'CarewellController@company_create_company_submit');
 Route::post('/company/update_company/submit', 			'CarewellController@company_update_company_submit');
 
-Route::get('/company/add_coverage_plan/{company_id}', 	'CarewellController@company_add_coverage_plan');
-Route::post('/company/add_coverage_plan/submit', 		'CarewellController@company_add_coverage_plan_submit');
+Route::get('/company/add_coverage_plan/{company_id}', 	     'CarewellController@company_add_coverage_plan');
+Route::post('/company/add_coverage_plan/submit', 		     'CarewellController@company_add_coverage_plan_submit');
 Route::get('/company/add_deployment/{company_id}', 		'CarewellController@company_add_deployment');
 Route::post('/company/add_deployment/submit', 			'CarewellController@company_add_deployment_submit');
 
@@ -169,6 +169,9 @@ Route::post('/payable/search_approval', 				'CarewellController@payable_search_a
 Route::post('/payable/create_payable/submit', 			'CarewellController@payable_create_submit');
 Route::get('/payable/payable_details/{payable_id}', 		'CarewellController@payable_details');
 
+Route::get('/payable/payable_details/export_excel/{payable_id}', 'CarewellController@payable_details_export_excel');
+
+Route::post('/payable/update_payable/submit', 			'CarewellController@payable_update_submit');
 
 
 /*REPORTS*/
@@ -180,6 +183,9 @@ Route::get('/reports/consolidation', 					'CarewellController@reports_consolidat
 
 Route::get('/reports/payment_report', 					'CarewellController@reports_payment_report');
 Route::get('/reports/payment_report/{member_id}', 		'CarewellController@reports_payment_report_member');
+
+
+Route::get('/reports/payment_report/excel/{new_year}/{payment_mode}/{member_id}', 'CarewellController@reports_payment_member_excel');
 
 
 

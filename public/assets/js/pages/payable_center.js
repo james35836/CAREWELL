@@ -19,6 +19,8 @@ function payable_center()
 			create_payable_confirm();
 			create_payable_submit();
 			view_payable_details();
+			update_payable_confirm();
+			update_payable_submit()
 			search_filter_approval();
 		});
 
@@ -147,12 +149,43 @@ function payable_center()
 			var modalClass 	= 'payable-details';
 			var modalLink 		= '/payable/payable_details/'+payable_id;
 			var modalActionName = 'SAVE CHANGES';
-			var modalAction 	= 'create-payable-confirms';
+			var modalAction 	= 'update-payable-confirm';
 			var modalSize 		= 'modal-lg';
 			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
 		});
 	
-    }
+    	}
+    	function update_payable_confirm()
+    	{
+    		$('body').on('click','.update-payable-confirm',function() 
+		{
+			if(globals.checking_null_validation(document.getElementById('payable_soa_number').value,"SOA NUMBER")=="")
+			{}
+		    	else if(globals.checking_null_validation(document.getElementById('payable_recieved').value,"RECIEVED DATE")=="")
+			{}
+			else if(globals.checking_null_validation(document.getElementById('payable_due').value,"DUE DATE")=="")
+			{}
+			else
+			{
+				
+				var	confirmModalMessage = 'Are you sure you want to continue?';
+				var confirmModalAction   = 'update-payable-submit';
+				globals.confirm_modals(confirmModalMessage,confirmModalAction);
+				
+				payableData.append("payable_soa_number",   	document.getElementById('payable_soa_number').value);
+		          payableData.append("payable_recieved", 		document.getElementById('payable_recieved').value);
+		          payableData.append("payable_due", 			document.getElementById('payable_due').value);
+		          payableData.append("payable_id", 			document.getElementById('payable_id').value);
+		     }
+		});
+    	}
+    	function update_payable_submit()
+     {
+     	$('body').on('click','.update-payable-submit',function() 
+		{
+			globals.global_submit('payable-details','/payable/update_payable/submit',payableData);
+          });
+    	}
 }
 
 

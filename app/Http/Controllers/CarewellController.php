@@ -415,6 +415,7 @@ class CarewellController extends ActiveAuthController
 	{
 
 		$coverage                       = TblMemberCompanyModel::where('archived',0)->where('member_id',$member_id)->first();
+		$data['_payment_history']       = TblCalMemberModel::where('tbl_cal_member.member_id',$member_id)->PaymentHistory()->get();
 		$data['_availment_history']     = TblApprovalModel::where('tbl_approval.member_id',$member_id)->AvailmentHistory()->get();
 		$data['coverage_plan_details']  = TblCoveragePlanModel::where('coverage_plan_id',$coverage->coverage_plan_id)->first();     
 		$data['_coverage_plan_covered'] = TblCoveragePlanProcedureModel::where('coverage_plan_id',$coverage->coverage_plan_id)->CoveragePlan()->get();
@@ -736,14 +737,7 @@ public function provider()
 	$data['user']              = StaticFunctionController::global();
 	$data['_provider_active']  = TblProviderModel::where('archived',0)->paginate(10);
 	$data['_provider_inactive']= TblProviderModel::where('archived',1)->paginate(10);
-	foreach ($data['_provider_active'] as $key => $provider) 
-	{
-		$data['_provider_active'][$key]['provider_payee'] =  TblProviderPayeeModel::where('provider_id',$provider->provider_id)->get();
-	}
-	foreach ($data['_provider_inactive'] as $key => $provider) 
-	{
-		$data['_provider_inactive'][$key]['provider_payee'] =  TblProviderPayeeModel::where('provider_id',$provider->provider_id)->get();
-	}
+
 	return view('carewell.pages.provider_center',$data);
 }
 public function provider_create()
@@ -821,17 +815,52 @@ public function provider_details(Request $request,$provider_id)
 	$data['_provider_payee']  = TblProviderPayeeModel::where('provider_id',$provider_id)->get();
 	$data['provider_details'] = TblProviderModel::where('tbl_provider.provider_id',$provider_id)->first();
 	$data['_provider_doctor'] = TblDoctorProviderModel::where('tbl_doctor_provider.provider_id',$provider_id)->DoctorProvider()->get();
-
-foreach ($data['_provider_doctor'] as $key => $provider) 
-  {
-    $data['_provider_doctor'][$key]['doctor_archive'] =  TblDoctorProviderModel::where('provider_id',$provider->provider_id)->value('archived');
-  }
+    
+	foreach ($data['_provider_doctor'] as $key => $doctor) 
+  	{
+    		$data['_provider_doctor'][$key]['doctor_archive'] =  TblDoctorModel::where('doctor_id',$doctor->doctor_id)->value('archived');
+  	}
 
 	return view('carewell.modal_pages.provider_details',$data);
 }
 public function provider_import()
 {
 	return view('carewell.modal_pages.provider_import');
+}
+public static function provider_doctor_insert($provider_name,$provider_id,$doctor_name,$doctor_id)
+{
+	$countPayee = 0;
+	if ($provider_name != $doctor_name)
+	{
+		if($doctor_id==null)
+		{
+			$providerDoctorData = new TblDoctorModel;
+			$providerDoctorData->doctor_full_name       = StaticFunctionController::transformText($doctor_name);
+			$providerDoctorData->doctor_number          = StaticFunctionController::updateReferenceNumber('doctor');
+			$providerDoctorData->doctor_gender          = "N/A";
+			$providerDoctorData->doctor_contact_number  = "N/A";
+			$providerDoctorData->doctor_email_address   = "N/A";
+			$providerDoctorData->doctor_created         = Carbon::now();
+			$providerDoctorData->save();
+
+			$insert['doctor_id']   = $providerDoctorData->doctor_id;
+			$insert['provider_id'] = $provider_id;
+			TblDoctorProviderModel::insert($insert);
+			$countPayee++;
+		}
+		else
+		{
+			if(TblDoctorProviderModel::where('doctor_id',$doctor_id)->where('provider_id',$provider_id)->count()==0)
+			{
+				$insert['doctor_id']   = $doctor_id;
+				$insert['provider_id'] = $provider_id;
+				TblDoctorProviderModel::insert($insert);
+
+				$countPayee++;
+			}
+		}
+	}
+	return $countPayee;
 }
 public function provider_import_submit(Request $request)
 {
@@ -846,9 +875,10 @@ public function provider_import_submit(Request $request)
 		{
 			if($data['provider_name']!=null)
 			{
-				$provider_id = TblProviderModel::where('provider_name', $data['provider_name'])->value('provider_id');
-				$doctor_id   = TblDoctorModel::where('doctor_full_name', $data['provider_payee'])->value('doctor_id');
-
+				$provider_id 		= TblProviderModel::where('provider_name', $data['provider_name'])->value('provider_id');
+				$doctor_id   		= TblDoctorModel::where('doctor_full_name', $data['provider_payee'])->value('doctor_id');
+                    $provider_name  	= $data['provider_name'];
+                    $doctor_name    	= $data['provider_payee'];
 				if($provider_id==null)
 				{
 					$providerData = new TblProviderModel;
@@ -864,67 +894,11 @@ public function provider_import_submit(Request $request)
 
 					$count++;
 
-					if ($data['provider_name'] != $data['provider_payee'])
-					{
-						if($doctor_id==null)
-						{
-							$providerDoctorData = new TblDoctorModel;
-							$providerDoctorData->doctor_full_name       = StaticFunctionController::transformText($data['provider_payee']);
-							$providerDoctorData->doctor_number          = StaticFunctionController::updateReferenceNumber('doctor');
-							$providerDoctorData->doctor_gender          = "N/A";
-							$providerDoctorData->doctor_contact_number  = "N/A";
-							$providerDoctorData->doctor_email_address   = "N/A";
-							$providerDoctorData->doctor_created         = Carbon::now();
-							$providerDoctorData->save();
-
-							$insert['doctor_id'] = $providerDoctorData->doctor_id;
-							$insert['provider_id'] = $providerData->provider_id;
-							TblDoctorProviderModel::insert($insert);
-
-							$countPayee++;
-						}
-						else
-						{
-							$insert['doctor_id'] = $doctor_id;
-							$insert['provider_id'] = $providerData->provider_id;
-							TblDoctorProviderModel::insert($insert);
-						}
-					}
+					$countPayee = Self::provider_doctor_insert($provider_name,$providerData->provider_id,$doctor_name,$doctor_id);
 				}
 				else
 				{
-					if ($data['provider_name'] != $data['provider_payee'])
-					{
-						if($doctor_id==null)
-						{
-							$providerDoctorData = new TblDoctorModel;
-							$providerDoctorData->doctor_full_name       = StaticFunctionController::transformText($data['provider_payee']);
-							$providerDoctorData->doctor_number          = StaticFunctionController::updateReferenceNumber('doctor');
-							$providerDoctorData->doctor_gender          = "N/A";
-							$providerDoctorData->doctor_contact_number  = "N/A";
-							$providerDoctorData->doctor_email_address   = "N/A";
-							$providerDoctorData->doctor_created         = Carbon::now();
-							$providerDoctorData->save();
-
-							$insert['doctor_id']   = $providerDoctorData->doctor_id;
-							$insert['provider_id'] = $provider_id;
-							TblDoctorProviderModel::insert($insert);
-							$countPayee++;
-						}
-						else
-						{
-							if(TblDoctorProviderModel::where('doctor_id',$doctor_id)->where('provider_id',$provider_id)->count()==0)
-							{
-								$insert['doctor_id']   = $doctor_id;
-								$insert['provider_id'] = $provider_id;
-								TblDoctorProviderModel::insert($insert);
-							}
-							else
-							{
-								
-							}
-						}
-					}
+					$countPayee = Self::provider_doctor_insert($provider_name,$provider_id,$doctor_name,$doctor_id);
 				}
 			}            
 		}  
@@ -1276,7 +1250,6 @@ public function doctor_add_doctor_provider_submit(Request $request)
 		}
 	}
 	return '<center><b><span class="color-red">'.$countInsert.' inserted<br>'. $countReject.' rejected</span></b></center>';
-	
 }
 
 /*BILLING*/
@@ -1308,7 +1281,6 @@ public function billing()
 		$data['_cal_pending'][$key]['members']   =  TblCalMemberModel::where('cal_id',$cal_pending->cal_id)->where('archived',0)->count();
 		$data['_cal_pending'][$key]['reference'] = 'show';
 	}
-
 	return view('carewell.pages.billing_center',$data);
 }
 public function billing_create_cal()
@@ -1621,37 +1593,47 @@ public function billing_cal_import_template(Request $request)
 						$cal_id           = $companyData->cal_id;
 						$member_id        = $checkingMember->member_id;
 						$premium          = TblCoveragePlanModel::where('coverage_plan_id',$coverage_plan_id)->value('coverage_plan_premium');
-						
-						$payment_count    = number_format(str_replace(',','',$payment_amount) / number_format($premium));
-						$payment_mode     = $member_data->member_payment_mode;
-						if($payment_count > 1)
+						if($payment_amount%$premium == 0)
+						{
+							$payment_count    = str_replace(',','',$payment_amount) /$premium;
+							$payment_mode     = $member_data->member_payment_mode;
+							if($payment_count > 1)
+							{
+								$name['first']  = $data['first_name'];
+								$name['middle'] = $data['middle_name'];
+								$name['last']   = $data['last_name'];
+								$name['type']   = 'NEED ADJUSTMENT';
+								array_push($exportArray,$name);
+							}
+							$cal_member['cal_payment_amount']   =   $payment_amount;
+							$cal_member['cal_payment_date']     =   Carbon::now();
+							$cal_member['cal_payment_count']    =   $payment_count;
+							$cal_member['member_id']            =   $checkingMember->member_id;
+							$cal_member['cal_id']               =   $companyData->cal_id;
+							$cal_member_id                      =   TblCalMemberModel::insertGetId($cal_member);
+							$payment_ref                        =   StaticFunctionController::paymentDateComputation($member_id,$cal_member_id,$payment_count,$payment_mode);
+							if($coverage_plan_id!=$member_data->coverage_plan_id)
+							{
+								StaticFunctionController::archivedCurrentCompany($checkingMember->member_id,$coverage_plan_id,'coverage_plan');
+							}
+							else if($deployment_id!=$member_data->deployment_id)
+							{
+								StaticFunctionController::archivedCurrentCompany($checkingMember->member_id,$deployment_id,'deployment');
+							}
+							$count++; 
+						}
+						else
 						{
 							$name['first']  = $data['first_name'];
 							$name['middle'] = $data['middle_name'];
 							$name['last']   = $data['last_name'];
-							$name['type']   = 'NEED ADJUSTMENT';
+							$name['type']   = 'Check Payment Amount';
 							array_push($exportArray,$name);
 						}
-						$cal_member['cal_payment_amount']   =   $payment_amount;
-						$cal_member['cal_payment_date']     =   Carbon::now();
-						$cal_member['cal_payment_count']    =   $payment_count;
-						$cal_member['member_id']            =   $checkingMember->member_id;
-						$cal_member['cal_id']               =   $companyData->cal_id;
-						$cal_member_id                      =   TblCalMemberModel::insertGetId($cal_member);
-						$payment_ref                        =   StaticFunctionController::paymentDateComputation($member_id,$cal_member_id,$payment_count,$payment_mode);
-						if($coverage_plan_id!=$member_data->coverage_plan_id)
-						{
-							StaticFunctionController::archivedCurrentCompany($checkingMember->member_id,$coverage_plan_id,'coverage_plan');
-						}
-						else if($deployment_id!=$member_data->deployment_id)
-						{
-							StaticFunctionController::archivedCurrentCompany($checkingMember->member_id,$deployment_id,'deployment');
-						}
-						$count++; 
 					     
 					}
 				}
-				elseif($checkingNewMember==null)
+				else if($checkingNewMember==null)
 				{
 					$coverage_plan_id                     =   StaticFunctionController::getid($data['coverage_plan'], 'coverage');
 					$payment_amount                       =   $data['payment_amount'];
@@ -1684,7 +1666,6 @@ public function billing_cal_import_template(Request $request)
 		if(count($exportArray)>0)
 		{
 			Session::put('exportWarning',$exportArray);
-
 		}
 		if($count == 0&&$countExist==0&&$countNew==0)
 		{
@@ -1774,32 +1755,41 @@ public function billing_cal_close($cal_id)
 }
 public function billing_cal_close_submit(Request $request)
 {
-	$unique_name            = substr(str_shuffle("ABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0,5);
-	$cal_info_attached_file = $request->file('cal_file');
-	$fileCalRef             = $unique_name.'-'.$cal_info_attached_file->getClientOriginalName();
-	$cal_info_attached_file->move('cal_file',$fileCalRef );
-
-	$calCloseData                           =   new TblCalInfoModel;
-	$calCloseData->cal_info_attached_file   =   '/cal_file/'.$fileCalRef.'';
-	$calCloseData->cal_info_check_number    =   $request->cal_info_check_number;
-	$calCloseData->cal_info_collection_date =   $request->cal_info_collection_date;
-	$calCloseData->cal_info_check_date      =   $request->cal_info_check_date;
-	$calCloseData->cal_info_or_number       =   $request->cal_info_or_number;
-	$calCloseData->cal_info_amount          =   $request->cal_info_amount;
-	$calCloseData->cal_info_created         =   Carbon::now();
-	$calCloseData->cal_id                   =   $request->cal_id;
-	$calCloseData->save();
-	
-	StaticFunctionController::getNewMember($request->cal_id,1);
-
-	$update['archived']   = '1';
-	$tblCal               = TblCalModel::where('cal_id',$request->cal_id)->update($update);
-	$data['_cal_member']  = TblCalMemberModel::where('cal_id',$request->cal_id)->get();
-	foreach($data['_cal_member'] as $key=>$cal_member)
+	$check  = TblCalInfoModel::where('cal_info_check_number',$request->cal_info_check_number)->orWhere('cal_info_or_number',$request->cal_info_or_number)->count();
+	if($check==0)
 	{
-		TblCalPaymentModel::where('cal_member_id',$cal_member->cal_member_id)->update($update);
+		$unique_name            = substr(str_shuffle("ABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0,5);
+		$cal_info_attached_file = $request->file('cal_file');
+		$fileCalRef             = $unique_name.'-'.$cal_info_attached_file->getClientOriginalName();
+		$cal_info_attached_file->move('cal_file',$fileCalRef );
+
+		$calCloseData                           =   new TblCalInfoModel;
+		$calCloseData->cal_info_attached_file   =   '/cal_file/'.$fileCalRef.'';
+		$calCloseData->cal_info_check_number    =   $request->cal_info_check_number;
+		$calCloseData->cal_info_collection_date =   $request->cal_info_collection_date;
+		$calCloseData->cal_info_check_date      =   $request->cal_info_check_date;
+		$calCloseData->cal_info_or_number       =   $request->cal_info_or_number;
+		$calCloseData->cal_info_amount          =   $request->cal_info_amount;
+		$calCloseData->cal_info_created         =   Carbon::now();
+		$calCloseData->cal_id                   =   $request->cal_id;
+		$calCloseData->save();
+		
+		StaticFunctionController::getNewMember($request->cal_id,1);
+
+		$update['archived']   = '1';
+		$tblCal               = TblCalModel::where('cal_id',$request->cal_id)->update($update);
+		$data['_cal_member']  = TblCalMemberModel::where('cal_id',$request->cal_id)->get();
+		foreach($data['_cal_member'] as $key=>$cal_member)
+		{
+			TblCalPaymentModel::where('cal_member_id',$cal_member->cal_member_id)->update($update);
+		}
+		return StaticFunctionController::returnMessage('success','CAL CLOSED');
 	}
-	return StaticFunctionController::returnMessage('success','CAL CLOSED');
+	else
+	{
+		return StaticFunctionController::customMessage('danger','OR number or Check Number Exist');
+	}
+	
 }
 
 /*MEDICAL*/
@@ -2021,9 +2011,7 @@ public function availment_view_approval_details($approval_id)
 						->where('type','doctor')
 						->join('tbl_doctor','tbl_doctor.doctor_id','=','tbl_approval_payee.payee_id')
 	                         ->get();
-	$data['_payee_other']    = TblApprovalPayeeModel::where('approval_id',$approval_id)
-						->where('type','payee')
-						->get();
+	$data['_payee_other']    = TblApprovalPayeeModel::where('approval_id',$approval_id)->where('type','payee')->get();
 	$data['total_procedure']  = TblApprovalTotalModel::where('approval_id',$approval_id)->where('total_type','procedure')->first();
 	$data['total_doctor']     = TblApprovalTotalModel::where('approval_id',$approval_id)->where('total_type','doctor')->first();
 
@@ -2155,7 +2143,7 @@ public function payable_details($payable_id)
 	$data['_provider']          = TblProviderModel::where('archived',0)->get();
 	$data['payable_details']    = TblPayableModel::where('tbl_payable.payable_id',$payable_id)->PayableInfo()->first();
 	$data['_payable_approval']  = TblPayableApprovalModel::where('payable_id',$payable_id)->where('tbl_member_company.archived',0)->PayableApproval()->get();
-
+     $data['link']               = "payable/payable_details/export_excel/".$payable_id;
 	foreach ($data['_payable_approval'] as $key => $payable_approval) 
 	{
 		$TblApprovalDoctorModel                             = TblApprovalDoctorModel::where('tbl_approval_doctor.approval_id',$payable_approval->approval_id);
@@ -2165,6 +2153,45 @@ public function payable_details($payable_id)
 		$data['_payable_approval'][$key]['charge_carewell'] = $TblApprovalDoctorModel->sum('approval_doctor_charge_carewell');                                          
 	}
 	return view('carewell.modal_pages.payable_details',$data);
+}
+public function payable_details_export_excel($payable_id)
+{
+	$data['_provider']          = TblProviderModel::where('archived',0)->get();
+	$data['payable_details']    = TblPayableModel::where('tbl_payable.payable_id',$payable_id)->PayableInfo()->first();
+	$data['_payable_approval']  = TblPayableApprovalModel::where('payable_id',$payable_id)->where('tbl_member_company.archived',0)->PayableApproval()->get();
+     $data['link']               = "/payable/payable_details/export_excel/".$payable_id;
+	foreach ($data['_payable_approval'] as $key => $payable_approval) 
+	{
+		$TblApprovalDoctorModel                             = TblApprovalDoctorModel::where('tbl_approval_doctor.approval_id',$payable_approval->approval_id);
+		$data['_payable_approval'][$key]['availed']         = TblApprovalProcedureModel::where('tbl_approval_procedure.approval_id',$payable_approval->approval_id)->Procedure()->get();
+		$data['_payable_approval'][$key]['doctor']          = $TblApprovalDoctorModel->join('tbl_doctor','tbl_doctor.doctor_id','=','tbl_approval_doctor.doctor_id')->get();
+		$data['_payable_approval'][$key]['doctor_fee']      = $TblApprovalDoctorModel->sum('approval_doctor_charge_carewell');
+		$data['_payable_approval'][$key]['charge_carewell'] = $TblApprovalDoctorModel->sum('approval_doctor_charge_carewell');                                          
+	}
+
+	Excel::create("PAYABLE - ".$data['payable_details']->provider_name,function($excel) use ($data)
+	{
+		$excel->sheet('clients',function($sheet) use ($data)
+		{
+			$sheet->loadView('carewell.additional_pages.payable_details_export_excel',$data);
+		});
+	})->download('xls');
+	
+}
+public function payable_update_submit(Request $request)
+{
+	$update['payable_soa_number'] = $request->payable_soa_number;
+	$update['payable_recieved'] 	= $request->payable_recieved;
+	$update['payable_due'] 		= $request->payable_due;
+	$check = TblPayableModel::where('payable_id',$request->payable_id)->update($update);
+	if($check)
+	{
+          return StaticFunctionController::returnMessage('success','PAYABLE');
+	}
+	else
+	{
+          return StaticFunctionController::returnMessage('danger','PAYABLE');
+	}
 }
 /*REPORTS*/
 public function reports()
@@ -2231,114 +2258,51 @@ public function reports_payment_report()
 	$data['_member']    = TblMemberModel::where('tbl_member.archived',0)->where('tbl_member_company.archived',0)->Member()->paginate(10);
 	return view('carewell.pages.reports_payment_report',$data);
 }
+
 public function reports_payment_report_member($member_id)
 {
-	$data['date'] 		= $key = date('Y-m'); 
+	$new_year           = date('Y'); 
+	$payment_mode 		= 'SEMI-MONTHLY';
 	$data['member_id'] 	= $member_id;
-	$data['link'] 		= '/reports/member_cal/excel_report/sem/'.$key.'/'.$member_id;
-	$data['_payment'] = TblCalPaymentModel::select(DB::raw("YEAR(cal_payment_start) as year"))->groupby('year')->where('member_id',$member_id)->orderBy('year','ASC')->get();
+	$data['link'] 		= '/reports/payment_report/excel/0/'.$payment_mode.'/'.$member_id;
+	$data['_payment']   = TblCalPaymentModel::where('tbl_cal_payment.archived',1)->where('member_id',$member_id)->select(DB::raw("YEAR(cal_payment_start) as year"))->groupby('year')->orderBy('year','ASC')->get();
 	foreach($data['_payment'] as $key=> $year)
 	{
-		$data['_payment'][$key]['cal_payment'] = TblCalPaymentModel::whereYear('tbl_cal_payment.cal_payment_start', '=', $year->year)
-		 								->join('tbl_cal_member','tbl_cal_member.cal_member_id','=','tbl_cal_payment.cal_member_id')
-		 								->join('tbl_cal','tbl_cal.cal_id','=','tbl_cal_member.cal_id')
-		                                        ->orderBy('cal_payment_start','ASC')->get();
+		$TblCalPaymentModel = TblCalPaymentModel::where('tbl_cal_payment.member_id',$member_id)->orderBy('cal_payment_start','ASC')
+		                                        ->whereYear('tbl_cal_payment.cal_payment_start', '=', $year->year)
+		                                        ->where('tbl_cal_payment.archived',1);
+          
+          $data['_payment'][$key]['cal_payment'] = $TblCalPaymentModel->CalInfo()->get();
+        	$date                                  = $TblCalPaymentModel->first();
+		$data['_payment'][$key]['colspan']     = StaticFunctionController::moth_reference($date->cal_payment_start);
 		
 	}
 	return view('carewell.modal_pages.reports_payment_report_member',$data);
 }
-
-public function reports_member_cal()
+public function reports_payment_member_excel($new_year,$payment_mode,$member_id)
 {
-	$data['page']     = 'Member CAL Reports';
-	$data['_member']  = TblMemberModel::where('tbl_member.archived',0)->where('tbl_member_company.archived',0)->Member()->paginate(10);
-	$data['user']     =  StaticFunctionController::global();
-
-	return view('carewell.pages.reports_member_cal',$data);
-}
-
-public function reports_member_cal_detail($ref,$member_id)
-{
-	
-	$data['ref'] = $ref;
-	if($ref == 'monthly')
+	$data['member_id'] 	= $member_id;
+	$data['link'] 		= '/reports/payment_report/excel/'.$new_year.'/'.$payment_mode.'/'.$member_id;
+	$data['_payment']   = TblCalPaymentModel::where('member_id',$member_id)->select(DB::raw("YEAR(cal_payment_start) as year"))->groupby('year')->orderBy('year','ASC')->get();
+	foreach($data['_payment'] as $key=> $year)
 	{
-
-		$data['date'] 		= $key = date('Y-m'); 
-		$data['member_id'] 	= $member_id;
-		$data['link'] 		= '/reports/member_cal/excel_report/'.$ref.'/'.$key.'/'.$member_id;
-		$data['_member'] 	= TblCalMemberModel::where('member_id',1)
-							->where('archived',1)
-							->get();
-		// foreach ($data['_member'] as $key => $member)
-		// {
-
-		// 	$data['_member'][$key]['year'] 	= TblCalPaymentModel::where('member_id',$member->member_id)->orderBy('cal_payment_start','ASC')->get();
-		// 	$data['_member'][$key]['cal'] 		= TblCalModel::where('cal_id',$member->cal_id)->first();
-
-
-
-		// }
-
-		//dd($data);
+		$TblCalPaymentModel = TblCalPaymentModel::where('tbl_cal_payment.member_id',$member_id)->orderBy('cal_payment_start','ASC')
+		                                        ->whereYear('tbl_cal_payment.cal_payment_start', '=', $year->year);
+          
+          $data['_payment'][$key]['cal_payment'] = $TblCalPaymentModel->CalInfo()->get();
+        	$date                                  = $TblCalPaymentModel->first();
+		$data['_payment'][$key]['colspan']     = StaticFunctionController::moth_reference($date->cal_payment_start);
 	}
 
-	return view('carewell.modal_pages.reports_member_cal_report',$data);
-
-}
-
-public function reports_member_cal_month_filter_date(Request $request)
-{
-	$key = $request->val_key;
-    //dd($key);
-	$data['link'] = '/reports/member_cal/month_detail/excel_report/'.$key.'/'.$request->member_id;
-	$data['member_id'] = $member_id = $request->member_id;
-	$data['_member'] = TblCalPaymentModel::where('member_id',$member_id)
-	->where('archived',1)
-	->where('cal_payment_start','like','%'.$key.'%')
-                        // ->where('cal_payment_start','like','%'.$request->val_key.'%')
-	->get();
-
-	foreach($data['_member'] as $key => $member)
-	{
-		$cal_amount = TblCalMemberModel::where('cal_member_id',$member->member_id)
-		->where('archived',0)
-		->first();
-		$data['_member'][$key]['amount'] = $cal_amount->cal_payment_amount/$cal_amount->cal_payment_count;
-	}
-	return view('carewell.additional_pages.reports_monthly_report_filter',$data);
-	
-}
-
-public function reports_export_excel($val_key,$member_id)
-{
-	$key = $val_key;
-    //dd($key);
-	$data['member_id'] = $member_id;
-	$data['_member'] = TblCalPaymentModel::where('member_id',$member_id)
-	->where('archived',1)
-	->where('cal_payment_start','like','%'.$key.'%')
-                        // ->where('cal_payment_start','like','%'.$request->val_key.'%')
-	->get();
-
-	foreach($data['_member'] as $key => $member)
-	{
-		$cal_amount = TblCalMemberModel::where('cal_member_id',$member->member_id)
-		->where('archived',0)
-		->first();
-		$data['_member'][$key]['amount'] = $cal_amount->cal_payment_amount/$cal_amount->cal_payment_count;
-	}
-
-	Excel::create("MEMBER MONTHLY REPORT",function($excel) use ($data)
+	Excel::create("MEMBER PAYMENT REPORT",function($excel) use ($data)
 	{
 		$excel->sheet('clients',function($sheet) use ($data)
 		{
-			$sheet->loadView('carewell.additional_pages.reports_member_monthly_excel',$data);
+			$sheet->loadView('carewell.additional_pages.reports_member_payment_excel',$data);
 		});
 	})->download('xls');
 
 }
-
 /*SETTINGS*/
 public function settings_coverage_plan()
 {
@@ -2611,6 +2575,7 @@ public function settings_coverage_items_submit(Request $request)
 		if(isset($session_items['identifier']))
 		{
 			if($session_items['identifier']==$identifiers)
+
 			{
 				unset($session_array[$keys]);
 			}
@@ -2629,7 +2594,6 @@ public function settings_coverage_items_submit(Request $request)
 	
 	foreach($request->procedure_id as $key=>$procedure_id)
 	{
-		
 		$insert['procedure_id']         = $procedure_id;
 		$insert['availment_id']         = $availment_id;
 		$insert['plan_charges']         = $plan_charges;
@@ -2699,9 +2663,9 @@ public function settings_coverage_plan_details($coverage_plan_id)
 								->get();
 	foreach($data['_coverage_plan_covered'] as $key=>$availment)
 	{
-		$data['_coverage_plan_covered'][$key]['procedure']   = TblCoveragePlanProcedureModel::where('availment_id',$availment->availment_id)
-		->join('tbl_procedure','tbl_procedure.procedure_id','=','tbl_coverage_plan_procedure.procedure_id') 
-		->get();
+		$data['_coverage_plan_covered'][$key]['procedure']   = TblCoveragePlanProcedureModel::where('availment_id',$availment->availment_id)->where('coverage_plan_id',$coverage_plan_id)
+								->join('tbl_procedure','tbl_procedure.procedure_id','=','tbl_coverage_plan_procedure.procedure_id') 
+								->get();
 	}
 	return view('carewell.modal_pages.settings_coverage_plan_details',$data);
 }
