@@ -212,6 +212,9 @@ Route::post('/settings/coverage/create_plan_submit', 		'CarewellController@setti
 Route::get('/settings/coverage/plan_details/{coverage_plan_id}', 			'CarewellController@settings_coverage_plan_details');
 
 
+Route::post('/settings/coverage/mark_new_submit', 		'CarewellController@settings_coverage_plan_mark_new_submit');
+
+
 /*ARCHIVED*/
 Route::POST('/archived/submit', 						'CarewellController@archived_submit');
 /*RESTORE*/

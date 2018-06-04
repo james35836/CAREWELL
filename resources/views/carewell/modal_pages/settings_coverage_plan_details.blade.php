@@ -10,18 +10,24 @@ radioClass   : 'iradio_minimal-blue'
 </script>
 <form class="coverage-plan-form" method="POST">
 	<div class="row box-globals">
+		<input  type="hidden" value="{{$coverage_plan_details->coverage_plan_id}}"  name="coverage_plan_id" id="coverage_plan_id" class="form-control">
+		<div class="row form-holder col-md-12 col-xs-12">
+		    <div class=" col-md-1 col-xs-6 pull-right no-padding">
+		      <button class="btn btn-default top-element enable-element" type="button" ><i class="fa fa-pencil-square-o btn-icon "></i>EDIT</button>
+		    </div>
+		</div>
 		<div class="row form-holder ">
 			<div class="col-md-2 form-content">
 				<label>Coverage Plan Name</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="text" value="{{$coverage_plan_details->coverage_plan_name}}"  name="coverage_plan_name" id="coverage_plan_name" class="form-control">
+				<input  type="text" value="{{$coverage_plan_details->coverage_plan_name}}" data-ref="old"  name="coverage_plan_name" id="coverage_plan_name" class="form-control" readonly>
 			</div>
 			<div class="col-md-2 form-content">
 				<label>Premium</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="text" value="{{$coverage_plan_details->coverage_plan_premium}}" name="coverage_plan_premium" id="coverage_plan_premium" class="form-control">
+				<input type="number" value="{{$coverage_plan_details->coverage_plan_premium}}" name="coverage_plan_premium" id="coverage_plan_premium" class="form-control" readonly>
 			</div>
 		</div>
 		<div class="row form-holder ">
@@ -29,13 +35,13 @@ radioClass   : 'iradio_minimal-blue'
 				<label>Age Bracket</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="text" value="{{$coverage_plan_details->coverage_plan_age_bracket}}" name="coverage_plan_age_bracket" id="coverage_plan_age_bracket" class="form-control">
+				<input type="text" value="{{$coverage_plan_details->coverage_plan_age_bracket}}" name="coverage_plan_age_bracket" id="coverage_plan_age_bracket" class="form-control" readonly>
 			</div>
 			<div class="col-md-2 form-content">
 				<label>Case Handling FEE</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="text" value="{{$coverage_plan_details->coverage_plan_case_handling}}" name="coverage_plan_case_handling" id="coverage_plan_case_handling" class="form-control">
+				<input type="number" value="{{$coverage_plan_details->coverage_plan_case_handling}}" name="coverage_plan_case_handling" id="coverage_plan_case_handling" class="form-control" readonly>
 			</div>
 		</div>
 		<div class="row form-holder ">
@@ -43,13 +49,13 @@ radioClass   : 'iradio_minimal-blue'
 				<label>Processing Fee</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="text" value="{{$coverage_plan_details->coverage_plan_processing_fee}}" name="coverage_plan_processing_fee" id="coverage_plan_processing_fee" class="form-control">
+				<input type="number" value="{{$coverage_plan_details->coverage_plan_processing_fee}}" name="coverage_plan_processing_fee" id="coverage_plan_processing_fee" class="form-control" readonly>
 			</div>
 			<div class="col-md-2 form-content">
 				<label>CARI Fee</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="text" value="{{$coverage_plan_details->coverage_plan_cari_fee}}" name="coverage_plan_cari_fee" id="coverage_plan_cari_fee" class="form-control">
+				<input type="number" value="{{$coverage_plan_details->coverage_plan_cari_fee}}" name="coverage_plan_cari_fee" id="coverage_plan_cari_fee" class="form-control" readonly>
 			</div>
 		</div>
 		<div class="row form-holder ">
@@ -57,13 +63,13 @@ radioClass   : 'iradio_minimal-blue'
 				<label>HIB</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="text" value="{{$coverage_plan_details->coverage_plan_hib}}" name="coverage_plan_hib" id="coverage_plan_hib" class="form-control">
+				<input type="number" value="{{$coverage_plan_details->coverage_plan_hib}}" name="coverage_plan_hib" id="coverage_plan_hib" class="form-control" readonly>
 			</div>
 			<div class="col-md-2 form-content">
 				<label>Pre-Existing</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<select class="form-control" name="coverage_plan_preexisting" id="coverage_plan_preexisting">
+				<select class="form-control" name="coverage_plan_preexisting" id="coverage_plan_preexisting" readonly>
 					<option>{{$coverage_plan_details->coverage_plan_name}}</option>
 					<option>WAVE</option>
 					<option>12 MONTHS</option>
@@ -76,7 +82,7 @@ radioClass   : 'iradio_minimal-blue'
 			</div>
 			<div class="col-md-4 form-content">
 				<div class="input-group">
-					<select class="form-control " name="coverage_plan_annual_benefit" id="coverage_plan_annual_benefit">
+					<select class="form-control " name="coverage_plan_annual_benefit" id="coverage_plan_annual_benefit" readonly>
 						<option>{{$coverage_plan_details->coverage_plan_annual_benefit}}</option>
 						<option>20,000</option>
 						<option>30,000</option>
@@ -92,7 +98,7 @@ radioClass   : 'iradio_minimal-blue'
 			</div>
 			<div class="col-md-4 form-content">
 				<div class="input-group">
-					<select class="form-control " name="coverage_plan_maximum_benefit" id="coverage_plan_maximum_benefit">
+					<select class="form-control " name="coverage_plan_maximum_benefit" id="coverage_plan_maximum_benefit" readonly>
 						<option>{{$coverage_plan_details->coverage_plan_maximum_benefit}}</option>
 						<option>20,000</option>
 						<option>30,000</option>
