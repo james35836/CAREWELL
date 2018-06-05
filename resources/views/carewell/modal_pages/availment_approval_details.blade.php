@@ -87,6 +87,12 @@ $(document).ready(function()
 		var text  = $(this).find(":selected").text();
 		$('select.charge_diagnosis').append('<option value="'+value+'" selected="selected">'+text+'</option>');
 	});
+	//edrich
+	$('body').on('change','.charge_diagnosis',function()
+	{
+		var value = $(this).val();
+	});
+	//edrich
 });
 </script>
 
@@ -110,13 +116,13 @@ $(document).ready(function()
 				<label>Caller Name</label>
 			</div>
 			<div class="col-md-4 form-content form-group">
-				<input type="text" readonly class="form-control" value="{{$approval_details->user_first_name." ".$approval_details->user_last_name}}"  />
+				<input type="text" disabled class="form-control" value="{{$approval_details->user_first_name." ".$approval_details->user_last_name}}"  />
 			</div>
 			<div class="col-md-2 form-content">
 				<label>Date Called</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="text" readonly class="form-control" value="{{date("F j, Y",strtotime($approval_details->approval_created))}}"  />
+				<input type="text" disabled class="form-control" value="{{date("F j, Y",strtotime($approval_details->approval_created))}}"  />
 			</div>
 		</div>
 		<div class="form-holder">
@@ -124,13 +130,13 @@ $(document).ready(function()
 				<label>Caller NUMBER</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="text" readonly class="form-control" value="{{$approval_details->user_number}}" />
+				<input type="text" disabled class="form-control" value="{{$approval_details->user_number}}" />
 			</div>
 			<div class="col-md-2 form-content">
 				<label>Contact Number</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="text" readonly class="form-control"  value="{{$approval_details->user_contact_number}}" />
+				<input type="text" disabled class="form-control"  value="{{$approval_details->user_contact_number}}" />
 			</div>
 		</div>
 	</div>
@@ -140,13 +146,13 @@ $(document).ready(function()
 				<label>Name</label>
 			</div>
 			<div class="col-md-4 form-content form-group">
-				<input type="text" readonly class="form-control" value="{{$approval_details->member_first_name." ".$approval_details->member_last_name}}"  />
+				<input type="text" disabled class="form-control" value="{{$approval_details->member_first_name." ".$approval_details->member_last_name}}"  />
 			</div>
 			<div class="col-md-2 form-content">
 				<label>Company</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="text" readonly class="form-control" value="{{$approval_details->company_name}}"  />
+				<input type="text" disabled class="form-control" value="{{$approval_details->company_name}}"  />
 			</div>
 		</div>
 		<div class="form-holder">
@@ -154,13 +160,13 @@ $(document).ready(function()
 				<label>Universal ID</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="text" readonly class="form-control" value="{{$approval_details->member_universal_id}}" />
+				<input type="text" disabled class="form-control" value="{{$approval_details->member_universal_id}}" />
 			</div>
 			<div class="col-md-2 form-content">
 				<label>Carewell ID</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="text" readonly class="form-control"  value="{{$approval_details->member_carewell_id}}" />
+				<input type="text" disabled class="form-control"  value="{{$approval_details->member_carewell_id}}" />
 			</div>
 		</div>
 		<div class="form-holder">
@@ -168,13 +174,13 @@ $(document).ready(function()
 				<label>Birthdate</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="text" readonly class="form-control" value="{{$approval_details->member_birthdate}}" />
+				<input type="text" disabled class="form-control" value="{{$approval_details->member_birthdate}}" />
 			</div>
 			<div class="col-md-2 form-content">
 				<label>Age</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="text" readonly class="form-control" value="{{date_create($approval_details->member_birthdate)->diff(date_create('today'))->y }}" />
+				<input type="text" disabled class="form-control" value="{{date_create($approval_details->member_birthdate)->diff(date_create('today'))->y }}" />
 			</div>
 		</div>
 	</div>
@@ -184,7 +190,7 @@ $(document).ready(function()
 				<label>Availment Date</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="text" readonly class="form-control" value="{{$approval_details->approval_date_availed}}" />
+				<input type="text" disabled="" class="form-control" value="{{$approval_details->approval_date_availed}}" />
 			</div>
 		</div>
 		<div class="row form-holder">
@@ -193,14 +199,20 @@ $(document).ready(function()
 			<div class="col-md-2 form-content">
 				<label>Network Provider</label>
 			</div>
+			<!-- edrich -->
+
+			<!-- edrich -->
 			<div class="col-md-4 form-content">
-				<input type="text" readonly class="form-control" value="{{$approval_details->provider_name}}" />
+				<input type="text" disabled class="form-control" value="{{$approval_details->provider_name}}" />
 			</div>
 			<div class="col-md-2 form-content">
 				<label>Type of availment</label>
 			</div>
+			<!-- edrich -->
+
+			<!-- edrich -->
 			<div class="col-md-4 form-content">
-				<input type="text" readonly class="form-control" value="{{$approval_details->availment_name}}" />
+				<input type="text" disabled class="form-control" value="{{$approval_details->availment_name}}" />
 			</div>
 		</div>
 		<div class="row form-holder">
@@ -219,8 +231,11 @@ $(document).ready(function()
 			<div class="col-md-2 form-content">
 				<label>Initial Diagnosis</label>
 			</div>
+			<!-- edrich -->
+		
+			<!-- edrich -->
 			<div class="col-md-10 form-content">
-				<input type="text" readonly class="form-control" value="{{$approval_details->diagnosis_name}}" />
+				<input type="text" disabled="" class="form-control" value="{{$approval_details->diagnosis_name}}" />
 			</div>
 		</div>
 		<div class="row form-holder">
@@ -229,10 +244,13 @@ $(document).ready(function()
 			<div class="col-md-2 form-content">
 				<label>Final Diagnosis</label>
 			</div>
+			<!-- edrich -->
+			
+			<!-- edrich -->
 			<div class="col-md-10">
 				@foreach($_final_diagnosis as $final_diagnosis)
 				<div class=" form-content">
-					<input type="text" readonly class="form-control" value="{{$final_diagnosis->diagnosis_name}}" />
+					<input type="text" disabled="" class="form-control" value="{{$final_diagnosis->diagnosis_name}}" />
 				</div>
 				@endforeach
 			</div>
@@ -243,9 +261,19 @@ $(document).ready(function()
 			<div class="col-md-2 form-content">
 				<label>Charge</label>
 			</div>
+			<!-- edrich -->
 			<div class="col-md-10 form-content">
-				<input type="text" readonly class="form-control" value="{{$charge_diagnosis->diagnosis_name}}" />
+				<select class="form-control charge_diagnosis" id="charge_diagnosis" name="charge_diagnosis_id" >
+					<!-- <option value="{{$final_diagnosis->diagnosis_id}}">{{$charge_diagnosis->diagnosis_name}}</option> -->
+					@foreach($_final_diagnosis as $final_diagnosis)
+					<option value="{{$final_diagnosis->diagnosis_id}}">{{$final_diagnosis->diagnosis_name}}</option>
+					@endforeach
+				</select>
 			</div>
+			<!-- edrich -->
+			<!-- <div class="col-md-10 form-content">
+				<input type="text" readonly class="form-control" value="{{$charge_diagnosis->diagnosis_name}}" />
+			</div> -->
 		</div>
 		<div class="row form-holder">
 		</div>
@@ -268,18 +296,30 @@ $(document).ready(function()
 							<th>PHILHEALTH CHARITY/SWA</th>
 							<th>CHARGE TO PATIENT</th>
 							<th>CHARGE TO CAREWELL</th>
+							<th><button type="button" data-ref="first" data-number="2" data-approval_id="{{$approval_details->approval_id}}" class="btn btn-primary btn-sm add-approval-details"><i class="fa fa-plus-circle"></i></button></th>
 						</tr>
 					</thead>
 					<tbody>
 						@foreach($_availed as $availed)
 						<tr>
-							<td><input type="text" readonly class="form-control" value="{{$availed->procedure_name}}" /></td>
+							<td>
+								<select style="width: 250px;" class="form-control select2 procedureList" name="procedure_id[]">
+									<option value="{{$availed->procedure_id}}">{{$availed->procedure_name}}</option>
+									@foreach($_procedure as $procedure)
+									<option value="{{$procedure->procedure_id}}">{{$procedure->procedure_name}}</option>
+									@endforeach
+								</select>
+							</td>
 							<td><input type="text" readonly name="procedure_gross_amount[]" id="" class="form-control" value="{{$availed->procedure_gross_amount}}" /></td>
 							<td><input type="text" readonly name="procedure_philhealth[]" id="" class="form-control" value="{{$availed->procedure_philhealth}}" /></td>
 							<td><input type="text" readonly name="procedure_charge_patient[]" id="" class="form-control" value="{{$availed->procedure_charge_patient}}" /></td>
 							<td><input type="text" readonly name="procedure_charge_carewell[]" id="" class="form-control" value="{{$availed->procedure_charge_carewell}}" /></td>
+							<td>
+								<div class="btn-group" role="group" aria-label="Basic example">
+									<button type="button" data-number="2" data-ref="procedure" data-id="{{$availed->procedure_approval_id}}" class="remove-approval-data btn btn-danger btn-sm remove-approval-procedure"><i class="fa fa-minus-circle"></i></button>
+								</div>
+							</td>
 						</tr>
-						
 						@endforeach
 					</tbody>
 				</table>
@@ -339,22 +379,53 @@ $(document).ready(function()
 						<th>PHILHEALTH CHARITY/SWA</th>
 						<th>CHARGE TO PATIENT</th>
 						<th>CHARGE TO CAREWELL</th>
+						<th><button type="button" data-ref="first" data-number="2" class="btn btn-primary btn-sm add-row"><i class="fa fa-plus-circle"></i></button></th>
 					</tr>
 				</thead>
 				<tbody>
 					@foreach($_doctor_assigned as $doctor_assigned)
 					<tr>
-						<td><input style="width: 250px;" type="text" readonly name="doctor_id[]" class="form-control" value="{{$doctor_assigned->doctor_full_name}}" /></td>
-						<td><input style="width: 300px;" type="text" readonly name="specialization_name[]" class="form-control" value="{{$doctor_assigned->specialization_name}}" /></td>
-						<td><input type="text" readonly name="approval_doctor_actual_pf[]" class="form-control" value="{{$approval_details->provider_rvs}}" /></td>
-						<td><input style="width: 300px;" type="text" readonly name="doctor_procedure_id[]" class="form-control" value="{{$doctor_assigned->doctor_procedure_descriptive}}" /></td>
+						<td>
+							<select style="width: 200px;" class="form-control select2 doctorList" name="doctor_id[]">
+								<option value="{{$doctor_assigned->doctor_id}}">{{$doctor_assigned->doctor_full_name}}</option>
+								@foreach($_doctor as $doctor)
+								<option value="{{$doctor->doctor_id}}">{{$doctor->doctor_full_name}}</option>
+								@endforeach
+							</select>
+						</td>
+						<td>
+							<div class="input-group">
+								<select style="width: 250px;" class="form-control select2" name="specialization_name[]">
+									<option>{{$doctor_assigned->specialization_name}}</option>
+									@foreach($_specialization as $specialization)
+									<option>{{$specialization->specialization_name}}</option>
+									@endforeach
+								</select>
+								<span class="input-group-btn">
+									<button data-ref="string" class="btn btn-secondary add-option" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span></button>
+								</span>
+							</div>
+						</td>
+						<td><input type="text" disabled="" name="approval_doctor_actual_pf[]" class="form-control" value="{{$approval_details->provider_rvs}}" /></td>
+						<td>
+							<select style="width: 330px;" class="form-control select2" name="doctor_procedure_id[]">
+								<option value="{{$doctor_assigned->doctor_procedure_id}}">{{$doctor_assigned->doctor_procedure_descriptive}}</option>
+								@foreach($_procedure_doctor as $procedure_doctor)
+								<option value="{{$procedure_doctor->doctor_procedure_id}}">{{$procedure_doctor->doctor_procedure_descriptive}}</option>
+								@endforeach
+							</select>
+						</td>
 						<td><input type="text" readonly name="approval_doctor_actual_pf[]" class="form-control" value="{{$doctor_assigned->approval_doctor_actual_pf}}" /></td>
 						<td><input type="text" readonly name="approval_doctor_phil_charity[]" class="form-control" value="{{$doctor_assigned->approval_doctor_phil_charity}}" /></td>
 						<td><input type="text" readonly name="approval_doctor_charge_patient[]" class="form-control" value="{{$doctor_assigned->approval_doctor_charge_patient}}" /></td>
 						<td><input type="text" readonly name="approval_doctor_charge_carewell[]" class="form-control" value="{{$doctor_assigned->approval_doctor_charge_carewell}}" /></td>
+						<td>
+							<div class="btn-group" role="group" aria-label="Basic example">
+								<button type="button" data-number="2" data-ref="doctor" data-id="{{$doctor_assigned->approval_doctor_id}}" class="remove-approval-data btn btn-danger btn-sm remove-approval-doctor"><i class="fa fa-minus-circle"></i></button>
+							</div>
+						</td>
 					</tr>
-					@endforeach
-					
+					@endforeach	
 				</tbody>
 			</table>
 		</div>
@@ -405,11 +476,20 @@ $(document).ready(function()
 			</div>
 			<div class="form-content col-md-8 form-element">
 				@foreach($_payee_doctor as $payee_doctor)
-				<div class="my-element">
-					<input type="text" readonly class="form-control" name="doctor_payee_id[]" value="{{$payee_doctor->doctor_full_name}}">
+				<div class="my-element" >
+					<div class="input-group my-element">
+					<select class="form-control doctor-payee" data-type="doctor" name="doctor_payee_id[]" id="payeeList">
+						<option value="{{$doctor_assigned->doctor_id}}">{{$payee_doctor->doctor_full_name}}</option>
+						@foreach($_doctor as $doctor)
+						<option value="{{$doctor->doctor_id}}">{{$doctor->doctor_full_name}}</option>
+						@endforeach
+					</select>
+					<span class="input-group-btn">
+						<button class="remove-approval-data btn btn-danger remove-approval-doctor-payee" data-ref="doctor payee" data-id="{{$payee_doctor->approval_payee_id}}" type="button" tabindex="-1"><span class="fa fa-minus-circle" aria-hidden="true"></span> </button>
+					</span>
 				</div>
+				</div>				
 				@endforeach
-				
 			</div>
 			<div class="form-content col-md-4">
 				<label>Other Payee</label>
@@ -418,6 +498,9 @@ $(document).ready(function()
 				@foreach($_payee_other as $payee_other)
 				<div class="my-element">
 					<input type="text" readonly class="form-control" name="payee_name[]" value="{{$payee_other->payee_name}}">
+					<span class="input-group-btn">
+						<button type="button" data-number="2" data-ref="other payee" data-id="{{$payee_other->approval_payee_id}}" class="remove-approval-data btn btn-danger btn-sm remove-approval-other-payee"><i class="fa fa-minus-circle"></i></button>
+					</span>
 				</div>
 				@endforeach
 			</div>

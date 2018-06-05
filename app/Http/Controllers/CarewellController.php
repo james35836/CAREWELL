@@ -1953,6 +1953,7 @@ class CarewellController extends ActiveAuthController
 				$payeeDocData->save();
 			}
 		}
+
 		if($request->payee_name!=null)
 		{
 			foreach($request->payee_name as $key=>$payee_name)
@@ -2013,6 +2014,25 @@ class CarewellController extends ActiveAuthController
 		$data['_payee_other']    = TblApprovalPayeeModel::where('approval_id',$approval_id)->where('type','payee')->get();
 		$data['total_procedure']  = TblApprovalTotalModel::where('approval_id',$approval_id)->where('total_type','procedure')->first();
 		$data['total_doctor']     = TblApprovalTotalModel::where('approval_id',$approval_id)->where('total_type','doctor')->first();
+		
+
+		// EDRICH
+		$approval = TblApprovalModel::where("approval_id",$approval_id)->first();
+
+
+		$data['_procedure'] = TblCoveragePlanProcedureModel::where("availment_id",$approval->availment_id)
+		->join("tbl_procedure","tbl_procedure.procedure_id","=","tbl_coverage_plan_procedure.procedure_id")
+		->get();
+
+		$data['_specialization']  = TblSpecializationModel::get();
+
+
+		$data['_doctor'] = TblDoctorProviderModel::where('provider_id',$approval->provider_id)->Doctor()->get();
+
+		$data['_procedure_doctor']= TblDoctorProcedureModel::where('archived',0)->get();
+
+
+
 		return view('carewell.modal_pages.availment_approval_details',$data);
 	}
 	public function approval_export_pdf($approval_id)
@@ -2055,6 +2075,53 @@ class CarewellController extends ActiveAuthController
 	     $pdf = PDF::loadView('carewell.additional_pages.approval_export_pdf', $data, [], $format);
 	     return $pdf->stream('document.pdf');
 	}
+	//edrich
+
+
+public function availment_approval_remove_details_submit(Request $request)
+{
+	$ref = $request->ref;
+	switch ($ref)
+	{
+		case 'procedure':
+			//dd('procedure');
+			$remove = TblApprovalProcedureModel::where('procedure_approval_id',$request->id)->delete();
+		break;
+
+		case 'doctor':
+			//dd('doctor');
+			$remove = TblApprovalDoctorModel::where('approval_doctor_id',$request->id)->delete();
+		break;
+
+		//same function if ref = doctor payee or ref = other payee
+		case 'doctor payee':		
+		case 'other payee':
+			$remove = TblApprovalPayeeModel::where('approval_payee_id',$request->id)->delete();
+		break;
+	}
+
+	return StaticFunctionController::customMessage("success", $ref." successfully deleted!");
+
+}
+
+public function availment_approval_add_details($approval_id)
+{
+	$approval = TblApprovalModel::where("approval_id",$approval_id)->first();
+	$data['approval_id'] = $approval_id;
+	$data['_availed']         = TblApprovalProcedureModel::where('tbl_approval_procedure.approval_id',$approval_id)->ProcedureDiagnosis()->get();
+	$data['_procedure'] = TblCoveragePlanProcedureModel::where("availment_id",$approval->availment_id)
+	->join("tbl_procedure","tbl_procedure.procedure_id","=","tbl_coverage_plan_procedure.procedure_id")
+	->get();
+
+
+	return view('carewell.modal_pages.availment_approval_add_details',$data);
+}
+
+public function availment_approval_add_details_submit()
+{
+	dd("wew");
+}
+// edrich
 
 	/*PAYABLE*/
 	public function payable()

@@ -162,6 +162,14 @@ Route::post('/availment/get_member_info',				'CarewellController@availment_get_m
 Route::post('/availment/create_approval/submit',		'CarewellController@availment_create_approval_submit');
 Route::get('/availment/approval_details/{approval_id}', 'CarewellController@availment_view_approval_details');
 Route::get('/availment/approval_export_pdf/{approval_id}', 'CarewellController@approval_export_pdf');
+Route::post('/availment/update_approval/submit',		'CarewellController@availment_update_approval_submit');
+Route::post('/availment/approval/remove_procedure',		'CarewellController@availment_approval_remove_procedure_submit');
+
+Route::post('/availment/approval/remove_doctor',		'CarewellController@availment_approval_remove_doctor_submit');
+Route::post('/availment/approval/remove_doctor_payee',		'CarewellController@availment_approval_remove_doctor_payee_submit');
+
+Route::post('/availment/approval/remove_approval_details',		'CarewellController@availment_approval_remove_details_submit');
+
 
 
 
