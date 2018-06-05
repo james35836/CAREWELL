@@ -225,7 +225,10 @@ function billing_center()
 			{}
 			else if(globals.checking_null_validation(document.getElementById('cal_payment_mode').value,"MODE OF PAYMENT")=="")
 			{}
-			
+			else if(globals.checking_null_validation(document.getElementById('cal_start').value,"PAYMENT START")=="")
+			{}
+			else if(globals.checking_null_validation(document.getElementById('cal_end').value,"PAYMENT END")=="")
+			{}
 			else
 			{
 				var	confirmModalMessage = 'Are you sure you want to add this CAL?';
@@ -233,10 +236,10 @@ function billing_center()
 				globals.confirm_modals(confirmModalMessage,confirmModalAction);
 		 
 				calData.append("company_id", 				document.getElementById('company_id').value);
-	            calData.append("cal_reveneu_period_year", 	document.getElementById('cal_reveneu_period_year').value);
-	            calData.append("cal_payment_mode", 			document.getElementById('cal_payment_mode').value);
-	            calData.append("cal_start", 				document.getElementById('cal_start').value);
-	            calData.append("cal_end", 					document.getElementById('cal_end').value);
+	            	calData.append("cal_reveneu_period_year", 	document.getElementById('cal_reveneu_period_year').value);
+	            	calData.append("cal_payment_mode", 			document.getElementById('cal_payment_mode').value);
+	            	calData.append("cal_start", 				document.getElementById('cal_start').value);
+	            	calData.append("cal_end", 					document.getElementById('cal_end').value);
 	        }
 		});
 	}
