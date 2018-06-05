@@ -230,6 +230,30 @@
                             <i class="fa fa-dashboard"></i> <span>DASHBOARD</span>
                         </a>
                     </li>
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-cog"></i>
+                            <span>SETTINGS</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a href="/settings/admin"><i class="fa fa-universal-access"></i>ADMIN PANEL</a></li>
+                            <li><a href="/settings/coverage"><i class="fa fa-circle-o"></i>COVERAGE PLAN</a></li>
+                            <li><a href="/settings/maintenance"><i class="fa fa-circle-o"></i>MAINTENANCE</a></li>
+                            <li >
+                                <a href="/provider">
+                                    <i class="fa fa-hospital-o"></i> <span style="font-size:.9em;">PROVIDER CENTER</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/doctor">
+                                    <i class="fa fa-user-md"></i> <span style="font-size:.9em;">DOCTOR CENTER</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                     
                     <li>
                         <a href="/company">
@@ -239,16 +263,6 @@
                     <li>
                         <a href="/member">
                             <i class="fa fa-user"></i> <span>MEMBER CENTER</span>
-                        </a>
-                    </li>
-                    <li >
-                        <a href="/provider">
-                            <i class="fa fa-hospital-o"></i> <span>PROVIDER CENTER</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/doctor">
-                            <i class="fa fa-user-md"></i> <span>DOCTOR CENTER</span>
                         </a>
                     </li>
                     <li>
@@ -283,20 +297,6 @@
                             <li><a href="/reports/breakdown"><i class="fa fa-circle-o"></i>BREAKDOWN</a></li>
                             <li><a href="/reports/consolidation"><i class="fa fa-circle-o"></i>CONSOLIDATION</a></li>
                             <li><a href="#"><i class="fa fa-circle-o"></i>SUMMARY</a></li>
-                        </ul>
-                    </li>
-                    <li class="treeview">
-                        <a href="#">
-                            <i class="fa fa-cog"></i>
-                            <span>SETTINGS</span>
-                            <span class="pull-right-container">
-                                <i class="fa fa-angle-left pull-right"></i>
-                            </span>
-                        </a>
-                        <ul class="treeview-menu">
-                            <li><a href="/settings/admin"><i class="fa fa-universal-access"></i>ADMIN PANEL</a></li>
-                            <li><a href="/settings/coverage"><i class="fa fa-circle-o"></i>COVERAGE PLAN</a></li>
-                            <li><a href="/settings/maintenance"><i class="fa fa-circle-o"></i>MAINTENANCE</a></li>
                         </ul>
                     </li>
                 </ul>
