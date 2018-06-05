@@ -25,6 +25,15 @@ function availment_center()
             	update_approval_confirm();
             	update_approval_submit();
 
+            	//edrich
+
+
+				delete_approval_details();
+				delete_approval_details_submit();
+
+
+            	// edrich
+
         });
 
 	}
@@ -409,4 +418,132 @@ function availment_center()
 	        	});
 	     });
 	}
+
+	// edrich
+	function delete_approval_procedure()
+	{
+			$('body').on('click','.remove-approval-procedure',function() 
+		{
+
+			if($(".remove-approval-procedure").length >= 2)
+			{
+				var	confirmModalMessage = 'Are you sure you want to remove this procedure?';
+				var confirmModalAction 	= 'remove-approval-procedure-submit';
+				globals.confirm_modals(confirmModalMessage,confirmModalAction);
+
+				approvalprocedureData.append("procedure_approval_id", 	$(this).data('procedure_approval_id'));
+				ajaxData.tdCloser  = $(this).closest('tr');
+			}
+			else
+			{
+				toastr.error('you cannot remove all procedure.', 'Something went wrong!', {timeOut: 3000});
+			}
+		});
+	}
+
+	function delete_approval_procedure_submit()
+	{
+		$('body').on('click','.remove-approval-procedure-submit',function() 
+		{
+			globals.global_single_submit('/availment/approval/remove_procedure',approvalprocedureData,ajaxData.tdCloser);
+		});
+	}
+
+	function delete_approval_doctor()
+	{
+		$('body').on('click','.remove-approval-doctor',function() 
+		{
+
+			if($(".remove-approval-doctor").length >= 2)
+			{
+				var	confirmModalMessage = 'Are you sure you want to remove this doctor?';
+				var confirmModalAction 	= 'remove-approval-doctor-submit';
+				globals.confirm_modals(confirmModalMessage,confirmModalAction);
+
+				approvalprocedureData.append("doctor_approval_id", 	$(this).data('doctor_approval_id'));
+				ajaxData.tdCloser  = $(this).closest('tr');
+			}
+			else
+			{
+				toastr.error('you cannot remove all doctor.', 'Something went wrong!', {timeOut: 3000});
+			}
+		});
+	}
+
+	function delete_approval_doctor_submit()
+	{
+		$('body').on('click','.remove-approval-doctor-submit',function() 
+		{
+			globals.global_single_submit('/availment/approval/remove_doctor',approvalprocedureData,ajaxData.tdCloser);
+		});
+	}
+
+	function delete_approval_payee()
+	{
+		$('body').on('click','.remove-approval-payee',function() 
+		{
+
+			if($(".remove-approval-payee").length >= 2)
+			{
+				var	confirmModalMessage = 'Are you sure you want to remove this doctor payee?';
+				var confirmModalAction 	= 'remove-approval-payee-submit';
+				globals.confirm_modals(confirmModalMessage,confirmModalAction);
+
+				approvalprocedureData.append("approval_payee_id", 	$(this).data('approval_payee_id'));
+
+				ajaxData.tdCloser  = $(this).closest('tr');
+			}
+			else
+			{
+				toastr.error('you cannot remove all doctor.', 'Something went wrong!', {timeOut: 3000});
+			}
+		});
+	}
+
+		function delete_approval_payee_submit()
+	{
+		$('body').on('click','.remove-approval-doctor-payee-submit',function() 
+		{
+			globals.global_single_submit('/availment/approval/remove_doctor_payee',approvalprocedureData,ajaxData.tdCloser);
+		});
+	}
+
+
+	function delete_approval_details()
+	{
+		$('body').on('click','.remove-approval-data',function() 
+		{
+			var ref = $(this).data('ref');
+
+			if($('.remove-approval-data[data-ref="'+ref+'"]').length <=1)
+			{
+				toastr.error('you cannot remove all '+ref+'.', 'Something went wrong!', {timeOut: 3000});
+			}
+			else
+			{
+				var	confirmModalMessage = 'Are you sure you want to remove this ' +ref;
+				var confirmModalAction 	= 'remove-approval-details-submit';
+				globals.confirm_modals(confirmModalMessage,confirmModalAction);
+				ajaxData.tdCloser  = $(this).closest('tr');
+
+				approvaldetailsData.append("id", 	$(this).data('id'));
+				approvaldetailsData.append("ref", ref);
+							
+			}
+		});
+
+	}
+
+	function delete_approval_details_submit()
+	{
+		$('body').on('click','.remove-approval-details-submit',function() 
+		{
+			globals.global_single_submit('/availment/approval/remove_approval_details',approvaldetailsData,ajaxData.tdCloser);
+		});
+
+	}
+
+
+	// edrich
+
 }

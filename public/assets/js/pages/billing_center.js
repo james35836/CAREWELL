@@ -1,6 +1,5 @@
 var billing_center 		= new billing_center();
-var billingMemberData 	= new FormData();
-var calPendingData    	= new FormData();
+
 function billing_center()
 {
 	init();

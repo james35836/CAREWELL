@@ -1989,10 +1989,70 @@ public function availment_create_approval_submit(Request $request)
 	
 }
 
-public function availment_update_approval_submit()
+//edrich
+public function availment_approval_remove_procedure_submit(Request $request)
 {
-	dd('wew');
+
+	$remove = TblApprovalProcedureModel::where('procedure_approval_id',$request->procedure_approval_id)->delete();
+	return StaticFunctionController::customMessage("success","procedure successfully deleted");
 }
+
+public function availment_approval_remove_doctor_submit(Request $request)
+{
+	$remove = TblApprovalDoctorModel::where('approval_doctor_id',$request->approval_doctor_id)->delete();
+	return StaticFunctionController::customMessage("success","doctor successfully deleted");
+}
+
+public function availment_approval_remove_doctor_payee_submit(Request $request)
+{
+	$remove = TblApprovalPayeeModel::where('approval_payee_id',$request->approval_payee_id)->delete();
+	return StaticFunctionController::customMessage("success","doctor payee successfully deleted");
+}
+
+public function availment_approval_remove_details_submit(Request $request)
+{
+	$ref = $request->ref;
+	switch ($ref)
+	{
+		case 'procedure':
+			//dd('procedure');
+			$remove = TblApprovalProcedureModel::where('procedure_approval_id',$request->id)->delete();
+		break;
+
+		case 'doctor':
+			//dd('doctor');
+			$remove = TblApprovalDoctorModel::where('approval_doctor_id',$request->id)->delete();
+		break;
+
+		//same function if ref = doctor payee or ref = other payee
+		case 'doctor payee':		
+		case 'other payee':
+			$remove = TblApprovalPayeeModel::where('approval_payee_id',$request->id)->delete();
+		break;
+	}
+
+	return StaticFunctionController::customMessage("success", $ref." successfully deleted!");
+
+}
+
+public function availment_approval_add_details($approval_id)
+{
+	$approval = TblApprovalModel::where("approval_id",$approval_id)->first();
+	$data['approval_id'] = $approval_id;
+	$data['_availed']         = TblApprovalProcedureModel::where('tbl_approval_procedure.approval_id',$approval_id)->ProcedureDiagnosis()->get();
+	$data['_procedure'] = TblCoveragePlanProcedureModel::where("availment_id",$approval->availment_id)
+	->join("tbl_procedure","tbl_procedure.procedure_id","=","tbl_coverage_plan_procedure.procedure_id")
+	->get();
+
+
+	return view('carewell.modal_pages.availment_approval_add_details',$data);
+}
+
+public function availment_approval_add_details_submit()
+{
+	dd("wew");
+}
+// edrich
 
 public function availment_view_approval_details($approval_id)
 {
@@ -2015,15 +2075,19 @@ public function availment_view_approval_details($approval_id)
 	$data['total_procedure']  = TblApprovalTotalModel::where('approval_id',$approval_id)->where('total_type','procedure')->first();
 	$data['total_doctor']     = TblApprovalTotalModel::where('approval_id',$approval_id)->where('total_type','doctor')->first();
 
-	$availment_id = TblApprovalModel::where("approval_id",$approval_id)->value('availment_id');
+	$approval = TblApprovalModel::where("approval_id",$approval_id)->first();
 
-	$data['_procedure'] = TblCoveragePlanProcedureModel::where("availment_id",$availment_id)
+
+	$data['_procedure'] = TblCoveragePlanProcedureModel::where("availment_id",$approval->availment_id)
 	->join("tbl_procedure","tbl_procedure.procedure_id","=","tbl_coverage_plan_procedure.procedure_id")
 	->get();
-	// edrich
-	//$data['_diagnosis']       = TblDiagnosisModel::where('archived',0)->get();
-	//$data['_availment']       = TblAvailmentModel::where('availment_parent_id',0)->get();
-	// edrich
+
+	$data['_specialization']  = TblSpecializationModel::get();
+
+
+	$data['_doctor'] = TblDoctorProviderModel::where('provider_id',$approval->provider_id)->Doctor()->get();
+
+	$data['_procedure_doctor']= TblDoctorProcedureModel::where('archived',0)->get();
 
 	return view('carewell.modal_pages.availment_approval_details',$data);
 }

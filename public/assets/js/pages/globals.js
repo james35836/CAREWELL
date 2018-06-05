@@ -27,6 +27,11 @@ var searchData 		= new FormData();
 var coverageData    = new FormData();
 var memberData 		= new FormData();
 
+var billingMemberData 	= new FormData();
+var calPendingData    	= new FormData();
+var approvalprocedureData = new FormData();
+
+var approvaldetailsData = new FormData();
 
 var coverageItemData	= [];
 var doctorProviderData	= [];
