@@ -399,6 +399,7 @@
     else
     {
     $('div').removeClass('modal-backdrop');
+    $('.modal').remove();
     }
     });
     $(document).ready(function()

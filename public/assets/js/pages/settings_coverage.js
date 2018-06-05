@@ -23,6 +23,9 @@ function settings_coverage()
             	coverage_add_item();
             	coverage_add_item_submit();
 
+            	coverage_mark_new_confirm();
+            	coverage_mark_new_submit();
+
 		});
 
 	}
@@ -46,7 +49,7 @@ function settings_coverage()
 		{
 			if(globals.checking_null_validation(document.getElementById('coverage_plan_name').value,"PLAN NAME")=="")
 			{}	
-		    else if(globals.checking_null_validation(document.getElementById('coverage_plan_preexisting').value,"PLAN PREXISTING")=="")
+		    	else if(globals.checking_null_validation(document.getElementById('coverage_plan_preexisting').value,"PLAN PREXISTING")=="")
 			{}
 			else if(globals.checking_null_validation(document.getElementById('coverage_plan_maximum_benefit').value,"PLAN MBL")=="")
 			{}	
@@ -118,7 +121,7 @@ function settings_coverage()
 			var modalClass       = 'coverage-details';
 			var modalLink        = '/settings/coverage/plan_details/'+coverage_plan_id;
 			var modalActionName  = 'MARK AS NEW';
-			var modalAction      = 'new-coverage-plan';
+			var modalAction      = 'coverage-mark-new-confirm';
 			if($(this).data('size')=='md')
 			{
 				var modalSize        = 'modal-md';
@@ -129,10 +132,10 @@ function settings_coverage()
 			}
 			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
 		});
-    }
-    function coverage_add_item()
-    {
-    	$("body").on('click','.add-coverage-item',function()
+    	}
+    	function coverage_add_item()
+    	{
+    		$("body").on('click','.add-coverage-item',function()
 		{
 			ajaxData.countThis  = $(this);
 			var availment_id    = $(this).data('availment_id');
@@ -145,14 +148,15 @@ function settings_coverage()
 			var modalAction 	= 'coverage-item-submit';
 			var modalSize 		= 'modal-md';
 			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
-        });
-        $(".coverage-plan-item-modal").on("hidden.bs.modal", function(){
+        	});
+        	$(".coverage-plan-item-modal").on("hidden.bs.modal", function()
+        	{
 		    $(".coverage-plan-item-modal.modal-body").remove();
 		});
     	
-    }
-    function coverage_add_item_submit()
-    {
+    	}
+    	function coverage_add_item_submit()
+    	{
     		$('body').on('click','.coverage-item-submit',function() 
 		{
 			var datas = new FormData();
@@ -186,6 +190,72 @@ function settings_coverage()
 			globals.global_submit('coverage-plan-item','/settings/coverage/items_submit',datas);
         	});
     	}
+
+    	function coverage_mark_new_confirm()
+    	{
+    		$("body").on('change','#coverage_plan_name',function()
+		{
+			$(this).attr('data-ref','new');
+		});
+    		$("body").on('click','.coverage-mark-new-confirm',function()
+		{
+			if($('#coverage_plan_name').data('ref')=="old")
+			{
+				toastr.error(' Please change COVERAGE PLAN NAME or some coverage information.', 'Something went wrong!', {timeOut: 3000})
+			}
+			else if(globals.checking_null_validation(document.getElementById('coverage_plan_name').value,"PLAN NAME")=="")
+			{}	
+		    	else if(globals.checking_null_validation(document.getElementById('coverage_plan_preexisting').value,"PLAN PREXISTING")=="")
+			{}
+			else if(globals.checking_null_validation(document.getElementById('coverage_plan_maximum_benefit').value,"PLAN MBL")=="")
+			{}	
+			else if(globals.checking_null_validation(document.getElementById('coverage_plan_annual_benefit').value,"PLAN ABL")=="")
+			{}
+			else if(globals.checking_null_validation(document.getElementById('coverage_plan_case_handling').value,"PLAN CASE HANDLING")=="")
+			{}
+			else if(globals.checking_null_validation(document.getElementById('coverage_plan_age_bracket').value,"PLAN AGE BRACKET")=="")
+			{}
+			else if(globals.checking_null_validation(document.getElementById('coverage_plan_mbl_illness').value,"PLAN ILLNESS")=="")
+			{}
+			else if(globals.checking_null_validation(document.getElementById('coverage_plan_mbl_year').value,"PLAN MBL/YEAR")=="")
+			{}
+			else if(globals.checking_null_validation(document.getElementById('coverage_plan_cari_fee').value,"PLAN CARD FEE")=="")
+			{}
+			else if(globals.checking_null_validation(document.getElementById('coverage_plan_hib').value,"PLAN HIB")=="")
+			{}
+			else if(globals.checking_null_validation(document.getElementById('coverage_plan_processing_fee').value,"PLAN PROCESSING FEE")=="")
+			{}
+			else if(globals.checking_null_validation(document.getElementById('coverage_plan_premium').value,"PLAN PREMIUM")=="")
+			{}
+			else
+			{
+				var	confirmModalMessage = 'Are you sure you want to mark this plan as new?';
+				var confirmModalAction = 'coverage-mark-new-submit';
+				globals.confirm_modals(confirmModalMessage,confirmModalAction);		
+				
+                    coverageData.append("coverage_plan_id",                document.getElementById('coverage_plan_id').value);
+				coverageData.append("coverage_plan_name",     		document.getElementById('coverage_plan_name').value);
+				coverageData.append("coverage_plan_preexisting",     	document.getElementById('coverage_plan_preexisting').value);
+				coverageData.append("coverage_plan_maximum_benefit",   document.getElementById('coverage_plan_maximum_benefit').value);
+				coverageData.append("coverage_plan_annual_benefit",    document.getElementById('coverage_plan_annual_benefit').value);
+				coverageData.append("coverage_plan_case_handling",     document.getElementById('coverage_plan_case_handling').value);
+				coverageData.append("coverage_plan_age_bracket",     	document.getElementById('coverage_plan_age_bracket').value);
+				coverageData.append("coverage_plan_mbl_illness",     	document.getElementById('coverage_plan_mbl_illness').value);
+				coverageData.append("coverage_plan_mbl_year",     	document.getElementById('coverage_plan_mbl_year').value);
+				coverageData.append("coverage_plan_cari_fee",     	document.getElementById('coverage_plan_cari_fee').value);
+				coverageData.append("coverage_plan_hib",     		document.getElementById('coverage_plan_hib').value);
+				coverageData.append("coverage_plan_processing_fee",    document.getElementById('coverage_plan_processing_fee').value);
+				coverageData.append("coverage_plan_premium",     		document.getElementById('coverage_plan_premium').value);
+			}
+		});
+    	}
+     function coverage_mark_new_submit()
+     {
+     	$('body').on('click','.coverage-mark-new-submit',function()  
+		{
+			globals.global_submit('coverage-details','/settings/coverage/mark_new_submit',coverageData);
+        	});
+     }
 	
 }
 

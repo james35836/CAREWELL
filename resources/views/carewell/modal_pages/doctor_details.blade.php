@@ -61,6 +61,7 @@
 					<table class="table table-hover table-bordered specialization-table">
 						<tr>
 							<th>PROVIDER NAME</th>
+							<th>STATUS</th>
 							<th class="col-md-1 col-xs-2"><button data-doctor_id = "{{$doctor_details->doctor_id}}" class="btn-primary btn btn-sm add-doctor-provider"><i class="fa fa-plus"></i> ADD PROVIDER</button></th>
 						</tr>
 						@foreach($_doctor_provider as $doctor_provider)

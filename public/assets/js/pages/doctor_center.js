@@ -156,7 +156,7 @@ function doctor_center()
 		$('body').on('click','.add-doctor-submit',function()  
 		{
 			globals.global_submit('doctor','/doctor/add_doctor/submit',doctorData);
-        });
+        	});
 		
 	}
 	function view_doctor_details()

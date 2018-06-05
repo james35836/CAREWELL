@@ -1,15 +1,16 @@
 <script type="text/javascript">
 $(function ()
 {
-$("#cal_reveneu_period_year").datepicker({
-format: "yyyy",
-viewMode: "years",
-minViewMode: "years"
-});
-$('.datepicker').datepicker(
-{
-autoclose: true
-});
+    $("#cal_reveneu_period_year").datepicker(
+    {
+        format: "yyyy",
+        viewMode: "years",
+        minViewMode: "years"
+    });
+    $('.datepicker').datepicker(
+    {
+    autoclose: true
+    });
 });
 </script>
 <div class=" row box-globals">

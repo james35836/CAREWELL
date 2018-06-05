@@ -174,7 +174,7 @@ function globals()
 	{
 		$('.confirm-modal').remove();
 		$('.append-modal').append(confirmModals);
-        $('.confirm-modal-dialog').removeClass().addClass('modal-dialog modal-sm');
+        	$('.confirm-modal-dialog').removeClass().addClass('modal-dialog modal-sm');
 		$('.confirm-modal-title').html(confirmModalMessage);
 		$('.confirm-submit').addClass(confirmModalAction);
 		$('.confirm-modal').modal('show');

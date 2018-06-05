@@ -926,4 +926,18 @@ class StaticFunctionController extends Controller
         $member_cut['member_id']          = $member_id;
         TblCalPaymentModel::insert($member_cut);
     }
+    public static function coverage_plan_mark_new($new_coverage_plan_id,$coverage_plan_id)
+    {
+        $_coverage_procedure = TblCoveragePlanProcedureModel::where('coverage_plan_id',$coverage_plan_id)->get();
+        foreach($_coverage_procedure as $coverage_procedure)
+        {
+            $insert['procedure_id']         = $coverage_procedure->procedure_id;
+            $insert['availment_id']         = $coverage_procedure->availment_id;
+            $insert['plan_charges']         = $coverage_procedure->plan_charges;
+            $insert['plan_covered_amount']  = $coverage_procedure->plan_covered_amount;
+            $insert['plan_limit']           = $coverage_procedure->plan_limit;
+            $insert['coverage_plan_id']     = $new_coverage_plan_id;
+            TblCoveragePlanProcedureModel::insert($insert);
+        }
+    }
 }
