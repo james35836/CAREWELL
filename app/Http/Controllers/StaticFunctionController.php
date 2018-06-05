@@ -36,6 +36,7 @@ use App\Http\Model\TblMemberGovernmentCardModel;
 
 
 use App\Http\Model\TblAvailmentModel;
+use App\Http\Model\TblApprovalProcedureModel;
 
 use App\Http\Model\TblCoveragePlanModel;
 use App\Http\Model\TblCoveragePlanTagModel;
@@ -96,14 +97,48 @@ class StaticFunctionController extends Controller
         return "<div class='alert alert-".$class."' style='text-align: center;'>".$message."!</div>";
     }
 
+    public function getCheckProcedureAmount(Request $request)
+    {
+        $member_id          = $request->member_id;
+        $carewell_charges   = $request->carewell;
+        $procedure_id       = $request->procedure;
+        $availment_id       = $request->availment_id;
 
+        $sum                = 0;
+    
+        $member             = TblMemberCompanyModel::where('tbl_member_company.member_id',$member_id)->CompanyMember()->first();
+        $procedure_covered  = TblCoveragePlanProcedureModel::where('procedure_id',$procedure_id)->where('availment_id',$availment_id)->where('coverage_plan_id',$member->coverage_plan_id)->value('plan_covered_amount'); 
+        
+
+
+        $_approval          = TblApprovalModel::where('member_id',$member_id)->get();
+        foreach($_approval as $approval)
+        {
+            $_procedure         = TblApprovalProcedureModel::where('approval_id',$approval->approval_id)->where('procedure_id',$procedure_id)->get();
+            
+            if($_procedure!=null)
+            {
+                foreach($_procedure as $procedure)
+                {
+                    $sum = $sum + $procedure->procedure_charge_carewell;
+                }
+            }
+        }
+
+        // if($sum > $procedure_covered)
+        // {
+        //     dd('up');
+        // }
+        // else
+        // {
+        //     dd('down');
+        // }
+    }
     public function getCompanyInfo(Request $request)
     {
         if($request->ajax())
         {
-            $data['_coverage']  = TblCompanyCoveragePlanModel::where('tbl_company_coverage_plan.company_id',$request->value)
-                                  ->join('tbl_coverage_plan','tbl_coverage_plan.coverage_plan_id','=','tbl_company_coverage_plan.coverage_plan_id')
-                                  ->get();
+            $data['_coverage']  = TblCompanyCoveragePlanModel::where('tbl_company_coverage_plan.company_id',$request->value)->CoveragePlan()->get();
             $data['_coverage_list'] = '<option value="0">-SELECT COVERAGE PLAN-';
             foreach($data['_coverage'] as $coverage)
             {
@@ -126,11 +161,8 @@ class StaticFunctionController extends Controller
         if($request->ajax())
         {
             $provider                   = TblProviderModel::where('provider_id',$request->provider_id)->first();
-            $data['_provider_doctor']   = TblDoctorProviderModel::where('tbl_doctor_provider.provider_id',$request->provider_id)
-                                        ->join('tbl_doctor','tbl_doctor.doctor_id','=','tbl_doctor_provider.doctor_id')
-                                        ->where('tbl_doctor_provider.archived',0)
-                                        ->get();
-            $data['_provider_doctors'] = '<option>-SELECT DOCTOR-';
+            $data['_provider_doctor']   = TblDoctorProviderModel::where('tbl_doctor_provider.provider_id',$request->provider_id)->where('tbl_doctor_provider.archived',0)->DoctorProvider()->get();
+            $data['_provider_doctors']  = '<option>-SELECT DOCTOR-';
             foreach($data['_provider_doctor'] as $provider_doctor)
             {
                 $data['_provider_doctors']     .= '<option value='.$provider_doctor->doctor_id.'>'.$provider_doctor->doctor_full_name;
@@ -559,64 +591,64 @@ class StaticFunctionController extends Controller
 
         foreach($data['new_member'] as $new_member)
         {
-          $member['member_first_name']        =   $new_member->member_first_name;
-          $member['member_middle_name']       =   $new_member->member_middle_name;
-          $member['member_last_name']         =   $new_member->member_last_name;
-          $member['member_birthdate']         =   date('d-m-Y', strtotime($new_member->member_birthdate));  
-          $member['member_gender']            =   "N/A";
-          $member['member_marital_status']    =   "N/A";
-          $member['member_mother_maiden_name']=   "N/A";
-          $member['member_permanet_address']  =   "N/A";
-          $member['member_present_address']   =   "N/A";
-          $member['member_contact_number']    =   "N/A";
-          $member['member_email_address']     =   "N/A";
-          $member['member_created']           =   Carbon::now();
-          $member['member_universal_id']      =   StaticFunctionController::generateUniversalId($member['member_first_name']." ".$member['member_middle_name']." ".$member['member_last_name'],$member['member_birthdate']);
-          $member_id                          =   TblMemberModel::insertGetId($member);
+            $member['member_first_name']        =   $new_member->member_first_name;
+            $member['member_middle_name']       =   $new_member->member_middle_name;
+            $member['member_last_name']         =   $new_member->member_last_name;
+            $member['member_birthdate']         =   date('d-m-Y', strtotime($new_member->member_birthdate));  
+            $member['member_gender']            =   "N/A";
+            $member['member_marital_status']    =   "N/A";
+            $member['member_mother_maiden_name']=   "N/A";
+            $member['member_permanet_address']  =   "N/A";
+            $member['member_present_address']   =   "N/A";
+            $member['member_contact_number']    =   "N/A";
+            $member['member_email_address']     =   "N/A";
+            $member['member_created']           =   Carbon::now();
+            $member['member_universal_id']      =   StaticFunctionController::generateUniversalId($member['member_first_name']." ".$member['member_middle_name']." ".$member['member_last_name'],$member['member_birthdate']);
+            $member_id                          =   TblMemberModel::insertGetId($member);
 
-          $dependent['dependent_full_name']   =   "N/A";
-          $dependent['dependent_birthdate']   =   "N/A";
-          $dependent['dependent_relationship']=   "N/A";
-          $dependent['member_id']             =   $member_id;
-          TblMemberDependentModel::insert($dependent);
+            $dependent['dependent_full_name']   =   "N/A";
+            $dependent['dependent_birthdate']   =   "N/A";
+            $dependent['dependent_relationship']=   "N/A";
+            $dependent['member_id']             =   $member_id;
+            TblMemberDependentModel::insert($dependent);
 
-          $government['government_card_philhealth'] =   "N/A";
-          $government['government_card_sss']        =   "N/A";
-          $government['government_card_tin']        =   "N/A";
-          $government['government_card_hdmf']       =   "N/A";
-          $government['member_id']                  =   $member_id;
-          TblMemberGovernmentCardModel::insert($government);
+            $government['government_card_philhealth'] =   "N/A";
+            $government['government_card_sss']        =   "N/A";
+            $government['government_card_tin']        =   "N/A";
+            $government['government_card_hdmf']       =   "N/A";
+            $government['member_id']                  =   $member_id;
+            TblMemberGovernmentCardModel::insert($government);
           
-          $company['member_carewell_id']        =   StaticFunctionController::generateCarewellId($companyData->company_code);
-          $company['member_employee_number']    =   "000000";
-          $company['member_company_status']     =   "N/A";
-          $company['member_transaction_date']   =   Carbon::now();
-          $company['coverage_plan_id']          =   $new_member->coverage_plan_id;
-          $company['deployment_id']             =   $new_member->deployment_id;
-          $company['member_id']                 =   $member_id;
-          $company['company_id']                =   $companyData->company_id;
-          $company['member_payment_mode']       =   'SEMI-MONTHLY';
-          TblMemberCompanyModel::insert($company);
+            $company['member_carewell_id']        =   StaticFunctionController::generateCarewellId($companyData->company_code);
+            $company['member_employee_number']    =   "000000";
+            $company['member_company_status']     =   "N/A";
+            $company['member_transaction_date']   =   Carbon::now();
+            $company['coverage_plan_id']          =   $new_member->coverage_plan_id;
+            $company['deployment_id']             =   $new_member->deployment_id;
+            $company['member_id']                 =   $member_id;
+            $company['company_id']                =   $companyData->company_id;
+            $company['member_payment_mode']       =   'SEMI-MONTHLY';
+            TblMemberCompanyModel::insert($company);
 
-          $cal_member['cal_payment_amount']     =   $new_member->cal_payment_amount;
-          $cal_member['cal_payment_date']       =   Carbon::now();
-          $cal_member['cal_payment_count']      =   $new_member->cal_payment_count;
-          $cal_member['member_id']              =   $member_id;
-          $cal_member['cal_id']                 =   $cal_id;
-          $cal_member_id = TblCalMemberModel::insertGetId($cal_member);
+            $cal_member['cal_payment_amount']     =   $new_member->cal_payment_amount;
+            $cal_member['cal_payment_date']       =   Carbon::now();
+            $cal_member['cal_payment_count']      =   $new_member->cal_payment_count;
+            $cal_member['member_id']              =   $member_id;
+            $cal_member['cal_id']                 =   $cal_id;
+            $cal_member_id = TblCalMemberModel::insertGetId($cal_member);
           
-          $data['new_cal_member'] = TblNewCalMemberModel::where('new_member_id',$new_member->new_member_id)->get();
+            $data['new_cal_member'] = TblNewCalMemberModel::where('new_member_id',$new_member->new_member_id)->get();
             
             foreach($data['new_cal_member'] as $new_cal_member)
             {
-              $member_cut['cal_payment_start']  = $new_cal_member->cal_payment_start;
-              $member_cut['cal_payment_end']    = $new_cal_member->cal_payment_end;
-              $member_cut['cal_payment_type']   = 'ORIGINAL';
-              $member_cut['cal_member_id']      = $cal_member_id;
-              $member_cut['member_id']          = $member_id;
-              $member_cut['archived']           = $status;
+                $member_cut['cal_payment_start']  = $new_cal_member->cal_payment_start;
+                $member_cut['cal_payment_end']    = $new_cal_member->cal_payment_end;
+                $member_cut['cal_payment_type']   = 'ORIGINAL';
+                $member_cut['cal_member_id']      = $cal_member_id;
+                $member_cut['member_id']          = $member_id;
+                $member_cut['archived']           = $status;
 
-              TblCalPaymentModel::insert($member_cut);
+                TblCalPaymentModel::insert($member_cut);
             }
 
             TblNewMemberModel::where('new_member_id',$new_member->new_member_id)->delete();
@@ -793,12 +825,6 @@ class StaticFunctionController extends Controller
         $session = Session::get('exportWarning');
         if($session!=null)
         {
-            Self::get_warning($session);
-        }
-        
-    }
-    public static function get_warning($session)
-    {
             $excels['_member'] = $session;
             $excels['data']  =   ['LAST NAME','FIRST NAME','MIDDLE NAME','TYPE'];
             Excel::create('CAREWELL WARNING DATA', function($excel) use ($excels) 
@@ -820,6 +846,13 @@ class StaticFunctionController extends Controller
 
                 });
             })->download('xlsx');
+        }
+        
+    }
+    public function forgetSession(Request $request)
+    {
+        Session::forget($request->session);
+        return "done";
     }
     public static function paymentDateComputation($member_id,$cal_member_id,$payment_count,$payment_mode)
     {

@@ -33,7 +33,8 @@ class TblApprovalModel extends Model
  	public function scopeAvailmentHistory($query)
  	{
  		$query	->join('tbl_provider','tbl_provider.provider_id','=','tbl_approval.provider_id')
-                ->join('tbl_availment','tbl_availment.availment_id','=','tbl_approval.availment_id');
+                ->join('tbl_availment','tbl_availment.availment_id','=','tbl_approval.availment_id')
+                ->join('tbl_diagnosis','tbl_diagnosis.diagnosis_id','=','tbl_approval.charge_diagnosis_id');
  		return $query;
  	}
 }

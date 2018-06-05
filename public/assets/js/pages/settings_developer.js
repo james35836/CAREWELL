@@ -26,13 +26,13 @@ function settings_developer()
 	{
 		$("body").on('click','.developer-modals',function()
 		{
-			var company_id = $(this).data('company_id');
-			var modalName= 'MAINTENANCE MODAL';
-			var modalClass='developer';
-			var modalLink='/settings/maintenance_modal';
-			var modalActionName='SUBMIT';
-			var modalAction='developer-modals-submit';
-			var modalSize = 'modal-import';
+			var company_id 	= $(this).data('company_id');
+			var modalName 		= 'MAINTENANCE MODAL';
+			var modalClass 	= 'developer';
+			var modalLink 		= '/settings/maintenance_modal';
+			var modalActionName = 'SUBMIT';
+			var modalAction 	= 'developer-modals-submit';
+			var modalSize 		= 'modal-import';
 			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
 		});
 	}

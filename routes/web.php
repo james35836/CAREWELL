@@ -15,20 +15,20 @@ Route::get('/downloadExcel/{type}', 'TestController@downloadExcel');
 Route::post('/importExcel', 'TestController@importExcel');
 
 Route::get('/testing', 					    			'TestController@testing');
-Route::get('/testing_excel', 			    			'TestController@testing_excel');
+Route::get('/testing_excel', 			    				'TestController@testing_excel');
 Route::get('/testing_excel2', 			    			'TestController@testing_excel2');
-Route::get('/sample',									'TestController@sample');	
-Route::post('/samples',									'TestController@sample_submit');
+Route::get('/sample',								'TestController@sample');	
+Route::post('/samples',								'TestController@sample_submit');
 
-Route::get('/export_pdf',								'TestController@export_pdf');
+Route::get('/export_pdf',							'TestController@export_pdf');
 
 /*LOGIN*/
-Route::get('/', 										'FrontController@login');
-Route::get('/login', 									'FrontController@login');
+Route::get('/', 									'FrontController@login');
+Route::get('/login', 								'FrontController@login');
 Route::post('/login_submit', 							'FrontController@login_submit');
-Route::get('/logout', 									'FrontController@logout');
+Route::get('/logout', 								'FrontController@logout');
 
-Route::get('/reset/password', 							'FrontController@reset_password');
+Route::get('/reset/password', 						'FrontController@reset_password');
 
 Route::post('/reset/password/submit', 					'FrontController@reset_password_submit');
 
@@ -37,12 +37,20 @@ Route::post('/reset/password/submit', 					'FrontController@reset_password_submi
 Route::any('/get/company_info', 						'StaticFunctionController@getCompanyInfo');
 Route::any('/get/provider_info', 						'StaticFunctionController@getProviderInfo');
 Route::any('/get/availment_info', 						'StaticFunctionController@getAvailmentInfo');
+Route::any('/get/check_procedure_amount', 				'StaticFunctionController@getCheckProcedureAmount');
+
+
+
+
 Route::any('/get/doctor_specialty', 					'StaticFunctionController@getDoctorSpecialty');
 Route::any('/get/export/warning',                           'StaticFunctionController@getExportWarning');
+
+
+Route::post('/forgetSession',                                 'StaticFunctionController@forgetSession');
 /*FILETERING*/
 
-Route::post('/page/filtering', 							'SearchController@pageFiltering');
-Route::post('/page/searching', 							'SearchController@pageSearching');
+Route::post('/page/filtering', 						'SearchController@pageFiltering');
+Route::post('/page/searching', 						'SearchController@pageSearching');
 
 
 /*USER*/
@@ -51,14 +59,14 @@ Route::get('/user/view_profile', 						'UserController@user_view_profile');
 Route::POST('/user/save_profile', 						'UserController@user_save_profile');
 
 Route::get('/user/change_password', 					'UserController@user_change_password');
-Route::POST('/user/change_password/submit', 			'UserController@user_change_password_submit');
+Route::POST('/user/change_password/submit', 				'UserController@user_change_password_submit');
 
 
 /*ADMIN*/
-Route::get('/settings/admin', 							'AdminController@admin_center');
+Route::get('/settings/admin', 						'AdminController@admin_center');
 Route::get('/admin/create_user', 						'AdminController@admin_create_user');
 Route::POST('/admin/create_user/submit', 				'AdminController@admin_create_user_submit');
-Route::get('/admin/view_user_details/{user_id}', 		'AdminController@admin_view_user_details');
+Route::get('/admin/view_user_details/{user_id}', 			'AdminController@admin_view_user_details');
 
 Route::get('/settings/maintenance', 				    'AdminController@settings_maintenance');
 Route::get('/settings/maintenance_modal', 				'AdminController@settings_maintenance_modal');

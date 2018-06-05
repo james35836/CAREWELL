@@ -1,8 +1,6 @@
 @extends('carewell.layout.layout')
 @section('content')
-<div class="row" style="padding:20px;">
-    <h3>{{$page}}</h3>
-</div>
+
 <div class="container" >
     <div class="row">
         

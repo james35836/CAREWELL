@@ -427,6 +427,11 @@ class CarewellController extends ActiveAuthController
 		{
 			$data['_payment_history'][$key]['amount'] = $payment->cal_payment_amount/$payment->cal_payment_count;
 		}
+		foreach($data['_availment_history'] as $key=>$availment_history)
+		{
+			$data['_availment_history'][$key]['charge_carewell_doctor'] 	= TblApprovalTotalModel::where('approval_id',$availment_history->approval_id)->where('total_type','doctor')->value('total_charge_carewell');
+			$data['_availment_history'][$key]['charge_carewell_procedure'] 	= TblApprovalTotalModel::where('approval_id',$availment_history->approval_id)->where('total_type','doctor')->value('total_charge_carewell');
+		}
 		return view('carewell.modal_pages.member_transaction_details',$data);
 	}
 	public function member_import_member(Request $request)

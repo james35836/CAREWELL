@@ -141,11 +141,11 @@ function member_center()
 	{
 		$('body').on('click','.transaction-details',function()
 		{
-			var member_id = $(this).data('transaction_member_id');
+			var member_id = $(this).data('member_id');
 			var modalName= 'MEMBER TRANSACTION DETAILS';
 			var modalClass='member-transaction-details';
 			var modalLink='/member/transaction_details/'+member_id;
-			var modalActionName='SAVE CHANGES';
+			var modalActionName='none';
 			var modalAction='confirm';
 			var modalSize = 'modal-md';
 			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);

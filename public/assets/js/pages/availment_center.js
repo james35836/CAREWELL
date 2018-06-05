@@ -20,9 +20,8 @@ function availment_center()
             	create_approval_get_info();
             	create_approval_confirm();
             	create_approval_submit();
-            	availment_transaction_details();
             	approval_details();
-        });
+        	});
 
 	}
 	this.get_total = function($this)
@@ -53,6 +52,26 @@ function availment_center()
 		$this.find('input.total_charge_patient').val(patient);
 		$this.find('input.total_charge_carewell').val(carewell);
 
+	}
+	this.check_procedure_amount = function(carewell,member_id,procedure,availment_id)
+	{
+		var carewell 		= carewell.val();
+		var procedure 		= procedure.val();
+		var member_id 		= member_id;
+		var availment_id 	= availment_id;
+		$.ajax({
+			headers: {
+			      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			},
+
+			url:'/get/check_procedure_amount',
+			data:{member_id: member_id,carewell:carewell},
+			method: "POST",
+            	success: function(data)
+			{
+				toastr.error('Please check the amount distribution.', 'Something went wrong!', {timeOut: 3000})
+			}
+		});
 	}
 	
 	function create_approval()
@@ -115,8 +134,8 @@ function availment_center()
 						$('.company_name').val('');
 						$('.get-availment-info').html('SELECT AVAILMENT');
 						$('.member_list').html(data.member_list);
-						$('.availment-transaction-details').data('member_id','');
-						$('.availment-transaction-details').attr("disabled", "true");
+						$('.transaction-details').data('member_id','');
+						$('.transaction-details').attr("disabled", "true");
 					}
 					else
 					{
@@ -131,8 +150,8 @@ function availment_center()
 						$('.company_name').val(data.company_name);
 						$('.get-availment-info').html(data.availment_list);
 						$('.member_list').html(data.member_list);
-						$('.availment-transaction-details').data('member_id',data.member_id);
-						$('.availment-transaction-details').removeAttr("disabled");
+						$('.transaction-details').data('member_id',data.member_id);
+						$('.transaction-details').removeAttr("disabled");
 				    }
 					
 				}
@@ -152,7 +171,7 @@ function availment_center()
 				url:'/get/provider_info',
 				data:{provider_id: provider_id},
 				method: "POST",
-	            success: function(data)
+	            	success: function(data)
 				{
 					$('.doctorList').html(data.first);
 					$('.doctor-payee').html(data.first);
@@ -182,7 +201,7 @@ function availment_center()
 					data:{availment_id:availment_id,member_id:member_id},
 					method: "POST",
 
-		            success: function(data)
+		            	success: function(data)
 					{
 						$('.procedureList').html(data);
 					}
@@ -281,22 +300,7 @@ function availment_center()
 	        	});
 	     });
 	}
-	function availment_transaction_details()
-	{
-		$("body").on('click','.availment-transaction-details',function()
-		{
-			var member_id 		= $(this).data('member_id');
-			var modalName 		= 'TRANSACTION DETAILS';
-			var modalClass 	= 'approval-transaction';
-			var modalLink  	= '/member/transaction_details/'+member_id;
-			var modalActionName = 'SAVE CHANGES';
-			var modalAction 	= 'create-approval-confirm';
-			var modalSize  	= 'modal-md';
-			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
-        });
-		
 	
-	}
 	function approval_details()
 	{
 		$("body").on('click','.view-approval-details',function()

@@ -19,10 +19,10 @@ $(document).ready(function()
 	{
 		
 		var value 		= $(this).val();
-		var $amount 	= $(this).parents('tr').find('.gross-amount');
-		var $philhealth = $(this).parents('tr').find('.philhealth');
-		var $patient 	= $(this).parents('tr').find('.charge-patient');
-		var $carewell 	= $(this).parents('tr').find('.charge-carewell');
+		var $amount 		= $(this).parents('tr').find('.gross-amount');
+		var $philhealth 	= $(this).parents('tr').find('.philhealth');
+		var $patient 		= $(this).parents('tr').find('.charge-patient');
+		var $carewell 		= $(this).parents('tr').find('.charge-carewell');
 
 		$philhealth.val('0');
 		$patient.val('0');
@@ -33,19 +33,22 @@ $(document).ready(function()
 	});
 	$('body').on('change','.philhealth',function()
 	{
-		var new_carewell = 0;
-		var value = $(this).val();
-		
-		var $amount 	= $(this).parents('tr').find('.gross-amount');
-		var $patient 	= $(this).parents('tr').find('.charge-patient');
-		var $carewell 	= $(this).parents('tr').find('.charge-carewell');
-		new_carewell = parseInt($amount.val())-(parseInt(value)+parseInt($patient.val()));
+		var $member_id    	= $('#member_id').val();
+		var $availment_id   = $('#availment_id').val();
+		var new_carewell 	= 0;
+		var value 		= $(this).val();
+	     var $procedure 	= $(this).parents('tr').find('.procedureList');
+		var $amount 		= $(this).parents('tr').find('.gross-amount');
+		var $patient 		= $(this).parents('tr').find('.charge-patient');
+		var $carewell 		= $(this).parents('tr').find('.charge-carewell');
+		new_carewell 		= parseInt($amount.val())-(parseInt(value)+parseInt($patient.val()));
 		
 		if (new_carewell >=0)
 		{
 			$carewell.val(new_carewell);
 			var $this 		= $(this).closest('div.box-globals');
 			availment_center.get_total($this);
+			availment_center.check_procedure_amount($carewell,$member_id,$procedure,$availment_id);
 		}
 		else
 		{
@@ -141,7 +144,7 @@ $(document).ready(function()
 			</div>
 			<div class="form-holder">
 				<div class="pull-right multiple-button-holder">
-					<button type="button" class="btn btn-warning button-lg availment-transaction-details" disabled><i class="fa fa-upload btn-icon"></i> TRANSACTION DETAILS</button>
+					<button type="button" class="btn btn-warning button-lg transaction-details" disabled><i class="fa fa-upload btn-icon"></i> TRANSACTION DETAILS</button>
 				</div>
 			</div>
 		</div>

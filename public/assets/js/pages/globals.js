@@ -126,7 +126,7 @@ function globals()
 		$('.global-ajax-loader').show();
         	$('.global-modal-body-content').hide();
         	$('.global-modal-footer').hide();
-
+          
         	$.ajax({
 				headers: {
 				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -137,7 +137,7 @@ function globals()
 	               success: function(data)
 	               {
 					setTimeout(function()
-					{   
+					{  
 						$('.global-ajax-loader').hide().removeClass().addClass('.modal-loader '+modalClass+'-ajax-loader');
 						$('.global-modal-body-content').show().removeClass().addClass('row box-holder  modal-body-content').html(data);
 						if(modalSize=="modal-import")
@@ -201,7 +201,7 @@ function globals()
 			url:link,
 			data:{value: value},
 			method: "POST",
-            success: function(data)
+            	success: function(data)
 			{
 				if(val=='val')
 				{
@@ -224,7 +224,7 @@ function globals()
 			url:link,
 			data:{value: value},
 			method: "POST",
-            success: function(data)
+            	success: function(data)
 			{
 				$(showId).html(data.first);
 				$(showId2).html(data.second);
@@ -234,20 +234,20 @@ function globals()
 	this.global_submit = function(modalName,submitLink,submitData)
 	{
 		$('.confirm-modal').remove();
-        $("."+modalName+"-modal-body").html("<div class='"+modalName+"-ajax-loader' style='display:none;text-align: center; padding:50px;'><img src='/assets/loader/loading.gif'/></div");
-        $("."+modalName+"-ajax-loader").show();
+        	$("."+modalName+"-modal-body").html("<div class='"+modalName+"-ajax-loader' style='display:none;text-align: center; padding:50px;'><img src='/assets/loader/loading.gif'/></div");
+        	$("."+modalName+"-ajax-loader").show();
         
-        $.ajax({
+        	$.ajax({
 			headers: {
 			      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 			},
 			url:submitLink,
 			method: "POST",
-            data: submitData,
-            contentType:false,
-            cache:false,
-            processData:false,
-            success: function(data)
+            	data: submitData,
+            	contentType:false,
+            	cache:false,
+            	processData:false,
+            	success: function(data)
 			{
 				setTimeout(function()
 				{
@@ -262,9 +262,9 @@ function globals()
 	this.global_single_submit = function (modalLink,modalData,tdCloser)
 	{
 		$(".confirm-modal-body").html("<div class='confirm-ajax-loader' style='display:none;text-align: center; padding:50px;'><img src='/assets/loader/loading.gif'/></div");
-	    $(".confirm-ajax-loader").show();
-	    $('.confirm-modal-title').html("MESSAGE");
-	    $(".confirm-modal-footer").html('');
+	    	$(".confirm-ajax-loader").show();
+	    	$('.confirm-modal-title').html("MESSAGE");
+	    	$(".confirm-modal-footer").html('');
 
 			$.ajax({
 				headers: {
@@ -272,12 +272,12 @@ function globals()
 				},
 				url:modalLink,
 				method: "POST",
-		        data: modalData,
-		        contentType:false,
-	            cache:false,
-	            processData:false,
+		        	data: modalData,
+		        	contentType:false,
+	            	cache:false,
+	            	processData:false,
 				success: function(data)
-                {
+                	{
 					setTimeout(function()
 					{
 						
@@ -293,18 +293,18 @@ function globals()
 	this.global_submit_serialized = function(modalName,submitLink,submitData)
 	{
 		$('.confirm-modal').remove();
-        $("."+modalName+"-modal-body").html("<div class='"+modalName+"-ajax-loader' style='display:none;text-align: center; padding:50px;'><img src='/assets/loader/loading.gif'/></div");
-        $("."+modalName+"-ajax-loader").show();
+        	$("."+modalName+"-modal-body").html("<div class='"+modalName+"-ajax-loader' style='display:none;text-align: center; padding:50px;'><img src='/assets/loader/loading.gif'/></div");
+        	$("."+modalName+"-ajax-loader").show();
         
-        $.ajax({
+        	$.ajax({
 			headers: {
 			      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 			},
 			url:submitLink,
 			method: "POST",
-            data: submitData,
-            dataType:"text",
-            success: function(data)
+            	data: submitData,
+            	dataType:"text",
+            	success: function(data)
 			{
 				setTimeout(function()
 				{
@@ -319,20 +319,20 @@ function globals()
 	this.global_archived_data = function(archived_param,string_param)
 	{
 		$(".confirm-modal-body").html('<h1 style="text-align:center;"><i class="fa fa-spinner fa-pulse fa-fw"></i></h1>');
-        $(".confirm-ajax-loader").show();
-        $('.confirm-modal-title').html("Message");
-        $.ajax({
+        	$(".confirm-ajax-loader").show();
+        	$('.confirm-modal-title').html("Message");
+        	$.ajax({
 			headers: {
 			      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 			},
 			url:'/archived/submit',
 			method: "POST",
-	        data: archived_param,
-	        contentType:false,
-            cache:false,
-            processData:false,
+	        	data: archived_param,
+	        	contentType:false,
+            	cache:false,
+            	processData:false,
 			success: function(data)
-            {
+            	{
 				setTimeout(function()
 				{
 					$(".confirm-ajax-loader").remove();
@@ -348,20 +348,20 @@ function globals()
 	this.global_restore_data = function(restore_param,string_param)
 	{
 		$(".confirm-modal-body").html('<h1 style="text-align:center;"><i class="fa fa-spinner fa-pulse fa-fw"></i></h1>');
-        $(".confirm-ajax-loader").show();
-        $('.confirm-modal-title').html("Message");
-        $.ajax({
+        	$(".confirm-ajax-loader").show();
+        	$('.confirm-modal-title').html("Message");
+        	$.ajax({
 			headers: {
 			      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 			},
 			url:'/restore/submit',
 			method: "POST",
-	        data: restore_param,
-	        contentType:false,
-            cache:false,
-            processData:false,
+	        	data: restore_param,
+	        	contentType:false,
+            	cache:false,
+            	processData:false,
 			success: function(data)
-            {
+            	{
 				setTimeout(function()
 				{
 					$(".confirm-ajax-loader").remove();
@@ -377,7 +377,7 @@ function globals()
 	this.option_modal  = function(modalClass,modalAction,modalRef)
 	{
 		$('.'+modalClass).remove();
-        $(".append-modal").append(globalModals);
+        	$(".append-modal").append(globalModals);
 		$('.global-modal').removeClass().addClass('modal fade modal-top '+modalClass);
 		$('.global-modal-dialog').removeClass().addClass('modal-dialog modal-sm');
 		$('.global-modal-content').removeClass().addClass('modal-content');
@@ -387,9 +387,9 @@ function globals()
 		$('.global-modal-body').removeClass().addClass('modal-body');
 		$('.'+modalClass).modal('show');
 		$('.global-ajax-loader').show();
-        $('.global-modal-body-content').hide();
-        $('.global-modal-footer').hide();
-        setTimeout(function()
+        	$('.global-modal-body-content').hide();
+        	$('.global-modal-footer').hide();
+        	setTimeout(function()
 		{
 
 			$('.global-ajax-loader').hide().removeClass().addClass('.modal-loader');
@@ -402,8 +402,8 @@ function globals()
 				$('.global-modal-body-content').show().removeClass().addClass('row box-holder  modal-body-content').html(dataOptionModals);
 			}
 			$('.global-modal-footer').show().removeClass().addClass('modal-footer');
-        	$('.global-footer-button').html('ADD OPTION').removeClass().addClass('btn btn-primary '+modalAction);
-        }, 1000);
+        		$('.global-footer-button').html('ADD OPTION').removeClass().addClass('btn btn-primary '+modalAction);
+        	}, 1000);
 	}
 	this.global_input_email = function(inputs)
 	{
@@ -422,9 +422,9 @@ function globals()
 	}
 	this.toLocation = function(url) 
      {
-        var a = document.createElement('a');
-        a.href = url;
-        return a;
+        	var a = document.createElement('a');
+        	a.href = url;
+        	return a;
      };
 
 	this.checkArrayValue = function(value,arr)
@@ -500,66 +500,63 @@ function globals()
         	enable_element();
 
         	
-    }
-    function enable_element()
-    {
-    	$('body').on('click','button.enable-element',function()
+    	}
+    	function enable_element()
     	{
-    		$(this).closest('div.modal-body').find('input,select,textarea').removeAttr('readonly');
-    	});
-    }
-    function event_run_paginate()
+	    	$('body').on('click','button.enable-element',function()
+	    	{
+	    		$(this).closest('div.modal-body').find('input,select,textarea').removeAttr('readonly');
+	    	});
+    	}
+    	function event_run_paginate()
 	{
-        $('body').on('click', '.pagination a', function(e) 
-        {
-            e.preventDefault();
-            var href= $(this).data('href');
-            var url = paginate_ajax.toLocation(href);
-            var domain = url.protocol + "//" + url.hostname;
+        	$('body').on('click', '.pagination a', function(e) 
+        	{
+            	e.preventDefault();
+            	var href= $(this).data('href');
+            	var url = paginate_ajax.toLocation(href);
+            	var domain = url.protocol + "//" + url.hostname;
             
-            var load_data = $(this).closest('.load-data');
+            	var load_data = $(this).closest('.load-data');
             
-            load_data.find('tr').css('opacity', '0.2');
+            	load_data.find('tr').css('opacity', '0.2');
             
-            if (window.location.href.indexOf("https") != -1)
-            {
-                var url = $(this).attr('href').replace("http", "https");
-            }
-            else
-            {
-                var url = $(this).attr('href');
-            }
+            	if (window.location.href.indexOf("https") != -1)
+            	{
+                	var url = $(this).attr('href').replace("http", "https");
+            	}
+            	else
+            	{
+                	var url = $(this).attr('href');
+            	}
 
-            load_data.each(function() 
-            {
-                $.each(this.attributes, function() 
-                {
-                    if(this.specified && this.name != "class" && this.name != "style") 
-                    {
-                        url = href.replace(domain,'');
-                    }
-                });
-            });
-            getArticles(url, load_data);
-        });
+            	load_data.each(function() 
+            	{
+                	$.each(this.attributes, function() 
+                	{
+                    	if(this.specified && this.name != "class" && this.name != "style") 
+                    	{
+                        	url = href.replace(domain,'');
+                    	}
+                	});
+            	});
+            	getArticles(url, load_data);
+        	});
 	}
 
-    function getArticles(url, load_data) 
-    {
-        target = load_data.data("target");
-        console.log(target);
-        load_data.load(url+" div."+target, function()
-        {
-            if (typeof loading_done == 'function')
-            {
+    	function getArticles(url, load_data) 
+    	{
+        	target = load_data.data("target");
+        	console.log(target);
+        	load_data.load(url+" div."+target, function()
+        	{
+            	if (typeof loading_done == 'function')
+            	{
                 
-            }
-        })
-    }
-
-	
-	
-	function filtering()
+            	}
+        	})
+    	}
+    	function filtering()
 	{
 		$('body').on('change','.filtering',function()
 		{
@@ -575,10 +572,10 @@ function globals()
 				},
 				url:'/page/filtering',
 				method: "POST",
-		        data: filterData,
-		        contentType:false,
-	            cache:false,
-	            processData:false,
+		        	data: filterData,
+		        	contentType:false,
+	            	cache:false,
+	            	processData:false,
 				success: function(data)
 				{
 					table.html(data);
@@ -600,10 +597,10 @@ function globals()
 				},
 				url:'/page/searching',
 				method: "POST",
-		        data: searchData,
-		        contentType:false,
-	            cache:false,
-	            processData:false,
+		        	data: searchData,
+		        	contentType:false,
+	            	cache:false,
+	            	processData:false,
 				success: function(data)
 				{
 					table.html(data);

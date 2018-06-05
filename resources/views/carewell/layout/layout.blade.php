@@ -63,6 +63,21 @@
         {
         border-radius: none !important;
         }*/
+        @media screen and (min-width: 426px) 
+        {
+            .top-padding
+            {
+                padding-top: 60px;
+            }
+        }
+        @media screen and (max-width: 425px) 
+        {
+            .top-padding
+            {
+                padding-top: 110px;
+            }
+        }
+        
         </style>
         
     </head>
@@ -289,8 +304,11 @@
             <!-- /.sidebar -->
         </aside>
         <!-- CONTENT -->
-        <div class="content-wrapper">
+        <div class="content-wrapper" >
             <!-- Content Header (Page header) -->
+            <div class="top-padding">
+                
+            </div>
             <section class="content-header">
                 <h1>
                 {{$page}}
@@ -304,17 +322,20 @@
                     @endif
                 </ol>
             </section>
-            @if(Session::has('exportWarning'))
-            <div class="container">
-                please click here <a href="/get/export/warning">go</a>
+           {{--  @if(Session::has('exportWarning'))
+            <div class="container session-container">
+                <p>
+                We have detected a warning data,<br> Please Click Export
+                </p>
+                <div class="btn-group">
+                    <a href="/get/export/warning" class=""><button type="button" class="btn btn-primary btn-sm">EXPORT</i></button></a>
+                    <button type="button" id="forgetSession" data-session="exportWarning" class="btn btn-danger btn-sm">FORGET</button>
+
+                </div>
             </div>
             @else
-            {{-- <script>
-            $( function() {
-            toastr.error('There is a warning message, <br>Please Click Here!.', 'Something went wrong!', {timeOut: 10000})
-            });
-            </script> --}}
-            @endif
+            
+            @endif --}}
             <!-- Main content -->
             <section class="content">
                 
@@ -336,7 +357,7 @@
             <div class="pull-right hidden-xs">
                 <b>Carewell </b> HMO
             </div>
-            <strong>Allright reserved &copy; 2017 Powered by: <a href="#">DigimaHouse.com</a></strong>
+            <strong>Allright reserved &copy; 2018 Powered by: <a href="#">DigimaHouse.com</a></strong>
         </footer>
         <!-- Control Sidebar -->
         @include('plugin.control_sidebar')
@@ -392,40 +413,58 @@
     <script>
     $('body').on('hidden.bs.modal', function (e)
     {
-    if($('.modal').hasClass('in'))
-    {
-    $('body').addClass('modal-open');
-    }
-    else
-    {
-    $('div').removeClass('modal-backdrop');
-    $('.modal').remove();
-    }
+        if($('.modal').hasClass('in'))
+        {
+        $('body').addClass('modal-open');
+        }
+        else
+        {
+        $('div').removeClass('modal-backdrop');
+        $('.modal').remove();
+        }
     });
     $(document).ready(function()
     {
-    $('.select2').select2();
-    $('.datepicker').datepicker({autoclose: true});
-    $('body').on('click','li.treeview',function()
-    {
-    if($(this).hasClass('menu-open'))
-    {
-    $(this).closest('treeview').find('ul.treeview-menu').css('display','block');
-    }
-    });
-    $("body").find(".table tr td").find('button.btn-danger').css("margin-right","-4px");
+        $('.select2').select2();
+        $('.datepicker').datepicker({autoclose: true});
+        $('body').on('click','li.treeview',function()
+        {
+        if($(this).hasClass('menu-open'))
+        {
+        $(this).closest('treeview').find('ul.treeview-menu').css('display','block');
+        }
+        });
+        $("body").find(".table tr td").find('button.btn-danger').css("margin-right","-4px");
+        $('body').on('click','#forgetSession',function() 
+        {
+            var session = $(this).data('session');
+            $.ajax({
+                    headers: {
+                          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+
+                    url:'/forgetSession',
+                    data:{session:session},
+                    method: "POST",
+                    success: function(data)
+                    {
+                        $('.session-container').remove();
+                    }
+                });
+            
+        });
     });
     $(document).ajaxStart(function ()
     {
-    Pace.restart()
+        Pace.restart()
     })
     $('.ajax').click(function ()
     {
-    $.ajax({
-    url: '#', success: function (result) {
-    $('.ajax-content').html('<hr>Ajax Request Completed !')
-    }
-    })
+        $.ajax({
+            url: '#', success: function (result) {
+            $('.ajax-content').html('<hr>Ajax Request Completed !')
+            }
+        })
     })
     
     

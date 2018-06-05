@@ -4,7 +4,7 @@
 		<p>UNIVERSAL ID  : {{$member_details->member_universal_id}}</p>
 	</div>
 	<div class="col-md-4 pull-right">
-		<button type="button" data-transaction_member_id="{{$member_details->member_id}}" class="btn btn-primary button-lg transaction-details" ><i class="fa fa-info btn-icon"></i> TRANSACTION DETAILS</button>
+		<button type="button" data-member_id="{{$member_details->member_id}}" class="btn btn-primary button-lg transaction-details" ><i class="fa fa-info btn-icon"></i> TRANSACTION DETAILS</button>
 	</div>
 </div>
 <div class="row box-globals">

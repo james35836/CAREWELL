@@ -34,15 +34,17 @@
 				
 			</div>
 			<div id="availment" class="tab-pane fade">
-				<div class="box-body table-responsive no-padding">
+				<div class="table-responsive no-padding">
 					<table class="table table-hover table-bordered">
 						<thead>
 							<tr>
 								<th>Approval ID</th>
 								<th>Availment</th>
-								<th>Availment Amount</th>
-								<th>PF Amount</th>
+								<th>Charge to Carewell(PROCEDURE)</th>
+								<th>Charge to Carewell(PF)</th>
 								<th>Provider</th>
+								<th>Charge to Diagnosis</th>
+								<th>Balance</th>
 								<th>Date Availed</th>
 							</tr>
 						</thead>
@@ -51,9 +53,11 @@
 							<tr>
 								<td>{{$availment_history->approval_number}}</td>
 								<td>{{$availment_history->availment_name}}</td>
-								<td>30000</td>
-								<td>4500</td>
+								<td><span class="label label-warning">{{$availment_history->charge_carewell_procedure}}</span></td>
+								<td><span class="label label-info">{{$availment_history->charge_carewell_doctor}}</span></td>
 								<td>{{$availment_history->provider_name}}</td>
+								<td>{{$availment_history->diagnosis_name}}</td>
+								<td>10000</td>
 								<td>{{date("F j, Y",strtotime($availment_history->approval_created))}}</td>
 							</tr>
 							@endforeach
