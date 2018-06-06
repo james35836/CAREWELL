@@ -225,7 +225,7 @@
                 </form>
                 <ul class="sidebar-menu" data-widget="tree">
                     <li class="header">MAIN NAVIGATION</li>
-                    <li>
+                    <li style="background-color:#674172">
                         <a href="/dashboard">
                             <i class="fa fa-dashboard"></i> <span>DASHBOARD</span>
                         </a>
@@ -242,7 +242,7 @@
                             <li><a href="/settings/admin"><i class="fa fa-universal-access"></i>ADMIN PANEL</a></li>
                             <li><a href="/settings/coverage"><i class="fa fa-circle-o"></i>COVERAGE PLAN</a></li>
                             <li><a href="/settings/maintenance"><i class="fa fa-circle-o"></i>MAINTENANCE</a></li>
-                            <li >
+                            <li style="background-color:#00a65a">
                                 <a href="/provider">
                                     <i class="fa fa-hospital-o"></i> <span style="font-size:.9em;">PROVIDER CENTER</span>
                                 </a>
@@ -255,12 +255,12 @@
                         </ul>
                     </li>
                     
-                    <li>
+                    <li style="background-color:#C0392B">
                         <a href="/company">
                             <i class="fa fa-building-o"></i> <span>COMPANY CENTER</span>
                         </a>
                     </li>
-                    <li>
+                    <li style="background-color:#446CB3">
                         <a href="/member">
                             <i class="fa fa-user"></i> <span>MEMBER CENTER</span>
                         </a>

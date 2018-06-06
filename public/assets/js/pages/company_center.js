@@ -62,99 +62,110 @@ function company_center()
             	var countBenefits 	= document.getElementById('contract_benefits_name').files.length;
             	var check 		= globals.checkArrayValues($("select.coverage_plan_name"));
             	if(check=="Exist")
-               {
-               	toastr.error('Duplicated entry, Please check provider.', 'Something went wrong!', {timeOut: 3000});
-               }
-               else if(globals.checking_null_validation(document.getElementById('company_name').value,"COMPANY NAME")=="")
-			{}	
+               	{
+               		toastr.error('Duplicated entry, Please check provider.', 'Something went wrong!', {timeOut: 3000});
+               	}
+               	else if(globals.checking_null_validation(document.getElementById('company_code').value,"COMPANY CODE")=="")
+				{
+
+				}	
+               	else if(globals.checking_null_validation(document.getElementById('company_name').value,"COMPANY NAME")=="")
+				{
+
+				}	
 		    	else if(globals.checking_null_validation(document.getElementById('company_contact_number').value,"COMPANY CONTACT PERSON")=="")
-			{}
-			else if(globals.checking_null_validation(document.getElementById('company_email_address').value,"COMPANY EMAIL ADDRESS")=="")
-			{}	
-		   	else if(globals.global_input_email($('#company_email_address'))=="error")
+				{
+
+				}
+				else if(globals.checking_null_validation(document.getElementById('company_email_address').value,"COMPANY EMAIL ADDRESS")=="")
+				{
+
+				}	
+		   		else if(globals.global_input_email($('#company_email_address'))=="error")
 		    	{
 		    		toastr.error('Email is in a wrong format.', 'Something went wrong!', {timeOut: 3000})
 		    	}
-			else if(globals.checking_null_validation(document.getElementById('company_address').value,"COMPANY ADDRESS")=="")
-			{}
-		    else if(countContract == 0)
-			{
-				globals.global_tostr('CONTACT IMAGE');
-			}
-			else if(countBenefits == 0)
-			{
-				globals.global_tostr('BENEFITS  IMAGE');
-			}
-			else
-			{
-				$('input[name="deployment_name[]"]').each(function(i, dep)
-	            	{
-		            	if($(dep).val()!="")
-		            	{
-		            		deploymentData.push(this.value);
-		            	}
-	            	});
-	            	if(deploymentData==null||deploymentData=="")
+				else if(globals.checking_null_validation(document.getElementById('company_address').value,"COMPANY ADDRESS")=="")
+				{}
+		    	else if(countContract == 0)
 				{
-					globals.global_tostr('DEPLOYMENT');
+					globals.global_tostr('CONTACT IMAGE');
+				}
+				else if(countBenefits == 0)
+				{
+					globals.global_tostr('BENEFITS  IMAGE');
 				}
 				else
 				{
-					$("select.coverage_plan_name").each(function(i, sel)
+					$('input[name="deployment_name[]"]').each(function(i, dep)
 		            	{
-			            	var selectedPlan = $(sel).val();
-			        		if(selectedPlan!="SELECT COVERAGE PLAN")
+			            	if($(dep).val()!="")
 			            	{
-			            		coveragePlanData.push(selectedPlan);
+			            		deploymentData.push(this.value);
 			            	}
 		            	});
-		            	if(coveragePlanData==null||coveragePlanData=="")
+		            	if(deploymentData==null||deploymentData=="")
 					{
-						globals.global_tostr('COVERAGE PLAN');
+						globals.global_tostr('DEPLOYMENT');
 					}
 					else
 					{
-						var	confirmModalMessage  = 'Are you sure you want to add this company?';
-						var confirmModalAction    = 'create-company-submit';
-						globals.confirm_modals(confirmModalMessage,confirmModalAction);
-						
-						companyData.append("company_name", 			document.getElementById('company_name').value);
-			            	companyData.append("company_email_address", 		document.getElementById('company_email_address').value);
-			            	companyData.append("company_contact_number", 	document.getElementById('company_contact_number').value);
-			            	companyData.append("company_address", 			document.getElementById('company_address').value);
-		                
-		                	companyData.append("contact_person_name", 		document.getElementById('contact_person_name').value);
-			            	companyData.append("contact_person_position", 	document.getElementById('contact_person_position').value);
-			            	companyData.append("contact_person_number", 		document.getElementById('contact_person_number').value);
+						$("select.coverage_plan_name").each(function(i, sel)
+			            	{
+				            	var selectedPlan = $(sel).val();
+				        		if(selectedPlan!="SELECT COVERAGE PLAN")
+				            	{
+				            		coveragePlanData.push(selectedPlan);
+				            	}
+			            	});
+			            	if(coveragePlanData==null||coveragePlanData=="")
+						{
+							globals.global_tostr('COVERAGE PLAN');
+						}
+						else
+						{
+							var	confirmModalMessage  = 'Are you sure you want to add this company?';
+							var confirmModalAction    = 'create-company-submit';
+							globals.confirm_modals(confirmModalMessage,confirmModalAction);
 
-			            	companyData.append("contact_person_names", 		document.getElementById('contact_person_names').value);
-			            	companyData.append("contact_person_positions", 	document.getElementById('contact_person_positions').value);
-			            	companyData.append("contact_person_numbers", 	document.getElementById('contact_person_numbers').value);
+								companyData.append("company_code", 			document.getElementById('company_code').value);
+								companyData.append("company_name", 			document.getElementById('company_name').value);
+				            	companyData.append("company_email_address", 		document.getElementById('company_email_address').value);
+				            	companyData.append("company_contact_number", 	document.getElementById('company_contact_number').value);
+				            	companyData.append("company_address", 			document.getElementById('company_address').value);
+			                
+			                	companyData.append("contact_person_name", 		document.getElementById('contact_person_name').value);
+				            	companyData.append("contact_person_position", 	document.getElementById('contact_person_position').value);
+				            	companyData.append("contact_person_number", 		document.getElementById('contact_person_number').value);
 
-			            	for (var i = 0; i < contactData.length; i++) 
-						{
-						    companyData.append('contactData[]', contactData[i]);
-						}
-						for (var i = 0; i < countContract; i++) 
-						{
-						    companyData.append('contractData[]', document.getElementById('contract_image_name').files[i]);
-						}
-						for (var i = 0; i < countBenefits; i++) 
-						{
-						    companyData.append('benefitsData[]', document.getElementById('contract_benefits_name').files[i]);
-						}
-						for (var i = 0; i < coveragePlanData.length; i++) 
-						{
-						    companyData.append('coveragePlanData[]', coveragePlanData[i]);
-						}
-						
-						for (var i = 0; i < deploymentData.length; i++) 
-						{
-						    companyData.append('deploymentData[]', deploymentData[i]);
+				            	companyData.append("contact_person_names", 		document.getElementById('contact_person_names').value);
+				            	companyData.append("contact_person_positions", 	document.getElementById('contact_person_positions').value);
+				            	companyData.append("contact_person_numbers", 	document.getElementById('contact_person_numbers').value);
+
+				            	for (var i = 0; i < contactData.length; i++) 
+							{
+							    companyData.append('contactData[]', contactData[i]);
+							}
+							for (var i = 0; i < countContract; i++) 
+							{
+							    companyData.append('contractData[]', document.getElementById('contract_image_name').files[i]);
+							}
+							for (var i = 0; i < countBenefits; i++) 
+							{
+							    companyData.append('benefitsData[]', document.getElementById('contract_benefits_name').files[i]);
+							}
+							for (var i = 0; i < coveragePlanData.length; i++) 
+							{
+							    companyData.append('coveragePlanData[]', coveragePlanData[i]);
+							}
+							
+							for (var i = 0; i < deploymentData.length; i++) 
+							{
+							    companyData.append('deploymentData[]', deploymentData[i]);
+							}
 						}
 					}
 				}
-			}
 		});
 	}
 	

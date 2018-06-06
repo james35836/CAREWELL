@@ -230,10 +230,12 @@ class CarewellController extends ActiveAuthController
 
 	public function company_create_company_submit(Request $request)
 	{
+		dd($request->company_code);
 		$unique_name   = substr(str_shuffle("ABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0,5);
 		
 		$companyData = new TblCompanyModel;
-		$companyData->company_code            = StaticFunctionController::updateReferenceNumber('company');
+		// $companyData->company_code            = StaticFunctionController::updateReferenceNumber('company');
+		$companyData->company_code            = $request->company_code;
 		$companyData->company_name            = $request->company_name;
 		$companyData->company_contact_number  = $request->company_contact_number;
 		$companyData->company_email_address   = $request->company_email_address;
