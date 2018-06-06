@@ -77,7 +77,67 @@
                 padding-top: 110px;
             }
         }
-        
+
+        aside.main-sidebar section.sidebar ul.sidebar-menu a
+        {
+            color:white;
+        }
+
+        /*aside.main-sidebar section.sidebar ul.sidebar-menu li a 
+        {
+            color:white;
+        }
+
+        aside.main-sidebar section.sidebar ul.sidebar-menu li a:hover
+        {
+            color:black;
+        }*/
+
+/*
+        aside.main-sidebar section.sidebar ul.sidebar-menu li.treeview a:hover
+        {
+            color:black !important;
+            font-weight: bold;
+        }*/
+
+  /*       aside.main-sidebar section.sidebar ul.sidebar-menu li.treeview:focus,  aside.main-sidebar section.sidebar ul.sidebar-menu li.treeview ul.treeview-menu:parent
+         {
+            color:red !important;
+         }
+*/      
+        /*aside.main-sidebar section.sidebar ul.sidebar-menu li.treeview ul.treeview-menu a
+         {
+            color:black !important;
+         }*/
+/*
+         aside.main-sidebar section.sidebar ul.sidebar-menu li.treeview > ul.treeview-menu 
+         {
+            color:black !important;
+         }*/
+
+
+
+        aside.main-sidebar section.sidebar ul.sidebar-menu a:hover,aside.main-sidebar section.sidebar ul.sidebar-menu a:focus
+        {
+            color:black !important;
+            background-color: white !important;
+            font-weight: bold;
+        }
+
+        /*aside.main-sidebar section.sidebar ul.sidebar-menu a:hover, aside.main-sidebar section.sidebar ul.sidebar-menu li.treeview:not(span)
+        {
+
+            background-color: red !important;
+        }
+*/
+/*        aside.main-sidebar section.sidebar ul.sidebar-menu li.treeview a:hover
+        {
+            color:black !important;
+            background-color: white !important;
+            font-weight: bold;
+        }*/
+
+
         </style>
         
     </head>
@@ -206,6 +266,7 @@
             </nav>
         </header>
         <!-- SIDEBAR -->
+        aside.main-sidebar section.sidebar ul.sidebar-menu li.treeview ul.treeview-menu a
         <aside class="main-sidebar">
             <section class="sidebar">
                 <div class="user-panel">
@@ -225,12 +286,12 @@
                 </form>
                 <ul class="sidebar-menu" data-widget="tree">
                     <li class="header">MAIN NAVIGATION</li>
-                    <li style="background-color:#674172">
+                    <li style="background-color:#BE90D4">
                         <a href="/dashboard">
                             <i class="fa fa-dashboard"></i> <span>DASHBOARD</span>
                         </a>
                     </li>
-                    <li class="treeview">
+                    <li class="treeview" style="background-color: #03A678">
                         <a href="#">
                             <i class="fa fa-cog"></i>
                             <span>SETTINGS</span>
@@ -239,15 +300,15 @@
                             </span>
                         </a>
                         <ul class="treeview-menu">
-                            <li><a href="/settings/admin"><i class="fa fa-universal-access"></i>ADMIN PANEL</a></li>
-                            <li><a href="/settings/coverage"><i class="fa fa-circle-o"></i>COVERAGE PLAN</a></li>
-                            <li><a href="/settings/maintenance"><i class="fa fa-circle-o"></i>MAINTENANCE</a></li>
-                            <li style="background-color:#00a65a">
+                            <li style="background-color:#3FC380"><a href="/settings/admin"><i class="fa fa-universal-access"></i>ADMIN PANEL</a></li>
+                            <li style="background-color:#03A678" ><a href="/settings/coverage"><i class="fa fa-circle-o"></i>COVERAGE PLAN</a></li>
+                            <li style="background-color:#03A678"><a href="/settings/maintenance"><i class="fa fa-circle-o"></i>MAINTENANCE</a></li>
+                            <li style="background-color:#049372">
                                 <a href="/provider">
                                     <i class="fa fa-hospital-o"></i> <span style="font-size:.9em;">PROVIDER CENTER</span>
                                 </a>
                             </li>
-                            <li>
+                            <li style="background-color:#1E824C">
                                 <a href="/doctor">
                                     <i class="fa fa-user-md"></i> <span style="font-size:.9em;">DOCTOR CENTER</span>
                                 </a>
@@ -265,23 +326,23 @@
                             <i class="fa fa-user"></i> <span>MEMBER CENTER</span>
                         </a>
                     </li>
-                    <li>
+                    <li style="background-color:#E87E04">
                         <a href="/billing">
                             <i class="fa fa-credit-card"></i> <span>BILLING CENTER</span>
                         </a>
                     </li>
-                    <li >
+                    <li style="background-color:#336E7B">
                         <a href="/availment">
                             <i class="fa fa-medkit"></i> <span>AVAILMENT CENTER</span>
                         </a>
                     </li>
-                    <li >
+                    <li style="background-color:#F64747">
                         <a href="/payable">
                             <i class="fa fa-paypal"></i> <span>PAYABLE</span>
                         </a>
                     </li>
                     
-                    <li class="treeview">
+                    <li style="background-color:#1BBC9B" class="treeview" >
                         <a href="#">
                             <i class="fa fa-bar-chart"></i>
                             <span>REPORTS</span>
@@ -290,13 +351,13 @@
                             </span>
                         </a>
                         <ul class="treeview-menu">
-                            <li><a href="/reports/availment"><i class="fa fa-circle-o"></i>AVAILMENT </a></li>
-                            <li><a href="#"><i class="fa fa-circle-o"></i>MONITORING</a></li>
-                            <li><a href="/reports/payment_report"><i class="fa fa-circle-o"></i>PAYMENT REPORT</a></li>
-                            <li><a href="/reports/ending_number_per_month"><i class="fa fa-circle-o"></i>ENDING NUMBER</a></li>
-                            <li><a href="/reports/breakdown"><i class="fa fa-circle-o"></i>BREAKDOWN</a></li>
-                            <li><a href="/reports/consolidation"><i class="fa fa-circle-o"></i>CONSOLIDATION</a></li>
-                            <li><a href="#"><i class="fa fa-circle-o"></i>SUMMARY</a></li>
+                            <li style="background-color:#26A65B"><a href="/reports/availment"><i class="fa fa-circle-o"></i>AVAILMENT </a></li>
+                            <li style="background-color:#26A65B"><a href="#"><i class="fa fa-circle-o"></i>MONITORING</a></li>
+                            <li style="background-color:#26A65B"><a href="/reports/payment_report"><i class="fa fa-circle-o"></i>PAYMENT REPORT</a></li>
+                            <li style="background-color:#26A65B"><a href="/reports/ending_number_per_month"><i class="fa fa-circle-o"></i>ENDING NUMBER</a></li>
+                            <li style="background-color:#26A65B"><a href="/reports/breakdown"><i class="fa fa-circle-o"></i>BREAKDOWN</a></li>
+                            <li style="background-color:#26A65B"><a href="/reports/consolidation"><i class="fa fa-circle-o"></i>CONSOLIDATION</a></li>
+                            <li style="background-color:#26A65B"><a href="#"><i class="fa fa-circle-o"></i>SUMMARY</a></li>
                         </ul>
                     </li>
                 </ul>
