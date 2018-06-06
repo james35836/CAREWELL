@@ -230,7 +230,6 @@ class CarewellController extends ActiveAuthController
 
 	public function company_create_company_submit(Request $request)
 	{
-		dd($request->company_code);
 		$unique_name   = substr(str_shuffle("ABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0,5);
 		
 		$companyData = new TblCompanyModel;
