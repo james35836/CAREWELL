@@ -269,6 +269,7 @@ $(document).ready(function()
 					<th>PHILHEALTH CHARITY/SWA</th>
 					<th>CHARGE TO PATIENT</th>
 					<th>CHARGE TO CAREWELL</th>
+					<th>REMARKS</th>
 					<th><button type="button" data-ref="first" data-number="2" class="btn btn-primary btn-sm add-row"><i class="fa fa-plus-circle"></i></button></th>
 				</tr>
 				<tr class="table-row">
@@ -281,6 +282,7 @@ $(document).ready(function()
 					<td><input type="text" value="0.0" name="procedure_philhealth[]" id="" class="philhealth form-control"/></td>
 					<td><input type="text" value="0.0" name="procedure_charge_patient[]" id="" class="charge-patient form-control"/></td>
 					<td><input type="text" value="0.0" name="procedure_charge_carewell[]" id="" class="charge-carewell form-control"/></td>
+					<td><textarea name="approval_remarks" id="approval_remarks" class="form-control"></textarea></td>
 					<td>
 						<div class="btn-group" role="group" aria-label="Basic example">
 							<button type="button" data-number="2" class="btn btn-danger btn-sm remove-row"><i class="fa fa-minus-circle"></i></button>

@@ -22,6 +22,8 @@ function payable_center()
 			update_payable_confirm();
 			update_payable_submit()
 			search_filter_approval();
+
+			view_payee_details();
 		});
 
 	}
@@ -186,6 +188,23 @@ function payable_center()
 			globals.global_submit('payable-details','/payable/update_payable/submit',payableData);
           });
     	}
+
+    	//edrich
+    	function view_payee_details()
+    	{
+    		$('body').on('click','.view-payee-details',function()
+    		{
+    			var payable_id      = $(this).data('payable_id');
+				var modalName 		= 'PAYEE DETAILS';
+				var modalClass 	= 'payable-details';
+				var modalLink 		= '/payable/payee_details/'+payable_id;
+				var modalActionName = 'SAVE CHANGES';
+				var modalAction 	= 'update-payable-confirm';
+				var modalSize 		= 'modal-md';
+				globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
+    		});
+    	}
+    	//edrich
 }
 
 

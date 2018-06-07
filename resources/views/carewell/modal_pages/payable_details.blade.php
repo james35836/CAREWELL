@@ -69,6 +69,9 @@
 						<button type="submit" class="btn btn-primary top-element"><i class="fa fa-file-excel-o" ></i> EXPORT TO EXCEL</button>
 					</a>
 				</div>
+				<div class="col-md-4 pull-right">
+					<a target="_new_page_payable" href="/payable/payable_export_pdf/{{$payable_details->payable_id}}"><button type="button" data-transaction_member_id="{{$payable_details->payable_id}}" class="btn btn-primary top-element" ><i class="fa fa-file-pdf-o btn-icon"></i>EXPORT PDF</button></a>
+				</div>
 			</div>
 		</div>
 		<div class="col-md-12">

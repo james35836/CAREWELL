@@ -188,6 +188,11 @@ Route::get('/payable/payable_details/export_excel/{payable_id}', 'CarewellContro
 
 Route::post('/payable/update_payable/submit', 			'CarewellController@payable_update_submit');
 
+Route::get('/payable/payee_details/{payable_id}', 		'CarewellController@payable_view_payee_details');
+
+Route::get('/payable/payable_export_pdf/{approval_id}', 'CarewellController@payable_export_pdf');
+
+
 
 /*REPORTS*/
 Route::get('/reports', 								'CarewellController@reports');

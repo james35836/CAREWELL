@@ -83,62 +83,14 @@
             color:white;
         }
 
-        /*aside.main-sidebar section.sidebar ul.sidebar-menu li a 
-        {
-            color:white;
-        }
-
-        aside.main-sidebar section.sidebar ul.sidebar-menu li a:hover
-        {
-            color:black;
-        }*/
-
-/*
-        aside.main-sidebar section.sidebar ul.sidebar-menu li.treeview a:hover
-        {
-            color:black !important;
-            font-weight: bold;
-        }*/
-
-  /*       aside.main-sidebar section.sidebar ul.sidebar-menu li.treeview:focus,  aside.main-sidebar section.sidebar ul.sidebar-menu li.treeview ul.treeview-menu:parent
-         {
-            color:red !important;
-         }
-*/      
-        /*aside.main-sidebar section.sidebar ul.sidebar-menu li.treeview ul.treeview-menu a
-         {
-            color:black !important;
-         }*/
-/*
-         aside.main-sidebar section.sidebar ul.sidebar-menu li.treeview > ul.treeview-menu 
-         {
-            color:black !important;
-         }*/
-
-
-
-        aside.main-sidebar section.sidebar ul.sidebar-menu a:hover,aside.main-sidebar section.sidebar ul.sidebar-menu a:focus
+        aside.main-sidebar section.sidebar ul.sidebar-menu li a:hover, aside.main-sidebar section.sidebar ul.sidebar-menu li a:focus
         {
             color:black !important;
             background-color: white !important;
             font-weight: bold;
         }
 
-        /*aside.main-sidebar section.sidebar ul.sidebar-menu a:hover, aside.main-sidebar section.sidebar ul.sidebar-menu li.treeview:not(span)
-        {
-
-            background-color: red !important;
-        }
-*/
-/*        aside.main-sidebar section.sidebar ul.sidebar-menu li.treeview a:hover
-        {
-            color:black !important;
-            background-color: white !important;
-            font-weight: bold;
-        }*/
-
-
-        </style>
+    </style>
         
     </head>
     <body class="hold-transition skin-yellow-light sidebar-collapse sidebar-mini">
@@ -286,7 +238,7 @@
                 </form>
                 <ul class="sidebar-menu" data-widget="tree">
                     <li class="header">MAIN NAVIGATION</li>
-                    <li style="background-color:#BE90D4">
+                    <li style="background-color:#913D88">
                         <a href="/dashboard">
                             <i class="fa fa-dashboard"></i> <span>DASHBOARD</span>
                         </a>
