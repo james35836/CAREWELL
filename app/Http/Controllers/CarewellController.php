@@ -233,7 +233,8 @@ class CarewellController extends ActiveAuthController
 		$unique_name   = substr(str_shuffle("ABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0,5);
 		
 		$companyData = new TblCompanyModel;
-		$companyData->company_code            = StaticFunctionController::updateReferenceNumber('company');
+		// $companyData->company_code            = StaticFunctionController::updateReferenceNumber('company');
+		$companyData->company_code            = $request->company_code;
 		$companyData->company_name            = $request->company_name;
 		$companyData->company_contact_number  = $request->company_contact_number;
 		$companyData->company_email_address   = $request->company_email_address;
@@ -445,7 +446,7 @@ class CarewellController extends ActiveAuthController
 		$excels['company_id']     =   $company_id;
 		$company_template         =   TblCompanyModel::where('company_id',$company_id)->first();
 		$excels['company_code']   =   $company_template->company_code;
-		$excels['data']           =   ['COMPANY CODE','CAREWELL ID','EMPLOYEE NUMBER','MEMBER LAST NAME','MEMBER FIRST NAME','MEMBER MIDDLE NAME','MEMBER BIRTHDATE','DEPLOYMENT','COVERAGE PLAN','MODE OF PAYMENT','STATUS'];
+		$excels['data']           =   ['COMPANY CODE','CAREWELL ID','EMPLOYEE NUMBER','MEMBER LAST NAME','MEMBER FIRST NAME','MEMBER MIDDLE NAME','MEMBER GENDER','MEMBER BIRTHDATE','DEPLOYMENT','COVERAGE PLAN','MODE OF PAYMENT','STATUS'];
 		Excel::create('CAREWELL '.$company_template->company_name.' TEMPLATE', function($excel) use ($excels) 
 		{
 			$excel->sheet('template', function($sheet) use ($excels) 
@@ -460,8 +461,20 @@ class CarewellController extends ActiveAuthController
 					/* COMPANY ROW */
 					$sheet->setCellValue('A'.$rowcell, $excels['company_code']);
 					
+					/**MEMBER GENDER*/
+					$gender_cell = $sheet->getCell('G'.$rowcell)->getDataValidation();
+					$gender_cell->setType(\PHPExcel_Cell_DataValidation::TYPE_LIST);
+					$gender_cell->setErrorStyle(\PHPExcel_Cell_DataValidation::STYLE_INFORMATION);
+					$gender_cell->setAllowBlank(false);
+					$gender_cell->setShowInputMessage(true);
+					$gender_cell->setShowErrorMessage(true);
+					$gender_cell->setShowDropDown(true);
+					$gender_cell->setErrorTitle('Input error');
+					$gender_cell->setError('Value is not in list.');
+					$gender_cell->setFormula1('gender');
+
 					/* DEPLOYMENT*/
-					$deployment_cell = $sheet->getCell('H'.$rowcell)->getDataValidation();
+					$deployment_cell = $sheet->getCell('I'.$rowcell)->getDataValidation();
 					$deployment_cell->setType(\PHPExcel_Cell_DataValidation::TYPE_LIST);
 					$deployment_cell->setErrorStyle(\PHPExcel_Cell_DataValidation::STYLE_INFORMATION);
 					$deployment_cell->setAllowBlank(false);
@@ -473,7 +486,7 @@ class CarewellController extends ActiveAuthController
 					$deployment_cell->setFormula1('deployment');
 					
 					/* AVAILMENT*/
-					$availment_cell = $sheet->getCell('I'.$rowcell)->getDataValidation();
+					$availment_cell = $sheet->getCell('J'.$rowcell)->getDataValidation();
 					$availment_cell->setType(\PHPExcel_Cell_DataValidation::TYPE_LIST);
 					$availment_cell->setErrorStyle(\PHPExcel_Cell_DataValidation::STYLE_INFORMATION);
 					$availment_cell->setAllowBlank(false);
@@ -485,7 +498,7 @@ class CarewellController extends ActiveAuthController
 					$availment_cell->setFormula1('coverage');
 
 					/* MODE OF PAYMENT*/
-					$payment_cell = $sheet->getCell('J'.$rowcell)->getDataValidation();
+					$payment_cell = $sheet->getCell('K'.$rowcell)->getDataValidation();
 					$payment_cell->setType(\PHPExcel_Cell_DataValidation::TYPE_LIST);
 					$payment_cell->setErrorStyle(\PHPExcel_Cell_DataValidation::STYLE_INFORMATION);
 					$payment_cell->setAllowBlank(false);
@@ -497,7 +510,7 @@ class CarewellController extends ActiveAuthController
 					$payment_cell->setFormula1('payment');
 
 					/* STATUS*/
-					$status_cell = $sheet->getCell('K'.$rowcell)->getDataValidation();
+					$status_cell = $sheet->getCell('L'.$rowcell)->getDataValidation();
 					$status_cell->setType(\PHPExcel_Cell_DataValidation::TYPE_LIST);
 					$status_cell->setErrorStyle(\PHPExcel_Cell_DataValidation::STYLE_INFORMATION);
 					$status_cell->setAllowBlank(false);
@@ -518,62 +531,74 @@ class CarewellController extends ActiveAuthController
 				->join('tbl_coverage_plan','tbl_coverage_plan.coverage_plan_id','=','tbl_company_coverage_plan.coverage_plan_id')
 				->get();
 				$_payment_mode    = TblPaymentModeModel::where('archived',0)->get();
+
+				/*GENDER*/
+				$sheet->SetCellValue("G1", "gender");
+				$sheet->SetCellValue("G2","MALE" );
+				$sheet->SetCellValue("G3","FEMALE" );
+
 				/* DEPLOYMENT REFERENCES */
-				$sheet->SetCellValue("H1", "deployment");
+				$sheet->SetCellValue("I1", "deployment");
 				$deployment_number = 2;
 				foreach($_deployment as $deployment)
 				{
-					$sheet->SetCellValue("H".$deployment_number, $deployment->deployment_name);
+					$sheet->SetCellValue("I".$deployment_number, $deployment->deployment_name);
 					$deployment_number++;
 				}
 				$deployment_number--;
 				/* AVAILMENT REFERENCES */
-				$sheet->SetCellValue("I1", "coverage");
+				$sheet->SetCellValue("J1", "coverage");
 				$coverage_number = 2;
 				foreach($_coverage as $coverage)
 				{
-					$sheet->SetCellValue("I".$coverage_number, $coverage->coverage_plan_name);
+					$sheet->SetCellValue("J".$coverage_number, $coverage->coverage_plan_name);
 					$coverage_number++;
 				}
 				$coverage_number--;
 
 				/* PAYMENT REFERENCES */
-				$sheet->SetCellValue("J1", "payment");
+				$sheet->SetCellValue("K1", "payment");
 				$payment_mode_number = 2;
 				foreach($_payment_mode as $payment_mode)
 				{
-					$sheet->SetCellValue("J".$payment_mode_number, $payment_mode->payment_mode_name);
+					$sheet->SetCellValue("K".$payment_mode_number, $payment_mode->payment_mode_name);
 					$payment_mode_number++;
 				}
 				$payment_mode_number--;
 				/* STATUS REFERENCES */
-				$sheet->SetCellValue("K1", "status");
-				$sheet->SetCellValue("K2", 'ACTIVE');
-				$sheet->SetCellValue("K3", 'INACTIVE');
+				$sheet->SetCellValue("L1", "status");
+				$sheet->SetCellValue("L2", 'ACTIVE');
+				$sheet->SetCellValue("L3", 'INACTIVE');
 
+				/*GENDER*/
+				$sheet->_parent->addNamedRange(
+					new \PHPExcel_NamedRange(
+						'gender', $sheet, 'G2:G3'
+					)
+				);
 				/*DEPLOYMENT*/
 				$sheet->_parent->addNamedRange(
 					new \PHPExcel_NamedRange(
-						'deployment', $sheet, 'H2:H'.$deployment_number
+						'deployment', $sheet, 'I2:I'.$deployment_number
 					)
 				);
 				/*AVAILMENT*/
 				$sheet->_parent->addNamedRange(
 					new \PHPExcel_NamedRange(
-						'coverage', $sheet, 'I2:I'.$coverage_number
+						'coverage', $sheet, 'J2:J'.$coverage_number
 					)
 				);
 
 				/*PAYMENT*/
 				$sheet->_parent->addNamedRange(
 					new \PHPExcel_NamedRange(
-						'payment', $sheet, 'J2:J'.$payment_mode_number
+						'payment', $sheet, 'K2:K'.$payment_mode_number
 					)
 				);
 				/*STATUS*/
 				$sheet->_parent->addNamedRange(
 					new \PHPExcel_NamedRange(
-						'status', $sheet, 'K2:K3'
+						'status', $sheet, 'L2:L3'
 					)
 				);
 			});
@@ -612,7 +637,7 @@ class CarewellController extends ActiveAuthController
 						$member['member_middle_name']       =   StaticFunctionController::transformText($data['member_middle_name']);
 						$member['member_last_name']         =   StaticFunctionController::transformText($data['member_last_name']);
 						$member['member_birthdate']         =   date('d-m-Y', strtotime($data['member_birthdate'])); 
-						$member['member_gender']            =   "N/A";
+						$member['member_gender']            =   StaticFunctionController::nullableToString($data['member_gender']);
 						$member['member_marital_status']    =   "N/A";
 						$member['member_mother_maiden_name']=   "N/A";
 						$member['member_contact_number']    =   "N/A";
@@ -1900,6 +1925,7 @@ class CarewellController extends ActiveAuthController
 		$approvalData->approval_complaint         = $request->approval_complaint;
 		$approvalData->approval_date_availed      = $request->approval_date_availed;
 		$approvalData->approval_created           = Carbon::now();
+		$approvalData->approval_remarks        	  = $request->approval_remarks;
 		$approvalData->charge_diagnosis_id        = $request->charge_diagnosis_id;
 		$approvalData->diagnosis_id               = $request->diagnosis_id;
 		$approvalData->availment_id               = $request->availment_id;
@@ -2014,7 +2040,6 @@ class CarewellController extends ActiveAuthController
 		$data['_payee_other']    = TblApprovalPayeeModel::where('approval_id',$approval_id)->where('type','payee')->get();
 		$data['total_procedure']  = TblApprovalTotalModel::where('approval_id',$approval_id)->where('total_type','procedure')->first();
 		$data['total_doctor']     = TblApprovalTotalModel::where('approval_id',$approval_id)->where('total_type','doctor')->first();
-		
 
 		// EDRICH
 		$approval = TblApprovalModel::where("approval_id",$approval_id)->first();
@@ -2035,6 +2060,7 @@ class CarewellController extends ActiveAuthController
 
 		return view('carewell.modal_pages.availment_approval_details',$data);
 	}
+
 	public function approval_export_pdf($approval_id)
 	{
 	    	$data['_provider']        = TblProviderModel::where('archived',0)->get();
@@ -2247,6 +2273,48 @@ public function availment_approval_add_details_submit()
 	          return StaticFunctionController::returnMessage('danger','PAYABLE');
 		}
 	}
+
+	//edrich
+	
+
+	public function payable_view_payee_details($payable_id)
+	{
+		$approval_id  = TblPayableApprovalModel::where('payable_id',$payable_id)->value('approval_id');
+
+		$data['_payee_doctor']    = TblApprovalPayeeModel::where('approval_id',$approval_id)
+	                              ->where('type','doctor')
+	                              ->join('tbl_doctor','tbl_doctor.doctor_id','=','tbl_approval_payee.payee_id')
+	                              ->get();
+	    $data['_payee_other']     = TblApprovalPayeeModel::where('approval_id',$approval_id)
+	                              ->where('type','payee')
+	                              ->get();
+
+	    return view('carewell.modal_pages.payable_view_payee_details',$data);
+
+	}
+	//edrich
+	public function payable_export_pdf($payable_id)
+	{
+	   	$data['_provider']          = TblProviderModel::where('archived',0)->get();
+		$data['payable_details']    = TblPayableModel::where('tbl_payable.payable_id',$payable_id)->PayableInfo()->first();
+		$data['_payable_approval']  = TblPayableApprovalModel::where('payable_id',$payable_id)->where('tbl_member_company.archived',0)->PayableApproval()->get();
+	     $data['link']               = "/payable/payable_details/export_excel/".$payable_id;
+		foreach ($data['_payable_approval'] as $key => $payable_approval) 
+		{
+			$TblApprovalDoctorModel                             = TblApprovalDoctorModel::where('tbl_approval_doctor.approval_id',$payable_approval->approval_id);
+			$data['_payable_approval'][$key]['availed']         = TblApprovalProcedureModel::where('tbl_approval_procedure.approval_id',$payable_approval->approval_id)->Procedure()->get();
+			$data['_payable_approval'][$key]['doctor']          = $TblApprovalDoctorModel->join('tbl_doctor','tbl_doctor.doctor_id','=','tbl_approval_doctor.doctor_id')->get();
+			$data['_payable_approval'][$key]['doctor_fee']      = $TblApprovalDoctorModel->sum('approval_doctor_charge_carewell');
+			$data['_payable_approval'][$key]['charge_carewell'] = $TblApprovalDoctorModel->sum('approval_doctor_charge_carewell');                                          
+		}
+
+	     $format["format"] = "Legal";
+	     $format["default_font"] = "sans-serif";
+	     $pdf = PDF::loadView('carewell.additional_pages.payable_details_export_pdf', $data, [], $format);
+	     return $pdf->stream('document.pdf');
+	}
+	//edrich
+
 	/*REPORTS*/
 	public function reports()
 	{

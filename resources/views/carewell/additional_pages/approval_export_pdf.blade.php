@@ -51,7 +51,7 @@
 	@page {
     size: Legal;
     margin: 0.4in;
-}
+	}
 
 </style>
 

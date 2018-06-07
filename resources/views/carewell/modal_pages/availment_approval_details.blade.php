@@ -296,6 +296,7 @@ $(document).ready(function()
 							<th>PHILHEALTH CHARITY/SWA</th>
 							<th>CHARGE TO PATIENT</th>
 							<th>CHARGE TO CAREWELL</th>
+							<th>REMARKS</th>
 							<th><button type="button" data-ref="first" data-number="2" data-approval_id="{{$approval_details->approval_id}}" class="btn btn-primary btn-sm add-approval-details"><i class="fa fa-plus-circle"></i></button></th>
 						</tr>
 					</thead>
@@ -314,6 +315,7 @@ $(document).ready(function()
 							<td><input type="text" readonly name="procedure_philhealth[]" id="" class="form-control" value="{{$availed->procedure_philhealth}}" /></td>
 							<td><input type="text" readonly name="procedure_charge_patient[]" id="" class="form-control" value="{{$availed->procedure_charge_patient}}" /></td>
 							<td><input type="text" readonly name="procedure_charge_carewell[]" id="" class="form-control" value="{{$availed->procedure_charge_carewell}}" /></td>
+							<td><textarea name="approval_remarks" id="" class="form-control">{{$approval_details->approval_remarks}}</textarea></td>
 							<td>
 								<div class="btn-group" role="group" aria-label="Basic example">
 									<button type="button" data-number="2" data-ref="procedure" data-id="{{$availed->procedure_approval_id}}" class="remove-approval-data btn btn-danger btn-sm remove-approval-procedure"><i class="fa fa-minus-circle"></i></button>

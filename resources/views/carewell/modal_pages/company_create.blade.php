@@ -23,8 +23,14 @@
 			<div class="col-md-2 form-content">
 				<label>Company Name</label>
 			</div>
-			<div class="col-md-10 form-content">
+			<div class="col-md-4 form-content">
 				<input type="text" name="company_name" id="company_name"  class="form-control string-only"/>
+			</div>
+			<div class="col-md-2 form-content">
+				<label>Company Code</label>
+			</div>
+			<div class="col-md-4 form-content">
+				<input type="text" name="company_code" id="company_code"  class="form-control string-only"/>
 			</div>
 		</div>
 		<div class="form-holder">
