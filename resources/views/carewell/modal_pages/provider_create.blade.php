@@ -8,7 +8,7 @@
 			<input type="text" id="provider_name" class="form-control"/>
 		</div>
 		<div class="col-md-2 form-content">
-			<label>Provider Rate/RVS</label>
+			<label>Rate/RVS</label>
 		</div>
 		<div class="col-md-4 form-content">
 			<select name="provider_rvs" id="provider_rvs" class="form-control">
@@ -34,7 +34,7 @@
 	
 	<div class="form-holder">
 		<div class="col-md-2 form-content">
-			<label>Telephone Number</label>
+			<label>Tel. Number</label>
 		</div>
 		<div class="col-md-4 form-content">
 			<input type="text" id="provider_telephone_number" class="form-control"/>

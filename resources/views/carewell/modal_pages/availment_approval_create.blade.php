@@ -170,12 +170,18 @@ $(document).ready(function()
 				<label>Network Provider</label>
 			</div>
 			<div class="col-md-4 form-content reemburse-provider">
-				<select class="form-control get-provider-info" id="provider_id" name="provider_id">
-					<option value="0">SELECT PROVIDER</option>
-					@foreach($_provider as $provider)
-					<option value="{{$provider->provider_id}}">{{$provider->provider_name}}</option>
-					@endforeach
-				</select>
+				<div class="input-group">
+					<select class="form-control get-provider-info" id="provider_id" name="provider_id">
+						<option value="0">SELECT PROVIDER</option>
+						@foreach($_provider as $provider)
+						<option value="{{$provider->provider_id}}">{{$provider->provider_name}}</option>
+						@endforeach
+					</select>
+					<span class="input-group-btn">
+						<button class="btn btn-secondary create-provider" data-size="md" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span></button>
+					</span>
+				</div>
+				
 			</div>
 			<div class="col-md-2 form-content">
 				<label>Type of Availment</label>
