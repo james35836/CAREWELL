@@ -2053,6 +2053,7 @@ class CarewellController extends ActiveAuthController
 
 
 		$data['_doctor'] = TblDoctorProviderModel::where('provider_id',$approval->provider_id)->Doctor()->get();
+		$data['_payee'] = TblApprovalPayeeModel::where('approval_id',$approval_id)->where('type','payee')->get();
 
 		$data['_procedure_doctor']= TblDoctorProcedureModel::where('archived',0)->get();
 

@@ -56,7 +56,7 @@
           <td>
             <div class="input-group">
               <select  class="form-control select2 " id="plan_limit">
-                <option value="NO LIMIT">NO LIMIT</option>
+                <option value="NO LIMIT">OPEN</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>

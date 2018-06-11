@@ -498,12 +498,26 @@ $(document).ready(function()
 			</div>
 			<div class="form-content col-md-8 form-element">
 				@foreach($_payee_other as $payee_other)
-				<div class="my-element">
+	<!-- 			<div class="my-element">
 					<input type="text" readonly class="form-control" name="payee_name[]" value="{{$payee_other->payee_name}}">
 					<span class="input-group-btn">
 						<button type="button" data-number="2" data-ref="other payee" data-id="{{$payee_other->approval_payee_id}}" class="remove-approval-data btn btn-danger btn-sm remove-approval-other-payee"><i class="fa fa-minus-circle"></i></button>
 					</span>
-				</div>
+				</div> -->
+
+				<div class="my-element" >
+					<div class="input-group my-element">
+						<select class="form-control doctor-payee" data-type="doctor" name="doctor_payee_id[]" id="payeeList">
+							<option value="{{$payee_other->approval_payee_id}}">{{$payee_other->payee_name}}</option>
+							@foreach($_payee as $payee)
+							<option value="{{$payee->payee_id}}">{{$payee->payee_name}}</option>
+							@endforeach
+						</select>
+						<span class="input-group-btn">
+							<button class="remove-approval-data btn btn-danger remove-approval-doctor-payee" data-ref="doctor payee" data-id="{{$payee_doctor->approval_payee_id}}" type="button" tabindex="-1"><span class="fa fa-minus-circle" aria-hidden="true"></span> </button>
+						</span>
+					</div>
+				</div>	
 				@endforeach
 			</div>
 		</div>

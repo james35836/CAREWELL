@@ -33,7 +33,7 @@
 				</select>
 			</div>
 			<div class="col-md-2 form-content">
-				<label>EMPLOYEE NUMBER</label>
+				<label>COMPANY ID</label>
 			</div>
 			<div class="col-md-4 form-content">
 				<input type="text" placeholder="THIS FIELD IS REQUIRED"  name="employee_number_adjustment" id="employee_number_adjustment" class="form-control"/>
