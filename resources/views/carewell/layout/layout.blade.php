@@ -73,7 +73,7 @@
         {
             .top-padding
             {
-                padding-top: 30px;
+                padding-top: 55px;
             }
         }
         @media screen and (max-width: 425px)
