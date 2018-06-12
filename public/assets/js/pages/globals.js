@@ -1,15 +1,18 @@
 var globals 		= new globals();
-var formData   	  	= new FormData();
+var formData   		= new FormData();
 var doctorData		= new FormData();
 var doctorFileData  = new FormData();
 var adjustmentData	= new FormData();
 var memberFileData	= new FormData();
-var companyData		= new FormData();
+var companyData     = new FormData();
 var providerData 	= new FormData();
+
+
 var providerFileData= new FormData();
 var calData 		= new FormData();
 var calCloseData	= new FormData();
 var calFileData 	= new FormData();
+
 
 var payableData 	= new FormData();
 
@@ -31,7 +34,7 @@ var billingMemberData 	= new FormData();
 var calPendingData    	= new FormData();
 var approvalprocedureData = new FormData();
 
-var approvaldetailsData = new FormData();
+var removeApprovalData = new FormData();
 
 var coverageItemData	= [];
 var doctorProviderData	= [];
@@ -41,11 +44,12 @@ var procedureData		= [];
 var chargesData			= [];
 
 
-
+var thisElement         = [];
 var finalDiagnosisData	= [];
 
 var payeeData			= [];
 var serializeData 	= [];
+var newSerializedApprovalData = [];
 var ajaxData 		= [];
 var value			= "0";
 var message			= "";
@@ -76,7 +80,7 @@ var confirmModals 			= '<div  class="modal fade modal-top confirm-modal" id="" t
 						        +'<input type="hidden" class="link"/>'
 						      +'</div>'
 						      +'<div class="modal-footer confirm-modal-footer">'
-						        +'<button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancel</button>'
+						        +'<button type="button" class="close-btn btn btn-default pull-left" data-dismiss="modal">Cancel</button>'
 						        +'<button type="button" class="btn btn-primary confirm-submit">Yes</button>'
 						      +'</div>'
 						    +'</div>'
@@ -99,7 +103,7 @@ var globalModals = '<div class="modal fade modal-top global-modal">'+
 		                '</div>'+
 		              '</div>'+
 		              '<div class="modal-footer global-modal-footer">'+
-		                '<button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>'+
+		                '<button type="button" class=" close-btn btn btn-default pull-left" data-dismiss="modal">Close</button>'+
 		                '<button type="button" class="btn btn-primary global-footer-button">Save changes</button>'+
 		              '</div>'+
 		            '</div>'+
@@ -119,7 +123,7 @@ function globals()
 	{
   
 		$('.'+modalClass+'-modal').remove();
-        	$(".append-modal").append(globalModals);
+        $(".append-modal").append(globalModals);
 		$('.global-modal').removeClass().addClass('modal fade modal-top '+modalClass+'-modal');
 		$('.global-modal-dialog').removeClass().addClass(''+modalClass+'-modal-dialog modal-dialog '+modalSize);
 		$('.global-modal-content').removeClass().addClass('modal-content');
@@ -129,8 +133,8 @@ function globals()
 		$('.global-modal-body').removeClass().addClass('modal-body '+modalClass+'-modal-body');
 		$('.'+modalClass+'-modal').modal('show');
 		$('.global-ajax-loader').show();
-        	$('.global-modal-body-content').hide();
-        	$('.global-modal-footer').hide();
+    	$('.global-modal-body-content').hide();
+    	$('.global-modal-footer').hide();
           
         	$.ajax({
 				headers: {
@@ -148,33 +152,41 @@ function globals()
 						if(modalSize=="modal-import")
 						{
 							$('.global-modal-footer').show().html(successButton);
-                    		}
+                    	}
 						else
 						{
 						    $footer = $('.global-modal-footer').show().removeClass().addClass('modal-footer '+modalClass+'-modal-footer');
 							if(modalActionName=="none")
 							{
-								$footer.html('<button type="button" class="btn btn-default pull-left" data-dismiss="modal">CLOSE</button>').show();
+								$footer.html('<button type="button" class="close-btn btn btn-default pull-left" data-dismiss="modal">CLOSE</button>').show();
 							}
 							else
 							{
-								$footer.find('.global-footer-button').html(modalActionName).removeClass().addClass('btn btn-primary '+modalAction+'');	
+								$footer.find('.global-footer-button').html(modalActionName).removeClass().addClass('btn btn-primary confirm-btn '+modalAction+'');	
 							    if(modalActionName=="SAVE CHANGES")
 								{
 									// $('button.'+modalAction).attr('disabled','true');
 								}
 							}
-                    		}
+                    	}
+
+                    	if(modalActionName=="SAVE CHANGES")
+                    	{
+                    		$('.'+modalClass+'-modal').find('button').attr('disabled','true');
+                    		$('.'+modalClass+'-modal').find('button.top-element').removeAttr('disabled');
+                    		$('.'+modalClass+'-modal').find('button.close').removeAttr('disabled');
+                    		$('.'+modalClass+'-modal').find('button.close-btn').removeAttr('disabled');
+                    	}
 					}, 700);
 				}
 			});
+    }
 
-	}
 	this.confirm_modals = function(confirmModalMessage,confirmModalAction)
 	{
 		$('.confirm-modal').remove();
 		$('.append-modal').append(confirmModals);
-        	$('.confirm-modal-dialog').removeClass().addClass('modal-dialog modal-sm');
+        $('.confirm-modal-dialog').removeClass().addClass('modal-dialog modal-sm');
 		$('.confirm-modal-title').html(confirmModalMessage);
 		$('.confirm-submit').addClass(confirmModalAction);
 		$('.confirm-modal').modal('show');
@@ -219,6 +231,26 @@ function globals()
 			}
 		});
 	}
+	this.global_ajax_call_submit = function(submitLink,submitData,moduleName,functionReference)
+	{
+		$.ajax({
+			headers: {
+			      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			},
+
+			url:submitLink,
+			method: "POST",
+        	data: submitData,
+        	contentType:false,
+        	cache:false,
+        	processData:false,
+            success: function(data)
+			{
+				moduleName.show_data_here(data,functionReference);
+			}
+		});
+	}
+	
 	this.get_dual_information = function(link,value,showId,showId2)
 	{
 		$.ajax({
@@ -229,13 +261,15 @@ function globals()
 			url:link,
 			data:{value: value},
 			method: "POST",
-            	success: function(data)
+
+            success: function(data)
 			{
 				$(showId).html(data.first);
 				$(showId2).html(data.second);
 			}
 		});
 	}
+	
 	this.global_submit = function(modalName,submitLink,submitData)
 	{
 		$('.confirm-modal').remove();
@@ -248,11 +282,11 @@ function globals()
 			},
 			url:submitLink,
 			method: "POST",
-            	data: submitData,
-            	contentType:false,
-            	cache:false,
-            	processData:false,
-            	success: function(data)
+        	data: submitData,
+        	contentType:false,
+        	cache:false,
+        	processData:false,
+        	success: function(data)
 			{
 				setTimeout(function()
 				{
@@ -264,12 +298,38 @@ function globals()
 			}
 		});
 	}
+	this.global_serialize_submit = function(modalName,submitLink,submitData)
+	{
+		$('.confirm-modal').remove();
+        	$("."+modalName+"-modal-body").html("<div class='"+modalName+"-ajax-loader' style='display:none;text-align: center; padding:50px;'><img src='/assets/loader/loading.gif'/></div");
+        	$("."+modalName+"-ajax-loader").show();
+        	
+       	$.ajax({
+			headers: {
+			      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			},
+			url:submitLink,
+			method: "POST",
+        	data: submitData,
+        	dataType:"text",
+        	success: function(data)
+			{
+				setTimeout(function()
+				{
+					$('.'+modalName+'-ajax-loader').hide();
+					$('.'+modalName+'-modal-dialog').removeClass().addClass('modal-sm modal-dialog')
+					$('.'+modalName+'-modal-body').html(data);
+					$('.'+modalName+'-modal-footer').html(successButton);
+				}, 1000);
+			}
+		});
+     }
 	this.global_single_submit = function (modalLink,modalData,tdCloser)
 	{
 		$(".confirm-modal-body").html("<div class='confirm-ajax-loader' style='display:none;text-align: center; padding:50px;'><img src='/assets/loader/loading.gif'/></div");
-	    	$(".confirm-ajax-loader").show();
-	    	$('.confirm-modal-title').html("MESSAGE");
-	    	$(".confirm-modal-footer").html('');
+    	$(".confirm-ajax-loader").show();
+    	$('.confirm-modal-title').html("MESSAGE");
+    	$(".confirm-modal-footer").html('');
 
 			$.ajax({
 				headers: {
@@ -277,10 +337,10 @@ function globals()
 				},
 				url:modalLink,
 				method: "POST",
-		        	data: modalData,
-		        	contentType:false,
-	            	cache:false,
-	            	processData:false,
+		        data: modalData,
+		        contentType:false,
+	            cache:false,
+	            processData:false,
 				success: function(data)
                 	{
 					setTimeout(function()
@@ -332,10 +392,10 @@ function globals()
 			},
 			url:'/archived/submit',
 			method: "POST",
-	        	data: archived_param,
-	        	contentType:false,
-            	cache:false,
-            	processData:false,
+        	data: archived_param,
+        	contentType:false,
+        	cache:false,
+        	processData:false,
 			success: function(data)
             	{
 				setTimeout(function()
@@ -382,7 +442,7 @@ function globals()
 	this.option_modal  = function(modalClass,modalAction,modalRef)
 	{
 		$('.'+modalClass).remove();
-        	$(".append-modal").append(globalModals);
+        $(".append-modal").append(globalModals);
 		$('.global-modal').removeClass().addClass('modal fade modal-top '+modalClass);
 		$('.global-modal-dialog').removeClass().addClass('modal-dialog modal-sm');
 		$('.global-modal-content').removeClass().addClass('modal-content');
@@ -392,9 +452,9 @@ function globals()
 		$('.global-modal-body').removeClass().addClass('modal-body');
 		$('.'+modalClass).modal('show');
 		$('.global-ajax-loader').show();
-        	$('.global-modal-body-content').hide();
-        	$('.global-modal-footer').hide();
-        	setTimeout(function()
+    	$('.global-modal-body-content').hide();
+    	$('.global-modal-footer').hide();
+    	setTimeout(function()
 		{
 
 			$('.global-ajax-loader').hide().removeClass().addClass('.modal-loader');
@@ -490,63 +550,66 @@ function globals()
 		reload_page();
 
 		archived_data();
-        	restore_data();
+    	restore_data();
 
-        	add_remove_element();
+    	add_remove_element();
 
-        	table_sorter();
-        	table_action_add_remove();
-       
+    	table_sorter();
+    	table_action_add_remove();
+   
 
-        	filtering();
-        	searching();
+    	filtering();
+    	searching();
 
-        	event_run_paginate();
-        	enable_element();
+    	event_run_paginate();
+    	enable_element();
 
         	
-    	}
-    	function enable_element()
-    	{
-	    	$('body').on('click','button.enable-element',function()
-	    	{
-	    		$(this).closest('div.modal-body').find('input,select,textarea').removeAttr('readonly');
-	    	});
-    	}
-    	function event_run_paginate()
+    }
+	function enable_element()
 	{
-        	$('body').on('click', '.pagination a', function(e) 
+    	$('body').on('click','button.enable-element',function()
+    	{
+    		$(this).closest('div.modal-body').find('input,select,textarea').removeAttr('readonly');
+    		$(this).closest('div.modal-body').find('select').removeAttr('disabled');
+    		$(this).closest('div.modal-body').find('button').removeAttr('disabled');
+    		$(this).closest('div.modal').find('button.confirm-btn').removeAttr('disabled');
+    	});
+	}
+    function event_run_paginate()
+	{
+    	$('body').on('click', '.pagination a', function(e) 
+    	{
+        	e.preventDefault();
+        	var href= $(this).data('href');
+        	var url = paginate_ajax.toLocation(href);
+        	var domain = url.protocol + "//" + url.hostname;
+        
+        	var load_data = $(this).closest('.load-data');
+        
+        	load_data.find('tr').css('opacity', '0.2');
+        
+        	if (window.location.href.indexOf("https") != -1)
         	{
-            	e.preventDefault();
-            	var href= $(this).data('href');
-            	var url = paginate_ajax.toLocation(href);
-            	var domain = url.protocol + "//" + url.hostname;
-            
-            	var load_data = $(this).closest('.load-data');
-            
-            	load_data.find('tr').css('opacity', '0.2');
-            
-            	if (window.location.href.indexOf("https") != -1)
-            	{
-                	var url = $(this).attr('href').replace("http", "https");
-            	}
-            	else
-            	{
-                	var url = $(this).attr('href');
-            	}
+            	var url = $(this).attr('href').replace("http", "https");
+        	}
+        	else
+        	{
+            	var url = $(this).attr('href');
+        	}
 
-            	load_data.each(function() 
+        	load_data.each(function() 
+        	{
+            	$.each(this.attributes, function() 
             	{
-                	$.each(this.attributes, function() 
+                	if(this.specified && this.name != "class" && this.name != "style") 
                 	{
-                    	if(this.specified && this.name != "class" && this.name != "style") 
-                    	{
-                        	url = href.replace(domain,'');
-                    	}
-                	});
+                    	url = href.replace(domain,'');
+                	}
             	});
-            	getArticles(url, load_data);
         	});
+        	getArticles(url, load_data);
+    	});
 	}
 
     	function getArticles(url, load_data) 
@@ -700,21 +763,21 @@ function globals()
 		});
 	}
 	
-    	function reload_page()
+	function reload_page()
+	{
+    	$('body').on('click','.reload-btn',function()
     	{
-	    	$('body').on('click','.reload-btn',function()
-	    	{
-	    		location.reload();
-	    	});
-    	}
-    	function check_all_checkbox()
-    	{
-    		$('body').on('click','.checkAllCheckbox',function (e) 
-    		{
+    		location.reload();
+    	});
+	}
+	function check_all_checkbox()
+	{
+		$('body').on('click','.checkAllCheckbox',function (e) 
+		{
 		    $(this).closest('table').find('td input:checkbox').prop('checked', this.checked);
 		});
-    	}
-    	function add_select_option()
+	}
+	function add_select_option()
 	{
 		$('body').on("click",".add-new-option",function()
 		{
@@ -779,6 +842,10 @@ function globals()
 			if($(this).data('ref')=='first')
 			{
 				$nrow  = $table.find('tr:eq(1)').clone().appendTo($table);
+				$nrow.find('#approval_doctor_id').val(0);
+				$nrow.find('#procedure_approval_id').val(0);
+				$nrow.find('#doctor_approval_payee_id').val(0);
+				$nrow.find('#payee_approval_payee_id').val(0);
 			}
 			else
 			{

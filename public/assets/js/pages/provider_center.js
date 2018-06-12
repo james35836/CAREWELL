@@ -110,7 +110,7 @@ function provider_center()
 		$('body').on('click','.create-provider-submit',function() 
 		{
 			globals.global_submit('provider','/provider/create_provider/submit',providerData);
-        });
+        	});
 		
 	}
 	function import_provider()

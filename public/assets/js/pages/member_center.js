@@ -15,14 +15,19 @@ function member_center()
 		$(document).ready(function()
 		{
 			export_template();
-            	import_member();
+            	
+
             	create_member();
             	create_member_confirm();
            	create_member_submit();
+
+ 			import_member();
             	import_member_confirm();
 			import_member_submit();
+
 			view_member_details();
 			view_member_transaction_details();
+
 			member_adjustment();
 			member_adjustment_confirm();
 			member_adjustment_submit();
@@ -264,7 +269,7 @@ function member_center()
 		{
 			var member_id 		= $(this).data('member_id');
 			var modalName 		= 'CHANGE COMPANY ';
-			var modalClass 		= 'member-adjustment';
+			var modalClass      = 'member-adjustment';
 			var modalLink 		= '/member/member_adjustment/'+member_id;
 			var modalActionName = 'SAVE CHANGES';
 			var modalAction 	= 'member-adjustment-confirm';

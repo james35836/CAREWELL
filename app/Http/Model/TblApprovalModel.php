@@ -37,4 +37,9 @@ class TblApprovalModel extends Model
                 ->join('tbl_diagnosis','tbl_diagnosis.diagnosis_id','=','tbl_approval.charge_diagnosis_id');
  		return $query;
  	}
+    public function scopeDiagnosis($query)
+    {
+        $query  ->join('tbl_diagnosis','tbl_diagnosis.diagnosis_id','=','tbl_approval.charge_diagnosis_id');
+        return $query;
+    }
 }

@@ -17,5 +17,10 @@ class TblPayableApprovalModel extends Model
                 ->join('tbl_member_company','tbl_member_company.member_id','=','tbl_member.member_id');
     	return $query;
     }
+    public function scopePayableStatus($query)
+    {
+        $query ->join('tbl_approval','tbl_approval.approval_id','=','tbl_payable_approval.approval_id');
+        return $query;
+    }
 }
 

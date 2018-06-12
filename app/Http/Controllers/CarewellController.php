@@ -776,42 +776,7 @@ class CarewellController extends ActiveAuthController
 	}
 
 
-	public static function provider_add_tag_doctor($doctorProviderData,$provider_id)
-	{
-		$doctorInsert = 0;
-	     foreach($doctorProviderData as $doctor_full_name)
-		{
-			$doctor_id = StaticFunctionController::getIdNorName($doctor_full_name,'doctor');
-			if($doctor_id==$doctor_full_name)
-			{
-				$doctorData = new TblDoctorModel;
-				$doctorData->doctor_full_name       = StaticFunctionController::transformText($doctor_full_name);
-				$doctorData->doctor_number          = StaticFunctionController::updateReferenceNumber('doctor');
-				$doctorData->doctor_gender          = "N/A";
-				$doctorData->doctor_contact_number  = "N/A";
-				$doctorData->doctor_email_address   = "N/A";
-				$doctorData->doctor_created         = Carbon::now();
-				$doctorData->save();
-
-				$providerDoctorData = new TblDoctorProviderModel;
-				$providerDoctorData->doctor_id 	= $doctorData->doctor_id;
-				$providerDoctorData->provider_id 	= $provider_id;
-				$providerDoctorData->save();
-
-				$doctorInsert++;
-			}
-			else
-			{
-				$providerDoctorData = new TblDoctorProviderModel;
-				$providerDoctorData->doctor_id 	= $doctor_id;
-				$providerDoctorData->provider_id 	= $provider_id;
-				$providerDoctorData->save();
-				
-				$doctorInsert++;
-			}
-		}
-		return $doctorInsert;
-	}
+	
 
 	public function provider_create_submit(Request $request)
 	{
@@ -829,11 +794,11 @@ class CarewellController extends ActiveAuthController
 		    	$providerData->provider_created         = Carbon::now();
 		    	$providerData->save();
 	          $notif    = "Provider Inserted";
-	    	     $inserted = Self::provider_add_tag_doctor($request->doctorProviderData,$providerData->provider_id);
+	    	     $inserted = StaticFunctionController::provider_add_tag_doctor($request->doctorProviderData,$providerData->provider_id);
 	    	}
 	    	else
 	    	{
-	    		$inserted = Self::provider_add_tag_doctor($request->doctorProviderData,$provider_id);
+	    		$inserted = StaticFunctionController::provider_add_tag_doctor($request->doctorProviderData,$provider_id);
 	          $notif    = "Provider Exist";
 		}
 	     return "<div class='alert alert-success' style='text-align: center;'>".$notif." and ".$inserted." doctors tag!</div>";
@@ -857,41 +822,7 @@ class CarewellController extends ActiveAuthController
 	{
 		return view('carewell.modal_pages.provider_import');
 	}
-	public static function provider_doctor_insert($provider_name,$provider_id,$doctor_name,$doctor_id)
-	{
-		$countPayee = 0;
-		if ($provider_name != $doctor_name)
-		{
-			if($doctor_id==null)
-			{
-				$providerDoctorData = new TblDoctorModel;
-				$providerDoctorData->doctor_full_name       = StaticFunctionController::transformText($doctor_name);
-				$providerDoctorData->doctor_number          = StaticFunctionController::updateReferenceNumber('doctor');
-				$providerDoctorData->doctor_gender          = "N/A";
-				$providerDoctorData->doctor_contact_number  = "N/A";
-				$providerDoctorData->doctor_email_address   = "N/A";
-				$providerDoctorData->doctor_created         = Carbon::now();
-				$providerDoctorData->save();
-
-				$insert['doctor_id']   = $providerDoctorData->doctor_id;
-				$insert['provider_id'] = $provider_id;
-				TblDoctorProviderModel::insert($insert);
-				$countPayee++;
-			}
-			else
-			{
-				if(TblDoctorProviderModel::where('doctor_id',$doctor_id)->where('provider_id',$provider_id)->count()==0)
-				{
-					$insert['doctor_id']   = $doctor_id;
-					$insert['provider_id'] = $provider_id;
-					TblDoctorProviderModel::insert($insert);
-
-					$countPayee++;
-				}
-			}
-		}
-		return $countPayee;
-	}
+	
 	public function provider_import_submit(Request $request)
 	{
 		$file   = $request->file('importProviderFile')->getRealPath();
@@ -924,11 +855,11 @@ class CarewellController extends ActiveAuthController
 
 						$count++;
 
-						$countPayee = Self::provider_doctor_insert($provider_name,$providerData->provider_id,$doctor_name,$doctor_id);
+						$countPayee = StaticFunctionController::provider_doctor_insert($provider_name,$providerData->provider_id,$doctor_name,$doctor_id);
 					}
 					else
 					{
-						$countPayee = Self::provider_doctor_insert($provider_name,$provider_id,$doctor_name,$doctor_id);
+						$countPayee = StaticFunctionController::provider_doctor_insert($provider_name,$provider_id,$doctor_name,$doctor_id);
 					}
 				}            
 			}  
@@ -1092,155 +1023,7 @@ class CarewellController extends ActiveAuthController
 		return $message;
 		
 	}
-	public function import_doctor()
-	{
-		$data['_provider'] = TblProviderModel::get();
-		return view('carewell.modal_pages.doctor_import',$data);
-	}
-	public function doctor_download_template($provider_id,$number)
-	{
-		$excels['number_of_rows'] =   $number;
-		$excels['provider_id']    =   $provider_id;
-		$provider_template        =   TblProviderModel::where('provider_id',$provider_id)->first();
-		$excels['provider_name']  =   $provider_template->provider_name;
-		$excels['data']           =   ['PROVIDER NAME','DOCTOR LAST NAME','DOCTOR FIRST NAME','DOCTOR MIDDLE NAME','DOCTOR GENDER','DOCTOR CONTACT NUMBER','DOCTOR EMAIL ADDRESS','DOCTOR SPECIALIZATION'];
-		Excel::create('CAREWELL '.$provider_template->provider_name.' PROVIDER TEMPLATE', function($excel) use ($excels) 
-		{
-			$excel->sheet('template', function($sheet) use ($excels) 
-			{
-				$data = $excels['data'];
-				$number_of_rows = $excels['number_of_rows'];
-				$sheet->fromArray($data, null, 'A1', false, false);
-				$sheet->freezeFirstRow();
-
-				for($row = 1, $rowcell = 2; $row <= $number_of_rows; $row++, $rowcell++)
-				{
-					/* PROVIDER ROW */
-					$sheet->setCellValue('A'.$rowcell, $excels['provider_name']);
-					
-					/* GENDER*/
-					$gender_cell = $sheet->getCell('E'.$rowcell)->getDataValidation();
-					$gender_cell->setType(\PHPExcel_Cell_DataValidation::TYPE_LIST);
-					$gender_cell->setErrorStyle(\PHPExcel_Cell_DataValidation::STYLE_INFORMATION);
-					$gender_cell->setAllowBlank(false);
-					$gender_cell->setShowInputMessage(true);
-					$gender_cell->setShowErrorMessage(true);
-					$gender_cell->setShowDropDown(true);
-					$gender_cell->setErrorTitle('Input error');
-					$gender_cell->setError('Value is not in list.');
-					$gender_cell->setFormula1('gender');
-
-					/* SPECIALIZATION*/
-					$special_cell = $sheet->getCell('H'.$rowcell)->getDataValidation();
-					$special_cell->setType(\PHPExcel_Cell_DataValidation::TYPE_LIST);
-					$special_cell->setErrorStyle(\PHPExcel_Cell_DataValidation::STYLE_INFORMATION);
-					$special_cell->setAllowBlank(false);
-					$special_cell->setShowInputMessage(true);
-					$special_cell->setShowErrorMessage(true);
-					$special_cell->setShowDropDown(true);
-					$special_cell->setErrorTitle('Input error');
-					$special_cell->setError('Value is not in list.');
-					$special_cell->setFormula1('special');
-				}
-			});
-			/* DATA VALIDATION (REFERENCE FOR DROPDOWN LIST) */
-			$excel->sheet('reference', function($sheet) use($excels) 
-			{
-				$provider_id       = $excels['provider_id'];
-				$_specialization    = TblSpecializationModel::where('archived',0)->get();
-				
-				/* GENDER REFERENCES */
-				$sheet->SetCellValue("E1", "gender");
-				$sheet->SetCellValue("E2", 'MALE');
-				$sheet->SetCellValue("E3", 'FEMALE');
-
-				/* DEPLOYMENT REFERENCES */
-				$sheet->SetCellValue("H1", "special");
-				$special_number = 2;
-				foreach($_specialization as $specialization)
-				{
-					$sheet->SetCellValue("H".$special_number, $specialization->specialization_name);
-					$special_number++;
-				}
-				$special_number--;
-				
-				/*GENDER*/
-				$sheet->_parent->addNamedRange(
-					new \PHPExcel_NamedRange(
-						'gender', $sheet, 'E2:E3'
-					)
-				);
-				/*SPECIALIZATION*/
-				$sheet->_parent->addNamedRange(
-					new \PHPExcel_NamedRange(
-						'special', $sheet, 'H2:H'.$special_number
-					)
-				);
-				
-
-			});
-		})->download('xlsx');
-	}
-	public function doctor_import_doctor_submit(Request $request)
-	{
-		$file   = $request->file('importDoctorFile')->getRealPath();
-		$_data  = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->all();
-		
-		$first  = $_data[0]; 
-		if(isset($first['provider_name'])&&isset($first['doctor_last_name'])&&isset($first['doctor_first_name'])&&isset($first['doctor_middle_name']))
-		{    
-			$count = 0;
-			foreach($_data as $data)
-			{
-				$providerID   = StaticFunctionController::getid($data['provider_name'], 'provider');
-				$providerData = TblProviderModel::where('provider_id',$providerID)->first();
-
-				$count_doctor = TblDoctorModel::where('doctor_first_name',StaticFunctionController::nullableToString($data['doctor_first_name']))
-							->where('doctor_last_name', StaticFunctionController::nullableToString($data['doctor_last_name']))
-							->where('doctor_middle_name',StaticFunctionController::nullableToString($data['doctor_middle_name']))
-							->count();
-				if($count_doctor == 0 &&StaticFunctionController::getid($data['provider_name'], 'provider') != null )
-				{
-					$doctor['doctor_number']            =   StaticFunctionController::updateReferenceNumber('doctor');
-					$doctor['doctor_first_name']        =   StaticFunctionController::nullableToString(ucwords($data['doctor_first_name']));
-					$doctor['doctor_middle_name']       =   StaticFunctionController::nullableToString(ucwords($data['doctor_middle_name']));
-					$doctor['doctor_last_name']         =   StaticFunctionController::nullableToString(ucwords($data['doctor_last_name']));
-					$doctor['doctor_gender']            =   StaticFunctionController::nullableToString(ucwords($data['doctor_gender']));
-					$doctor['doctor_contact_number']    =   StaticFunctionController::nullableToString(ucwords($data['doctor_contact_number']));
-					$doctor['doctor_email_address']     =   StaticFunctionController::nullableToString(ucwords($data['doctor_email_address']));
-					$doctor['doctor_created']           =   Carbon::now();
-					
-					$doctor_id                          =   TblDoctorModel::insertGetId($doctor);
-					
-
-					$specialization['specialization_id']  =   StaticFunctionController::getid($data['doctor_specialization'], 'specialization');
-					$specialization['doctor_id']            =   $doctor_id ;
-					TblDoctorSpecializationModel::insert($specialization);
-
-					$doctorProviderData['provider_id']         = $providerID;
-					$doctorProviderData['doctor_id']           = $doctor_id;
-					TblDoctorProviderModel::insert($doctorProviderData);
-
-					$count++;
-				}
-			}    
-
-			if($count == 0)
-			{
-				$message = '<center><b><span class="color-gray">There is nothing to insert</span></b></center>';
-			}
-			else
-			{
-				$message = '<center><b><span class="color-green">'.$count.' Member/s has been inserted.</span></b></center>';
-			}
-			return $message;
-		}
-		else
-		{
-			return '<center><b><span class="color-red">Wrong file Format</span></b></center>';
-		}
-
-	}
+	
 	public function doctor_add_doctor_provider($doctor_id)
 	{
 		$data['doctor_id'] = $doctor_id;
@@ -1844,7 +1627,6 @@ class CarewellController extends ActiveAuthController
 		$data['_doctor']          = TblDoctorModel::where('archived',0)->get();
 		$data['_payee']           = TblProviderPayeeModel::where('archived',0)->get();
 		$data['_diagnosis']       = TblDiagnosisModel::where('archived',0)->get();
-		$data['_laboratory']      = TblLaboratoryModel::where('archived',0)->get();
 		$data['_specialization']  = TblSpecializationModel::get();
 		return view('carewell.modal_pages.availment_approval_create',$data);
 	}
@@ -2018,137 +1800,373 @@ class CarewellController extends ActiveAuthController
 		{
 			return StaticFunctionController::returnMessage('danger','APPROVAL');
 		}
-		
 	}
 	public function availment_view_approval_details($approval_id)
 	{
-		$data['_provider']        = TblProviderModel::where('archived',0)->get();
-		
 		$data['approval_details'] = TblApprovalModel::where('tbl_approval.approval_id',$approval_id)->ApprovalDetails()->first();
-		$data['charge_diagnosis'] = TblApprovalModel::where('tbl_approval.approval_id',$approval_id)
-							->join('tbl_diagnosis','tbl_diagnosis.diagnosis_id','=','tbl_approval.charge_diagnosis_id')
-							->first();
-		$data['_final_diagnosis'] = TblApprovalDiagnosisModel::where('approval_id',$approval_id)
-							->join('tbl_diagnosis','tbl_diagnosis.diagnosis_id','=','tbl_approval_diagnosis.diagnosis_id')
-							->get();
+		$data['charge_diagnosis'] = TblApprovalModel::where('tbl_approval.approval_id',$approval_id)->Diagnosis()->first();
+		$data['_final_diagnosis'] = TblApprovalDiagnosisModel::where('approval_id',$approval_id)->Diagnosis()->get();
 		$data['_availed']         = TblApprovalProcedureModel::where('tbl_approval_procedure.approval_id',$approval_id)->ProcedureDiagnosis()->get();
 		$data['_doctor_assigned'] = TblApprovalDoctorModel::where('tbl_approval_doctor.approval_id',$approval_id)->ApprovalDoctor()->get();
-		$data['_payee_doctor']    = TblApprovalPayeeModel::where('approval_id',$approval_id)
-							->where('type','doctor')
-							->join('tbl_doctor','tbl_doctor.doctor_id','=','tbl_approval_payee.payee_id')
-		                         ->get();
-		$data['_payee_other']    = TblApprovalPayeeModel::where('approval_id',$approval_id)->where('type','payee')->get();
+		$data['_payee_doctor']    = TblApprovalPayeeModel::where('approval_id',$approval_id)->PayeeDoctor()->get();
+		$data['_payee_other']     = TblApprovalPayeeModel::where('approval_id',$approval_id)->where('type','payee')->get();
 		$data['total_procedure']  = TblApprovalTotalModel::where('approval_id',$approval_id)->where('total_type','procedure')->first();
 		$data['total_doctor']     = TblApprovalTotalModel::where('approval_id',$approval_id)->where('total_type','doctor')->first();
 
-		// EDRICH
-		$approval = TblApprovalModel::where("approval_id",$approval_id)->first();
-
-
-		$data['_procedure'] = TblCoveragePlanProcedureModel::where("availment_id",$approval->availment_id)
-		->join("tbl_procedure","tbl_procedure.procedure_id","=","tbl_coverage_plan_procedure.procedure_id")
-		->get();
-
+		/*BELOW ARE FOR UPDATE DATA*/
+		$approval                 = TblApprovalModel::where("approval_id",$approval_id)->first();
+		$coverage_plan_id         = TblMemberCompanyModel::where('member_id',$approval->member_id)->where('tbl_member_company.archived',0)->value('coverage_plan_id');
+		
+		$data['_procedure'] 	 = TblMemberCompanyModel::CovaragePlanProcedure($approval->member_id,$approval->availment_id)->where('tbl_member_company.archived',0)->get();
+          $data['_availment']       = TblCoveragePlanProcedureModel::where('coverage_plan_id',$coverage_plan_id)->Availment()->get();
+		$data['_provider']        = TblProviderModel::where('archived',0)->get();
+		$data['_procedure_doctor']= TblDoctorProcedureModel::where('archived',0)->get();
+		$data['_doctor']          = TblDoctorProviderModel::where('provider_id',$approval->provider_id)->Doctor()->where('tbl_doctor.archived',0)->get();
+		
+		$data['_payee']           = TblProviderPayeeModel::where('archived',0)->get();
+		$data['_diagnosis']       = TblDiagnosisModel::where('archived',0)->get();
 		$data['_specialization']  = TblSpecializationModel::get();
 
-
-		$data['_doctor'] = TblDoctorProviderModel::where('provider_id',$approval->provider_id)->Doctor()->get();
-
-		$data['_procedure_doctor']= TblDoctorProcedureModel::where('archived',0)->get();
-
-
-
 		return view('carewell.modal_pages.availment_approval_details',$data);
+	}
+    public static function update_insert_procedure($request)
+    {
+    	foreach($request['procedure_id'] as $key=>$datas)
+		{
+			if($request['procedure_approval_id'][$key]==0)
+			{
+				$procedureData = new TblApprovalProcedureModel;
+				$procedureData->procedure_id              = $request['procedure_id'][$key];
+				$procedureData->procedure_gross_amount    = $request['procedure_gross_amount'][$key];
+				$procedureData->procedure_philhealth      = $request['procedure_philhealth'][$key];
+				$procedureData->procedure_charge_patient  = $request['procedure_charge_patient'][$key];
+				$procedureData->procedure_charge_carewell = $request['procedure_charge_carewell'][$key];
+				$procedureData->diagnosis_id              = 1;
+				$procedureData->approval_id               = $request['approval_id'];
+				$procedureData->save();
+			}
+			else
+			{
+				$totalData['total_gross_amount']    = StaticFunctionController::nullableToString($request['procedure_total_gross_amount'],'int');
+				$totalData['total_philhealth']      = StaticFunctionController::nullableToString($request['procedure_total_philhealth'],'int');
+				$totalData['total_charge_patient']  = StaticFunctionController::nullableToString($request['procedure_total_charge_patient'],'int');
+				$totalData['total_charge_carewell'] = StaticFunctionController::nullableToString($request['procedure_total_charge_carewell'],'int');
+				TblApprovalTotalModel::where('approval_total_id',$request['procedure_total_id'])->update($totalData);
+
+				$procedureData['procedure_id']              = $request['procedure_id'][$key];
+				$procedureData['procedure_gross_amount']    = $request['procedure_gross_amount'][$key];
+				$procedureData['procedure_philhealth']      = $request['procedure_philhealth'][$key];
+				$procedureData['procedure_charge_patient']  = $request['procedure_charge_patient'][$key];
+				$procedureData['procedure_charge_carewell'] = $request['procedure_charge_carewell'][$key];
+				TblApprovalProcedureModel::where('procedure_approval_id',$request['procedure_approval_id'][$key])->update($procedureData);
+			}
+			
+		}
+	}
+	public static function update_insert_doctor($request)
+	{
+		foreach($request['doctor_id'] as $key=>$data)
+		{
+			if($request['approval_doctor_id'][$key]==0)
+			{
+				$doctorData = new TblApprovalDoctorModel;
+				$doctorData->approval_doctor_actual_pf        = $request['approval_doctor_actual_pf'][$key];
+				$doctorData->approval_doctor_phil_charity     = $request['approval_doctor_phil_charity'][$key];
+				$doctorData->approval_doctor_charge_patient   = $request['approval_doctor_charge_patient'][$key];
+				$doctorData->approval_doctor_charge_carewell  = $request['approval_doctor_charge_carewell'][$key];
+				$doctorData->specialization_name              = $request['specialization_name'][$key];
+				$doctorData->doctor_id                        = $data;
+				$doctorData->doctor_procedure_id              = $request['doctor_procedure_id'][$key];
+				$doctorData->approval_id                      = $request['approval_id'];
+				$doctorData->save();
+			}
+			else
+			{
+				$totalDoctorData['total_gross_amount']    = StaticFunctionController::nullableToString($request['doctor_total_gross_amount'],'int');
+				$totalDoctorData['total_philhealth']      = StaticFunctionController::nullableToString($request['doctor_total_philhealth'],'int');
+				$totalDoctorData['total_charge_patient']  = StaticFunctionController::nullableToString($request['doctor_total_charge_patient'],'int');
+				$totalDoctorData['total_charge_carewell'] = StaticFunctionController::nullableToString($request['doctor_total_charge_carewell'],'int');
+				TblApprovalTotalModel::where('approval_total_id',$request['doctor_total_id'])->update($totalDoctorData);
+
+				$doctorData['approval_doctor_actual_pf']        = $request['approval_doctor_actual_pf'][$key];
+				$doctorData['approval_doctor_phil_charity']     = $request['approval_doctor_phil_charity'][$key];
+				$doctorData['approval_doctor_charge_patient']   = $request['approval_doctor_charge_patient'][$key];
+				$doctorData['approval_doctor_charge_carewell']  = $request['approval_doctor_charge_carewell'][$key];
+				$doctorData['specialization_name']              = $request['specialization_name'][$key];
+				$doctorData['doctor_id']                        = $request['doctor_id'][$key];
+				$doctorData['doctor_procedure_id']              = $request['doctor_procedure_id'][$key];
+				TblApprovalDoctorModel::where('approval_doctor_id',$request['procedure_approval_id'][$key])->update($doctorData);
+			}
+		}
+	}
+	public function availment_update_approval_submit(Request $request)
+	{
+		
+		$approval = TblApprovalModel::where('approval_id',$request->approval_id)->first();
+
+
+		if($approval->availment_id==$request->availment_id)
+		{
+			Self::update_insert_procedure($request->all());
+		}
+		else
+		{
+			TblApprovalProcedureModel::where('approval_id',$request->approval_id)->delete();
+			TblApprovalTotalModel::where('total_type','procedure')->where('approval_id',$request->approval_id)->delete();
+
+			$totalData = new TblApprovalTotalModel;
+			$totalData->total_gross_amount    = StaticFunctionController::nullableToString($request->procedure_total_gross_amount,'int');
+			$totalData->total_philhealth      = StaticFunctionController::nullableToString($request->procedure_total_philhealth,'int');
+			$totalData->total_charge_patient  = StaticFunctionController::nullableToString($request->procedure_total_charge_patient,'int');
+			$totalData->total_charge_carewell = StaticFunctionController::nullableToString($request->procedure_total_charge_carewell,'int');
+			$totalData->total_type            = 'procedure';
+			$totalData->approval_id           = $request->approval_id;
+			$totalData->save();
+
+			foreach($request->procedure_id as $key=>$datas)
+			{
+				$procedureData = new TblApprovalProcedureModel;
+				$procedureData->procedure_id              = $request->procedure_id[$key];
+				$procedureData->procedure_gross_amount    = $request->procedure_gross_amount[$key];
+				$procedureData->procedure_philhealth      = $request->procedure_philhealth[$key];
+				$procedureData->procedure_charge_patient  = $request->procedure_charge_patient[$key];
+				$procedureData->procedure_charge_carewell = $request->procedure_charge_carewell[$key];
+				$procedureData->diagnosis_id              = 1;
+				$procedureData->approval_id               = $request->approval_id;
+				$procedureData->save();
+			}
+		}
+		if($approval->provider_id==$request->provider_id)
+		{
+			Self::update_insert_doctor($request->all());
+		}
+		else
+		{
+			TblApprovalDoctorModel::where('approval_id',$request->approval_id)->delete();
+			TblApprovalTotalModel::where('total_type','doctor')->where('approval_id',$request->approval_id)->delete();
+
+			$totalDoctorData = new TblApprovalTotalModel;
+			$totalDoctorData->total_gross_amount    = StaticFunctionController::nullableToString($request->doctor_total_gross_amount,'int');
+			$totalDoctorData->total_philhealth      = StaticFunctionController::nullableToString($request->doctor_total_philhealth,'int');
+			$totalDoctorData->total_charge_patient  = StaticFunctionController::nullableToString($request->doctor_total_charge_patient,'int');
+			$totalDoctorData->total_charge_carewell = StaticFunctionController::nullableToString($request->doctor_total_charge_carewell,'int');
+			$totalDoctorData->total_type            = 'doctor';
+			$totalDoctorData->approval_id           = $request->approval_id;
+			$totalDoctorData->save();
+
+			foreach($request->doctor_id as $key=>$data)
+			{
+				$doctorData = new TblApprovalDoctorModel;
+				$doctorData->approval_doctor_actual_pf        = $request->approval_doctor_actual_pf[$key];
+				$doctorData->approval_doctor_phil_charity     = $request->approval_doctor_phil_charity[$key];
+				$doctorData->approval_doctor_charge_patient   = $request->approval_doctor_charge_patient[$key];
+				$doctorData->approval_doctor_charge_carewell  = $request->approval_doctor_charge_carewell[$key];
+				$doctorData->specialization_name              = $request->specialization_name[$key];
+				$doctorData->doctor_id                        = $request->doctor_id[$key];
+				$doctorData->doctor_procedure_id              = $request->doctor_procedure_id[$key];
+				$doctorData->approval_id                      = $request->approval_id;
+				$doctorData->save();
+			}
+		}
+
+		if($request->doctor_payee_id!=null)
+		{
+			foreach($request->doctor_payee_id as $key=>$payee_id)
+			{
+				if($request->doctor_approval_payee_id==0)
+				{
+					$payeeDocData = new TblApprovalPayeeModel;
+					$payeeDocData->payee_id     = $payee_id;
+					$payeeDocData->approval_id  = $request->approval_id;
+					$payeeDocData->payee_name   = 'doctor';
+					$payeeDocData->type         = 'doctor';
+					$payeeDocData->save();
+				}
+				else
+				{
+					$payeeDocData['payee_id']     = $payee_id;
+					TblApprovalPayeeModel::where('approval_payee_id',$request->doctor_approval_payee_id)->update($payeeDocData);
+				}
+				
+			}
+		}
+
+		if($request->payee_name!=null)
+		{
+			foreach($request->payee_name as $key=>$payee_name)
+			{
+				if($request->payee_approval_payee_id==0)
+				{
+					$payeeData = new TblApprovalPayeeModel;
+					$payeeData->payee_id     = '0';
+					$payeeData->approval_id  = $request->approval_id;
+					$payeeData->payee_name   = $payee_name;
+					$payeeData->type         = 'payee';
+					$payeeData->save();
+				}
+				else
+				{
+					$payeeData['payee_name']     = $payee_name;
+					TblApprovalPayeeModel::where('approval_payee_id',$request->payee_approval_payee_id)->update($payeeData);
+				}
+			}
+		}
+		$approvalData['approval_complaint']         = $request->approval_complaint;
+		$approvalData['approval_date_availed']      = $request->approval_date_availed;
+		$approvalData['availment_id']               = $request->availment_id;
+		$approvalData['provider_id']                = $request->provider_id;
+		$checkApproval = TblApprovalModel::where('approval_id',$request->approval_id)->update($approvalData);
+		
+		return StaticFunctionController::returnMessage('success','APPROVAL');
+		// foreach($request->final_diagnosis_id as $final_diagnosis_id)
+		// {
+		// 	$diagnosisData = new TblApprovalDiagnosisModel;
+		// 	$diagnosisData->approval_diagnosis_type = '0';
+		// 	$diagnosisData->diagnosis_id = $final_diagnosis_id;
+		// 	$diagnosisData->approval_id = $approvalData->approval_id;
+		// 	$diagnosisData->save();
+		// }
+		// if($checkApproval)
+		// {
+		// 	return StaticFunctionController::returnMessage('success','APPROVAL');
+		// }
+		// else
+		// {
+		// 	return StaticFunctionController::returnMessage('danger','APPROVAL');
+		// }
+     
 	}
 
 	public function approval_export_pdf($approval_id)
 	{
-	    	$data['_provider']        = TblProviderModel::where('archived',0)->get();
-	    
-	    	$data['approval_details'] = TblApprovalModel::where('tbl_approval.approval_id',$approval_id)->ApprovalDetails()->first();
-	    	$data['charge_diagnosis'] = TblApprovalModel::where('tbl_approval.approval_id',$approval_id)
-	                              ->join('tbl_diagnosis','tbl_diagnosis.diagnosis_id','=','tbl_approval.charge_diagnosis_id')
-	                              ->first();
-	    	$data['_final_diagnosis'] = TblApprovalDiagnosisModel::where('approval_id',$approval_id)
-	                              ->join('tbl_diagnosis','tbl_diagnosis.diagnosis_id','=','tbl_approval_diagnosis.diagnosis_id')
-	                              ->get();
-	    	$data['_availed']         = TblApprovalProcedureModel::where('tbl_approval_procedure.approval_id',$approval_id)->ProcedureDiagnosis()->get();
-	    	$data['_doctor_assigned'] = TblApprovalDoctorModel::where('tbl_approval_doctor.approval_id',$approval_id)->ApprovalDoctor()->get();
-	    	$data['_payee_doctor']    = TblApprovalPayeeModel::where('approval_id',$approval_id)
-	                              ->where('type','doctor')
-	                              ->join('tbl_doctor','tbl_doctor.doctor_id','=','tbl_approval_payee.payee_id')
-	                              ->get();
-	    	$data['_payee_other']     = TblApprovalPayeeModel::where('approval_id',$approval_id)
-	                              ->where('type','payee')
-	                              ->get();
-	    	$data['total_procedure']  = TblApprovalTotalModel::where('approval_id',$approval_id)->where('total_type','procedure')->first();
-	    	$data['total_doctor']     = TblApprovalTotalModel::where('approval_id',$approval_id)->where('total_type','doctor')->first();
+    	$data['approval_details'] = TblApprovalModel::where('tbl_approval.approval_id',$approval_id)->ApprovalDetails()->first();
+		$data['charge_diagnosis'] = TblApprovalModel::where('tbl_approval.approval_id',$approval_id)->Diagnosis()->first();
+		$data['_final_diagnosis'] = TblApprovalDiagnosisModel::where('approval_id',$approval_id)->Diagnosis()->get();
+		$data['_availed']         = TblApprovalProcedureModel::where('tbl_approval_procedure.approval_id',$approval_id)->ProcedureDiagnosis()->get();
+		$data['_doctor_assigned'] = TblApprovalDoctorModel::where('tbl_approval_doctor.approval_id',$approval_id)->ApprovalDoctor()->get();
+		$data['_payee_doctor']    = TblApprovalPayeeModel::where('approval_id',$approval_id)->PayeeDoctor()->get();
+		$data['_payee_other']     = TblApprovalPayeeModel::where('approval_id',$approval_id)->where('type','payee')->get();
+		$data['total_procedure']  = TblApprovalTotalModel::where('approval_id',$approval_id)->where('total_type','procedure')->first();
+		$data['total_doctor']     = TblApprovalTotalModel::where('approval_id',$approval_id)->where('total_type','doctor')->first();
 
-	     //$data["page"] = "Monthly Government Forms";
-	      // $year = 2017;
-	      // $shop_id = 7;
-	      // $contri_info = TblApprovalModel::get();
-	      // $data['company_id1'] = 1;
-	      // $data["contri_info"] = 2; 
-	      // $data["month"] = 33;
-	      // $data["month_name"] = 44;
-	      // $data["year"] = $year;
-	      // $data['_company'] = TblApprovalModel::get();
-
-	      //$format["title"] = $data['page'];
-	     $format["format"] = "Legal";
-	     $format["default_font"] = "sans-serif";
-	     $pdf = PDF::loadView('carewell.additional_pages.approval_export_pdf', $data, [], $format);
-	     return $pdf->stream('document.pdf');
+	    $format["format"] 			= "Legal";
+	    $format["default_font"] 	= "sans-serif";
+	    $pdf = PDF::loadView('carewell.additional_pages.approval_export_pdf', $data, [], $format);
+	    return $pdf->stream('document.pdf');
 	}
-	//edrich
 
-
-public function availment_approval_remove_details_submit(Request $request)
-{
-	$ref = $request->ref;
-	switch ($ref)
+	public function availment_remove_approval_details_submit(Request $request)
 	{
-		case 'procedure':
-			//dd('procedure');
-			$remove = TblApprovalProcedureModel::where('procedure_approval_id',$request->id)->delete();
-		break;
+		$ref = $request->ref;
+		
+		switch ($ref)
+		{
+			case 'PROCEDURE':
+			     $remove = TblApprovalProcedureModel::where('procedure_approval_id',$request->id)->delete();
+			break;
 
-		case 'doctor':
-			//dd('doctor');
-			$remove = TblApprovalDoctorModel::where('approval_doctor_id',$request->id)->delete();
-		break;
-
-		//same function if ref = doctor payee or ref = other payee
-		case 'doctor payee':		
-		case 'other payee':
-			$remove = TblApprovalPayeeModel::where('approval_payee_id',$request->id)->delete();
-		break;
+			case 'PHYSICIAN':
+				$remove = TblApprovalDoctorModel::where('approval_doctor_id',$request->id)->delete();
+			break;
+			case 'doctor payee':
+				$remove = TblApprovalPayeeModel::where('approval_payee_id',$request->id)->delete();
+			break;		
+			case 'other payee':
+				$remove = TblApprovalPayeeModel::where('approval_payee_id',$request->id)->delete();
+			break;
+		}
+		if($remove)
+		{
+             	$message = StaticFunctionController::customMessage("success", $ref." successfully deleted!");
+		}
+		else
+		{
+			$message = StaticFunctionController::customMessage("danger","Transaction Failed");
+		}
+		return $message;
+     }
+     public function availment_create_new_provider($warning)
+     {
+     	$data['warning']         = $warning;
+     	$data['user']            = StaticFunctionController::global();
+     	return view('carewell.modal_pages.availment_new_provider_doctor',$data);
+     }
+     public function availment_create_new_provider_submit(Request $request)
+     {
+     	$provider_id = StaticFunctionController::getIdNorName($request->provider_name,'provider');
+    	if($provider_id==$request->provider_name)
+    	{
+    		$providerData = new TblProviderModel;
+	    	$providerData->provider_name            = $request->provider_name;
+	    	$providerData->provider_rvs             = $request->provider_rvs;
+	    	$providerData->provider_contact_person  = 'N/A';
+	    	$providerData->provider_telephone_number= 'N/A';
+	    	$providerData->provider_mobile_number   = 'N/A';
+	    	$providerData->provider_contact_email   = 'N/A';
+	    	$providerData->provider_address         = 'N/A';
+	    	$providerData->provider_created         = Carbon::now();
+	    	$providerData->save();
+          	$notif    			= "Provider Inserted";
+    	    $inserted 			= StaticFunctionController::provider_add_tag_doctor($request->doctorProviderData,$providerData->provider_id);
+    		$new_provider_id 	= $providerData->provider_id;
+    		$new_provider_name 	= $providerData->provider_name;
+    	}
+    	else
+    	{
+    		$inserted 			= StaticFunctionController::provider_add_tag_doctor($request->doctorProviderData,$provider_id);
+          	$notif    			= "Provider Exist";
+          	$new_provider_id 	= $provider_id;
+          	$new_provider_name 	= TblProviderModel::where('provider_id',$provider_id)->value('provider_name');
+		}
+		$message  	= StaticFunctionController::customMessage('success',$notif.' and '.$inserted.' doctors tag!'); 
+		$_doctors 	= TblDoctorProviderModel::where('provider_id',$new_provider_id)->Doctor()->get();
+		$data['_doctor_list'] = '<option value="0">-SELECT  DOCTOR-';
+      	foreach($_doctors as $doctor)
+      	{
+            $data['_doctor_list']     .= '<option value='.$doctor->doctor_id.'>'.$doctor->doctor_full_name;
+      	}
+        return  response()->json(array('provider_id' => $new_provider_id,'provider_name' => $new_provider_name,'doctor_list' => $data['_doctor_list'],'message'=>$message));
+	}
+	public function availment_add_approval_details($ref,$id)
+	{
+		switch ($ref)
+		{
+			case 'procedure':
+				$approval 				= TblApprovalModel::where("approval_id",$id)->first();
+				$data['_procedure'] 	= TblMemberCompanyModel::CovaragePlanProcedure($approval->member_id,$approval->availment_id)->where('tbl_member_company.archived',0)->get();
+		        $data['ref']        	= $ref;
+		        $data['title']      	= 'PROCEDURE';
+		        $data['approval_id'] 	= $id;
+		     break;
+		}
+		return view('carewell.modal_pages.availment_approval_add_details',$data);
 	}
 
-	return StaticFunctionController::customMessage("success", $ref." successfully deleted!");
-
-}
-
-public function availment_approval_add_details($approval_id)
-{
-	$approval = TblApprovalModel::where("approval_id",$approval_id)->first();
-	$data['approval_id'] = $approval_id;
-	$data['_availed']         = TblApprovalProcedureModel::where('tbl_approval_procedure.approval_id',$approval_id)->ProcedureDiagnosis()->get();
-	$data['_procedure'] = TblCoveragePlanProcedureModel::where("availment_id",$approval->availment_id)
-	->join("tbl_procedure","tbl_procedure.procedure_id","=","tbl_coverage_plan_procedure.procedure_id")
-	->get();
-
-
-	return view('carewell.modal_pages.availment_approval_add_details',$data);
-}
-
-public function availment_approval_add_details_submit()
-{
-	dd("wew");
-}
-// edrich
-
+	public function availment_add_approval_details_submit(Request $request)
+	{
+		switch ($request->ref)
+		{
+			case 'procedure':
+				foreach($request->procedure_id as $key=>$datas)
+				{
+					if($request->procedure_id[$key]!="")
+					{
+						$procedureData = new TblApprovalProcedureModel;
+						$procedureData->procedure_id              = $request->procedure_id[$key];
+						$procedureData->procedure_gross_amount    = $request->procedure_gross_amount[$key];
+						$procedureData->procedure_philhealth      = $request->procedure_philhealth[$key];
+						$procedureData->procedure_charge_patient  = $request->procedure_charge_patient[$key];
+						$procedureData->procedure_charge_carewell = $request->procedure_charge_carewell[$key];
+						$procedureData->diagnosis_id              = 1;
+						$procedureData->approval_id               = $request->approval_id;
+						$procedureData->save();
+					}
+				}
+				$message =  StaticFunctionController::customMessage('success','PROCEDURE ADDED'); 
+			break;
+		}
+		return $message;
+	}
 	/*PAYABLE*/
 	public function payable()
 	{
@@ -2159,15 +2177,11 @@ public function availment_approval_add_details_submit()
 		$data['_payable_close']  = TblPayableModel::where('tbl_payable.archived',1)->PayableInfo()->paginate(10);
 		foreach ($data['_payable_open'] as $key => $payable) 
 		{
-			$data['_payable_open'][$key]['approval_number']    =  TblPayableApprovalModel::where('payable_id',$payable->payable_id)
-			->join('tbl_approval','tbl_approval.approval_id','=','tbl_payable_approval.approval_id')
-			->get();
+			$data['_payable_open'][$key]['approval_number']    =  TblPayableApprovalModel::where('payable_id',$payable->payable_id)->PayableStatus()->get();
 		}
 		foreach ($data['_payable_close'] as $key => $payable) 
 		{
-			$data['_payable_close'][$key]['approval_number']    =  TblPayableApprovalModel::where('payable_id',$payable->payable_id)
-			->join('tbl_approval','tbl_approval.approval_id','=','tbl_payable_approval.approval_id')
-			->get();
+			$data['_payable_close'][$key]['approval_number']    =  TblPayableApprovalModel::where('payable_id',$payable->payable_id)->PayableStatus()->get();
 		}
 		return view('carewell.pages.payable_center',$data);
 	}

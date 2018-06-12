@@ -35,6 +35,12 @@
         
         
         <style>
+        
+        select.approval-select
+        {
+            width:300px !important;
+        }
+
         input
         {
         text-transform: capitalize ;
@@ -67,7 +73,7 @@
         {
             .top-padding
             {
-                padding-top: 60px;
+                padding-top: 30px;
             }
         }
         @media screen and (max-width: 425px) 

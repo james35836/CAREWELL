@@ -7,8 +7,8 @@ $(document).ready(function()
 	});
 	$('body').find('.get-member-info').select2();
 	$('.date-picker').datepicker();
-	$('body').find('.get-availment-info').select2();
-	$('body').find('.get-provider-info').select2();
+	$('body').find('.getAvailmentInfo').select2();
+	$('body').find('.getProviderInfo').select2();
 	$('body').find('.default-select2').select2();
 
 	$('body').find('.my-select').select2();
@@ -18,7 +18,7 @@ $(document).ready(function()
 	$('body').on('change','.gross-amount',function()
 	{
 		
-		var value 		= $(this).val();
+		var value 			= $(this).val();
 		var $amount 		= $(this).parents('tr').find('.gross-amount');
 		var $philhealth 	= $(this).parents('tr').find('.philhealth');
 		var $patient 		= $(this).parents('tr').find('.charge-patient');
@@ -36,7 +36,7 @@ $(document).ready(function()
 		var $member_id    	= $('#member_id').val();
 		var $availment_id   = $('#availment_id').val();
 		var new_carewell 	= 0;
-		var value 		= $(this).val();
+		var value 			= $(this).val();
 	     var $procedure 	= $(this).parents('tr').find('.procedureList');
 		var $amount 		= $(this).parents('tr').find('.gross-amount');
 		var $patient 		= $(this).parents('tr').find('.charge-patient');
@@ -152,11 +152,8 @@ $(document).ready(function()
 	
 	<div class="row box-globals">
 		<div class="form-holder col-md-12 no-padding">
-			<div class="col-md-3 form-content">
-				<button type="button" class="btn btn-primary top-element reimbursementBtn" ><i class="fa fa-upload btn-icon"></i> REIMBURSEMENT</button>
-			</div>
-			<div class="col-md-3 form-content">
-				
+			<div class="col-md-6 form-content">
+				<!-- FOR SPACING -->
 			</div>
 			<div class="col-md-2 form-content">
 				<label>Availment Date</label>
@@ -169,16 +166,16 @@ $(document).ready(function()
 			<div class="col-md-2 form-content">
 				<label>Network Provider</label>
 			</div>
-			<div class="col-md-4 form-content reemburse-provider">
+			<div class="col-md-4 form-content">
 				<div class="input-group">
-					<select class="form-control get-provider-info" id="provider_id" name="provider_id">
+					<select class="form-control getProviderInfo" id="provider_id" name="provider_id">
 						<option value="0">SELECT PROVIDER</option>
 						@foreach($_provider as $provider)
 						<option value="{{$provider->provider_id}}">{{$provider->provider_name}}</option>
 						@endforeach
 					</select>
 					<span class="input-group-btn">
-						<button class="btn btn-secondary create-provider" data-size="md" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span></button>
+						<button class="btn btn-secondary create-new-provider" data-size="md" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span></button>
 					</span>
 				</div>
 				
@@ -187,12 +184,8 @@ $(document).ready(function()
 				<label>Type of Availment</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<select data-name="availment" class="form-control get-availment-info" name="availment_id" id="availment_id">
+				<select data-name="availment" class="form-control getAvailmentInfo" name="availment_id" id="availment_id">
 					<option value="0">SELECT AVAILMENT</option>
-					<option disabled>Availment List</option>
-					@foreach($_availment as $availment)
-					<option value="{{$availment->availment_id}}">{{$availment->availment_name}}</option>
-					@endforeach
 				</select>
 			</div>
 		</div>
@@ -212,7 +205,7 @@ $(document).ready(function()
 				<label>Admitting Diagnosis</label>
 			</div>
 			<div class="col-md-10 form-content">
-				<select class="form-control default-select2" id="initial_diagnosis_id" name="diagnosis_id" >
+				<select class="form-control default-select2" id="diagnosis_id" name="diagnosis_id" >
 					<option value="0">SELECT DIAGNOSIS</option>
 					@foreach($_diagnosis as $diagnosis)
 					<option value="{{$diagnosis->diagnosis_id}}">{{$diagnosis->diagnosis_name}}</option>
@@ -266,7 +259,7 @@ $(document).ready(function()
 			</center>
 		</div>
 	</div>
-	<div class="row box-globals">
+	<div class="row box-globals" id="changeAvailmentInfo">
 		<div class="table-responsive no-padding">
 			<table class="table table-bordered" >
 				<tr>
@@ -280,15 +273,15 @@ $(document).ready(function()
 				</tr>
 				<tr class="table-row">
 					<td>
-						<select style="width: 250px;" class="form-control select2 procedureList" name="procedure_id[]">
+						<select class="form-control approval-select procedureList" name="procedure_id[]">
 							<option value="0">-Select Description-</option>
 						</select>
 					</td>
-					<td><input type="text"  value="0.0" name="procedure_gross_amount[]" id="laboratory_amount" class="gross-amount form-control"/></td>
-					<td><input type="text" value="0.0" name="procedure_philhealth[]" id="" class="philhealth form-control"/></td>
-					<td><input type="text" value="0.0" name="procedure_charge_patient[]" id="" class="charge-patient form-control"/></td>
-					<td><input type="text" value="0.0" name="procedure_charge_carewell[]" id="" class="charge-carewell form-control"/></td>
-					<td><textarea name="approval_remarks" id="approval_remarks" class="form-control"></textarea></td>
+					<td><input type="number"  value="0.0" name="procedure_gross_amount[]" id="laboratory_amount" class="gross-amount form-control"/></td>
+					<td><input type="number" value="0.0" name="procedure_philhealth[]" id="" class="philhealth form-control"/></td>
+					<td><input type="number" value="0.0" name="procedure_charge_patient[]" id="" class="charge-patient form-control"/></td>
+					<td><input type="number" value="0.0" name="procedure_charge_carewell[]" id="" class="charge-carewell form-control"/></td>
+					<td><textarea name="approval_remarks"  cols="2" rows="1"  id="approval_remarks" class="form-control">REMARKS</textarea></td>
 					<td>
 						<div class="btn-group" role="group" aria-label="Basic example">
 							<button type="button" data-number="2" class="btn btn-danger btn-sm remove-row"><i class="fa fa-minus-circle"></i></button>
@@ -299,10 +292,10 @@ $(document).ready(function()
 		</div>
 		<div class="col-md-6 pull-right col-xs-12">
 			<div class="col-md-6 form-holder">
-				<label>Total Actual PF Charges</label>
+				<label>Total Gross Amount</label>
 			</div>
 			<div class="col-md-6 form-holder">
-				<input type="text" class="form-control total_gross_amount" name="procedure_total_gross_amount" id="total_gross_amount">
+				<input type="number" class="form-control total_gross_amount" name="procedure_total_gross_amount" id="total_gross_amount">
 			</div>
 		</div>
 		<div class="col-md-6 pull-right col-xs-12">
@@ -310,7 +303,7 @@ $(document).ready(function()
 				<label>Total Philhealth Charity</label>
 			</div>
 			<div class="col-md-6 form-holder">
-				<input type="text" class="form-control total_philhealth" name="procedure_total_philhealth" id="total_philhealth">
+				<input type="number" class="form-control total_philhealth" name="procedure_total_philhealth" id="total_philhealth">
 			</div>
 		</div>
 		<div class="col-md-6 pull-right col-xs-12">
@@ -318,7 +311,7 @@ $(document).ready(function()
 				<label>Total Charge to Patient</label>
 			</div>
 			<div class="col-md-6 form-holder">
-				<input type="text" class="form-control total_charge_patient" name="procedure_total_charge_patient" id="total_charge_patient">
+				<input type="number" class="form-control total_charge_patient" name="procedure_total_charge_patient" id="total_charge_patient">
 			</div>
 		</div>
 		<div class="col-md-6 pull-right col-xs-12">
@@ -326,7 +319,7 @@ $(document).ready(function()
 				<label>Total Charge to Carewell</label>
 			</div>
 			<div class="col-md-6 form-holder">
-				<input type="text" class="form-control total_charge_carewell" name="procedure_total_charge_carewell" id="total_charge_carewell">
+				<input type="number" class="form-control total_charge_carewell" name="procedure_total_charge_carewell" id="total_charge_carewell">
 			</div>
 		</div>
 	</div>
@@ -354,14 +347,14 @@ $(document).ready(function()
 				</tr>
 				<tr class="table-row">
 					<td>
-						<select style="width: 200px;" class="form-control select2 doctorList" name="doctor_id[]">
+						<select class="form-control approval-select doctorList" name="doctor_id[]">
 							<option value="0">SELECT PROVIDER</option>
 						</select>
 					</td>
 					<td>
 						
 						<div class="input-group">
-							<select style="width: 254px;" class="form-control select2" name="specialization_name[]">
+							<select class="form-control approval-select specializationList" name="specialization_name[]">
 								<option>SPECIALIZATION</option>
 								@foreach($_specialization as $specialization)
 								<option>{{$specialization->specialization_name}}</option>
@@ -372,19 +365,18 @@ $(document).ready(function()
 							</span>
 						</div>
 					</td>
-					<td><input type="text"  value="2017" name="" class="form-control rateRvs"/></td>
+					<td><input disabled type="text"  value="" name="" class="form-control rateRvs"/></td>
 					<td>
-						<select style="width: 330px;" class="form-control select2" name="doctor_procedure_id[]">
-							<option>SELECT PROCEDURE</option>
+						<select class="form-control approval-select doctorProcedureList" name="doctor_procedure_id[]">
 							@foreach($_procedure_doctor as $procedure_doctor)
 							<option value="{{$procedure_doctor->doctor_procedure_id}}">{{$procedure_doctor->doctor_procedure_descriptive}}</option>
 							@endforeach
 						</select>
 					</td>
-					<td><input type="text" value="0.0" name="approval_doctor_actual_pf[]" class="gross-amount form-control"/></td>
-					<td><input type="text" value="0.0" name="approval_doctor_phil_charity[]" class="philhealth form-control"/></td>
-					<td><input type="text" value="0.0" name="approval_doctor_charge_patient[]" class="charge-patient form-control"/></td>
-					<td><input type="text" value="0.0" name="approval_doctor_charge_carewell[]" class="charge-carewell form-control"/></td>
+					<td><input type="number" value="0" name="approval_doctor_actual_pf[]" class="gross-amount form-control"/></td>
+					<td><input type="number" value="0" name="approval_doctor_phil_charity[]" class="philhealth form-control"/></td>
+					<td><input type="number" value="0" name="approval_doctor_charge_patient[]" class="charge-patient form-control"/></td>
+					<td><input type="number" value="0" name="approval_doctor_charge_carewell[]" class="charge-carewell form-control"/></td>
 					<td>
 						<div class="btn-group" role="group" aria-label="Basic example">
 							<button type="button" data-number="2" class="btn btn-danger btn-sm remove-row"><i class="fa fa-minus-circle"></i></button>
@@ -398,7 +390,7 @@ $(document).ready(function()
 				<label>Total Actual PF Charges</label>
 			</div>
 			<div class="col-md-6 form-holder">
-				<input type="text" class="form-control total_gross_amount" name="doctor_total_gross_amount" id="total_gross_amount">
+				<input type="number" class="form-control total_gross_amount" name="doctor_total_gross_amount" id="total_gross_amount">
 			</div>
 		</div>
 		<div class="col-md-6 pull-right col-xs-12">
@@ -406,7 +398,7 @@ $(document).ready(function()
 				<label>Total Philhealth Charity</label>
 			</div>
 			<div class="col-md-6 form-holder">
-				<input type="text" class="form-control total_philhealth" name="doctor_total_philhealth" id="total_philhealth">
+				<input type="number" class="form-control total_philhealth" name="doctor_total_philhealth" id="total_philhealth">
 			</div>
 		</div>
 		<div class="col-md-6 pull-right col-xs-12">
@@ -414,7 +406,7 @@ $(document).ready(function()
 				<label>Total Charge to Patient</label>
 			</div>
 			<div class="col-md-6 form-holder">
-				<input type="text" class="form-control total_charge_patient" name="doctor_total_charge_patient" id="total_charge_patient">
+				<input type="number" class="form-control total_charge_patient" name="doctor_total_charge_patient" id="total_charge_patient">
 			</div>
 		</div>
 		<div class="col-md-6 pull-right col-xs-12">
@@ -422,7 +414,7 @@ $(document).ready(function()
 				<label>Total Charge to Carewell</label>
 			</div>
 			<div class="col-md-6 form-holder">
-				<input type="text" class="form-control total_charge_carewell" name="doctor_total_charge_carewell" id="total_charge_carewell">
+				<input type="number" class="form-control total_charge_carewell" name="doctor_total_charge_carewell" id="total_charge_carewell">
 			</div>
 		</div>
 	</div>

@@ -29,7 +29,14 @@ class TblCoveragePlanProcedureModel extends Model
             ->join('tbl_availment','tbl_availment.availment_id','=','tbl_coverage_plan_procedure.availment_id');
     	return $query;
     }
-
+    public function scopeAvailment($query)
+    {
+        $query  ->where('tbl_coverage_plan_procedure.archived',0)
+                ->select(DB::raw('count(*) as totals, tbl_coverage_plan_procedure.availment_id,tbl_availment.availment_name'))
+                ->groupBy('availment_id')
+                ->join('tbl_availment','tbl_availment.availment_id','=','tbl_coverage_plan_procedure.availment_id');
+        return $query;
+    }
     
 }
 

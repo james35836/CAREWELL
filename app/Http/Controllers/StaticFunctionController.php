@@ -56,6 +56,7 @@ use App\Http\Model\TblDoctorModel;
 use App\Http\Model\TblDoctorSpecializationModel;
 use App\Http\Model\TblDoctorProviderModel;
 use App\Http\Model\TblSpecializationModel;
+use App\Http\Model\TblDoctorProcedureModel;
 
 use App\Http\Model\TblApprovalModel;
 
@@ -160,31 +161,41 @@ class StaticFunctionController extends Controller
     {
         if($request->ajax())
         {
-            $provider                   = TblProviderModel::where('provider_id',$request->provider_id)->first();
-            $data['_provider_doctor']   = TblDoctorProviderModel::where('tbl_doctor_provider.provider_id',$request->provider_id)->where('tbl_doctor_provider.archived',0)->DoctorProvider()->get();
-            $data['_provider_doctors']  = '<option>-SELECT DOCTOR-';
+            $_specialization                    = TblSpecializationModel::get();
+            $_procedure_doctor                  = TblDoctorProcedureModel::where('archived',0)->get();
+            $provider                           = TblProviderModel::where('provider_id',$request->provider_id)->first();
+            $data['_provider_doctor']           = TblDoctorProviderModel::where('tbl_doctor_provider.provider_id',$request->provider_id)->where('tbl_doctor_provider.archived',0)->DoctorProvider()->get();
+            $data['_procedure_doctors']          = '<option>-SELECT PROCEDURE-';
+            $data['_provider_doctors']          = '<option>-SELECT DOCTOR-';
+            $data['_specialization_doctors']    = '<option>-SELECT SPECIALIZATION-';
+            foreach($_procedure_doctor as $procedure_doctor)
+            {
+                $data['_procedure_doctors']     .= '<option value='.$procedure_doctor->doctor_procedure_id.'>'.$procedure_doctor->doctor_procedure_descriptive;
+            }
             foreach($data['_provider_doctor'] as $provider_doctor)
             {
                 $data['_provider_doctors']     .= '<option value='.$provider_doctor->doctor_id.'>'.$provider_doctor->doctor_full_name;
             }
-
-            return  response()->json(array('first' => $data['_provider_doctors'],'second'=>$provider->provider_rvs,'third'=>$provider->provider_name));
-        }
-    }
-  
-    public function getDoctorSpecialty(Request $request)
-    {
-        if($request->ajax())
-        {
-            $data['_specialization']      = TblDoctorSpecializationModel::where('tbl_doctor_specialization.doctor_id',$request->value)
-                                          ->join('tbl_specialization','tbl_specialization.specialization_id','=','tbl_doctor_specialization.specialization_id')
-                                          ->get();
-            $data['_specializationList']  = '';
-            foreach($data['_specialization'] as $specializationDoctor)
+            foreach($_specialization as $specialization)
             {
-                $data['_specializationList']     .= '<option value='.$specializationDoctor->specialization_id.'>'.$specializationDoctor->specialization_name;
+                $data['_specialization_doctors']     .= '<option>'.$specialization->specialization_name;
             }
-            return $data['_specializationList'];
+
+            $first              = $data['_provider_doctors'];
+            $second             = $provider->provider_rvs;
+            $third              = $provider->provider_name;
+            $specialization     = $data['_specialization_doctors'];
+            $doctorprocedure    = $data['_procedure_doctors'];
+
+            if($request->warning=="show")//FOR UPDATE
+            {
+                $view               = view('carewell.additional_pages.availment_change_provider')->render();
+            }
+            else
+            {
+                $view               = 'none';
+            }
+            return response()->json(array('first' => $first,'second'=>$second,'third'=>$third,'view'=>$view,'specialization'=>$specialization,'doctorprocedure'=>$doctorprocedure));
         }
     }
     public function getAvailmentInfo(Request $request)
@@ -192,15 +203,22 @@ class StaticFunctionController extends Controller
         if($request->ajax())
         {
             $coverage           = TblMemberCompanyModel::where('archived',0)->where('member_id',$request->member_id)->value('coverage_plan_id');
-            $data['procedure']  = TblCoveragePlanProcedureModel::where('coverage_plan_id',$coverage)
-                                ->join('tbl_procedure','tbl_procedure.procedure_id','=','tbl_coverage_plan_procedure.procedure_id')
-                                ->get();
+            $procedure          = TblCoveragePlanProcedureModel::where('coverage_plan_id',$coverage)->Procedure()->get();
             $data['_procedureList'] = '<option>-SELECT DESCRIPTION-';
-            foreach($data['procedure'] as $procedure)
+            foreach($procedure as $procedure)
             {
                 $data['_procedureList']     .= '<option value='.$procedure->procedure_id.'>'.$procedure->procedure_name;
             }
-            return $data['_procedureList'];
+            $procedure_list    = $data['_procedureList'];
+            if($request->warning=="show")//FOR UPDATE
+            {
+                $view               = view('carewell.additional_pages.availment_change_availment')->render();
+            }
+            else
+            {
+                $view               = 'none';
+            }
+            return response()->json(array('procedure_list'=>$procedure_list,'view'=>$view));
         }
     }
     public static function generateUniversalId($display_name,$birthdate)
@@ -579,6 +597,81 @@ class StaticFunctionController extends Controller
           $message = "FAILED";
         }
         return $message; 
+    }
+    public static function provider_doctor_insert($provider_name,$provider_id,$doctor_name,$doctor_id)
+    {
+        $countPayee = 0;
+        if ($provider_name != $doctor_name)
+        {
+            if($doctor_id==null)
+            {
+                $providerDoctorData = new TblDoctorModel;
+                $providerDoctorData->doctor_full_name       = StaticFunctionController::transformText($doctor_name);
+                $providerDoctorData->doctor_number          = StaticFunctionController::updateReferenceNumber('doctor');
+                $providerDoctorData->doctor_gender          = "N/A";
+                $providerDoctorData->doctor_contact_number  = "N/A";
+                $providerDoctorData->doctor_email_address   = "N/A";
+                $providerDoctorData->doctor_created         = Carbon::now();
+                $providerDoctorData->save();
+
+                $insert['doctor_id']   = $providerDoctorData->doctor_id;
+                $insert['provider_id'] = $provider_id;
+                TblDoctorProviderModel::insert($insert);
+                $countPayee++;
+            }
+            else
+            {
+                if(TblDoctorProviderModel::where('doctor_id',$doctor_id)->where('provider_id',$provider_id)->count()==0)
+                {
+                    $insert['doctor_id']   = $doctor_id;
+                    $insert['provider_id'] = $provider_id;
+                    TblDoctorProviderModel::insert($insert);
+
+                    $countPayee++;
+                }
+            }
+        }
+        return $countPayee;
+    }
+    public static function provider_add_tag_doctor($doctorProviderData,$provider_id)
+    {
+        $doctorInsert = 0;
+         foreach($doctorProviderData as $doctor_full_name)
+        {
+            $doctor_id = StaticFunctionController::getIdNorName($doctor_full_name,'doctor');
+            if($doctor_id==$doctor_full_name)
+            {
+                $doctorData = new TblDoctorModel;
+                $doctorData->doctor_full_name       = StaticFunctionController::transformText($doctor_full_name);
+                $doctorData->doctor_number          = StaticFunctionController::updateReferenceNumber('doctor');
+                $doctorData->doctor_gender          = "N/A";
+                $doctorData->doctor_contact_number  = "N/A";
+                $doctorData->doctor_email_address   = "N/A";
+                $doctorData->doctor_created         = Carbon::now();
+                $doctorData->save();
+
+                $providerDoctorData = new TblDoctorProviderModel;
+                $providerDoctorData->doctor_id  = $doctorData->doctor_id;
+                $providerDoctorData->provider_id    = $provider_id;
+                $providerDoctorData->save();
+
+                $doctorInsert++;
+            }
+            else
+            {
+                $check = TblDoctorProviderModel::where('provider_id',$provider_id)->where('doctor_id',$doctor_id)->count();
+                if($check==0)
+                {
+                    $providerDoctorData = new TblDoctorProviderModel;
+                    $providerDoctorData->doctor_id  = $doctor_id;
+                    $providerDoctorData->provider_id    = $provider_id;
+                    $providerDoctorData->save();
+                    
+                    $doctorInsert++;
+                }
+            }
+        }
+        return $doctorInsert;
     }
   
     public static function getNewMember($cal_id,$status)

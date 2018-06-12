@@ -41,8 +41,6 @@ Route::any('/get/check_procedure_amount', 				'StaticFunctionController@getCheck
 
 
 
-
-Route::any('/get/doctor_specialty', 					'StaticFunctionController@getDoctorSpecialty');
 Route::any('/get/export/warning',                           'StaticFunctionController@getExportWarning');
 
 
@@ -158,21 +156,25 @@ Route::post('/billing/cal_close/sumbit',				'CarewellController@billing_cal_clos
 Route::get('/availment', 							'CarewellController@availment');
 Route::get('/availment/create_approval', 				'CarewellController@availment_create_approval');
 Route::post('/availment/get_member_info',				'CarewellController@availment_get_member_info');
-
 Route::post('/availment/create_approval/submit',		'CarewellController@availment_create_approval_submit');
 Route::get('/availment/approval_details/{approval_id}', 'CarewellController@availment_view_approval_details');
 Route::get('/availment/approval_export_pdf/{approval_id}', 'CarewellController@approval_export_pdf');
+
+
 Route::post('/availment/update_approval/submit',		'CarewellController@availment_update_approval_submit');
-Route::post('/availment/approval/remove_procedure',		'CarewellController@availment_approval_remove_procedure_submit');
 
-Route::post('/availment/approval/remove_doctor',		'CarewellController@availment_approval_remove_doctor_submit');
-Route::post('/availment/approval/remove_doctor_payee',		'CarewellController@availment_approval_remove_doctor_payee_submit');
 
-Route::post('/availment/approval/remove_approval_details',		'CarewellController@availment_approval_remove_details_submit');
+
+Route::post('/availment/remove_approval_details/submit',		'CarewellController@availment_remove_approval_details_submit');
 
 
 
 
+Route::get('/availment/create_new_provider/{warning}', 			'CarewellController@availment_create_new_provider');
+Route::post('/availment/create_new_provider/submit',		'CarewellController@availment_create_new_provider_submit');
+
+Route::get('/availment/add_approval_details/{ref}/{id}', 	'CarewellController@availment_add_approval_details');
+Route::post('/availment/add_approval_details/submit',		'CarewellController@availment_add_approval_details_submit');
 
 
 /*PAYABLE*/
