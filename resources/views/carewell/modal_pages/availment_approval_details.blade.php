@@ -464,6 +464,7 @@ $(document).ready(function()
 		</div>
 	</div>
 	<div class="row box-globals">
+
 		<div class="table-responsive no-padding">
 			<table class="table table-hover table-bordered procedure-form">
 				<thead>
@@ -511,6 +512,7 @@ $(document).ready(function()
 					@endforeach
 				</tbody>
 			</table>
+
 		</div>
 	</div>
 </form>

@@ -1,3 +1,4 @@
+
 @extends('carewell.layout.layout')
 @section('content')
 <script type="text/javascript">
@@ -15,6 +16,7 @@ $(document).ready(function(){
         settings_reports.calculateSum('sum-oct');
         settings_reports.calculateSum('sum-nov');
         settings_reports.calculateSum('sum-dec');
+        settings_reports.calculateSum('sum-count');
 });
 
 </script>
@@ -29,17 +31,10 @@ $(document).ready(function(){
         <div class="tab-content">
           <div class="tab-pane active" id="open">
             <div class="row top-element">
-              <div class="col-md-3 col-xs-12 pull-left">
-                <select class="form-control">
-                  <option value="">SELECT COMPANY</option>
-                  @foreach($_company as $company)
-                  <option>{{$company->company_name}}</option>
-                  @endforeach
-                </select>
-              </div>
+
               <div class="col-md-3 col-xs-12">
                 <div class="btn-group">
-                   <a href="/reports/ending_number_per_reports/export_excel"><button type="button" class="btn btn-success">EXPORT EXCEL</button></a>
+                   <a href="/reports/availment_monitoring/export_excel"><button type="button" class="btn btn-success">EXPORT EXCEL</button></a>
                 </div>
               </div>
               <div class="col-md-3 col-xs-12 pull-right">
@@ -54,9 +49,7 @@ $(document).ready(function(){
             <div class="table-responsive no-padding">
               <table class="table table-hover table-bordered sum_table">
                 <tr class="titlerow">
-                  <th>COMPANY</th>
-                  <th>PREM</th>
-                  <th>DATE ACQUIRED</th>
+                  <th>AVAILMENT TYPE</th>
                   <th>JAN</th>
                   <th>FEB</th>
                   <th>MAR</th>
@@ -69,47 +62,46 @@ $(document).ready(function(){
                   <th>OCT</th>
                   <th>NOV</th>
                   <th>DEC</th>
+                  <th>TOTAL</th>
                 </tr>
-                @foreach($_company as $company)
+                @foreach($_availment as $availment)
                 <tr>
-                  <td>{{$company->company_name}}</td>
-                  <td>{{$company->coverage_plan_premium}}</td>
-                  <td>{{substr($company->coverage_plan_created,0,10)}}</td>
-                  <td class="sum-jan">{{$company->count_jan}}</td>
-                  <td class="sum-feb">{{$company->count_feb}}</td>
-                  <td class="sum-mar">{{$company->count_mar}}</td>
-                  <td class="sum-apr">{{$company->count_apr}}</td>
-                  <td class="sum-may">{{$company->count_may}}</td>
-                  <td class="sum-jun">{{$company->count_june}}</td>
-                  <td class="sum-jul">{{$company->count_july}}</td>
-                  <td class="sum-aug">{{$company->count_aug}}</td>
-                  <td class="sum-sep">{{$company->count_sept}}</td>
-                  <td class="sum-oct">{{$company->count_oct}}</td>
-                  <td class="sum-nov">{{$company->count_nov}}</td>
-                  <td class="sum-dec">{{$company->count_dec}}</td>
+                  <td>{{$availment->availment_name}}</td>
+                  <td class="sum-jan">{{$availment->count_jan}}</td>
+                  <td class="sum-feb">{{$availment->count_feb}}</td>
+                  <td class="sum-mar">{{$availment->count_mar}}</td>
+                  <td class="sum-apr">{{$availment->count_apr}}</td>
+                  <td class="sum-may">{{$availment->count_may}}</td>
+                  <td class="sum-jun">{{$availment->count_jun}}</td>
+                  <td class="sum-jul">{{$availment->count_jul}}</td>
+                  <td class="sum-aug">{{$availment->count_aug}}</td>
+                  <td class="sum-sep">{{$availment->count_sep}}</td>
+                  <td class="sum-oct">{{$availment->count_oct}}</td>
+                  <td class="sum-nov">{{$availment->count_nov}}</td>
+                  <td class="sum-dec">{{$availment->count_dec}}</td>
+                  <td class="sum-count">{{$availment->count}}</td>
                 </tr>
                 @endforeach
                 <tr>
                   <td>TOTAL</td>
-                  <td></td>
-                  <td></td>
-                  <td id="sum-jan"></td>
-                  <td id="sum-feb"></td>
-                  <td id="sum-mar"></td>
-                  <td id="sum-apr"></td>
-                  <td id="sum-may"></td>
-                  <td id="sum-jun"></td>
-                  <td id="sum-jul"></td>
-                  <td id="sum-aug"></td>
-                  <td id="sum-sep"></td>
-                  <td id="sum-oct"></td>
-                  <td id="sum-nov"></td>
-                  <td id="sum-dec"></td>
+                  <td id="sum-jan">-</td>
+                  <td id="sum-feb">-</td>
+                  <td id="sum-mar">-</td>
+                  <td id="sum-apr">-</td>
+                  <td id="sum-may">-</td>
+                  <td id="sum-jun">-</td>
+                  <td id="sum-jul">-</td>
+                  <td id="sum-aug">-</td>
+                  <td id="sum-sep">-</td>
+                  <td id="sum-oct">-</td>
+                  <td id="sum-nov">-</td>
+                  <td id="sum-dec">-</td>
+                  <td id="sum-count"></td>  
                 </tr>
               </table>
             </div>
             <div class="box-footer clearfix">
-              @include('globals.pagination', ['paginator' => $_company])
+              @include('globals.pagination', ['paginator' => $_availment])
             </div>
           </div>
         </div>

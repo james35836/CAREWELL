@@ -1813,6 +1813,7 @@ class CarewellController extends ActiveAuthController
 		$data['total_procedure']  = TblApprovalTotalModel::where('approval_id',$approval_id)->where('total_type','procedure')->first();
 		$data['total_doctor']     = TblApprovalTotalModel::where('approval_id',$approval_id)->where('total_type','doctor')->first();
 
+
 		/*BELOW ARE FOR UPDATE DATA*/
 		$approval                 = TblApprovalModel::where("approval_id",$approval_id)->first();
 		$coverage_plan_id         = TblMemberCompanyModel::where('member_id',$approval->member_id)->where('tbl_member_company.archived',0)->value('coverage_plan_id');
@@ -1820,6 +1821,7 @@ class CarewellController extends ActiveAuthController
 		$data['_procedure'] 	 = TblMemberCompanyModel::CovaragePlanProcedure($approval->member_id,$approval->availment_id)->where('tbl_member_company.archived',0)->get();
           $data['_availment']       = TblCoveragePlanProcedureModel::where('coverage_plan_id',$coverage_plan_id)->Availment()->get();
 		$data['_provider']        = TblProviderModel::where('archived',0)->get();
+
 		$data['_procedure_doctor']= TblDoctorProcedureModel::where('archived',0)->get();
 		$data['_doctor']          = TblDoctorProviderModel::where('provider_id',$approval->provider_id)->Doctor()->where('tbl_doctor.archived',0)->get();
 		
@@ -2355,19 +2357,100 @@ class CarewellController extends ActiveAuthController
 	public function reports_monitoring_end_per_month()
 	{
 		$data['page']     = 'Ending Number Per Month Reports';
-		$data['_company'] = TblCompanyModel::where('archived',0)->paginate(10);
 		$data['user']     = StaticFunctionController::global();
+		$data['_company'] = TblCompanyCoveragePlanModel::join('tbl_company','tbl_company.company_id','=','tbl_company_coverage_plan.company_id')
+														  ->join('tbl_coverage_plan','tbl_coverage_plan.coverage_plan_id','=','tbl_company_coverage_plan.coverage_plan_id')
+			                                              ->paginate(10);
 
-		foreach ($data['_company'] as $key => $company) 
+		foreach($data['_company'] as $key => $company) 
 		{
-			$data['_company'][$key]['company_availment']  =  TblCompanyCoveragePlanModel::where('tbl_company_coverage_plan.company_id',$company->company_id)
-													->where('tbl_availment.availment_parent_id',0)
-													->join('tbl_coverage_plan','tbl_coverage_plan.coverage_plan_id','=','tbl_company_coverage_plan.coverage_plan_id')
-													->join('tbl_coverage_plan_tag','tbl_coverage_plan_tag.coverage_plan_id','=','tbl_coverage_plan.coverage_plan_id')
-													->join('tbl_availment','tbl_availment.availment_id','=','tbl_coverage_plan_tag.availment_id')
-													->get();
+			$data['_company'][$key]['company_coverage'] = TblMemberCompanyModel::where('tbl_member_company.archived',0)
+			                                             ->where('coverage_plan_id',$company->coverage_plan_id)
+			                                             ->where('company_id',$company->company_id)
+			                                             ->join('tbl_approval','tbl_approval.member_id','=','tbl_member_company.member_id')
+			                                             ->get();
+
+			//$data['_company'][$key]['count'] = TblMemberCompanyModel::CountAvailment($company->coverage_plan_id,$company->company_id)->count();
+
+			$data['_company'][$key]['count_jan'] 	= TblMemberCompanyModel::CountAvailment($company->coverage_plan_id,$company->company_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-01').'%')->count();                                           
+			$data['_company'][$key]['count_feb'] 	= TblMemberCompanyModel::CountAvailment($company->coverage_plan_id,$company->company_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-02').'%')->count();
+			$data['_company'][$key]['count_mar'] 	= TblMemberCompanyModel::CountAvailment($company->coverage_plan_id,$company->company_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-03').'%')->count(); 
+			$data['_company'][$key]['count_apr'] 	= TblMemberCompanyModel::CountAvailment($company->coverage_plan_id,$company->company_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-04').'%')->count(); 
+			$data['_company'][$key]['count_may'] 	= TblMemberCompanyModel::CountAvailment($company->coverage_plan_id,$company->company_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-05').'%')->count();
+			$data['_company'][$key]['count_june']	= TblMemberCompanyModel::CountAvailment($company->coverage_plan_id,$company->company_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-06').'%')->count();
+			$data['_company'][$key]['count_july'] 	= TblMemberCompanyModel::CountAvailment($company->coverage_plan_id,$company->company_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-07').'%')->count();
+			$data['_company'][$key]['count_aug'] 	= TblMemberCompanyModel::CountAvailment($company->coverage_plan_id,$company->company_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-08').'%')->count();
+			$data['_company'][$key]['count_sept'] 	= TblMemberCompanyModel::CountAvailment($company->coverage_plan_id,$company->company_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-09').'%')->count();
+			$data['_company'][$key]['count_oct'] 	= TblMemberCompanyModel::CountAvailment($company->coverage_plan_id,$company->company_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-10').'%')->count();
+			$data['_company'][$key]['count_nov'] 	= TblMemberCompanyModel::CountAvailment($company->coverage_plan_id,$company->company_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-11').'%')->count();
+			$data['_company'][$key]['count_dec'] 	= TblMemberCompanyModel::CountAvailment($company->coverage_plan_id,$company->company_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-12').'%')->count();									      
 		}
+
 		return view('carewell.pages.reports_end_per_month',$data);
+	}
+
+	public function reports_availment_per_month()
+	{
+		$data['page']     = 'Availment per Month Summary';
+		$data['user']     = StaticFunctionController::global();
+		$data['_company'] = TblCompanyCoveragePlanModel::join('tbl_company','tbl_company.company_id','=','tbl_company_coverage_plan.company_id')
+														  ->join('tbl_coverage_plan','tbl_coverage_plan.coverage_plan_id','=','tbl_company_coverage_plan.coverage_plan_id')
+			                                              ->paginate(10);
+
+		foreach($data['_company'] as $key => $company) 
+		{
+			$data['_company'][$key]['company_coverage'] = TblMemberCompanyModel::where('tbl_member_company.archived',0)
+			                                             ->where('coverage_plan_id',$company->coverage_plan_id)
+			                                             ->where('company_id',$company->company_id)
+			                                             ->join('tbl_approval','tbl_approval.member_id','=','tbl_member_company.member_id')
+			                                             ->get();
+
+			$data['_company'][$key]['count'] = TblMemberCompanyModel::CountAvailment($company->coverage_plan_id,$company->company_id)->count();
+
+
+			$data['_company'][$key]['count_jan'] 	= TblMemberCompanyModel::CountAvailment($company->coverage_plan_id,$company->company_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-01').'%')->count();                                           
+			$data['_company'][$key]['count_feb'] 	= TblMemberCompanyModel::CountAvailment($company->coverage_plan_id,$company->company_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-02').'%')->count();
+			$data['_company'][$key]['count_mar'] 	= TblMemberCompanyModel::CountAvailment($company->coverage_plan_id,$company->company_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-03').'%')->count(); 
+			$data['_company'][$key]['count_apr'] 	= TblMemberCompanyModel::CountAvailment($company->coverage_plan_id,$company->company_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-04').'%')->count(); 
+			$data['_company'][$key]['count_may'] 	= TblMemberCompanyModel::CountAvailment($company->coverage_plan_id,$company->company_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-05').'%')->count();
+			$data['_company'][$key]['count_june']	= TblMemberCompanyModel::CountAvailment($company->coverage_plan_id,$company->company_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-06').'%')->count();
+			$data['_company'][$key]['count_july'] 	= TblMemberCompanyModel::CountAvailment($company->coverage_plan_id,$company->company_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-07').'%')->count();
+			$data['_company'][$key]['count_aug'] 	= TblMemberCompanyModel::CountAvailment($company->coverage_plan_id,$company->company_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-08').'%')->count();
+			$data['_company'][$key]['count_sept'] 	= TblMemberCompanyModel::CountAvailment($company->coverage_plan_id,$company->company_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-09').'%')->count();
+			$data['_company'][$key]['count_oct'] 	= TblMemberCompanyModel::CountAvailment($company->coverage_plan_id,$company->company_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-10').'%')->count();
+			$data['_company'][$key]['count_nov'] 	= TblMemberCompanyModel::CountAvailment($company->coverage_plan_id,$company->company_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-11').'%')->count();
+			$data['_company'][$key]['count_dec'] 	= TblMemberCompanyModel::CountAvailment($company->coverage_plan_id,$company->company_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-12').'%')->count();									      
+		}
+
+		return view('carewell.pages.reports_availment_per_month',$data);
+
+	}
+
+	public function reports_availment_monitoring()
+	{
+		$data['page']     = 'Availment per Month Summary';
+		$data['user']     = StaticFunctionController::global();
+		$data['_availment'] = TblAvailmentModel::where('archived',0)->paginate(10);
+
+		foreach ($data['_availment'] as $key => $availment)
+		{
+			$data['_availment'][$key]['count'] = TblApprovalModel::where('availment_id',$availment->availment_id)->count();
+			$data['_availment'][$key]['count_jan'] = TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-01').'%')->count();                                           
+			$data['_availment'][$key]['count_feb'] = TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-02').'%')->count();
+			$data['_availment'][$key]['count_mar'] = TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-03').'%')->count(); 
+			$data['_availment'][$key]['count_apr'] = TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-04').'%')->count(); 
+			$data['_availment'][$key]['count_may'] = TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-05').'%')->count();
+			$data['_availment'][$key]['count_jun']= TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-06').'%')->count();
+			$data['_availment'][$key]['count_jul']= TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-07').'%')->count();
+			$data['_availment'][$key]['count_aug'] = TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-08').'%')->count();
+			$data['_availment'][$key]['count_sep']= TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-09').'%')->count();
+			$data['_availment'][$key]['count_oct'] = TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-10').'%')->count();
+			$data['_availment'][$key]['count_nov'] = TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-11').'%')->count();
+			$data['_availment'][$key]['count_dec'] = TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-12').'%')->count();									      
+		}
+
+		return view('carewell.pages.reports_availment_monitoring_report',$data);
+
 	}
 
 	public function reports_breakdown()
@@ -2437,8 +2520,191 @@ class CarewellController extends ActiveAuthController
 				$sheet->loadView('carewell.additional_pages.reports_member_payment_excel',$data);
 			});
 		})->download('xls');
+	}
+
+	public function reports_end_per_month_export_excel()
+		{
+			$data['page']     = 'Ending Number Per Month Reports';
+			$data['user']     = StaticFunctionController::global();
+			$data['_company'] = TblCompanyCoveragePlanModel::join('tbl_company','tbl_company.company_id','=','tbl_company_coverage_plan.company_id')
+															  ->join('tbl_coverage_plan','tbl_coverage_plan.coverage_plan_id','=','tbl_company_coverage_plan.coverage_plan_id')
+				                                              ->paginate(10);
+
+			$data['link']               = "/reports/ending_number_per_reports/export_excel/";
+
+			$data['total_jan'] = 0;
+			$data['total_feb'] = 0;
+			$data['total_mar'] = 0;
+			$data['total_apr'] = 0; 
+			$data['total_may'] = 0;
+			$data['total_june'] = 0;
+			$data['total_july'] = 0;
+			$data['total_aug'] = 0;
+			$data['total_sept'] = 0;
+			$data['total_oct'] = 0;
+			$data['total_nov'] = 0;
+			$data['total_dec'] = 0;
+
+
+			foreach($data['_company'] as $key => $company) 
+			{
+				$data['_company'][$key]['company_coverage'] = TblMemberCompanyModel::where('tbl_member_company.archived',0)
+				                                             ->where('coverage_plan_id',$company->coverage_plan_id)
+				                                             ->where('company_id',$company->company_id)
+				                                             ->join('tbl_approval','tbl_approval.member_id','=','tbl_member_company.member_id')
+				                                             ->get();
+
+				//$data['_company'][$key]['count'] = TblMemberCompanyModel::CountAvailment($company->coverage_plan_id,$company->company_id)->count();
+
+				$data['_company'][$key]['count_jan'] 	= TblMemberCompanyModel::CountAvailment($company->coverage_plan_id,$company->company_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-01').'%')->count();                                           
+				$data['_company'][$key]['count_feb'] 	= TblMemberCompanyModel::CountAvailment($company->coverage_plan_id,$company->company_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-02').'%')->count();
+				$data['_company'][$key]['count_mar'] 	= TblMemberCompanyModel::CountAvailment($company->coverage_plan_id,$company->company_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-03').'%')->count(); 
+				$data['_company'][$key]['count_apr'] 	= TblMemberCompanyModel::CountAvailment($company->coverage_plan_id,$company->company_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-04').'%')->count(); 
+				$data['_company'][$key]['count_may'] 	= TblMemberCompanyModel::CountAvailment($company->coverage_plan_id,$company->company_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-05').'%')->count();
+				$data['_company'][$key]['count_june']	= TblMemberCompanyModel::CountAvailment($company->coverage_plan_id,$company->company_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-06').'%')->count();
+				$data['_company'][$key]['count_july'] 	= TblMemberCompanyModel::CountAvailment($company->coverage_plan_id,$company->company_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-07').'%')->count();
+				$data['_company'][$key]['count_aug'] 	= TblMemberCompanyModel::CountAvailment($company->coverage_plan_id,$company->company_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-08').'%')->count();
+				$data['_company'][$key]['count_sept'] 	= TblMemberCompanyModel::CountAvailment($company->coverage_plan_id,$company->company_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-09').'%')->count();
+				$data['_company'][$key]['count_oct'] 	= TblMemberCompanyModel::CountAvailment($company->coverage_plan_id,$company->company_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-10').'%')->count();
+				$data['_company'][$key]['count_nov'] 	= TblMemberCompanyModel::CountAvailment($company->coverage_plan_id,$company->company_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-11').'%')->count();
+				$data['_company'][$key]['count_dec'] 	= TblMemberCompanyModel::CountAvailment($company->coverage_plan_id,$company->company_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-12').'%')->count();									      
+
+				$data['total_jan'] 	= $data['total_jan'] 	+ 	$data['_company'][$key]['count_jan'] ;
+				$data['total_feb'] 	= $data['total_feb'] 	+ 	$data['_company'][$key]['count_feb'] ;
+				$data['total_mar'] 	= $data['total_mar'] 	+ 	$data['_company'][$key]['count_mar'] ;
+				$data['total_apr'] 	= $data['total_apr'] 	+ 	$data['_company'][$key]['count_apr'] ;
+				$data['total_may'] 	= $data['total_may'] 	+ 	$data['_company'][$key]['count_may'] ;
+				$data['total_june'] = $data['total_june'] 	+ 	$data['_company'][$key]['count_june'];
+				$data['total_july'] = $data['total_july'] 	+ 	$data['_company'][$key]['count_july'] ;
+				$data['total_aug']	= $data['total_aug'] 	+ 	$data['_company'][$key]['count_aug'] ;
+				$data['total_sept'] = $data['total_sept'] 	+ 	$data['_company'][$key]['count_sept'] ;
+				$data['total_oct'] 	= $data['total_oct'] 	+ 	$data['_company'][$key]['count_oct'] ;
+				$data['total_nov'] 	= $data['total_nov'] 	+ 	$data['_company'][$key]['count_nov'] ;
+				$data['total_dec'] 	= $data['total_dec'] 	+ 	$data['_company'][$key]['count_dec'] ;
+			}
+
+
+			Excel::create("ENDING NUMBER PER MONTH ".date('Y'),function($excel) use ($data)
+			{
+				$excel->sheet('clients',function($sheet) use ($data)
+				{
+					$sheet->loadView('carewell.additional_pages.ending_number_per_month_export_excel',$data);
+				});
+			})->download('xls');
+		}
+
+	public function reports_availment_per_month_export_excel()
+	{
+		$data['page']     = 'Availment per Month Summary';
+		$data['user']     = StaticFunctionController::global();
+		$data['_company'] = TblCompanyCoveragePlanModel::join('tbl_company','tbl_company.company_id','=','tbl_company_coverage_plan.company_id')
+														  ->join('tbl_coverage_plan','tbl_coverage_plan.coverage_plan_id','=','tbl_company_coverage_plan.coverage_plan_id')
+			                                              ->paginate(10);
+
+		$data['total_avail'] = 0;
+
+		foreach($data['_company'] as $key => $company) 
+		{
+			$data['_company'][$key]['company_coverage'] = TblMemberCompanyModel::where('tbl_member_company.archived',0)
+			                                             ->where('coverage_plan_id',$company->coverage_plan_id)
+			                                             ->where('company_id',$company->company_id)
+			                                             ->join('tbl_approval','tbl_approval.member_id','=','tbl_member_company.member_id')
+			                                             ->get();
+
+			$data['_company'][$key]['count'] = TblMemberCompanyModel::CountAvailment($company->coverage_plan_id,$company->company_id)->count();
+
+
+			$data['_company'][$key]['count_jan'] 	= TblMemberCompanyModel::CountAvailment($company->coverage_plan_id,$company->company_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-01').'%')->count();                                           
+			$data['_company'][$key]['count_feb'] 	= TblMemberCompanyModel::CountAvailment($company->coverage_plan_id,$company->company_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-02').'%')->count();
+			$data['_company'][$key]['count_mar'] 	= TblMemberCompanyModel::CountAvailment($company->coverage_plan_id,$company->company_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-03').'%')->count(); 
+			$data['_company'][$key]['count_apr'] 	= TblMemberCompanyModel::CountAvailment($company->coverage_plan_id,$company->company_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-04').'%')->count(); 
+			$data['_company'][$key]['count_may'] 	= TblMemberCompanyModel::CountAvailment($company->coverage_plan_id,$company->company_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-05').'%')->count();
+			$data['_company'][$key]['count_june']	= TblMemberCompanyModel::CountAvailment($company->coverage_plan_id,$company->company_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-06').'%')->count();
+			$data['_company'][$key]['count_july'] 	= TblMemberCompanyModel::CountAvailment($company->coverage_plan_id,$company->company_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-07').'%')->count();
+			$data['_company'][$key]['count_aug'] 	= TblMemberCompanyModel::CountAvailment($company->coverage_plan_id,$company->company_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-08').'%')->count();
+			$data['_company'][$key]['count_sept'] 	= TblMemberCompanyModel::CountAvailment($company->coverage_plan_id,$company->company_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-09').'%')->count();
+			$data['_company'][$key]['count_oct'] 	= TblMemberCompanyModel::CountAvailment($company->coverage_plan_id,$company->company_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-10').'%')->count();
+			$data['_company'][$key]['count_nov'] 	= TblMemberCompanyModel::CountAvailment($company->coverage_plan_id,$company->company_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-11').'%')->count();
+			$data['_company'][$key]['count_dec'] 	= TblMemberCompanyModel::CountAvailment($company->coverage_plan_id,$company->company_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-12').'%')->count();									      
+		
+			$data['total_avail'] = $data['total_avail'] + $data['_company'][$key]['count'];
+
+		}
+
+		Excel::create("AVAILMENT PER MONTH SUMMARY ".date('Y'),function($excel) use ($data)
+			{
+				$excel->sheet('clients',function($sheet) use ($data)
+				{
+					$sheet->loadView('carewell.additional_pages.reports_availment_per_month_export_excel',$data);
+				});
+			})->download('xls');
 
 	}
+
+	public function reports_availment_monitoring_export_excel()
+	{
+		$data['page']     = 'Availment per Month Summary Monitoring';
+		$data['user']     = StaticFunctionController::global();
+		$data['_availment'] = TblAvailmentModel::where('archived',0)->paginate(10);
+
+			$data['total_all'] = 0;
+			$data['total_jan'] = 0;
+			$data['total_feb'] = 0;
+			$data['total_mar'] = 0;
+			$data['total_apr'] = 0; 
+			$data['total_may'] = 0;
+			$data['total_jun'] = 0;
+			$data['total_jul'] = 0;
+			$data['total_aug'] = 0;
+			$data['total_sep'] = 0;
+			$data['total_oct'] = 0;
+			$data['total_nov'] = 0;
+			$data['total_dec'] = 0;
+
+		foreach ($data['_availment'] as $key => $availment)
+		{
+			$data['_availment'][$key]['count'] = TblApprovalModel::where('availment_id',$availment->availment_id)->count();
+			$data['_availment'][$key]['count_jan'] = TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-01').'%')->count();                                           
+			$data['_availment'][$key]['count_feb'] = TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-02').'%')->count();
+			$data['_availment'][$key]['count_mar'] = TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-03').'%')->count(); 
+			$data['_availment'][$key]['count_apr'] = TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-04').'%')->count(); 
+			$data['_availment'][$key]['count_may'] = TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-05').'%')->count();
+			$data['_availment'][$key]['count_jun']= TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-06').'%')->count();
+			$data['_availment'][$key]['count_jul']= TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-07').'%')->count();
+			$data['_availment'][$key]['count_aug'] = TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-08').'%')->count();
+			$data['_availment'][$key]['count_sep']= TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-09').'%')->count();
+			$data['_availment'][$key]['count_oct'] = TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-10').'%')->count();
+			$data['_availment'][$key]['count_nov'] = TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-11').'%')->count();
+			$data['_availment'][$key]['count_dec'] = TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-12').'%')->count();									      
+		
+				$data['total_jan'] 	= $data['total_jan'] 	+ 	$data['_availment'][$key]['count_jan'] ;
+				$data['total_feb'] 	= $data['total_feb'] 	+ 	$data['_availment'][$key]['count_feb'] ;
+				$data['total_mar'] 	= $data['total_mar'] 	+ 	$data['_availment'][$key]['count_mar'] ;
+				$data['total_apr'] 	= $data['total_apr'] 	+ 	$data['_availment'][$key]['count_apr'] ;
+				$data['total_may'] 	= $data['total_may'] 	+ 	$data['_availment'][$key]['count_may'] ;
+				$data['total_jun']  = $data['total_jun'] 	+ 	$data['_availment'][$key]['count_jun'] ;
+				$data['total_jul']  = $data['total_jul'] 	+ 	$data['_availment'][$key]['count_jul'] ;
+				$data['total_aug']	= $data['total_aug'] 	+ 	$data['_availment'][$key]['count_aug'] ;
+				$data['total_sep']  = $data['total_sep'] 	+ 	$data['_availment'][$key]['count_sep'] ;
+				$data['total_oct'] 	= $data['total_oct'] 	+ 	$data['_availment'][$key]['count_oct'] ;
+				$data['total_nov'] 	= $data['total_nov'] 	+ 	$data['_availment'][$key]['count_nov'] ;
+				$data['total_dec'] 	= $data['total_dec'] 	+ 	$data['_availment'][$key]['count_dec'] ;
+				$data['total_all'] 	= $data['total_all'] 	+ 	$data['_availment'][$key]['count'] ;
+
+		}
+
+			Excel::create("AVAILMENT PER MONTH SUMMARY MONITORING".date('Y'),function($excel) use ($data)
+			{
+				$excel->sheet('clients',function($sheet) use ($data)
+				{
+					$sheet->loadView('carewell.additional_pages.reports_availment_monitoring_report_export_excel',$data);
+				});
+			})->download('xls');
+
+
+	}
+
+		
 	/*SETTINGS*/
 	public function settings_coverage_plan()
 	{
@@ -2791,17 +3057,10 @@ class CarewellController extends ActiveAuthController
 	public function settings_coverage_plan_details($coverage_plan_id)   
 	{     
 		$data['coverage_plan_details']  = TblCoveragePlanModel::where('coverage_plan_id',$coverage_plan_id)->first();     
-		$data['_coverage_plan_covered'] = TblCoveragePlanProcedureModel::where('coverage_plan_id',$coverage_plan_id)
-									->where('tbl_coverage_plan_procedure.archived',0)
-									->select(DB::raw('count(*) as totals, tbl_coverage_plan_procedure.availment_id,tbl_availment.availment_name'))
-									->groupBy('availment_id')
-									->join('tbl_availment','tbl_availment.availment_id','=','tbl_coverage_plan_procedure.availment_id') 
-									->get();
+		$data['_coverage_plan_covered'] = TblCoveragePlanProcedureModel::where('coverage_plan_id',$coverage_plan_id)->CoveragePlan()->get();
 		foreach($data['_coverage_plan_covered'] as $key=>$availment)
 		{
-			$data['_coverage_plan_covered'][$key]['procedure']   = TblCoveragePlanProcedureModel::where('availment_id',$availment->availment_id)->where('coverage_plan_id',$coverage_plan_id)
-									->join('tbl_procedure','tbl_procedure.procedure_id','=','tbl_coverage_plan_procedure.procedure_id') 
-									->get();
+			$data['_coverage_plan_covered'][$key]['procedure']   = TblCoveragePlanProcedureModel::where('availment_id',$availment->availment_id)->where('coverage_plan_id',$coverage_plan_id)->Procedure()->get();
 		}
 		return view('carewell.modal_pages.settings_coverage_plan_details',$data);
 	}

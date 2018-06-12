@@ -69,34 +69,31 @@
         {
         border-radius: none !important;
         }*/
-        @media screen and (min-width: 426px) 
+        @media screen and (min-width: 426px)
         {
             .top-padding
             {
                 padding-top: 30px;
             }
         }
-        @media screen and (max-width: 425px) 
+        @media screen and (max-width: 425px)
         {
-            .top-padding
-            {
-                padding-top: 110px;
-            }
+        .top-padding
+        {
+        padding-top: 110px;
         }
-
+        }
         aside.main-sidebar section.sidebar ul.sidebar-menu a
         {
-            color:white;
+        color:white;
         }
-
         aside.main-sidebar section.sidebar ul.sidebar-menu li a:hover, aside.main-sidebar section.sidebar ul.sidebar-menu li a:focus
         {
-            color:black !important;
-            background-color: white !important;
-            font-weight: bold;
+        color:black !important;
+        background-color: white !important;
+        font-weight: bold;
         }
-
-    </style>
+        </style>
         
     </head>
     <body class="hold-transition skin-yellow-light sidebar-collapse sidebar-mini">
@@ -224,7 +221,7 @@
             </nav>
         </header>
         <!-- SIDEBAR -->
-        aside.main-sidebar section.sidebar ul.sidebar-menu li.treeview ul.treeview-menu a
+        <!--         aside.main-sidebar section.sidebar ul.sidebar-menu li.treeview ul.treeview-menu a -->
         <aside class="main-sidebar">
             <section class="sidebar">
                 <div class="user-panel">
@@ -309,8 +306,8 @@
                             </span>
                         </a>
                         <ul class="treeview-menu">
-                            <li style="background-color:#26A65B"><a href="/reports/availment"><i class="fa fa-circle-o"></i>AVAILMENT </a></li>
-                            <li style="background-color:#26A65B"><a href="#"><i class="fa fa-circle-o"></i>MONITORING</a></li>
+                            <li style="background-color:#26A65B"><a href="/reports/availment_per_month"><i class="fa fa-circle-o"></i>AVAILMENT </a></li>
+                            <li style="background-color:#26A65B"><a href="/reports/availment_monitoring"><i class="fa fa-circle-o"></i>MONITORING</a></li>
                             <li style="background-color:#26A65B"><a href="/reports/payment_report"><i class="fa fa-circle-o"></i>PAYMENT REPORT</a></li>
                             <li style="background-color:#26A65B"><a href="/reports/ending_number_per_month"><i class="fa fa-circle-o"></i>ENDING NUMBER</a></li>
                             <li style="background-color:#26A65B"><a href="/reports/breakdown"><i class="fa fa-circle-o"></i>BREAKDOWN</a></li>
@@ -341,15 +338,14 @@
                     @endif
                 </ol>
             </section>
-           {{--  @if(Session::has('exportWarning'))
+            {{--  @if(Session::has('exportWarning'))
             <div class="container session-container">
                 <p>
-                We have detected a warning data,<br> Please Click Export
+                    We have detected a warning data,<br> Please Click Export
                 </p>
                 <div class="btn-group">
                     <a href="/get/export/warning" class=""><button type="button" class="btn btn-primary btn-sm">EXPORT</i></button></a>
                     <button type="button" id="forgetSession" data-session="exportWarning" class="btn btn-danger btn-sm">FORGET</button>
-
                 </div>
             </div>
             @else
@@ -432,58 +428,57 @@
     <script>
     $('body').on('hidden.bs.modal', function (e)
     {
-        if($('.modal').hasClass('in'))
-        {
-        $('body').addClass('modal-open');
-        }
-        else
-        {
-        $('div').removeClass('modal-backdrop');
-        $('.modal').remove();
-        }
+    if($('.modal').hasClass('in'))
+    {
+    $('body').addClass('modal-open');
+    }
+    else
+    {
+    $('div').removeClass('modal-backdrop');
+    $('.modal').remove();
+    }
     });
     $(document).ready(function()
     {
-        $('.select2').select2();
-        $('.datepicker').datepicker({autoclose: true});
-        $('body').on('click','li.treeview',function()
-        {
-        if($(this).hasClass('menu-open'))
-        {
-        $(this).closest('treeview').find('ul.treeview-menu').css('display','block');
-        }
-        });
-        $("body").find(".table tr td").find('button.btn-danger').css("margin-right","-4px");
-        $('body').on('click','#forgetSession',function() 
-        {
-            var session = $(this).data('session');
-            $.ajax({
-                    headers: {
-                          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-
-                    url:'/forgetSession',
-                    data:{session:session},
-                    method: "POST",
-                    success: function(data)
-                    {
-                        $('.session-container').remove();
-                    }
-                });
-            
-        });
+    $('.select2').select2();
+    $('.datepicker').datepicker({autoclose: true});
+    $('body').on('click','li.treeview',function()
+    {
+    if($(this).hasClass('menu-open'))
+    {
+    $(this).closest('treeview').find('ul.treeview-menu').css('display','block');
+    }
+    });
+    $("body").find(".table tr td").find('button.btn-danger').css("margin-right","-4px");
+    $('body').on('click','#forgetSession',function()
+    {
+    var session = $(this).data('session');
+    $.ajax({
+    headers: {
+    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    },
+    url:'/forgetSession',
+    data:{session:session},
+    method: "POST",
+    success: function(data)
+    {
+    $('.session-container').remove();
+    }
+    });
+    
+    });
     });
     $(document).ajaxStart(function ()
     {
-        Pace.restart()
+    Pace.restart()
     })
     $('.ajax').click(function ()
     {
-        $.ajax({
-            url: '#', success: function (result) {
-            $('.ajax-content').html('<hr>Ajax Request Completed !')
-            }
-        })
+    $.ajax({
+    url: '#', success: function (result) {
+    $('.ajax-content').html('<hr>Ajax Request Completed !')
+    }
+    })
     })
     
     

@@ -3,6 +3,20 @@ var settings_reports	= new settings_reports();
 
 function settings_reports()
 {
+	this.calculateSum = function(SumClass)
+	 {
+	    var sum = 0;
+	  // iterate through each td based on class and add the values
+	  $("."+SumClass).each(function() {
+	      var value = $(this).text();
+	      // add only if the value is number
+	      if(!isNaN(value) && value.length != 0) {
+	          sum += parseFloat(value);
+	      }
+	     });
+	   $("#"+SumClass).html(sum);
+	}
+
 	init();
 
 	function init()

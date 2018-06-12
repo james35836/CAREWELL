@@ -125,7 +125,7 @@
 						<tr>
 							<th>CAREWELL ID</th>
 							<th>COMPANY NAME</th>
-							<th>EMPLOYEE ID</th>
+							<th>COMPANY ID</th>
 							<th>COVERAGE PLAN</th>
 							<th>MODE OF PAYMENT</th>
 							<th>DEPLOYMENT</th>

@@ -1,20 +1,22 @@
+
 @extends('carewell.layout.layout')
 @section('content')
 <script type="text/javascript">
 
 $(document).ready(function(){
-        settings_reports.calculateSum('sum-jan');
-        settings_reports.calculateSum('sum-feb');
-        settings_reports.calculateSum('sum-mar');
-        settings_reports.calculateSum('sum-apr');
-        settings_reports.calculateSum('sum-may');
-        settings_reports.calculateSum('sum-jun');
-        settings_reports.calculateSum('sum-jul');
-        settings_reports.calculateSum('sum-aug');
-        settings_reports.calculateSum('sum-sep');
-        settings_reports.calculateSum('sum-oct');
-        settings_reports.calculateSum('sum-nov');
-        settings_reports.calculateSum('sum-dec');
+        // settings_reports.calculateSum('sum-jan');
+        // settings_reports.calculateSum('sum-feb');
+        // settings_reports.calculateSum('sum-mar');
+        // settings_reports.calculateSum('sum-apr');
+        // settings_reports.calculateSum('sum-may');
+        // settings_reports.calculateSum('sum-jun');
+        // settings_reports.calculateSum('sum-jul');
+        // settings_reports.calculateSum('sum-aug');
+        // settings_reports.calculateSum('sum-sep');
+        // settings_reports.calculateSum('sum-oct');
+        // settings_reports.calculateSum('sum-nov');
+        // settings_reports.calculateSum('sum-dec');
+        settings_reports.calculateSum('sum-count');
 });
 
 </script>
@@ -39,7 +41,7 @@ $(document).ready(function(){
               </div>
               <div class="col-md-3 col-xs-12">
                 <div class="btn-group">
-                   <a href="/reports/ending_number_per_reports/export_excel"><button type="button" class="btn btn-success">EXPORT EXCEL</button></a>
+                   <a href="/reports/availment_per_month_summary/export_excel"><button type="button" class="btn btn-success">EXPORT EXCEL</button></a>
                 </div>
               </div>
               <div class="col-md-3 col-xs-12 pull-right">
@@ -55,8 +57,6 @@ $(document).ready(function(){
               <table class="table table-hover table-bordered sum_table">
                 <tr class="titlerow">
                   <th>COMPANY</th>
-                  <th>PREM</th>
-                  <th>DATE ACQUIRED</th>
                   <th>JAN</th>
                   <th>FEB</th>
                   <th>MAR</th>
@@ -69,12 +69,11 @@ $(document).ready(function(){
                   <th>OCT</th>
                   <th>NOV</th>
                   <th>DEC</th>
+                  <th>TOTAL</th>
                 </tr>
                 @foreach($_company as $company)
                 <tr>
                   <td>{{$company->company_name}}</td>
-                  <td>{{$company->coverage_plan_premium}}</td>
-                  <td>{{substr($company->coverage_plan_created,0,10)}}</td>
                   <td class="sum-jan">{{$company->count_jan}}</td>
                   <td class="sum-feb">{{$company->count_feb}}</td>
                   <td class="sum-mar">{{$company->count_mar}}</td>
@@ -87,24 +86,24 @@ $(document).ready(function(){
                   <td class="sum-oct">{{$company->count_oct}}</td>
                   <td class="sum-nov">{{$company->count_nov}}</td>
                   <td class="sum-dec">{{$company->count_dec}}</td>
+                  <td class="sum-count">{{$company->count}}</td>
                 </tr>
                 @endforeach
                 <tr>
                   <td>TOTAL</td>
-                  <td></td>
-                  <td></td>
-                  <td id="sum-jan"></td>
-                  <td id="sum-feb"></td>
-                  <td id="sum-mar"></td>
-                  <td id="sum-apr"></td>
-                  <td id="sum-may"></td>
-                  <td id="sum-jun"></td>
-                  <td id="sum-jul"></td>
-                  <td id="sum-aug"></td>
-                  <td id="sum-sep"></td>
-                  <td id="sum-oct"></td>
-                  <td id="sum-nov"></td>
-                  <td id="sum-dec"></td>
+                  <td id="sum-jan">-</td>
+                  <td id="sum-feb">-</td>
+                  <td id="sum-mar">-</td>
+                  <td id="sum-apr">-</td>
+                  <td id="sum-may">-</td>
+                  <td id="sum-jun">-</td>
+                  <td id="sum-jul">-</td>
+                  <td id="sum-aug">-</td>
+                  <td id="sum-sep">-</td>
+                  <td id="sum-oct">-</td>
+                  <td id="sum-nov">-</td>
+                  <td id="sum-dec">-</td>
+                  <td id="sum-count"></td>  
                 </tr>
               </table>
             </div>
