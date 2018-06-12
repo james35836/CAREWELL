@@ -223,6 +223,9 @@ Route::get('/reports/availment_per_month',  'CarewellController@reports_availmen
 
 Route::get('/reports/availment_per_month_summary/export_excel', 'CarewellController@reports_availment_per_month_export_excel');
 
+Route::get('/reports/availment_monitoring', 'CarewellController@reports_availment_monitoring');
+Route::get('/reports/availment_monitoring/export_excel', 'CarewellController@reports_availment_monitoring_export_excel');
+
 
 
 

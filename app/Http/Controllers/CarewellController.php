@@ -2411,6 +2411,33 @@ public function availment_approval_add_details_submit()
 
 	}
 
+	public function reports_availment_monitoring()
+	{
+		$data['page']     = 'Availment per Month Summary';
+		$data['user']     = StaticFunctionController::global();
+		$data['_availment'] = TblAvailmentModel::where('archived',0)->paginate(10);
+
+		foreach ($data['_availment'] as $key => $availment)
+		{
+			$data['_availment'][$key]['count'] = TblApprovalModel::where('availment_id',$availment->availment_id)->count();
+			$data['_availment'][$key]['count_jan'] = TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-01').'%')->count();                                           
+			$data['_availment'][$key]['count_feb'] = TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-02').'%')->count();
+			$data['_availment'][$key]['count_mar'] = TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-03').'%')->count(); 
+			$data['_availment'][$key]['count_apr'] = TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-04').'%')->count(); 
+			$data['_availment'][$key]['count_may'] = TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-05').'%')->count();
+			$data['_availment'][$key]['count_jun']= TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-06').'%')->count();
+			$data['_availment'][$key]['count_jul']= TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-07').'%')->count();
+			$data['_availment'][$key]['count_aug'] = TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-08').'%')->count();
+			$data['_availment'][$key]['count_sep']= TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-09').'%')->count();
+			$data['_availment'][$key]['count_oct'] = TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-10').'%')->count();
+			$data['_availment'][$key]['count_nov'] = TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-11').'%')->count();
+			$data['_availment'][$key]['count_dec'] = TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-12').'%')->count();									      
+		}
+
+		return view('carewell.pages.reports_availment_monitoring_report',$data);
+
+	}
+
 	public function reports_breakdown()
 	{
 		$data['page']     = 'Breakdown Reports';
@@ -2589,13 +2616,76 @@ public function availment_approval_add_details_submit()
 
 		}
 
-		Excel::create("AVAILMENT PER MONTH SUMMART ".date('Y'),function($excel) use ($data)
+		Excel::create("AVAILMENT PER MONTH SUMMARY ".date('Y'),function($excel) use ($data)
 			{
 				$excel->sheet('clients',function($sheet) use ($data)
 				{
 					$sheet->loadView('carewell.additional_pages.reports_availment_per_month_export_excel',$data);
 				});
 			})->download('xls');
+
+	}
+
+	public function reports_availment_monitoring_export_excel()
+	{
+		$data['page']     = 'Availment per Month Summary Monitoring';
+		$data['user']     = StaticFunctionController::global();
+		$data['_availment'] = TblAvailmentModel::where('archived',0)->paginate(10);
+
+			$data['total_all'] = 0;
+			$data['total_jan'] = 0;
+			$data['total_feb'] = 0;
+			$data['total_mar'] = 0;
+			$data['total_apr'] = 0; 
+			$data['total_may'] = 0;
+			$data['total_jun'] = 0;
+			$data['total_jul'] = 0;
+			$data['total_aug'] = 0;
+			$data['total_sep'] = 0;
+			$data['total_oct'] = 0;
+			$data['total_nov'] = 0;
+			$data['total_dec'] = 0;
+
+		foreach ($data['_availment'] as $key => $availment)
+		{
+			$data['_availment'][$key]['count'] = TblApprovalModel::where('availment_id',$availment->availment_id)->count();
+			$data['_availment'][$key]['count_jan'] = TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-01').'%')->count();                                           
+			$data['_availment'][$key]['count_feb'] = TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-02').'%')->count();
+			$data['_availment'][$key]['count_mar'] = TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-03').'%')->count(); 
+			$data['_availment'][$key]['count_apr'] = TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-04').'%')->count(); 
+			$data['_availment'][$key]['count_may'] = TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-05').'%')->count();
+			$data['_availment'][$key]['count_jun']= TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-06').'%')->count();
+			$data['_availment'][$key]['count_jul']= TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-07').'%')->count();
+			$data['_availment'][$key]['count_aug'] = TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-08').'%')->count();
+			$data['_availment'][$key]['count_sep']= TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-09').'%')->count();
+			$data['_availment'][$key]['count_oct'] = TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-10').'%')->count();
+			$data['_availment'][$key]['count_nov'] = TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-11').'%')->count();
+			$data['_availment'][$key]['count_dec'] = TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-12').'%')->count();									      
+		
+				$data['total_jan'] 	= $data['total_jan'] 	+ 	$data['_availment'][$key]['count_jan'] ;
+				$data['total_feb'] 	= $data['total_feb'] 	+ 	$data['_availment'][$key]['count_feb'] ;
+				$data['total_mar'] 	= $data['total_mar'] 	+ 	$data['_availment'][$key]['count_mar'] ;
+				$data['total_apr'] 	= $data['total_apr'] 	+ 	$data['_availment'][$key]['count_apr'] ;
+				$data['total_may'] 	= $data['total_may'] 	+ 	$data['_availment'][$key]['count_may'] ;
+				$data['total_jun']  = $data['total_jun'] 	+ 	$data['_availment'][$key]['count_jun'] ;
+				$data['total_jul']  = $data['total_jul'] 	+ 	$data['_availment'][$key]['count_jul'] ;
+				$data['total_aug']	= $data['total_aug'] 	+ 	$data['_availment'][$key]['count_aug'] ;
+				$data['total_sep']  = $data['total_sep'] 	+ 	$data['_availment'][$key]['count_sep'] ;
+				$data['total_oct'] 	= $data['total_oct'] 	+ 	$data['_availment'][$key]['count_oct'] ;
+				$data['total_nov'] 	= $data['total_nov'] 	+ 	$data['_availment'][$key]['count_nov'] ;
+				$data['total_dec'] 	= $data['total_dec'] 	+ 	$data['_availment'][$key]['count_dec'] ;
+				$data['total_all'] 	= $data['total_all'] 	+ 	$data['_availment'][$key]['count'] ;
+
+		}
+
+			Excel::create("AVAILMENT PER MONTH SUMMARY MONITORING".date('Y'),function($excel) use ($data)
+			{
+				$excel->sheet('clients',function($sheet) use ($data)
+				{
+					$sheet->loadView('carewell.additional_pages.reports_availment_monitoring_report_export_excel',$data);
+				});
+			})->download('xls');
+
 
 	}
 
