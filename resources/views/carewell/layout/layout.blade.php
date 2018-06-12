@@ -218,7 +218,7 @@
             </nav>
         </header>
         <!-- SIDEBAR -->
-        aside.main-sidebar section.sidebar ul.sidebar-menu li.treeview ul.treeview-menu a
+<!--         aside.main-sidebar section.sidebar ul.sidebar-menu li.treeview ul.treeview-menu a -->
         <aside class="main-sidebar">
             <section class="sidebar">
                 <div class="user-panel">

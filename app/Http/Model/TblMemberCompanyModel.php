@@ -30,4 +30,14 @@ class TblMemberCompanyModel extends Model
        
       return $query;
     }
+
+    public function scopeCountAvailment($query,$coverage_plan_id,$company_id)
+    {
+      $query -> where('tbl_member_company.archived',0)
+                ->where('coverage_plan_id',$coverage_plan_id)
+                ->where('company_id',$company_id)
+                ->join('tbl_approval','tbl_approval.member_id','=','tbl_member_company.member_id');
+
+                return $query;
+    }
 }

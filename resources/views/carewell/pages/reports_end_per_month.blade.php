@@ -1,29 +1,22 @@
 @extends('carewell.layout.layout')
 @section('content')
-<script >
-$(document).ready(function() {
-$(".sum_table tr:not(:first,:last)  td:last-child").text(function()
-{
-var t = 0;
-$(this).prevAll().each(function(){
-t += parseInt( $(this).text(), 10 ) || 0;
+<script type="text/javascript">
+
+$(document).ready(function(){
+        settings_reports.calculateSum('sum-jan');
+        settings_reports.calculateSum('sum-feb');
+        settings_reports.calculateSum('sum-mar');
+        settings_reports.calculateSum('sum-apr');
+        settings_reports.calculateSum('sum-may');
+        settings_reports.calculateSum('sum-jun');
+        settings_reports.calculateSum('sum-jul');
+        settings_reports.calculateSum('sum-aug');
+        settings_reports.calculateSum('sum-sep');
+        settings_reports.calculateSum('sum-oct');
+        settings_reports.calculateSum('sum-nov');
+        settings_reports.calculateSum('sum-dec');
 });
-return t;
-});
-$(".sum_table tr:last td").text(function(i)
-{
-var t = 0;
-$(this).parent().prevAll().find("td:nth-child("+(++i)+")").each(function()
-{
-t += parseInt( $(this).text(), 10 ) || 0;
-});
-if(t==0)
-{
-t="";
-}
-return  t;
-});
-});
+
 </script>
 <div class="container">
   <div class="row">
@@ -32,7 +25,6 @@ return  t;
       <div class="nav-tabs-custom">
         <ul class="nav nav-tabs">
           <li class="active"><a href="#open" data-toggle="tab">MONTHLY MONITORING</a></li>
-          <li><a href="#close" data-toggle="tab">MONTHLY SUMMARY</a></li>
         </ul>
         <div class="tab-content">
           <div class="tab-pane active" id="open">
@@ -45,7 +37,11 @@ return  t;
                   @endforeach
                 </select>
               </div>
-
+              <div class="col-md-3 col-xs-12">
+                <div class="btn-group">
+                   <a href="/reports/ending_number_per_reports/export_excel"><button type="button" class="btn btn-success">EXPORT EXCEL</button></a>
+                </div>
+              </div>
               <div class="col-md-3 col-xs-12 pull-right">
                 <div class="input-group ">
                   <input type="text" class="form-control">
@@ -69,131 +65,46 @@ return  t;
                   <th>JUNE</th>
                   <th>JULY</th>
                   <th>AUG</th>
-                  <th>SEP</th>
+                  <th>SEPT</th>
                   <th>OCT</th>
                   <th>NOV</th>
                   <th>DEC</th>
                 </tr>
                 @foreach($_company as $company)
-                @foreach($company->company_availment as $company_availment)
                 <tr>
                   <td>{{$company->company_name}}</td>
-                  <td>{{$company_availment->availment_name}}</td>
-                  <td>5</td>
-                  <td>DIGIMA</td>
-                  <td>DEC-NOV</td>
-                  <td>DEC-NOV</td>
-                  <td>DEC-NOV</td>
-                  <td>DEC-NOV</td>
-                  <td>CAL 01</td>
-                  <td>DEC-NOV</td>
-                  <td>DEC-NOV</td>
-                  <td>DIGIMA</td>
-                  <td>DIGIMA</td>
-                  <td><span class="label label-success">active</span></td>
-                  <td><span class="label label-success pop-up-lg action-span" data-modalname="APPROVAL DETAILS" data-link="/medical/approval/details">view details</span></td>
+                  <td>{{$company->coverage_plan_premium}}</td>
+                  <td>{{substr($company->coverage_plan_created,0,10)}}</td>
+                  <td class="sum-jan">{{$company->count_jan}}</td>
+                  <td class="sum-feb">{{$company->count_feb}}</td>
+                  <td class="sum-mar">{{$company->count_mar}}</td>
+                  <td class="sum-apr">{{$company->count_apr}}</td>
+                  <td class="sum-may">{{$company->count_may}}</td>
+                  <td class="sum-jun">{{$company->count_june}}</td>
+                  <td class="sum-jul">{{$company->count_july}}</td>
+                  <td class="sum-aug">{{$company->count_aug}}</td>
+                  <td class="sum-sep">{{$company->count_sept}}</td>
+                  <td class="sum-oct">{{$company->count_oct}}</td>
+                  <td class="sum-nov">{{$company->count_nov}}</td>
+                  <td class="sum-dec">{{$company->count_dec}}</td>
                 </tr>
                 @endforeach
-                @endforeach
                 <tr>
-                  <td></td>
                   <td>TOTAL</td>
-                  <td>0.0</td>
-                  <td>0.0</td>
-                  <td>0.0</td>
-                  <td>0.0</td>
-                  <td>0.0</td>
-                  <td>0.0</td>
-                  <td>0.0</td>
-                  <td>0.0</td>
-                  <td>0.0</td>
-                  <td>0.0</td>
-                  <td>0.0</td>
-                  <td>0.0</td>
                   <td></td>
-                </tr>
-              </table>
-            </div>
-            <div class="box-footer clearfix">
-              @include('globals.pagination', ['paginator' => $_company])
-            </div>
-          </div>
-          <!-- /.tab-pane -->
-          <div class="tab-pane" id="close">
-            <div class="row">
-              <div class="col-md-3 col-xs-12 pull-left">
-                <select class="form-control">
-                  <option value="">SELECT COMPANY</option>
-                  @foreach($_company as $company)
-                  <option>{{$company->company_name}}</option>
-                  @endforeach
-                </select>
-              </div>
-              <div class="col-md-3 col-xs-12 pull-right">
-                <div class="input-group margin">
-                  <input type="text" class="form-control">
-                  <span class="input-group-btn">
-                    <button type="button" class="btn btn-default"><i class="fa fa-search"></i></button>
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div class="table-responsive no-padding">
-              <table class="table table-hover table-bordered sum_table">
-                <tr class="titlerow">
-                  <th>COMPANY</th>
-                  <th>PREM</th>
-                  <th>DATE ACQUIRED</th>
-                  <th>JAN</th>
-                  <th>FEB</th>
-                  <th>MAR</th>
-                  <th>APR</th>
-                  <th>MAY</th>
-                  <th>JUNE</th>
-                  <th>JULY</th>
-                  <th>AUG</th>
-                  <th>SEP</th>
-                  <th>OCT</th>
-                  <th>NOV</th>
-                  <th>DEC</th>
-                </tr>
-                @foreach($_company as $company)
-                @foreach($company->company_availment as $company_availment)
-                <tr>
-                  <td>{{$company->company_name}}</td>
-                  <td>{{$company_availment->availment_name}}</td>
-                  <td>5</td>
-                  <td>DIGIMA</td>
-                  <td>DEC-NOV</td>
-                  <td>DEC-NOV</td>
-                  <td>DEC-NOV</td>
-                  <td>DEC-NOV</td>
-                  <td>CAL 01</td>
-                  <td>DEC-NOV</td>
-                  <td>DEC-NOV</td>
-                  <td>DIGIMA</td>
-                  <td>DIGIMA</td>
-                  <td><span class="label label-success">active</span></td>
-                  <td><span class="label label-success pop-up-lg action-span" data-modalname="APPROVAL DETAILS" data-link="/medical/approval/details">view details</span></td>
-                </tr>
-                @endforeach
-                @endforeach
-                <tr>
                   <td></td>
-                  <td>TOTAL</td>
-                  <td>0.0</td>
-                  <td>0.0</td>
-                  <td>0.0</td>
-                  <td>0.0</td>
-                  <td>0.0</td>
-                  <td>0.0</td>
-                  <td>0.0</td>
-                  <td>0.0</td>
-                  <td>0.0</td>
-                  <td>0.0</td>
-                  <td>0.0</td>
-                  <td>0.0</td>
-                  <td></td>
+                  <td id="sum-jan"></td>
+                  <td id="sum-feb"></td>
+                  <td id="sum-mar"></td>
+                  <td id="sum-apr"></td>
+                  <td id="sum-may"></td>
+                  <td id="sum-jun"></td>
+                  <td id="sum-jul"></td>
+                  <td id="sum-aug"></td>
+                  <td id="sum-sep"></td>
+                  <td id="sum-oct"></td>
+                  <td id="sum-nov"></td>
+                  <td id="sum-dec"></td>
                 </tr>
               </table>
             </div>
