@@ -36,7 +36,6 @@ function availment_center()
 
         	remove_approval_details_confirm();
             remove_approval_details_submit();
-
         });
 	}
 	this.get_total = function($this)
@@ -68,28 +67,33 @@ function availment_center()
 		$this.find('input.total_charge_carewell').val(carewell);
 
 	}
+
 	this.check_procedure_amount = function(carewell,member_id,procedure,availment_id)
 	{
-		var carewell 		= carewell.val();
-		var procedure 		= procedure.val();
+		var ajaxCallData 	= new FormData();
+		var carewell_amount = carewell;
+		var procedure_id    = procedure;
 		var member_id 		= member_id;
 		var availment_id 	= availment_id;
-		$.ajax({
-			headers: {
-			      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-			},
 
-			url:'/get/check_procedure_amount',
-			data:{member_id: member_id,carewell:carewell},
-			method: "POST",
-            	success: function(data)
-			{
-				toastr.error('Please check the amount distribution.', 'Something went wrong!', {timeOut: 3000})
-			}
-		});
-	}
+
+    	ajaxCallData.append('carewell_amount',		carewell_amount);
+    	ajaxCallData.append('procedure_id',			procedure_id);
+    	ajaxCallData.append('member_id',			member_id);
+    	ajaxCallData.append('availment_id',		    availment_id);
+		globals.global_ajax_call_submit('/get/check_procedure_amount',ajaxCallData,availment_center,'check_procedure');
+    }
 	this.show_data_here = function(data,functionReference)
 	{
+		switch (functionReference) 
+		{
+		    case 0:
+		        day = "Sunday";
+		        break;
+		    case 1:
+		        day = "Monday";
+		        break;
+		}
 		if(functionReference=="provider")
 		{
 			if(data.view!="none")
@@ -103,8 +107,14 @@ function availment_center()
 			$('.other-payee').val(data.third);
 			$('.specializationList').html(data.specialization);
 			$('.doctorProcedureList').html(data.doctorprocedure);
-
-
+		}
+		else if(functionReference=="check_procedure")
+		{
+			if(data.ref=="sumobra")
+			{
+				toastr.error('CURRENT BALANCE : '+data.current_balance+' Member has insufficient balance for this procedure <br>or<br> have reached his/her coverage limit.', 'Something went wrong!', {timeOut: 5000});                                                           
+			}
+			
 		}
 		else if(functionReference=="availment")
 		{

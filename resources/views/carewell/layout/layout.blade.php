@@ -255,7 +255,8 @@
                             </span>
                         </a>
                         <ul class="treeview-menu">
-                            <li style="background-color:#3FC380"><a href="/settings/admin"><i class="fa fa-universal-access"></i>ADMIN PANEL</a></li>
+                            <li style="background-color:#3FC380"><a href="/settings/admin"><i class="fa fa-user"></i>ADMIN PANEL</a></li>
+                            <li style="background-color:#3FC380"><a href="/access"><i class="fa fa-universal-access"></i>ACCESS LEVEL</a></li>
                             <li style="background-color:#03A678" ><a href="/settings/coverage"><i class="fa fa-circle-o"></i>COVERAGE PLAN</a></li>
                             <li style="background-color:#03A678"><a href="/settings/maintenance"><i class="fa fa-circle-o"></i>MAINTENANCE</a></li>
                             <li style="background-color:#049372">
@@ -410,6 +411,7 @@
     <script src="/assets/js/pages/dashboardv2.js"></script>
     <script src="/assets/js/pages/dashboard.js"></script>
     <script src="/assets/js/pages/admin_center.js"></script>
+    <script src="/assets/js/pages/access_center.js"></script>
     <script src="/assets/js/pages/company_center.js"></script>
     <script src="/assets/js/pages/member_center.js"></script>
     <script src="/assets/js/pages/billing_center.js"></script>

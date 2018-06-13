@@ -70,6 +70,10 @@ Route::get('/settings/maintenance', 				    'AdminController@settings_maintenanc
 Route::get('/settings/maintenance_modal', 				'AdminController@settings_maintenance_modal');
 Route::post('/settings/maintenance_modal_submit', 		'AdminController@settings_maintenance_modal_submit');
 
+Route::get('/access', 						            'AdminController@access_center');
+Route::get('/access/create_position', 					'AdminController@access_center_create_position');
+
+
 /*DASHBOARD*/
 Route::get('/dashboard', 						     'CarewellController@dashboard');
 

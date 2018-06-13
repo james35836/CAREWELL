@@ -6,67 +6,59 @@ $(document).ready(function()
 	radioClass   : 'iradio_minimal-blue'
 	});
 	$('body').find('.get-member-info').select2();
-	$('.date-picker').datepicker();
+	$('body').find('.approval_date_availed').datepicker();
 	$('body').find('.getAvailmentInfo').select2();
 	$('body').find('.getProviderInfo').select2();
 	$('body').find('.default-select2').select2();
 
 	$('body').find('.my-select').select2();
     
-	
-	
-	$('body').on('change','.gross-amount',function()
-	{
-		
-		var value 			= $(this).val();
-		var $amount 		= $(this).parents('tr').find('.gross-amount');
-		var $philhealth 	= $(this).parents('tr').find('.philhealth');
-		var $patient 		= $(this).parents('tr').find('.charge-patient');
-		var $carewell 		= $(this).parents('tr').find('.charge-carewell');
 
-		$philhealth.val('0');
-		$patient.val('0');
-		$carewell.val(value);
 
-		var $this 		= $(this).closest('div.box-globals');
-		availment_center.get_total($this);
-	});
-	$('body').on('change','.philhealth',function()
+	$('body').on('change','.procedureList,.gross-amount,.philhealth,.charge-patient',function()
 	{
+		var $carewell 		= $(this).parents('tr').find('.charge-carewell').val();
+		var $procedure 	    = $(this).parents('tr').find('.procedureList').val();
+		var $amount 		= $(this).parents('tr').find('.gross-amount').val();
+		var $philhealth 	= $(this).parents('tr').find('.philhealth').val();
+		var $patient 		= $(this).parents('tr').find('.charge-patient').val();
+
+        var new_carewell    = 0;
 		var $member_id    	= $('#member_id').val();
 		var $availment_id   = $('#availment_id').val();
-		var new_carewell 	= 0;
-		var value 			= $(this).val();
-	     var $procedure 	= $(this).parents('tr').find('.procedureList');
-		var $amount 		= $(this).parents('tr').find('.gross-amount');
-		var $patient 		= $(this).parents('tr').find('.charge-patient');
-		var $carewell 		= $(this).parents('tr').find('.charge-carewell');
-		new_carewell 		= parseInt($amount.val())-(parseInt(value)+parseInt($patient.val()));
-		
-		if (new_carewell >=0)
+		if($(this).hasClass('procedureList'))
 		{
-			$carewell.val(new_carewell);
-			var $this 		= $(this).closest('div.box-globals');
-			availment_center.get_total($this);
-			availment_center.check_procedure_amount($carewell,$member_id,$procedure,$availment_id);
+			$(this).parents('tr').find('.philhealth').val('0');
+			$(this).parents('tr').find('.charge-patient').val('0');
+			$(this).parents('tr').find('.charge-carewell').val('0');
+			availment_center.check_procedure_amount(0,$member_id,$procedure,$availment_id);
 		}
 		else
 		{
-			toastr.error('Please check the amount distribution.', 'Something went wrong!', {timeOut: 3000})
-		}
-	});
-	$('body').on('change','.charge-patient',function()
-		{
-			var new_carewell = 0;
-			var value = $(this).val();
-			
-			var $amount 	= $(this).parents('tr').find('.gross-amount');
-			var $philhealth = $(this).parents('tr').find('.philhealth');
-			var $carewell 	= $(this).parents('tr').find('.charge-carewell');
-			new_carewell = parseInt($amount.val())-(parseInt(value)+parseInt($philhealth.val()));
-			if (new_carewell >= 0)
+
+			if($(this).hasClass('philhealth'))
 			{
-				$carewell.val(new_carewell);
+				new_carewell 		= parseInt($amount)-(parseInt($philhealth)+parseInt($patient));
+			}
+			else if($(this).hasClass('charge-patient'))
+			{ 
+				new_carewell = parseInt($amount)-(parseInt($patient)+parseInt($philhealth));
+			}
+
+			if (new_carewell >=0)
+			{
+				if($(this).hasClass('gross-amount'))
+				{
+					$(this).parents('tr').find('.philhealth').val('0');
+					$(this).parents('tr').find('.charge-patient').val('0');
+					$(this).parents('tr').find('.charge-carewell').val($(this).val());
+				}
+				else
+				{
+					availment_center.check_procedure_amount(new_carewell,$member_id,$procedure,$availment_id);
+					$(this).parents('tr').find('.charge-carewell').val(new_carewell);
+				}
+				
 				var $this 		= $(this).closest('div.box-globals');
 				availment_center.get_total($this);
 			}
@@ -74,15 +66,7 @@ $(document).ready(function()
 			{
 				toastr.error('Please check the amount distribution.', 'Something went wrong!', {timeOut: 3000})
 			}
-			
-	});
-	$('body').on('click','.reimbursementBtn',function()
-	{
-		$('.reemburse-provider').html('<input type="text" class="form-control" name="state_d" id="state_d">');
-		$('.doctorList').replaceWith('<input type="text" class="form-control" name="state_d" id="state_d">');
-		$('.payeeList').replaceWith('<input type="text" class="form-control" name="state_d" id="state_d">');
-	
-
+		}
 	});
 	$('body').on('change','.final_diagnosis_id',function()
 	{
@@ -159,7 +143,7 @@ $(document).ready(function()
 				<label>Availment Date</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="text" name="approval_date_availed" id="approval_date_availed" class="form-control date-picker" value="{{date('m-d-Y')}}"/>
+				<input type="text" name="approval_date_availed" id="approval_date_availed" class="approval_date_availed form-control" value="{{date('m-d-Y')}}"/>
 			</div>
 		</div>
 		<div class="form-holder">
@@ -277,10 +261,10 @@ $(document).ready(function()
 							<option value="0">-Select Description-</option>
 						</select>
 					</td>
-					<td><input type="number"  value="0.0" name="procedure_gross_amount[]" id="laboratory_amount" class="gross-amount form-control"/></td>
-					<td><input type="number" value="0.0" name="procedure_philhealth[]" id="" class="philhealth form-control"/></td>
-					<td><input type="number" value="0.0" name="procedure_charge_patient[]" id="" class="charge-patient form-control"/></td>
-					<td><input type="number" value="0.0" name="procedure_charge_carewell[]" id="" class="charge-carewell form-control"/></td>
+					<td><input type="number"  value="0" name="procedure_gross_amount[]" id="" class="gross-amount form-control"/></td>
+					<td><input type="number" value="0" name="procedure_philhealth[]" id="" class="philhealth form-control"/></td>
+					<td><input type="number" value="0" name="procedure_charge_patient[]" id="" class="charge-patient form-control"/></td>
+					<td><input type="number" value="0" name="procedure_charge_carewell[]" id="" class="charge-carewell form-control"/></td>
 					<td><textarea name="approval_remarks"  cols="2" rows="1"  id="approval_remarks" class="form-control">REMARKS</textarea></td>
 					<td>
 						<div class="btn-group" role="group" aria-label="Basic example">

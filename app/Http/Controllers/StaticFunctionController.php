@@ -101,39 +101,48 @@ class StaticFunctionController extends Controller
     public function getCheckProcedureAmount(Request $request)
     {
         $member_id          = $request->member_id;
-        $carewell_charges   = $request->carewell;
-        $procedure_id       = $request->procedure;
+        $carewell_amount    = $request->carewell_amount;
+        $procedure_id       = $request->procedure_id;
         $availment_id       = $request->availment_id;
-
+ 
         $sum                = 0;
     
         $member             = TblMemberCompanyModel::where('tbl_member_company.member_id',$member_id)->CompanyMember()->first();
         $procedure_covered  = TblCoveragePlanProcedureModel::where('procedure_id',$procedure_id)->where('availment_id',$availment_id)->where('coverage_plan_id',$member->coverage_plan_id)->value('plan_covered_amount'); 
         
+        
 
-
-        $_approval          = TblApprovalModel::where('member_id',$member_id)->get();
+        $_approval          = TblApprovalModel::where('member_id',$member_id)
+                            ->join('tbl_approval_procedure','tbl_approval_procedure.approval_id','tbl_approval.approval_id')
+                            ->where('procedure_id',$procedure_id)
+                            ->where('availment_id',$availment_id)
+                            ->get();
+                            
         foreach($_approval as $approval)
         {
-            $_procedure         = TblApprovalProcedureModel::where('approval_id',$approval->approval_id)->where('procedure_id',$procedure_id)->get();
-            
-            if($_procedure!=null)
-            {
-                foreach($_procedure as $procedure)
-                {
-                    $sum = $sum + $procedure->procedure_charge_carewell;
-                }
-            }
+            $sum = $sum + $approval->procedure_charge_carewell;
         }
+        $actual     = $sum+$carewell_amount;
+        $balance    = $procedure_covered-$actual;
 
-        // if($sum > $procedure_covered)
-        // {
-        //     dd('up');
-        // }
-        // else
-        // {
-        //     dd('down');
-        // }
+        $current_balance = $procedure_covered-$sum;
+        // dd($sum,$procedure_id,$procedure_covered,$_approval);
+        if($balance < 0)
+        {
+            $message['ref']             = 'sumobra';
+            $message['balance']         = $balance;
+            $message['actual']          = $actual;
+            $message['current_balance'] = $current_balance;
+        }
+        else 
+        {
+            $message['ref']             = 'pwede';
+            $message['balance']         = $balance;
+            $message['actual']          = $actual;
+            $message['current_balance'] = $current_balance;
+
+        }
+        return $message;
     }
     public function getCompanyInfo(Request $request)
     {
