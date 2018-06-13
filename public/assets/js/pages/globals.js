@@ -574,6 +574,16 @@ function globals()
     		$(this).closest('div.modal-body').find('select').removeAttr('disabled');
     		$(this).closest('div.modal-body').find('button').removeAttr('disabled');
     		$(this).closest('div.modal').find('button.confirm-btn').removeAttr('disabled');
+
+
+    		$(this).closest('div.modal').find('input.total_gross_amount').attr('readonly',true);
+    		$(this).closest('div.modal').find('input.total_philhealth').attr('readonly',true);
+    		$(this).closest('div.modal').find('input.total_charge_patient').attr('readonly',true);
+    		$(this).closest('div.modal').find('input.total_charge_carewell').attr('readonly',true);
+    	
+
+
+
     	});
 	}
     function event_run_paginate()
