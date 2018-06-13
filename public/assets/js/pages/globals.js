@@ -143,8 +143,8 @@ function globals()
 
 				url:modalLink,
 				method: "get",
-	               success: function(data)
-	               {
+	            success: function(data)
+	            {
 					setTimeout(function()
 					{  
 						$('.global-ajax-loader').hide().removeClass().addClass('.modal-loader '+modalClass+'-ajax-loader');

@@ -6,12 +6,11 @@ $(document).ready(function()
 	radioClass   : 'iradio_minimal-blue'
 	});
 	$('body').find('.get-member-info').select2();
-	
 	$('body').find('.getAvailmentInfo').select2();
 	$('body').find('.getProviderInfo').select2();
 	$('body').find('.default-select2').select2();
 	$('body').find('.my-select').select2();
-	
+    $('body').find('.approval_date_availed').datepicker();
 	
 	$('body').on('change','.gross-amount',function()
 	{
@@ -177,11 +176,14 @@ $(document).ready(function()
 	</div>
 	<div class="row box-globals">
 		<div class="form-holder col-md-12 no-padding">
+			<div class="col-md-6 form-content">
+				<!-- FOR SPACING -->
+			</div>
 			<div class="col-md-2 form-content">
 				<label>Availment Date</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="text" readonly name="approval_date_availed" class="form-control" value="{{$approval_details->approval_date_availed}}" />
+				<input type="text" readonly name="approval_date_availed" id="approval_date_availed" class="approval_date_availed form-control" value="{{$approval_details->approval_date_availed}}" />
 			</div>
 		</div>
 		<div class="row form-holder">
