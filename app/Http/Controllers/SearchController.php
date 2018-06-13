@@ -74,6 +74,33 @@ use App\Http\Model\TblScheduleOfBenefitsModel;
 
 class SearchController extends ActiveAuthController
 {
+	public function dateFiltering(Request $request)
+	{
+		dd($request->date);
+		switch ($request->ref)
+		 {
+			case 'breakdown':
+					$data['_company'] = TblCompanyModel::where('archived',0)->paginate(10);
+					foreach ($data['_company'] as $key => $company) 
+					{
+						$data['_company'][$key]['count_mem'] = TblMemberCompanyModel::where('company_id',$company->company_id)->count();
+					}
+					$view = view('carewell.filtering_date.reports_breakdown_filtering',$data);
+				break;
+			
+			default:
+				# code...
+				break;
+		}
+
+		return $view;
+
+	}
+
+
+
+
+
   	public function pageFiltering(Request $request)
   	{
   		if($request->ajax())

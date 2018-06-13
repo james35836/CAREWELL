@@ -228,6 +228,10 @@ Route::get('/reports/availment_per_month_summary/export_excel', 'CarewellControl
 Route::get('/reports/availment_monitoring', 'CarewellController@reports_availment_monitoring');
 Route::get('/reports/availment_monitoring/export_excel', 'CarewellController@reports_availment_monitoring_export_excel');
 
+Route::get('/reports_breakdown/filter_date', 'CarewellController@reports_breakdown_filter');
+
+Route::post('/page/date_filter', 'SearchController@dateFiltering');
+
 
 
 

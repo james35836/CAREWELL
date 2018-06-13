@@ -99,7 +99,7 @@
 					</tr>
 					@foreach($_payable_approval as $payable_approval)
 					<tr>
-						<td>{{$payable_approval->approval_number}}</td>
+						<td><span class="label label-success view-approval-details" data-size="md" data-approval_id="{{$payable_approval->approval_id}}">{{$payable_approval->approval_number}}</span></td>
 						<td>{{$payable_approval->member_carewell_id}}</td>
 						<td>{{$payable_approval->member_first_name." ".$payable_approval->member_last_name }}</td>
 						<td>{{date("F j, Y",strtotime($payable_approval->approval_created))}}</td>

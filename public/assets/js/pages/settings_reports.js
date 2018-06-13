@@ -56,29 +56,32 @@ function settings_reports()
 
     function searching()
 	{
-		// $('body').on('change','#datepicker',function()
-		// {
-		// 	var ref				= $(this).data('ref');
-		// 	var table = 						$('#showMonthlyReport');
-		// 	searchData.append("val_key", 		$(this).val());
-		// 	searchData.append("member_id", 		$(this).data('member_id'));
+		$('body').on('change','#datepicker-filtering',function()
+		{
+			//alert(document.getElementById('datepicker').val());
+			var date = $(this).val();
+			var ref	 = $(this).data('ref');
 
-		// 	$.ajax({
-		// 		headers: {
-		// 		      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-		// 		},
-		// 		url:'/reports/member_cal/date_filter/'+ref,
-		// 		method: "POST",
-		//         data: searchData,
-		//         contentType:false,
-	 //            cache:false,
-	 //            processData:false,
-		// 		success: function(data)
-		// 		{
-		// 			table.html(data);
-		// 		}
-		// 	});
-		// });
+			var table = 					$(this).closest('div.tab-pane').find('#showTable');
+			searchData.append("date", 		$(this).val());
+			searchData.append("ref", 		$(this).data('ref'));
+
+			$.ajax({
+				headers: {
+				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				},
+				url:'/page/date_filter',
+				method: "POST",
+		        data: searchData,
+		        contentType:false,
+	            cache:false,
+	            processData:false,
+				success: function(data)
+				{
+					table.html(data);
+				}
+			});
+		});
 	}
 
 	//try

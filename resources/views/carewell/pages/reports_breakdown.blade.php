@@ -1,5 +1,30 @@
 @extends('carewell.layout.layout')
 @section('content')
+<!-- <script type="text/javascript">
+  $( document ).ready(function() {
+  datepickerdate();
+});
+
+  function datepickerdate()
+{
+  var d = new Date(); 
+  var month = d.getMonth()+1;
+
+  var output = (month<10 ? '0' : '') + month + '/' + d.getFullYear();
+  var date = document.getElementById('datepicker');
+  var wd = new Date(d.getFullYear(),d.getMonth());
+  date.value = output;
+
+  // var date_string = wd.toDateString();
+  // var date_month = date_string.substring(4,7);
+  // var date_year = date_string.substring(11,15);
+  // var td_month = document.getElementById('th-date');
+  //  td_month.value = date_month+" "+date_year;
+  // console.log(td_month);
+}
+
+
+</script> -->
 
 <div class="container">
   <div class="row">
@@ -14,28 +39,31 @@
           <div class="tab-pane active" id="open">
             <div class="row">
               <div class="col-md-3 col-xs-12 pull-left">
-                <select class="form-control top-element filtering" data-archived="0" data-name="member">
+                <select class="form-control top-element" data-archived="0" data-name="member">
                   <option>SELECT COMPANY</option>
                   @foreach($_company as $company)
                   <option value="{{$company->company_id}}">{{$company->company_name}}</option>
                   @endforeach
                 </select>
               </div>
+              <div class="col-md-3 col-xs-12">
+                <input class="datepicker" id="datepicker-filtering" data-date-format="yyyy-mm" data-ref="breakdown">
+                <a href="/reports_breakdown/filter_date"><button>date</button></a>
+              </div>
+              
               <div class="col-md-3 col-xs-12 pull-right">
                 <select class="form-control">
                   <option value="2018">2018</option>
                 </select>
               </div>
             </div>
+        <div id="showTable" class="load-data load-reports-breakdown" data-target="load-reports-breakdown">
             <div class="table-responsive no-padding">
-              <table class="table table-hover table-bordered sum_table">
+              <table class="table table-hover table-bordered sum_table" id="showReport">
                 <tr class="titlerow">
-                  <th>NUMBER</th>
                   <th>COMPANY</th>
-                  <th>PREMIUM</th>
-                  <th>DATE ACQUIRED</th>
                   <th>NUMBER OF MEMBER</th>
-                  <th>AVAILMENT</th>
+                  <th>AVAILMENT AS OF</th>
                   <th>YEAR TO DATE AVAIL</th>
                   <th>APE</th>
                   <th>CONFINEMENT-MED</th>
@@ -44,23 +72,18 @@
                   <th>DENTAL</th>
                   <th>LAB</th>
                   <th>MO</th>
-
                   <th>FA</th>
                   <th>DB</th>
                   <th>HIB</th>
                   <th>TOTAL</th>
-
                 </tr>
                 @foreach($_company as $company)
                 <tr>
-                  <td>{{$company->company_code}}</td>
                   <td>{{$company->company_name}}</td>
-                  <td>DIGIMA</td>
+                  <td>{{$company->count_mem}}</td>
                   <td>DEC-NOV</td>
                   <td>DEC-NOV</td>
-                  <td>DEC-NOV</td>
-                  <td>DEC-NOV</td>
-                  <td>CAL 01</td>
+                  <td>{{$company->count_ape}}</td>
                   <td>DEC-NOV</td>
                   <td>DEC-NOV</td>
                   <td>DIGIMA</td>
@@ -76,6 +99,7 @@
                 
               </table>
             </div>
+          </div>  
             {{-- <div class="box-footer clearfix">
               @include('globals.pagination', ['paginator' => $_company])
             </div> --}}

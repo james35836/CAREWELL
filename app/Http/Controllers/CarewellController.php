@@ -2459,6 +2459,14 @@ class CarewellController extends ActiveAuthController
 		$data['_company'] = TblCompanyModel::where('archived',0)->paginate(10);
 		$data['user']     = StaticFunctionController::global();
 
+		foreach ($data['_company'] as $key => $company) 
+		{
+			$data['_company'][$key]['count_mem'] = TblMemberCompanyModel::where('company_id',$company->company_id)->distinct('member_id')->count('member_id'); 
+
+			// $data['_company'][$key]['count_ape'] 	= TblApprovalModel::
+			// $data['_company'][$key]['count_avail'] = tbl
+		}
+
 		return view('carewell.pages.reports_breakdown',$data);
 	}
 	public function reports_consolidation()
@@ -2702,6 +2710,11 @@ class CarewellController extends ActiveAuthController
 			})->download('xls');
 
 
+	}
+
+	public function reports_breakdown_filter()
+	{
+		dd('wew');
 	}
 
 		
