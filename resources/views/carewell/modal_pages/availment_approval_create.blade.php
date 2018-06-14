@@ -279,7 +279,7 @@ $(document).ready(function()
 				<label>Total Gross Amount</label>
 			</div>
 			<div class="col-md-6 form-holder">
-				<input type="number" class="form-control total_gross_amount" name="procedure_total_gross_amount" id="total_gross_amount">
+				<input readonly type="number" class="form-control total_gross_amount" name="procedure_total_gross_amount" id="total_gross_amount">
 			</div>
 		</div>
 		<div class="col-md-6 pull-right col-xs-12">
@@ -287,7 +287,7 @@ $(document).ready(function()
 				<label>Total Philhealth Charity</label>
 			</div>
 			<div class="col-md-6 form-holder">
-				<input type="number" class="form-control total_philhealth" name="procedure_total_philhealth" id="total_philhealth">
+				<input readonly type="number" class="form-control total_philhealth" name="procedure_total_philhealth" id="total_philhealth">
 			</div>
 		</div>
 		<div class="col-md-6 pull-right col-xs-12">
@@ -295,7 +295,7 @@ $(document).ready(function()
 				<label>Total Charge to Patient</label>
 			</div>
 			<div class="col-md-6 form-holder">
-				<input type="number" class="form-control total_charge_patient" name="procedure_total_charge_patient" id="total_charge_patient">
+				<input readonly type="number" class="form-control total_charge_patient" name="procedure_total_charge_patient" id="total_charge_patient">
 			</div>
 		</div>
 		<div class="col-md-6 pull-right col-xs-12">
@@ -303,7 +303,7 @@ $(document).ready(function()
 				<label>Total Charge to Carewell</label>
 			</div>
 			<div class="col-md-6 form-holder">
-				<input type="number" class="form-control total_charge_carewell" name="procedure_total_charge_carewell" id="total_charge_carewell">
+				<input readonly type="number" class="form-control total_charge_carewell" name="procedure_total_charge_carewell" id="total_charge_carewell">
 			</div>
 		</div>
 	</div>
@@ -374,7 +374,7 @@ $(document).ready(function()
 				<label>Total Actual PF Charges</label>
 			</div>
 			<div class="col-md-6 form-holder">
-				<input type="number" class="form-control total_gross_amount" name="doctor_total_gross_amount" id="total_gross_amount">
+				<input readonly type="number" class="form-control total_gross_amount" name="doctor_total_gross_amount" id="total_gross_amount">
 			</div>
 		</div>
 		<div class="col-md-6 pull-right col-xs-12">
@@ -382,7 +382,7 @@ $(document).ready(function()
 				<label>Total Philhealth Charity</label>
 			</div>
 			<div class="col-md-6 form-holder">
-				<input type="number" class="form-control total_philhealth" name="doctor_total_philhealth" id="total_philhealth">
+				<input readonly type="number" class="form-control total_philhealth" name="doctor_total_philhealth" id="total_philhealth">
 			</div>
 		</div>
 		<div class="col-md-6 pull-right col-xs-12">
@@ -390,7 +390,7 @@ $(document).ready(function()
 				<label>Total Charge to Patient</label>
 			</div>
 			<div class="col-md-6 form-holder">
-				<input type="number" class="form-control total_charge_patient" name="doctor_total_charge_patient" id="total_charge_patient">
+				<input readonly type="number" class="form-control total_charge_patient" name="doctor_total_charge_patient" id="total_charge_patient">
 			</div>
 		</div>
 		<div class="col-md-6 pull-right col-xs-12">
@@ -398,7 +398,7 @@ $(document).ready(function()
 				<label>Total Charge to Carewell</label>
 			</div>
 			<div class="col-md-6 form-holder">
-				<input type="number" class="form-control total_charge_carewell" name="doctor_total_charge_carewell" id="total_charge_carewell">
+				<input readonly type="number" class="form-control total_charge_carewell" name="doctor_total_charge_carewell" id="total_charge_carewell">
 			</div>
 		</div>
 	</div>
