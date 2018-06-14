@@ -2457,13 +2457,14 @@ class CarewellController extends ActiveAuthController
 	{
 		$data['page']     = 'Breakdown Reports';
 		$data['_company'] = TblCompanyModel::where('archived',0)->paginate(10);
+		$data['_availment'] = TblAvailmentModel::where('archived',0)->get();
 		$data['user']     = StaticFunctionController::global();
 
 		foreach ($data['_company'] as $key => $company) 
 		{
 			$data['_company'][$key]['count_mem'] = TblMemberCompanyModel::where('company_id',$company->company_id)->distinct('member_id')->count('member_id'); 
 
-			// $data['_company'][$key]['count_ape'] 	= TblApprovalModel::
+			// $data['_company'][$key]['count_ape'] 	= TblApprovalModel::join('tbl_member_company')
 			// $data['_company'][$key]['count_avail'] = tbl
 		}
 
