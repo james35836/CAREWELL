@@ -256,7 +256,7 @@
                         </a>
                         <ul class="treeview-menu">
                             <li style="background-color:#3FC380"><a href="/settings/admin"><i class="fa fa-user"></i>ADMIN PANEL</a></li>
-                            <li style="background-color:#3FC380"><a href="/access"><i class="fa fa-universal-access"></i>ACCESS LEVEL</a></li>
+                            <li style="background-color:#3FC380"><a href="/settings/access"><i class="fa fa-universal-access"></i>ACCESS LEVEL</a></li>
                             <li style="background-color:#03A678" ><a href="/settings/coverage"><i class="fa fa-circle-o"></i>COVERAGE PLAN</a></li>
                             <li style="background-color:#03A678"><a href="/settings/maintenance"><i class="fa fa-circle-o"></i>MAINTENANCE</a></li>
                             <li style="background-color:#049372">
@@ -324,9 +324,26 @@
         <div class="content-wrapper" >
             <!-- Content Header (Page header) -->
             <div class="top-padding">
-                
             </div>
-            <section class="content-header">
+             @if(Session::has('exportWarning'))
+            <div class="container session-container">
+                <div class="col-md-5 col-xs-12">
+                    We have detected a warning data, Please Click Export
+                </div>
+                <div class="col-xs-12 col-md-7">
+                    <div class="btn-group">
+                        <a href="/get/export/warning">
+                            <button type="button" class="btn btn-primary btn-sm">EXPORT LIST</button>
+                        </a>
+                        <a href="/forgetSession">
+                            <button type="button" class="btn btn-danger btn-sm">FORGET LIST</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            @else
+            @endif
+            <section class="container content-header">
                 <h1>
                 {{$page}}
                 <small>center</small>
@@ -339,19 +356,7 @@
                     @endif
                 </ol>
             </section>
-            {{--  @if(Session::has('exportWarning'))
-            <div class="container session-container">
-                <p>
-                    We have detected a warning data,<br> Please Click Export
-                </p>
-                <div class="btn-group">
-                    <a href="/get/export/warning" class=""><button type="button" class="btn btn-primary btn-sm">EXPORT</i></button></a>
-                    <button type="button" id="forgetSession" data-session="exportWarning" class="btn btn-danger btn-sm">FORGET</button>
-                </div>
-            </div>
-            @else
             
-            @endif --}}
             <!-- Main content -->
             <section class="content">
                 
@@ -452,23 +457,6 @@
     }
     });
     $("body").find(".table tr td").find('button.btn-danger').css("margin-right","-4px");
-    $('body').on('click','#forgetSession',function()
-    {
-    var session = $(this).data('session');
-    $.ajax({
-    headers: {
-    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    },
-    url:'/forgetSession',
-    data:{session:session},
-    method: "POST",
-    success: function(data)
-    {
-    $('.session-container').remove();
-    }
-    });
-    
-    });
     });
     $(document).ajaxStart(function ()
     {

@@ -120,7 +120,7 @@ $(document).ready(function()
 					<input type="text" class="form-control member_birthdate" disabled/>
 				</div>
 				<div class="col-md-2 form-content">
-					<label>Employee Number</label>
+					<label>Company ID</label>
 				</div>
 				<div class="col-md-4 form-content">
 					<input type="text" class="form-control member_employee_number" disabled/>
@@ -265,7 +265,7 @@ $(document).ready(function()
 					<td><input type="number" value="0" name="procedure_philhealth[]" id="" class="philhealth form-control"/></td>
 					<td><input type="number" value="0" name="procedure_charge_patient[]" id="" class="charge-patient form-control"/></td>
 					<td><input type="number" value="0" name="procedure_charge_carewell[]" id="" class="charge-carewell form-control"/></td>
-					<td><textarea name="approval_remarks"  cols="2" rows="1"  id="approval_remarks" class="form-control">REMARKS</textarea></td>
+					<td><textarea name="procedure_remarks[]"  cols="2" rows="1"  id="procedure_remarks[]" class="form-control">REMARKS</textarea></td>
 					<td>
 						<div class="btn-group" role="group" aria-label="Basic example">
 							<button type="button" data-number="2" class="btn btn-danger btn-sm remove-row"><i class="fa fa-minus-circle"></i></button>

@@ -234,7 +234,7 @@
 			</div>
 			
 			<div class="col-md-2 form-content">
-				<label>Employee Number</label>
+				<label>Company ID</label>
 			</div>
 			<div class="col-md-4 form-content">
 				<input type="text"  name="member_employee_number" id="member_employee_number" class="form-control"/>

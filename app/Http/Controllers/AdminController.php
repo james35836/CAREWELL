@@ -41,6 +41,12 @@ use App\Http\Model\TblLaboratoryModel;
 use App\Http\Model\TblDiagnosisModel;
 use App\Http\Model\TblProcedureModel;
 use App\Http\Model\TblScheduleOfBenefitsModel;
+
+use App\Http\Model\TblPositionModel;
+use App\Http\Model\TblPositionTagModel;
+use App\Http\Model\TblPositionAccessModel;
+
+
 use Excel;
 use Input;
 // use Request;
@@ -55,15 +61,34 @@ class AdminController extends ActiveAuthController
     {
         $data['page'] = 'Access Panel';
         $data['user'] = StaticFunctionController::global();
-        $data['_user_active']= TblUserModel::where('tbl_user.archived',0)->UserInfo()->paginate(10);
-        $data['_user_archived']= TblUserModel::where('tbl_user.archived',1)->UserInfo()->paginate(10);
+        $data['_position'] = TblPositionModel::where('archived',0)->paginate(10);
         return view('carewell.pages.access_center',$data);
     }
     public function access_center_create_position()
     {
-        $data['page'] = 'Admin Panel';
-        $data['user'] = StaticFunctionController::global();
+        $data['_access'] = TblPositionAccessModel::where('access_parent_id',0)->get();
+        foreach($data['_access'] as $key=> $access)
+        {
+            $data['_access'][$key]['sub_acces']  = TblPositionAccessModel::where('access_parent_id',$access->access_id)->get();
+        }
         return view('carewell.modal_pages.access_create_position',$data);
+    }
+    public function access_center_create_position_submit(Request $request)
+    {
+        $accessData                     = new TblPositionModel;
+        $accessData->position_name      =  $request->position_name;
+        $accessData->position_created   =  Carbon::now();
+        $accessData->save();
+
+        foreach($request->access_id as $access_id)
+        {
+            $accessLevel                = new TblPositionTagModel;
+            $accessLevel->access_id     = $access_id;
+            $accessLevel->position_id   = $accessData->position_id;
+            $accessLevel->save();
+        }
+        return StaticFunctionController::customMessage('success','NEW POSITION ADDED!');
+        
     }
     public function admin_center()
     {

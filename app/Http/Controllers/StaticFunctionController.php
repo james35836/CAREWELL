@@ -953,8 +953,8 @@ class StaticFunctionController extends Controller
     }
     public function forgetSession(Request $request)
     {
-        Session::forget($request->session);
-        return "done";
+        Session::forget('exportWarning');
+        return redirect()->back();   
     }
     public static function paymentDateComputation($member_id,$cal_member_id,$payment_count,$payment_mode)
     {

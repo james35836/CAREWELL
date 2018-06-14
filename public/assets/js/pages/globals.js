@@ -786,6 +786,16 @@ function globals()
 		{
 		    $(this).closest('table').find('td input:checkbox').prop('checked', this.checked);
 		});
+		$('body').on('click','input.parent',function (e) 
+		{
+		    $(this).closest('div.parent').find('div.child input:checkbox').prop('checked', this.checked);
+		});
+		$('body').on('click','input.child',function (e) 
+		{
+		    $(this).closest('div.parent').find('input.parent').prop('checked', this.checked);
+		});
+
+
 	}
 	function add_select_option()
 	{
