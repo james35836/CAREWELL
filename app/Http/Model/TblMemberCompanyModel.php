@@ -49,13 +49,22 @@ class TblMemberCompanyModel extends Model
         return $query;
     }
 
-    public function scopeCountAvailment($query,$coverage_plan_id,$company_id)
+    // public function scopeCountAvailment($query,$coverage_plan_id,$company_id,$date)
+    // {
+    //     $query ->join('tbl_approval','tbl_approval.member_id','=','tbl_member_company.member_id')
+    //             ->where('tbl_member_company.archived',0)
+    //             ->where('coverage_plan_id',$coverage_plan_id)
+    //             ->where('company_id',$company_id)
+    //             ->where('tbl_approval.approval_created','LIKE','%'.$dates.'%');
+    //             return $query;
+    // }
+    public function scopeCountAvailment($query,$parameter,$date)
     {
-      $query -> where('tbl_member_company.archived',0)
-                ->where('coverage_plan_id',$coverage_plan_id)
-                ->where('company_id',$company_id)
-                ->join('tbl_approval','tbl_approval.member_id','=','tbl_member_company.member_id');
-
+        $query ->join('tbl_approval','tbl_approval.member_id','=','tbl_member_company.member_id')
+                ->where('tbl_member_company.archived',0)
+                ->where('coverage_plan_id',$parameter[0])
+                ->where('company_id',$parameter[1])
+                ->where('tbl_approval.approval_created','LIKE','%'.$date.'%');
                 return $query;
     }
 }

@@ -3,7 +3,7 @@
     <td colspan="15">MONTLY MONITORING</td>
   </tr>
   <tr>
-    <td colspan="15">{{date('Y')}}</td>
+    <td colspan="15">{{$date}}</td>
   </tr>
   <tr>
     <th>COMPANY</th>

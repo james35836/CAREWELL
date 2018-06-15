@@ -33,10 +33,31 @@ function settings_reports()
 			searching();
 			//try
 			search_member_cal();
+			datepickerdate();
+
+			
 
 		});
 
 	}
+
+	// $("#datepicker-filtering").datepicker( {
+	// 			format: "yyyy-mm",
+	// 			startView: "months",
+	// 			minViewMode: "months",
+	// 			autoclose: true
+	// 			});
+
+	function datepickerdate()
+	{
+	// var d = new Date();
+	// var month = d.getMonth()+1;
+	// var output = d.getFullYear()+'-'+(month<10 ? '0' : '') + month;
+	// var date = document.getElementById('datepicker-filtering');
+	// date.value = output;
+	}
+
+
 	function member_report()
 	{
 
@@ -58,11 +79,10 @@ function settings_reports()
 	{
 		$('body').on('change','#datepicker-filtering',function()
 		{
-			//alert(document.getElementById('datepicker').val());
 			var date = $(this).val();
 			var ref	 = $(this).data('ref');
 
-			var table = 					$(this).closest('div.tab-pane').find('#showTable');
+			var table = 					$(this).closest('div.showReportContent');
 			searchData.append("date", 		$(this).val());
 			searchData.append("ref", 		$(this).data('ref'));
 

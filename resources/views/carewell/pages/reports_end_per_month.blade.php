@@ -1,22 +1,30 @@
 @extends('carewell.layout.layout')
 @section('content')
 <script type="text/javascript">
-
 $(document).ready(function(){
-        settings_reports.calculateSum('sum-jan');
-        settings_reports.calculateSum('sum-feb');
-        settings_reports.calculateSum('sum-mar');
-        settings_reports.calculateSum('sum-apr');
-        settings_reports.calculateSum('sum-may');
-        settings_reports.calculateSum('sum-jun');
-        settings_reports.calculateSum('sum-jul');
-        settings_reports.calculateSum('sum-aug');
-        settings_reports.calculateSum('sum-sep');
-        settings_reports.calculateSum('sum-oct');
-        settings_reports.calculateSum('sum-nov');
-        settings_reports.calculateSum('sum-dec');
+settings_reports.calculateSum('sum-jan');
+settings_reports.calculateSum('sum-feb');
+settings_reports.calculateSum('sum-mar');
+settings_reports.calculateSum('sum-apr');
+settings_reports.calculateSum('sum-may');
+settings_reports.calculateSum('sum-jun');
+settings_reports.calculateSum('sum-jul');
+settings_reports.calculateSum('sum-aug');
+settings_reports.calculateSum('sum-sep');
+settings_reports.calculateSum('sum-oct');
+settings_reports.calculateSum('sum-nov');
+settings_reports.calculateSum('sum-dec');
+$('body').on('click','.year-picker',function(e)
+{
+$(this).datepicker({
+format: " yyyy",
+startView: "years",
+viewMode: "years",
+minViewMode: "years",
+autoclose: true
 });
-
+});
+});
 </script>
 <div class="container">
   <div class="row">
@@ -27,7 +35,7 @@ $(document).ready(function(){
           <li class="active"><a href="#open" data-toggle="tab">MONTHLY MONITORING</a></li>
         </ul>
         <div class="tab-content">
-          <div class="tab-pane active" id="open">
+          <div class="tab-pane active showReportContent" id="open">
             <div class="row top-element">
               <div class="col-md-3 col-xs-12 pull-left">
                 <select class="form-control">
@@ -39,16 +47,17 @@ $(document).ready(function(){
               </div>
               <div class="col-md-3 col-xs-12">
                 <div class="btn-group">
-                   <a href="/reports/ending_number_per_reports/export_excel"><button type="button" class="btn btn-success">EXPORT EXCEL</button></a>
+                  <a href="{{$link}}"><button type="button" class="btn btn-success">EXPORT EXCEL</button></a>
                 </div>
               </div>
-              <div class="col-md-3 col-xs-12 pull-right">
-                <div class="input-group ">
-                  <input type="text" class="form-control">
-                  <span class="input-group-btn">
-                    <button type="button" class="btn btn-default"><i class="fa fa-search"></i></button>
-                  </span>
+              <div class="col-md-6 col-xs-12 pull-right">
+                <div class="col-md-4">
+                  <label style="display:inline-block;">Filter Report:</label>
                 </div>
+                <div class="col-md-8">
+                  <input class="form-control year-picker" id="datepicker-filtering" value="{{$date}}" data-ref="end_per_month" >
+                </div>
+                
               </div>
             </div>
             <div class="table-responsive no-padding">
