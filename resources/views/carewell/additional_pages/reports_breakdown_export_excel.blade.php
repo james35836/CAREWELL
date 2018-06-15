@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
+		<style>
+			table,th,td {
+				text-align: center !important;
+			}
+		</style>
 	</head>
 	<body>
 		<table class="table table-hover table-bordered sum_table" id="showReport">
