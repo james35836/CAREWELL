@@ -300,7 +300,7 @@ class CarewellController extends ActiveAuthController
 	/*MEMBER*/
 	public function member()
 	{
-		$data['page']                 = 'Member';
+        $data['page']                 = 'Member';
 		$data['user']                 = StaticFunctionController::global();
 		$data['_company']             = TblCompanyModel::where('archived',0)->get();
 		$data['_member_active']       = TblMemberModel::where('tbl_member.archived',0)->where('tbl_member_company.archived',0)->Member()->orderBy('tbl_member.member_id','ASC')->paginate(10, ['*'], 'active');
@@ -1534,23 +1534,23 @@ class CarewellController extends ActiveAuthController
 	public function billing_cal_pending_submit(Request $request)
 	{
 		StaticFunctionController::getNewMember($request->cal_id,2);
-	    	$update['archived']     = 2; //for pending cal
-	    	$update['cal_remarks']  = $request->cal_remarks;
-	    	$pending                = TblCalModel::where('cal_id',$request->cal_id)->update($update);
-	    	$data['_cal_member']    = TblCalMemberModel::where('cal_id',$request->cal_id)->get();
-	    	foreach($data['_cal_member'] as $key=>$cal_member)
-	    	{
-	    		$member['archived']   = 2;
-	    		TblCalPaymentModel::where('cal_member_id',$cal_member->cal_member_id)->update($member);
-	    	}
-	    	if($pending)
-	    	{
-	    		return '<center><b><span class="color-red">CAL successfully mark as Pending!</span></b></center>';
-	    	}
-	    	else
-	    	{
-	    		return "error";
-	    	}
+    	$update['archived']     = 2; //for pending cal
+    	$update['cal_remarks']  = $request->cal_remarks;
+    	$pending                = TblCalModel::where('cal_id',$request->cal_id)->update($update);
+    	$data['_cal_member']    = TblCalMemberModel::where('cal_id',$request->cal_id)->get();
+    	foreach($data['_cal_member'] as $key=>$cal_member)
+    	{
+    		$member['archived']   = 2;
+    		TblCalPaymentModel::where('cal_member_id',$cal_member->cal_member_id)->update($member);
+    	}
+    	if($pending)
+    	{
+    		return '<center><b><span class="color-red">CAL successfully mark as Pending!</span></b></center>';
+    	}
+    	else
+    	{
+    		return "error";
+    	}
 	}
 	public function billing_cal_close($cal_id)
 	{
@@ -1707,7 +1707,6 @@ class CarewellController extends ActiveAuthController
 		$approvalData->approval_complaint         = $request->approval_complaint;
 		$approvalData->approval_date_availed      = $request->approval_date_availed;
 		$approvalData->approval_created           = Carbon::now();
-		$approvalData->approval_remarks        	  = $request->approval_remarks;
 		$approvalData->charge_diagnosis_id        = $request->charge_diagnosis_id;
 		$approvalData->diagnosis_id               = $request->diagnosis_id;
 		$approvalData->availment_id               = $request->availment_id;
@@ -1732,6 +1731,7 @@ class CarewellController extends ActiveAuthController
 			$procedureData->procedure_philhealth      = $request->procedure_philhealth[$key];
 			$procedureData->procedure_charge_patient  = $request->procedure_charge_patient[$key];
 			$procedureData->procedure_charge_carewell = $request->procedure_charge_carewell[$key];
+			$procedureData->procedure_remarks         = $request->procedure_remarks[$key];
 			$procedureData->diagnosis_id              = 1;
 			$procedureData->approval_id               = $approvalData->approval_id;
 			$procedureData->save();
@@ -1843,6 +1843,7 @@ class CarewellController extends ActiveAuthController
 				$procedureData->procedure_philhealth      = $request['procedure_philhealth'][$key];
 				$procedureData->procedure_charge_patient  = $request['procedure_charge_patient'][$key];
 				$procedureData->procedure_charge_carewell = $request['procedure_charge_carewell'][$key];
+				$procedureData->procedure_remarks         = $request['procedure_remarks'][$key];
 				$procedureData->diagnosis_id              = 1;
 				$procedureData->approval_id               = $request['approval_id'];
 				$procedureData->save();
@@ -1860,6 +1861,7 @@ class CarewellController extends ActiveAuthController
 				$procedureData['procedure_philhealth']      = $request['procedure_philhealth'][$key];
 				$procedureData['procedure_charge_patient']  = $request['procedure_charge_patient'][$key];
 				$procedureData['procedure_charge_carewell'] = $request['procedure_charge_carewell'][$key];
+				$procedureData['procedure_remarks']         = $request['procedure_remarks'][$key];
 				TblApprovalProcedureModel::where('procedure_approval_id',$request['procedure_approval_id'][$key])->update($procedureData);
 			}
 			
@@ -1933,6 +1935,7 @@ class CarewellController extends ActiveAuthController
 				$procedureData->procedure_philhealth      = $request->procedure_philhealth[$key];
 				$procedureData->procedure_charge_patient  = $request->procedure_charge_patient[$key];
 				$procedureData->procedure_charge_carewell = $request->procedure_charge_carewell[$key];
+				$procedureData->procedure_remarks         = $request->procedure_remarks[$key];
 				$procedureData->diagnosis_id              = 1;
 				$procedureData->approval_id               = $request->approval_id;
 				$procedureData->save();
@@ -1987,7 +1990,7 @@ class CarewellController extends ActiveAuthController
 				else
 				{
 					$payeeDocData['payee_id']     = $payee_id;
-					TblApprovalPayeeModel::where('approval_payee_id',$request->doctor_approval_payee_id)->update($payeeDocData);
+					TblApprovalPayeeModel::where('approval_payee_id',$request->doctor_payee_id)->update($payeeDocData);
 				}
 				
 			}
@@ -2159,6 +2162,7 @@ class CarewellController extends ActiveAuthController
 						$procedureData->procedure_philhealth      = $request->procedure_philhealth[$key];
 						$procedureData->procedure_charge_patient  = $request->procedure_charge_patient[$key];
 						$procedureData->procedure_charge_carewell = $request->procedure_charge_carewell[$key];
+						$procedureData->procedure_remarks         = $request->procedure_remarks[$key];
 						$procedureData->diagnosis_id              = 1;
 						$procedureData->approval_id               = $request->approval_id;
 						$procedureData->save();

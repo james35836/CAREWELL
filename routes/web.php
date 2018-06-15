@@ -30,21 +30,19 @@ Route::get('/logout', 								'FrontController@logout');
 
 Route::get('/reset/password', 						'FrontController@reset_password');
 
-Route::post('/reset/password/submit', 					'FrontController@reset_password_submit');
+Route::post('/reset/password/submit', 			     'FrontController@reset_password_submit');
 
 /*STATIC CONTROLLER*/
 
-Route::any('/get/company_info', 						'StaticFunctionController@getCompanyInfo');
-Route::any('/get/provider_info', 						'StaticFunctionController@getProviderInfo');
-Route::any('/get/availment_info', 						'StaticFunctionController@getAvailmentInfo');
-Route::any('/get/check_procedure_amount', 				'StaticFunctionController@getCheckProcedureAmount');
+Route::any('/get/company_info', 					'StaticFunctionController@getCompanyInfo');
+Route::any('/get/provider_info', 					'StaticFunctionController@getProviderInfo');
+Route::any('/get/availment_info', 					'StaticFunctionController@getAvailmentInfo');
+Route::any('/get/check_procedure_amount', 			'StaticFunctionController@getCheckProcedureAmount');
 
 
 
-Route::any('/get/export/warning',                           'StaticFunctionController@getExportWarning');
-
-
-Route::post('/forgetSession',                                 'StaticFunctionController@forgetSession');
+Route::any('/get/export/warning',                   'StaticFunctionController@getExportWarning');
+Route::get('/forgetSession',                       'StaticFunctionController@forgetSession');
 /*FILETERING*/
 
 Route::post('/page/filtering', 						'SearchController@pageFiltering');
@@ -70,8 +68,9 @@ Route::get('/settings/maintenance', 				    'AdminController@settings_maintenanc
 Route::get('/settings/maintenance_modal', 				'AdminController@settings_maintenance_modal');
 Route::post('/settings/maintenance_modal_submit', 		'AdminController@settings_maintenance_modal_submit');
 
-Route::get('/access', 						            'AdminController@access_center');
-Route::get('/access/create_position', 					'AdminController@access_center_create_position');
+Route::get('/settings/access', 						            'AdminController@access_center');
+Route::get('/settings/access/create_position', 					'AdminController@access_center_create_position');
+Route::post('/settings/access/create_position/submit', 		'AdminController@access_center_create_position_submit');
 
 
 /*DASHBOARD*/

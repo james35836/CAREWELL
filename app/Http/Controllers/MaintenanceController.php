@@ -20,54 +20,51 @@ use Crypt;
 
 class MaintenanceController extends Controller
 {
-      public function developer_truncate()
-      {
-            DB::table('tbl_company')->truncate();
-            DB::table('tbl_cal')->truncate();
-            DB::table('tbl_cal_member')->truncate();
-            DB::table('tbl_company_contract')->truncate();
-            DB::table('tbl_company_coverage_plan')->truncate();
-            DB::table('tbl_member')->truncate();
-            DB::table('tbl_member_company')->truncate();
-            DB::table('tbl_member_dependent')->truncate();
-            DB::table('tbl_member_government_card')->truncate();
-            DB::table('tbl_member_payment')->truncate();
+    public function developer_truncate()
+    {
+        DB::table('tbl_company')->truncate();
+        DB::table('tbl_cal')->truncate();
+        DB::table('tbl_cal_member')->truncate();
+        DB::table('tbl_company_contract')->truncate();
+        DB::table('tbl_company_coverage_plan')->truncate();
+        DB::table('tbl_member')->truncate();
+        DB::table('tbl_member_company')->truncate();
+        DB::table('tbl_member_dependent')->truncate();
+        DB::table('tbl_member_government_card')->truncate();
+        DB::table('tbl_member_payment')->truncate();
             
-      }
-      public function developer_credential()
-      {
-            if (DB::table('tbl_user')->count() <= 0) 
-            {
-                  $user[0]["user_id"]           = 1;
-                  $user[0]["user_email"]        = "carewelladmin@admin.com";
-                  $user[0]["user_password"]     = Crypt::encrypt('carewelladmin');
-                  $user[0]["user_position"]     = "ADMIN";
-            
-                  DB::table('tbl_user')->insert($user);
-            }
-            if (DB::table('tbl_user_info')->count() <= 0) 
-            {
-                  $user_info[0]["user_info_id"]       = 1;
-                  $user_info[0]["user_profile"]       = '/profile/default_profile.jpg';
-                  $user_info[0]["user_first_name"]    = "CAREWELL";
-                  $user_info[0]["user_middle_name"]   = "HMO";
-                  $user_info[0]["user_last_name"]     = "ADMIN";
-                  $user_info[0]["user_gender"]        = "NOT AVAILABLE";
-                  $user_info[0]["user_birthdate"]     = "NOT AVAILABLE";
-                  $user_info[0]["user_contact_number"]= "NOT AVAILABLE";
-                  $user_info[0]["user_number"]        = "CW-0000001";
-                  $user_info[0]["user_address"]       = "NOT AVAILABLE";
-                  $user_info[0]["user_created"]       = Carbon::now();
-                  $user_info[0]["user_id"]            = 1;
-                  
-                  DB::table('tbl_user_info')->insert($user_info);
-            }
-      }
+    }
+    public function developer_credential()
+    {
+        if (DB::table('tbl_user')->count() <= 0) 
+        {
+            $user[0]["user_id"]           = 1;
+            $user[0]["user_email"]        = "carewelladmin@admin.com";
+            $user[0]["user_password"]     = Crypt::encrypt('carewelladmin');
+            $user[0]["user_position"]     = "ADMIN";
+        
+            DB::table('tbl_user')->insert($user);
+        }
+        if (DB::table('tbl_user_info')->count() <= 0) 
+        {
+            $user_info[0]["user_info_id"]       = 1;
+            $user_info[0]["user_profile"]       = '/profile/default_profile.jpg';
+            $user_info[0]["user_first_name"]    = "CAREWELL";
+            $user_info[0]["user_middle_name"]   = "HMO";
+            $user_info[0]["user_last_name"]     = "ADMIN";
+            $user_info[0]["user_gender"]        = "NOT AVAILABLE";
+            $user_info[0]["user_birthdate"]     = "NOT AVAILABLE";
+            $user_info[0]["user_contact_number"]= "NOT AVAILABLE";
+            $user_info[0]["user_number"]        = "CW-0000001";
+            $user_info[0]["user_address"]       = "NOT AVAILABLE";
+            $user_info[0]["user_created"]       = Carbon::now();
+            $user_info[0]["user_id"]            = 1;
+              
+            DB::table('tbl_user_info')->insert($user_info);
+        }
+    }
 	public function developer_maintenance()
-      {
-         // $up['user_profile']  = '/profile/sam.jpg';
-         // TblUserInfoModel::where('user_info_id',1)->update($up);  
-
+    {
         if (DB::table('tbl_specialization')->count() <= 0) 
         {
             $specialization[0]["specialization_id"]    = 1;
@@ -382,14 +379,188 @@ class MaintenanceController extends Controller
             DB::table('tbl_laboratory')->insert($laboratory);
         }
 
+        if (DB::table('tbl_position_access')->count() <= 0) 
+        {
+            $access[0]["access_id"]          = 1;
+            $access[0]["access_name"]        = "Dashboard";
+            $access[0]["access_segment"]     = "dashboard";
+            $access[0]["access_parent_id"]   = 0;
+
+            $access[1]["access_id"]          = 2;
+            $access[1]["access_name"]        = "Create";
+            $access[1]["access_segment"]     = "none";
+            $access[1]["access_parent_id"]   = 1;
+
+            $access[2]["access_id"]          = 3;
+            $access[2]["access_name"]        = "Modify";
+            $access[2]["access_segment"]     = "none";
+            $access[2]["access_parent_id"]   = 1;
+
+            $access[3]["access_id"]          = 4;
+            $access[3]["access_name"]        = "Delete";
+            $access[3]["access_segment"]     = "none";
+            $access[3]["access_parent_id"]   = 1;
+
+            $access[4]["access_id"]          = 5;
+            $access[4]["access_name"]        = "View";
+            $access[4]["access_segment"]     = "none";
+            $access[4]["access_parent_id"]   = 1;
 
 
+            $access[5]["access_id"]          = 6;
+            $access[5]["access_name"]        = "Company";
+            $access[5]["access_segment"]     = "company";
+            $access[5]["access_parent_id"]   = 0;
+
+            $access[6]["access_id"]          = 7;
+            $access[6]["access_name"]        = "Create";
+            $access[6]["access_segment"]     = "none";
+            $access[6]["access_parent_id"]   = 6;
+
+            $access[7]["access_id"]          = 8;
+            $access[7]["access_name"]        = "Modify";
+            $access[7]["access_segment"]     = "none";
+            $access[7]["access_parent_id"]   = 6;
+
+            $access[8]["access_id"]          = 9;
+            $access[8]["access_name"]        = "Delete";
+            $access[8]["access_segment"]     = "none";
+            $access[8]["access_parent_id"]   = 6;
+
+            $access[9]["access_id"]          = 10;
+            $access[9]["access_name"]        = "View";
+            $access[9]["access_segment"]     = "none";
+            $access[9]["access_parent_id"]   = 6;
+
+            $access[10]["access_id"]          = 11;
+            $access[10]["access_name"]        = "Member";
+            $access[10]["access_segment"]     = "member";
+            $access[10]["access_parent_id"]   = 0;
+
+            $access[11]["access_id"]          = 12;
+            $access[11]["access_name"]        = "Create";
+            $access[11]["access_segment"]     = "none";
+            $access[11]["access_parent_id"]   = 11;
+
+            $access[12]["access_id"]          = 13;
+            $access[12]["access_name"]        = "Modify";
+            $access[12]["access_segment"]     = "none";
+            $access[12]["access_parent_id"]   = 11;
+
+            $access[13]["access_id"]          = 14;
+            $access[13]["access_name"]        = "Delete";
+            $access[13]["access_segment"]     = "none";
+            $access[13]["access_parent_id"]   = 11;
+
+            $access[14]["access_id"]          = 15;
+            $access[14]["access_name"]        = "View";
+            $access[14]["access_segment"]     = "none";
+            $access[14]["access_parent_id"]   = 11;
+
+            $access[15]["access_id"]          = 16;
+            $access[15]["access_name"]        = "Billing";
+            $access[15]["access_segment"]     = "billing";
+            $access[15]["access_parent_id"]   = 0;
+
+            $access[16]["access_id"]          = 17;
+            $access[16]["access_name"]        = "Create";
+            $access[16]["access_segment"]     = "none";
+            $access[16]["access_parent_id"]   = 16;
+
+            $access[17]["access_id"]          = 18;
+            $access[17]["access_name"]        = "Modify";
+            $access[17]["access_segment"]     = "none";
+            $access[17]["access_parent_id"]   = 16;
+
+            $access[18]["access_id"]          = 19;
+            $access[18]["access_name"]        = "Delete";
+            $access[18]["access_segment"]     = "none";
+            $access[18]["access_parent_id"]   = 16;
+
+            $access[19]["access_id"]          = 20;
+            $access[19]["access_name"]        = "View";
+            $access[19]["access_segment"]     = "none";
+            $access[19]["access_parent_id"]   = 16;
 
 
+            $access[20]["access_id"]          = 21;
+            $access[20]["access_name"]        = "Availment";
+            $access[20]["access_segment"]     = "availment";
+            $access[20]["access_parent_id"]   = 0;
 
+            $access[21]["access_id"]          = 22;
+            $access[21]["access_name"]        = "Create";
+            $access[21]["access_segment"]     = "none";
+            $access[21]["access_parent_id"]   = 21;
 
+            $access[22]["access_id"]          = 23;
+            $access[22]["access_name"]        = "Modify";
+            $access[22]["access_segment"]     = "none";
+            $access[22]["access_parent_id"]   = 21;
 
+            $access[23]["access_id"]          = 24;
+            $access[23]["access_name"]        = "Delete";
+            $access[23]["access_segment"]     = "none";
+            $access[23]["access_parent_id"]   = 21;
 
+            $access[24]["access_id"]          = 25;
+            $access[24]["access_name"]        = "View";
+            $access[24]["access_segment"]     = "none";
+            $access[24]["access_parent_id"]   = 21;
+
+            $access[25]["access_id"]          = 26;
+            $access[25]["access_name"]        = "Payable";
+            $access[25]["access_segment"]     = "payable";
+            $access[25]["access_parent_id"]   = 0;
+
+            $access[26]["access_id"]          = 27;
+            $access[26]["access_name"]        = "Create";
+            $access[26]["access_segment"]     = "none";
+            $access[26]["access_parent_id"]   = 26;
+
+            $access[27]["access_id"]          = 28;
+            $access[27]["access_name"]        = "Modify";
+            $access[27]["access_segment"]     = "none";
+            $access[27]["access_parent_id"]   = 26;
+
+            $access[28]["access_id"]          = 29;
+            $access[28]["access_name"]        = "Delete";
+            $access[28]["access_segment"]     = "none";
+            $access[28]["access_parent_id"]   = 26;
+
+            $access[29]["access_id"]          = 30;
+            $access[29]["access_name"]        = "View";
+            $access[29]["access_segment"]     = "none";
+            $access[29]["access_parent_id"]   = 26;
+
+            $access[30]["access_id"]          = 31;
+            $access[30]["access_name"]        = "Reports";
+            $access[30]["access_segment"]     = "reports";
+            $access[30]["access_parent_id"]   = 0;
+
+            $access[31]["access_id"]          = 32;
+            $access[31]["access_name"]        = "Create";
+            $access[31]["access_segment"]     = "none";
+            $access[31]["access_parent_id"]   = 31;
+
+            $access[32]["access_id"]          = 33;
+            $access[32]["access_name"]        = "Modify";
+            $access[32]["access_segment"]     = "none";
+            $access[32]["access_parent_id"]   = 31;
+
+            $access[33]["access_id"]          = 34;
+            $access[33]["access_name"]        = "Delete";
+            $access[33]["access_segment"]     = "none";
+            $access[33]["access_parent_id"]   = 31;
+
+            $access[34]["access_id"]          = 36;
+            $access[34]["access_name"]        = "View";
+            $access[34]["access_segment"]     = "none";
+            $access[34]["access_parent_id"]   = 31;
+
+            
+            DB::table('tbl_position_access')->insert($access);
+        }
+            
     }
-
 }

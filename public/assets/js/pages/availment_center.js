@@ -380,9 +380,7 @@ function availment_center()
 			}
 		    else if(globals.checking_null_validation(document.getElementById('approval_complaint').value,"COMPLAINT")=="")
 			{}
-			else if(globals.checking_null_validation(document.getElementById('approval_remarks').value,"PROCEDURE REMARKS")=="")
-			{}
-			else if(document.getElementById('diagnosis_id').value==0)
+		    else if(document.getElementById('diagnosis_id').value==0)
 			{
 				globals.global_tostr('INITIAL DIAGNOSIS');
 			}

@@ -159,7 +159,7 @@ radioClass   : 'iradio_minimal-blue'
 											{{$procedure->plan_charges}}
 										</td>
 										<td class="col-md-4">
-											{{$procedure->plan_covered_amount}}
+											{{number_format($procedure->plan_covered_amount)}}
 										</td>
 										<td class="col-md-4">
 											{{$procedure->plan_limit}}

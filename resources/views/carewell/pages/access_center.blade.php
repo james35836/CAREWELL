@@ -1,8 +1,34 @@
 @extends('carewell.layout.layout')
 @section('content')
+{{-- <?php
+$items = array(
+  'Dashboard'  => array('text'=>'Dashboard',  'url'=>'?p=Dashboard'),
+  'Settings' => array('text'=>'Settings', 'url'=>'?p=Settings'),
+  'Company'  => array('text'=>'Company',  'url'=>'?p=Company'),
+  'Member' => array('text'=>'Member', 'url'=>'?p=Member'),
+  'Billing' => array('text'=>'Billing', 'url'=>'?p=Billing'),
+  'Availment' => array('text'=>'Availment', 'url'=>'?p=Availment'),
+  'Payable' => array('text'=>'Payable', 'url'=>'?p=Payable'),
+  'Reports' => array('text'=>'Reports', 'url'=>'?p=Reports'),
+  
+  
+);
+$class="active";
+
+$html = "<nav class='$class'>\n";
+    foreach($items as $item) {
+      $html .= "<a href='{$item['url']}'>{$item['text']}</a>\n";
+    }
+    $html .= "</nav>\n";
+
+
+print_r($html);
+
+
+?> --}}
 <div class="container">
     <div class="row">
-        <div class=" col-md-2 col-xs-6 pull-right no-padding">
+        <div class=" col-md-3 col-xs-6 pull-right no-padding">
             <button class="btn btn-primary top-element create-position" type="button" ><i class="fa fa-plus btn-icon "></i>CREATE POSITION</button>
         </div>
     </div>
@@ -29,24 +55,18 @@
                     <div class=" box-body table-responsive no-padding">
                         <table class="table table-hover table-bordered">
                             <tr>
-                                <th>USER ID</th>
-                                <th>ID NUMBER</th>
-                                <th>FULL NAME</th>
-                                <th>EMAIL</th>
-                                <th>GENDER</th>
-                                <th>STATUS</th>
-                                <th>DATE ADDED</th>
+                                <th> ID</th>
+                                <th>POSITION NAME</th>
+                                <th>NO. MEMBER</th>
+                                <th>POSITION CREATED</th>
                                 <th>ACTION</th>
                             </tr>
-                            @foreach($_user_active as $user_active)
+                            @foreach($_position as $key=>$position)
                             <tr>
-                                <td>{{$user_active->user_id}}</td>
-                                <td>{{$user_active->user_number}}</td>
-                                <td>{{$user_active->user_first_name." ".$user_active->user_last_name}}</td>
-                                <td>{{$user_active->user_email}}</td>
-                                <td>{{$user_active->user_gender}}</td>
-                                <td><span class="label label-success">active</span></td>
-                                <td>{{date("F j, Y",strtotime($user_active->user_created))}}</td>
+                                <td>{{$key+1}}</td>
+                                <td>{{$position->position_name}}</td>
+                                <td><span class="label label-success">3</span></td>
+                                <td>{{date("F j, Y",strtotime($position->position_created))}}</td>
                                 <td>
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-danger">Action</button>
@@ -55,8 +75,8 @@
                                         <span class="sr-only">Toggle Dropdown</span>
                                         </button>
                                         <ul class="dropdown-menu" role="menu" style="position: absolute !important;">
-                                            <li><button type="button" data-user_id="{{$user_active->user_id}}" class="btn btn-link view-user-details"><i class="fa fa-eye btn-icon"></i>  View User</button></li>
-                                            <li><button type="button" data-id="{{$user_active->user_id}}" data-name="USER" class="btn btn-link archived"><i class="fa fa-trash btn-icon"></i> Archived User</button></li>
+                                            <li><button type="button" data-user_id="{{$position->position_id}}" class="btn btn-link view-position-details"><i class="fa fa-eye btn-icon"></i>  View position</button></li>
+                                            <li><button type="button" data-id="{{$position->position_id}}" data-name="USER" class="btn btn-link archived"><i class="fa fa-trash btn-icon"></i> Archived User</button></li>
                                         </ul>
                                     </div>
                                 </td>
@@ -65,11 +85,11 @@
                         </table>
                     </div>
                     <div class="box-footer clearfix">
-                        @include('globals.pagination', ['paginator' => $_user_active])
+                        @include('globals.pagination_v2', ['paginator' => $_position])
                     </div>
                 </div>
                 <!-- /.tab-pane -->
-                <div class="tab-pane" id="inActiveUser">
+                {{-- <div class="tab-pane" id="inActiveUser">
                     <div class="row">
                         <div class="col-md-4 col-xs-12 pull-right">
                             <div class="input-group margin">
@@ -121,7 +141,7 @@
                     <div class="box-footer clearfix">
                         @include('globals.pagination', ['paginator' => $_user_archived])
                     </div>
-                </div>
+                </div> --}}
             </div>
             <!-- /.tab-content -->
         </div>

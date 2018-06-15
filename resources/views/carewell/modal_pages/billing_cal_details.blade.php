@@ -46,7 +46,7 @@ table tr td
 	</div>
 	@if($cal_check==0)
 	<div class=" col-md-4 pull-right">
-		<button type="button" data-member_company_id="{{$cal_details->company_id}}" data-member_cal_id="{{$cal_details->cal_id}}" class="btn btn-primary import-cal-members  button-lg" ><i class="fa fa-plus btn-icon"></i>IMPORT MEMBER</button>
+		<button type="button" data-member_company_id="{{$cal_details->company_id}}" data-member_cal_id="{{$cal_details->cal_id}}" class="btn btn-primary import-cal-members  top-element" ><i class="fa fa-plus btn-icon"></i>IMPORT MEMBER</button>
 	</div>
 	@endif
 </div>

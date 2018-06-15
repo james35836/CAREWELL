@@ -306,7 +306,7 @@ $(document).ready(function()
 						<td><input type="number" readonly name="procedure_philhealth[]" id="" class="philhealth form-control" value="{{$availed->procedure_philhealth}}" /></td>
 						<td><input type="number" readonly name="procedure_charge_patient[]" id="" class="charge-patient form-control" value="{{$availed->procedure_charge_patient}}" /></td>
 						<td><input type="number" readonly name="procedure_charge_carewell[]" id="" class="charge-carewell form-control" value="{{$availed->procedure_charge_carewell}}" /></td>
-						<td><textarea readonly name="approval_remarks" id=""  cols="2" rows="1"  class="form-control">{{$approval_details->approval_remarks}}</textarea></td>
+						<td><textarea readonly name="procedure_remarks[]" id="procedure_remarks"  cols="2" rows="1"  class="form-control">{{$availed->procedure_remarks}}</textarea></td>
 						<td>
 							<div class="btn-group" role="group" aria-label="Basic example">
 								<button type="button" data-ref="PROCEDURE" data-id="{{$availed->procedure_approval_id}}" class="remove-approval-details-confirm btn btn-danger btn-sm"><i class="fa fa-minus-circle"></i></button>
@@ -481,7 +481,7 @@ $(document).ready(function()
 					<tr>
 						<td><input type="hidden" id="doctor_approval_payee_id" name="doctor_approval_payee_id" value="{{$payee_doctor->approval_payee_id}}"/>
 							<select disabled style="width:450px;" class="form-control" name="doctor_payee_id[]">
-								<option>{{$payee_doctor->doctor_full_name}}</option>
+								<option value="{{$payee_doctor->doctor_id}}">{{$payee_doctor->doctor_full_name}}</option>
 								@foreach($_doctor as $doctor)
 								<option  value="{{$doctor->doctor_id}}">{{$doctor->doctor_full_name}}</option>
 								@endforeach
