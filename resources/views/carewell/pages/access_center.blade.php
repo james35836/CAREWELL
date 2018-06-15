@@ -1,5 +1,31 @@
 @extends('carewell.layout.layout')
 @section('content')
+{{-- <?php
+$items = array(
+  'Dashboard'  => array('text'=>'Dashboard',  'url'=>'?p=Dashboard'),
+  'Settings' => array('text'=>'Settings', 'url'=>'?p=Settings'),
+  'Company'  => array('text'=>'Company',  'url'=>'?p=Company'),
+  'Member' => array('text'=>'Member', 'url'=>'?p=Member'),
+  'Billing' => array('text'=>'Billing', 'url'=>'?p=Billing'),
+  'Availment' => array('text'=>'Availment', 'url'=>'?p=Availment'),
+  'Payable' => array('text'=>'Payable', 'url'=>'?p=Payable'),
+  'Reports' => array('text'=>'Reports', 'url'=>'?p=Reports'),
+  
+  
+);
+$class="active";
+
+$html = "<nav class='$class'>\n";
+    foreach($items as $item) {
+      $html .= "<a href='{$item['url']}'>{$item['text']}</a>\n";
+    }
+    $html .= "</nav>\n";
+
+
+print_r($html);
+
+
+?> --}}
 <div class="container">
     <div class="row">
         <div class=" col-md-3 col-xs-6 pull-right no-padding">

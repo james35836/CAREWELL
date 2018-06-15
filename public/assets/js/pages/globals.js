@@ -172,10 +172,11 @@ function globals()
 
                     	if(modalActionName=="SAVE CHANGES")
                     	{
-                    		$('.'+modalClass+'-modal').find('button').attr('disabled','true');
+                    		// $('.'+modalClass+'-modal').find('button').attr('disabled','true');
                     		$('.'+modalClass+'-modal').find('button.top-element').removeAttr('disabled');
                     		$('.'+modalClass+'-modal').find('button.close').removeAttr('disabled');
                     		$('.'+modalClass+'-modal').find('button.close-btn').removeAttr('disabled');
+                    		$('.'+modalClass+'-modal').find('button.confirm-btn').removeAttr('disabled');
                     	}
 					}, 700);
 				}
