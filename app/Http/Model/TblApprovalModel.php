@@ -42,4 +42,15 @@ class TblApprovalModel extends Model
         $query  ->join('tbl_diagnosis','tbl_diagnosis.diagnosis_id','=','tbl_approval.charge_diagnosis_id');
         return $query;
     }
+    public function scopeGetAvailment($query, $company_id,$availment_id,$date)
+    {
+        $query  ->join('tbl_member_company','tbl_member_company.member_id','=','tbl_approval.member_id')
+            ->where('tbl_member_company.company_id',$company_id)
+            ->where('tbl_approval.availment_id',$availment_id)
+            ->where('tbl_member_company.archived',0)
+            ->where('tbl_approval.approval_created','LIKE','%'.$date.'%');
+            // ->groupby('tbl_approval.approval_id');
+        return $query;
+    }
+
 }

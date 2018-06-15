@@ -33,10 +33,31 @@ function settings_reports()
 			searching();
 			//try
 			search_member_cal();
+			datepickerdate();
+
+			
 
 		});
 
 	}
+
+	// $("#datepicker-filtering").datepicker( {
+	// 			format: "yyyy-mm",
+	// 			startView: "months",
+	// 			minViewMode: "months",
+	// 			autoclose: true
+	// 			});
+
+	function datepickerdate()
+	{
+	// var d = new Date();
+	// var month = d.getMonth()+1;
+	// var output = d.getFullYear()+'-'+(month<10 ? '0' : '') + month;
+	// var date = document.getElementById('datepicker-filtering');
+	// date.value = output;
+	}
+
+
 	function member_report()
 	{
 
@@ -56,29 +77,31 @@ function settings_reports()
 
     function searching()
 	{
-		// $('body').on('change','#datepicker',function()
-		// {
-		// 	var ref				= $(this).data('ref');
-		// 	var table = 						$('#showMonthlyReport');
-		// 	searchData.append("val_key", 		$(this).val());
-		// 	searchData.append("member_id", 		$(this).data('member_id'));
+		$('body').on('change','#datepicker-filtering',function()
+		{
+			var date = $(this).val();
+			var ref	 = $(this).data('ref');
 
-		// 	$.ajax({
-		// 		headers: {
-		// 		      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-		// 		},
-		// 		url:'/reports/member_cal/date_filter/'+ref,
-		// 		method: "POST",
-		//         data: searchData,
-		//         contentType:false,
-	 //            cache:false,
-	 //            processData:false,
-		// 		success: function(data)
-		// 		{
-		// 			table.html(data);
-		// 		}
-		// 	});
-		// });
+			var table = 					$(this).closest('div.showReportContent');
+			searchData.append("date", 		$(this).val());
+			searchData.append("ref", 		$(this).data('ref'));
+
+			$.ajax({
+				headers: {
+				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				},
+				url:'/page/date_filter',
+				method: "POST",
+		        data: searchData,
+		        contentType:false,
+	            cache:false,
+	            processData:false,
+				success: function(data)
+				{
+					table.html(data);
+				}
+			});
+		});
 	}
 
 	//try
