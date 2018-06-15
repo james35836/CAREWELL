@@ -28,21 +28,21 @@
 		});
 	})
 </script>
-<div class="row box-globals">
-	<form class="member-information-form" method="post">
+<form class="member-submit-form">
+	<div class="row box-globals">
 		<div class="form-holder">
-			<div class="col-md-2 form-content">
-				<label>Last Name</label>
-			</div>
-			<div class="col-md-4 form-content">
-				<input type="text" name="member_last_name" id="member_last_name" class="form-control" required/>
-			</div>
-			<div class="col-md-2 form-content">
-				<label>First Name</label>
-			</div>
-			<div class="col-md-4 form-content">
-				<input type="text" name="member_first_name" id="member_first_name" class="form-control"/>
-			</div>
+				<div class="col-md-2 form-content">
+					<label>Last Name</label>
+				</div>
+				<div class="col-md-4 form-content">
+					<input type="text" name="member_last_name" id="member_last_name" class="form-control" required/>
+				</div>
+				<div class="col-md-2 form-content">
+					<label>First Name</label>
+				</div>
+				<div class="col-md-4 form-content">
+					<input type="text" name="member_first_name" id="member_first_name" class="form-control"/>
+				</div>
 		</div>
 		<div class="form-holder">
 			<div class="col-md-2 form-content">
@@ -119,57 +119,52 @@
 				<input type="text" name="member_mother_maiden_name" id="member_mother_maiden_name" class="form-control"/>
 			</div>
 		</div>
-		
-	</form>
-</div>
-<div class="row box-globals">
-	<form class="member-dependent-form" method="post">
-		<div class="box-body table-responsive no-padding">
-		<table class="table table-bordered dependent-form" style="border:none !important;">
-			<thead>
-				<tr>
-					<th>Dependent Full Name</th>
-					<th>Birthdate</th>
-					<th>Relationship</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td><input type="text" name="dependent_full_name[]" id="dependent_full_name" class="form-control"/></td>
-					<td><input type="text" name="dependent_birthdate[]" id="dependent_birthdate[]" class="form-control datepicker"/></td>
-					<td>
-						<select  name="dependent_relationship[]" id="dependent_relationship[]" class="form-control">
-							<option>FATHER</option>
-							<option>MOTHER</option>
-							<option>CHILD</option>
-							<option>SPOUSE</option>
-							<option>UNCLE</option>
-							<option>AUNT</option>
-							<option>BROTHER</option>
-							<option>SISTER</option>
-							<option>GRANDFATHER</option>
-							<option>GRANDMOTHER</option>
-							<option>NEPHEW</option>
-							<option>NIECE</option>
-							<option>COUSIN</option>
-						</select>
-					</td>
-				</tr>
-			</tbody>
-		</table>
 	</div>
-	</form>
-	<div class="form-holder">
-		<div class="form-content" style="text-align: center;margin-top:3px;">
-			<div class="btn-group">
-				<button type="button" class="btn btn-primary addDependent"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>
-				<button type="button" class="btn btn-danger removeDependent"><i class="fa fa-minus-circle" aria-hidden="true"></i></button>
+	<div class="row box-globals">
+		<div class="box-body table-responsive no-padding">
+			<table class="table table-bordered dependent-form" style="border:none !important;">
+				<thead>
+					<tr>
+						<th>Dependent Full Name</th>
+						<th>Birthdate</th>
+						<th>Relationship</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td><input type="text" name="dependent_full_name[]" id="dependent_full_name" class="form-control"/></td>
+						<td><input type="text" name="dependent_birthdate[]" id="dependent_birthdate[]" class="form-control datepicker"/></td>
+						<td>
+							<select  name="dependent_relationship[]" id="dependent_relationship[]" class="form-control">
+								<option>FATHER</option>
+								<option>MOTHER</option>
+								<option>CHILD</option>
+								<option>SPOUSE</option>
+								<option>UNCLE</option>
+								<option>AUNT</option>
+								<option>BROTHER</option>
+								<option>SISTER</option>
+								<option>GRANDFATHER</option>
+								<option>GRANDMOTHER</option>
+								<option>NEPHEW</option>
+								<option>NIECE</option>
+								<option>COUSIN</option>
+							</select>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="form-holder">
+			<div class="form-content" style="text-align: center;margin-top:3px;">
+				<div class="btn-group">
+					<button type="button" class="btn btn-primary addDependent"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>
+					<button type="button" class="btn btn-danger removeDependent"><i class="fa fa-minus-circle" aria-hidden="true"></i></button>
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
-<div class="row box-globals">
-	<form class="member-government-form" method="post">
+	<div class="row box-globals">
 		<div class="form-holder">
 			<div class="col-md-2 form-content">
 				<label>Phil-Health Number</label>
@@ -198,10 +193,8 @@
 				<input type="text" name="government_card_hdmf" id="government_card_hdmf" class="form-control"/>
 			</div>
 		</div>
-	</form>
-</div>
-<div class="row box-globals">
-	<form class="member-company-form" method="post">
+	</div>
+	<div class="row box-globals">
 		<div class="form-holder">
 			<div class="col-md-2 form-content">
 				<label>Company</label>
@@ -253,5 +246,5 @@
 				</select>
 			</div>
 		</div>
-	</form>
-</div>
+	</div>
+</form>

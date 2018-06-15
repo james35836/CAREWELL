@@ -17,12 +17,12 @@ function member_center()
 			export_template();
             	
 
-            	create_member();
-            	create_member_confirm();
+            create_member();
+            create_member_confirm();
            	create_member_submit();
 
  			import_member();
-            	import_member_confirm();
+            import_member_confirm();
 			import_member_submit();
 
 			view_member_details();
@@ -93,7 +93,7 @@ function member_center()
 				var confirmModalAction = 'create-member-submit';
 				globals.confirm_modals(confirmModalMessage,confirmModalAction);
 
-				ajaxData = $(".member-company-form,.member-dependent-form,.member-information-form,.member-government-form").serialize(); 
+				ajaxData = $("form.member-submit-form").serialize(); 
 	   		}
 		});
 
@@ -101,44 +101,22 @@ function member_center()
     function create_member_submit()
     { 	
     	$('body').on('click','.create-member-submit',function() 
-	    {
-	    	$('.confirm-modal').remove();
-            $(".member-modal-body").html("<div class='member-ajax-loader' style='display:none;text-align: center; padding:50px;'><img src='/assets/loader/loading.gif'/></div");
-            $('.member-ajax-loader').show();
-	        $.ajax({
-	          	headers: {
-	              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-	        	},
-		        url:'/member/create_member/submit',
-		        method: "POST",
-		        data: ajaxData,
-		        dataType:"text",
-		        success: function(data)
-		        {
-		            setTimeout(function()
-					{
-						$('.member-ajax-loader').hide();
-						$('.member-modal-dialog').removeClass().addClass('modal-sm modal-dialog')
-						$('.member-modal-body').html(data);
-						$('.member-modal-footer').html(successButton);
-					}, 1000);
-		           
-		        }
-	        });
-	     });
+		{
+			globals.global_serialize_submit('member','/member/create_member/submit',ajaxData);
+        });
 
     }
 	function view_member_details()
 	{
 		$('body').on('click','.view-member-details',function()
 		{
-			var member_id = $(this).data('member_id');
-			var modalName= 'MEMBER DETAILS';
-			var modalClass='member-details';
-			var modalLink='/member/view_member_details/'+member_id;
-			var modalActionName='SAVE CHANGES';
-			var modalAction='update-member-confirm';
-			var modalSize = 'modal-lg';
+			var member_id 		= $(this).data('member_id');
+			var modalName 		= 'MEMBER DETAILS';
+			var modalClass 		= 'member-details';
+			var modalLink 		= '/member/view_member_details/'+member_id;
+			var modalActionName = 'SAVE CHANGES';
+			var modalAction 	= 'update-member-confirm';
+			var modalSize  		= 'modal-lg';
 			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
 		});
 	}
@@ -146,17 +124,15 @@ function member_center()
 	{
 		$('body').on('click','.transaction-details',function()
 		{
-			var member_id = $(this).data('member_id');
-			var modalName= 'MEMBER TRANSACTION DETAILS';
-			var modalClass='member-transaction-details';
-			var modalLink='/member/transaction_details/'+member_id;
-			var modalActionName='none';
-			var modalAction='confirm';
-			var modalSize = 'modal-md';
+			var member_id 		= $(this).data('member_id');
+			var modalName 		= 'MEMBER TRANSACTION DETAILS';
+			var modalClass 		= 'member-transaction-details';
+			var modalLink 		= '/member/transaction_details/'+member_id;
+			var modalActionName = 'none';
+			var modalAction 	= 'confirm';
+			var modalSize 		= 'modal-md';
 			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
 		});
-
-		
 	}
 
 	//edrich

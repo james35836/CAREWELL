@@ -39,6 +39,14 @@ class TblMemberCompanyModel extends Model
         return $query;
                         
     }
+    public function scopeApproval($query,$coverage_plan_id,$company_id)
+    {
+        $query  ->where('tbl_member_company.archived',0)
+                ->where('coverage_plan_id',$coverage_plan_id)
+                ->where('company_id',$company_id)
+                ->join('tbl_approval','tbl_approval.member_id','=','tbl_member_company.member_id');
+        return $query;
+    }
     public function scopeCovaragePlanAvailment($query,$member_id,$availment_id)
     {
         $query  ->join('tbl_coverage_plan_procedure','tbl_coverage_plan_procedure.coverage_plan_id','=','tbl_member_company.coverage_plan_id')
@@ -48,6 +56,7 @@ class TblMemberCompanyModel extends Model
                 ->where("tbl_coverage_plan_procedure.availment_id",$availment_id);
         return $query;
     }
+
 
     // public function scopeCountAvailment($query,$coverage_plan_id,$company_id,$date)
     // {
