@@ -31,13 +31,13 @@ body
 		{
 			border:1px solid black;
 		}
-		table, th, td
+		/*table, th, td
 		{
 			text-align: center;
 			border: 1px solid gray;
 			border-collapse: collapse;
 			width:100%;
-		}
+		}*/
 		div.table-container table th
 		{
 			font-size:13px !important;
@@ -47,3 +47,14 @@ body
 		{
 			font-size:13px !important;
 		}
+
+
+
+		table th,td
+			{
+				text-align: center;
+				
+				width:100px;
+
+			}
+			

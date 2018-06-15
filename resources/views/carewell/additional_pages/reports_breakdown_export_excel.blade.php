@@ -1,6 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
+		<link rel="stylesheet" href="assets/css/export_pdf.css">
+		
+		{{-- <style type="text/css">
+			table th,td
+			{
+				text-align: center;
+				background-color:#4444;
+				width:100px;
+
+			}
+			body
+			{
+				padding-top:50px;
+			}
+		</style> --}}
 	</head>
 	<body>
 		<table class="table table-hover table-bordered sum_table" id="showReport">
@@ -16,7 +31,7 @@
 				<th></th>
 				<th></th>
 				<th></th>
-				<th>APE</th>
+				<th >APE</th>
 				<th colspan="2">CONFINEMENT</th>
 				<th>CONS/OP</th>
 				<th>DENTAL</th>
