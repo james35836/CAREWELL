@@ -44,9 +44,9 @@
           <td>
             <div class="input-group">
               <select class="form-control select2" id="plan_covered_amount">
-                <option value="1000">10,000</option>
-                <option value="2000">20,000</option>
-                <option value="3000">30,000</option>
+                <option value="10000">10,000</option>
+                <option value="20000">20,000</option>
+                <option value="30000">30,000</option>
               </select>
               <span class="input-group-btn">
                 <button class="btn btn-secondary add-new-option" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span></button>
