@@ -1,27 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<style>
-			table,th,td {
-				text-align: center !important;
-			}
-		</style>
+		<link rel="stylesheet" href="assets/css/export_excel.css">
+		
+
 	</head>
 	<body>
 		<table class="table table-hover table-bordered sum_table" id="showReport">
 			<tr class="titlerow">
 				<th></th>
-				<th rowspan="2">NUMBER OF MEMBER</th>
-				<th rowspan="2">AVAILMENT AS OF {{date("F, Y",strtotime($date))}}</th>
-				<th rowspan="2">YEAR TO DATE AVAIL</th>
+				<th>NUMBER</th>
+				<th>AVAILMENT </th>
+				<th>YEAR TO DATE</th>
 				<th colspan="11">BREAKDOWN OF AVAILMENTS</th>
 			</tr>
 			<tr class="titlerow">
 				<th>COMPANY</th>
-				<th></th>
-				<th></th>
-				<th></th>
-				<th>APE</th>
+				<th>OF MEMBER</th>
+				<th>AS OF {{strtoupper(date("F Y",strtotime($date)))}}</th>
+				<th>AVAILMENTS</th>
+				<th >APE</th>
 				<th colspan="2">CONFINEMENT</th>
 				<th>CONS/OP</th>
 				<th>DENTAL</th>

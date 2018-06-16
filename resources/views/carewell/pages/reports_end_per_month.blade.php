@@ -83,7 +83,7 @@ autoclose: true
                 <tr>
                   <td>{{$company->company_name}}</td>
                   <td>{{$company->coverage_plan_premium}}</td>
-                  <td>{{substr($company->coverage_plan_created,0,10)}}</td>
+                  <td>{{substr($company->company_created,0,10)}}</td>
                   <td class="sum-jan">{{$company->count_jan}}</td>
                   <td class="sum-feb">{{$company->count_feb}}</td>
                   <td class="sum-mar">{{$company->count_mar}}</td>

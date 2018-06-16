@@ -1,4 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="assets/css/export_excel.css">
+    
+  </head>
+  <body>
 <table>
+    <tr><th class="col-adjust">CAREWELL HEALTH SYSTEMS, INC.</th></tr>
+    <tr><th class="col-adjust">MONTHLY AVAILMENT MONITORING</th></tr>
+    <tr><th class="col-adjust">CY {{$date}}</th></tr>
+    <tr><th class="col-adjust">CONSOLIDATED</th></tr>
   <tr>
     <th>AVAILMENT TYPE</th>
     <th>JAN</th>
@@ -50,3 +61,4 @@
     <td id="sum-count">{{$total_all}}</td>
   </tr>
 </table>
+</body>

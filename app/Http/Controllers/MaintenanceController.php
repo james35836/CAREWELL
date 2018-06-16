@@ -22,16 +22,82 @@ class MaintenanceController extends Controller
 {
     public function developer_truncate()
     {
-        DB::table('tbl_company')->truncate();
+        dd('SORRY YOU ARE NOT ALLOWED HERE!');
+        DB::table('tbl_approval')->truncate();
+        DB::table('tbl_approval_availed')->truncate();
+        DB::table('tbl_approval_diagnosis')->truncate();
+        DB::table('tbl_approval_doctor')->truncate();
+        DB::table('tbl_approval_payee')->truncate();
+
+        DB::table('tbl_approval_procedure')->truncate();
+        DB::table('tbl_approval_total')->truncate();
         DB::table('tbl_cal')->truncate();
+        DB::table('tbl_cal_info')->truncate();
         DB::table('tbl_cal_member')->truncate();
+
+        DB::table('tbl_cal_payment')->truncate();
+        DB::table('tbl_company')->truncate();
+        DB::table('tbl_company_contact_person')->truncate();
         DB::table('tbl_company_contract')->truncate();
+        DB::table('tbl_company_contract_benefits')->truncate();
+
+        DB::table('tbl_company_contract_image')->truncate();
         DB::table('tbl_company_coverage_plan')->truncate();
+        DB::table('tbl_company_deployment')->truncate();
+        DB::table('tbl_company_number')->truncate();
+        DB::table('tbl_coverage_plan')->truncate();
+
+        DB::table('tbl_coverage_plan_procedure')->truncate();
+        DB::table('tbl_coverage_plan_tag')->truncate();
         DB::table('tbl_member')->truncate();
         DB::table('tbl_member_company')->truncate();
         DB::table('tbl_member_dependent')->truncate();
+
         DB::table('tbl_member_government_card')->truncate();
-        DB::table('tbl_member_payment')->truncate();
+        DB::table('tbl_new_cal_member')->truncate();
+        DB::table('tbl_new_member')->truncate();
+        DB::table('tbl_payable')->truncate();
+        DB::table('tbl_payable_approval')->truncate();
+
+
+        echo "SUCCESS";
+        
+       
+    // tbl_approval    
+    // tbl_approval_availed    
+    // tbl_approval_diagnosis  
+    // tbl_approval_doctor
+    // tbl_approval_payee  
+
+    // tbl_approval_procedure   
+    // tbl_approval_total
+    // tbl_cal 
+    // tbl_cal_info    
+    // tbl_cal_member
+
+    // tbl_cal_payment
+    // tbl_company
+    // tbl_company_contact_person  
+    // tbl_company_contract    
+    // tbl_company_contract_benefits
+
+    // tbl_company_contract_image  
+    // tbl_company_coverage_plan        
+    // tbl_company_deployment  
+    // tbl_company_number  
+    // tbl_coverage_plan
+
+    // tbl_coverage_plan_procedure
+    // tbl_coverage_plan_tag   
+    // tbl_member  
+    // tbl_member_company  
+    // tbl_member_dependent
+        
+    // tbl_member_government_card  
+    // tbl_new_cal_member  
+    // tbl_new_member  
+    // tbl_payable 
+    // tbl_payable_approval
             
     }
     public function developer_credential()

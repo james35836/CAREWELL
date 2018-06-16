@@ -1,0 +1,11 @@
+		table th
+			{
+				text-align: center;
+				font-weight:bolder;
+				column-width: auto;
+
+			}
+			.col-adjust
+			{
+				text-align: left !important;
+			}
