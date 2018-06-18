@@ -361,7 +361,7 @@ class CarewellController extends ActiveAuthController
 		$companyMemberData->deployment_id           = $request->deployment_id;
 		$companyMemberData->member_id               = $memberData->member_id;
 		$companyMemberData->company_id              = $request->company_id;
-		$companyMemberData->member_payment_mode     = 'SEMI-MONTHLY';
+		$companyMemberData->member_payment_mode     = $request->member_payment_mode;
 		$companyMemberData->save();
 		if($memberData->save())
 		{
@@ -1634,16 +1634,16 @@ class CarewellController extends ActiveAuthController
 	{
 		if($request->ajax())
 		{
-			$today                	= date('Y-m-d');
-			$mem_cal              	= TblCalPaymentModel::where('member_id',$request->member_id)
-								->where(function($query)
-								{
-									$query->where('archived',1);
-									$query->orWhere('archived',2);
-									
-								})
-								->orderBy('cal_payment_end','DESC')
-								->first();
+			$today      = date('Y-m-d');
+			$mem_cal    = TblCalPaymentModel::where('member_id',$request->member_id)
+						->where(function($query)
+						{
+							$query->where('archived',1);
+							$query->orWhere('archived',2);
+							
+						})
+						->orderBy('cal_payment_end','DESC')
+						->first();
 			$data['member_info']  	= TblMemberModel::where('tbl_member.member_id',$request->member_id)->where('tbl_member_company.archived',0)->Member()->first();
 			$data['_member']     	= TblMemberModel::where('tbl_member.archived',0)->where('tbl_member_company.archived',0)->Member()->get();
 			$data['_availment']   	= TblCoveragePlanProcedureModel::where('coverage_plan_id',$data['member_info']->coverage_plan_id)
@@ -2293,23 +2293,16 @@ class CarewellController extends ActiveAuthController
 	          return StaticFunctionController::returnMessage('danger','PAYABLE');
 		}
 	}
-
-	//edrich
-	
-
-	public function payable_view_payee_details($payable_id)
+	public function payable_mark_close($payable_id)
 	{
-		$approval_id  = TblPayableApprovalModel::where('payable_id',$payable_id)->value('approval_id');
+		$data['_payable_approval']   = TblPayableApprovalModel::where('payable_id',$payable_id)->PayableStatus()->get();
+        foreach($data['_payable_approval'] as $key=> $approval)
+        {
+        	$data['_payable_approval'][$key]['_payee_doctor']  = TblApprovalPayeeModel::where('approval_id',$approval->approval_id)->PayeeDoctor()->get();
+		    $data['_payable_approval'][$key]['_payee_other']   = TblApprovalPayeeModel::where('approval_id',$approval->approval_id)->where('type','payee')->get();
+	    }
 
-		$data['_payee_doctor']    = TblApprovalPayeeModel::where('approval_id',$approval_id)
-	                              ->where('type','doctor')
-	                              ->join('tbl_doctor','tbl_doctor.doctor_id','=','tbl_approval_payee.payee_id')
-	                              ->get();
-	    $data['_payee_other']     = TblApprovalPayeeModel::where('approval_id',$approval_id)
-	                              ->where('type','payee')
-	                              ->get();
-
-	    return view('carewell.modal_pages.payable_view_payee_details',$data);
+	    return view('carewell.modal_pages.payable_mark_close',$data);
 
 	}
 	public function payable_export_pdf($payable_id)

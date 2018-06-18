@@ -1,31 +1,5 @@
 @extends('carewell.layout.layout')
 @section('content')
-{{-- <?php
-$items = array(
-  'Dashboard'  => array('text'=>'Dashboard',  'url'=>'?p=Dashboard'),
-  'Settings' => array('text'=>'Settings', 'url'=>'?p=Settings'),
-  'Company'  => array('text'=>'Company',  'url'=>'?p=Company'),
-  'Member' => array('text'=>'Member', 'url'=>'?p=Member'),
-  'Billing' => array('text'=>'Billing', 'url'=>'?p=Billing'),
-  'Availment' => array('text'=>'Availment', 'url'=>'?p=Availment'),
-  'Payable' => array('text'=>'Payable', 'url'=>'?p=Payable'),
-  'Reports' => array('text'=>'Reports', 'url'=>'?p=Reports'),
-  
-  
-);
-$class="active";
-
-$html = "<nav class='$class'>\n";
-    foreach($items as $item) {
-      $html .= "<a href='{$item['url']}'>{$item['text']}</a>\n";
-    }
-    $html .= "</nav>\n";
-
-
-print_r($html);
-
-
-?> --}}
 <div class="container">
     <div class="row">
         <div class=" col-md-3 col-xs-6 pull-right no-padding">
@@ -88,62 +62,7 @@ print_r($html);
                         @include('globals.pagination_v2', ['paginator' => $_position])
                     </div>
                 </div>
-                <!-- /.tab-pane -->
-                {{-- <div class="tab-pane" id="inActiveUser">
-                    <div class="row">
-                        <div class="col-md-4 col-xs-12 pull-right">
-                            <div class="input-group margin">
-                                <input type="text" class="form-control">
-                                <span class="input-group-btn">
-                                    <button type="button" class="btn btn-default"><i class="fa fa-search"></i></button>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="box-body table-responsive no-padding">
-                        <table class="table table-hover table-bordered">
-                            <tr>
-                                <th>USER ID</th>
-                                <th>ID NUMBER</th>
-                                <th>FULL NAME</th>
-                                <th>EMAIL</th>
-                                <th>GENDER</th>
-                                <th>STATUS</th>
-                                <th>DATE ADDED</th>
-                                <th>ACTION</th>
-                            </tr>
-                            @foreach($_user_archived as $user_archived)
-                            <tr>
-                                <td>{{$user_archived->user_id}}</td>
-                                <td>{{$user_archived->user_number}}</td>
-                                <td>{{$user_archived->user_first_name." ".$user_archived->user_last_name}}</td>
-                                <td>{{$user_archived->user_email}}</td>
-                                <td>{{$user_archived->user_gender}}</td>
-                                <td><span class="label label-success">active</span></td>
-                                <td>{{date("F j, Y",strtotime($user_archived->user_created))}}h</td>
-                                <td>
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-danger">Action</button>
-                                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                        <span class="caret"></span>
-                                        <span class="sr-only">Toggle Dropdown</span>
-                                        </button>
-                                        <ul class="dropdown-menu" role="menu" style="position: absolute !important;">
-                                            <li><button type="button" data-user_id="{{$user_archived->user_id}}" class="btn btn-link view-user-details"><i class="fa fa-eye btn-icon"></i>  View User</button></li>
-                                            <li><button type="button" data-id="{{$user_archived->user_id}}" data-name="USER" class="btn btn-link restore" ><i class="fa fa-trash btn-icon"></i> Restore User </button></li>
-                                        </ul>
-                                    </div>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </table>
-                    </div>
-                    <div class="box-footer clearfix">
-                        @include('globals.pagination', ['paginator' => $_user_archived])
-                    </div>
-                </div> --}}
             </div>
-            <!-- /.tab-content -->
         </div>
     </div>
 </div>

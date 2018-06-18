@@ -265,7 +265,7 @@ $(document).ready(function()
 					<td><input type="number" value="0" name="procedure_philhealth[]" id="" class="philhealth form-control"/></td>
 					<td><input type="number" value="0" name="procedure_charge_patient[]" id="" class="charge-patient form-control"/></td>
 					<td><input type="number" value="0" name="procedure_charge_carewell[]" id="" class="charge-carewell form-control"/></td>
-					<td><textarea name="procedure_remarks[]"  cols="2" rows="1"  id="procedure_remarks[]" class="form-control">REMARKS</textarea></td>
+					<td><textarea name="procedure_remarks[]"  cols="2" rows="1"  id="procedure_remarks[]" class="form-control" placeholder="REMARKS"></textarea></td>
 					<td>
 						<div class="btn-group" role="group" aria-label="Basic example">
 							<button type="button" data-number="2" class="btn btn-danger btn-sm remove-row"><i class="fa fa-minus-circle"></i></button>

@@ -23,7 +23,7 @@ function payable_center()
 			update_payable_submit()
 			search_filter_approval();
 
-			view_payee_details();
+			payable_mark_as_close();
 		});
 
 	}
@@ -182,29 +182,28 @@ function payable_center()
 		});
     	}
     	function update_payable_submit()
-     {
-     	$('body').on('click','.update-payable-submit',function() 
-		{
-			globals.global_submit('payable-details','/payable/update_payable/submit',payableData);
-          });
+     	{
+	     	$('body').on('click','.update-payable-submit',function() 
+			{
+				globals.global_submit('payable-details','/payable/update_payable/submit',payableData);
+          	});
     	}
 
-    	//edrich
-    	function view_payee_details()
+    	function payable_mark_as_close()
     	{
-    		$('body').on('click','.view-payee-details',function()
+    		$('body').on('click','.payable-mark-close',function()
     		{
     			var payable_id      = $(this).data('payable_id');
-				var modalName 		= 'PAYEE DETAILS';
-				var modalClass 	= 'payable-details';
-				var modalLink 		= '/payable/payee_details/'+payable_id;
+				var modalName 		= 'PAYABLE MARK AS CLOSE';
+				var modalClass 		= 'payable-mark-as-close';
+				var modalLink 		= '/payable/mark_close/'+payable_id;
 				var modalActionName = 'SAVE CHANGES';
-				var modalAction 	= 'update-payable-confirm';
+				var modalAction 	= 'payable-mark-close-confirm';
 				var modalSize 		= 'modal-md';
 				globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
     		});
     	}
-    	//edrich
+    	
 }
 
 

@@ -186,21 +186,7 @@
                                         <small>Member since {{date("F j, Y",strtotime($user->user_created))}}</small>
                                     </p>
                                 </li>
-                                {{-- <!-- Menu Body -->
-                                <li class="user-body">
-                                    <div class="row">
-                                        <div class="col-xs-4 text-center">
-                                            <a href="#">Followers</a>
-                                        </div>
-                                        <div class="col-xs-4 text-center">
-                                            <a href="#">Sales</a>
-                                        </div>
-                                        <div class="col-xs-4 text-center">
-                                            <a href="#">Friends</a>
-                                        </div>
-                                    </div>
-                                    <!-- /.row -->
-                                </li> --}}
+                                <!-- MENU BODY DELETED -->
                                 <!-- Menu Footer-->
                                 <li class="user-footer">
                                     <div class="pull-left">
@@ -212,10 +198,7 @@
                                 </li>
                             </ul>
                         </li>
-                        <!-- Control Sidebar Toggle Button -->
-                        {{-- <li>
-                            <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
-                        </li> --}}
+                        <!-- CONTROL SIDE BAR DELETED -->
                     </ul>
                 </div>
             </nav>
@@ -241,6 +224,55 @@
                 </form>
                 <ul class="sidebar-menu" data-widget="tree">
                     <li class="header">MAIN NAVIGATION</li>
+
+
+
+<!-- SAMPLE -->
+
+
+<?php
+
+
+    $dashboard  = array('access_id'=>1,'text'=>'Dashboard',  'href'=>'/dashboard','style'=>"background-color:#913D88","class"=>"fa fa-dashboard");
+    $settings   = array(
+                    'admin_pannel'  => array('access_id'=>1,'text'=>'Dashboard',  'href'=>'/dashboard','style'=>"background-color:#913D88","class"=>"fa fa-dashboard"),
+                    'access_level'  => array('access_id'=>1,'text'=>'Dashboard',  'href'=>'/dashboard','style'=>"background-color:#913D88","class"=>"fa fa-dashboard"),
+                    'coverage_plan' => array('access_id'=>1,'text'=>'Dashboard',  'href'=>'/dashboard','style'=>"background-color:#913D88","class"=>"fa fa-dashboard"),
+                    'maintenance'   => array('access_id'=>1,'text'=>'Dashboard',  'href'=>'/dashboard','style'=>"background-color:#913D88","class"=>"fa fa-dashboard"),
+                    'provider'      => array('access_id'=>1,'text'=>'Dashboard',  'href'=>'/dashboard','style'=>"background-color:#913D88","class"=>"fa fa-dashboard"),
+                    'doctor'        => array('access_id'=>1,'text'=>'Dashboard',  'href'=>'/dashboard','style'=>"background-color:#913D88","class"=>"fa fa-dashboard"),
+                );
+
+
+
+?>
+ 
+                  {{-- @include(app_path() . '\app\http\page'); --}}
+                   <li style="{{$dashboard['style']}}">
+                        <a href="{{$dashboard['href']}}">
+                            <i class="{{$dashboard['class']}}"></i> <span>{{$dashboard['text']}}</span>
+                        </a>
+                    </li>
+                    
+                   
+                    <li class="treeview" style="background-color: #03A678">
+                        <a href="#">
+                            <i class="fa fa-cog"></i>
+                            <span>SETTINGS</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                             @foreach($settings as $item)
+                            <li style="{{$item['style']}}"><a href="{{$item['href']}}"><i class="{{$item['class']}}"></i> <span>{{$item['text']}}</span></a></li>
+                            @endforeach
+                        </ul>
+                    </li>
+                    
+
+
+                    <!-- SAMPLE -->
                     <li style="background-color:#913D88">
                         <a href="/dashboard">
                             <i class="fa fa-dashboard"></i> <span>DASHBOARD</span>
