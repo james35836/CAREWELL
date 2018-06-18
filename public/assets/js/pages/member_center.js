@@ -15,9 +15,8 @@ function member_center()
 		$(document).ready(function()
 		{
 			export_template();
-            	
 
-            create_member();
+			create_member();
             create_member_confirm();
            	create_member_submit();
 
@@ -145,11 +144,11 @@ function member_center()
 			globals.confirm_modals(confirmModalMessage,confirmModalAction);
 
 			memberData.append("member_id", 				document.getElementById('member_id').value);
-			memberData.append("member_first_name", 				document.getElementById('member_first_name').value);
+			memberData.append("member_first_name", 	    document.getElementById('member_first_name').value);
 			memberData.append("member_middle_name", 	document.getElementById('member_middle_name').value);
-			memberData.append("member_last_name", 	document.getElementById('member_last_name').value);
-			memberData.append("member_birthdate", 			document.getElementById('member_birthdate').value);               
-		   	memberData.append("member_gender", 		document.getElementById('member_gender').value);
+			memberData.append("member_last_name", 	    document.getElementById('member_last_name').value);
+			memberData.append("member_birthdate", 	    document.getElementById('member_birthdate').value);               
+		   	memberData.append("member_gender", 		    document.getElementById('member_gender').value);
 			memberData.append("member_marital_status", 	document.getElementById('member_marital_status').value);
 			memberData.append("member_mother_maiden_name", 	document.getElementById('member_mother_maiden_name').value);
 			memberData.append("member_contact_number", 		document.getElementById('member_contact_number').value);
@@ -211,13 +210,13 @@ function member_center()
 	{
 		$("body").on('click','.import-member',function() 
 		{
-			var member_id = $(this).data('member_id');
-			var modalName= 'IMPORT MEMBER';
-			var modalClass='member-import';
-			var modalLink='/member/import_member';
-			var modalActionName='SAVE CHANGES';
-			var modalAction='create-approval-confirm';
-			var modalSize = 'modal-import';
+			var member_id 		= $(this).data('member_id');
+			var modalName 		= 'IMPORT MEMBER';
+			var modalClass 	 	= 'member-import';
+			var modalLink 		= '/member/import_member';
+			var modalActionName = 'SAVE CHANGES';
+			var modalAction 	= 'create-approval-confirm';
+			var modalSize  		= 'modal-import';
 			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
         });
 	}
@@ -225,8 +224,8 @@ function member_center()
 	{
 		$('body').on('click','.import-member-confirm',function()
 		{
-			var	confirmModalMessage = 'Are you sure you want to import this file?';
-			var confirmModalAction = 'import-member-submit';
+			var	confirmModalMessage 	= 'Are you sure you want to import this file?';
+			var confirmModalAction 		= 'import-member-submit';
 			globals.confirm_modals(confirmModalMessage,confirmModalAction);
 
 			memberFileData.append("importMemberFile", 	document.getElementById('importMemberFile').files[0]);

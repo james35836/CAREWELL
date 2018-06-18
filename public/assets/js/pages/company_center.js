@@ -98,27 +98,27 @@ function company_center()
 				else
 				{
 					$('input[name="deployment_name[]"]').each(function(i, dep)
+	            	{
+		            	if($(dep).val()!="")
 		            	{
-			            	if($(dep).val()!="")
-			            	{
-			            		deploymentData.push(this.value);
-			            	}
-		            	});
-		            	if(deploymentData==null||deploymentData=="")
+		            		deploymentData.push(this.value);
+		            	}
+	            	});
+	            	if(deploymentData==null||deploymentData=="")
 					{
 						globals.global_tostr('DEPLOYMENT');
 					}
 					else
 					{
 						$("select.coverage_plan_name").each(function(i, sel)
+		            	{
+			            	var selectedPlan = $(sel).val();
+			        		if(selectedPlan!="SELECT COVERAGE PLAN")
 			            	{
-				            	var selectedPlan = $(sel).val();
-				        		if(selectedPlan!="SELECT COVERAGE PLAN")
-				            	{
-				            		coveragePlanData.push(selectedPlan);
-				            	}
-			            	});
-			            	if(coveragePlanData==null||coveragePlanData=="")
+			            		coveragePlanData.push(selectedPlan);
+			            	}
+		            	});
+		            	if(coveragePlanData==null||coveragePlanData=="")
 						{
 							globals.global_tostr('COVERAGE PLAN');
 						}
@@ -128,21 +128,21 @@ function company_center()
 							var confirmModalAction    = 'create-company-submit';
 							globals.confirm_modals(confirmModalMessage,confirmModalAction);
 
-								companyData.append("company_code", 			document.getElementById('company_code').value);
-								companyData.append("company_name", 			document.getElementById('company_name').value);
-				            	companyData.append("company_email_address", 		document.getElementById('company_email_address').value);
-				            	companyData.append("company_contact_number", 	document.getElementById('company_contact_number').value);
-				            	companyData.append("company_address", 			document.getElementById('company_address').value);
-			                
-			                	companyData.append("contact_person_name", 		document.getElementById('contact_person_name').value);
-				            	companyData.append("contact_person_position", 	document.getElementById('contact_person_position').value);
-				            	companyData.append("contact_person_number", 		document.getElementById('contact_person_number').value);
+							companyData.append("company_code", 			document.getElementById('company_code').value);
+							companyData.append("company_name", 			document.getElementById('company_name').value);
+			            	companyData.append("company_email_address", 		document.getElementById('company_email_address').value);
+			            	companyData.append("company_contact_number", 	document.getElementById('company_contact_number').value);
+			            	companyData.append("company_address", 			document.getElementById('company_address').value);
+		                
+		                	companyData.append("contact_person_name", 		document.getElementById('contact_person_name').value);
+			            	companyData.append("contact_person_position", 	document.getElementById('contact_person_position').value);
+			            	companyData.append("contact_person_number", 		document.getElementById('contact_person_number').value);
 
-				            	companyData.append("contact_person_names", 		document.getElementById('contact_person_names').value);
-				            	companyData.append("contact_person_positions", 	document.getElementById('contact_person_positions').value);
-				            	companyData.append("contact_person_numbers", 	document.getElementById('contact_person_numbers').value);
+			            	companyData.append("contact_person_names", 		document.getElementById('contact_person_names').value);
+			            	companyData.append("contact_person_positions", 	document.getElementById('contact_person_positions').value);
+			            	companyData.append("contact_person_numbers", 	document.getElementById('contact_person_numbers').value);
 
-				            	for (var i = 0; i < contactData.length; i++) 
+				            for (var i = 0; i < contactData.length; i++) 
 							{
 							    companyData.append('contactData[]', contactData[i]);
 							}

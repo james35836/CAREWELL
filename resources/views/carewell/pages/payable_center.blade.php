@@ -69,7 +69,7 @@
                                         </button>
                                         <ul class="dropdown-menu" role="menu" style="position: absolute !important;">
                                             <li><button type="button" data-payable_id="{{$payable->payable_id}}" class="btn btn-link view-payable-details"><i class="fa fa-eye btn-icon"></i>  View Payable</button></li>
-                                            <li><button type="button" data-payable_id="{{$payable->payable_id}}" class="btn btn-link view-payee-details"><i class="fa fa-trash btn-icon"></i> Mark as Close</button></li>
+                                            <li><button type="button" data-payable_id="{{$payable->payable_id}}" class="btn btn-link payable-mark-close"><i class="fa fa-trash btn-icon"></i> Mark as Close</button></li>
                                         </ul>
                                     </div>
                                 </td>

@@ -188,30 +188,30 @@
 			<div id="government" class="row tab-pane fade table-min-height">
 				<div class="form-holder">
 					<div class="col-md-2 form-content">
-						<label>PHIL-HEALTH </label>
+						<label>PHIL-HEALTH</label>
 					</div>
 					<div class="col-md-4 form-content">
-						<input type="text" class="form-control" value="{{$member_government->government_card_philhealth}}" id="government_card_philhealth" readonly/>
+						<input type="text" class="form-control" value="{{$member_government->government_card_philhealth}}" name="government_card_philhealth" id="government_card_philhealth" readonly/>
 					</div>
 					<div class="col-md-2 form-content">
-						<label>SSS </label>
+						<label>SSS</label>
 					</div>
 					<div class="col-md-4 form-content">
-						<input type="text" class="form-control" value="{{$member_government->government_card_sss}}" id="government_card_sss" readonly/>
+						<input type="text" class="form-control" value="{{$member_government->government_card_sss}}" name="government_card_sss" id="government_card_sss" readonly/>
 					</div>
 				</div>
 				<div class="form-holder">
 					<div class="col-md-2 form-content">
-						<label>TIN </label>
+						<label>TIN</label>
 					</div>
 					<div class="col-md-4 form-content">
-						<input type="text" class="form-control" value="{{$member_government->government_card_tin}}" id="government_card_tin" readonly />
+						<input type="text" class="form-control" value="{{$member_government->government_card_tin}}" name="government_card_tin" id="government_card_tin" readonly />
 					</div>
 					<div class="col-md-2 form-content">
-						<label>HDMF </label>
+						<label>HDMF</label>
 					</div>
 					<div class="col-md-4 form-content">
-						<input type="text" class="form-control" value="{{$member_government->government_card_hdmf}}" id="government_card_hdmf" readonly/>
+						<input type="text" class="form-control" value="{{$member_government->government_card_hdmf}}" name="government_card_hdmf" id="government_card_hdmf" readonly/>
 					</div>
 				</div>
 			</div>
