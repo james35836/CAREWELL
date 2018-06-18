@@ -2404,6 +2404,7 @@ class CarewellController extends ActiveAuthController
 			                                             ->where('company_id',$company->company_id)
 			                                             ->join('tbl_approval','tbl_approval.member_id','=','tbl_member_company.member_id')
 			                                             ->get();
+			$data['_company'][$key]['count'] = TblMemberCompanyModel::CountAvailment($parameter,$date)->count();
 
 			foreach($_param_name as $param=>$param_name)
             {

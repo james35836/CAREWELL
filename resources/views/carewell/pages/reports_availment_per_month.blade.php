@@ -2,18 +2,18 @@
 @section('content')
 <script type="text/javascript">
 $(document).ready(function(){
-// settings_reports.calculateSum('sum-jan');
-// settings_reports.calculateSum('sum-feb');
-// settings_reports.calculateSum('sum-mar');
-// settings_reports.calculateSum('sum-apr');
-// settings_reports.calculateSum('sum-may');
-// settings_reports.calculateSum('sum-jun');
-// settings_reports.calculateSum('sum-jul');
-// settings_reports.calculateSum('sum-aug');
-// settings_reports.calculateSum('sum-sep');
-// settings_reports.calculateSum('sum-oct');
-// settings_reports.calculateSum('sum-nov');
-// settings_reports.calculateSum('sum-dec');
+settings_reports.calculateSum('sum-jan');
+settings_reports.calculateSum('sum-feb');
+settings_reports.calculateSum('sum-mar');
+settings_reports.calculateSum('sum-apr');
+settings_reports.calculateSum('sum-may');
+settings_reports.calculateSum('sum-jun');
+settings_reports.calculateSum('sum-jul');
+settings_reports.calculateSum('sum-aug');
+settings_reports.calculateSum('sum-sep');
+settings_reports.calculateSum('sum-oct');
+settings_reports.calculateSum('sum-nov');
+settings_reports.calculateSum('sum-dec');
 settings_reports.calculateSum('sum-count');
 
 
@@ -51,7 +51,7 @@ settings_reports.calculateSum('sum-count');
                 <div class="tab-content">
                     <div class="tab-pane active showReportContent" id="open">
                         <div class="row top-element">
-                            <div class="col-md-3 col-xs-12 pull-left">
+                  <!--           <div class="col-md-3 col-xs-12 pull-left">
                                 <select class="form-control">
                                     <option value="">SELECT COMPANY</option>
                                     @foreach($_company as $company)
@@ -59,7 +59,7 @@ settings_reports.calculateSum('sum-count');
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-md-3 col-xs-12">
+ -->                            <div class="col-md-3 col-xs-12">
                                 <div class="btn-group">
                                     <a href="{{$link}}"><button type="button" class="btn btn-success">EXPORT EXCEL</button></a>
                                 </div>
