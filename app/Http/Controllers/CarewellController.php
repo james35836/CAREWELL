@@ -2372,7 +2372,7 @@ class CarewellController extends ActiveAuthController
 		$data['link']		= '/reports/ending_number_per_reports/export_excel/'.date('Y');
         $data['date']      	= $date  = date('Y');
         
-        $_param_name        = array('count_jan','count_feb','count_mar','count_apr','count_may','count_june','count_july','count_aug','count_sept','count_oct','count_nov','count_dec');
+        $_param_name        = array('count_jan','count_feb','count_mar','count_apr','count_may','count_jun','count_jul','count_aug','count_sep','count_oct','count_nov','count_dec');
 		$_param_val         = array('01','02','03','04','05','06','07','08','09','10','11','12'); 
 		
 		foreach($data['_company'] as $key => $company) 
@@ -2382,20 +2382,8 @@ class CarewellController extends ActiveAuthController
 
 			foreach($_param_name as $param=>$param_name)
             {
-            	$data['_company'][$key][''.$_param_name[$param].''] 	= TblMemberCompanyModel::CountAvailment($parameter,$date.'-'.$_param_val[$param].'%')->count();                                           
-            }
-            // $data['_company'][$key]['count_jan'] 	= TblMemberCompanyModel::CountAvailment($parameter,date('Y').'-01'.'%')->count();                                           
-			// $data['_company'][$key]['count_feb'] 	= TblMemberCompanyModel::CountAvailment($parameter,date('Y').'-02'.'%')->count();
-			// $data['_company'][$key]['count_mar'] 	= TblMemberCompanyModel::CountAvailment($parameter,date('Y').'-03'.'%')->count(); 
-			// $data['_company'][$key]['count_apr'] 	= TblMemberCompanyModel::CountAvailment($parameter,date('Y').'-04'.'%')->count(); 
-			// $data['_company'][$key]['count_may'] 	= TblMemberCompanyModel::CountAvailment($parameter,date('Y').'-05'.'%')->count();
-			// $data['_company'][$key]['count_june']	= TblMemberCompanyModel::CountAvailment($parameter,date('Y').'-06'.'%')->count();
-			// $data['_company'][$key]['count_july'] 	= TblMemberCompanyModel::CountAvailment($parameter,date('Y').'-07'.'%')->count();
-			// $data['_company'][$key]['count_aug'] 	= TblMemberCompanyModel::CountAvailment($parameter,date('Y').'-08'.'%')->count();
-			// $data['_company'][$key]['count_sept'] 	= TblMemberCompanyModel::CountAvailment($parameter,date('Y').'-09'.'%')->count();
-			// $data['_company'][$key]['count_oct'] 	= TblMemberCompanyModel::CountAvailment($parameter,date('Y').'-10'.'%')->count();
-			// $data['_company'][$key]['count_nov'] 	= TblMemberCompanyModel::CountAvailment($parameter,date('Y').'-11'.'%')->count();
-			// $data['_company'][$key]['count_dec'] 	= TblMemberCompanyModel::CountAvailment($parameter,date('Y').'-12'.'%')->count();									      
+            	$data['_company'][$key][''.$_param_name[$param].''] 	= TblMemberCompanyModel::CountAvailment($parameter,$date.'-'.$_param_val[$param].'%')->count();  
+            }			      
 		}
 		return view('carewell.pages.reports_end_per_month',$data);
 	}
@@ -2407,7 +2395,12 @@ class CarewellController extends ActiveAuthController
 		$data['_company'] = TblCompanyCoveragePlanModel::CompanyCoverage()->paginate(10);
 			                    
 		$data['link']		= '/reports/availment_per_month_summary/export_excel/'.date('Y').'/0';
-        $data['date']      = date('Y');
+         $data['date']      	= $date  = date('Y');
+        
+
+         $_param_name        = array('count_jan','count_feb','count_mar','count_apr','count_may','count_june','count_july','count_aug','count_sept','count_oct','count_nov','count_dec');
+		$_param_val         = array('01','02','03','04','05','06','07','08','09','10','11','12'); 
+
 		foreach($data['_company'] as $key => $company) 
 		{
 			$parameter = array($company->coverage_plan_id,$company->company_id);
@@ -2419,21 +2412,10 @@ class CarewellController extends ActiveAuthController
 			                                             ->join('tbl_approval','tbl_approval.member_id','=','tbl_member_company.member_id')
 			                                             ->get();
 
-			$data['_company'][$key]['count'] = TblMemberCompanyModel::CountAvailment($parameter,date('Y'))->count();
-
-
-			$data['_company'][$key]['count_jan'] 	= TblMemberCompanyModel::CountAvailment($parameter,date('Y').'-01')->count();                                           
-			$data['_company'][$key]['count_feb'] 	= TblMemberCompanyModel::CountAvailment($parameter,date('Y').'-02')->count();
-			$data['_company'][$key]['count_mar'] 	= TblMemberCompanyModel::CountAvailment($parameter,date('Y').'-03')->count(); 
-			$data['_company'][$key]['count_apr'] 	= TblMemberCompanyModel::CountAvailment($parameter,date('Y').'-04')->count(); 
-			$data['_company'][$key]['count_may'] 	= TblMemberCompanyModel::CountAvailment($parameter,date('Y').'-05')->count();
-			$data['_company'][$key]['count_june']	= TblMemberCompanyModel::CountAvailment($parameter,date('Y').'-06')->count();
-			$data['_company'][$key]['count_july'] 	= TblMemberCompanyModel::CountAvailment($parameter,date('Y').'-07')->count();
-			$data['_company'][$key]['count_aug'] 	= TblMemberCompanyModel::CountAvailment($parameter,date('Y').'-08')->count();
-			$data['_company'][$key]['count_sept'] 	= TblMemberCompanyModel::CountAvailment($parameter,date('Y').'-09')->count();
-			$data['_company'][$key]['count_oct'] 	= TblMemberCompanyModel::CountAvailment($parameter,date('Y').'-10')->count();
-			$data['_company'][$key]['count_nov'] 	= TblMemberCompanyModel::CountAvailment($parameter,date('Y').'-11')->count();
-			$data['_company'][$key]['count_dec'] 	= TblMemberCompanyModel::CountAvailment($parameter,date('Y').'-12')->count();									      
+			foreach($_param_name as $param=>$param_name)
+            {
+            	$data['_company'][$key][''.$_param_name[$param].''] 	= TblMemberCompanyModel::CountAvailment($parameter,$date.'-'.$_param_val[$param].'%')->count();  
+            }				      
 		}
 
 		return view('carewell.pages.reports_availment_per_month',$data);
@@ -2447,26 +2429,23 @@ class CarewellController extends ActiveAuthController
 		$data['_availment'] = TblAvailmentModel::where('archived',0)->paginate(10);
 
 		$data['link']		= '/reports/availment_monitoring/export_excel/'.date('Y');
-        $data['date']      = date('Y');
+        $data['date']      	= $date  = date('Y');
+        
 
+        $_param_name        = array('count_jan','count_feb','count_mar','count_apr','count_may','count_jun','count_jul','count_aug','count_sep','count_oct','count_nov','count_dec');
+		$_param_val         = array('01','02','03','04','05','06','07','08','09','10','11','12'); 
 
 		foreach ($data['_availment'] as $key => $availment)
 		{
 			$data['_availment'][$key]['count'] = TblApprovalModel::where('availment_id',$availment->availment_id)->count();
-			$data['_availment'][$key]['count_jan'] = TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-01').'%')->count();                                           
-			$data['_availment'][$key]['count_feb'] = TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-02').'%')->count();
-			$data['_availment'][$key]['count_mar'] = TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-03').'%')->count(); 
-			$data['_availment'][$key]['count_apr'] = TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-04').'%')->count(); 
-			$data['_availment'][$key]['count_may'] = TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-05').'%')->count();
-			$data['_availment'][$key]['count_jun']= TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-06').'%')->count();
-			$data['_availment'][$key]['count_jul']= TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-07').'%')->count();
-			$data['_availment'][$key]['count_aug'] = TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-08').'%')->count();
-			$data['_availment'][$key]['count_sep']= TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-09').'%')->count();
-			$data['_availment'][$key]['count_oct'] = TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-10').'%')->count();
-			$data['_availment'][$key]['count_nov'] = TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-11').'%')->count();
-			$data['_availment'][$key]['count_dec'] = TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.date('Y-12').'%')->count();									      
-		}
 
+
+			foreach($_param_name as $param=>$param_name)
+            {
+            	$data['_availment'][$key][$_param_name[$param]]	= TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.$date.'-'.sprintf("%02d", $param+1).'%')->count();
+            }
+
+		}
 		return view('carewell.pages.reports_availment_monitoring_report',$data);
 
 	}

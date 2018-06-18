@@ -149,29 +149,18 @@ class SearchController extends ActiveAuthController
 				$data['link']		= '/reports/ending_number_per_reports/export_excel/'.$date;
 		        $data['date']      = $date;
 
+				$_param_name        = array('count_jan','count_feb','count_mar','count_apr','count_may','count_jun','count_jul','count_aug','count_sep','count_oct','count_nov','count_dec');
+				$_param_val         = array('01','02','03','04','05','06','07','08','09','10','11','12'); 
+		
 				foreach($data['_company'] as $key => $company) 
 				{
 					$parameter = array($company->coverage_plan_id,$company->company_id);
-					$data['_company'][$key]['company_coverage'] = TblMemberCompanyModel::where('tbl_member_company.archived',0)
-					                                             ->where('coverage_plan_id',$company->coverage_plan_id)
-					                                             ->where('company_id',$company->company_id)
-					                                             ->join('tbl_approval','tbl_approval.member_id','=','tbl_member_company.member_id')
-					                                             ->get();
+					$data['_company'][$key]['company_coverage'] = TblMemberCompanyModel::Approval($company->coverage_plan_id,$company->company_id)->get();
 
-					//$data['_company'][$key]['count'] = TblMemberCompanyModel::CountAvailment($company->coverage_plan_id,$company->company_id)->count();
-
-					$data['_company'][$key]['count_jan'] 	= TblMemberCompanyModel::CountAvailment($parameter,$date.'-01'.'%')->count();                                           
-					$data['_company'][$key]['count_feb'] 	= TblMemberCompanyModel::CountAvailment($parameter,$date.'-02'.'%')->count();
-					$data['_company'][$key]['count_mar'] 	= TblMemberCompanyModel::CountAvailment($parameter,$date.'-03'.'%')->count(); 
-					$data['_company'][$key]['count_apr'] 	= TblMemberCompanyModel::CountAvailment($parameter,$date.'-04'.'%')->count(); 
-					$data['_company'][$key]['count_may'] 	= TblMemberCompanyModel::CountAvailment($parameter,$date.'-05'.'%')->count();
-					$data['_company'][$key]['count_june']	= TblMemberCompanyModel::CountAvailment($parameter,$date.'-06'.'%')->count();
-					$data['_company'][$key]['count_july'] 	= TblMemberCompanyModel::CountAvailment($parameter,$date.'-07'.'%')->count();
-					$data['_company'][$key]['count_aug'] 	= TblMemberCompanyModel::CountAvailment($parameter,$date.'-08'.'%')->count();
-					$data['_company'][$key]['count_sept'] 	= TblMemberCompanyModel::CountAvailment($parameter,$date.'-09'.'%')->count();
-					$data['_company'][$key]['count_oct'] 	= TblMemberCompanyModel::CountAvailment($parameter,$date.'-10'.'%')->count();
-					$data['_company'][$key]['count_nov'] 	= TblMemberCompanyModel::CountAvailment($parameter,$date.'-11'.'%')->count();
-					$data['_company'][$key]['count_dec'] 	= TblMemberCompanyModel::CountAvailment($parameter,$date.'-12'.'%')->count();									      
+					foreach($_param_name as $param=>$param_name)
+		            {
+		            	$data['_company'][$key][''.$_param_name[$param].''] 	= TblMemberCompanyModel::CountAvailment($parameter,$date.'-'.$_param_val[$param].'%')->count();  
+		            }			      
 				}
 
 				$view = view('carewell.filtering_date.reports_end_per_month',$data);
