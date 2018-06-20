@@ -5,7 +5,20 @@
 				column-width: auto;
 
 			}
+			td
+			{
+				text-align: center;
+				font-weight:bolder;
+				column-width: auto;
+				color: red !important;
+
+			}
 			.col-adjust
 			{
 				text-align: left !important;
+			}
+
+			.total
+			{
+				font-weight: bold !important;
 			}

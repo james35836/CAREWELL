@@ -220,7 +220,9 @@ Route::post('/page/date_filter', 'SearchController@dateFiltering');
 
 Route::get('reports/reports_breakdown/export_excel/{date}', 'CarewellController@reports_breakdown_export_excel');
 
+Route::get('/reports/company_availment','CarewellController@reports_company_availment');
 
+Route::get('/reports/reports_company_availment/export_excel/{date}', 'CarewellController@reports_company_availment_per_month_export_excel');
 
 
 Route::post('/reports/member_cal/get_report', 'TestController@test_search');

@@ -110,10 +110,10 @@ class SearchController extends ActiveAuthController
 						$data['_company'][$key]['count_nov'] 	= TblMemberCompanyModel::CountAvailment($parameter,$date.'-11')->count();
 						$data['_company'][$key]['count_dec'] 	= TblMemberCompanyModel::CountAvailment($parameter,$date.'-12')->count();									      
 					}
-				$view = view('carewell.filtering_date.reports_availment_per_month_filtering',$data);
+					$view = view('carewell.filtering_date.reports_availment_per_month_filtering',$data);
 				break;
 
-				case 'availment_monitoring':
+			case 'availment_monitoring':
 
 					$data['_availment'] = TblAvailmentModel::where('archived',0)->paginate(10);
 
@@ -138,32 +138,96 @@ class SearchController extends ActiveAuthController
 						$data['_availment'][$key]['count_dec'] = TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.$date.'-12'.'%')->count();									      
 					}
 					$view = view('carewell.filtering_date.reports_availment_monitoring_filtering',$data);
-					break;
+			break;
 
-				case 'end_per_month':
+			case 'end_per_month':
 
-				$data['_company'] = TblCompanyCoveragePlanModel::join('tbl_company','tbl_company.company_id','=','tbl_company_coverage_plan.company_id')
-														  ->join('tbl_coverage_plan','tbl_coverage_plan.coverage_plan_id','=','tbl_company_coverage_plan.coverage_plan_id')
-			                                              ->paginate(10);
+					$data['_company'] = TblCompanyCoveragePlanModel::join('tbl_company','tbl_company.company_id','=','tbl_company_coverage_plan.company_id')
+															  ->join('tbl_coverage_plan','tbl_coverage_plan.coverage_plan_id','=','tbl_company_coverage_plan.coverage_plan_id')
+				                                              ->paginate(10);
 
-				$data['link']		= '/reports/ending_number_per_reports/export_excel/'.$date;
-		        $data['date']      = $date;
+					$data['link']		= '/reports/ending_number_per_reports/export_excel/'.$date;
+			        $data['date']      = $date;
 
-				$_param_name        = array('count_jan','count_feb','count_mar','count_apr','count_may','count_jun','count_jul','count_aug','count_sep','count_oct','count_nov','count_dec');
-				$_param_val         = array('01','02','03','04','05','06','07','08','09','10','11','12'); 
-		
-				foreach($data['_company'] as $key => $company) 
-				{
-					$parameter = array($company->coverage_plan_id,$company->company_id);
-					$data['_company'][$key]['company_coverage'] = TblMemberCompanyModel::Approval($company->coverage_plan_id,$company->company_id)->get();
+					$_param_name        = array('count_jan','count_feb','count_mar','count_apr','count_may','count_jun','count_jul','count_aug','count_sep','count_oct','count_nov','count_dec');
+					$_param_val         = array('01','02','03','04','05','06','07','08','09','10','11','12'); 
+			
+					foreach($data['_company'] as $key => $company) 
+					{
+						$parameter = array($company->coverage_plan_id,$company->company_id);
+						$data['_company'][$key]['company_coverage'] = TblMemberCompanyModel::Approval($company->coverage_plan_id,$company->company_id)->get();
 
-					foreach($_param_name as $param=>$param_name)
-		            {
-		            	$data['_company'][$key][''.$_param_name[$param].''] 	= TblMemberCompanyModel::CountAvailment($parameter,$date.'-'.$_param_val[$param].'%')->count();  
-		            }			      
-				}
+						foreach($_param_name as $param=>$param_name)
+			            {
+			            	$data['_company'][$key][''.$_param_name[$param].''] 	= TblMemberCompanyModel::CountAvailment($parameter,$date.'-'.$_param_val[$param].'%')->count();  
+			            }			      
+					}
 
-				$view = view('carewell.filtering_date.reports_end_per_month',$data);
+					$view = view('carewell.filtering_date.reports_end_per_month',$data);
+			break;
+
+			case 'company_availment_per_month':
+
+					$data['page'] = 'Company Monthly Availment Report';
+					$data['user']     = StaticFunctionController::global();
+					$data['_company'] = TblCompanyModel::where('archived',0)->paginate(10);
+					$data['_availment'] = TblAvailmentModel::where('archived',0)->paginate(10);
+
+					$data['link']		= '/reports/reports_company_availment/export_excel/'.$date;
+			        $data['date']      =  $date;
+
+			        $_param_name        = array('count_jan','count_feb','count_mar','count_apr','count_may','count_jun','count_jul','count_aug','count_sep','count_oct','count_nov','count_dec');
+					$_param_val         = array('01','02','03','04','05','06','07','08','09','10','11','12'); 
+					
+					$data['grand_total_all'] = TblApprovalModel::where('tbl_approval.approval_created','LIKE','%'.$date.'%')
+							                                                ->join('tbl_member_company','tbl_member_company.member_id','=','tbl_approval.member_id')
+																            ->where('tbl_member_company.archived',0)
+																			->count();
+
+					foreach ($data['_company'] as $key => $company) 
+					{
+
+						$data['_company'][$key]['availment']  = TblAvailmentModel::where('archived',0)->get();
+
+						foreach($data['_company'][$key]['availment'] as $avail=>$availment)
+						{
+							$data['_company'][$key]['availment'][$avail]['total'] = TblApprovalModel::where('availment_id',$availment->availment_id)
+																			->join('tbl_member_company','tbl_member_company.member_id','=','tbl_approval.member_id')
+																            ->where('tbl_member_company.company_id',$company->company_id)
+																            ->where('tbl_member_company.archived',0)
+																			->count();
+
+							$data['_company'][$key]['total_all'] = TblApprovalModel::where('tbl_approval.approval_created','LIKE','%'.$date.'%')
+							                                                ->join('tbl_member_company','tbl_member_company.member_id','=','tbl_approval.member_id')
+																            ->where('tbl_member_company.company_id',$company->company_id)
+																            ->where('tbl_member_company.archived',0)
+																			->count();
+
+							foreach($_param_name as $param=>$param_name)
+				            {
+				            	$data['_company'][$key]['availment'][$avail][$_param_name[$param]]	= TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.$date.'-'.sprintf("%02d", $param+1).'%')
+																	            	->join('tbl_member_company','tbl_member_company.member_id','=','tbl_approval.member_id')
+																	            	->where('tbl_member_company.company_id',$company->company_id)
+																	            	->where('tbl_member_company.archived',0)
+																	            	->count();
+
+								$data['_company'][$key][$_param_name[$param].'_total']	= TblApprovalModel::where('tbl_approval.approval_created','LIKE','%'.$date.'-'.sprintf("%02d", $param+1).'%')
+					            	->join('tbl_member_company','tbl_member_company.member_id','=','tbl_approval.member_id')
+					            	->where('tbl_member_company.company_id',$company->company_id)
+					            	->where('tbl_member_company.archived',0)
+					            	->count();
+
+					            $data['_company'][$key][$_param_name[$param].'_grand_total']	= TblApprovalModel::where('tbl_approval.approval_created','LIKE','%'.$date.'-'.sprintf("%02d", $param+1).'%')
+					            	->join('tbl_member_company','tbl_member_company.member_id','=','tbl_approval.member_id')
+					            	->where('tbl_member_company.archived',0)
+					            	->count();									            	
+				            }
+
+						}
+					}
+					return view('carewell.filtering_date.reports_company_availment_per_month_filtering',$data);
+
+			break;
 
 			default:
 				# code...

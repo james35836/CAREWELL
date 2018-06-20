@@ -2440,6 +2440,7 @@ class CarewellController extends ActiveAuthController
             }
 
 		}
+
 		return view('carewell.pages.reports_availment_monitoring_report',$data);
 
 	}
@@ -2471,6 +2472,70 @@ class CarewellController extends ActiveAuthController
 
 		return view('carewell.pages.reports_breakdown',$data);
 	}
+
+	public function reports_company_availment()
+	{
+		$data['page'] = 'Company Monthly Availment Report';
+		$data['user']     = StaticFunctionController::global();
+		$data['_company'] = TblCompanyModel::where('archived',0)->paginate(10);
+		$data['_availment'] = TblAvailmentModel::where('archived',0)->paginate(10);
+
+		$data['link']		= '/reports/reports_company_availment/export_excel/'.date('Y');
+        $data['date']      =  $date = date('Y');
+
+        $_param_name        = array('count_jan','count_feb','count_mar','count_apr','count_may','count_jun','count_jul','count_aug','count_sep','count_oct','count_nov','count_dec');
+		$_param_val         = array('01','02','03','04','05','06','07','08','09','10','11','12'); 
+		
+		$data['grand_total_all'] = TblApprovalModel::where('tbl_approval.approval_created','LIKE','%'.$date.'%')
+				                                                ->join('tbl_member_company','tbl_member_company.member_id','=','tbl_approval.member_id')
+													            ->where('tbl_member_company.archived',0)
+																->count();
+
+		foreach ($data['_company'] as $key => $company) 
+		{
+
+			$data['_company'][$key]['availment']  = TblAvailmentModel::where('archived',0)->get();
+
+			foreach($data['_company'][$key]['availment'] as $avail=>$availment)
+			{
+				$data['_company'][$key]['availment'][$avail]['total'] = TblApprovalModel::where('availment_id',$availment->availment_id)
+																->join('tbl_member_company','tbl_member_company.member_id','=','tbl_approval.member_id')
+													            ->where('tbl_member_company.company_id',$company->company_id)
+													            ->where('tbl_member_company.archived',0)
+																->count();
+
+				$data['_company'][$key]['total_all'] = TblApprovalModel::where('tbl_approval.approval_created','LIKE','%'.$date.'%')
+				                                                ->join('tbl_member_company','tbl_member_company.member_id','=','tbl_approval.member_id')
+													            ->where('tbl_member_company.company_id',$company->company_id)
+													            ->where('tbl_member_company.archived',0)
+																->count();
+
+				foreach($_param_name as $param=>$param_name)
+	            {
+	            	$data['_company'][$key]['availment'][$avail][$_param_name[$param]]	= TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.$date.'-'.sprintf("%02d", $param+1).'%')
+														            	->join('tbl_member_company','tbl_member_company.member_id','=','tbl_approval.member_id')
+														            	->where('tbl_member_company.company_id',$company->company_id)
+														            	->where('tbl_member_company.archived',0)
+														            	->count();
+
+					$data['_company'][$key][$_param_name[$param].'_total']	= TblApprovalModel::where('tbl_approval.approval_created','LIKE','%'.$date.'-'.sprintf("%02d", $param+1).'%')
+		            	->join('tbl_member_company','tbl_member_company.member_id','=','tbl_approval.member_id')
+		            	->where('tbl_member_company.company_id',$company->company_id)
+		            	->where('tbl_member_company.archived',0)
+		            	->count();
+
+		            $data['_company'][$key][$_param_name[$param].'_grand_total']	= TblApprovalModel::where('tbl_approval.approval_created','LIKE','%'.$date.'-'.sprintf("%02d", $param+1).'%')
+		            	->join('tbl_member_company','tbl_member_company.member_id','=','tbl_approval.member_id')
+		            	->where('tbl_member_company.archived',0)
+		            	->count();									            	
+	            }
+
+			}
+		}
+		
+		return view('carewell.pages.reports_company_availment',$data);
+	}
+
 	public function reports_consolidation()
 	{
 		$data['page']       = 'Consolidation Reports';
@@ -2769,6 +2834,73 @@ class CarewellController extends ActiveAuthController
 			$excel->sheet('clients',function($sheet) use ($data)
 			{
 				$sheet->loadView('carewell.additional_pages.reports_breakdown_export_excel',$data);
+			});
+		})->download('xls');
+
+	}
+
+	public function reports_company_availment_per_month_export_excel($date)
+	{
+		$data['_company'] = TblCompanyModel::where('archived',0)->paginate(10);
+		$data['_availment'] = TblAvailmentModel::where('archived',0)->paginate(10);
+
+        $data['date']      =  $date;
+
+        $_param_name        = array('count_jan','count_feb','count_mar','count_apr','count_may','count_jun','count_jul','count_aug','count_sep','count_oct','count_nov','count_dec');
+		$_param_val         = array('01','02','03','04','05','06','07','08','09','10','11','12'); 
+		
+		$data['grand_total_all'] = TblApprovalModel::where('tbl_approval.approval_created','LIKE','%'.$date.'%')
+				                                                ->join('tbl_member_company','tbl_member_company.member_id','=','tbl_approval.member_id')
+													            ->where('tbl_member_company.archived',0)
+																->count();
+
+		foreach ($data['_company'] as $key => $company) 
+		{
+
+			$data['_company'][$key]['availment']  = TblAvailmentModel::where('archived',0)->get();
+
+			foreach($data['_company'][$key]['availment'] as $avail=>$availment)
+			{
+				$data['_company'][$key]['availment'][$avail]['total'] = TblApprovalModel::where('availment_id',$availment->availment_id)
+																->join('tbl_member_company','tbl_member_company.member_id','=','tbl_approval.member_id')
+													            ->where('tbl_member_company.company_id',$company->company_id)
+													            ->where('tbl_member_company.archived',0)
+																->count();
+
+				$data['_company'][$key]['total_all'] = TblApprovalModel::where('tbl_approval.approval_created','LIKE','%'.$date.'%')
+				                                                ->join('tbl_member_company','tbl_member_company.member_id','=','tbl_approval.member_id')
+													            ->where('tbl_member_company.company_id',$company->company_id)
+													            ->where('tbl_member_company.archived',0)
+																->count();
+
+				foreach($_param_name as $param=>$param_name)
+	            {
+	            	$data['_company'][$key]['availment'][$avail][$_param_name[$param]]	= TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.$date.'-'.sprintf("%02d", $param+1).'%')
+														            	->join('tbl_member_company','tbl_member_company.member_id','=','tbl_approval.member_id')
+														            	->where('tbl_member_company.company_id',$company->company_id)
+														            	->where('tbl_member_company.archived',0)
+														            	->count();
+
+					$data['_company'][$key][$_param_name[$param].'_total']	= TblApprovalModel::where('tbl_approval.approval_created','LIKE','%'.$date.'-'.sprintf("%02d", $param+1).'%')
+		            	->join('tbl_member_company','tbl_member_company.member_id','=','tbl_approval.member_id')
+		            	->where('tbl_member_company.company_id',$company->company_id)
+		            	->where('tbl_member_company.archived',0)
+		            	->count();
+
+		            $data['_company'][$key][$_param_name[$param].'_grand_total']	= TblApprovalModel::where('tbl_approval.approval_created','LIKE','%'.$date.'-'.sprintf("%02d", $param+1).'%')
+		            	->join('tbl_member_company','tbl_member_company.member_id','=','tbl_approval.member_id')
+		            	->where('tbl_member_company.archived',0)
+		            	->count();									            	
+	            }
+
+			}
+		}
+
+		Excel::create("COMPANY MONTHLY AVAILMENT REPORTS ".$date,function($excel) use ($data)
+		{
+			$excel->sheet('clients',function($sheet) use ($data)
+			{
+				$sheet->loadView('carewell.additional_pages.reports_company_availment_per_month_export_excel',$data);
 			});
 		})->download('xls');
 

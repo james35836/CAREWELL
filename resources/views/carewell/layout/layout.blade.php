@@ -339,7 +339,8 @@
                             </span>
                         </a>
                         <ul class="treeview-menu">
-                            <li style="background-color:#26A65B"><a href="/reports/availment_per_month"><i class="fa fa-circle-o"></i>AVAILMENT </a></li>
+                            <li style="background-color:#26A65B"><a href="/reports/availment_per_month"><i class="fa fa-circle-o"></i>AVAILMENT</a></li>
+                            <li style="background-color:#26A65B"><a href="/reports/company_availment"><i class="fa fa-circle-o"></i><span style="font-size:12px;">COMPANY AVAILMENT</span></a></li>
                             <li style="background-color:#26A65B"><a href="/reports/availment_monitoring"><i class="fa fa-circle-o"></i>MONITORING</a></li>
                             <li style="background-color:#26A65B"><a href="/reports/payment_report"><i class="fa fa-circle-o"></i>PAYMENT REPORT</a></li>
                             <li style="background-color:#26A65B"><a href="/reports/ending_number_per_month"><i class="fa fa-circle-o"></i>ENDING NUMBER</a></li>
