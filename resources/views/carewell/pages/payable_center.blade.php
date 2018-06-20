@@ -98,7 +98,8 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div><button class="pagination_button" data-link="/provider?page=3">click</button>
+                            </div>
+                            <!-- <button class="pagination_button" data-link="/provider?page=3">click</button> -->
                             <div class="box-body table-responsive no-padding">
                                 <table class="table table-hover table-bordered">
                                     <tr>

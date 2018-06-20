@@ -209,7 +209,7 @@ Route::get('/reports/ending_number_per_reports/export_excel/{date}', 'CarewellCo
 
 Route::get('/reports/availment_per_month',  'CarewellController@reports_availment_per_month');
 
-Route::get('/reports/availment_per_month_summary/export_excel/{date}/{company}', 'CarewellController@reports_availment_per_month_export_excel');
+Route::get('/reports/availment_per_month_summary/export_excel/{date}', 'CarewellController@reports_availment_per_month_export_excel');
 
 Route::get('/reports/availment_monitoring', 'CarewellController@reports_availment_monitoring');
 Route::get('/reports/availment_monitoring/export_excel/{date}', 'CarewellController@reports_availment_monitoring_export_excel');
