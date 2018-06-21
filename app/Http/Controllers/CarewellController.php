@@ -122,6 +122,8 @@ class CarewellController extends ActiveAuthController
 	            		$data['sum_approval']->total_charge_carewell = 0;
 	            	}
 
+	            	//Request::has('grace_time_rule_late') ? Request::input("grace_time_rule_late") : 'first';
+
 
         $data['total_paid'] = TblPayableApprovalModel::join('tbl_approval','tbl_approval.approval_id','=','tbl_payable_approval.approval_id')
         ->join('tbl_approval_total','tbl_approval_total.approval_id','=','tbl_payable_approval.approval_id')
