@@ -456,7 +456,7 @@ class CarewellController extends ActiveAuthController
 				$sheet->fromArray($data, null, 'A1', false, false);
 				$sheet->freezeFirstRow();
 
-				for($row = 1, $rowcell = 2; $row <= $number_of_rows+5; $row++, $rowcell++)
+				for($row = 1, $rowcell = 2; $row <= $number_of_rows; $row++, $rowcell++)
 				{
 					/* COMPANY ROW */
 					$sheet->setCellValue('A'.$rowcell, $excels['company_code']);
