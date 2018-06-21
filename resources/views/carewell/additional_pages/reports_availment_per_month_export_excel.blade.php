@@ -36,10 +36,10 @@
         <td class="sum-mar">{{$company->count_mar}}</td>
         <td class="sum-apr">{{$company->count_apr}}</td>
         <td class="sum-may">{{$company->count_may}}</td>
-        <td class="sum-jun">{{$company->count_june}}</td>
-        <td class="sum-jul">{{$company->count_july}}</td>
+        <td class="sum-jun">{{$company->count_jun}}</td>
+        <td class="sum-jul">{{$company->count_jul}}</td>
         <td class="sum-aug">{{$company->count_aug}}</td>
-        <td class="sum-sep">{{$company->count_sept}}</td>
+        <td class="sum-sep">{{$company->count_sep}}</td>
         <td class="sum-oct">{{$company->count_oct}}</td>
         <td class="sum-nov">{{$company->count_nov}}</td>
         <td class="sum-dec">{{$company->count_dec}}</td>
