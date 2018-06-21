@@ -111,6 +111,40 @@ class CarewellController extends ActiveAuthController
 		->join('tbl_member','tbl_member.member_id','=','tbl_approval.member_id')
 		->orderBy('approval_created','DESC')->get();
 		$data['total_approval'] =  count($data['_approval']);
+
+		$data['sum_approval'] = TblApprovalModel::join('tbl_approval_total','tbl_approval_total.approval_id','=','tbl_approval.approval_id')
+                ->where('tbl_approval.approval_created','LIKE','%'.$monthYear.'%')
+            	->select([DB::raw("SUM(total_charge_carewell) as total_charge_carewell")])
+            	->first();
+
+            	if($data['sum_approval']->total_charge_carewell == null)
+	            	{
+	            		$data['sum_approval']->total_charge_carewell = 0;
+	            	}
+
+	            	//Request::has('grace_time_rule_late') ? Request::input("grace_time_rule_late") : 'first';
+
+
+        $data['total_paid'] = TblPayableApprovalModel::join('tbl_approval','tbl_approval.approval_id','=','tbl_payable_approval.approval_id')
+        ->join('tbl_approval_total','tbl_approval_total.approval_id','=','tbl_payable_approval.approval_id')
+        ->join('tbl_payable','tbl_payable_approval.payable_id','=','tbl_payable.payable_id')
+        ->where('tbl_payable.archived',1)
+        ->where('tbl_approval.approval_created','LIKE','%'.$monthYear.'%')
+        ->select([DB::raw("SUM(total_charge_carewell) as total_charge_carewell")])
+        ->first();
+
+        	if($data['total_paid']->total_charge_carewell == null)
+            	{
+            		$data['total_paid']->total_charge_carewell = 0;
+            	}
+            	// dd($data['sum_approval']->total_charge_carewell );
+
+// select sum(tbl_approval_total.total_charge_carewell) from tbl_payable_approval 
+// inner join tbl_approval on tbl_approval.approval_id = tbl_payable_approval .approval_id
+// inner join tbl_approval_total on tbl_approval_total.approval_id = tbl_payable_approval .approval_id
+// inner join tbl_payable on tbl_payable_approval.payable_id = tbl_payable.payable_id
+// where tbl_payable.archived =1 ;
+
 		return view('carewell.pages.dashboard',$data);
 	}
 	/*COMPANY*/

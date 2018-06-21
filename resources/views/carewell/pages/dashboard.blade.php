@@ -141,13 +141,13 @@ text-align: center;
           </div>
           <div class="col-sm-3 col-xs-6">
             <div class="description-block border-right">
-              <h5 class="description-header">&#8369; 10,390.90</h5>
+              <h5 class="description-header">&#8369; {{number_format($sum_approval->total_charge_carewell,2)}}</h5>
               <span class="description-text">TOTAL OUTSTANDING PAYABLE</span>
             </div>
           </div>
           <div class="col-sm-3 col-xs-6">
             <div class="description-block">
-              <h5 class="description-header">&#8369; 1200</h5>
+              <h5 class="description-header">&#8369; {{number_format($total_paid->total_charge_carewell,2)}}</h5>
               <span class="description-text">TOTAL PAID</span>
             </div>
           </div>
