@@ -64,11 +64,14 @@
 				<div class="col-md-3 col-xs-12 pull-left">
 					<h4 class="box-title medical-btn-sample">APPROVAL LIST</h4>
 				</div>
-				<div class="col-md-5 col-xs-12 pull-right">
-					<div class="btn-group">
-					  	<a href="{{$link}}"><button type="button" class="btn btn-success "><i class="fa fa-file-excel-o btn-icon"></i>EXPORT TO EXCEL</button></a>
-					  	<a target="_blank" href="/payable/payable_export_pdf/{{$payable_details->payable_id}}"><button type="button" data-transaction_member_id="{{$payable_details->payable_id}}" class="btn btn-primary" ><i class="fa fa-file-pdf-o btn-icon"></i>EXPORT PDF</button></a>
+				<div class="col-md-6 col-xs-12 pull-right" >
+					<div class="col-md-6" >
+						<a href="{{$link}}"><button type="button" class="btn btn-success top-element"><i class="fa fa-file-excel-o btn-icon"></i>EXPORT TO EXCEL</button></a>
 					</div>
+					<div class="col-md-6 no-padding" >
+						<a target="_blank" href="/payable/payable_export_pdf/{{$payable_details->payable_id}}"><button type="button" data-transaction_member_id="{{$payable_details->payable_id}}" class="btn btn-primary top-element" ><i class="fa fa-file-pdf-o btn-icon"></i>EXPORT PDF</button></a>
+					</div>
+					
 				</div>
 			</div>
 		</div>

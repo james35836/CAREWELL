@@ -36,6 +36,17 @@
         
         <style>
         
+        span.show-money
+        {
+            font-size: 30px;
+            color: green;
+            font-weight: bold;
+        }
+        p.show-money
+        {
+            font-size:20px;
+        }
+    
         select.approval-select
         {
             width:300px !important;

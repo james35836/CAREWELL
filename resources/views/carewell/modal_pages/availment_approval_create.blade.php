@@ -55,7 +55,12 @@ $(document).ready(function()
 				}
 				else
 				{
-					availment_center.check_procedure_amount(new_carewell,$member_id,$procedure,$availment_id);
+					var div_id   =  $(this).find('div.box-globals').data('id');
+					if(div_id == "procedure")
+					{
+						availment_center.check_procedure_amount(new_carewell,$member_id,$procedure,$availment_id);
+					}
+					
 					$(this).parents('tr').find('.charge-carewell').val(new_carewell);
 				}
 				
@@ -74,8 +79,11 @@ $(document).ready(function()
 		var text  = $(this).find(":selected").text();
 		$('select.charge_diagnosis').append('<option value="'+value+'" selected="selected">'+text+'</option>');
 	});
+
+
 });
 </script>
+
 <form class="approval-submit-form" method="post">
 	<div  id="insertMember">
 		<div class="row box-globals" >
@@ -243,7 +251,7 @@ $(document).ready(function()
 			</center>
 		</div>
 	</div>
-	<div class="row box-globals" id="changeAvailmentInfo">
+	<div class="row box-globals" id="changeAvailmentInfo" data-id="procedure">
 		<div class="table-responsive no-padding">
 			<table class="table table-bordered" >
 				<tr>
@@ -315,7 +323,7 @@ $(document).ready(function()
 		</div>
 	</div>
 	
-	<div class="row box-globals">
+	<div class="row box-globals" data-id="physician">
 		<div class="table-responsive no-padding">
 			<table class="table table-hover table-bordered procedure-doctor-form">
 				<tr>
@@ -402,6 +410,7 @@ $(document).ready(function()
 			</div>
 		</div>
 	</div>
+	
 	<div class="row box-globals">
 		<div class="row form-holder">
 			<center>
@@ -441,4 +450,12 @@ $(document).ready(function()
 			</div>
 		</div>
 	</div>
+	<div class="row box-globals">
+		<div class="row form-holder">
+			<center>
+				<p class="show-money">GRAND TOTAL  =  <span class="show-money">&#8369;</span><span class="show-money" id="grand_total">0</span></p>
+			</center>
+		</div>
+	</div>
+	
 </form>

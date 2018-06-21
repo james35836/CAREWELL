@@ -100,23 +100,21 @@ class StaticFunctionController extends Controller
 
     public function getCheckProcedureAmount(Request $request)
     {
+
         $member_id          = $request->member_id;
         $carewell_amount    = $request->carewell_amount;
         $procedure_id       = $request->procedure_id;
         $availment_id       = $request->availment_id;
- 
+        $member             = TblMemberCompanyModel::where('tbl_member_company.member_id',$member_id)->CompanyMember()->first();
+        $TblCoveragePlanProcedureModel = TblCoveragePlanProcedureModel::where('procedure_id',$procedure_id)->where('availment_id',$availment_id)->where('coverage_plan_id',$member->coverage_plan_id);
         $sum                = 0;
     
-        $member             = TblMemberCompanyModel::where('tbl_member_company.member_id',$member_id)->CompanyMember()->first();
-        $procedure_covered  = TblCoveragePlanProcedureModel::where('procedure_id',$procedure_id)->where('availment_id',$availment_id)->where('coverage_plan_id',$member->coverage_plan_id)->value('plan_covered_amount'); 
         
+        $procedure_covered  = $TblCoveragePlanProcedureModel->value('plan_covered_amount'); 
+        $procedure_limit    = $TblCoveragePlanProcedureModel->value('plan_limit'); 
         
 
-        $_approval          = TblApprovalModel::where('member_id',$member_id)
-                            ->join('tbl_approval_procedure','tbl_approval_procedure.approval_id','tbl_approval.approval_id')
-                            ->where('procedure_id',$procedure_id)
-                            ->where('availment_id',$availment_id)
-                            ->get();
+        $_approval          = TblApprovalModel::where('member_id',$member_id)->Procedure()->where('procedure_id',$procedure_id)->where('availment_id',$availment_id)->get();
                             
         foreach($_approval as $approval)
         {
@@ -126,22 +124,33 @@ class StaticFunctionController extends Controller
         $balance    = $procedure_covered-$actual;
 
         $current_balance = $procedure_covered-$sum;
-        // dd($sum,$procedure_id,$procedure_covered,$_approval);
-        if($balance < 0)
+        // dd($procedure_limit);
+        if($procedure_limit=="OPEN"||count($_approval) < $procedure_limit)
         {
-            $message['ref']             = 'sumobra';
-            $message['balance']         = $balance;
-            $message['actual']          = $actual;
-            $message['current_balance'] = $current_balance;
-        }
-        else 
-        {
-            $message['ref']             = 'pwede';
-            $message['balance']         = $balance;
-            $message['actual']          = $actual;
-            $message['current_balance'] = $current_balance;
+            if($balance < 0)
+            {
+                $message['ref']             = 'sumobra';
+                $message['balance']         = $balance;
+                $message['actual']          = $actual;
+                $message['current_balance'] = $current_balance;
+            }
+            else 
+            {
+                $message['ref']             = 'pwede';
+                $message['balance']         = $balance;
+                $message['actual']          = $actual;
+                $message['current_balance'] = $current_balance;
 
+            }
         }
+        else
+        {
+            $message['ref']             = 'reached_limit';
+            $message['balance']         = $balance;
+            $message['actual']          = $actual;
+            $message['current_balance'] = $current_balance;
+        }
+        
         return $message;
     }
     public function getCompanyInfo(Request $request)
@@ -174,7 +183,7 @@ class StaticFunctionController extends Controller
             $_procedure_doctor                  = TblDoctorProcedureModel::where('archived',0)->get();
             $provider                           = TblProviderModel::where('provider_id',$request->provider_id)->first();
             $data['_provider_doctor']           = TblDoctorProviderModel::where('tbl_doctor_provider.provider_id',$request->provider_id)->where('tbl_doctor_provider.archived',0)->DoctorProvider()->get();
-            $data['_procedure_doctors']          = '<option>-SELECT PROCEDURE-';
+            $data['_procedure_doctors']          = '<option value="1">-SELECT PROCEDURE-';
             $data['_provider_doctors']          = '<option>-SELECT DOCTOR-';
             $data['_specialization_doctors']    = '<option>-SELECT SPECIALIZATION-';
             foreach($_procedure_doctor as $procedure_doctor)

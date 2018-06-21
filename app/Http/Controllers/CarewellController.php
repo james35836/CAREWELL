@@ -1813,13 +1813,14 @@ class CarewellController extends ActiveAuthController
 		$data['total_procedure']  = TblApprovalTotalModel::where('approval_id',$approval_id)->where('total_type','procedure')->first();
 		$data['total_doctor']     = TblApprovalTotalModel::where('approval_id',$approval_id)->where('total_type','doctor')->first();
 
+		$data['grand_total']      = $data['total_procedure']->total_charge_carewell + $data['total_doctor']->total_charge_carewell;
 
 		/*BELOW ARE FOR UPDATE DATA*/
 		$approval                 = TblApprovalModel::where("approval_id",$approval_id)->first();
 		$coverage_plan_id         = TblMemberCompanyModel::where('member_id',$approval->member_id)->where('tbl_member_company.archived',0)->value('coverage_plan_id');
 		
 		$data['_procedure'] 	 = TblMemberCompanyModel::CovaragePlanProcedure($approval->member_id,$approval->availment_id)->where('tbl_member_company.archived',0)->get();
-          $data['_availment']       = TblCoveragePlanProcedureModel::where('coverage_plan_id',$coverage_plan_id)->Availment()->get();
+        $data['_availment']       = TblCoveragePlanProcedureModel::where('coverage_plan_id',$coverage_plan_id)->Availment()->get();
 		$data['_provider']        = TblProviderModel::where('archived',0)->get();
 
 		$data['_procedure_doctor']= TblDoctorProcedureModel::where('archived',0)->get();

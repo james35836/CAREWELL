@@ -52,5 +52,10 @@ class TblApprovalModel extends Model
             // ->groupby('tbl_approval.approval_id');
         return $query;
     }
+    public function scopeProcedure($query)
+    {
+        $query ->join('tbl_approval_procedure','tbl_approval_procedure.approval_id','tbl_approval.approval_id');
+        return $query;
+    }
 
 }

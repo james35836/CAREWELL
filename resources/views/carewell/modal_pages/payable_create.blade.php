@@ -45,23 +45,12 @@
 	</div>
 	
 </div>
-<div class="row box-globals">
+<div class="row box-globals" id="load-approval">
 	<div class="form-holder">
 		<div class=" col-md-4 col-xs-12 pull-left">
-			<div class="input-group top-element">
-			    <input type="text" class="form-control datepicker" id="payable_from"/>
-			    <span class="input-group-addon">TO</span>
-			    <input type="text" class="form-control datepicker" id="payable_to"/>
-			</div>
+			<h4 class="box-title medical-btn-sample">APPROVAL LIST</h4>
 		</div>
-		<div class="col-md-3 col-xs-12 pull-right">
-              	<div class="input-group top-element">
-               	<input type="text" class="form-control search-approval-key">
-                	<span class="input-group-btn">
-                  		<button type="button" class="btn btn-default search-approval" ><i class="fa fa-search"></i></button>
-                	</span>
-              	</div>
-          </div>
+		
 	</div>
 	<div class="form-holder">
 		<div class="load-data load-member-approval" data-target="load-member-approval">

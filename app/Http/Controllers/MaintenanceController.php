@@ -20,6 +20,11 @@ use Crypt;
 
 class MaintenanceController extends Controller
 {
+    public function update_limit()
+    {
+        $update['plan_limit'] = "OPEN";
+        DB::table('tbl_coverage_plan_procedure')->where('plan_limit','NO LIMIT')->update($update);
+    }
     public function developer_truncate()
     {
         dd('SORRY YOU ARE NOT ALLOWED HERE!');
