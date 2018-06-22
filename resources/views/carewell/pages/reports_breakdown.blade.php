@@ -41,14 +41,14 @@ date.value = output;
         <div class="tab-content">
           <div class="tab-pane active showReportContent" id="open">
             <div class="row top-element">
-              <div class="col-md-3 col-xs-12 pull-left">
+ <!--              <div class="col-md-3 col-xs-12 pull-left">
                 <select class="form-control">
                   <option value="">SELECT COMPANY</option>
                   @foreach($_company as $company)
                   <option>{{$company->company_name}}</option>
                   @endforeach
                 </select>
-              </div>
+              </div> -->
               <div class="col-md-3 col-xs-12">
                 <div class="btn-group">
                   <a href="{{$link}}"><button type="button" class="btn btn-success">EXPORT EXCEL</button></a>

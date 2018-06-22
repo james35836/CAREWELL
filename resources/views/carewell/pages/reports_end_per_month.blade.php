@@ -102,18 +102,18 @@ autoclose: true
                   <td>TOTAL</td>
                   <td></td>
                   <td></td>
-                  <td id="sum-jan"></td>
-                  <td id="sum-feb"></td>
-                  <td id="sum-mar"></td>
-                  <td id="sum-apr"></td>
-                  <td id="sum-may"></td>
-                  <td id="sum-jun"></td>
-                  <td id="sum-jul"></td>
-                  <td id="sum-aug"></td>
-                  <td id="sum-sep"></td>
-                  <td id="sum-oct"></td>
-                  <td id="sum-nov"></td>
-                  <td id="sum-dec"></td>
+                  <td id="sum-jan">{{$company->count_jan_total}}</td>
+                  <td id="sum-feb">{{$company->count_feb_total}}</td>
+                  <td id="sum-mar">{{$company->count_mar_total}}</td>
+                  <td id="sum-apr">{{$company->count_apr_total}}</td>
+                  <td id="sum-may">{{$company->count_may_total}}</td>
+                  <td id="sum-jun">{{$company->count_jun_total}}</td>
+                  <td id="sum-jul">{{$company->count_jul_total}}</td>
+                  <td id="sum-aug">{{$company->count_aug_total}}</td>
+                  <td id="sum-sep">{{$company->count_sep_total}}</td>
+                  <td id="sum-oct">{{$company->count_oct_total}}</td>
+                  <td id="sum-nov">{{$company->count_nov_total}}</td>
+                  <td id="sum-dec">{{$company->count_dec_total}}</td>
                 </tr>
               </table>
             </div>

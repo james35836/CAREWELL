@@ -35,7 +35,7 @@ function settings_reports()
 			search_member_cal();
 			datepickerdate();
 
-			
+			dropdown_search();
 
 		});
 
@@ -102,6 +102,18 @@ function settings_reports()
 				}
 			});
 		});
+	}
+
+	function dropdown_search()
+	{
+		$('body').on('click','#dropdown_search',function()
+		{
+			var company = document.getElementById('reports_company').value;
+			var deployment = document.getElementById('reports_deployment').value;
+			var payment = document.getElementById('reports_payment').value;
+
+			alert(company+" "+deployment+" "+payment);
+		})
 	}
 
 	//try

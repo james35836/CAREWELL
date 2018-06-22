@@ -2,20 +2,19 @@
 @section('content')
 <script type="text/javascript">
 $(document).ready(function(){
-// settings_reports.calculateSum('sum-jan');
-// settings_reports.calculateSum('sum-feb');
-// settings_reports.calculateSum('sum-mar');
-// settings_reports.calculateSum('sum-apr');
-// settings_reports.calculateSum('sum-may');
-// settings_reports.calculateSum('sum-jun');
-// settings_reports.calculateSum('sum-jul');
-// settings_reports.calculateSum('sum-aug');
-// settings_reports.calculateSum('sum-sep');
-// settings_reports.calculateSum('sum-oct');
-// settings_reports.calculateSum('sum-nov');
-// settings_reports.calculateSum('sum-dec');
-// settings_reports.calculateSum('sum-count');
-
+settings_reports.calculateSum('sum-jan');
+settings_reports.calculateSum('sum-feb');
+settings_reports.calculateSum('sum-mar');
+settings_reports.calculateSum('sum-apr');
+settings_reports.calculateSum('sum-may');
+settings_reports.calculateSum('sum-jun');
+settings_reports.calculateSum('sum-jul');
+settings_reports.calculateSum('sum-aug');
+settings_reports.calculateSum('sum-sep');
+settings_reports.calculateSum('sum-oct');
+settings_reports.calculateSum('sum-nov');
+settings_reports.calculateSum('sum-dec');
+settings_reports.calculateSum('sum-count');
 // $(".year-picker").datepicker( {
 //     format: " yyyy",
 //     startView: "years",
@@ -33,7 +32,6 @@ minViewMode: "years",
 autoclose: true
 });
 });
-
 });
 </script>
 <div class="container">
@@ -47,15 +45,37 @@ autoclose: true
                 <div class="tab-content">
                     <div class="tab-pane active showReportContent" id="open">
                         <div class="row top-element">
-                            <!--           <div class="col-md-3 col-xs-12 pull-left">
-                                <select class="form-control">
-                                    <option value="">SELECT COMPANY</option>
+                            <div class="col-md-3 col-xs-12 pull-left">
+                                <select class="form-control" id="reports_company">
+                                    <option value="0">SELECT COMPANY</option>
                                     @foreach($_company as $company)
-                                    <option>{{$company->company_name}}</option>
+                                    <option value="{{$company->company_id}}">{{$company->company_name}}</option>
                                     @endforeach
                                 </select>
                             </div>
-                            -->                            <div class="col-md-3 col-xs-12">
+                            <div class="col-md-3 col-xs-12 pull-left">
+                                <select class="form-control" id="reports_deployment">
+                                    <option value="0">SELECT DEPLOYMENT</option>
+                                    @foreach($_deployment as $deployment)
+                                    <option value="{{$deployment->deployment_id}}">{{$deployment->deployment_name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-3 col-xs-12 pull-left">
+                                <select class="form-control" id="reports_payment">
+                                    <option value="0">SELECT MODE OF PAYMENT</option>
+                                    @foreach($_payment as $payment)
+                                    <option value="{{$payment->payment_mode_name}}">{{$payment->payment_mode_name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-3 col-xs-12 pull-left">
+                                <a><button type="button" class="btn btn-primary" id="dropdown_search">SEARCH</button></a>
+                            </div>
+
+                        </div>
+                        <div class="row top-element">
+                            <div class="col-md-3 col-xs-12">
                                 <div class="btn-group">
                                     <a href="{{$link}}"><button type="button" class="btn btn-success">EXPORT EXCEL</button></a>
                                 </div>
@@ -70,7 +90,7 @@ autoclose: true
                                 
                             </div>
                         </div>
-
+                        
                         <div  id="showTable" class="load-data load-reports-availment-per-month" data-target="load-reports-availment-per-month">
                             <div class="table-responsive no-padding">
                                 <table class="table table-hover table-bordered sum_table">
@@ -110,19 +130,19 @@ autoclose: true
                                     @endforeach
                                     <tr>
                                         <td>TOTAL</td>
-                                        <td id="sum-jan">{{$_company[0]->count_jan_total}}</td>
-                                        <td id="sum-feb">{{$_company[0]->count_feb_total}}</td>
-                                        <td id="sum-mar">{{$_company[0]->count_mar_total}}</td>
-                                        <td id="sum-apr">{{$_company[0]->count_apr_total}}</td>
-                                        <td id="sum-may">{{$_company[0]->count_may_total}}</td>
-                                        <td id="sum-jun">{{$_company[0]->count_jun_total}}</td>
-                                        <td id="sum-jul">{{$_company[0]->count_jul_total}}</td>
-                                        <td id="sum-aug">{{$_company[0]->count_aug_total}}</td>
-                                        <td id="sum-sep">{{$_company[0]->count_sep_total}}</td>
-                                        <td id="sum-oct">{{$_company[0]->count_oct_total}}</td>
-                                        <td id="sum-nov">{{$_company[0]->count_nov_total}}</td>
-                                        <td id="sum-dec">{{$_company[0]->count_dec_total}}</td>
-                                        <td id="sum-count">{{$_company[0]->count_total}}</td>
+                                        <td id="sum-jan">-</td>
+                                        <td id="sum-feb">-</td>
+                                        <td id="sum-mar">-</td>
+                                        <td id="sum-apr">-</td>
+                                        <td id="sum-may">-</td>
+                                        <td id="sum-jun">-</td>
+                                        <td id="sum-jul">-</td>
+                                        <td id="sum-aug">-</td>
+                                        <td id="sum-sep">-</td>
+                                        <td id="sum-oct">-</td>
+                                        <td id="sum-nov">-</td>
+                                        <td id="sum-dec">-</td>
+                                        <td id="sum-count"></td>
                                     </tr>
                                 </table>
                             </div>

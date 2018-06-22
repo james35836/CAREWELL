@@ -227,6 +227,8 @@ Route::get('/reports/company_availment','CarewellController@reports_company_avai
 
 Route::get('/reports/reports_company_availment/export_excel/{date}', 'CarewellController@reports_company_availment_per_month_export_excel');
 
+Route::get('/reports/active_per_month','CarewellController@reports_active_per_month');
+
 
 Route::post('/reports/member_cal/get_report', 'TestController@test_search');
 

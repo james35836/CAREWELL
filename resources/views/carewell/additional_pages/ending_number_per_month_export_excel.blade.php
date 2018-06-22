@@ -39,10 +39,10 @@
         <td>{{$company->count_mar}}</td>
         <td>{{$company->count_apr}}</td>
         <td>{{$company->count_may}}</td>
-        <td>{{$company->count_june}}</td>
-        <td>{{$company->count_july}}</td>
+        <td>{{$company->count_jun}}</td>
+        <td>{{$company->count_jul}}</td>
         <td>{{$company->count_aug}}</td>
-        <td>{{$company->count_sept}}</td>
+        <td>{{$company->count_sep}}</td>
         <td>{{$company->count_oct}}</td>
         <td>{{$company->count_nov}}</td>
         <td>{{$company->count_dec}}</td>
@@ -52,18 +52,18 @@
         <td>TOTAL</td>
         <td></td>
         <td></td>
-        <td>{{$total_jan}}</td>
-        <td>{{$total_feb}}</td>
-        <td>{{$total_mar}}</td>
-        <td>{{$total_apr}}</td>
-        <td>{{$total_may}}</td>
-        <td>{{$total_june}}</td>
-        <td>{{$total_july}}</td>
-        <td>{{$total_aug}}</td>
-        <td>{{$total_sept}}</td>
-        <td>{{$total_oct}}</td>
-        <td>{{$total_nov}}</td>
-        <td>{{$total_dec}}</td>
+        <td>{{$_company[0]->count_jan_total}}</td>
+        <td>{{$_company[0]->count_feb_total}}</td>
+        <td>{{$_company[0]->count_mar_total}}</td>
+        <td>{{$_company[0]->count_apr_total}}</td>
+        <td>{{$_company[0]->count_may_total}}</td>
+        <td>{{$_company[0]->count_jun_total}}</td>
+        <td>{{$_company[0]->count_jul_total}}</td>
+        <td>{{$_company[0]->count_aug_total}}</td>
+        <td>{{$_company[0]->count_sep_total}}</td>
+        <td>{{$_company[0]->count_oct_total}}</td>
+        <td>{{$_company[0]->count_nov_total}}</td>
+        <td>{{$_company[0]->count_dec_total}}</td>
       </tr>
     </table>
   </body>
