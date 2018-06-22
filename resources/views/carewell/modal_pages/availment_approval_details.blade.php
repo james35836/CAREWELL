@@ -276,7 +276,7 @@ $(document).ready(function()
 			</center>
 		</div>
 	</div>
-	<div class="box-globals row" id="changeAvailmentInfo">
+	<div class="row box-globals" id="changeAvailmentInfo" data-id="procedure">
 		
 		<div class="table-responsive no-padding">
 			<table class="table table-hover table-bordered procedure-form">
@@ -360,7 +360,7 @@ $(document).ready(function()
 			</center>
 		</div>
 	</div>
-	<div class="row box-globals" id="changeProviderInfo">
+	<div class="row box-globals" id="changeProviderInfo" data-id="physician">
 		<div class="table-responsive no-padding">
 			<table class="table table-hover table-bordered procedure-form">
 				<thead>
@@ -515,6 +515,13 @@ $(document).ready(function()
 				</tbody>
 			</table>
 
+		</div>
+	</div>
+	<div class="row box-globals">
+		<div class="row form-holder">
+			<center>
+				<p class="show-money">GRAND TOTAL  =  <span class="show-money">&#8369;</span><span class="show-money" id="grand_total">{{$grand_total}}</span></p>
+			</center>
 		</div>
 	</div>
 </form>

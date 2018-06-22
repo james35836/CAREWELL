@@ -45,28 +45,19 @@
 	</div>
 	
 </div>
-<div class="row box-globals">
+<div class="row box-globals" id="load-approval">
 	<div class="form-holder">
 		<div class=" col-md-4 col-xs-12 pull-left">
-			<div class="input-group top-element">
-			    <input type="text" class="form-control datepicker" id="payable_from"/>
-			    <span class="input-group-addon">TO</span>
-			    <input type="text" class="form-control datepicker" id="payable_to"/>
-			</div>
+			<h4 class="box-title medical-btn-sample">APPROVAL LIST</h4>
 		</div>
 		<div class="col-md-3 col-xs-12 pull-right">
-              	<div class="input-group top-element">
-               	<input type="text" class="form-control search-approval-key">
-                	<span class="input-group-btn">
-                  		<button type="button" class="btn btn-default search-approval" ><i class="fa fa-search"></i></button>
-                	</span>
-              	</div>
-          </div>
-	</div>
+	        <input type="text" data-ref="approval" data-name="member-approval" class="form-control search-key">
+	    </div>
+    </div>
 	<div class="form-holder">
 		<div class="load-data load-member-approval" data-target="load-member-approval">
 			<div class="box-body table-responsive no-padding">
-	              	<table class="table table-hover table-bordered">
+	              	<table class="table table-hover table-bordered member-approval">
 		               <tr>
 		               	<th><input type="checkbox" class="checkAllCheckbox"></th>
 		                  	<th class="live-search">APPROVAL #</th>
@@ -80,7 +71,7 @@
 		               @foreach($_approval_active as $approval_active)
 		               <tr>
 		               	<td><input type="checkbox" ></td>
-		                  	<td><span class="label label-success view-approval-details" data-size="md" data-approval_id="{{$approval_active->approval_id}}">{{$approval_active->approval_number}}</span></td>
+		                  	<td class="approval"><span class="label label-success view-approval-details" data-size="md" data-approval_id="{{$approval_active->approval_id}}">{{$approval_active->approval_number}}</span></td>
 		                  	<td>{{$approval_active->member_universal_id}}</td>
 		                  	<td>{{$approval_active->member_carewell_id}}</td>
 		                  	<td>{{$approval_active->member_first_name." ".$approval_active->member_last_name }}</td>

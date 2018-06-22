@@ -10,6 +10,9 @@
 | 
 |
 */
+
+Route::get('/update_limit', 								'MaintenanceController@update_limit');
+
 Route::get('/importExport', 								'TestController@importExport');
 Route::get('/downloadExcel/{type}', 						'TestController@downloadExcel');
 Route::post('/importExcel',                                 'TestController@importExcel');

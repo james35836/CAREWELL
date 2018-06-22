@@ -83,9 +83,9 @@ function payable_center()
 				},
 				url:'/payable/get_approval/'+provider_id,
 				method: "get",
-                	success: function(data)
+                success: function(data)
 				{
-					$('.load-member-approval').html(data);
+					$('#load-approval').html(data);
 				}
 			});
 		});
@@ -175,9 +175,9 @@ function payable_center()
 				globals.confirm_modals(confirmModalMessage,confirmModalAction);
 				
 				payableData.append("payable_soa_number",   	document.getElementById('payable_soa_number').value);
-		          payableData.append("payable_recieved", 		document.getElementById('payable_recieved').value);
-		          payableData.append("payable_due", 			document.getElementById('payable_due').value);
-		          payableData.append("payable_id", 			document.getElementById('payable_id').value);
+		        payableData.append("payable_recieved", 		document.getElementById('payable_recieved').value);
+		        payableData.append("payable_due", 			document.getElementById('payable_due').value);
+		        payableData.append("payable_id", 			document.getElementById('payable_id').value);
 		     }
 		});
     	}

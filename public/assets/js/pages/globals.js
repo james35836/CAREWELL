@@ -565,8 +565,33 @@ function globals()
     	event_run_paginate();
     	enable_element();
 
-        	
+        search_live_data();	
     }
+    function search_live_data()
+    {
+    	$("body").on("keyup",".search-key", function()
+        {
+            var value   = $(this).val().toLowerCase();
+            var $table  = $(this).closest("table tr");
+            var ref     = $(this).data('ref');
+            $("table."+$(this).data('name')+" tr").each(function(index) 
+            {
+                if (index !== 0)
+                {
+                    $row = $(this);
+                    var id = $row.find("td."+ref+"").text().toLowerCase();
+                    if (id.indexOf(value) !== 0)
+                    {
+                        $row.hide();
+                    }
+                    else
+                    {
+                        $row.show();
+                    }
+                }
+            });
+        });
+    }	
 	function enable_element()
 	{
     	$('body').on('click','button.enable-element',function()
@@ -581,10 +606,6 @@ function globals()
     		$(this).closest('div.modal').find('input.total_philhealth').attr('readonly',true);
     		$(this).closest('div.modal').find('input.total_charge_patient').attr('readonly',true);
     		$(this).closest('div.modal').find('input.total_charge_carewell').attr('readonly',true);
-    	
-
-
-
     	});
 	}
     function event_run_paginate()

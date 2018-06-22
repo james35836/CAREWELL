@@ -38,12 +38,14 @@ function availment_center()
             remove_approval_details_submit();
         });
 	}
+
 	this.get_total = function($this)
 	{
 		var amount 		= 0;
 		var philhealth 	= 0;
 		var patient 	= 0;
 		var carewell 	= 0;
+		var grand_total = 0;
 		$this.find('.gross-amount').each(function() 
 		{
 			amount += Number($(this).val());
@@ -66,6 +68,12 @@ function availment_center()
 		$this.find('input.total_charge_patient').val(patient);
 		$this.find('input.total_charge_carewell').val(carewell);
 
+
+		$('input.total_charge_carewell').each(function()
+		{
+			grand_total += Number($(this).val());
+		});
+		$('#grand_total').html(grand_total);
 	}
 
 	this.check_procedure_amount = function(carewell,member_id,procedure,availment_id)
@@ -114,6 +122,10 @@ function availment_center()
 			{
 				toastr.error('CURRENT BALANCE : '+data.current_balance+' Member has insufficient balance for this procedure <br>or<br> have reached his/her coverage limit.', 'Something went wrong!', {timeOut: 5000});                                                           
 			}
+		    if(data.ref=="reached_limit")
+		    {
+		    	toastr.error('Member has reached the limit for this procedure <br>or<br> have reached his/her coverage limit.', 'Something went wrong!', {timeOut: 5000});                                                           
+		    }
 			
 		}
 		else if(functionReference=="availment")
@@ -468,7 +480,7 @@ function availment_center()
 			}
 		    else 
 			{
-				var	confirmModalMessage = 'Are you sure you want to add this approval?';
+				var	confirmModalMessage = 'Are you sure you want to update this approval?';
 				var confirmModalAction = 'update-approval-submit';
 				globals.confirm_modals(confirmModalMessage,confirmModalAction);
 				ajaxData = $("form.approval-update-form").serialize();

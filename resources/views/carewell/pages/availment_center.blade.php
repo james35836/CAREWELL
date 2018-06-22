@@ -9,9 +9,9 @@
      <div class="row">
           <div class="nav-tabs-custom">
                <ul class="nav nav-tabs">
-                    <li class="active"><a href="#activeTab" data-toggle="tab">ACTIVE </a></li>
+                    <li class="active"><a href="#activeTab" data-toggle="tab">OPEN </a></li>
                     <li><a href="#pendingTab" data-toggle="tab">PENDING</a></li>
-                    <li><a href="#inActiveTab" data-toggle="tab">INACTIVE </a></li>
+                    <li><a href="#inActiveTab" data-toggle="tab">CLOSE </a></li>
                </ul>
                <div class="tab-content">
                     <div class="tab-pane active" id="activeTab">

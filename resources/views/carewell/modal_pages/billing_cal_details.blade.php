@@ -1,25 +1,4 @@
 <script type="text/javascript">
-$(".search-key").on("keyup", function() 
-{
-    var value = $(this).val();
-    var $table = $(this).closest("table tr");
-    $("table."+$(this).data('name')+" tr").each(function(index) 
-    {
-        if (index !== 0) 
-        {
-        	$row = $(this);
-        	var id = $row.find("td.members").text();
-        	if (id.indexOf(value) !== 0) 
-        	{
-                $row.hide();
-            }
-            else 
-            {
-                $row.show();
-            }
-        }
-    });
-});
 $(function () 
 {
 	$('.select2').select2();
@@ -204,9 +183,12 @@ table tr td
 		<div class="tab-content">
 			<div class="tab-pane active" id="active">
 				<div class="row">
+					<div class=" col-md-4 col-xs-12 pull-left">
+						<h4 class="box-title medical-btn-sample">MEMBER LIST</h4>
+					</div>
 		            <div class="col-md-3 col-xs-12 pull-right">
-		             	<input type="text" data-name="active_cal_member" class="top-element form-control search-key">
-		            </div>
+                        <input type="text" data-ref="members" data-name="active_cal_member" class=" form-control search-key">
+                    </div>
 		        </div>
 				<div class="box-body table-responsive no-padding">
 					<table class="table table-bordered active_cal_member">
@@ -257,9 +239,12 @@ table tr td
 			</div>
 			<div class="tab-pane" id="inActive">
 				<div class="row">
+					<div class=" col-md-4 col-xs-12 pull-left">
+						<h4 class="box-title medical-btn-sample">MEMBER LIST</h4>
+					</div>
 		            <div class="col-md-3 col-xs-12 pull-right">
-		             	<input type="text" data-name="inactive_cal_member" class="top-element form-control search-key">
-		            </div>
+                        <input type="text" data-ref="members" data-name="inactive_cal_member" class=" form-control search-key">
+                    </div>
 		        </div>
 				<div class="box-body table-responsive no-padding">
 					<table class="table table-bordered inactive_cal_member">
