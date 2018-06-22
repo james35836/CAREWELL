@@ -95,6 +95,13 @@ $(document).ready(function()
 			<a target="_new_page" href="/availment/approval_export_pdf/{{$approval_details->approval_id}}"><button type="button" data-transaction_member_id="{{$approval_details->approval_id}}" class="btn btn-primary top-element" ><i class="fa fa-file-pdf-o btn-icon"></i>EXPORT PDF</button></a>
 		</div>
 	</div>
+	<div class="row box-globals">
+		<div class="row form-holder">
+			<center>
+			<p style="font-size:20px;">CALLER INFO</p>
+			</center>
+		</div>
+	</div>
 	<div class="row box-globals" >
 		<div class="form-holder col-md-12 col-xs-12">
 			<div class=" col-md-1 col-xs-6 pull-right no-padding">
@@ -128,6 +135,48 @@ $(document).ready(function()
 			<div class="col-md-4 form-content">
 				<input type="text" disabled class="form-control"  value="{{$approval_details->user_contact_number}}" />
 			</div>
+		</div>
+	</div>
+	@if(count($ajudication)!=0)
+	<div class="row box-globals">
+		<div class="row form-holder">
+			<center>
+			<p style="font-size:20px;">AJUDICATION</p>
+			</center>
+		</div>
+	</div>
+	<div class="row box-globals" >
+		<div class="form-holder">
+			<div class="col-md-2 form-content">
+				<label>Name</label>
+			</div>
+			<div class="col-md-4 form-content form-group">
+				<input type="text" disabled class="form-control" value="{{$ajudication->user_first_name." ".$ajudication->user_last_name}}"  />
+			</div>
+			<div class="col-md-2 form-content">
+				<label>ID Number</label>
+			</div>
+			<div class="col-md-4 form-content">
+				<input type="text" disabled class="form-control" value="{{$ajudication->user_number}}"  />
+			</div>
+		</div>
+		<div class="form-holder">
+			<div class="col-md-2 form-content">
+				<label>Date Ajudicate</label>
+			</div>
+			<div class="col-md-4 form-content">
+				<input type="text" disabled class="form-control" value="{{date("F j, Y",strtotime($ajudication->ajudication_created))}}" />
+			</div>
+			<div class="col-md-6 form-content">
+			</div>
+		</div>
+	</div>
+	@endif
+	<div class="row box-globals">
+		<div class="row form-holder">
+			<center>
+			<p style="font-size:20px;">MEMBER INFO</p>
+			</center>
 		</div>
 	</div>
 	<div class="row box-globals" >
@@ -172,6 +221,13 @@ $(document).ready(function()
 			<div class="col-md-4 form-content">
 				<input type="text" disabled class="form-control" value="{{date_create($approval_details->member_birthdate)->diff(date_create('today'))->y }}" />
 			</div>
+		</div>
+	</div>
+	<div class="row box-globals">
+		<div class="row form-holder">
+			<center>
+			<p style="font-size:20px;">AVAILMENT INFO</p>
+			</center>
 		</div>
 	</div>
 	<div class="row box-globals">

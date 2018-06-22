@@ -400,8 +400,8 @@ class SearchController extends ActiveAuthController
 					}
 					$output = view('carewell.filtering.company_filtering_active',$data);
 				break;
-					case 'member':
-				$data['_member_active'] = TblMemberModel::where('tbl_member.archived',0)
+				case 'member':
+					$data['_member_active'] = TblMemberModel::where('tbl_member.archived',0)
 									->where('tbl_member_company.archived',0)
 									->where(function($query)use($key)
 					{
@@ -412,20 +412,18 @@ class SearchController extends ActiveAuthController
 					})
 									->Member()
 									->paginate(10);
-				$output = view('carewell.filtering.member_filtering_active',$data);
-					break;
-					case 'provider':
-						$data['_provider_active']  = TblProviderModel::where('archived',0)
-											->where('tbl_provider.provider_name','like','%'.$key.'%')
-				->paginate(10);
+					$output = view('carewell.filtering.member_filtering_active',$data);
+				break;
+				case 'provider':
+					$data['_provider_active']  = TblProviderModel::where('archived',0)->where('tbl_provider.provider_name','like','%'.$key.'%')->paginate(10);
 					foreach ($data['_provider_active'] as $key => $provider)
 					{
 					$data['_provider_active'][$key]['provider_payee'] =  TblProviderPayeeModel::where('provider_id',$provider->provider_id)->get();
 					}
 					$output = view('carewell.filtering.provider_filtering_active',$data);
-					break;
-					case 'doctor':
-				$data['_doctor_active'] = TblDoctorModel::where('tbl_doctor.archived',0)
+				break;
+				case 'doctor':
+					$data['_doctor_active'] = TblDoctorModel::where('tbl_doctor.archived',0)
 									->where('tbl_doctor.doctor_full_name','like','%'.$key.'%')
 									->paginate(10);
 					foreach ($data['_doctor_active'] as $key => $doctor)
@@ -437,16 +435,16 @@ class SearchController extends ActiveAuthController
 							->join('tbl_provider','tbl_provider.provider_id','=','tbl_doctor_provider.provider_id')
 							->get();
 					}
-				$output = view('carewell.filtering.doctor_filtering_active',$data);
-					break;
-					case 'billing':
+					$output = view('carewell.filtering.doctor_filtering_active',$data);
+				break;
+				case 'billing':
 					$data['_cal_open'] 	= TblCalModel::join('tbl_company','tbl_company.company_id','=','tbl_cal.company_id')
 								->where('tbl_cal.archived',0)
 								->where(function($query)use($key)
-				{
-				$query->where('tbl_cal.cal_number','like','%'.$key.'%');
-				$query->orWhere('tbl_company.company_name','like','%'.$key.'%');
-				})
+								{
+									$query->where('tbl_cal.cal_number','like','%'.$key.'%');
+									$query->orWhere('tbl_company.company_name','like','%'.$key.'%');
+								})
 								->paginate(10);
 					foreach ($data['_cal_open'] as $key => $cal_open)
 						{
@@ -454,24 +452,35 @@ class SearchController extends ActiveAuthController
 						$data['_cal_open'][$key]['members']   =  TblCalMemberModel::where('cal_id',$cal_open->cal_id)->count();
 						}
 					$output = view('carewell.filtering.billing_filtering_active',$data);
-					break;
-					case 'availment':
+				break;
+				case 'availment':
 					$data['_approval_active'] = TblApprovalModel::where('tbl_approval.archived',0)->where('tbl_member_company.archived',0)
 														->where(function($query)use($key)
 									{
-									$query->where('tbl_approval.approval_number','like','%'.$key.'%');
-			$query->orWhere('tbl_member.member_first_name','like','%'.$key.'%');
-			$query->orWhere('tbl_company.company_name','like','%'.$key.'%');
-			$query->orWhere('tbl_provider.provider_name','like','%'.$key.'%');
+										$query->where('tbl_approval.approval_number','like','%'.$key.'%');
+										$query->orWhere('tbl_member.member_first_name','like','%'.$key.'%');
+										$query->orWhere('tbl_company.company_name','like','%'.$key.'%');
+										$query->orWhere('tbl_provider.provider_name','like','%'.$key.'%');
 									})
 									->ApprovalInfo()
 									->paginate(10);
-				$output = view('carewell.filtering.availment_filtering_active',$data);
-					break;
-					case 'coverage_plan':
+					$output = view('carewell.filtering.availment_filtering_active',$data);
+				break;
+				case 'coverage_plan':
 					$data['_active_coverage_plan']    = TblCoveragePlanModel::where('archived',0)->where('coverage_plan_name','like','%'.$key.'%')->paginate(10);
-				$output = view('carewell.filtering.coverage_filtering_active',$data);
-					break;
+					$output = view('carewell.filtering.coverage_filtering_active',$data);
+				break;
+				case 'payment-member-report':
+					$data['_member']    = TblMemberModel::where('tbl_member.archived',0)->where('tbl_member_company.archived',0)->Member()
+					->where(function($query)use($key)
+					{
+					$query->where('tbl_member.member_last_name','like','%'.$key.'%');
+					$query->orWhere('tbl_member.member_first_name','like','%'.$key.'%');
+					$query->orWhere('tbl_member_company.member_carewell_id','like','%'.$key.'%');
+					$query->orWhere('tbl_member.member_universal_id','like','%'.$key.'%');
+					})->paginate(10);
+					$output = view('carewell.filtering.reports_payment_report_filtering',$data);
+				break;
 				}
 			}
 			else if($request->val_archived==1)

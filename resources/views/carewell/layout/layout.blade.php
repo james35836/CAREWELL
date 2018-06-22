@@ -235,6 +235,9 @@
                 </form>
                 <ul class="sidebar-menu" data-widget="tree">
                     <li class="header">MAIN NAVIGATION</li>
+                    <!-- PAGE -->
+                    @include('carewell.layout.page')
+                    <!-- END PAGE -->
                     <li style="background-color:#913D88">
                         <a href="/dashboard">
                             <i class="fa fa-dashboard"></i> <span>DASHBOARD</span>
@@ -354,7 +357,7 @@
             
             <!-- Main content -->
             <section class="content">
-                
+              
                 @yield('content')
                 <!-- MODALS DONT DELETE-->
                 {{-- @include('carewell.modals.modal-lg')

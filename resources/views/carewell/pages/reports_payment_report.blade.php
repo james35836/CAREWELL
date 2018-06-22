@@ -5,11 +5,11 @@
     <div class="row">
         
             <div class="nav-tabs-custom">
-                 <div class="tab-content">
+                 <div class="tab-pane tab-content">
                     
                         <div class="row">
                             <div class=" col-md-3 col-xs-12 pull-left">
-                                <select class="form-control top-element filtering" data-archived="0" data-name="member">
+                                <select class="form-control top-element filtering" data-archived="0" data-name="payment-member-report">
                                     <option>SELECT COMPANY</option>
                                     @foreach($_company as $company)
                                     <option value="{{$company->company_id}}">{{$company->company_name}}</option>
@@ -20,12 +20,12 @@
                                 <div class="input-group top-element">
                                     <input type="text" class="form-control search-key">
                                     <span class="input-group-btn">
-                                        <button type="button" class="btn btn-default searching" data-name="member" data-archived="0"><i class="fa fa-search"></i></button>
+                                        <button type="button" class="btn btn-default searching" data-name="payment-member-report" data-archived="0"><i class="fa fa-search"></i></button>
                                     </span>
                                 </div>
                             </div>
                         </div>
-                        <div id="showTable" class="load-data load-active-company" data-target="load-active-company">
+                        <div id="showTable" class="load-data payment-member-report" data-target="payment-member-report">
                             <div class="box-body table-responsive no-padding">
                                 <table class="table table-hover table-bordered">
                                     <tr class="titlerow">

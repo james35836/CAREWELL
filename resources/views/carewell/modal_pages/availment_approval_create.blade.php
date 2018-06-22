@@ -188,7 +188,6 @@ $(document).ready(function()
 			<div class="col-md-10 form-content">
 				<textarea name="approval_complaint" id="approval_complaint" cols="2" rows="3" class="form-control" placeholder="REQUIRED"></textarea>
 			</div>
-			
 		</div>
 		<div class="row form-holder">
 		</div>

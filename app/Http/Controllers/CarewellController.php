@@ -64,6 +64,8 @@ use App\Http\Model\TblApprovalProcedureModel;
 use App\Http\Model\TblApprovalDiagnosisModel;
 use App\Http\Model\TblApprovalPayeeModel;
 use App\Http\Model\TblApprovalTotalModel;
+use App\Http\Model\TblApprovalAjudicationModel;
+
 
 use App\Http\Model\TblLaboratoryModel;
 use App\Http\Model\TblDiagnosisModel;
@@ -1846,8 +1848,8 @@ class CarewellController extends ActiveAuthController
 		$data['_payee_other']     = TblApprovalPayeeModel::where('approval_id',$approval_id)->where('type','payee')->get();
 		$data['total_procedure']  = TblApprovalTotalModel::where('approval_id',$approval_id)->where('total_type','procedure')->first();
 		$data['total_doctor']     = TblApprovalTotalModel::where('approval_id',$approval_id)->where('total_type','doctor')->first();
-
-		$data['grand_total']      = $data['total_procedure']->total_charge_carewell + $data['total_doctor']->total_charge_carewell;
+        $data['grand_total']      = $data['total_procedure']->total_charge_carewell + $data['total_doctor']->total_charge_carewell;
+        $data['ajudication']      = TblApprovalAjudicationModel::where('approval_id',$approval_id)->User()->first();
 
 		/*BELOW ARE FOR UPDATE DATA*/
 		$approval                 = TblApprovalModel::where("approval_id",$approval_id)->first();
@@ -1941,6 +1943,22 @@ class CarewellController extends ActiveAuthController
 	public function availment_update_approval_submit(Request $request)
 	{
 	    /*AJUDICATED HERE*/
+	    $user       			= StaticFunctionController::global();
+	    $ajudicate['user_id'] 				= $user->user_id;
+	    $ajudicate['approval_id'] 			= $request->approval_id;
+	    $ajudicate['ajudication_created'] 	= Carbon::now();
+
+	    $ajudication = TblApprovalAjudicationModel::where('approval_id',$request->approval_id);
+	    if($ajudication->count()==0)
+	    {
+	    	$ajudication->insert($ajudicate);
+	    }
+	    else
+	    {
+	    	$ajudication->update($ajudicate);
+	    }
+
+
 		$approval = TblApprovalModel::where('approval_id',$request->approval_id)->first();
         if($approval->availment_id==$request->availment_id)
 		{
@@ -2634,7 +2652,8 @@ class CarewellController extends ActiveAuthController
 	public function reports_payment_report_member($member_id)
 	{
 		$new_year           = date('Y'); 
-		$payment_mode 		= 'SEMI-MONTHLY';
+		$member             = TblMemberCompanyModel::where('member_id',$member_id)->where('archived',0)->first();
+		$data['payment_mode']  = $payment_mode 		= 'SEMI-MONTHLY';
 		$data['member_id'] 	= $member_id;
 		$data['link'] 		= '/reports/payment_report/excel/0/'.$payment_mode.'/'.$member_id;
 		$data['_payment']   = TblCalPaymentModel::where('tbl_cal_payment.archived',1)->where('member_id',$member_id)->select(DB::raw("YEAR(cal_payment_start) as year"))->groupby('year')->orderBy('year','ASC')->get();
@@ -2644,10 +2663,9 @@ class CarewellController extends ActiveAuthController
 			                                        ->whereYear('tbl_cal_payment.cal_payment_start', '=', $year->year)
 			                                        ->where('tbl_cal_payment.archived',1);
 	          
-	          $data['_payment'][$key]['cal_payment'] = $TblCalPaymentModel->CalInfo()->get();
-	        	$date                                  = $TblCalPaymentModel->first();
-			$data['_payment'][$key]['colspan']     = StaticFunctionController::moth_reference($date->cal_payment_start);
-			
+	        $data['_payment'][$key]['cal_payment'] 	= $TblCalPaymentModel->CalInfo()->get();
+	        $date                                  	= $TblCalPaymentModel->first();
+			$data['_payment'][$key]['colspan']     	= StaticFunctionController::moth_reference($date->cal_payment_start);
 		}
 		return view('carewell.modal_pages.reports_payment_report_member',$data);
 	}

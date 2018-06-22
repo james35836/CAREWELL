@@ -566,29 +566,43 @@ function globals()
     	enable_element();
 
         search_live_data();	
+        global_static_function();
+    }
+    function global_static_function()
+    {
+    	
     }
     function search_live_data()
     {
     	$("body").on("keyup",".search-key", function()
         {
+
             var value   = $(this).val().toLowerCase();
             var $table  = $(this).closest("table tr");
             var ref     = $(this).data('ref');
             $("table."+$(this).data('name')+" tr").each(function(index) 
             {
-                if (index !== 0)
-                {
-                    $row = $(this);
-                    var id = $row.find("td."+ref+"").text().toLowerCase();
-                    if (id.indexOf(value) !== 0)
-                    {
-                        $row.hide();
-                    }
-                    else
-                    {
-                        $row.show();
-                    }
-                }
+            	if (!index) return;
+		        $(this).find("td").each(function () 
+		        {
+		            var id = $(this).text().toLowerCase().trim();
+		            var not_found = (id.indexOf(value) == -1);
+		            $(this).closest('tr').toggle(!not_found);
+		            return not_found;
+		        });
+                // if (index !== 0)
+                // {
+                //     $row = $(this);
+                //     var id = $row.find("td."+ref+"").text().toLowerCase();
+                //     if (id.search(value) !== 0)
+                //     {
+                //         $row.hide();
+                //     }
+                //     else
+                //     {
+                //         $row.show();
+                //     }
+                // }
             });
         });
     }	
@@ -644,19 +658,19 @@ function globals()
     	});
 	}
 
-    	function getArticles(url, load_data) 
+	function getArticles(url, load_data) 
+	{
+    	target = load_data.data("target");
+    	console.log(target);
+    	load_data.load(url+" div."+target, function()
     	{
-        	target = load_data.data("target");
-        	console.log(target);
-        	load_data.load(url+" div."+target, function()
+        	if (typeof loading_done == 'function')
         	{
-            	if (typeof loading_done == 'function')
-            	{
-                
-            	}
-        	})
-    	}
-    	function filtering()
+            
+        	}
+    	})
+	}
+    function filtering()
 	{
 		$('body').on('change','.filtering',function()
 		{
