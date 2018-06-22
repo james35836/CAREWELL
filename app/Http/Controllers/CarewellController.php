@@ -1738,7 +1738,7 @@ class CarewellController extends ActiveAuthController
 		
 		$approvalData = new TblApprovalModel;
 		$approvalData->approval_number            = StaticFunctionController::updateReferenceNumber('approval');
-		$approvalData->approval_complaint         = $request->approval_complaint;
+		$approvalData->approval_complaint         = StaticFunctionController::nullableToString($request->approval_complaint,'string');
 		$approvalData->approval_date_availed      = $request->approval_date_availed;
 		$approvalData->approval_created           = Carbon::now();
 		$approvalData->charge_diagnosis_id        = $request->charge_diagnosis_id;
@@ -1765,7 +1765,7 @@ class CarewellController extends ActiveAuthController
 			$procedureData->procedure_philhealth      = $request->procedure_philhealth[$key];
 			$procedureData->procedure_charge_patient  = $request->procedure_charge_patient[$key];
 			$procedureData->procedure_charge_carewell = $request->procedure_charge_carewell[$key];
-			$procedureData->procedure_remarks         = $request->procedure_remarks[$key];
+			$procedureData->procedure_remarks         = StaticFunctionController::nullableToString($request->procedure_remarks[$key],'string');
 			$procedureData->diagnosis_id              = 1;
 			$procedureData->approval_id               = $approvalData->approval_id;
 			$procedureData->save();
@@ -1940,11 +1940,9 @@ class CarewellController extends ActiveAuthController
 	}
 	public function availment_update_approval_submit(Request $request)
 	{
-		
+	    /*AJUDICATED HERE*/
 		$approval = TblApprovalModel::where('approval_id',$request->approval_id)->first();
-
-
-		if($approval->availment_id==$request->availment_id)
+        if($approval->availment_id==$request->availment_id)
 		{
 			Self::update_insert_procedure($request->all());
 		}

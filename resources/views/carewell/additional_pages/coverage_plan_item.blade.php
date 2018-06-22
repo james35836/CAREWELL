@@ -1,24 +1,4 @@
-<script type="text/javascript">
-$(".search-key").on("keyup", function()
-{
-var value   = $(this).val();
-var $table  = $(this).closest("table tr");
-$("table."+$(this).data('name')+" tr").each(function(index) {
-if (index !== 0)
-{
-$row = $(this);var id = $row.find("td.procedure").text();
-if (id.indexOf(value) !== 0)
-{
-$row.hide();
-}
-else
-{
-$row.show();
-}
-}
-});
-});
-</script>
+
 <form method="POST">
     <input type="hidden" id="availment_id"  value="{{$availment_id}}"/>
     <input type="hidden" id="session_name"  value="{{$session_name}}"/>
@@ -82,9 +62,7 @@ $row.show();
                 <div class="tab-pane active" id="labTab">
                     <div class="row">
                         <div class="col-md-3 col-xs-12 pull-right">
-                            
-                            <input type="text" data-name="laboratory" class="top-element form-control search-key">
-                            
+                            <input type="text" data-ref="procedure" data-name="laboratory" class="top-element form-control search-key">
                         </div>
                     </div>
                     <div  class="table-responsive no-padding">

@@ -186,7 +186,7 @@ $(document).ready(function()
 				<label>Chief Complaint</label>
 			</div>
 			<div class="col-md-10 form-content">
-				<textarea name="approval_complaint" id="approval_complaint" cols="2" rows="3" class="form-control" >NOTHING TO COMPLAIN</textarea>
+				<textarea name="approval_complaint" id="approval_complaint" cols="2" rows="3" class="form-control" placeholder="REQUIRED"></textarea>
 			</div>
 			
 		</div>

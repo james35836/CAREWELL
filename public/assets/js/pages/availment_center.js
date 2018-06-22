@@ -480,7 +480,7 @@ function availment_center()
 			}
 		    else 
 			{
-				var	confirmModalMessage = 'Are you sure you want to add this approval?';
+				var	confirmModalMessage = 'Are you sure you want to update this approval?';
 				var confirmModalAction = 'update-approval-submit';
 				globals.confirm_modals(confirmModalMessage,confirmModalAction);
 				ajaxData = $("form.approval-update-form").serialize();
