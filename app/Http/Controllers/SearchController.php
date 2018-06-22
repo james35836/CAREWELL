@@ -99,11 +99,22 @@ class SearchController extends ActiveAuthController
 						                                             ->where('company_id',$company->company_id)
 						                                             ->join('tbl_approval','tbl_approval.member_id','=','tbl_member_company.member_id')
 						                                             ->get();
+
 						$data['_company'][$key]['count'] = TblMemberCompanyModel::CountAvailment($parameter,$date)->count();
+
+						$data['_company'][$key]['count_total'] 		= TblMemberCompanyModel::join('tbl_approval','tbl_approval.member_id','=','tbl_member_company.member_id')
+											                ->where('tbl_member_company.archived',0)
+											                ->where('coverage_plan_id',$company->coverage_plan_id)
+											                ->where('tbl_approval.approval_created','LIKE','%'.$date.'%')->count();
 
 						foreach($_param_name as $param=>$param_name)
 			            {
 			            	$data['_company'][$key][''.$_param_name[$param].''] 	= TblMemberCompanyModel::CountAvailment($parameter,$date.'-'.$_param_val[$param].'%')->count();  
+
+			            	$data['_company'][$key][$_param_name[$param].'_total'] 	= TblMemberCompanyModel::join('tbl_approval','tbl_approval.member_id','=','tbl_member_company.member_id')
+																	                ->where('tbl_member_company.archived',0)
+																	                ->where('coverage_plan_id',$company->coverage_plan_id)
+																	                ->where('tbl_approval.approval_created','LIKE','%'.$date.'-'.$_param_val[$param].'%')->count();
 			            }				      
 					}
 					$view = view('carewell.filtering_date.reports_availment_per_month_filtering',$data);
@@ -134,6 +145,7 @@ class SearchController extends ActiveAuthController
 					{
 						$data['_availment'][$key]['count'] = TblApprovalModel::where('availment_id',$availment->availment_id)
 															->where('tbl_approval.approval_created','LIKE','%'.$date.'%')
+															->where('archived',0)
 															->count();
 
 						$data['_availment'][$key]['count_sum']	= TblApprovalModel::where('availment_id',$availment->availment_id)
@@ -201,6 +213,12 @@ class SearchController extends ActiveAuthController
 						foreach($_param_name as $param=>$param_name)
 			            {
 			            	$data['_company'][$key][''.$_param_name[$param].''] 	= TblMemberCompanyModel::CountAvailment($parameter,$date.'-'.$_param_val[$param].'%')->count();  
+			            
+			            	$data['_company'][$key][$_param_name[$param].'_total'] 	= TblMemberCompanyModel::join('tbl_approval','tbl_approval.member_id','=','tbl_member_company.member_id')
+													                ->where('tbl_member_company.archived',0)
+													                ->where('coverage_plan_id',$company->coverage_plan_id)
+													                ->where('tbl_approval.approval_created','LIKE','%'.$date.'-'.$_param_val[$param].'%')
+													                ->count();
 			            }			      
 					}
 

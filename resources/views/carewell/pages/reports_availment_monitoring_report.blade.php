@@ -2,19 +2,6 @@
 @section('content')
 <script type="text/javascript">
 $(document).ready(function(){
-settings_reports.calculateSum('sum-jan');
-settings_reports.calculateSum('sum-feb');
-settings_reports.calculateSum('sum-mar');
-settings_reports.calculateSum('sum-apr');
-settings_reports.calculateSum('sum-may');
-settings_reports.calculateSum('sum-jun');
-settings_reports.calculateSum('sum-jul');
-settings_reports.calculateSum('sum-aug');
-settings_reports.calculateSum('sum-sep');
-settings_reports.calculateSum('sum-oct');
-settings_reports.calculateSum('sum-nov');
-settings_reports.calculateSum('sum-dec');
-settings_reports.calculateSum('sum-count');
 $('body').on('click','.year-picker',function(e)
 {
 $(this).datepicker({

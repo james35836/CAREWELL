@@ -298,6 +298,7 @@
                             <li style="background-color:#26A65B"><a href="/reports/breakdown"><i class="fa fa-circle-o"></i>BREAKDOWN</a></li>
                             <li style="background-color:#26A65B"><a href="/reports/consolidation"><i class="fa fa-circle-o"></i>CONSOLIDATION</a></li>
                             <li style="background-color:#26A65B"><a href="#"><i class="fa fa-circle-o"></i>SUMMARY</a></li>
+                            <li style="background-color:#26A65B"><a href="/reports/active_per_month"><i class="fa fa-circle-o"></i><span style="font-size:12px;">ACTIVE PER MONTH</span></a></li>
                         </ul>
                     </li>
                 </ul>
