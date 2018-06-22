@@ -113,8 +113,6 @@ function settings_reports()
 			var payment = document.getElementById('reports_payment').value;
 
 			alert(company+" "+deployment+" "+payment);
-
-
 		})
 	}
 
