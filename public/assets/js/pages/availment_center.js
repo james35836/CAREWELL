@@ -347,20 +347,29 @@ function availment_center()
 
 		$('body').on('change','select.getAvailmentInfo',function() 
 		{
-			if($(this).data('warning')=="show")
+
+			if($(this).val()==4)
 			{
-				var	confirmModalMessage = 'You are required to change all the information in description, please reload if you do not want to continue!<br><br>Do you want to proceed?';
-				var confirmModalAction = 'getAvailmentInfo';
-				globals.confirm_modals(confirmModalMessage,confirmModalAction);
+				$(this).closest('.modal').find('div#minorOps').css('display','none');
 			}
 			else
 			{
-				var ajaxCallData 	= new FormData();
-	        	ajaxCallData.append('availment_id',		$(this).val());
-	        	ajaxCallData.append('member_id',		$('#member_id').val());
-	        	ajaxCallData.append('warning',			$(this).data('warning'));
-				globals.global_ajax_call_submit('/get/availment_info',ajaxCallData,availment_center,'availment');
+				if($(this).data('warning')=="show")
+				{
+					var	confirmModalMessage = 'You are required to change all the information in description, please reload if you do not want to continue!<br><br>Do you want to proceed?';
+					var confirmModalAction = 'getAvailmentInfo';
+					globals.confirm_modals(confirmModalMessage,confirmModalAction);
+				}
+				else
+				{
+					var ajaxCallData 	= new FormData();
+		        	ajaxCallData.append('availment_id',		$(this).val());
+		        	ajaxCallData.append('member_id',		$('#member_id').val());
+		        	ajaxCallData.append('warning',			$(this).data('warning'));
+					globals.global_ajax_call_submit('/get/availment_info',ajaxCallData,availment_center,'availment');
+				}
 			}
+			
 		});
 		$('body').on('click','button.getAvailmentInfo',function() 
 		{
@@ -410,22 +419,22 @@ function availment_center()
 	            		finalDiagnosisData.push(selectedFinal);
 	            	}
             	});
-            	$("select.doctor-payee").each(function(i, sel)
-            	{
-	            	var selectedPayee = $(sel).val();
-	            	if(selectedPayee!=0)
-	            	{
-	            		payeeData.push(selectedPayee);
-	            	}
-            	});
+            	// $("select.doctor-payee").each(function(i, sel)
+            	// {
+	            // 	var selectedPayee = $(sel).val();
+	            // 	if(selectedPayee!=0)
+	            // 	{
+	            // 		payeeData.push(selectedPayee);
+	            // 	}
+            	// });
             	if(finalDiagnosisData==null||finalDiagnosisData=="")
 				{
 					globals.global_tostr('FINAL DIAGNOSIS');
 				}
-				else if(payeeData==null||payeeData=="")
-				{
-					globals.global_tostr('PAYEE');
-				}
+				// else if(payeeData==null||payeeData=="")
+				// {
+				// 	globals.global_tostr('PAYEE');
+				// }
 				else
 				{
 					var	confirmModalMessage = 'Are you sure you want to add this approval?';

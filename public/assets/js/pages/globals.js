@@ -567,6 +567,15 @@ function globals()
 
         search_live_data();	
         global_static_function();
+
+        disable_child_checkbox();
+    }
+    function disable_child_checkbox()
+    {
+    	$('body').on('click','input.disableChildCheckbox',function(e) 
+		{
+			$(this).closest('.modal').find('div.disableChildCheckbox input:checkbox').prop('disabled', this.checked).prop('checked', false);
+		});
     }
     function global_static_function()
     {
@@ -576,8 +585,7 @@ function globals()
     {
     	$("body").on("keyup",".search-key", function()
         {
-
-            var value   = $(this).val().toLowerCase();
+        	var value   = $(this).val().toLowerCase();
             var $table  = $(this).closest("table tr");
             var ref     = $(this).data('ref');
             $("table."+$(this).data('name')+" tr").each(function(index) 
@@ -590,19 +598,6 @@ function globals()
 		            $(this).closest('tr').toggle(!not_found);
 		            return not_found;
 		        });
-                // if (index !== 0)
-                // {
-                //     $row = $(this);
-                //     var id = $row.find("td."+ref+"").text().toLowerCase();
-                //     if (id.search(value) !== 0)
-                //     {
-                //         $row.hide();
-                //     }
-                //     else
-                //     {
-                //         $row.show();
-                //     }
-                // }
             });
         });
     }	
@@ -686,10 +681,10 @@ function globals()
 				},
 				url:'/page/filtering',
 				method: "POST",
-		        	data: filterData,
-		        	contentType:false,
-	            	cache:false,
-	            	processData:false,
+	        	data: filterData,
+	        	contentType:false,
+            	cache:false,
+            	processData:false,
 				success: function(data)
 				{
 					table.html(data);
@@ -711,10 +706,10 @@ function globals()
 				},
 				url:'/page/searching',
 				method: "POST",
-		        	data: searchData,
-		        	contentType:false,
-	            	cache:false,
-	            	processData:false,
+	        	data: searchData,
+	        	contentType:false,
+            	cache:false,
+            	processData:false,
 				success: function(data)
 				{
 					table.html(data);
@@ -728,7 +723,7 @@ function globals()
 		$('body').on('click','.archived',function()
 		{
 			var	confirmModalMessage = 'Are you sure you want to archived '+$(this).data('name')+'?';
-			var confirmModalAction = 'archived-submit';
+			var confirmModalAction 	= 'archived-submit';
 			globals.confirm_modals(confirmModalMessage,confirmModalAction);
 
 			archivedData.append("archived_id", 		$(this).data('id'));
@@ -747,10 +742,10 @@ function globals()
 				},
 				url:'/archived/submit',
 				method: "POST",
-		        	data: archivedData,
-		        	contentType:false,
-	            	cache:false,
-	            	processData:false,
+	        	data: archivedData,
+	        	contentType:false,
+            	cache:false,
+            	processData:false,
 				success: function(data)
 	            	{
 					setTimeout(function()
@@ -789,10 +784,10 @@ function globals()
 				},
 				url:'/restore/submit',
 				method: "POST",
-		        	data: restoreData,
+		        data: restoreData,
 		       	contentType:false,
-	            	cache:false,
-	            	processData:false,
+	            cache:false,
+	            processData:false,
 				success: function(data)
 	            	{
 					setTimeout(function()
@@ -824,10 +819,12 @@ function globals()
 		});
 		$('body').on('click','input.parent',function (e) 
 		{
-		    $(this).closest('div.parent').find('div.child input:checkbox').prop('checked', this.checked);
+			$(this).find('input.disableChildCheckbox').attr('checked',false);
+			$(this).closest('div.parent').find('div.child input:checkbox').prop('checked', this.checked);
 		});
 		$('body').on('click','input.child',function (e) 
 		{
+			$(this).find('input.disableChildCheckbox').attr('checked',false);
 		    $(this).closest('div.parent').find('input.parent').prop('checked', this.checked);
 		});
 

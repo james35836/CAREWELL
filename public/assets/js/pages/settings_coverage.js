@@ -17,14 +17,14 @@ function settings_coverage()
 			
 			create_coverage_plan();
 			create_coverage_plan_confirm();
-            	create_coverage_plan_submit();
+        	create_coverage_plan_submit();
 
-            	coverage_plan_details();
-            	coverage_add_item();
-            	coverage_add_item_submit();
+        	coverage_plan_details();
+        	coverage_add_item();
+        	coverage_add_item_submit();
 
-            	coverage_mark_new_confirm();
-            	coverage_mark_new_submit();
+        	coverage_mark_new_confirm();
+        	coverage_mark_new_submit();
 
 		});
 
@@ -136,23 +136,23 @@ function settings_coverage()
     	function coverage_add_item()
     	{
     		$("body").on('click','.add-coverage-item',function()
-		{
-			ajaxData.countThis  = $(this);
-			var availment_id    = $(this).data('availment_id');
-			var session_name	= $(this).data('name');
-			var identifier      = $(this).closest('tr').find('button.remove-row').data('number');
-			var modalName 		= 'COVERAGE PLAN PROCEDURE';
-			var modalClass      = 'coverage-plan-item';
-			var modalLink 		= '/settings/coverage/items/'+availment_id+'/'+session_name+'/'+identifier;
-			var modalActionName	= 'ADD PROCEDURE';
-			var modalAction 	= 'coverage-item-submit';
-			var modalSize 		= 'modal-md';
-			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
-        	});
-        	$(".coverage-plan-item-modal").on("hidden.bs.modal", function()
-        	{
-		    $(".coverage-plan-item-modal.modal-body").remove();
-		});
+			{
+				ajaxData.countThis  = $(this);
+				var availment_id    = $(this).data('availment_id');
+				var session_name	= $(this).data('name');
+				var identifier      = $(this).closest('tr').find('button.remove-row').data('number');
+				var modalName 		= 'COVERAGE PLAN PROCEDURE';
+				var modalClass      = 'coverage-plan-item';
+				var modalLink 		= '/settings/coverage/items/'+availment_id+'/'+session_name+'/'+identifier;
+				var modalActionName	= 'ADD PROCEDURE';
+				var modalAction 	= 'coverage-item-submit';
+				var modalSize 		= 'modal-md';
+				globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
+	        	});
+	        	$(".coverage-plan-item-modal").on("hidden.bs.modal", function()
+	        	{
+			    $(".coverage-plan-item-modal.modal-body").remove();
+			});
     	
     	}
     	function coverage_add_item_submit()
