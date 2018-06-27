@@ -2338,6 +2338,7 @@ class CarewellController extends ActiveAuthController
 	{
 		$user         = StaticFunctionController::global();
 		$payableDatas = new TblPayableModel;
+		$payableDatas->payable_number      = StaticFunctionController::updateReferenceNumber('payable');
 		$payableDatas->payable_soa_number  = $request->payable_soa_number;
 		$payableDatas->payable_recieved    = $request->payable_recieved; 
 		$payableDatas->payable_due         = $request->payable_due;

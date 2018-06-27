@@ -8,6 +8,12 @@
 	})
 </script>
 <div class="row box-globals">
+	<div class="col-md-8 pull-left top-label" style="">
+		<p>PV #  : {{$payable_details->payable_number}}</p>
+	</div>
+</div>
+<div class="row box-globals">
+	
 	<input type="hidden" value="{{$payable_details->payable_id}}" class="form-control" id="payable_id"/>
 	<div class="form-holder col-md-12 col-xs-12">
 		<div class=" col-md-1 col-xs-6 pull-right no-padding">
