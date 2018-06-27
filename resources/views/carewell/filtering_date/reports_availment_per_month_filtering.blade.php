@@ -1,17 +1,17 @@
 <script type="text/javascript">
 $(document).ready(function(){
-// settings_reports.calculateSum('sum-jan');
-// settings_reports.calculateSum('sum-feb');
-// settings_reports.calculateSum('sum-mar');
-// settings_reports.calculateSum('sum-apr');
-// settings_reports.calculateSum('sum-may');
-// settings_reports.calculateSum('sum-jun');
-// settings_reports.calculateSum('sum-jul');
-// settings_reports.calculateSum('sum-aug');
-// settings_reports.calculateSum('sum-sep');
-// settings_reports.calculateSum('sum-oct');
-// settings_reports.calculateSum('sum-nov');
-// settings_reports.calculateSum('sum-dec');
+settings_reports.calculateSum('sum-jan');
+settings_reports.calculateSum('sum-feb');
+settings_reports.calculateSum('sum-mar');
+settings_reports.calculateSum('sum-apr');
+settings_reports.calculateSum('sum-may');
+settings_reports.calculateSum('sum-jun');
+settings_reports.calculateSum('sum-jul');
+settings_reports.calculateSum('sum-aug');
+settings_reports.calculateSum('sum-sep');
+settings_reports.calculateSum('sum-oct');
+settings_reports.calculateSum('sum-nov');
+settings_reports.calculateSum('sum-dec');
 settings_reports.calculateSum('sum-count');
 });
 </script>
@@ -78,19 +78,19 @@ settings_reports.calculateSum('sum-count');
             @endforeach
             <tr>
                 <td>TOTAL</td>
-                <td id="sum-jan">{{$_company[0]->count_jan_total}}</td>
-                <td id="sum-feb">{{$_company[0]->count_feb_total}}</td>
-                <td id="sum-mar">{{$_company[0]->count_mar_total}}</td>
-                <td id="sum-apr">{{$_company[0]->count_apr_total}}</td>
-                <td id="sum-may">{{$_company[0]->count_may_total}}</td>
-                <td id="sum-jun">{{$_company[0]->count_jun_total}}</td>
-                <td id="sum-jul">{{$_company[0]->count_jul_total}}</td>
-                <td id="sum-aug">{{$_company[0]->count_aug_total}}</td>
-                <td id="sum-sep">{{$_company[0]->count_sep_total}}</td>
-                <td id="sum-oct">{{$_company[0]->count_oct_total}}</td>
-                <td id="sum-nov">{{$_company[0]->count_nov_total}}</td>
-                <td id="sum-dec">{{$_company[0]->count_dec_total}}</td>
-                <td id="sum-count">{{$_company[0]->count_total}}</td>
+                <td id="sum-jan"></td>
+                <td id="sum-feb"></td>
+                <td id="sum-mar"></td>
+                <td id="sum-apr"></td>
+                <td id="sum-may"></td>
+                <td id="sum-jun"></td>
+                <td id="sum-jul"></td>
+                <td id="sum-aug"></td>
+                <td id="sum-sep"></td>
+                <td id="sum-oct"></td>
+                <td id="sum-nov"></td>
+                <td id="sum-dec"></td>
+                <td id="sum-count"></td>
             </tr>
         </table>
     </div>

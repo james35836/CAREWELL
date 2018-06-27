@@ -108,11 +108,26 @@ function settings_reports()
 	{
 		$('body').on('click','#dropdown_search',function()
 		{
-			var company = document.getElementById('reports_company').value;
-			var deployment = document.getElementById('reports_deployment').value;
-			var payment = document.getElementById('reports_payment').value;
+			searchData.append("company",document.getElementById('reports_company').value);
+			searchData.append("deployment",document.getElementById('reports_deployment').value);
+			searchData.append("payment",document.getElementById('reports_payment').value);
+			searchData.append("ref",$(this).data('ref'));
 
-			alert(company+" "+deployment+" "+payment);
+			// $.ajax({
+			// 	headers: {
+			// 	      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			// 	},
+			// 	url:'/page/select_filter',
+			// 	method: "POST",
+		 //        data: searchData,
+		 //        contentType:false,
+	  //           cache:false,
+	  //           processData:false,
+			// 	success: function(data)
+			// 	{
+			// 		// table.html(data);
+			// 	}
+			// });
 		})
 	}
 

@@ -30,6 +30,7 @@ class FrontController extends Controller
   }
   public function  login_submit(Request $request)
   {
+
     $email          = $request->email;
     $password       = $request->password;
     $validate_login = TblUserModel::where('user_email',$email)->first();
