@@ -113,7 +113,7 @@
                                 <th class="live-search">PREPARATION DATE</th>
                                 <th class="live-search">ACTION</th>
                             </tr>
-                            @foreach($_payable_open as $payable)
+                            @foreach($_payable_close as $payable)
                             <tr>
                                 
                                 <td>{{$payable->payable_id}}</td>
@@ -146,7 +146,7 @@
                         </table>
                     </div>
                     <div class="box-footer clearfix">
-                        @include('globals.pagination', ['paginator' => $_payable_open])
+                        @include('globals.pagination', ['paginator' => $_payable_close])
                     </div>
                 </div>
             </div>

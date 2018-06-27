@@ -251,7 +251,25 @@ function globals()
 			}
 		});
 	}
-	
+	this.validators            = function(formWithClass)
+	{
+		var validator = []
+		$(formWithClass).each(function(i, sel)
+		{
+			if($(sel).val().length < 1)
+			{
+				$(this).css('border','1px solid red');
+				error = "null";
+				validator.push(error);
+			}
+			else
+			{
+				$(this).css('border','1px solid #d2d6de');
+			}
+            
+		});
+		return validator;
+	}
 	this.get_dual_information = function(link,value,showId,showId2)
 	{
 		$.ajax({
@@ -299,6 +317,7 @@ function globals()
 			}
 		});
 	}
+
 	this.global_serialize_submit = function(modalName,submitLink,submitData)
 	{
 		$('.confirm-modal').remove();
@@ -579,7 +598,10 @@ function globals()
     }
     function global_static_function()
     {
-    	
+    	$('body').on('click','.default-datepicker',function(e)
+    	{
+    		$(this).datepicker();
+    	});
     }
     function search_live_data()
     {

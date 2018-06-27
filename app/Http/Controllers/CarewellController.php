@@ -54,6 +54,7 @@ use App\Http\Model\TblDoctorSpecializationModel;
 
 use App\Http\Model\TblPayableModel;
 use App\Http\Model\TblPayableApprovalModel;
+use App\Http\Model\TblPayablePayeeModel;
 
 use App\Http\Model\TblSpecializationModel;
 
@@ -2391,15 +2392,53 @@ class CarewellController extends ActiveAuthController
 	}
 	public function payable_mark_close($payable_id)
 	{
-		$data['_payable_approval']   = TblPayableApprovalModel::where('payable_id',$payable_id)->PayableStatus()->get();
-        foreach($data['_payable_approval'] as $key=> $approval)
+		$approval_doctor_charge_carewell    = 0;
+		$procedure_charge_carewell  		= 0;
+		$data['_payable_approval']   		= TblPayableApprovalModel::where('payable_id',$payable_id)->PayableStatus()->get();
+        foreach($data['_payable_approval'] as $keys=> $approval)
         {
-        	$data['_payable_approval'][$key]['_payee_doctor']  = TblApprovalPayeeModel::where('approval_id',$approval->approval_id)->PayeeDoctor()->get();
-		    $data['_payable_approval'][$key]['_payee_other']   = TblApprovalPayeeModel::where('approval_id',$approval->approval_id)->where('type','payee')->get();
+        	$data['_availed']         = TblApprovalProcedureModel::where('tbl_approval_procedure.approval_id',$approval->approval_id)->ProcedureDiagnosis()->get();
+			$data['_payable_approval'][$keys]['doctor_assigned'] = $data['_doctor_assigned']= TblApprovalDoctorModel::where('tbl_approval_doctor.approval_id',$approval->approval_id)->ApprovalDoctor()->get();
+			
+			foreach($data['_availed'] as $key=>$availed)
+			{
+				$procedure_charge_carewell 	= $procedure_charge_carewell 	+ $availed->procedure_charge_carewell;
+			}
+			foreach($data['_doctor_assigned'] as $key=>$doctor_assigned)
+			{
+				$approval_doctor_charge_carewell 	= $approval_doctor_charge_carewell 	+ $doctor_assigned->approval_doctor_charge_carewell;
+			}
+			$data['_payable_approval'][$keys]['procedure_charge_carewell']  = $procedure_charge_carewell;
 	    }
-
 	    return view('carewell.modal_pages.payable_mark_close',$data);
-
+    }
+    public function payable_mark_close_submit(Request $request)
+    {
+    	foreach($request->doctor_approval_id as $key=>$payee)
+    	{
+    		$payablePayee = new TblPayablePayeeModel;
+	    	$payablePayee->payable_check_number 	= $request->payable_check_number[$key];
+	    	$payablePayee->payable_release_date 	= $request->payable_release_date[$key];
+	    	$payablePayee->payable_check_date 		= $request->payable_check_date[$key];
+	    	$payablePayee->payable_cv_number 		= $request->payable_cv_number[$key];
+	    	$payablePayee->payable_amount 			= $request->payable_amount[$key];
+	    	$payablePayee->payable_bank_name 		= $request->payable_bank_name[$key];
+	    	$payablePayee->payable_refrence_number 	= $request->payable_refrence_number[$key];
+	    	$payablePayee->payable_payee_created 	= Carbon::now();
+	    	$payablePayee->doctor_approval_id 		= $request->doctor_approval_id[$key];
+	    	$payablePayee->provider_id 				= $request->provider_id[$key];
+	    	$payablePayee->approval_id 				= $request->approval_id;
+	    	$payablePayee->payable_id 				= $request->payable_id;
+	    	$payablePayee->save();
+	    }
+	    $archived['archived'] 	= 1; 
+	    $payable 				= TblPayableModel::where('payable_id',$request->payable_id)->update($archived);
+	    $_payable_approval 		= TblPayableApprovalModel::where('payable_id',$request->payable_id)->get(); 
+	    foreach($_payable_approval as $payable_approval)
+	    {
+	    	$approval = TblApprovalModel::where('approval_id',$payable_approval->approval_id)->update($archived);
+	    }
+	    return   StaticFunctionController::customMessage('success','PAYABLE CLOSED'); 
 	}
 	public function payable_export_pdf($payable_id)
 	{
