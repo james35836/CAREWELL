@@ -43,6 +43,7 @@ Route::any('/get/check_procedure_amount', 					'StaticFunctionController@getChec
 
 Route::any('/get/export/warning',                   		'StaticFunctionController@getExportWarning');
 Route::get('/forgetSession',                       			'StaticFunctionController@forgetSession');
+
 /*FILETERING*/
 Route::post('/page/filtering', 								'SearchController@pageFiltering');
 Route::post('/page/searching', 								'SearchController@pageSearching');
@@ -86,6 +87,8 @@ Route::get('/company/add_coverage_plan/{company_id}', 	    'CarewellController@c
 Route::post('/company/add_coverage_plan/submit', 		    'CarewellController@company_add_coverage_plan_submit');
 Route::get('/company/add_deployment/{company_id}', 			'CarewellController@company_add_deployment');
 Route::post('/company/add_deployment/submit', 				'CarewellController@company_add_deployment_submit');
+
+Route::get('/company_details/member_list/export_excel/{company_id}/{data_pick}', 'CarewellController@company_details_export_excel');
 
 
 /*MEMBER*/
@@ -229,6 +232,8 @@ Route::get('/reports/reports_company_availment/export_excel/{date}', 'CarewellCo
 
 Route::get('/reports/active_per_month','CarewellController@reports_active_per_month');
 
+Route::get('/page/select_filter', 'SearchController@selectFiltering');
+
 
 Route::post('/reports/member_cal/get_report', 'TestController@test_search');
 
@@ -241,6 +246,7 @@ Route::post('/settings/coverage/create_plan_submit', 		'CarewellController@setti
 Route::get('/settings/coverage/plan_details/{coverage_plan_id}', 'CarewellController@settings_coverage_plan_details');
 Route::post('/settings/coverage/mark_new_submit', 			'CarewellController@settings_coverage_plan_mark_new_submit');
 
+Route::get('/settings/coverage/plan_details/{coverage_plan_id}/print', 'CarewellController@settings_coverage_plan_details_print');
 
 /*ARCHIVED*/
 Route::POST('/archived/submit', 							'CarewellController@archived_submit');

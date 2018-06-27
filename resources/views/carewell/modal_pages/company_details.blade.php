@@ -1,6 +1,6 @@
 <script>
 	$('input.string-only').keypress('keypress', string_only);//function in layout name string_only
-    $('input.integer-only').keypress('keypress', integer_only);
+$('input.integer-only').keypress('keypress', integer_only);
 </script>
 <div class="row box-globals">
 	<input type="hidden" value="{{$company_details->company_id}}" id="company_id" name="">
@@ -13,9 +13,9 @@
 </div>
 <div class="row box-globals">
 	<div class="form-holder col-md-12 col-xs-12">
-	    <div class=" col-md-1 col-xs-6 pull-right no-padding">
-	      <button class="btn btn-default top-element enable-element" type="button" ><i class="fa fa-pencil-square-o btn-icon "></i>EDIT</button>
-	    </div>
+		<div class=" col-md-1 col-xs-6 pull-right no-padding">
+			<button class="btn btn-default top-element enable-element" type="button" ><i class="fa fa-pencil-square-o btn-icon "></i>EDIT</button>
+		</div>
 	</div>
 	<div class="form-holder">
 		<div class="col-md-2 form-content">
@@ -80,10 +80,13 @@
 <div class="row box-globals" >
 	<div class="nav-tabs-custom">
 		<ul class="nav nav-tabs">
-			<li class="active my-tab"><a data-toggle="tab" href="#contract">CONTRACT DETAILS</a></li>
-			<li class="my-tab"><a data-toggle="tab" href="#coverage">COVERAGE PLAN</a></li>
-			<li class="my-tab"><a data-toggle="tab" href="#deployment">DEPLOYMENT</a></li>
-			<li class="my-tab"><a data-toggle="tab" href="#member">MEMBER LIST</a></li>
+			<li class="active my-tab"><a data-toggle="tab" href="#contract" style="width:auto;">CONTRACT DETAILS</a></li>
+			<li class="my-tab"><a data-toggle="tab" href="#coverage" style="width:auto;">COVERAGE PLAN</a></li>
+			<li class="my-tab"><a data-toggle="tab" href="#deployment" style="width:auto;">DEPLOYMENT</a></li>
+			<li class="my-tab"><a data-toggle="tab" href="#member" style="width:auto;">ACTIVE MEMBER LIST</a></li>
+			<!-- edrich -->
+			<li class="my-tab"><a data-toggle="tab" href="#inactive_member" style="width:auto;">INACTIVE MEMBER LIST</a></li>
+			<!-- edrich -->
 		</ul>
 		<div class="tab-content" >
 			<div id="contract" class="row tab-pane fade in active table-min-height" >
@@ -93,7 +96,7 @@
 					</div>
 					<div class="col-md-4 form-content">
 						<center>
-							<p style="font-size:20px;">{{$company_contract->contract_number}}</p>
+						<p style="font-size:20px;">{{$company_contract->contract_number}}</p>
 						</center>
 					</div>
 				</div>
@@ -190,6 +193,13 @@
 			</div>
 			<div id="member" class="row tab-pane fade table-min-height" >
 				<div class="form-holder">
+					<div class="row">
+						<div class="col-md-3 col-xs-12 pull-right">
+							<div class="btn-group">
+								<a href="/company_details/member_list/export_excel/{{$company_details->company_id}}/{{$data_pick=0}}"><button type="button" class="btn btn-success">EXPORT EXCEL</button></a>
+							</div>
+						</div>
+					</div>
 					<div class="load-data load-company-member" data-target="load-company-member">
 						<div class="table-responsive">
 							<table class="table table-bordered">
@@ -215,12 +225,50 @@
 								</tbody>
 							</table>
 						</div>
-						<div class="box-footer clearfix">
-							@include('globals.pagination_v2', ['paginator' => $_company_member])
-						</div>
-						
 					</div>
 				</div>
+			</div>
+			<!-- edrich -->
+			<div id="inactive_member" class="row tab-pane fade table-min-height" >
+				<div class="form-holder">
+					<div class="row">
+						<div class="col-md-3 col-xs-12 pull-right">
+							<div class="btn-group">
+								<a href="/company_details/member_list/export_excel/{{$company_details->company_id}}/{{$data_pick=1}}"><button type="button" class="btn btn-success">EXPORT EXCEL</button></a>
+							</div>
+						</div>
+					</div>
+					<div class="load-data load-company-member" data-target="load-company-member">
+						<div class="table-responsive">
+							<table class="table table-bordered">
+								<thead>
+									<tr>
+										<th>UNIVERSAL ID</th>
+										<th>CAREWELL ID</th>
+										<th>MEMBER NAME</th>
+										<th>DEPLOYMENT</th>
+										<th>COVERAGE PLAN</th>
+									</tr>
+								</thead>
+								<tbody>
+									@foreach($_company_member_inactive as $company_member_inactive)
+									<tr>
+										<td>{{$company_member_inactive->member_universal_id}}</td>
+										<td>{{$company_member_inactive->member_carewell_id}}</td>
+										<td>{{$company_member_inactive->member_first_name." ".$company_member_inactive->member_last_name}}</td>
+										<td>{{$company_member_inactive->deployment_name}}</td>
+										<td>{{$company_member_inactive->coverage_plan_name}}</td>
+									</tr>
+									@endforeach
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- edrich -->
+			<div class="box-footer clearfix">
+				@include('globals.pagination_v2', ['paginator' => $_company_member])
 			</div>
 		</div>
 	</div>

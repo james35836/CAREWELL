@@ -21,15 +21,26 @@ class TblMemberCompanyModel extends Model
         return $query;
                               
     }
-    public function scopeCompanyMember($query)
+    public function scopeCompanyMember($query,$archived)
     {
-        $query  ->where('tbl_member_company.archived',0)
+        $query  ->where('tbl_member_company.archived',$archived)
                 ->join('tbl_coverage_plan','tbl_coverage_plan.coverage_plan_id','=','tbl_member_company.coverage_plan_id')
                 ->join('tbl_member','tbl_member.member_id','=','tbl_member_company.member_id')
                 ->join('tbl_company_deployment','tbl_company_deployment.deployment_id','=','tbl_member_company.deployment_id');
        
         return $query;
     }
+    //edrich
+    public function scopeCompanyMemberInactive($query)
+    {
+        $query  ->where('tbl_member_company.archived',1)
+                ->join('tbl_coverage_plan','tbl_coverage_plan.coverage_plan_id','=','tbl_member_company.coverage_plan_id')
+                ->join('tbl_member','tbl_member.member_id','=','tbl_member_company.member_id')
+                ->join('tbl_company_deployment','tbl_company_deployment.deployment_id','=','tbl_member_company.deployment_id');
+       
+        return $query;
+    }
+    //edrich
     public function scopeCovaragePlanProcedure($query,$member_id,$availment_id)
     {
         $query  ->join('tbl_coverage_plan_procedure','tbl_coverage_plan_procedure.coverage_plan_id','=','tbl_member_company.coverage_plan_id')

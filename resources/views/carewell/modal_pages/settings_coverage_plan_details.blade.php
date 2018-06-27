@@ -15,6 +15,9 @@ radioClass   : 'iradio_minimal-blue'
 		    <div class=" col-md-1 col-xs-6 pull-right no-padding">
 		      <button class="btn btn-default top-element enable-element" type="button" ><i class="fa fa-pencil-square-o btn-icon "></i>EDIT</button>
 		    </div>
+		     <div class=" col-md-1 col-xs-6 pull-right no-padding">
+		      <a href="/settings/coverage/plan_details/{{$coverage_plan_details->coverage_plan_id}}/print" target="print_coverage"><button class="btn btn-primary top-element" type="button" ><i class="fa fa-print btn-icon " aria-hidden="true"></i>PRINT</button></a>
+		    </div>
 		</div>
 		<div class="row form-holder ">
 			<div class="col-md-2 form-content">

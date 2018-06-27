@@ -70,7 +70,7 @@ autoclose: true
                                 </select>
                             </div>
                             <div class="col-md-3 col-xs-12 pull-left">
-                                <a><button type="button" class="btn btn-primary" id="dropdown_search">SEARCH</button></a>
+                                <a><button type="button" class="btn btn-primary" id="dropdown_search" data-ref="active_member_per_month">SEARCH</button></a>
                             </div>
 
                         </div>
