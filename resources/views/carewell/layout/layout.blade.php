@@ -76,10 +76,13 @@
         {
         border: 2px solid red;
         }
-        /*.pagination
+        /* LAYOUT */
+        button.hide-feature
         {
-        border-radius: none !important;
-        }*/
+            visibility: hidden !important;
+        }
+        /* END LAYOUT */
+
         @media screen and (min-width: 426px)
         {
             .top-padding

@@ -325,6 +325,7 @@ $(document).ready(function()
 		<div class="row form-holder">
 		</div>
 	</div>
+	@if($approval_details->availment_id!=4)
 	<div class="row box-globals">
 		<div class="row form-holder">
 			<center>
@@ -378,8 +379,7 @@ $(document).ready(function()
 				<label>Total Gross Amount</label>
 			</div>
 			<div class="col-md-6 form-holder">
-				<input type="hidden" readonly name="procedure_total_id" value="{{$total_procedure->approval_total_id}}"/>
-				<input type="number" readonly class="form-control total_gross_amount" id="total_gross_amount" name="procedure_total_gross_amount" value="{{$total_procedure->total_gross_amount}}">
+				<input type="number" readonly class="form-control total_gross_amount" id="total_gross_amount" name="procedure_total_gross_amount" value="{{$procedure_gross_amount}}">
 			</div>
 		</div>
 		<div class="col-md-6 pull-right col-xs-12">
@@ -387,7 +387,7 @@ $(document).ready(function()
 				<label>Total Philhealth Charity</label>
 			</div>
 			<div class="col-md-6 form-holder">
-				<input type="number" readonly class="form-control total_philhealth" id="total_philhealth" name="procedure_total_philhealth"  value="{{$total_procedure->total_philhealth}}">
+				<input type="number" readonly class="form-control total_philhealth" id="total_philhealth" name="procedure_total_philhealth"  value="{{$procedure_philhealth}}">
 			</div>
 		</div>
 		<div class="col-md-6 pull-right col-xs-12">
@@ -395,7 +395,7 @@ $(document).ready(function()
 				<label>Total Charge to Patient</label>
 			</div>
 			<div class="col-md-6 form-holder">
-				<input type="number" readonly class="form-control total_charge_patient" id="total_charge_patient" name="procedure_total_charge_patient"  value="{{$total_procedure->total_charge_patient}}">
+				<input type="number" readonly class="form-control total_charge_patient" id="total_charge_patient" name="procedure_total_charge_patient"  value="{{$procedure_charge_patient}}">
 			</div>
 		</div>
 		<div class="col-md-6 pull-right col-xs-12">
@@ -403,12 +403,11 @@ $(document).ready(function()
 				<label>Total Charge to Carewell</label>
 			</div>
 			<div class="col-md-6 form-holder">
-				<input type="number" readonly class="form-control total_charge_carewell" id="total_charge_carewell" name="procedure_total_charge_carewell"  value="{{$total_procedure->total_charge_carewell}}">
+				<input type="number" readonly class="form-control total_charge_carewell" id="total_charge_carewell" name="procedure_total_charge_carewell"  value="{{$procedure_charge_carewell}}">
 			</div>
 		</div>
-		
 	</div>
-	
+	@endif
 	<div class="row box-globals">
 		<div class="row form-holder">
 			<center>
@@ -485,8 +484,7 @@ $(document).ready(function()
 				<label>Total Gross Amount</label>
 			</div>
 			<div class="col-md-6 form-holder">
-				<input type="hidden"  name="doctor_total_id" value="{{$total_doctor->approval_total_id}}"/>
-				<input type="number" readonly class="form-control total_gross_amount" name="doctor_total_gross_amount" id="total_gross_amount" value="{{$total_doctor->total_gross_amount}}">
+				<input type="number" readonly class="form-control total_gross_amount" name="doctor_total_gross_amount" id="total_gross_amount" value="{{$approval_doctor_actual_pf}}">
 			</div>
 		</div>
 		<div class="col-md-6 pull-right col-xs-12">
@@ -494,7 +492,7 @@ $(document).ready(function()
 				<label>Total Philhealth Charity</label>
 			</div>
 			<div class="col-md-6 form-holder">
-				<input type="number" readonly class="form-control total_philhealth" name="doctor_total_philhealth" id="total_philhealth"  value="{{$total_doctor->total_philhealth}}">
+				<input type="number" readonly class="form-control total_philhealth" name="doctor_total_philhealth" id="total_philhealth"  value="{{$approval_doctor_phil_charity}}">
 			</div>
 		</div>
 		<div class="col-md-6 pull-right col-xs-12">
@@ -502,7 +500,7 @@ $(document).ready(function()
 				<label>Total Charge to Patient</label>
 			</div>
 			<div class="col-md-6 form-holder">
-				<input type="number" readonly class="form-control total_charge_patient" name="doctor_total_charge_patient" id="total_charge_patient"  value="{{$total_doctor->total_charge_patient}}">
+				<input type="number" readonly class="form-control total_charge_patient" name="doctor_total_charge_patient" id="total_charge_patient"  value="{{$approval_doctor_charge_patient}}">
 			</div>
 		</div>
 		<div class="col-md-6 pull-right col-xs-12">
@@ -510,7 +508,7 @@ $(document).ready(function()
 				<label>Total Charge to Carewell</label>
 			</div>
 			<div class="col-md-6 form-holder">
-				<input type="number" readonly class="form-control total_charge_carewell" name="doctor_total_charge_carewell" id="total_charge_carewell"  value="{{$total_doctor->total_charge_carewell}}">
+				<input type="number" readonly class="form-control total_charge_carewell" name="doctor_total_charge_carewell" id="total_charge_carewell"  value="{{$approval_doctor_charge_carewell}}">
 			</div>
 		</div>
 	</div>
@@ -522,6 +520,33 @@ $(document).ready(function()
 		</div>
 	</div>
 	<div class="row box-globals">
+
+		<div class="table-responsive no-padding">
+			<table class="table table-hover table-bordered procedure-form">
+				<thead>
+					<tr>
+						<th>PAYEE NAME</th>
+						<th>AMOUNT</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>{{$approval_details->provider_name}}</td>
+						<td>{{$payee_company}}</td>
+					</tr>
+					@foreach($_doctor_assigned as $doctor_assigned)
+					<tr>
+						<td>{{$doctor_assigned->doctor_full_name}}</td>
+						<td>{{$doctor_assigned->approval_doctor_charge_carewell}}</td>
+					</tr>
+					@endforeach
+
+				</tbody>
+			</table>
+		</div>
+		
+	</div>
+	{{-- <div class="row box-globals">
 
 		<div class="table-responsive no-padding">
 			<table class="table table-hover table-bordered procedure-form">
@@ -572,7 +597,7 @@ $(document).ready(function()
 			</table>
 
 		</div>
-	</div>
+	</div> --}}
 	<div class="row box-globals">
 		<div class="row form-holder">
 			<center>

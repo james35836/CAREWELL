@@ -140,12 +140,14 @@ radioClass   : 'iradio_minimal-blue'
 						{{$coverage_plan_covered->availment_name}}
 					</p>
 					<div class=" availment-box">
-						<div class="table-responsive parent-availment ">
+						<div class="table-responsive parent-availment">
 							
 							<table class="table table-bordered availed-table">
 								<thead>
 									<tr>
+										@if($coverage_plan_covered->availment_id!=4)
 										<th class="col-md-5">PROCEDURE</th>
+										@endif
 										<th class="col-md-5" >CHARGE</th>
 										<th class="col-md-2">AMOUNT COVERED</th>
 										<th class="col-md-2">LIMIT</th>
@@ -155,9 +157,11 @@ radioClass   : 'iradio_minimal-blue'
 								<tbody>
 									@foreach($coverage_plan_covered->procedure as $procedure)
 									<tr class="table-row">
+										@if($coverage_plan_covered->availment_id!=4)
 										<td class="col-md-5">
 											{{$procedure->procedure_name}}
 										</td>
+										@endif
 										<td class="col-md-4">
 											{{$procedure->plan_charges}}
 										</td>

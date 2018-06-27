@@ -48,6 +48,14 @@
         </div>
     </div>
     <div class="row">
+        <div class="col-md-3 col-xs-12 pull-left">
+            <div class="btn-group">
+                 <input type="checkbox" name="coverage_item[]" class="disableChildCheckbox" style="height:20px;width:20px;" value="35836">
+                <label for="">No Procedure</label>
+            </div>
+        </div>
+    </div>
+    <div class="row disableChildCheckbox">
         <div class="nav-tabs-custom">
             <ul class="nav nav-tabs">
                 <li class="active"><a href="#labTab" data-toggle="tab">LABORATORY </a></li>
