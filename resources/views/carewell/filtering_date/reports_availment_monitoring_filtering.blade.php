@@ -48,61 +48,61 @@
         <tr>
             <td>{{$availment->availment_name}}</td>
             <td>{{$availment->count_jan}}</td>
-            <td>{{$availment->count_jan_amount->total_gross}}</td>
+            <td>{{$availment->count_jan_amount}}</td>
             <td>{{$availment->count_feb}}</td>
-            <td>{{$availment->count_feb_amount->total_gross}}</td>
+            <td>{{$availment->count_feb_amount}}</td>
             <td>{{$availment->count_mar}}</td>
-            <td>{{$availment->count_mar_amount->total_gross}}</td>
+            <td>{{$availment->count_mar_amount}}</td>
             <td>{{$availment->count_apr}}</td>
-            <td>{{$availment->count_apr_amount->total_gross}}</td>
+            <td>{{$availment->count_apr_amount}}</td>
             <td>{{$availment->count_may}}</td>
-            <td>{{$availment->count_may_amount->total_gross}}</td>
+            <td>{{$availment->count_may_amount}}</td>
             <td>{{$availment->count_jun}}</td>
-            <td>{{$availment->count_jun_amount->total_gross}}</td>
+            <td>{{$availment->count_jun_amount}}</td>
             <td>{{$availment->count_jul}}</td>
-            <td>{{$availment->count_jul_amount->total_gross}}</td>
+            <td>{{$availment->count_jul_amount}}</td>
             <td>{{$availment->count_aug}}</td>
-            <td>{{$availment->count_aug_amount->total_gross}}</td>
+            <td>{{$availment->count_aug_amount}}</td>
             <td>{{$availment->count_sep}}</td>
-            <td>{{$availment->count_sep_amount->total_gross}}</td>
+            <td>{{$availment->count_sep_amount}}</td>
             <td>{{$availment->count_oct}}</td>
-            <td>{{$availment->count_oct_amount->total_gross}}</td>
+            <td>{{$availment->count_oct_amount}}</td>
             <td>{{$availment->count_nov}}</td>
-            <td>{{$availment->count_nov_amount->total_gross}}</td>
+            <td>{{$availment->count_nov_amount}}</td>
             <td>{{$availment->count_dec}}</td>
-            <td>{{$availment->count_dec_amount->total_gross}}</td>
+            <td>{{$availment->count_dec_amount}}</td>
             <td>{{$availment->count}}</td>
-            <td>{{$availment->count_sum->total_gross}}</td>
+            <td>{{$availment->count_sum}}</td>
         </tr>
         @endforeach
         <tr>
             <td>TOTAL</td>
-            <td>{{$availment->count_jan_member_avail}}</td>
-            <td>{{$availment->count_jan_amount->total_gross}}</td>
-            <td>{{$availment->count_feb_member_avail}}</td>
-            <td>{{$availment->count_feb_amount->total_gross}}</td>
-            <td>{{$availment->count_mar_member_avail}}</td>
-            <td>{{$availment->count_mar_amount->total_gross}}</td>
-            <td>{{$availment->count_apr_member_avail}}</td>
-            <td>{{$availment->count_apr_amount->total_gross}}</td>
-            <td>{{$availment->count_may_member_avail}}</td>
-            <td>{{$availment->count_may_amount->total_gross}}</td>
-            <td>{{$availment->count_jun_member_avail}}</td>
-            <td>{{$availment->count_jun_amount->total_gross}}</td>
-            <td>{{$availment->count_jul_member_avail}}</td>
-            <td>{{$availment->count_jul_amount->total_gross}}</td>
-            <td>{{$availment->count_aug_member_avail}}</td>
-            <td>{{$availment->count_aug_amount->total_gross}}</td>
-            <td>{{$availment->count_sep_member_avail}}</td>
-            <td>{{$availment->count_sep_amount->total_gross}}</td>
-            <td>{{$availment->count_oct_member_avail}}</td>
-            <td>{{$availment->count_oct_amount->total_gross}}</td>
-            <td>{{$availment->count_nov_member_avail}}</td>
-            <td>{{$availment->count_nov_amount->total_gross}}</td>
-            <td>{{$availment->count_dec_member_avail}}</td>
-            <td>{{$availment->count_dec_amount->total_gross}}</td>
+            <td>{{$total[0]}}</td>
+            <td>{{$total_amount[0]}}</td>
+            <td>{{$total[1]}}</td>
+            <td>{{$total_amount[1]}}</td>
+            <td>{{$total[2]}}</td>
+            <td>{{$total_amount[2]}}</td>
+            <td>{{$total[3]}}</td>
+            <td>{{$total_amount[3]}}</td>
+            <td>{{$total[4]}}</td>
+            <td>{{$total_amount[4]}}</td>
+            <td>{{$total[5]}}</td>
+            <td>{{$total_amount[5]}}</td>
+            <td>{{$total[6]}}</td>
+            <td>{{$total_amount[6]}}</td>
+            <td>{{$total[7]}}</td>
+            <td>{{$total_amount[7]}}</td>
+            <td>{{$total[8]}}</td>
+            <td>{{$total_amount[8]}}</td>
+            <td>{{$total[9]}}</td>
+            <td>{{$total_amount[9]}}</td>
+            <td>{{$total[10]}}</td>
+            <td>{{$total_amount[10]}}</td>
+            <td>{{$total[11]}}</td>
+            <td>{{$total_amount[11]}}</td>
             <td>{{$count_approval}}</td>
-            <td>{{$sum_approval->total_gross}}</td>
+            <td>{{$sum_approval}}</td>
         </tr>
     </table>
 </div>
