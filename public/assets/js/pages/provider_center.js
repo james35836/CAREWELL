@@ -78,29 +78,29 @@ function provider_center()
 	            			doctorProviderData.push(this.value);
 	            		}
 	            	});
-	            	if(doctorProviderData==null||doctorProviderData=="")
-				{
-					toastr.error('Please add PAYEE at least one.', 'Something went wrong!', {timeOut: 3000})
-				}
-				else
-				{
+	   //          if(doctorProviderData==null||doctorProviderData=="")
+				// {
+				// 	toastr.error('Please add PAYEE at least one.', 'Something went wrong!', {timeOut: 3000})
+				// }
+				// else
+				// {
 					var	confirmModalMessage = 'Are you sure you want to add this provider?';
 					var confirmModalAction = 'create-provider-submit';
 					globals.confirm_modals(confirmModalMessage,confirmModalAction);
 
 					providerData.append("provider_name", 			document.getElementById('provider_name').value);
 					providerData.append("provider_rvs", 			document.getElementById('provider_rvs').value);
-		               providerData.append("provider_contact_person", 	document.getElementById('provider_contact_person').value);
-		            	providerData.append("provider_telephone_number",  document.getElementById('provider_telephone_number').value);
-		            	providerData.append("provider_mobile_number", 	document.getElementById('provider_mobile_number').value);
-		            	providerData.append("provider_contact_email", 	document.getElementById('provider_contact_email').value);
-		            	providerData.append("provider_address", 	     document.getElementById('provider_address').value);
+	               	providerData.append("provider_contact_person", 	document.getElementById('provider_contact_person').value);
+	            	providerData.append("provider_telephone_number",  document.getElementById('provider_telephone_number').value);
+	            	providerData.append("provider_mobile_number", 	document.getElementById('provider_mobile_number').value);
+	            	providerData.append("provider_contact_email", 	document.getElementById('provider_contact_email').value);
+	            	providerData.append("provider_address", 	     document.getElementById('provider_address').value);
 		            
-		            	for (var i = 0; i < doctorProviderData.length; i++) 
+		            for (var i = 0; i < doctorProviderData.length; i++) 
 					{
 					    providerData.append('doctorProviderData[]', doctorProviderData[i]);
 					}
-				}
+				// }
 			}
 		});
 	}

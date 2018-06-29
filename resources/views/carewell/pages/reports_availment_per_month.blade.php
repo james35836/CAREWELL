@@ -1,20 +1,21 @@
 @extends('carewell.layout.layout')
 @section('content')
 <script type="text/javascript">
-$(document).ready(function(){
-settings_reports.calculateSum('sum-jan');
-settings_reports.calculateSum('sum-feb');
-settings_reports.calculateSum('sum-mar');
-settings_reports.calculateSum('sum-apr');
-settings_reports.calculateSum('sum-may');
-settings_reports.calculateSum('sum-jun');
-settings_reports.calculateSum('sum-jul');
-settings_reports.calculateSum('sum-aug');
-settings_reports.calculateSum('sum-sep');
-settings_reports.calculateSum('sum-oct');
-settings_reports.calculateSum('sum-nov');
-settings_reports.calculateSum('sum-dec');
-settings_reports.calculateSum('sum-count');
+$(document).ready(function()
+{
+    settings_reports.calculateSum('sum-jan');
+    settings_reports.calculateSum('sum-feb');
+    settings_reports.calculateSum('sum-mar');
+    settings_reports.calculateSum('sum-apr');
+    settings_reports.calculateSum('sum-may');
+    settings_reports.calculateSum('sum-jun');
+    settings_reports.calculateSum('sum-jul');
+    settings_reports.calculateSum('sum-aug');
+    settings_reports.calculateSum('sum-sep');
+    settings_reports.calculateSum('sum-oct');
+    settings_reports.calculateSum('sum-nov');
+    settings_reports.calculateSum('sum-dec');
+    settings_reports.calculateSum('sum-count');
 
 // $(".year-picker").datepicker( {
 //     format: " yyyy",
@@ -23,17 +24,17 @@ settings_reports.calculateSum('sum-count');
 //     minViewMode: "years",
 //     autoclose: true
 // });
-$('body').on('click','.year-picker',function(e)
-{
-$(this).datepicker({
-format: " yyyy",
-startView: "years",
-viewMode: "years",
-minViewMode: "years",
-autoclose: true
-});
-});
 
+// $('body').on('click','.year-picker',function(e)
+// {
+// $(this).datepicker({
+// format: " yyyy",
+// startView: "years",
+// viewMode: "years",
+// minViewMode: "years",
+// autoclose: true
+// });
+// });
 });
 </script>
 <div class="container">
@@ -55,7 +56,8 @@ autoclose: true
                                     @endforeach
                                 </select>
                             </div>
-                            -->                            <div class="col-md-3 col-xs-12">
+                            -->
+                            <div class="col-md-3 col-xs-12">
                                 <div class="btn-group">
                                     <a href="{{$link}}"><button type="button" class="btn btn-success">EXPORT EXCEL</button></a>
                                 </div>
@@ -70,10 +72,9 @@ autoclose: true
                                 
                             </div>
                         </div>
-
                         <div  id="showTable" class="load-data load-reports-availment-per-month" data-target="load-reports-availment-per-month">
                             <div class="table-responsive no-padding">
-                                <table class="table table-hover table-bordered sum_table">
+                                <table class="table table-hover table-bordered">
                                     <tr class="titlerow">
                                         <th>COMPANY</th>
                                         <th>JAN</th>
@@ -108,7 +109,7 @@ autoclose: true
                                         <td class="sum-count">{{$company->count}}</td>
                                     </tr>
                                     @endforeach
-            
+                                    
                                     <tr>
                                         <td>TOTAL</td>
                                         <td id="sum-jan"></td>
@@ -127,9 +128,9 @@ autoclose: true
                                     </tr>
                                 </table>
                             </div>
-                        </div>
-                        <div class="box-footer clearfix">
-                            @include('globals.pagination', ['paginator' => $_company])
+                            <div class="box-footer clearfix">
+                                @include('globals.pagination_v2', ['paginator' => $_company])
+                            </div>
                         </div>
                     </div>
                 </div>
