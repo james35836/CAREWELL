@@ -270,25 +270,7 @@ function globals()
 		});
 		return validator;
 	}
-	this.validatorSelect    = function(formWithClass)
-	{
-		var validatorSelect = [];
-		$(formWithClass).each(function(i, sel)
-    	{
-        	var selected = $(sel).val();
-        	if(selected=="0"||selected=="")
-        	{
-        		$(this).css('border','1px solid red');
-        		var error = "null";
-        		validatorSelect.push(error);
-        	}
-        	else
-        	{
-        		$(this).css('border','1px solid #d2d6de');
-        	}
-    	});
-    	return validatorSelect;
-	}
+	
 	this.get_dual_information = function(link,value,showId,showId2)
 	{
 		$.ajax({
@@ -332,6 +314,40 @@ function globals()
 					$('.'+modalName+'-modal-dialog').removeClass().addClass('modal-sm modal-dialog')
 					$('.'+modalName+'-modal-body').html(data);
 					$('.'+modalName+'-modal-footer').html(successButton);
+				}, 1000);
+			}
+		});
+	}
+	this.global_submit_no_loader = function(modalName,submitLink,submitData)
+	{
+		$('.confirm-modal').remove();
+    	
+    
+    	$.ajax({
+			headers: {
+			      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			},
+			url:submitLink,
+			method: "POST",
+        	data: submitData,
+        	contentType:false,
+        	cache:false,
+        	processData:false,
+        	success: function(data)
+			{
+				setTimeout(function()
+				{
+					if(data.alert=="danger")
+					{
+						toastr.error(data.message, 'Something went wrong!', {timeOut: 3000});
+					}
+					else
+					{
+						$('.'+modalName+'-modal-dialog').removeClass().addClass('modal-sm modal-dialog')
+						$('.'+modalName+'-modal-body').html(data.message);
+						$('.'+modalName+'-modal-footer').html(successButton);
+					}
+					
 				}, 1000);
 			}
 		});
@@ -397,18 +413,18 @@ function globals()
 	this.global_submit_serialized = function(modalName,submitLink,submitData)
 	{
 		$('.confirm-modal').remove();
-        	$("."+modalName+"-modal-body").html("<div class='"+modalName+"-ajax-loader' style='display:none;text-align: center; padding:50px;'><img src='/assets/loader/loading.gif'/></div");
-        	$("."+modalName+"-ajax-loader").show();
-        
-        	$.ajax({
+    	$("."+modalName+"-modal-body").html("<div class='"+modalName+"-ajax-loader' style='display:none;text-align: center; padding:50px;'><img src='/assets/loader/loading.gif'/></div");
+    	$("."+modalName+"-ajax-loader").show();
+    
+    	$.ajax({
 			headers: {
 			      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 			},
 			url:submitLink,
 			method: "POST",
-            	data: submitData,
-            	dataType:"text",
-            	success: function(data)
+            data: submitData,
+            dataType:"text",
+            success: function(data)
 			{
 				setTimeout(function()
 				{
@@ -688,6 +704,10 @@ function globals()
                 	{
                     	url = href.replace(domain,'');
                 	}
+                	else
+                	{
+                		url = href;
+                	}
             	});
         	});
         	getArticles(url, load_data);
@@ -757,6 +777,8 @@ function globals()
 				}
 			});
 		});
+
+
 	}
 	
 	function archived_data()

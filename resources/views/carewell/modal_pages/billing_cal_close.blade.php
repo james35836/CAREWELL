@@ -83,7 +83,7 @@ autoclose: true
             <label>Amount</label>
         </div>
         <div class="col-md-4 form-content">
-            <input type="text" class="form-control " id="cal_info_amount">
+            <input type="text" class="form-control " id="cal_info_amount" value="{{$total_amount}}">
         </div>
     </div>
     <div class="form-holder">

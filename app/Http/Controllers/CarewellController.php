@@ -1667,13 +1667,16 @@ class CarewellController extends ActiveAuthController
 			{
 				TblCalPaymentModel::where('cal_member_id',$cal_member->cal_member_id)->update($update);
 			}
-			return StaticFunctionController::returnMessage('success','CAL CLOSED');
+			$message['alert'] 	= "success";
+			$message['message'] = StaticFunctionController::customMessage('success','CAL CLOSED SUCCESSFULLY');
+			
 		}
 		else
 		{
-			return StaticFunctionController::customMessage('danger','OR number or Check Number Exist');
+			$message['alert'] 	= "danger";
+			$message['message'] = "OR number or Check Number Exist";
 		}
-		
+		return $message;
 	}
 
 	/*MEDICAL*/
@@ -1772,6 +1775,8 @@ class CarewellController extends ActiveAuthController
 	{
 		StaticFunctionController::updateReferenceNumber('approval');
 		$data['user'] = StaticFunctionController::global();
+
+		$member_company_id = TblMemberCompanyModel::where('member_id',$request->member_id)->where('tbl_member_company.archived',0)->value('member_company_id');
 		
 		$approvalData = new TblApprovalModel;
 		$approvalData->approval_number            = StaticFunctionController::updateReferenceNumber('approval');
@@ -1783,6 +1788,7 @@ class CarewellController extends ActiveAuthController
 		$approvalData->availment_id               = $request->availment_id;
 		$approvalData->provider_id                = $request->provider_id;
 		$approvalData->member_id                  = $request->member_id;
+		$approvalData->member_company_id		  = $member_company_id;
 		$approvalData->user_id                    = $data['user']->user_id;
 		$approvalData->save();
 		
@@ -2136,7 +2142,7 @@ class CarewellController extends ActiveAuthController
 		}
 		if($remove)
 		{
-             	$message = StaticFunctionController::customMessage("success", $ref." successfully deleted!");
+            $message = StaticFunctionController::customMessage("success", $ref." successfully deleted!");
 		}
 		else
 		{
@@ -2237,10 +2243,14 @@ class CarewellController extends ActiveAuthController
 		$data['_payable_close']  = TblPayableModel::where('tbl_payable.archived',1)->PayableInfo()->paginate(10);
 		foreach ($data['_payable_open'] as $key => $payable) 
 		{
-			$data['_payable_open'][$key]['approval_number']    =  TblPayableApprovalModel::where('payable_id',$payable->payable_id)->PayableStatus()->get();
+			
+			$data['_payable_open'][$key]['payable_age']   		= date_create($payable->payable_due)->diff(date_create('today'))->m.' Months and '.date_create($payable->payable_due)->diff(date_create('today'))->d.' Days';
+			$data['_payable_open'][$key]['approval_number']    	=  TblPayableApprovalModel::where('payable_id',$payable->payable_id)->PayableStatus()->get();
+		
 		}
 		foreach ($data['_payable_close'] as $key => $payable) 
 		{
+			$data['_payable_close'][$key]['payable_age']   		= date_create($payable->payable_due)->diff(date_create('today'))->m.' Months and '.date_create($payable->payable_due)->diff(date_create('today'))->d.' Days';
 			$data['_payable_close'][$key]['approval_number']    =  TblPayableApprovalModel::where('payable_id',$payable->payable_id)->PayableStatus()->get();
 		}
 		return view('carewell.pages.payable_center',$data);
@@ -2277,11 +2287,11 @@ class CarewellController extends ActiveAuthController
 			$payApprovalData->approval_id = $approval_id; 
 			$payApprovalData->payable_id  = $payableDatas->payable_id;
 			$payApprovalData->save();
-	          if($payApprovalData->save())
-	          {
+	        if($payApprovalData->save())
+	        {
 	          	$archived['archived'] = '2';
 				TblApprovalModel::where('tbl_approval.approval_id',$approval_id)->update($archived);
-	          }
+	        }
 		}
 		if($payableDatas->save())
 		{
@@ -2337,11 +2347,11 @@ class CarewellController extends ActiveAuthController
 		$check = TblPayableModel::where('payable_id',$request->payable_id)->update($update);
 		if($check)
 		{
-	          return StaticFunctionController::returnMessage('success','PAYABLE');
+	        return StaticFunctionController::returnMessage('success','PAYABLE');
 		}
 		else
 		{
-	          return StaticFunctionController::returnMessage('danger','PAYABLE');
+	        return StaticFunctionController::returnMessage('danger','PAYABLE');
 		}
 	}
 	public function payable_mark_close($payable_id)
@@ -2425,25 +2435,25 @@ class CarewellController extends ActiveAuthController
 	
 	/*REPORTS*/
 	public function reports()
-		{
-			$data['page']     = 'Reports';
-			$data['_company'] = TblCompanyModel::where('archived',0)->get();
-			$data['user']     = StaticFunctionController::global();
+	{
+		$data['page']     = 'Reports';
+		$data['_company'] = TblCompanyModel::where('archived',0)->get();
+		$data['user']     = StaticFunctionController::global();
 
-			return view('carewell.pages.reports',$data);
-		}
+		return view('carewell.pages.reports',$data);
+	}
 	public function reports_availment()
-		{
-			$data['page']     = 'Availment Reports';
-			$data['_company'] = TblCompanyModel::where('archived',0)->paginate(10);
-			$data['user']     = StaticFunctionController::global();
+	{
+		$data['page']     = 'Availment Reports';
+		$data['_company'] = TblCompanyModel::where('archived',0)->paginate(10);
+		$data['user']     = StaticFunctionController::global();
 
-			foreach ($data['_company'] as $key => $company) 
-			{
-				$data['_company'][$key]['company_availment']  =  TblAvailmentModel::get();
-			}
-			return view('carewell.pages.reports_availment',$data);
+		foreach ($data['_company'] as $key => $company) 
+		{
+			$data['_company'][$key]['company_availment']  =  TblAvailmentModel::get();
 		}
+		return view('carewell.pages.reports_availment',$data);
+	}
 
 	public function reports_monitoring_end_per_month()
 	{

@@ -5,9 +5,9 @@
 | Web Routes
 |--------------------------------------------------------------------------
 |
-| Developer : James Omosora
-| Author 	: James Omosora
-| 
+| Developer 	: James Omosora
+| Author 		: James Omosora
+| Collaborator	: Edrich
 |
 */
 
