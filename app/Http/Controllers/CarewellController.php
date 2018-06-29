@@ -171,46 +171,40 @@ class CarewellController extends ActiveAuthController
 	}
 	public function company_details($company_id)
 	{
-		$data['company_details']      = TblCompanyModel::where('tbl_company.company_id',$company_id)->CompanyContact()->first();
-		$data['_company_deployment']  = TblCompanyDeploymentModel::where('company_id',$company_id)->get();
-		$data['_coverage_plan']       = TblCompanyCoveragePlanModel::where('company_id',$company_id)->CoveragePlan()->get();
-		$data['_company_member']      = TblMemberCompanyModel::where('tbl_member_company.company_id',$company_id)->CompanyMember(0)->paginate(10);
-		//edrich
-		$data['_company_member_inactive']      = TblMemberCompanyModel::where('tbl_member_company.company_id',$company_id)->CompanyMember(1)->paginate(10);
-		//edrich
-		$data['company_contract']     = TblCompanyContractModel::where('company_id',$company_id)->first();
-		$data['_contract_images']     = TblCompanyContractImageModel::where('archived',0)->where('contract_id',$data['company_contract']->contract_id)->get();
-		$data['_benefits_images']     = TblCompanyContractBenefitsModel::where('archived',0)->where('contract_id',$data['company_contract']->contract_id)->get();
+		$data['company_details']      		= TblCompanyModel::where('tbl_company.company_id',$company_id)->CompanyContact()->first();
+		$data['_company_deployment']  		= TblCompanyDeploymentModel::where('company_id',$company_id)->get();
+		$data['_coverage_plan']       		= TblCompanyCoveragePlanModel::where('company_id',$company_id)->CoveragePlan()->get();
+		$data['_company_member']      		= TblMemberCompanyModel::where('tbl_member.archived',0)->where('tbl_member_company.company_id',$company_id)->CompanyMember(0)->paginate(10);
+		$data['_company_member_inactive']   = TblMemberCompanyModel::where('tbl_member.archived',2)->where('tbl_member_company.company_id',$company_id)->CompanyMember(0)->paginate(10);
+		$data['company_contract']     		= TblCompanyContractModel::where('company_id',$company_id)->first();
+		$data['_contract_images']     		= TblCompanyContractImageModel::where('archived',0)->where('contract_id',$data['company_contract']->contract_id)->get();
+		$data['_benefits_images']     		= TblCompanyContractBenefitsModel::where('archived',0)->where('contract_id',$data['company_contract']->contract_id)->get();
 		
 		return view('carewell.modal_pages.company_details',$data);
 	}
-
-	//edrich
-	public function company_details_export_excel($company_id,$data_pick)
+	public function company_details_export_member_excel($company_id,$archived)
 	{
 		$company = TblMemberCompanyModel::join('tbl_company','tbl_company.company_id','=','tbl_member_company.company_id')->where('tbl_member_company.company_id',$company_id)->first();
-		$filename = "";
+		if($archived == 0) 
+		{
+			$fileRef = "ACTIVE MEMBER";
+		}
+		else 
+		{
+			$fileRef = "INACTIVE MEMBER";
+		}
 
-		if($data_pick == 0) // active member
-		{
-			$data['_company_member']      = TblMemberCompanyModel::where('tbl_member_company.company_id',$company_id)->CompanyMember(0)->get();
-			$filename = "ACTIVE MEMBER ".$company->company_name." (".$company->company_code.")";
-		}
-		else //inactive member
-		{
-			$data['_company_member']      = TblMemberCompanyModel::where('tbl_member_company.company_id',$company_id)->CompanyMember(1)->get();
-			$filename = "INACTIVE MEMBER ".$company->company_name." (".$company->company_code.")";
-		}
+		$data['_company_member']      = TblMemberCompanyModel::where('tbl_member.archived',$archived)->where('tbl_member_company.company_id',$company_id)->CompanyMember(0)->get();
+		$filename = $fileRef." ".$company->company_name." (".$company->company_code.")";
 
 		Excel::create($filename,function($excel) use ($data)
 		{
 			$excel->sheet('clients',function($sheet) use ($data)
 			{
-				$sheet->loadView('carewell.additional_pages.company_details_inactive_active_member_export_excel',$data);
+				$sheet->loadView('carewell.additional_pages.company_details_export_member_excel',$data);
 			});
 		})->download('xls');
 	}
-	//edrich
 	public function company_create_company()
 	{
 		$data['_payment_mode']    = TblPaymentModeModel::get();
@@ -371,7 +365,8 @@ class CarewellController extends ActiveAuthController
 		$data['user']                 = StaticFunctionController::global();
 		$data['_company']             = TblCompanyModel::where('archived',0)->get();
 		$data['_member_active']       = TblMemberModel::where('tbl_member.archived',0)->where('tbl_member_company.archived',0)->Member()->orderBy('tbl_member.member_id','ASC')->paginate(10, ['*'], 'active');
-		$data['_member_inactive']     = TblMemberModel::where('tbl_member.archived',1)->where('tbl_member_company.archived',0)->Member()->orderBy('tbl_member.member_id','ASC')->paginate(10, ['*'], 'inactive');
+		$data['_member_inactive']     = TblMemberModel::where('tbl_member.archived',2)->where('tbl_member_company.archived',0)->Member()->orderBy('tbl_member.member_id','ASC')->paginate(10, ['*'], 'inactive');
+		$data['_member_terminated']   = TblMemberModel::where('tbl_member.archived',1)->where('tbl_member_company.archived',0)->Member()->orderBy('tbl_member.member_id','ASC')->paginate(10, ['*'], 'inactive');
 		return view('carewell.pages.member_center',$data);
 	}
 	public function member_create_member()
@@ -801,6 +796,9 @@ class CarewellController extends ActiveAuthController
 	}
 	public function member_adjustment_submit(Request $request)
 	{
+		$memberArchived['archived'] = 0;
+		TblMemberModel::where('member_id',$request->member_id_adjustment)->update($memberArchived);
+
 		$companyData       = TblCompanyModel::where('company_id',$request->company_id_adjustment)->first();
 		$companyMemberData = new TblMemberCompanyModel;
 		$companyMemberData->member_carewell_id      = StaticFunctionController::generateCarewellId($companyData->company_code);
@@ -861,17 +859,16 @@ class CarewellController extends ActiveAuthController
 		    	$providerData->provider_created         = Carbon::now();
 		    	$providerData->save();
 	          	$notif    = "Provider Inserted";
-	          	if($request->doctorProviderData != null || count($request->doctorProviderData) != 0)
+	          	if($request->doctor_full_name != null || count($request->doctor_full_name) != 0)
 	          	{
-	          		$inserted = StaticFunctionController::provider_add_tag_doctor($request->doctorProviderData,$providerData->provider_id);
+	          		$inserted = StaticFunctionController::provider_add_tag_doctor($request->doctor_full_name,$providerData->provider_id);
 	          	}
-	    	    
 	    	}
 	    	else
 	    	{
-	    		if($request->doctorProviderData != null || count($request->doctorProviderData) != 0)
+	    		if($request->doctor_full_name != null || count($request->doctor_full_name) != 0)
 	          	{
-	    			$inserted = StaticFunctionController::provider_add_tag_doctor($request->doctorProviderData,$provider_id);
+	    			$inserted = StaticFunctionController::provider_add_tag_doctor($request->doctor_full_name,$provider_id);
 	    		}
 
 	          	$notif    = "Provider Exist";
@@ -1034,15 +1031,11 @@ class CarewellController extends ActiveAuthController
 		$data['_doctor_inactive'] = TblDoctorModel::where('archived',1)->paginate(10);
 		foreach ($data['_doctor_active'] as $key => $doctor) 
 		{
-			$data['_doctor_active'][$key]['provider']   =  TblDoctorProviderModel::where('doctor_id',$doctor->doctor_id)
-	                                                  ->where('tbl_doctor_provider.archived',0)
-	                                                  ->Provider()->get();
+			$data['_doctor_active'][$key]['provider']   =  TblDoctorProviderModel::where('doctor_id',$doctor->doctor_id)->where('tbl_doctor_provider.archived',0)->Provider()->get();
 		}
 		foreach ($data['_doctor_inactive'] as $key => $doctor) 
 		{
-			$data['_doctor_inactive'][$key]['provider'] =  TblDoctorProviderModel::where('doctor_id',$doctor->doctor_id)
-	                                                  ->where('tbl_doctor_provider.archived',0)
-	                                                  ->Provider()->get();
+			$data['_doctor_inactive'][$key]['provider'] =  TblDoctorProviderModel::where('doctor_id',$doctor->doctor_id)->where('tbl_doctor_provider.archived',0)->Provider()->get();
 		}
 		return view('carewell.pages.doctor_center',$data);
 	}
@@ -1052,16 +1045,17 @@ class CarewellController extends ActiveAuthController
 		$data['doctor_details']         = TblDoctorModel::where('doctor_id',$doctor_id)->first();
 		$data['_doctor_provider']       = TblDoctorProviderModel::where('tbl_doctor_provider.doctor_id',$doctor_id)->Provider()->get();
 
-	  foreach ($data['_doctor_provider'] as $key => $doctor) 
-	  {
-	    // $data['_doctor_provider'][$key]['doctor_archive'] =  TblDoctorProviderModel::where('doctor_id',$doctor_id)->value('archived');
-	    $data['_doctor_provider'][$key]['doctor_archive'] = TblDoctorProviderModel::where('provider_id',$doctor->provider_id)->value('archived');
-	  }
+	  	foreach ($data['_doctor_provider'] as $key => $doctor) 
+	  	{
+	    	// $data['_doctor_provider'][$key]['doctor_archive'] =  TblDoctorProviderModel::where('doctor_id',$doctor_id)->value('archived');
+	    	$data['_doctor_provider'][$key]['doctor_archive'] = TblDoctorProviderModel::where('provider_id',$doctor->provider_id)->value('archived');
+	  	}
 		return view('carewell.modal_pages.doctor_details',$data);
 	}
 
 	public function doctor_update_submit(Request $request)
 	{
+
 		$update['doctor_full_name']     = $request->doctor_full_name;
 		$update['doctor_gender']        = $request->doctor_gender;
 		$update['doctor_contact_number']= $request->doctor_contact_number;
@@ -1094,7 +1088,7 @@ class CarewellController extends ActiveAuthController
 			$doctorData->doctor_created         = Carbon::now();
 			$doctorData->save();
 
-			foreach($request->doctorProviderData as $provider_id)
+			foreach($request->provider_id as $provider_id)
 			{
 				$check = TblDoctorProviderModel::where('provider_id',$provider_id)->where('doctor_id',$doctorData->doctor_id)->count();
 				if($check==0)

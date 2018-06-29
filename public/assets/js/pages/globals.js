@@ -531,14 +531,16 @@ function globals()
 		var is_email=re.test(inputs.val());
 		if(is_email)
 		{
-			// inputs.removeClass("invalid").addClass("valid");
+			inputs.css('border','1px solid #d2d6de');
 			return "success";
 		}
 		else
 		{
-			// inputs.removeClass("valid").addClass("invalid");
+			inputs.css('border','1px solid #f9a3a3');
 			return "error";
 		}
+
+		
 	}
 	this.toLocation = function(url) 
      {

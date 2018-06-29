@@ -83,10 +83,8 @@ $('input.integer-only').keypress('keypress', integer_only);
 			<li class="active my-tab"><a data-toggle="tab" href="#contract" style="width:auto;">CONTRACT DETAILS</a></li>
 			<li class="my-tab"><a data-toggle="tab" href="#coverage" style="width:auto;">COVERAGE PLAN</a></li>
 			<li class="my-tab"><a data-toggle="tab" href="#deployment" style="width:auto;">DEPLOYMENT</a></li>
-			<li class="my-tab"><a data-toggle="tab" href="#member" style="width:auto;">ACTIVE MEMBER LIST</a></li>
-			<!-- edrich -->
+			<li class="my-tab"><a data-toggle="tab" href="#active_member" style="width:auto;">ACTIVE MEMBER LIST</a></li>
 			<li class="my-tab"><a data-toggle="tab" href="#inactive_member" style="width:auto;">INACTIVE MEMBER LIST</a></li>
-			<!-- edrich -->
 		</ul>
 		<div class="tab-content" >
 			<div id="contract" class="row tab-pane fade in active table-min-height" >
@@ -96,7 +94,7 @@ $('input.integer-only').keypress('keypress', integer_only);
 					</div>
 					<div class="col-md-4 form-content">
 						<center>
-						<p style="font-size:20px;">{{$company_contract->contract_number}}</p>
+							<p style="font-size:20px;">{{$company_contract->contract_number}}</p>
 						</center>
 					</div>
 				</div>
@@ -191,16 +189,14 @@ $('input.integer-only').keypress('keypress', integer_only);
 					</div>
 				</div>
 			</div>
-			<div id="member" class="row tab-pane fade table-min-height" >
+			<div id="active_member" class="row tab-pane fade table-min-height" >
 				<div class="form-holder">
 					<div class="row">
 						<div class="col-md-3 col-xs-12 pull-right">
-							<div class="btn-group">
-								<a href="/company_details/member_list/export_excel/{{$company_details->company_id}}/{{$data_pick=0}}"><button type="button" class="btn btn-success">EXPORT EXCEL</button></a>
-							</div>
+							<a href="/company_details/export_member_excel/{{$company_details->company_id}}/0"><button type="button" class="btn btn-success top-element">EXPORT EXCEL</button></a>
 						</div>
 					</div>
-					<div class="load-data load-company-member" data-target="load-company-member">
+					<div class="load-data load-company-active_member" data-target="load-company-active_member">
 						<div class="table-responsive">
 							<table class="table table-bordered">
 								<thead>
@@ -225,20 +221,20 @@ $('input.integer-only').keypress('keypress', integer_only);
 								</tbody>
 							</table>
 						</div>
+						<div class="box-footer clearfix">
+							@include('globals.pagination_v2', ['paginator' => $_company_member])
+						</div>
 					</div>
 				</div>
 			</div>
-			<!-- edrich -->
 			<div id="inactive_member" class="row tab-pane fade table-min-height" >
 				<div class="form-holder">
 					<div class="row">
 						<div class="col-md-3 col-xs-12 pull-right">
-							<div class="btn-group">
-								<a href="/company_details/member_list/export_excel/{{$company_details->company_id}}/{{$data_pick=1}}"><button type="button" class="btn btn-success">EXPORT EXCEL</button></a>
-							</div>
+							<a href="/company_details/export_member_excel/{{$company_details->company_id}}/2"><button type="button" class="btn btn-success top-element">EXPORT EXCEL</button></a>
 						</div>
 					</div>
-					<div class="load-data load-company-member" data-target="load-company-member">
+					<div class="load-data load-company-inactive_member" data-target="load-company-inactive_member">
 						<div class="table-responsive">
 							<table class="table table-bordered">
 								<thead>
@@ -263,12 +259,12 @@ $('input.integer-only').keypress('keypress', integer_only);
 								</tbody>
 							</table>
 						</div>
+						<div class="box-footer clearfix">
+							@include('globals.pagination_v2', ['paginator' => $_company_member_inactive])
+						</div>
 					</div>
 				</div>
-			</div>
-			<!-- edrich -->
-			<div class="box-footer clearfix">
-				@include('globals.pagination_v2', ['paginator' => $_company_member])
+				
 			</div>
 		</div>
 	</div>

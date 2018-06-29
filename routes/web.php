@@ -89,7 +89,7 @@ Route::post('/company/add_coverage_plan/submit', 		    'CarewellController@compa
 Route::get('/company/add_deployment/{company_id}', 			'CarewellController@company_add_deployment');
 Route::post('/company/add_deployment/submit', 				'CarewellController@company_add_deployment_submit');
 
-Route::get('/company_details/member_list/export_excel/{company_id}/{data_pick}', 'CarewellController@company_details_export_excel');
+Route::get('/company_details/export_member_excel/{company_id}/{archived}', 'CarewellController@company_details_export_member_excel');
 
 
 /*MEMBER*/
@@ -118,12 +118,10 @@ Route::post('/provider/update_provider/submit', 			'CarewellController@provider_
 /*DOCTOR*/
 Route::get('/doctor', 										'CarewellController@doctor');
 Route::get('/doctor/add_doctor', 					    	'CarewellController@add_doctor');
-Route::get('/doctor/import_doctor', 						'CarewellController@import_doctor');
 Route::post('/doctor/add_doctor/submit', 			    	'CarewellController@add_doctor_submit');
 Route::get('/doctor/view_doctor_details/{doctor_id}', 		'CarewellController@doctor_view_details');
-Route::get('/doctor/download_template/{provider_id}/{number}', 	'CarewellController@doctor_download_template');
-Route::post('/doctor/import_doctor/submit', 				'CarewellController@doctor_import_doctor_submit');
 Route::post('/doctor/update_doctor/submit', 				'CarewellController@doctor_update_submit');
+
 Route::get('/doctor/add_doctor_provider/{doctor_id}', 		'CarewellController@doctor_add_doctor_provider');
 Route::post('/doctor/add_doctor_provider/submit', 			'CarewellController@doctor_add_doctor_provider_submit');
 

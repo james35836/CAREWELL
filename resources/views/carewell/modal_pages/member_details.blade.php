@@ -117,7 +117,7 @@
 			<div id="company" class="row tab-pane fade in active table-min-height">
 				<div class="row ">
 			    <div class=" col-md-3 pull-right">
-			      <button type="button" class="btn btn-primary  button-lg member-adjustment" data-member_id="{{$member_details->member_id}}"><i class="fa fa-plus btn-icon "></i>CHANGE COMPANY</button>
+			      <button type="button" class="btn btn-primary  top-element member-adjustment" data-member_id="{{$member_details->member_id}}"><i class="fa fa-plus btn-icon "></i>CHANGE COMPANY</button>
 			    </div>
 			  </div>
 				<div class="box-body table-responsive no-padding">
@@ -166,7 +166,7 @@
 						<tr>
 							<td>{{$member_dependent->dependent_full_name}}</td>
 							<td>{{$member_dependent->dependent_relationship}}</td>
-							<td>{{date("F j, Y",strtotime($member_dependent->dependent_birthdate))}}</td>
+							<td>@if($member_dependent->dependent_birthdate=="N/A"){{$member_dependent->dependent_birthdate}}@else{{date("F j, Y",strtotime($member_dependent->dependent_birthdate))}}@endif</td>
 							<td>
 								<div class="btn-group">
 									<button type="button" class="btn btn-danger btn-sm">Action</button>
@@ -175,8 +175,8 @@
 									<span class="sr-only">Toggle Dropdown</span>
 									</button>
 									<ul class="dropdown-menu" role="menu" style="position: absolute !important;">
-										<li><button type="button" data-id="{{$member_dependent->member_id}}" class="btn btn-link view-member-details">View Member</button></li>
-										<li><button type="button" class="btn btn-link">Update Member</button></li>
+										{{-- <li><button type="button" data-id="{{$member_dependent->member_id}}" class="btn btn-link view-member-details">View Member</button></li>
+										<li><button type="button" class="btn btn-link">Update Member</button></li> --}}
 									</ul>
 								</div>
 							</td>
