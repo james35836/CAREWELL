@@ -18,6 +18,7 @@
 			padding-left: 15px;
 			margin-right: auto;
 			margin-left: auto;
+
 		}
 		div.header-text
 		{
@@ -71,8 +72,10 @@
 	<body>
 		<div class="header-container">
 			<div class="header-text">PAYABLES</div>
+			<div class="header-text">Carewell Health Systems Inc.</div>
+			<div class="header-text">Availment Forms</div>
 		</div>
-		<br>
+		<br><br><br><br>
 		
 		<div class="box-border">
 			<div class="box-border-content">

@@ -33,9 +33,35 @@
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
         <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet">
         
-        
+       
         <style>
-        
+        div.alert-div {
+            padding: 20px;
+            background-color: #f44336;
+            color: white;
+            position:absolute;
+            top:5px;
+            right:5px;
+            z-index: 9000;
+            visibility:hidden;
+        }
+
+        span.alert-div-closebtn {
+            margin-left: 15px;
+            color: white;
+            font-weight: bold;
+            float: right;
+            font-size: 22px;
+            line-height: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+           
+            
+        }
+
+        span.alert-div-closebtn:hover {
+            color: black;
+        }
         span.show-money
         {
             font-size: 30px;
@@ -281,6 +307,11 @@
                     <li class="active">{{$page}}</li>
                     @endif
                 </ol>
+                <!-- ALERT DIV -->
+                <div class="alert-div">
+                    <span class="alert-div-closebtn" onclick="this.parentElement.style.visibility='hidden';">&times;</span> 
+                    <strong>Danger!</strong> <div class="alert-div-message"></div>
+                </div>
             </section>
             
             <!-- Main content -->
@@ -352,6 +383,7 @@
     <script src="/assets/js/pages/payable_center.js"></script>
     <script src="/assets/js/pages/reports_payment.js"></script>
     {{-- <script src="/assets/js/pages/report_center.js"></script> --}}
+    <script src="/assets/js/pages/terminated_member.js"></script>
     <script src="/assets/js/pages/settings_center.js"></script>
     <script src="/assets/js/pages/settings_coverage.js"></script>
     <script src="/assets/js/pages/settings_developer.js"></script>

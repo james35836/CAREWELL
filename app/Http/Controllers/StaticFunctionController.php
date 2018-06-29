@@ -66,6 +66,7 @@ use App\Http\Model\TblProcedureDoctorModel;
 
 use App\Http\Model\TblLaboratoryModel;
 
+use App\Http\Model\TblPayableModel;
 
 use App\Http\Model\TblScheduleOfBenefitsModel;
 
@@ -77,9 +78,7 @@ class StaticFunctionController extends Controller
 {
     public static function global()
     {
-        $user_info = TblUserInfoModel::where('tbl_user_info.user_id',session('user_id'))
-                    ->join('tbl_user','tbl_user.user_id','=','tbl_user_info.user_id')
-                    ->first();
+        $user_info = TblUserInfoModel::where('tbl_user_info.user_id',session('user_id'))->User()->first();
         return $user_info;
     }
     public static function returnMessage($alert_message="",$str_name="")
@@ -97,6 +96,18 @@ class StaticFunctionController extends Controller
     {
         return "<div class='alert alert-".$class."' style='text-align: center;'>".$message."!</div>";
     }
+    public static function checkboxValue($input)
+    {
+        if($input=="on")
+        {
+            $val = $input;
+        }
+        else
+        {
+            $val = "off";
+        }
+        return $val;
+    }
 
     public function getCheckProcedureAmount(Request $request)
     {
@@ -105,7 +116,7 @@ class StaticFunctionController extends Controller
         $carewell_amount    = $request->carewell_amount;
         $procedure_id       = $request->procedure_id;
         $availment_id       = $request->availment_id;
-        $member             = TblMemberCompanyModel::where('tbl_member_company.member_id',$member_id)->CompanyMember()->first();
+        $member             = TblMemberCompanyModel::where('tbl_member_company.member_id',$member_id)->CompanyMember(0)->first();
         $TblCoveragePlanProcedureModel = TblCoveragePlanProcedureModel::where('procedure_id',$procedure_id)->where('availment_id',$availment_id)->where('coverage_plan_id',$member->coverage_plan_id);
         $sum                = 0;
     
@@ -183,9 +194,9 @@ class StaticFunctionController extends Controller
             $_procedure_doctor                  = TblDoctorProcedureModel::where('archived',0)->get();
             $provider                           = TblProviderModel::where('provider_id',$request->provider_id)->first();
             $data['_provider_doctor']           = TblDoctorProviderModel::where('tbl_doctor_provider.provider_id',$request->provider_id)->where('tbl_doctor_provider.archived',0)->DoctorProvider()->get();
-            $data['_procedure_doctors']          = '<option value="1">-SELECT PROCEDURE-';
-            $data['_provider_doctors']          = '<option>-SELECT DOCTOR-';
-            $data['_specialization_doctors']    = '<option>-SELECT SPECIALIZATION-';
+            $data['_procedure_doctors']          = '<option value="">-SELECT PROCEDURE-';
+            $data['_provider_doctors']          = '<option value="">-SELECT DOCTOR-';
+            $data['_specialization_doctors']    = '<option value="">-SELECT SPECIALIZATION-';
             foreach($_procedure_doctor as $procedure_doctor)
             {
                 $data['_procedure_doctors']     .= '<option value='.$procedure_doctor->doctor_procedure_id.'>'.$procedure_doctor->doctor_procedure_descriptive;
@@ -222,7 +233,7 @@ class StaticFunctionController extends Controller
         {
             $coverage           = TblMemberCompanyModel::where('archived',0)->where('member_id',$request->member_id)->value('coverage_plan_id');
             $procedure          = TblCoveragePlanProcedureModel::where('coverage_plan_id',$coverage)->Procedure()->get();
-            $data['_procedureList'] = '<option>-SELECT DESCRIPTION-';
+            $data['_procedureList'] = '<option value="">-SELECT DESCRIPTION-';
             foreach($procedure as $procedure)
             {
                 $data['_procedureList']     .= '<option value='.$procedure->procedure_id.'>'.$procedure->procedure_name;
@@ -278,93 +289,103 @@ class StaticFunctionController extends Controller
         $refrenceNumber = '00000';
         switch ($str_name) 
         {
-          case 'approval':
-            $approval_count          =  TblApprovalModel::count();
-            if($approval_count==null||$approval_count==0)
-            {
-              $refrenceNumber = 'APP-'.str_replace(["-", "–"], "",date("m-y")).'-'.sprintf("%05d",1);
-            }
-            else
-            {
-              $approval              =  TblApprovalModel::orderBy('approval_id','DESC')->first();
-              $refrenceNumber = 'APP-'.str_replace(["-", "–"], "",date("m-y")).'-'.sprintf("%05d",$approval->approval_id+1);
-           
-            }
+            case 'approval':
+                $approval_count     =  TblApprovalModel::count();
+                if($approval_count==null||$approval_count==0)
+                {
+                    $refrenceNumber = 'APP-'.str_replace(["-", "–"], "",date("m-y")).'-'.sprintf("%05d",1);
+                }
+                else
+                {
+                    $approval       =  TblApprovalModel::orderBy('approval_id','DESC')->first();
+                    $refrenceNumber = 'APP-'.str_replace(["-", "–"], "",date("m-y")).'-'.sprintf("%05d",$approval->approval_id+1);
+                }
             break;
-          case 'doctor':
-            $count_doctor = TblDoctorModel::count();
-            if($count_doctor==null||$count_doctor==0)
-            {
-              $refrenceNumber = sprintf("%05d",1);
-            }
-            else
-            {
-              $doctor = TblDoctorModel::orderBy('doctor_id','DESC')->first();
-              $refrenceNumber = sprintf("%05d",$doctor->doctor_id+1);
-            }
-
+            case 'payable':
+                $payable_count      =  TblPayableModel::count();
+                if($payable_count==null||$payable_count==0)
+                {
+                    $refrenceNumber = 'PV-'.sprintf("%05d",1);
+                }
+                else
+                {
+                    $payable        =  TblPayableModel::orderBy('payable_id','DESC')->first();
+                    $refrenceNumber = 'PV-'.sprintf("%05d",$payable->payable_id+1);
+                }
             break;
-
-          case 'company':
-            $count_company = TblCompanyModel::count();
-            if($count_company==null||$count_company==0)
-            {
-              $refrenceNumber = sprintf("%05d",1);
-            }
-            else
-            {
-              $company = TblCompanyModel::orderBy('company_id','DESC')->first();
-              $refrenceNumber = sprintf("%05d",$company->company_id+1);
-            }
+            case 'doctor':
+                $count_doctor = TblDoctorModel::count();
+                if($count_doctor==null||$count_doctor==0)
+                {
+                    $refrenceNumber = sprintf("%05d",1);
+                }
+                else
+                {
+                    $doctor = TblDoctorModel::orderBy('doctor_id','DESC')->first();
+                    $refrenceNumber = sprintf("%05d",$doctor->doctor_id+1);
+                }
             break;
 
-          case 'contract':
-            $count_contract = TblCompanyContractModel::count();
-            if($count_contract==null||$count_contract==0)
-            {
-              $refrenceNumber = sprintf("%05d",1);
-            }
-            else
-            {
-              $contract = TblCompanyContractModel::orderBy('company_id','DESC')->first();
-              $refrenceNumber = sprintf("%05d",$contract->contract_id+1);
-            }
+            case 'company':
+                $count_company = TblCompanyModel::count();
+                if($count_company==null||$count_company==0)
+                {
+                  $refrenceNumber = sprintf("%05d",1);
+                }
+                else
+                {
+                  $company = TblCompanyModel::orderBy('company_id','DESC')->first();
+                  $refrenceNumber = sprintf("%05d",$company->company_id+1);
+                }
             break;
-          case 'user':
-            $count_user = TblUserInfoModel::count();
-            if($count_user==null||$count_user==0)
-            {
-              $refrenceNumber = 'CW-'.sprintf("%05d",1);
-            }
-            else
-            {
-              $user = TblUserInfoModel::orderBy('user_info_id','DESC')->first();
-              $refrenceNumber = 'CW-'.sprintf("%05d",$user->user_info_id+1);
-            }
+
+            case 'contract':
+                $count_contract = TblCompanyContractModel::count();
+                if($count_contract==null||$count_contract==0)
+                {
+                  $refrenceNumber = sprintf("%05d",1);
+                }
+                else
+                {
+                  $contract = TblCompanyContractModel::orderBy('company_id','DESC')->first();
+                  $refrenceNumber = sprintf("%05d",$contract->contract_id+1);
+                }
             break;
-          case 'member_company':
-            $member_company_count = TblMemberCompanyModel::count();
-            if($member_company_count==null||$member_company_count==0)
-            {
-              $refrenceNumber = sprintf("%05d",1);
-            }
-            else
-            {
-              $member_company = TblMemberCompanyModel::orderBy('member_company_id','DESC')->first();
-              $refrenceNumber = sprintf("%05d",$member_company->member_company_id + 1);
-            }
+            case 'user':
+                $count_user = TblUserInfoModel::count();
+                if($count_user==null||$count_user==0)
+                {
+                  $refrenceNumber = 'CW-'.sprintf("%05d",1);
+                }
+                else
+                {
+                  $user = TblUserInfoModel::orderBy('user_info_id','DESC')->first();
+                  $refrenceNumber = 'CW-'.sprintf("%05d",$user->user_info_id+1);
+                }
             break;
-          case 'billing_cal':
-            $cal_count        =  TblCalModel::count();
-            if($cal_count==null||$cal_count==0)
-            {
-              $refrenceNumber = 'CAL-'.sprintf("%05d",1);
-            }
-            else
-            {
-              $cal            =  TblCalModel::orderBy('cal_id','DESC')->first();
-              $refrenceNumber =  'CAL-'.sprintf("%05d",$cal->cal_id+1);
-            }
+            case 'member_company':
+                $member_company_count = TblMemberCompanyModel::count();
+                if($member_company_count==null||$member_company_count==0)
+                {
+                  $refrenceNumber = sprintf("%05d",1);
+                }
+                else
+                {
+                  $member_company = TblMemberCompanyModel::orderBy('member_company_id','DESC')->first();
+                  $refrenceNumber = sprintf("%05d",$member_company->member_company_id + 1);
+                }
+            break;
+            case 'billing_cal':
+                $cal_count        =  TblCalModel::count();
+                if($cal_count==null||$cal_count==0)
+                {
+                  $refrenceNumber = 'CAL-'.sprintf("%05d",1);
+                }
+                else
+                {
+                  $cal            =  TblCalModel::orderBy('cal_id','DESC')->first();
+                  $refrenceNumber =  'CAL-'.sprintf("%05d",$cal->cal_id+1);
+                }
             break;
         }
          

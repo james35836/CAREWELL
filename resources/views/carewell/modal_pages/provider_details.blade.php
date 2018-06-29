@@ -163,6 +163,9 @@
 										<td>{{$provider_payable_close->approval_number}}</td>
 										<td>{{$provider_payable_close->user_first_name." ".$provider_payable_close->user_last_name}}</td>
 										<td>{{date("F j, Y",strtotime($provider_payable_close->payable_created))}}</td>
+										<th class="live-search">STATUS</th>
+										<th class="live-search">PREPARED BY</th>
+										<th class="live-search">PREPARATION DATE</th>
 									</tr>
 									@endforeach
 								</table>
@@ -172,26 +175,5 @@
 				</div>
 			</div>
 		</div>
-		<script>
-			$(document).ready(function()
-			{
-				$(".table-searcher").on("keyup", function() {
-				var value = $(this).val();
-				var $table = $(this).closest("div.tab-pane table tr");
-				$("table."+$(this).data('name')+" tr").each(function(index)
-				{
-				if (index !== 0) {
-				$row = $(this);
-				var id = $row.find("td.word").text();
-				if (id.indexOf(value) !== 0)
-				{
-				$row.hide();
-				}
-				else {
-				$row.show();
-				}
-				}
-				});
-				});
-			});
-		</script>
+	</div>
+</div>

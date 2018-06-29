@@ -251,7 +251,44 @@ function globals()
 			}
 		});
 	}
-	
+	this.validators            = function(formWithClass)
+	{
+		var validator = [];
+		$(formWithClass).each(function(i, sel)
+		{
+			if($(sel).val().length < 1)
+			{
+				$(this).css('border','1px solid #f9a3a3');
+				error = "null";
+				validator.push(error);
+			}
+			else
+			{
+				$(this).css('border','1px solid #d2d6de');
+			}
+            
+		});
+		return validator;
+	}
+	this.validatorSelect    = function(formWithClass)
+	{
+		var validatorSelect = [];
+		$(formWithClass).each(function(i, sel)
+    	{
+        	var selected = $(sel).val();
+        	if(selected=="0"||selected=="")
+        	{
+        		$(this).css('border','1px solid red');
+        		var error = "null";
+        		validatorSelect.push(error);
+        	}
+        	else
+        	{
+        		$(this).css('border','1px solid #d2d6de');
+        	}
+    	});
+    	return validatorSelect;
+	}
 	this.get_dual_information = function(link,value,showId,showId2)
 	{
 		$.ajax({
@@ -299,11 +336,12 @@ function globals()
 			}
 		});
 	}
+
 	this.global_serialize_submit = function(modalName,submitLink,submitData)
 	{
 		$('.confirm-modal').remove();
-        	$("."+modalName+"-modal-body").html("<div class='"+modalName+"-ajax-loader' style='display:none;text-align: center; padding:50px;'><img src='/assets/loader/loading.gif'/></div");
-        	$("."+modalName+"-ajax-loader").show();
+        $("."+modalName+"-modal-body").html("<div class='"+modalName+"-ajax-loader' style='display:none;text-align: center; padding:50px;'><img src='/assets/loader/loading.gif'/></div");
+        $("."+modalName+"-ajax-loader").show();
         	
        	$.ajax({
 			headers: {
@@ -579,7 +617,10 @@ function globals()
     }
     function global_static_function()
     {
-    	
+    	$('body').on('click','.default-datepicker',function(e)
+    	{
+    		$(this).datepicker();
+    	});
     }
     function search_live_data()
     {

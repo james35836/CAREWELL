@@ -20,6 +20,7 @@
             <ul class="nav nav-tabs">
                 <li class="active"><a href="#activeTab" data-toggle="tab">ACTIVE </a></li>
                 <li><a href="#inActiveTab" data-toggle="tab">INACTIVE </a></li>
+                <li><a href="#terminatedTab" data-toggle="tab">TERMINATED</a></li>
             </ul>
             <div class="tab-content">
                 <div class="tab-pane active" id="activeTab">
