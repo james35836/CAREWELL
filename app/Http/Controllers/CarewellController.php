@@ -187,16 +187,18 @@ class CarewellController extends ActiveAuthController
 	//edrich
 	public function company_details_export_excel($company_id,$data_pick)
 	{
+		$company = TblMemberCompanyModel::join('tbl_company','tbl_company.company_id','=','tbl_member_company.company_id')->where('tbl_member_company.company_id',$company_id)->first();
 		$filename = "";
+
 		if($data_pick == 0) // active member
 		{
 			$data['_company_member']      = TblMemberCompanyModel::where('tbl_member_company.company_id',$company_id)->CompanyMember(0)->get();
-			$filename = "ACTIVE MEMBER";
+			$filename = "ACTIVE MEMBER ".$company->company_name." (".$company->company_code.")";
 		}
 		else //inactive member
 		{
 			$data['_company_member']      = TblMemberCompanyModel::where('tbl_member_company.company_id',$company_id)->CompanyMember(1)->get();
-			$filename = "INACTIVE MEMBER";
+			$filename = "INACTIVE MEMBER ".$company->company_name." (".$company->company_code.")";
 		}
 
 		Excel::create($filename,function($excel) use ($data)
@@ -857,14 +859,22 @@ class CarewellController extends ActiveAuthController
 		    	$providerData->provider_address         = $request->provider_address;
 		    	$providerData->provider_created         = Carbon::now();
 		    	$providerData->save();
-	          $notif    = "Provider Inserted";
-	    	     $inserted = StaticFunctionController::provider_add_tag_doctor($request->doctorProviderData,$providerData->provider_id);
+	          	$notif    = "Provider Inserted";
+	          	if($request->doctorProviderData != null || count($request->doctorProviderData) != 0)
+	          	{
+	          		$inserted = StaticFunctionController::provider_add_tag_doctor($request->doctorProviderData,$providerData->provider_id);
+	          	}
+	    	    
 	    	}
 	    	else
 	    	{
-	    		$inserted = StaticFunctionController::provider_add_tag_doctor($request->doctorProviderData,$provider_id);
-	          $notif    = "Provider Exist";
-		}
+	    		if($request->doctorProviderData != null || count($request->doctorProviderData) != 0)
+	          	{
+	    			$inserted = StaticFunctionController::provider_add_tag_doctor($request->doctorProviderData,$provider_id);
+	    		}
+
+	          	$notif    = "Provider Exist";
+			}
 	     return "<div class='alert alert-success' style='text-align: center;'>".$notif." and ".$inserted." doctors tag!</div>";
 		
 	}
@@ -874,7 +884,18 @@ class CarewellController extends ActiveAuthController
 		$data['_provider_payee']  = TblProviderPayeeModel::where('provider_id',$provider_id)->get();
 		$data['provider_details'] = TblProviderModel::where('tbl_provider.provider_id',$provider_id)->first();
 		$data['_provider_doctor'] = TblDoctorProviderModel::where('tbl_doctor_provider.provider_id',$provider_id)->DoctorProvider()->get();
-	    
+	    // edrich
+	    $data['_provider_payable_open'] = TblPayableModel::join('tbl_user_info','tbl_user_info.user_id','=','tbl_payable.user_id')
+	    							->join('tbl_payable_approval','tbl_payable_approval.payable_id','=', 'tbl_payable.payable_id')
+	    							->join('tbl_approval','tbl_approval.approval_id','=','tbl_payable_approval.approval_id')
+	                                ->where('tbl_payable.provider_id',$provider_id)->where('tbl_payable.archived',0)->get();
+
+	    $data['_provider_payable_close'] = TblPayableModel::join('tbl_user_info','tbl_user_info.user_id','=','tbl_payable.user_id')
+	    							->join('tbl_payable_approval','tbl_payable_approval.payable_id','=', 'tbl_payable.payable_id')
+	    							->join('tbl_approval','tbl_approval.approval_id','=','tbl_payable_approval.approval_id')
+	                                ->where('tbl_payable.provider_id',$provider_id)->where('tbl_payable.archived',1)->get();
+	    // edrich
+
 		foreach ($data['_provider_doctor'] as $key => $doctor) 
 	  	{
 	    		$data['_provider_doctor'][$key]['doctor_archive'] =  TblDoctorModel::where('doctor_id',$doctor->doctor_id)->value('archived');
@@ -2512,12 +2533,29 @@ class CarewellController extends ActiveAuthController
 			$data['page']     = 'Availment per Month Summary';
 			$data['user']     = StaticFunctionController::global();
 			$data['_company'] = TblCompanyCoveragePlanModel::CompanyCoverage()->paginate(10);
-				                    
+			
 			$data['link']		= '/reports/availment_per_month_summary/export_excel/'.date('Y');
-	        $data['date']      	= $date  = date('Y');
+			$data['date']      	= $date  = date('Y');
 
 	        $_param_name        = array('count_jan','count_feb','count_mar','count_apr','count_may','count_jun','count_jul','count_aug','count_sep','count_oct','count_nov','count_dec');
 			$_param_val         = array('01','02','03','04','05','06','07','08','09','10','11','12'); 
+			$_param_key			= array(0,1,2,3,4,5,6,7,8,9,10,11);
+
+			$param_name_key = array_combine($_param_key, $_param_name);
+			$param_val_key = array_combine($_param_key, $_param_val);
+
+			$data['total_count'] = TblMemberCompanyModel::where('tbl_member_company.archived',0)
+				                                        ->join('tbl_approval','tbl_approval.member_id','=','tbl_member_company.member_id')
+				                                        ->where('tbl_approval.approval_created','LIKE','%'.$date.'%')
+				                                        ->count();     
+
+			foreach ($param_name_key as $key => $_param_key) 
+			{
+				$data['total'][$key] = TblMemberCompanyModel::where('tbl_member_company.archived',0)
+				                                        ->join('tbl_approval','tbl_approval.member_id','=','tbl_member_company.member_id')
+				                                        ->where('tbl_approval.approval_created','LIKE','%'.$date.'-'.$param_val_key[$key].'%')
+				                                        ->count(); 	                                                              
+			}			
 
 			foreach($data['_company'] as $key => $company) 
 			{
@@ -2701,6 +2739,7 @@ class CarewellController extends ActiveAuthController
 				}
 			}
 			
+			// dd($data['_company']);
 			return view('carewell.pages.reports_company_availment',$data);
 		}
 
@@ -2839,7 +2878,7 @@ class CarewellController extends ActiveAuthController
 		{
 			$data['page']     = 'Availment per Month Summary';
 			$data['user']     = StaticFunctionController::global();
-			$data['_company'] = TblCompanyCoveragePlanModel::CompanyCoverage()->paginate(10);
+			$data['_company'] = TblCompanyCoveragePlanModel::CompanyCoverage()->get();
 				                    
 			$data['link']		= '/reports/availment_per_month_summary/export_excel/'.$date;
 	        $data['date']      	= $date;

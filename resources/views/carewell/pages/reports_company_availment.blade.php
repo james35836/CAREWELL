@@ -1,38 +1,35 @@
 @extends('carewell.layout.layout')
 @section('content')
 <script type="text/javascript">
-$(document).ready(function(){
-// settings_reports.calculateSum('sum-jan');
-// settings_reports.calculateSum('sum-feb');
-// settings_reports.calculateSum('sum-mar');
-// settings_reports.calculateSum('sum-apr');
-// settings_reports.calculateSum('sum-may');
-// settings_reports.calculateSum('sum-jun');
-// settings_reports.calculateSum('sum-jul');
-// settings_reports.calculateSum('sum-aug');
-// settings_reports.calculateSum('sum-sep');
-// settings_reports.calculateSum('sum-oct');
-// settings_reports.calculateSum('sum-nov');
-// settings_reports.calculateSum('sum-dec');
-// settings_reports.calculateSum('sum-count');
-// $(".year-picker").datepicker( {
-//     format: " yyyy",
-//     startView: "years",
-//     viewMode: "years",
-//     minViewMode: "years",
-//     autoclose: true
-// });
-$('body').on('click','.year-picker',function(e)
-{
-$(this).datepicker({
-format: " yyyy",
-startView: "years",
-viewMode: "years",
-minViewMode: "years",
-autoclose: true
-});
-});
-});
+	$(document).ready(function()
+	{
+		settings_reports.calculateSum('sum-jan');
+		settings_reports.calculateSum('sum-feb');
+		settings_reports.calculateSum('sum-mar');
+		settings_reports.calculateSum('sum-apr');
+		settings_reports.calculateSum('sum-may');
+		settings_reports.calculateSum('sum-jun');
+		settings_reports.calculateSum('sum-jul');
+		settings_reports.calculateSum('sum-aug');
+		settings_reports.calculateSum('sum-sep');
+		settings_reports.calculateSum('sum-oct');
+		settings_reports.calculateSum('sum-nov');
+		settings_reports.calculateSum('sum-dec');
+		settings_reports.calculateSum('sum-count');
+
+		$('body').on('click','.year-picker',function(e)
+		{
+			$(this).datepicker({
+			format: " yyyy",
+			startView: "years",
+			viewMode: "years",
+			minViewMode: "years",
+			autoclose: true
+			});
+		
+		});
+	});
+
 </script>
 <style>
 table,th,td
@@ -42,7 +39,7 @@ table,th,td
 td
 {
 	width:100% !important;
-		/*	text-align: center !important;
+					/*	text-align: center !important;
 	vertical-align: middle !important;*/
 }
 /*tr td table tr th,  tr td table tr td
@@ -61,13 +58,13 @@ td
 				<div class="tab-content">
 					<div class="tab-pane active showReportContent" id="open">
 						<div class="row top-element">
-						<!-- 	<div class="col-md-3 col-xs-12 pull-left">
-								<select class="form-control">
-									<option value="">SELECT COMPANY</option>
-									@foreach($_company as $company)
-									<option>{{$company->company_name}}</option>
-									@endforeach
-								</select>
+							<!-- 	<div class="col-md-3 col-xs-12 pull-left">
+									<select class="form-control">
+													<option value="">SELECT COMPANY</option>
+													@foreach($_company as $company)
+													<option>{{$company->company_name}}</option>
+													@endforeach
+									</select>
 							</div> -->
 							<div class="col-md-3 col-xs-12">
 								<div class="btn-group">
@@ -84,7 +81,7 @@ td
 								
 							</div>
 						</div>
-						<div  id="showTable" class="load-data load-reports-availment-per-month" data-target="load-reports-availment-per-month">
+						<div  id="showTable" class="load-data load-reports-company-availment-per-month" data-target="load-reports-company-availment-per-month">
 							<div class="table-responsive no-padding">
 								
 								<table class="">
@@ -119,19 +116,19 @@ td
 													<td></td>
 													@endif
 													<td>{{$availment->availment_name}}</td>
-													<td class="sum-jan">{{$availment->count_jan}}</td>
-													<td class="sum-feb">{{$availment->count_feb}}</td>
-													<td class="sum-mar">{{$availment->count_mar}}</td>
-													<td class="sum-apr">{{$availment->count_apr}}</td>
-													<td class="sum-may">{{$availment->count_may}}</td>
-													<td class="sum-jun">{{$availment->count_jun}}</td>
-													<td class="sum-jul">{{$availment->count_jul}}</td>
-													<td class="sum-aug">{{$availment->count_aug}}</td>
-													<td class="sum-sep">{{$availment->count_sep}}</td>
-													<td class="sum-oct">{{$availment->count_oct}}</td>
-													<td class="sum-nov">{{$availment->count_nov}}</td>
-													<td class="sum-dec">{{$availment->count_dec}}</td>
-													<td class="sum-count">{{$availment->total}}</td>
+													<td>{{$availment->count_jan}}</td>
+													<td>{{$availment->count_feb}}</td>
+													<td>{{$availment->count_mar}}</td>
+													<td>{{$availment->count_apr}}</td>
+													<td>{{$availment->count_may}}</td>
+													<td>{{$availment->count_jun}}</td>
+													<td>{{$availment->count_jul}}</td>
+													<td>{{$availment->count_aug}}</td>
+													<td>{{$availment->count_sep}}</td>
+													<td>{{$availment->count_oct}}</td>
+													<td>{{$availment->count_nov}}</td>
+													<td>{{$availment->count_dec}}</td>
+													<td>{{$availment->total}}</td>
 												</tr>
 												@if($key == 7)
 												<tr>
@@ -156,26 +153,25 @@ td
 											</table>
 										</td>
 									</tr>
-									
 									@endforeach
 									<tr>
 										<td>
 											<table class="" style="width: 100%;">
 												<tr>
 													<td colspan="2">GRAND TOTAL</td>
-													<td id="sum-jan">{{$company->count_jan_grand_total}}</td>
-													<td id="sum-feb">{{$company->count_feb_grand_total}}</td>
-													<td id="sum-mar">{{$company->count_mar_grand_total}}</td>
-													<td id="sum-apr">{{$company->count_apr_grand_total}}</td>
-													<td id="sum-may">{{$company->count_may_grand_total}}</td>
-													<td id="sum-jun">{{$company->count_jun_grand_total}}</td>
-													<td id="sum-jul">{{$company->count_jul_grand_total}}</td>
-													<td id="sum-aug">{{$company->count_aug_grand_total}}</td>
-													<td id="sum-sep">{{$company->count_sep_grand_total}}</td>
-													<td id="sum-oct">{{$company->count_oct_grand_total}}</td>
-													<td id="sum-nov">{{$company->count_nov_grand_total}}</td>
-													<td id="sum-dec">{{$company->count_dec_grand_total}}</td>
-													<td id="sum-count">{{$grand_total_all}}</td>
+													<td id="sum-jan"></td>
+													<td id="sum-feb"></td>
+													<td id="sum-mar"></td>
+													<td id="sum-apr"></td>
+													<td id="sum-may"></td>
+													<td id="sum-jun"></td>
+													<td id="sum-jul"></td>
+													<td id="sum-aug"></td>
+													<td id="sum-sep"></td>
+													<td id="sum-oct"></td>
+													<td id="sum-nov"></td>
+													<td id="sum-dec"></td>
+													<td id="sum-count"></td>
 												</tr>
 											<tr></tr>
 										</table>
@@ -183,9 +179,9 @@ td
 								</tr>
 							</table>
 						</div>
-					</div>
-					<div class="box-footer clearfix">
-						@include('globals.pagination', ['paginator' => $_company])
+						<div class="box-footer clearfix">
+							@include('globals.pagination_v2', ['paginator' => $_company])
+						</div>
 					</div>
 				</div>
 			</div>
