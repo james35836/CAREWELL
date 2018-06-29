@@ -2556,64 +2556,62 @@ class CarewellController extends ActiveAuthController
 			$data['link']		= '/reports/availment_monitoring/export_excel/'.date('Y');
 	        $data['date']      	= $date  = date('Y');
 
+	        //total patient count
 	        $data['count_approval'] = TblApprovalModel::where('archived',0)->where('approval_created','LIKE','%'.$date.'%')->count();
+	        
+	        //total amount
 	        $data['sum_approval'] = TblApprovalModel::join('tbl_approval_total','tbl_approval_total.approval_id','=','tbl_approval.approval_id')
 	                ->where('tbl_approval.approval_created','LIKE','%'.$date.'%')
-	            	->select([DB::raw("SUM(total_gross_amount) as total_gross")])
-	            	->first();
-
-	            	if($data['sum_approval']->total_gross == null)
-	            	{
-	            		$data['sum_approval']->total_gross = 0;
-	            	}
+	                ->where('tbl_approval.archived',0)
+	            	->sum('total_gross_amount');
 	        
 	        $_param_name        = array('count_jan','count_feb','count_mar','count_apr','count_may','count_jun','count_jul','count_aug','count_sep','count_oct','count_nov','count_dec');
 			$_param_val         = array('01','02','03','04','05','06','07','08','09','10','11','12'); 
+			$_param_key			= array(0,1,2,3,4,5,6,7,8,9,10,11);
+
+			$param_name_key = array_combine($_param_key, $_param_name);
+			$param_val_key = array_combine($_param_key, $_param_val);    
+
+			//total patient and amount
+			foreach ($param_name_key as $key => $_param_key) 
+			{	
+				//total patient
+				$data['total'][$key] = TblApprovalModel::where('tbl_approval.approval_created','LIKE','%'.$date.'-'.$param_val_key[$key].'%')->where('tbl_approval.archived',0)->count();       
+				
+				//total amount
+				$data['total_amount'][$key] = TblApprovalModel::join('tbl_approval_total','tbl_approval_total.approval_id','=','tbl_approval.approval_id')
+																	            	->where('tbl_approval.approval_created','LIKE','%'.$date.'-'.$param_val_key[$key].'%')
+																	            	->where('tbl_approval.archived',0)
+																	            	->sum('total_gross_amount');                                                       
+			}		
 
 			foreach ($data['_availment'] as $key => $availment)
 			{
+				//total number of patient (column)
 				$data['_availment'][$key]['count'] 		= TblApprovalModel::where('availment_id',$availment->availment_id)
 													->where('tbl_approval.approval_created','LIKE','%'.$date.'%')
 													->where('archived',0)
 													->count();
 
+				//total amount (column)
 				$data['_availment'][$key]['count_sum']	= TblApprovalModel::where('availment_id',$availment->availment_id)
 												    ->where('tbl_approval.approval_created','LIKE','%'.$date.'%')
+									            	->where('tbl_approval.archived',0)
 									            	->join('tbl_approval_total','tbl_approval_total.approval_id','=','tbl_approval.approval_id')
-									            	->select([DB::raw("SUM(total_gross_amount) as total_gross")])
-									            	->first();
+									            	->sum('total_gross_amount');
 
-	            	if($data['_availment'][$key]['count_sum']->total_gross == null)
-	            	{
-	            		$data['_availment'][$key]['count_sum']->total_gross = 0;
-	            	}
-
+				//jan, feb , mar, apr, may, jun, jul, aug, sep, oct, nov ,dec				            	
 				foreach($_param_name as $param=>$param_name)
 	            {
-	            	$data['_availment'][$key][$_param_name[$param]]					= TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.$date.'-'.sprintf("%02d", $param+1).'%')->count();
+	            	//number of patient per month and availment
+	            	$data['_availment'][$key][$_param_name[$param]]					= TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.$date.'-'.sprintf("%02d", $param+1).'%')->where('tbl_approval.archived',0)->count();
 
-	            	$data['_availment'][$key][$_param_name[$param].'_member_avail']	= TblApprovalModel::where('tbl_approval.approval_created','LIKE','%'.$date.'-'.sprintf("%02d", $param+1).'%')->count();
-
+	            	//amount of patient per month and availment
 	            	$data['_availment'][$key][$_param_name[$param].'_amount']		= TblApprovalModel::where('availment_id',$availment->availment_id)
 																	            	->join('tbl_approval_total','tbl_approval_total.approval_id','=','tbl_approval.approval_id')
 																	            	->where('tbl_approval.approval_created','LIKE','%'.$date.'-'.sprintf("%02d", $param+1).'%')
-																	            	->select([DB::raw("SUM(total_gross_amount) as total_gross")])
-																	            	->first();
-
-	            	if($data['_availment'][$key][$_param_name[$param].'_amount']->total_gross == null)
-	            	{
-	            		$data['_availment'][$key][$_param_name[$param].'_amount']->total_gross = 0;
-	            	}
-
-	            	$data['_availment'][$key][$_param_name[$param].'_total_amount']	= TblApprovalModel::join('tbl_approval_total','tbl_approval_total.approval_id','=','tbl_approval.approval_id')
-																	            	->where('tbl_approval.approval_created','LIKE','%'.$date.'-'.sprintf("%02d", $param+1).'%')
-																	            	->select([DB::raw("SUM(total_gross_amount) as total_gross")])
-																	            	->first();
-
-					if( $data['_availment'][$key][$_param_name[$param].'_total_amount']->total_gross == null)
-	            	{
-	            		$data['_availment'][$key][$_param_name[$param].'_total_amount']->total_gross = 0;
-	            	}
+																	            	->where('tbl_approval.archived',0)
+																	            	->sum('total_gross_amount');
 	            }
 			}
 
@@ -2657,14 +2655,26 @@ class CarewellController extends ActiveAuthController
 
 			$data['link']		= '/reports/reports_company_availment/export_excel/'.date('Y');
 	        $data['date']      	=  $date = date('Y');
-
-	        $_param_name        = array('count_jan','count_feb','count_mar','count_apr','count_may','count_jun','count_jul','count_aug','count_sep','count_oct','count_nov','count_dec');
-			$_param_val         = array('01','02','03','04','05','06','07','08','09','10','11','12'); 
 			
+			$_param_name        = array('count_jan','count_feb','count_mar','count_apr','count_may','count_jun','count_jul','count_aug','count_sep','count_oct','count_nov','count_dec');
+			$_param_val         = array('01','02','03','04','05','06','07','08','09','10','11','12'); 
+			$_param_key			= array(0,1,2,3,4,5,6,7,8,9,10,11);
+
 			$data['grand_total_all'] = TblApprovalModel::where('tbl_approval.approval_created','LIKE','%'.$date.'%')
 					                                                ->join('tbl_member_company','tbl_member_company.member_id','=','tbl_approval.member_id')
 														            ->where('tbl_member_company.archived',0)
 																	->count();
+
+			$param_name_key = array_combine($_param_key, $_param_name);
+			$param_val_key = array_combine($_param_key, $_param_val);
+
+			foreach ($param_name_key as $key => $_param_key) 
+			{
+				$data['total'][$key] = TblApprovalModel::where('tbl_approval.approval_created','LIKE','%'.$date.'-'.$param_val_key[$key].'%')
+					                                                ->join('tbl_member_company','tbl_member_company.member_id','=','tbl_approval.member_id')
+														            ->where('tbl_member_company.archived',0)
+																	->count();                                                            
+			}
 
 			foreach ($data['_company'] as $key => $company) 
 			{
@@ -2903,70 +2913,69 @@ class CarewellController extends ActiveAuthController
 
 	public function reports_availment_monitoring_export_excel($date)
 		{
-			$data['page']     = 'Availment per Month Summary Monitoring';
+			$data['page']     = 'Availment per Month Monitoring Summary';
 			$data['user']     = StaticFunctionController::global();
 			$data['_availment'] = TblAvailmentModel::where('archived',0)->paginate(10);
 
-			$data['date'] = $date;
+			$data['link']		= '/reports/availment_monitoring/export_excel/'.date('Y');
+	        $data['date']      	= $date;
 
-			 $data['count_approval'] = TblApprovalModel::where('archived',0)->where('approval_created','LIKE','%'.$date.'%')->count();
+	        //total patient count
+	        $data['count_approval'] = TblApprovalModel::where('archived',0)->where('approval_created','LIKE','%'.$date.'%')->count();
+	        
+	        //total amount
 	        $data['sum_approval'] = TblApprovalModel::join('tbl_approval_total','tbl_approval_total.approval_id','=','tbl_approval.approval_id')
 	                ->where('tbl_approval.approval_created','LIKE','%'.$date.'%')
-	            	->select([DB::raw("SUM(total_gross_amount) as total_gross")])
-	            	->first();
-
-	            	if($data['sum_approval']->total_gross == null)
-	            	{
-	            		$data['sum_approval']->total_gross = 0;
-	            	}
+	                ->where('tbl_approval.archived',0)
+	            	->sum('total_gross_amount');
 	        
 	        $_param_name        = array('count_jan','count_feb','count_mar','count_apr','count_may','count_jun','count_jul','count_aug','count_sep','count_oct','count_nov','count_dec');
 			$_param_val         = array('01','02','03','04','05','06','07','08','09','10','11','12'); 
+			$_param_key			= array(0,1,2,3,4,5,6,7,8,9,10,11);
+
+			$param_name_key = array_combine($_param_key, $_param_name);
+			$param_val_key = array_combine($_param_key, $_param_val);    
+
+			//total patient and amount
+			foreach ($param_name_key as $key => $_param_key) 
+			{	
+				//total patient
+				$data['total'][$key] = TblApprovalModel::where('tbl_approval.approval_created','LIKE','%'.$date.'-'.$param_val_key[$key].'%')->where('tbl_approval.archived',0)->count();       
+				
+				//total amount
+				$data['total_amount'][$key] = TblApprovalModel::join('tbl_approval_total','tbl_approval_total.approval_id','=','tbl_approval.approval_id')
+																	            	->where('tbl_approval.approval_created','LIKE','%'.$date.'-'.$param_val_key[$key].'%')
+																	            	->where('tbl_approval.archived',0)
+																	            	->sum('total_gross_amount');                                                       
+			}		
 
 			foreach ($data['_availment'] as $key => $availment)
 			{
-				$data['_availment'][$key]['count'] = TblApprovalModel::where('availment_id',$availment->availment_id)
+				//total number of patient (column)
+				$data['_availment'][$key]['count'] 		= TblApprovalModel::where('availment_id',$availment->availment_id)
 													->where('tbl_approval.approval_created','LIKE','%'.$date.'%')
-													->where('archived',0)	
+													->where('archived',0)
 													->count();
 
+				//total amount (column)
 				$data['_availment'][$key]['count_sum']	= TblApprovalModel::where('availment_id',$availment->availment_id)
-				    ->where('tbl_approval.approval_created','LIKE','%'.$date.'%')
-	            	->join('tbl_approval_total','tbl_approval_total.approval_id','=','tbl_approval.approval_id')
-	            	->select([DB::raw("SUM(total_gross_amount) as total_gross")])
-	            	->first();
+												    ->where('tbl_approval.approval_created','LIKE','%'.$date.'%')
+									            	->where('tbl_approval.archived',0)
+									            	->join('tbl_approval_total','tbl_approval_total.approval_id','=','tbl_approval.approval_id')
+									            	->sum('total_gross_amount');
 
-	            	if($data['_availment'][$key]['count_sum']->total_gross == null)
-	            	{
-	            		$data['_availment'][$key]['count_sum']->total_gross = 0;
-	            	}
-
+				//jan, feb , mar, apr, may, jun, jul, aug, sep, oct, nov ,dec				            	
 				foreach($_param_name as $param=>$param_name)
 	            {
-	            	$data['_availment'][$key][$_param_name[$param]]	= TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.$date.'-'.sprintf("%02d", $param+1).'%')->count();
+	            	//number of patient per month and availment
+	            	$data['_availment'][$key][$_param_name[$param]]					= TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.$date.'-'.sprintf("%02d", $param+1).'%')->where('tbl_approval.archived',0)->count();
 
-	            	$data['_availment'][$key][$_param_name[$param].'_member_avail']	= TblApprovalModel::where('tbl_approval.approval_created','LIKE','%'.$date.'-'.sprintf("%02d", $param+1).'%')->count();
-
-	            	$data['_availment'][$key][$_param_name[$param].'_amount']	= TblApprovalModel::where('availment_id',$availment->availment_id)
-																            	->join('tbl_approval_total','tbl_approval_total.approval_id','=','tbl_approval.approval_id')
-																            	->where('tbl_approval.approval_created','LIKE','%'.$date.'-'.sprintf("%02d", $param+1).'%')
-																            	->select([DB::raw("SUM(total_gross_amount) as total_gross")])
-																            	->first();
-
-	            	$data['_availment'][$key][$_param_name[$param].'_total_amount']	= TblApprovalModel::join('tbl_approval_total','tbl_approval_total.approval_id','=','tbl_approval.approval_id')
+	            	//amount of patient per month and availment
+	            	$data['_availment'][$key][$_param_name[$param].'_amount']		= TblApprovalModel::where('availment_id',$availment->availment_id)
+																	            	->join('tbl_approval_total','tbl_approval_total.approval_id','=','tbl_approval.approval_id')
 																	            	->where('tbl_approval.approval_created','LIKE','%'.$date.'-'.sprintf("%02d", $param+1).'%')
-																	            	->select([DB::raw("SUM(total_gross_amount) as total_gross")])
-																	            	->first();
-
-	            	if($data['_availment'][$key][$_param_name[$param].'_amount']->total_gross == null)
-	            	{
-	            		$data['_availment'][$key][$_param_name[$param].'_amount']->total_gross = 0;
-	            	}
-
-	            	if( $data['_availment'][$key][$_param_name[$param].'_total_amount']->total_gross == null)
-	            	{
-	            		$data['_availment'][$key][$_param_name[$param].'_total_amount']->total_gross = 0;
-	            	}
+																	            	->where('tbl_approval.archived',0)
+																	            	->sum('total_gross_amount');
 	            }
 			}
 
@@ -3033,18 +3042,34 @@ class CarewellController extends ActiveAuthController
 
 	public function reports_company_availment_per_month_export_excel($date)
 	{
-		$data['_company'] = TblCompanyModel::where('archived',0)->paginate(10);
-		$data['_availment'] = TblAvailmentModel::where('archived',0)->paginate(10);
-
-        $data['date']      =  $date;
-
-        $_param_name        = array('count_jan','count_feb','count_mar','count_apr','count_may','count_jun','count_jul','count_aug','count_sep','count_oct','count_nov','count_dec');
-		$_param_val         = array('01','02','03','04','05','06','07','08','09','10','11','12'); 
 		
+		$data['page'] 		= 'Company Monthly Availment Report';
+		$data['user']    	= StaticFunctionController::global();
+		$data['_company'] 	= TblCompanyModel::where('archived',0)->get();
+		$data['_availment'] = TblAvailmentModel::where('archived',0)->get();
+
+		$data['link']		= '/reports/reports_company_availment/export_excel/'.$date;
+        $data['date']      	=  $date;
+		
+		$_param_name        = array('count_jan','count_feb','count_mar','count_apr','count_may','count_jun','count_jul','count_aug','count_sep','count_oct','count_nov','count_dec');
+		$_param_val         = array('01','02','03','04','05','06','07','08','09','10','11','12'); 
+		$_param_key			= array(0,1,2,3,4,5,6,7,8,9,10,11);
+
 		$data['grand_total_all'] = TblApprovalModel::where('tbl_approval.approval_created','LIKE','%'.$date.'%')
 				                                                ->join('tbl_member_company','tbl_member_company.member_id','=','tbl_approval.member_id')
 													            ->where('tbl_member_company.archived',0)
 																->count();
+
+		$param_name_key = array_combine($_param_key, $_param_name);
+		$param_val_key = array_combine($_param_key, $_param_val);
+
+		foreach ($param_name_key as $key => $_param_key) 
+		{
+			$data['total'][$key] = TblApprovalModel::where('tbl_approval.approval_created','LIKE','%'.$date.'-'.$param_val_key[$key].'%')
+				                                                ->join('tbl_member_company','tbl_member_company.member_id','=','tbl_approval.member_id')
+													            ->where('tbl_member_company.archived',0)
+																->count();                                                            
+		}
 
 		foreach ($data['_company'] as $key => $company) 
 		{
@@ -3053,41 +3078,40 @@ class CarewellController extends ActiveAuthController
 
 			foreach($data['_company'][$key]['availment'] as $avail=>$availment)
 			{
-				$data['_company'][$key]['availment'][$avail]['total'] = TblApprovalModel::where('availment_id',$availment->availment_id)
-																->join('tbl_member_company','tbl_member_company.member_id','=','tbl_approval.member_id')
-													            ->where('tbl_member_company.company_id',$company->company_id)
-													            ->where('tbl_member_company.archived',0)
-																->count();
+				$data['_company'][$key]['availment'][$avail]['total'] 	= TblApprovalModel::where('availment_id',$availment->availment_id)
+																		->join('tbl_member_company','tbl_member_company.member_id','=','tbl_approval.member_id')
+															            ->where('tbl_member_company.company_id',$company->company_id)
+															            ->where('tbl_member_company.archived',0)
+																		->count();
 
-				$data['_company'][$key]['total_all'] = TblApprovalModel::where('tbl_approval.approval_created','LIKE','%'.$date.'%')
-				                                                ->join('tbl_member_company','tbl_member_company.member_id','=','tbl_approval.member_id')
-													            ->where('tbl_member_company.company_id',$company->company_id)
-													            ->where('tbl_member_company.archived',0)
-																->count();
+				$data['_company'][$key]['total_all'] 					= TblApprovalModel::where('tbl_approval.approval_created','LIKE','%'.$date.'%')
+						                                                ->join('tbl_member_company','tbl_member_company.member_id','=','tbl_approval.member_id')
+															            ->where('tbl_member_company.company_id',$company->company_id)
+															            ->where('tbl_member_company.archived',0)
+																		->count();
 
 				foreach($_param_name as $param=>$param_name)
 	            {
 	            	$data['_company'][$key]['availment'][$avail][$_param_name[$param]]	= TblApprovalModel::where('availment_id',$availment->availment_id)->where('tbl_approval.approval_created','LIKE','%'.$date.'-'.sprintf("%02d", $param+1).'%')
-														            	->join('tbl_member_company','tbl_member_company.member_id','=','tbl_approval.member_id')
-														            	->where('tbl_member_company.company_id',$company->company_id)
-														            	->where('tbl_member_company.archived',0)
-														            	->count();
+																		            	->join('tbl_member_company','tbl_member_company.member_id','=','tbl_approval.member_id')
+																		            	->where('tbl_member_company.company_id',$company->company_id)
+																		            	->where('tbl_member_company.archived',0)
+																		            	->count();
 
-					$data['_company'][$key][$_param_name[$param].'_total']	= TblApprovalModel::where('tbl_approval.approval_created','LIKE','%'.$date.'-'.sprintf("%02d", $param+1).'%')
-		            	->join('tbl_member_company','tbl_member_company.member_id','=','tbl_approval.member_id')
-		            	->where('tbl_member_company.company_id',$company->company_id)
-		            	->where('tbl_member_company.archived',0)
-		            	->count();
+					$data['_company'][$key][$_param_name[$param].'_total']				= TblApprovalModel::where('tbl_approval.approval_created','LIKE','%'.$date.'-'.sprintf("%02d", $param+1).'%')
+																		            	->join('tbl_member_company','tbl_member_company.member_id','=','tbl_approval.member_id')
+																		            	->where('tbl_member_company.company_id',$company->company_id)
+																		            	->where('tbl_member_company.archived',0)
+																		            	->count();
 
-		            $data['_company'][$key][$_param_name[$param].'_grand_total']	= TblApprovalModel::where('tbl_approval.approval_created','LIKE','%'.$date.'-'.sprintf("%02d", $param+1).'%')
-		            	->join('tbl_member_company','tbl_member_company.member_id','=','tbl_approval.member_id')
-		            	->where('tbl_member_company.archived',0)
-		            	->count();									            	
+		            $data['_company'][$key][$_param_name[$param].'_grand_total']		= TblApprovalModel::where('tbl_approval.approval_created','LIKE','%'.$date.'-'.sprintf("%02d", $param+1).'%')
+																		            	->join('tbl_member_company','tbl_member_company.member_id','=','tbl_approval.member_id')
+																		            	->where('tbl_member_company.archived',0)
+																		            	->count();									            	
 	            }
 
 			}
 		}
-
 		Excel::create("COMPANY MONTHLY AVAILMENT REPORTS ".$date,function($excel) use ($data)
 		{
 			$excel->sheet('clients',function($sheet) use ($data)

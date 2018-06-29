@@ -79,18 +79,18 @@
 				<table>
 					<tr class="total">
 						<th colspan="2">GRAND TOTAL</th>
-						<th id="sum-jan">{{$company->count_jan_grand_total}}</th>
-						<th id="sum-feb">{{$company->count_feb_grand_total}}</th>
-						<th id="sum-mar">{{$company->count_mar_grand_total}}</th>
-						<th id="sum-apr">{{$company->count_apr_grand_total}}</th>
-						<th id="sum-may">{{$company->count_may_grand_total}}</th>
-						<th id="sum-jun">{{$company->count_jun_grand_total}}</th>
-						<th id="sum-jul">{{$company->count_jul_grand_total}}</th>
-						<th id="sum-aug">{{$company->count_aug_grand_total}}</th>
-						<th id="sum-sep">{{$company->count_sep_grand_total}}</th>
-						<th id="sum-oct">{{$company->count_oct_grand_total}}</th>
-						<th id="sum-nov">{{$company->count_nov_grand_total}}</th>
-						<th id="sum-dec">{{$company->count_dec_grand_total}}</th>
+						<th id="sum-jan">{{$total[0]}}</th>
+						<th id="sum-feb">{{$total[1]}}</th>
+						<th id="sum-mar">{{$total[2]}}</th>
+						<th id="sum-apr">{{$total[3]}}</th>
+						<th id="sum-may">{{$total[4]}}</th>
+						<th id="sum-jun">{{$total[5]}}</th>
+						<th id="sum-jul">{{$total[6]}}</th>
+						<th id="sum-aug">{{$total[7]}}</th>
+						<th id="sum-sep">{{$total[8]}}</th>
+						<th id="sum-oct">{{$total[9]}}</th>
+						<th id="sum-nov">{{$total[10]}}</th>
+						<th id="sum-dec">{{$total[11]}}</th>
 						<th id="sum-count">{{$grand_total_all}}</th>
 					</tr>
 				</table>

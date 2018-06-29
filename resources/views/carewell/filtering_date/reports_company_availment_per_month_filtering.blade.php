@@ -1,10 +1,10 @@
 <div class="row top-element">
 	<!-- 	<div class="col-md-3 col-xs-12 pull-left">
 			<select class="form-control">
-					<option value="">SELECT COMPANY</option>
-					@foreach($_company as $company)
-					<option>{{$company->company_name}}</option>
-					@endforeach
+								<option value="">SELECT COMPANY</option>
+								@foreach($_company as $company)
+								<option>{{$company->company_name}}</option>
+								@endforeach
 			</select>
 	</div> -->
 	<div class="col-md-3 col-xs-12">
@@ -22,7 +22,7 @@
 		
 	</div>
 </div>
-<div  id="showTable" class="load-data load-reports-availment-per-month" data-target="load-reports-availment-per-month">
+<div  id="showTable" class="load-data load-reports-company-availment-per-month" data-target="load-reports-company-availment-per-month">
 	<div class="table-responsive no-padding">
 		
 		<table class="">
@@ -57,19 +57,19 @@
 							<td></td>
 							@endif
 							<td>{{$availment->availment_name}}</td>
-							<td class="sum-jan">{{$availment->count_jan}}</td>
-							<td class="sum-feb">{{$availment->count_feb}}</td>
-							<td class="sum-mar">{{$availment->count_mar}}</td>
-							<td class="sum-apr">{{$availment->count_apr}}</td>
-							<td class="sum-may">{{$availment->count_may}}</td>
-							<td class="sum-jun">{{$availment->count_jun}}</td>
-							<td class="sum-jul">{{$availment->count_jul}}</td>
-							<td class="sum-aug">{{$availment->count_aug}}</td>
-							<td class="sum-sep">{{$availment->count_sep}}</td>
-							<td class="sum-oct">{{$availment->count_oct}}</td>
-							<td class="sum-nov">{{$availment->count_nov}}</td>
-							<td class="sum-dec">{{$availment->count_dec}}</td>
-							<td class="sum-count">{{$availment->total}}</td>
+							<td>{{$availment->count_jan}}</td>
+							<td>{{$availment->count_feb}}</td>
+							<td>{{$availment->count_mar}}</td>
+							<td>{{$availment->count_apr}}</td>
+							<td>{{$availment->count_may}}</td>
+							<td>{{$availment->count_jun}}</td>
+							<td>{{$availment->count_jul}}</td>
+							<td>{{$availment->count_aug}}</td>
+							<td>{{$availment->count_sep}}</td>
+							<td>{{$availment->count_oct}}</td>
+							<td>{{$availment->count_nov}}</td>
+							<td>{{$availment->count_dec}}</td>
+							<td>{{$availment->total}}</td>
 						</tr>
 						@if($key == 7)
 						<tr>
@@ -94,25 +94,24 @@
 					</table>
 				</td>
 			</tr>
-			
 			@endforeach
 			<tr>
 				<td>
 					<table class="" style="width: 100%;">
 						<tr>
-							<td colspan="2">GRAND TOTAL</td>
-							<td id="sum-jan">{{$company->count_jan_grand_total}}</td>
-							<td id="sum-feb">{{$company->count_feb_grand_total}}</td>
-							<td id="sum-mar">{{$company->count_mar_grand_total}}</td>
-							<td id="sum-apr">{{$company->count_apr_grand_total}}</td>
-							<td id="sum-may">{{$company->count_may_grand_total}}</td>
-							<td id="sum-jun">{{$company->count_jun_grand_total}}</td>
-							<td id="sum-jul">{{$company->count_jul_grand_total}}</td>
-							<td id="sum-aug">{{$company->count_aug_grand_total}}</td>
-							<td id="sum-sep">{{$company->count_sep_grand_total}}</td>
-							<td id="sum-oct">{{$company->count_oct_grand_total}}</td>
-							<td id="sum-nov">{{$company->count_nov_grand_total}}</td>
-							<td id="sum-dec">{{$company->count_dec_grand_total}}</td>
+							<td colspan="2">GRAND TOTAL FOR YEAR {{$date}}</td>
+							<td id="sum-jan">{{$total[0]}}</td>
+							<td id="sum-feb">{{$total[1]}}</td>
+							<td id="sum-mar">{{$total[2]}}</td>
+							<td id="sum-apr">{{$total[3]}}</td>
+							<td id="sum-may">{{$total[4]}}</td>
+							<td id="sum-jun">{{$total[5]}}</td>
+							<td id="sum-jul">{{$total[6]}}</td>
+							<td id="sum-aug">{{$total[7]}}</td>
+							<td id="sum-sep">{{$total[8]}}</td>
+							<td id="sum-oct">{{$total[9]}}</td>
+							<td id="sum-nov">{{$total[10]}}</td>
+							<td id="sum-dec">{{$total[11]}}</td>
 							<td id="sum-count">{{$grand_total_all}}</td>
 						</tr>
 					<tr></tr>
@@ -121,7 +120,6 @@
 		</tr>
 	</table>
 </div>
-</div>
 <div class="box-footer clearfix">
-@include('globals.pagination', ['paginator' => $_company])
+	@include('globals.pagination_v2', ['paginator' => $_company])
 </div>

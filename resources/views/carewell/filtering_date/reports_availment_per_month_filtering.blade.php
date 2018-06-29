@@ -1,22 +1,22 @@
 <script type="text/javascript">
 $(document).ready(function(){
-settings_reports.calculateSum('sum-jan');
-settings_reports.calculateSum('sum-feb');
-settings_reports.calculateSum('sum-mar');
-settings_reports.calculateSum('sum-apr');
-settings_reports.calculateSum('sum-may');
-settings_reports.calculateSum('sum-jun');
-settings_reports.calculateSum('sum-jul');
-settings_reports.calculateSum('sum-aug');
-settings_reports.calculateSum('sum-sep');
-settings_reports.calculateSum('sum-oct');
-settings_reports.calculateSum('sum-nov');
-settings_reports.calculateSum('sum-dec');
-settings_reports.calculateSum('sum-count');
+// settings_reports.calculateSum('sum-jan');
+// settings_reports.calculateSum('sum-feb');
+// settings_reports.calculateSum('sum-mar');
+// settings_reports.calculateSum('sum-apr');
+// settings_reports.calculateSum('sum-may');
+// settings_reports.calculateSum('sum-jun');
+// settings_reports.calculateSum('sum-jul');
+// settings_reports.calculateSum('sum-aug');
+// settings_reports.calculateSum('sum-sep');
+// settings_reports.calculateSum('sum-oct');
+// settings_reports.calculateSum('sum-nov');
+// settings_reports.calculateSum('sum-dec');
+// settings_reports.calculateSum('sum-count');
 });
 </script>
 <div class="row top-element">
-<!--     <div class="col-md-3 col-xs-12 pull-left">
+    <!--     <div class="col-md-3 col-xs-12 pull-left">
         <select class="form-control">
             <option value="">SELECT COMPANY</option>
             @foreach($_company as $company)
@@ -77,24 +77,24 @@ settings_reports.calculateSum('sum-count');
             </tr>
             @endforeach
             <tr>
-                <td>TOTAL</td>
-                <td id="sum-jan"></td>
-                <td id="sum-feb"></td>
-                <td id="sum-mar"></td>
-                <td id="sum-apr"></td>
-                <td id="sum-may"></td>
-                <td id="sum-jun"></td>
-                <td id="sum-jul"></td>
-                <td id="sum-aug"></td>
-                <td id="sum-sep"></td>
-                <td id="sum-oct"></td>
-                <td id="sum-nov"></td>
-                <td id="sum-dec"></td>
-                <td id="sum-count"></td>
+                <td>TOTAL FOR YEAR {{$date}}</td>
+                <td id="sum-jan">{{$total[0]}}</td>
+                <td id="sum-feb">{{$total[1]}}</td>
+                <td id="sum-mar">{{$total[2]}}</td>
+                <td id="sum-apr">{{$total[3]}}</td>
+                <td id="sum-may">{{$total[4]}}</td>
+                <td id="sum-jun">{{$total[5]}}</td>
+                <td id="sum-jul">{{$total[6]}}</td>
+                <td id="sum-aug">{{$total[7]}}</td>
+                <td id="sum-sep">{{$total[8]}}</td>
+                <td id="sum-oct">{{$total[9]}}</td>
+                <td id="sum-nov">{{$total[10]}}</td>
+                <td id="sum-dec">{{$total[11]}}</td>
+                <td id="sum-count">{{$total_count}}</td>
             </tr>
         </table>
     </div>
 </div>
 <div class="box-footer clearfix">
-    @include('globals.pagination', ['paginator' => $_company])
+    @include('globals.pagination_v2', ['paginator' => $_company])
 </div>
