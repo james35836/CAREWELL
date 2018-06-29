@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>Payable</title>
+		<title>APPROVAL</title>
 		<style>
 		@page
 		{
@@ -60,7 +60,7 @@
 		}
 		div.pdf-footer
 		{
-			font-size:13px !important;
+			font-size:8px !important;
 			font-weight: bold !important;
 			text-align: center;
 			margin-top:30px;
@@ -162,7 +162,6 @@
 				</div>
 			</div>
 			@if($approval_details->availment_id!=4)
-			{{$approval_details->availment_id}}
 			<div class="box-border-content">
 				<div class="header-text">
 					PROCEDURE

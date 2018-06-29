@@ -48,19 +48,31 @@ function availment_center()
 		var grand_total = 0;
 		$this.find('.gross-amount').each(function() 
 		{
-			amount += Number($(this).val());
+			if(!$(this).closest('tr').find('.procedure_disapproved').is(':checked'))
+			{
+				amount += Number($(this).val());
+			}
 		});
 		$this.find('.philhealth').each(function() 
 		{
-			philhealth += Number($(this).val());
+			if(!$(this).closest('tr').find('.procedure_disapproved').is(':checked'))
+			{
+				philhealth += Number($(this).val());
+			}
 		});
 		$this.find('.charge-patient').each(function() 
 		{
-			patient += Number($(this).val());
+			if(!$(this).closest('tr').find('.procedure_disapproved').is(':checked'))
+			{
+				patient += Number($(this).val());
+			}
 		});
 		$this.find('.charge-carewell').each(function() 
 		{
-			carewell += Number($(this).val());
+			if(!$(this).closest('tr').find('.procedure_disapproved').is(':checked'))
+			{
+				carewell += Number($(this).val());
+			}
 		});
 		
 		$this.find('input.total_gross_amount').val(amount);
@@ -350,7 +362,7 @@ function availment_center()
 
 			if($(this).val()==4)
 			{
-				$(this).closest('.modal').find('div#minorOps').css('display','none');
+				$(this).closest('.modal').find('div#minorOps').remove();
 			}
 			else
 			{
@@ -386,62 +398,19 @@ function availment_center()
 	{
 		$('body').on('click','.create-approval-confirm',function() 
 		{
+			var validator 			= [];
+			validator 		= globals.validators('form.approval-submit-form .required');
 			
-            if(document.getElementById('member_id').value==0)
+			if(validator.length!=0)
 			{
-				globals.global_tostr('MEMBER');
-			}	
-			else if(document.getElementById('provider_id').value==0)
-			{
-				globals.global_tostr('PROVIDER');
-			}
-			else if(document.getElementById('availment_id').value==0)
-			{
-				globals.global_tostr('AVAILMENT');
-			}
-		    else if(globals.checking_null_validation(document.getElementById('approval_complaint').value,"COMPLAINT")=="")
-			{}
-		    else if(document.getElementById('diagnosis_id').value==0)
-			{
-				globals.global_tostr('INITIAL DIAGNOSIS');
-			}
-			else if(document.getElementById('approval_date_availed').value==0)
-			{
-				globals.global_tostr('AVAILMENT DATE');
+				toastr.error('All form with red border is required.', 'Something went wrong!', {timeOut: 3000})
 			}
 			else 
 			{
-				$("select.final_diagnosis_id").each(function(i, sel)
-            	{
-	            	var selectedFinal = $(sel).val();
-	            	if(selectedFinal!=0)
-	            	{
-	            		finalDiagnosisData.push(selectedFinal);
-	            	}
-            	});
-            	// $("select.doctor-payee").each(function(i, sel)
-            	// {
-	            // 	var selectedPayee = $(sel).val();
-	            // 	if(selectedPayee!=0)
-	            // 	{
-	            // 		payeeData.push(selectedPayee);
-	            // 	}
-            	// });
-            	if(finalDiagnosisData==null||finalDiagnosisData=="")
-				{
-					globals.global_tostr('FINAL DIAGNOSIS');
-				}
-				// else if(payeeData==null||payeeData=="")
-				// {
-				// 	globals.global_tostr('PAYEE');
-				// }
-				else
-				{
-					var	confirmModalMessage = 'Are you sure you want to add this approval?';
-					var confirmModalAction = 'create-approval-submit';
-					globals.confirm_modals(confirmModalMessage,confirmModalAction);
-					ajaxData = $("form.approval-submit-form").serialize();
-				}
+				var	confirmModalMessage = 'Are you sure you want to add this approval?';
+				var confirmModalAction = 'create-approval-submit';
+				globals.confirm_modals(confirmModalMessage,confirmModalAction);
+				ajaxData = $("form.approval-submit-form").serialize();
 			}
 		});
 	}

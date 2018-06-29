@@ -11,7 +11,9 @@
                <ul class="nav nav-tabs">
                     <li class="active"><a href="#activeTab" data-toggle="tab">OPEN </a></li>
                     <li><a href="#pendingTab" data-toggle="tab">PENDING</a></li>
-                    <li><a href="#inActiveTab" data-toggle="tab">CLOSE </a></li>
+                    <li><a href="#inActiveTab" data-toggle="tab">CLOSED </a></li>
+                    <li><a href="#inActiveTab" data-toggle="tab">CANCELLED </a></li>
+                    <li><a href="#inActiveTab" data-toggle="tab">DISAPPROVED </a></li>
                </ul>
                <div class="tab-content">
                     <div class="tab-pane active" id="activeTab">
@@ -64,7 +66,8 @@
                                                        </button>
                                                        <ul class="dropdown-menu" role="menu" style="position: absolute !important;">
                                                             <li><button type="button" data-approval_id="{{$approval_active->approval_id}}" class="btn btn-link view-approval-details"><i class="fa fa-eye btn-icon"></i>  View Approval</button></li>
-                                                            {{-- <li><button type="button" class="btn btn-link"><i class="fa fa-trash btn-icon"></i> Archived Approval</button></li> --}}
+                                                            <li><button type="button" class="btn btn-link"><i class="fa fa-trash btn-icon"></i> Cancell Approval</button></li>
+                                                            <li><button type="button" class="btn btn-link"><i class="fa fa-trash btn-icon"></i> Disapprove Approval</button></li>
                                                        </ul>
                                                   </div>
                                              </td>

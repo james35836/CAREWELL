@@ -72,6 +72,7 @@ Route::get('/settings/access', 						        'AdminController@access_center');
 Route::get('/settings/access/create_position', 				'AdminController@access_center_create_position');
 Route::post('/settings/access/create_position/submit', 		'AdminController@access_center_create_position_submit');
 
+Route::get('/settings/terminated', 							'AdminController@terminated_member');
 
 /*DASHBOARD*/
 Route::get('/dashboard', 						     		'CarewellController@dashboard');
@@ -134,7 +135,7 @@ Route::get('/billing/create_cal', 							'CarewellController@billing_create_cal'
 Route::post('/billing/create_cal/sumbit', 					'CarewellController@billing_create_cal_submit');
 Route::get('/billing/cal_details/{cal_id}', 				'CarewellController@billing_cal_details');
 
-Route::post('/billing/update_cal_details/sumbit', 			'CarewellController@billing_update_cal_details_submit');
+Route::post('/billing/update_cal_details/submit', 			'CarewellController@billing_update_cal_details_submit');
 
 
 Route::get('/billing/import_cal_members/{cal_id}/{company_id}',    'CarewellController@billing_import_cal_members');
@@ -178,19 +179,13 @@ Route::post('/availment/add_approval_details/submit',		'CarewellController@avail
 Route::get('/payable', 										'CarewellController@payable');
 Route::get('/payable/create_payable', 						'CarewellController@payable_create');
 Route::get('/payable/get_approval/{provider_id}', 			'CarewellController@payable_create_get_approval');
-Route::post('/payable/search_approval', 					'CarewellController@payable_search_approval');
 Route::post('/payable/create_payable/submit', 				'CarewellController@payable_create_submit');
 Route::get('/payable/payable_details/{payable_id}', 		'CarewellController@payable_details');
 Route::get('/payable/payable_details/export_excel/{payable_id}', 'CarewellController@payable_details_export_excel');
 Route::post('/payable/update_payable/submit', 				'CarewellController@payable_update_submit');
-
 Route::get('/payable/mark_close/{payable_id}', 				'CarewellController@payable_mark_close');
 Route::post('/payable/mark_close/submit', 					'CarewellController@payable_mark_close_submit');
-
-
 Route::get('/payable/payable_export_pdf/{approval_id}', 	'CarewellController@payable_export_pdf');
-
-
 
 /*REPORTS*/
 Route::get('/reports', 										'CarewellController@reports');
@@ -239,6 +234,13 @@ Route::get('/page/select_filter', 'SearchController@selectFiltering');
 
 
 Route::post('/reports/member_cal/get_report', 'TestController@test_search');
+
+
+
+Route::get('/reports/ajudication',							'CarewellController@reports_ajudication');
+Route::get('/reports/ajudication/pdf/{payable_id}',   		'CarewellController@reports_ajudication_pdf');
+
+
 
 /*SETTINGS*/
 Route::get('/settings/coverage', 				    		'CarewellController@settings_coverage_plan');

@@ -295,5 +295,12 @@ class AdminController extends ActiveAuthController
             return '<center><b><span class="color-gray">WRONG FILE</span></b></center>';
         }
     }
+    public function terminated_member()
+    {
+        $data['page'] = 'Terminated Member';
+        $data['user'] = StaticFunctionController::global();
+        $data['_position'] = TblPositionModel::where('archived',0)->paginate(10);
+        return view('carewell.pages.terminated_member',$data);
+    }
 
 }

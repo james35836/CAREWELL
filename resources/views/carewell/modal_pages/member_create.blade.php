@@ -21,9 +21,10 @@
 	});
 	$(function ()
 	{
-		$("body").on("click", ".datepicker", function(){
-		$(this).datepicker();
-		$(this).datepicker("show");
+		$("body").on("click", ".datepicker", function()
+		{
+			$(this).datepicker();
+			$(this).datepicker("show");
 		
 		});
 	})

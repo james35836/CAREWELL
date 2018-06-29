@@ -21,7 +21,7 @@ function payable_center()
 			view_payable_details();
 			update_payable_confirm();
 			update_payable_submit()
-			search_filter_approval();
+			
 
 			payable_mark_as_close();
 			payable_mark_as_close_confirm();
@@ -29,38 +29,7 @@ function payable_center()
 		});
 
 	}
-	function search_filter_approval()
-	{
-		$('body').on('click','.search-approval',function() 
-		{
-			var key     		= $('.search-approval-key').val();
-			var provider_id     = $('#provider_id').val();
-			if(key=="")
-			{
-				toastr.error('Input search key first.', 'Something went wrong!', {timeOut: 3000})
-			}
-			else if(provider_id=="")
-			{
-				toastr.error('Please select provider first.', 'Something went wrong!', {timeOut: 3000})
-			}
-			else
-			{
-				$.ajax({
-					headers: {
-					      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-					},
-					url:'/payable/search_approval',
-					method: "post",
-					data  :  {key:key,provider_id:provider_id},
-					success: function(data)
-					{
-						$('.load-member-approval').html(data);
-					}
-				});
-			}
-			
-		});
-	}
+	
 	function create_payable()
 	{
         $('body').on('click','.create-payable',function() 
@@ -96,44 +65,33 @@ function payable_center()
      {
     	$('body').on('click','.create-payable-confirm',function() 
 		{
-			if(document.getElementById('provider_id').value=="Select Provider")
+			$('input[name="approval_id[]"]:checked').each(function(i,num)
+           	{
+            	if($(num).val()!="")
+            	{
+            		approvalData.push(this.value);
+            	}
+        	});
+			var validator 	= [];
+			validator 		= globals.validators('form.payable-submit-form .required');
+			if($('#provider_id').val()=="")
 			{
-				toastr.error('Please select provider first.', 'Something went wrong!', {timeOut: 3000})
+				toastr.error('Please select provider.', 'Something went wrong!', {timeOut: 3000})
 			}
-			else if(globals.checking_null_validation(document.getElementById('payable_soa_number').value,"SOA NUMBER")=="")
-			{}
-		    	else if(globals.checking_null_validation(document.getElementById('payable_recieved').value,"RECIEVED DATE")=="")
-			{}
-			else if(globals.checking_null_validation(document.getElementById('payable_due').value,"DUE DATE")=="")
-			{}
+			else if(validator.length!=0)
+			{
+				toastr.error('All form with red border is required.', 'Something went wrong!', {timeOut: 3000})
+			}
+			else if(approvalData.length==0)
+			{
+				toastr.error('Please select Approval at least one.', 'Something went wrong!', {timeOut: 3000})
+			}
 			else
 			{
-				$('input[name="approval_id[]"]:checked').each(function(i,num)
-	           	{
-		            	if($(num).val()!="")
-		            	{
-		            		approvalData.push(this.value);
-		            	}
-	            	});
-	            	if(approvalData==null||approvalData=="")
-				{
-					toastr.error('Please select Approval at least one.', 'Something went wrong!', {timeOut: 3000})
-				}
-				else
-				{
-					var	confirmModalMessage = 'Are you sure you want to add this payable?';
-					var confirmModalAction = 'create-payable-submit';
-					globals.confirm_modals(confirmModalMessage,confirmModalAction);
-					
-					payableData.append("provider_id", 			document.getElementById('provider_id').value);
-			          payableData.append("payable_soa_number",   	document.getElementById('payable_soa_number').value);
-			          payableData.append("payable_recieved", 		document.getElementById('payable_recieved').value);
-			          payableData.append("payable_due", 			document.getElementById('payable_due').value);
-			          for (var i = 0; i < approvalData.length; i++) 
-					{
-					    payableData.append('approvalData[]', approvalData[i]);
-					}
-				}
+				var	confirmModalMessage = 'Are you sure you want to add this payable?';
+				var confirmModalAction = 'create-payable-submit';
+				globals.confirm_modals(confirmModalMessage,confirmModalAction);
+				serializeData  = $("form.payable-submit-form").serialize();
 			}
 		});
     }
@@ -141,7 +99,7 @@ function payable_center()
     {
      	$('body').on('click','.create-payable-submit',function() 
 		{
-			globals.global_submit('payable','/payable/create_payable/submit',payableData);
+			globals.global_serialize_submit('payable','/payable/create_payable/submit',serializeData);
         });
     }
     function view_payable_details()

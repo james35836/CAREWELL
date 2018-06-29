@@ -217,30 +217,19 @@ function billing_center()
 	{
 		$('body').on('click','.create-cal-confirm',function() 
 		{
-			if(document.getElementById('company_id').value=="0")
+			var validator 	= [];
+			validator 		= globals.validators('form.cal-form-submit .required');
+			if(validator.length!=0)
 			{
-				globals.global_tostr('COMPANY');
+				toastr.error('All form with red border is required.', 'Something went wrong!', {timeOut: 3000})
 			}
-			else if(globals.checking_null_validation(document.getElementById('cal_reveneu_period_year').value,"REVENUE YEAR")=="")
-			{}
-			else if(globals.checking_null_validation(document.getElementById('cal_payment_mode').value,"MODE OF PAYMENT")=="")
-			{}
-			else if(globals.checking_null_validation(document.getElementById('cal_start').value,"PAYMENT START")=="")
-			{}
-			else if(globals.checking_null_validation(document.getElementById('cal_end').value,"PAYMENT END")=="")
-			{}
 			else
 			{
 				var	confirmModalMessage = 'Are you sure you want to add this CAL?';
 				var confirmModalAction = 'create-cal-submit';
 				globals.confirm_modals(confirmModalMessage,confirmModalAction);
-		 
-				calData.append("company_id", 				document.getElementById('company_id').value);
-	            	calData.append("cal_reveneu_period_year", 	document.getElementById('cal_reveneu_period_year').value);
-	            	calData.append("cal_payment_mode", 			document.getElementById('cal_payment_mode').value);
-	            	calData.append("cal_start", 				document.getElementById('cal_start').value);
-	            	calData.append("cal_end", 					document.getElementById('cal_end').value);
-	        }
+				serializeData  = $("form.cal-form-submit").serialize();
+			}
 		});
 	}
 	
@@ -248,7 +237,8 @@ function billing_center()
 	{
 		$('body').on('click','.create-cal-submit',function()
 		{
-			globals.global_submit('cal','/billing/create_cal/sumbit',calData);
+			globals.global_serialize_submit('cal','/billing/create_cal/sumbit',serializeData);
+		
         });
 		
 	}
@@ -278,36 +268,27 @@ function billing_center()
 	{
 		$('body').on('click','.update-cal-details-confirm',function() 
 		{
-			if(document.getElementById('company_id').value=="0")
+			var validator 	= [];
+			validator 		= globals.validators('form.update-cal-submit-form .required');
+			if(validator.length!=0)
 			{
-				globals.global_tostr('COMPANY');
+				toastr.error('All form with red border is required.', 'Something went wrong!', {timeOut: 3000})
 			}
-			else if(globals.checking_null_validation(document.getElementById('cal_reveneu_period_year').value,"REVENUE YEAR")=="")
-			{}
-			else if(globals.checking_null_validation(document.getElementById('cal_payment_mode').value,"MODE OF PAYMENT")=="")
-			{}
-			
 			else
 			{
-				var	confirmModalMessage = 'Are you sure you want to add this CAL?';
+				var	confirmModalMessage = 'Are you sure you want to update this CAL?';
 				var confirmModalAction = 'update-cal-details-submit';
 				globals.confirm_modals(confirmModalMessage,confirmModalAction);
-		 
-				calData.append("company_id", 				document.getElementById('company_id').value);
-	            calData.append("cal_reveneu_period_year", 	document.getElementById('cal_reveneu_period_year').value);
-	            calData.append("cal_payment_mode", 			document.getElementById('cal_payment_mode').value);
-	            calData.append("cal_start", 				document.getElementById('cal_start').value);
-	            calData.append("cal_end", 					document.getElementById('cal_end').value);
-	        	calData.append("cal_id",                    document.getElementById('cal_id').value);
-	        }
+				serializeData  = $("form.update-cal-submit-form").serialize();
+			}
 		});
 	}    
 	function cal_details_update_submit()
 	{
 		$('body').on('click','.update-cal-details-submit',function()
 		{
-			globals.global_submit('cal-details','/billing/update_cal_details/sumbit',calData);
-        });
+			globals.global_serialize_submit('cal-details','/billing/update_cal_details/submit',serializeData);
+		});
 	}
     function download_cal_template()
 	{
@@ -323,8 +304,6 @@ function billing_center()
 		{
 			var company_id 	= $(this).data('member_company_id');
 			var cal_id 		= $(this).data('member_cal_id');
-
-
 			var modalName 		= 'IMPORT MEMBER';
 			var modalClass 		= 'cal-member';
 			var modalLink 		= '/billing/import_cal_members/'+cal_id+'/'+company_id;
@@ -333,8 +312,6 @@ function billing_center()
 			var modalSize 		= 'modal-import';
 			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
         });
-
-		
 	}
 	function import_cal_member_confirm()
 	{
@@ -347,7 +324,6 @@ function billing_center()
 			calFileData.append("company_id", 			$(this).data('company_id'));
 			calFileData.append("cal_id", 				$(this).data('cal_id'));
 			calFileData.append("importCalMemberFile", 	document.getElementById('importCalMemberFile').files[0]);
-            
         });
 	}
 	function import_cal_member_submit()
@@ -396,7 +372,6 @@ function billing_center()
 		$('body').on('click','.restore-cal-member-submit',function() 
 		{
 			globals.global_single_submit('/billing/cal_member/restore',billingMemberData,ajaxData.tdCloser);
-
-		});
+        });
 	}
 }

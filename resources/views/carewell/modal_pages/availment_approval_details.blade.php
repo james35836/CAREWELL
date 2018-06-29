@@ -80,6 +80,11 @@ $(document).ready(function()
 		var text  = $(this).find(":selected").text();
 		$('select.charge_diagnosis').append('<option value="'+value+'" selected="selected">'+text+'</option>');
 	});
+	$('body').on('click','.procedure_disapproved',function()
+	{
+		var $this 			= $(this).closest('div.box-globals');
+		availment_center.get_total($this);
+	});
 	
 });
 </script>
@@ -359,11 +364,12 @@ $(document).ready(function()
 								@endforeach
 							</select>
 						</td>
-						<td><input type="hidden" id="procedure_approval_id" name="procedure_approval_id[]" value="{{$availed->procedure_approval_id}}"/><input type="number" readonly name="procedure_gross_amount[]" id="" class="gross-amount form-control" value="{{$availed->procedure_gross_amount}}" /></td>
-						<td><input type="number" readonly name="procedure_philhealth[]" id="" class="philhealth form-control" value="{{$availed->procedure_philhealth}}" /></td>
-						<td><input type="number" readonly name="procedure_charge_patient[]" id="" class="charge-patient form-control" value="{{$availed->procedure_charge_patient}}" /></td>
-						<td><input type="number" readonly name="procedure_charge_carewell[]" id="" class="charge-carewell form-control" value="{{$availed->procedure_charge_carewell}}" /></td>
-						<td><textarea readonly name="procedure_remarks[]" id="procedure_remarks"  cols="2" rows="1"  class="form-control">{{$availed->procedure_remarks}}</textarea></td>
+						<td><input type="hidden" id="procedure_approval_id" name="procedure_approval_id[]" value="{{$availed->procedure_approval_id}}"/><input type="number" readonly name="procedure_gross_amount[]" id="" class="gross-amount form-control" value="{{$availed->procedure_gross_amount}}" @if($availed->procedure_disapproved=="on") disabled  @endif/></td>
+						<td><input type="number" readonly name="procedure_philhealth[]" id="" class="philhealth form-control" value="{{$availed->procedure_philhealth}}" @if($availed->procedure_disapproved=="on") disabled  @endif/></td>
+						<td><input type="number" readonly name="procedure_charge_patient[]" id="" class="charge-patient form-control" value="{{$availed->procedure_charge_patient}}" @if($availed->procedure_disapproved=="on") disabled  @endif/></td>
+						<td><input type="number" readonly name="procedure_charge_carewell[]" id="" class="charge-carewell form-control" value="{{$availed->procedure_charge_carewell}}" @if($availed->procedure_disapproved=="on") disabled  @endif/></td>
+						<td><input type="checkbox" value="disapproved" name="procedure_disapproved[]" id="" class="procedure_disapproved" @if($availed->procedure_disapproved=="on") checked disabled  @endif/></td>
+						<td><textarea readonly name="procedure_remarks[]" id="procedure_remarks"  cols="2" rows="1"  class="form-control" @if($availed->procedure_disapproved=="on") disabled  @endif>{{$availed->procedure_remarks}}</textarea></td>
 						<td>
 							<div class="btn-group" role="group" aria-label="Basic example">
 								<button type="button" data-ref="PROCEDURE" data-id="{{$availed->procedure_approval_id}}" class="remove-approval-details-confirm btn btn-danger btn-sm"><i class="fa fa-minus-circle"></i></button>

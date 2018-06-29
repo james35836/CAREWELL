@@ -58,6 +58,9 @@ function company_center()
 	{
 		$('body').on('click','.create-company-confirm',function() 
 		{
+			$('body').find('div.alert-div').css('visibility','visible');
+			$('body').find('div.alert-div-message').html("james");
+			alert("james");
 			var countContract 	= document.getElementById('contract_image_name').files.length;
             	var countBenefits 	= document.getElementById('contract_benefits_name').files.length;
             	var check 		= globals.checkArrayValues($("select.coverage_plan_name"));

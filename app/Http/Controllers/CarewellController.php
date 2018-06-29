@@ -878,10 +878,16 @@ class CarewellController extends ActiveAuthController
 	    
 		foreach ($data['_provider_doctor'] as $key => $doctor) 
 	  	{
-	    		$data['_provider_doctor'][$key]['doctor_archive'] =  TblDoctorModel::where('doctor_id',$doctor->doctor_id)->value('archived');
+	    	$data['_provider_doctor'][$key]['doctor_archive'] =  TblDoctorModel::where('doctor_id',$doctor->doctor_id)->value('archived');
 	  	}
 
-		return view('carewell.modal_pages.provider_details',$data);
+	  	$data['_payable'] = TblPayableModel::where('tbl_payable.provider_id',$provider_id)->PayableInfo()->get();
+	  	foreach ($data['_payable'] as $key => $payable) 
+		{
+			$data['_payable'][$key]['approval_number']    =  TblPayableApprovalModel::where('payable_id',$payable->payable_id)->PayableStatus()->get();
+		}
+	  	
+	  	return view('carewell.modal_pages.provider_details',$data);
 	}
 	public function provider_import()
 	{
@@ -1002,7 +1008,7 @@ class CarewellController extends ActiveAuthController
 	{
 		$data['page']             = 'Doctor';
 		$data['user']             = StaticFunctionController::global();
-		$data['_provider']        = TblProviderModel::get();
+		$data['_provider']        = TblProviderModel::where('archived',0)->get();
 		$data['_doctor_active']   = TblDoctorModel::where('archived',0)->paginate(10);
 		$data['_doctor_inactive'] = TblDoctorModel::where('archived',1)->paginate(10);
 		foreach ($data['_doctor_active'] as $key => $doctor) 
@@ -1180,7 +1186,7 @@ class CarewellController extends ActiveAuthController
 		$companyCalData->company_id                 =   $request->company_id;
 		$companyCalData->save();
 
-		return StaticFunctionController::returnMessage('success','COMPANY CAL');     
+		return StaticFunctionController::customMessage('success','CAL CREATED SUCCESFULLY');
 	}
 	public function billing_cal_details($cal_id)
 	{
@@ -1788,18 +1794,22 @@ class CarewellController extends ActiveAuthController
 			$diagnosisData->approval_id = $approvalData->approval_id;
 			$diagnosisData->save();
 		}
-		foreach($request->procedure_id as $key=>$datas)
+		if($request->procedure_id!=null)
 		{
-			$procedureData = new TblApprovalProcedureModel;
-			$procedureData->procedure_id              = $request->procedure_id[$key];
-			$procedureData->procedure_gross_amount    = $request->procedure_gross_amount[$key];
-			$procedureData->procedure_philhealth      = $request->procedure_philhealth[$key];
-			$procedureData->procedure_charge_patient  = $request->procedure_charge_patient[$key];
-			$procedureData->procedure_charge_carewell = $request->procedure_charge_carewell[$key];
-			$procedureData->procedure_remarks         = StaticFunctionController::nullableToString($request->procedure_remarks[$key],'string');
-			$procedureData->diagnosis_id              = 1;
-			$procedureData->approval_id               = $approvalData->approval_id;
-			$procedureData->save();
+			foreach($request->procedure_id as $key=>$datas)
+			{
+				$procedureData = new TblApprovalProcedureModel;
+				$procedureData->procedure_id              = $request->procedure_id[$key];
+				$procedureData->procedure_gross_amount    = $request->procedure_gross_amount[$key];
+				$procedureData->procedure_philhealth      = $request->procedure_philhealth[$key];
+				$procedureData->procedure_charge_patient  = $request->procedure_charge_patient[$key];
+				$procedureData->procedure_charge_carewell = $request->procedure_charge_carewell[$key];
+				$procedureData->procedure_remarks         = StaticFunctionController::nullableToString($request->procedure_remarks[$key],'string');
+				$procedureData->procedure_disapproved     = StaticFunctionController::checkboxValue($request->procedure_disapproved[$key]);
+				$procedureData->diagnosis_id              = 1;
+				$procedureData->approval_id               = $approvalData->approval_id;
+				$procedureData->save();
+			}
 		}
 		foreach($request->doctor_id as $key=>$data)
 		{
@@ -1814,50 +1824,10 @@ class CarewellController extends ActiveAuthController
 			$doctorData->approval_id                      = $approvalData->approval_id;
 			$doctorData->save();
 		}
-		if($request->doctor_payee_id!=null)
-		{
-			foreach($request->doctor_payee_id as $key=>$payee_id)
-			{
-				$payeeDocData = new TblApprovalPayeeModel;
-				$payeeDocData->payee_id     = $payee_id;
-				$payeeDocData->approval_id  = $approvalData->approval_id;
-				$payeeDocData->payee_name   = 'doctor';
-				$payeeDocData->type         = 'doctor';
-				$payeeDocData->save();
-			}
-		}
+		
+		
 
-		if($request->payee_name!=null)
-		{
-			foreach($request->payee_name as $key=>$payee_name)
-			{
-				$payeeData = new TblApprovalPayeeModel;
-				$payeeData->payee_id     = '0';
-				$payeeData->approval_id  = $approvalData->approval_id;
-				$payeeData->payee_name   = $payee_name;
-				$payeeData->type         = 'payee';
-				$payeeData->save();
-			}
-		}
-		$totalData = new TblApprovalTotalModel;
-		$totalData->total_gross_amount    = StaticFunctionController::nullableToString($request->procedure_total_gross_amount,'int');
-		$totalData->total_philhealth      = StaticFunctionController::nullableToString($request->procedure_total_philhealth,'int');
-		$totalData->total_charge_patient  = StaticFunctionController::nullableToString($request->procedure_total_charge_patient,'int');
-		$totalData->total_charge_carewell = StaticFunctionController::nullableToString($request->procedure_total_charge_carewell,'int');
-		$totalData->total_type            = 'procedure';
-		$totalData->approval_id           = $approvalData->approval_id;
-		$totalData->save();
-
-		$totalDoctorData = new TblApprovalTotalModel;
-		$totalDoctorData->total_gross_amount    = StaticFunctionController::nullableToString($request->doctor_total_gross_amount,'int');
-		$totalDoctorData->total_philhealth      = StaticFunctionController::nullableToString($request->doctor_total_philhealth,'int');
-		$totalDoctorData->total_charge_patient  = StaticFunctionController::nullableToString($request->doctor_total_charge_patient,'int');
-		$totalDoctorData->total_charge_carewell = StaticFunctionController::nullableToString($request->doctor_total_charge_carewell,'int');
-		$totalDoctorData->total_type            = 'doctor';
-		$totalDoctorData->approval_id           = $approvalData->approval_id;
-		$totalDoctorData->save();
-
-		if($approvalData->save()&&$procedureData->save()&&$doctorData->save())
+		if($approvalData->save())
 		{
 			return StaticFunctionController::returnMessage('success','APPROVAL');
 		}
@@ -2063,48 +2033,7 @@ class CarewellController extends ActiveAuthController
 			}
 		}
 
-		// if($request->doctor_payee_id!=null)
-		// {
-		// 	foreach($request->doctor_payee_id as $key=>$payee_id)
-		// 	{
-		// 		if($request->doctor_approval_payee_id==0)
-		// 		{
-		// 			$payeeDocData = new TblApprovalPayeeModel;
-		// 			$payeeDocData->payee_id     = $payee_id;
-		// 			$payeeDocData->approval_id  = $request->approval_id;
-		// 			$payeeDocData->payee_name   = 'doctor';
-		// 			$payeeDocData->type         = 'doctor';
-		// 			$payeeDocData->save();
-		// 		}
-		// 		else
-		// 		{
-		// 			$payeeDocData['payee_id']     = $payee_id;
-		// 			TblApprovalPayeeModel::where('approval_payee_id',$request->doctor_payee_id)->update($payeeDocData);
-		// 		}
-				
-		// 	}
-		// }
-
-		// if($request->payee_name!=null)
-		// {
-		// 	foreach($request->payee_name as $key=>$payee_name)
-		// 	{
-		// 		if($request->payee_approval_payee_id==0)
-		// 		{
-		// 			$payeeData = new TblApprovalPayeeModel;
-		// 			$payeeData->payee_id     = '0';
-		// 			$payeeData->approval_id  = $request->approval_id;
-		// 			$payeeData->payee_name   = $payee_name;
-		// 			$payeeData->type         = 'payee';
-		// 			$payeeData->save();
-		// 		}
-		// 		else
-		// 		{
-		// 			$payeeData['payee_name']     = $payee_name;
-		// 			TblApprovalPayeeModel::where('approval_payee_id',$request->payee_approval_payee_id)->update($payeeData);
-		// 		}
-		// 	}
-		// }
+		
 		$approvalData['approval_complaint']         = $request->approval_complaint;
 		$approvalData['approval_date_availed']      = $request->approval_date_availed;
 		$approvalData['availment_id']               = $request->availment_id;
@@ -2329,11 +2258,7 @@ class CarewellController extends ActiveAuthController
 		$data['_approval_active']  = TblApprovalModel::where('tbl_approval.provider_id',$provider_id)->where('tbl_member_company.archived',0)->where('tbl_approval.archived',0)->ApprovalInfo()->get();
 		return view('carewell.additional_pages.payable_get_approval',$data);
 	}
-	public function payable_search_approval(Request $request)
-	{
-		$data['_approval_active']  = TblApprovalModel::where('approval_number','like','%'.$request->key.'%')->where('tbl_approval.provider_id',$request->provider_id)->where('tbl_member_company.archived',0)->where('tbl_approval.archived',0)->ApprovalInfo()->get();
-		return view('carewell.additional_pages.payable_get_approval',$data);
-	}
+	
 	public function payable_create_submit(Request $request)
 	{
 		$user         = StaticFunctionController::global();
@@ -2346,7 +2271,7 @@ class CarewellController extends ActiveAuthController
 		$payableDatas->provider_id         = $request->provider_id;  
 		$payableDatas->user_id             = $user->user_id;
 		$payableDatas->save();
-		foreach($request->approvalData as $approval_id)
+		foreach($request->approval_id as $approval_id)
 		{
 			$payApprovalData = new TblPayableApprovalModel;
 			$payApprovalData->approval_id = $approval_id; 
@@ -2783,35 +2708,35 @@ class CarewellController extends ActiveAuthController
 		}
 
 	public function reports_payment_report()
-		{
-			$data['page']       = 'Payment Reports';
-			$data['user']       = StaticFunctionController::global();
-			$data['_company']   = TblCompanyModel::where('archived',0)->paginate(10);
-			$data['_member']    = TblMemberModel::where('tbl_member.archived',0)->where('tbl_member_company.archived',0)->Member()->paginate(10);
-			return view('carewell.pages.reports_payment_report',$data);
-		}
+	{
+		$data['page']       = 'Payment Reports';
+		$data['user']       = StaticFunctionController::global();
+		$data['_company']   = TblCompanyModel::where('archived',0)->paginate(10);
+		$data['_member']    = TblMemberModel::where('tbl_member.archived',0)->where('tbl_member_company.archived',0)->Member()->paginate(10);
+		return view('carewell.pages.reports_payment_report',$data);
+	}
 
 	public function reports_payment_report_member($member_id)
 
+	{
+		$new_year           = date('Y'); 
+		$payment_mode 		= 'SEMI-MONTHLY';
+		$data['member_id'] 	= $member_id;
+		$data['link'] 		= '/reports/payment_report/excel/0/'.$payment_mode.'/'.$member_id;
+		$data['_payment']   = TblCalPaymentModel::where('tbl_cal_payment.archived',1)->where('member_id',$member_id)->select(DB::raw("YEAR(cal_payment_start) as year"))->groupby('year')->orderBy('year','ASC')->get();
+		foreach($data['_payment'] as $key=> $year)
 		{
-			$new_year           = date('Y'); 
-			$payment_mode 		= 'SEMI-MONTHLY';
-			$data['member_id'] 	= $member_id;
-			$data['link'] 		= '/reports/payment_report/excel/0/'.$payment_mode.'/'.$member_id;
-			$data['_payment']   = TblCalPaymentModel::where('tbl_cal_payment.archived',1)->where('member_id',$member_id)->select(DB::raw("YEAR(cal_payment_start) as year"))->groupby('year')->orderBy('year','ASC')->get();
-			foreach($data['_payment'] as $key=> $year)
-			{
-				$TblCalPaymentModel = TblCalPaymentModel::where('tbl_cal_payment.member_id',$member_id)->orderBy('cal_payment_start','ASC')
-				                                        ->whereYear('tbl_cal_payment.cal_payment_start', '=', $year->year)
-				                                        ->where('tbl_cal_payment.archived',1);
-		          
-		          $data['_payment'][$key]['cal_payment'] = $TblCalPaymentModel->CalInfo()->get();
-		        	$date                                  = $TblCalPaymentModel->first();
-				$data['_payment'][$key]['colspan']     = StaticFunctionController::moth_reference($date->cal_payment_start);
-				
-			}
-			return view('carewell.modal_pages.reports_payment_report_member',$data);
+			$TblCalPaymentModel = TblCalPaymentModel::where('tbl_cal_payment.member_id',$member_id)->orderBy('cal_payment_start','ASC')
+			                                        ->whereYear('tbl_cal_payment.cal_payment_start', '=', $year->year)
+			                                        ->where('tbl_cal_payment.archived',1);
+	          
+	          $data['_payment'][$key]['cal_payment'] = $TblCalPaymentModel->CalInfo()->get();
+	        	$date                                  = $TblCalPaymentModel->first();
+			$data['_payment'][$key]['colspan']     = StaticFunctionController::moth_reference($date->cal_payment_start);
+			
 		}
+		return view('carewell.modal_pages.reports_payment_report_member',$data);
+	}
 
 	public function reports_payment_member_excel($new_year,$payment_mode,$member_id)
 		{
@@ -3128,6 +3053,88 @@ class CarewellController extends ActiveAuthController
 			});
 		})->download('xls');
 
+	}
+	public function reports_ajudication()
+	{
+		$data['page']       = 'AJUDICATION REPORT';
+		$data['user']       = StaticFunctionController::global();
+		$data['_provider']  = TblProviderModel::where('archived',0)->get();
+		$data['_payable']  = TblPayableModel::where('tbl_payable.archived',1)->orWhere('tbl_payable.archived',0)->PayableInfo()->paginate(10);
+		foreach ($data['_payable'] as $key => $payable) 
+		{
+			$data['_payable'][$key]['approval_number']    =  TblPayableApprovalModel::where('payable_id',$payable->payable_id)->PayableStatus()->get();
+		}
+		return view('carewell.pages.reports_judication',$data);
+	}
+	public function reports_ajudication_pdf($payable_id)
+	{
+		$approval_doctor_actual_pf 			= 0;
+		$approval_doctor_phil_charity    	= 0;
+		$approval_doctor_charge_patient 	= 0;
+		$approval_doctor_charge_carewell    = 0;
+
+		$procedure_gross_amount 			= 0;
+		$procedure_philhealth    			= 0;
+		$procedure_charge_patient 			= 0;
+		$procedure_charge_carewell  		= 0;
+
+		$disprocedure_gross_amount 			= 0;
+		$disprocedure_philhealth    			= 0;
+		$disprocedure_charge_patient 			= 0;
+		$disprocedure_charge_carewell  		= 0;
+
+		$data['payable_details']    = TblPayableModel::where('tbl_payable.payable_id',$payable_id)->PayableInfo()->first();
+		$data['_payable_approval']  = TblPayableApprovalModel::where('tbl_payable_approval.payable_id',$payable_id)->ApprovalDetails()->where('tbl_member_company.archived',0)->where('tbl_payable_approval.archived',0)->get();
+	    foreach ($data['_payable_approval'] as $keys => $payable_approval) 
+		{
+			$data['_payable_approval'][$keys]['charge_diagnosis'] = TblApprovalModel::where('tbl_approval.approval_id',$payable_approval->approval_id)->Diagnosis()->first();
+			$data['_payable_approval'][$keys]['_final_diagnosis'] = TblApprovalDiagnosisModel::where('approval_id',$payable_approval->approval_id)->Diagnosis()->get();
+			$data['_payable_approval'][$keys]['_availed']         = TblApprovalProcedureModel::where('tbl_approval_procedure.procedure_disapproved','off')->where('tbl_approval_procedure.approval_id',$payable_approval->approval_id)->ProcedureDiagnosis()->get();
+			$data['_payable_approval'][$keys]['_doctor_assigned'] = TblApprovalDoctorModel::where('tbl_approval_doctor.approval_id',$payable_approval->approval_id)->ApprovalDoctor()->get();
+			$data['_payable_approval'][$keys]['_disapproved']         = TblApprovalProcedureModel::where('tbl_approval_procedure.procedure_disapproved','on')->where('tbl_approval_procedure.approval_id',$payable_approval->approval_id)->ProcedureDiagnosis()->get();
+			foreach($data['_payable_approval'][$keys]['_availed'] as $key=>$availed)
+			{
+				$procedure_gross_amount 	= $procedure_gross_amount 		+ $availed->procedure_gross_amount;
+				$procedure_philhealth 		= $procedure_philhealth 		+ $availed->procedure_philhealth;
+				$procedure_charge_patient 	= $procedure_charge_patient 	+ $availed->procedure_charge_patient;
+				$procedure_charge_carewell 	= $procedure_charge_carewell 	+ $availed->procedure_charge_carewell;
+			}
+			foreach($data['_payable_approval'][$keys]['_doctor_assigned'] as $key=>$doctor_assigned)
+			{
+				$approval_doctor_actual_pf 			= $approval_doctor_actual_pf 		+ $doctor_assigned->approval_doctor_actual_pf;
+				$approval_doctor_phil_charity 		= $approval_doctor_phil_charity 	+ $doctor_assigned->approval_doctor_phil_charity;
+				$approval_doctor_charge_patient 	= $approval_doctor_charge_patient 	+ $doctor_assigned->approval_doctor_charge_patient;
+				$approval_doctor_charge_carewell 	= $approval_doctor_charge_carewell 	+ $doctor_assigned->approval_doctor_charge_carewell;
+			}
+			foreach($data['_payable_approval'][$keys]['_disapproved'] as $key=>$disapproved)
+			{
+				$disprocedure_gross_amount 		= $disprocedure_gross_amount 	+ $disapproved->procedure_gross_amount;
+				$disprocedure_philhealth 		= $disprocedure_philhealth 		+ $disapproved->procedure_philhealth;
+				$disprocedure_charge_patient 	= $disprocedure_charge_patient 	+ $disapproved->procedure_charge_patient;
+				$disprocedure_charge_carewell 	= $disprocedure_charge_carewell + $disapproved->procedure_charge_carewell;
+			}
+			$data['_payable_approval'][$keys]['procedure_gross_amount'] 	= $procedure_gross_amount;
+			$data['_payable_approval'][$keys]['procedure_philhealth']    	= $procedure_philhealth;
+			$data['_payable_approval'][$keys]['procedure_charge_patient'] 	= $procedure_charge_patient;
+			$data['_payable_approval'][$keys]['procedure_charge_carewell']  = $procedure_charge_carewell;
+
+			$data['_payable_approval'][$keys]['approval_doctor_actual_pf'] 			= $approval_doctor_actual_pf;
+			$data['_payable_approval'][$keys]['approval_doctor_phil_charity']    	= $approval_doctor_phil_charity;
+			$data['_payable_approval'][$keys]['approval_doctor_charge_patient'] 	= $approval_doctor_charge_patient;
+			$data['_payable_approval'][$keys]['approval_doctor_charge_carewell']    = $approval_doctor_charge_carewell;
+
+			$data['_payable_approval'][$keys]['grand_total']      = $approval_doctor_charge_carewell + $procedure_charge_carewell;
+	        $data['_payable_approval'][$keys]['payee_company']    = $procedure_charge_carewell;
+
+	        $data['_payable_approval'][$keys]['disapproved']    = $disprocedure_charge_carewell;
+		    
+		}
+		$data['approval_doctor_charge_carewell']    = $approval_doctor_charge_carewell;
+		$data['procedure_charge_carewell'] 		    = $procedure_charge_carewell;
+        $format["format"] 			= "Legal";
+	    $format["default_font"] 	= "sans-serif";
+	    $pdf = PDF::loadView('carewell.additional_pages.reports_ajudication_export_pdf', $data, [], $format);
+	    return $pdf->stream('document.pdf');
 	}
 		
 	/*SETTINGS*/
@@ -3456,8 +3463,8 @@ class CarewellController extends ActiveAuthController
 		$coverageData->coverage_plan_preexisting      = $request->coverage_plan_preexisting;
 		$coverageData->coverage_plan_annual_benefit   = $request->coverage_plan_annual_benefit;
 		$coverageData->coverage_plan_maximum_benefit  = $request->coverage_plan_maximum_benefit;
-		$coverageData->coverage_plan_mbl_illness      = $request->coverage_plan_mbl_illness;  
-		$coverageData->coverage_plan_mbl_year         = $request->coverage_plan_mbl_year;
+		$coverageData->coverage_plan_mbl_illness      = StaticFunctionController::checkboxValue($request->coverage_plan_mbl_illness);  
+		$coverageData->coverage_plan_mbl_year         = StaticFunctionController::checkboxValue($request->coverage_plan_mbl_year);
 		$coverageData->coverage_plan_case_handling    = $request->coverage_plan_case_handling;
 		$coverageData->coverage_plan_age_bracket      = $request->coverage_plan_age_bracket;
 		$coverageData->coverage_plan_premium          = $request->coverage_plan_premium;
@@ -3510,8 +3517,8 @@ class CarewellController extends ActiveAuthController
 		$coverageData->coverage_plan_preexisting      = $request->coverage_plan_preexisting;
 		$coverageData->coverage_plan_annual_benefit   = $request->coverage_plan_annual_benefit;
 		$coverageData->coverage_plan_maximum_benefit  = $request->coverage_plan_maximum_benefit;
-		$coverageData->coverage_plan_mbl_illness      = $request->coverage_plan_mbl_illness;  
-		$coverageData->coverage_plan_mbl_year         = $request->coverage_plan_mbl_year;
+		$coverageData->coverage_plan_mbl_illness      = StaticFunctionController::checkboxValue($request->coverage_plan_mbl_illness);  
+		$coverageData->coverage_plan_mbl_year         = StaticFunctionController::checkboxValue($request->coverage_plan_mbl_year);
 		$coverageData->coverage_plan_case_handling    = $request->coverage_plan_case_handling;
 		$coverageData->coverage_plan_age_bracket      = $request->coverage_plan_age_bracket;
 		$coverageData->coverage_plan_premium          = $request->coverage_plan_premium;

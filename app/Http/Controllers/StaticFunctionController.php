@@ -78,9 +78,7 @@ class StaticFunctionController extends Controller
 {
     public static function global()
     {
-        $user_info = TblUserInfoModel::where('tbl_user_info.user_id',session('user_id'))
-                    ->join('tbl_user','tbl_user.user_id','=','tbl_user_info.user_id')
-                    ->first();
+        $user_info = TblUserInfoModel::where('tbl_user_info.user_id',session('user_id'))->User()->first();
         return $user_info;
     }
     public static function returnMessage($alert_message="",$str_name="")
@@ -98,6 +96,18 @@ class StaticFunctionController extends Controller
     {
         return "<div class='alert alert-".$class."' style='text-align: center;'>".$message."!</div>";
     }
+    public static function checkboxValue($input)
+    {
+        if($input=="on")
+        {
+            $val = $input;
+        }
+        else
+        {
+            $val = "off";
+        }
+        return $val;
+    }
 
     public function getCheckProcedureAmount(Request $request)
     {
@@ -106,7 +116,7 @@ class StaticFunctionController extends Controller
         $carewell_amount    = $request->carewell_amount;
         $procedure_id       = $request->procedure_id;
         $availment_id       = $request->availment_id;
-        $member             = TblMemberCompanyModel::where('tbl_member_company.member_id',$member_id)->CompanyMember()->first();
+        $member             = TblMemberCompanyModel::where('tbl_member_company.member_id',$member_id)->CompanyMember(0)->first();
         $TblCoveragePlanProcedureModel = TblCoveragePlanProcedureModel::where('procedure_id',$procedure_id)->where('availment_id',$availment_id)->where('coverage_plan_id',$member->coverage_plan_id);
         $sum                = 0;
     
@@ -184,9 +194,9 @@ class StaticFunctionController extends Controller
             $_procedure_doctor                  = TblDoctorProcedureModel::where('archived',0)->get();
             $provider                           = TblProviderModel::where('provider_id',$request->provider_id)->first();
             $data['_provider_doctor']           = TblDoctorProviderModel::where('tbl_doctor_provider.provider_id',$request->provider_id)->where('tbl_doctor_provider.archived',0)->DoctorProvider()->get();
-            $data['_procedure_doctors']          = '<option value="1">-SELECT PROCEDURE-';
-            $data['_provider_doctors']          = '<option>-SELECT DOCTOR-';
-            $data['_specialization_doctors']    = '<option>-SELECT SPECIALIZATION-';
+            $data['_procedure_doctors']          = '<option value="">-SELECT PROCEDURE-';
+            $data['_provider_doctors']          = '<option value="">-SELECT DOCTOR-';
+            $data['_specialization_doctors']    = '<option value="">-SELECT SPECIALIZATION-';
             foreach($_procedure_doctor as $procedure_doctor)
             {
                 $data['_procedure_doctors']     .= '<option value='.$procedure_doctor->doctor_procedure_id.'>'.$procedure_doctor->doctor_procedure_descriptive;
@@ -223,7 +233,7 @@ class StaticFunctionController extends Controller
         {
             $coverage           = TblMemberCompanyModel::where('archived',0)->where('member_id',$request->member_id)->value('coverage_plan_id');
             $procedure          = TblCoveragePlanProcedureModel::where('coverage_plan_id',$coverage)->Procedure()->get();
-            $data['_procedureList'] = '<option>-SELECT DESCRIPTION-';
+            $data['_procedureList'] = '<option value="">-SELECT DESCRIPTION-';
             foreach($procedure as $procedure)
             {
                 $data['_procedureList']     .= '<option value='.$procedure->procedure_id.'>'.$procedure->procedure_name;
