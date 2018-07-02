@@ -27,38 +27,40 @@
 		text-align: center;
 	}
 </style>
+
 <table>
+	<img src="{{$_SERVER['DOCUMENT_ROOT']}}/assets/img/avatar.png" height="100" width="100" alt="asdas"/>
 	<tr>
-		<th colspan="4"><h2>COVERAGE PLAN DETAILS</h2></th>
+		<th colspan="4" class="center">COVERAGE PLAN DETAILS</th>
 	</tr>
 	<tr>
-		<th>Coverage Plan Name:</th>
+		<td>Coverage Plan Name:</td>
 		<td>{{$coverage_plan_details->coverage_plan_name}}</td>
-		<th>Premium:</th>
+		<td>Premium:</td>
 		<td>{{$coverage_plan_details->coverage_plan_premium}}</td>
 	</tr>
 	<tr>
-		<th>Age Bracket:</th>
+		<td>Age Bracket:</td>
 		<td>{{$coverage_plan_details->coverage_plan_age_bracket}}</td>
-		<th>Case Handling Fee:</th>
+		<td>Case Handling Fee:</td>
 		<td>{{$coverage_plan_details->coverage_plan_case_handling}}</td>
 	</tr>
 	<tr>
-		<th>Processing Fee:</th>
+		<td>Processing Fee:</td>
 		<td>{{$coverage_plan_details->coverage_plan_processing_fee}}</td>
-		<th>CARI Fee:</th>
+		<td>CARI Fee:</td>
 		<td>{{$coverage_plan_details->coverage_plan_cari_fee}}</td>
 	</tr>
 	<tr>
-		<th>HIB:</th>
+		<td>HIB:</td>
 		<td>{{$coverage_plan_details->coverage_plan_hib}}</td>
-		<th>Pre-Existing:</th>
+		<td>Pre-Existing:</td>
 		<td>{{$coverage_plan_details->coverage_plan_name}}</td>
 	</tr>
 	<tr>
-		<th>ABL:</th>
+		<td>Aggregate Benefit Limit (ABL):</td>
 		<td>{{$coverage_plan_details->coverage_plan_annual_benefit}}</td>
-		<th>MBL:</th>
+		<td>Maximum Benefit Limit (MBL):</td>
 		<td>{{$coverage_plan_details->coverage_plan_maximum_benefit}}</td>
 	</tr>
 	<tr>
