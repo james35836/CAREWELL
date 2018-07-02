@@ -195,7 +195,7 @@ function billing_center()
 	{
 		$('body').on('click','.cal-close-submit',function()
 		{
-			globals.global_submit('cal-close','/billing/cal_close/sumbit',calCloseData);
+			globals.global_submit_no_loader('cal-close','/billing/cal_close/sumbit',calCloseData);
         });
 
 	}
@@ -203,13 +203,13 @@ function billing_center()
 	{
 		$("body").on('click','.create-cal',function()
 		{
-			var company_id = $(this).data('company_id');
-			var modalName= 'CREATE CAL';
-			var modalClass='cal';
-			var modalLink='/billing/create_cal';
-			var modalActionName='CREATE CAL';
-			var modalAction='create-cal-confirm';
-			var modalSize = 'modal-md';
+			var company_id 		= $(this).data('company_id');
+			var modalName 		= 'CREATE CAL';
+			var modalClass 		= 'cal';
+			var modalLink 		= '/billing/create_cal';
+			var modalActionName = 'CREATE CAL';
+			var modalAction 	= 'create-cal-confirm';
+			var modalSize 		= 'modal-md';
             globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
 		});
 	}
@@ -238,8 +238,7 @@ function billing_center()
 		$('body').on('click','.create-cal-submit',function()
 		{
 			globals.global_serialize_submit('cal','/billing/create_cal/sumbit',serializeData);
-		
-        });
+		});
 		
 	}
 	function cal_view_details()

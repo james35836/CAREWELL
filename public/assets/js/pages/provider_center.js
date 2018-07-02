@@ -32,7 +32,7 @@ function provider_center()
 		$("body").on('click','.create-provider',function() 
 		{
 			var modalName 		= 'CREATE PROVIDER';
-			var modalClass 	= 'provider';
+			var modalClass 		= 'provider';
 			var modalLink 		= '/provider/create_provider';
 			var modalActionName = 'CREATE PROVIDER';
 			var modalAction 	= 'create-provider-confirm';
@@ -52,66 +52,33 @@ function provider_center()
 	{
 		$('body').on('click','.create-provider-confirm',function() 
 		{ 
-			var inputs = $('#provider_contact_email');
-			if(globals.checking_null_validation(document.getElementById('provider_name').value,"PROVIDER NAME")=="")
-			{}	
-			else if(globals.checking_null_validation(document.getElementById('provider_contact_person').value,"PROVIDER CONTACT PERSON")=="")
-			{}	
-			else if(globals.checking_null_validation(document.getElementById('provider_telephone_number').value,"PROVIDER PHONE NUMBER")=="")
-			{}
-			else if(globals.checking_null_validation(document.getElementById('provider_mobile_number').value,"PROVIDER MOBILE NUMBER")=="")
-			{}
-			else if(globals.checking_null_validation(document.getElementById('provider_contact_email').value,"PROVIDER EMAIL ADDRESS")=="")
-			{}
-			else if(globals.checking_null_validation(document.getElementById('provider_address').value,"PROVIDER ADDRESS")=="")
-			{}
-			else if(globals.global_input_email(inputs)=="error")
+			var validator 	= [];
+			validator 		= globals.validators('form.provider-create-submit-form .required');
+			if(validator.length!=0)
+			{
+				toastr.error('All form with red border is required.', 'Something went wrong!', {timeOut: 3000})
+			}
+			else if(globals.global_input_email($('#provider_contact_email'))=="error")
 			{
 				toastr.error('Email is in a wrong format.', 'Something went wrong!', {timeOut: 3000})
 			}
-		     else
+			else
 			{
-				$('input[name="doctor_full_name[]"]').each(function(i, doctor)
-	            	{
-	            		if($(doctor).val()!="")
-	            		{
-	            			doctorProviderData.push(this.value);
-	            		}
-	            	});
-	   //          if(doctorProviderData==null||doctorProviderData=="")
-				// {
-				// 	toastr.error('Please add PAYEE at least one.', 'Something went wrong!', {timeOut: 3000})
-				// }
-				// else
-				// {
-					var	confirmModalMessage = 'Are you sure you want to add this provider?';
-					var confirmModalAction = 'create-provider-submit';
-					globals.confirm_modals(confirmModalMessage,confirmModalAction);
-
-					providerData.append("provider_name", 			document.getElementById('provider_name').value);
-					providerData.append("provider_rvs", 			document.getElementById('provider_rvs').value);
-	               	providerData.append("provider_contact_person", 	document.getElementById('provider_contact_person').value);
-	            	providerData.append("provider_telephone_number",  document.getElementById('provider_telephone_number').value);
-	            	providerData.append("provider_mobile_number", 	document.getElementById('provider_mobile_number').value);
-	            	providerData.append("provider_contact_email", 	document.getElementById('provider_contact_email').value);
-	            	providerData.append("provider_address", 	     document.getElementById('provider_address').value);
-		            
-		            for (var i = 0; i < doctorProviderData.length; i++) 
-					{
-					    providerData.append('doctorProviderData[]', doctorProviderData[i]);
-					}
-				// }
+				var	confirmModalMessage = 'Are you sure you want to add this provider?';
+				var confirmModalAction = 'create-provider-submit';
+				globals.confirm_modals(confirmModalMessage,confirmModalAction);
+				serializeData  = $("form.provider-create-submit-form").serialize();
 			}
 		});
 	}
 	
     function create_provider_submit()
 	{
-		$('body').on('click','.create-provider-submit',function() 
-		{
-			globals.global_submit('provider','/provider/create_provider/submit',providerData);
-        	});
 		
+		$('body').on('click','.create-provider-submit',function()  
+		{
+			globals.global_serialize_submit('provider','/provider/create_provider/submit',serializeData);
+		});
 	}
 	function import_provider()
 	{

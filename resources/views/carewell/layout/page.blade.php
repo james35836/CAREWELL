@@ -7,7 +7,7 @@ $_item = array(
                     'admin_pannel'  => array('access_id'=>1,'text'=>'ADMIN PANEL',      'href'=>'/settings/admin','style'=>"background-color:#3FC380","class"=>"fa fa-user"),
                     'access_level'  => array('access_id'=>1,'text'=>'ACCESS LEVEL',      'href'=>'/settings/access','style'=>"background-color:#3FC380","class"=>"fa fa-universal-access"),
                     'coverage_plan' => array('access_id'=>1,'text'=>'COVERAGE PLAN',    'href'=>'/settings/coverage','style'=>"background-color:#03A678","class"=>"fa fa-paypal"),
-                    'maintenance'   => array('access_id'=>1,'text'=>'AINTENANCE',       'href'=>'/settings/maintenance','style'=>"background-color:#03A678","class"=>"fa fa-circle-o"),
+                    'maintenance'   => array('access_id'=>1,'text'=>'MAINTENANCE',       'href'=>'/settings/maintenance','style'=>"background-color:#03A678","class"=>"fa fa-circle-o"),
                     'provider'      => array('access_id'=>1,'text'=>'PROVIDER ',        'href'=>'/provider','style'=>"background-color:#049372","class"=>"fa fa-hospital-o"),
                     'doctor'        => array('access_id'=>1,'text'=>'DOCTOR ',          'href'=>'/doctor','style'=>"background-color:#1E824C","class"=>"fa fa-user-md"),
                     'terminated'        => array('access_id'=>1,'text'=>'TERMINATED ',  'href'=>'/settings/terminated','style'=>"background-color:#1E824C","class"=>"fa fa-user-md"),

@@ -1,22 +1,4 @@
-<script>
-// $(document).ready(function()
-// {
-// 	$('div.box-container').find('.form-control').attr('disabled',!this.checked);
-// 	$('div.box-container').find('.btn').attr('disabled',!this.checked);
-// 	$('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
-// 	checkboxClass: 'icheckbox_minimal-blue',
-// 	radioClass   : 'iradio_minimal-blue'
-// 	})
-// 	$("body").on('click','.parent-box',function()
-// 	{
-// 	var $parent = $(this).closest('div.availment-box');
-// 	$parent.find('.form-control').attr('enabled',this.checked);
-// 	$parent.find('.btn').attr('enabled',this.checked);
-// 	$parent.find('.form-control').attr('disabled',!this.checked);
-// 	$parent.find('.btn').attr('disabled',!this.checked);
-// 	});
-// });
-</script>
+
 <script>
     $(function () {
         $('select[multiple].active.3col').multiselect({

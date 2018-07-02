@@ -169,14 +169,14 @@ class StaticFunctionController extends Controller
         if($request->ajax())
         {
             $data['_coverage']  = TblCompanyCoveragePlanModel::where('tbl_company_coverage_plan.company_id',$request->value)->CoveragePlan()->get();
-            $data['_coverage_list'] = '<option value="0">-SELECT COVERAGE PLAN-';
+            $data['_coverage_list'] = '<option value="">-SELECT COVERAGE PLAN-';
             foreach($data['_coverage'] as $coverage)
             {
                 $data['_coverage_list']     .= '<option value='.$coverage->coverage_plan_id.'>'.$coverage->coverage_plan_name;
             }
 
             $data['_deployment'] = TblCompanyDeploymentModel::where('company_id',$request->value)->get();
-            $data['_deployment_list'] = '<option value="0">-SELECT DEPLOYMENT-';
+            $data['_deployment_list'] = '<option value="">-SELECT DEPLOYMENT-';
             foreach($data['_deployment'] as $deployment)
             {
                 $data['_deployment_list']     .= '<option value='.$deployment->deployment_id.'>'.$deployment->deployment_name;
@@ -675,38 +675,41 @@ class StaticFunctionController extends Controller
     public static function provider_add_tag_doctor($doctorProviderData,$provider_id)
     {
         $doctorInsert = 0;
-         foreach($doctorProviderData as $doctor_full_name)
+        foreach($doctorProviderData as $doctor_full_name)
         {
-            $doctor_id = StaticFunctionController::getIdNorName($doctor_full_name,'doctor');
-            if($doctor_id==$doctor_full_name)
+            if($doctor_full_name!="")
             {
-                $doctorData = new TblDoctorModel;
-                $doctorData->doctor_full_name       = StaticFunctionController::transformText($doctor_full_name);
-                $doctorData->doctor_number          = StaticFunctionController::updateReferenceNumber('doctor');
-                $doctorData->doctor_gender          = "N/A";
-                $doctorData->doctor_contact_number  = "N/A";
-                $doctorData->doctor_email_address   = "N/A";
-                $doctorData->doctor_created         = Carbon::now();
-                $doctorData->save();
-
-                $providerDoctorData = new TblDoctorProviderModel;
-                $providerDoctorData->doctor_id  = $doctorData->doctor_id;
-                $providerDoctorData->provider_id    = $provider_id;
-                $providerDoctorData->save();
-
-                $doctorInsert++;
-            }
-            else
-            {
-                $check = TblDoctorProviderModel::where('provider_id',$provider_id)->where('doctor_id',$doctor_id)->count();
-                if($check==0)
+                $doctor_id = StaticFunctionController::getIdNorName($doctor_full_name,'doctor');
+                if($doctor_id==$doctor_full_name)
                 {
+                    $doctorData = new TblDoctorModel;
+                    $doctorData->doctor_full_name       = StaticFunctionController::transformText($doctor_full_name);
+                    $doctorData->doctor_number          = StaticFunctionController::updateReferenceNumber('doctor');
+                    $doctorData->doctor_gender          = "N/A";
+                    $doctorData->doctor_contact_number  = "N/A";
+                    $doctorData->doctor_email_address   = "N/A";
+                    $doctorData->doctor_created         = Carbon::now();
+                    $doctorData->save();
+
                     $providerDoctorData = new TblDoctorProviderModel;
-                    $providerDoctorData->doctor_id  = $doctor_id;
+                    $providerDoctorData->doctor_id  = $doctorData->doctor_id;
                     $providerDoctorData->provider_id    = $provider_id;
                     $providerDoctorData->save();
-                    
+
                     $doctorInsert++;
+                }
+                else
+                {
+                    $check = TblDoctorProviderModel::where('provider_id',$provider_id)->where('doctor_id',$doctor_id)->count();
+                    if($check==0)
+                    {
+                        $providerDoctorData = new TblDoctorProviderModel;
+                        $providerDoctorData->doctor_id  = $doctor_id;
+                        $providerDoctorData->provider_id    = $provider_id;
+                        $providerDoctorData->save();
+                        
+                        $doctorInsert++;
+                    }
                 }
             }
         }

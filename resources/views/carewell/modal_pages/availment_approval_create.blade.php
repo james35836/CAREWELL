@@ -10,7 +10,6 @@ $(document).ready(function()
 	$('body').find('.getAvailmentInfo').select2();
 	$('body').find('.getProviderInfo').select2();
 	$('body').find('.default-select2').select2();
-
 	$('body').find('.my-select').select2();
     
 

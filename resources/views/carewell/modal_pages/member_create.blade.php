@@ -1,62 +1,33 @@
-<script>
-	$(document).ready(function()
-	{
-		$('body').find('.select2').select2();
-		$(document).on("click",".addDependent", function()
-		{
-			$(".dependent-form").append('<tr><td><input type="text" name="member_dependent_full_name[]" id="member_dependent_full_name" class="form-control"/></td><td><input type="text" name="member_dependent_birthdate[]" id="member_dependent_birthdate[]" class="date-picker form-control datepicker"/></td><td><select  name="member_dependent_relationship[]" id="member_dependent_relationship[]" class="form-control"><option>FATHER</option><option>MOTHER</option><option>CHILD</option><option>SPOUSE</option><option>UNCLE</option><option>AUNT</option><option>BROTHER</option><option>SISTER</option><option>GRANDFATHER</option><option>GRANDMOTHER</option><option>NEPHEW</option><option>NIECE</option><option>COUSIN</option></select></td></tr>');
-		});
-		$(document).on("click",".removeDependent", function()
-		{
-			if ($(".dependent-form tr").length >2)
-			{
-				$(".dependent-form tr:last").remove();
-			}
-			else
-			{
-				toastr.error('You cannot remove all rows.', 'Something went wrong!', {timeOut: 3000})
-			}
-			
-		});
-	});
-	$(function ()
-	{
-		$("body").on("click", ".datepicker", function()
-		{
-			$(this).datepicker();
-			$(this).datepicker("show");
-		
-		});
-	})
-</script>
+
+@include('carewell.additional_pages.script_function')
 <form class="member-submit-form">
 	<div class="row box-globals">
 		<div class="form-holder">
-				<div class="col-md-2 form-content">
-					<label>Last Name</label>
-				</div>
-				<div class="col-md-4 form-content">
-					<input type="text" name="member_last_name" id="member_last_name" class="form-control" required/>
-				</div>
-				<div class="col-md-2 form-content">
-					<label>First Name</label>
-				</div>
-				<div class="col-md-4 form-content">
-					<input type="text" name="member_first_name" id="member_first_name" class="form-control"/>
-				</div>
+			<div class="col-md-2 form-content">
+				<label>Last Name</label>
+			</div>
+			<div class="col-md-4 form-content">
+				<input type="text" name="member_last_name" id="member_last_name" class="form-control required" required/>
+			</div>
+			<div class="col-md-2 form-content">
+				<label>First Name</label>
+			</div>
+			<div class="col-md-4 form-content">
+				<input type="text" name="member_first_name" id="member_first_name" class="form-control required"/>
+			</div>
 		</div>
 		<div class="form-holder">
 			<div class="col-md-2 form-content">
 				<label>Middle Name</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="text" name="member_middle_name" id="member_middle_name" class="form-control"/>
+				<input type="text" name="member_middle_name" id="member_middle_name" class="form-control required"/>
 			</div>
 			<div class="col-md-2 form-content">
 				<label>Birthdate</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="text" name="member_birthdate" id="member_birthdate" class="form-control datepicker"/>
+				<input type="text" name="member_birthdate" id="member_birthdate" class="form-control required datepicker"/>
 			</div>
 		</div>
 		<div class="form-holder">
@@ -65,7 +36,7 @@
 			</div>
 			<div class="col-md-4 form-content">
 				<select name="member_gender" id="member_gender" class="form-control">
-					<option>SELECT GENDER</option>
+					<option value="">SELECT GENDER</option>
 					<option>MALE</option>
 					<option>FEMALE</option>
 				</select>
@@ -74,8 +45,8 @@
 				<label>Marital Status</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<select name="member_marital_status" id="member_marital_status" class="form-control">
-					<option>SELECT STATUS</option>
+				<select name="member_marital_status" id="member_marital_status" class="form-control ">
+					<option value="">SELECT STATUS</option>
 					<option>SINGLE</option>
 					<option>MARRIED</option>
 					<option>DIVORCED</option>
@@ -89,13 +60,13 @@
 				<label>Email Address</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="email" name="member_email_address" id="member_email_address" class="form-control"/>
+				<input type="email" name="member_email_address" id="member_email_address" class="form-control "/>
 			</div>
 			<div class="col-md-2 form-content">
 				<label>Contact Number</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="text" name="member_contact_number" id="member_contact_number" class="form-control"/>
+				<input type="text" name="member_contact_number" id="member_contact_number" class="form-control "/>
 			</div>
 		</div>
 		<div class="form-holder">
@@ -103,13 +74,13 @@
 				<label>Permanent Address</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<textarea  id="member_permanet_address" name="member_permanet_address" class="form-control" cols="30" rows="3"></textarea>
+				<textarea  id="member_permanet_address" name="member_permanet_address" class="form-control " cols="30" rows="3"></textarea>
 			</div>
 			<div class="col-md-2 form-content">
 				<label>Present Address</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<textarea  id="member_present_address" name="member_present_address" class="form-control" cols="30" rows="3"></textarea>
+				<textarea  id="member_present_address" name="member_present_address" class="form-control " cols="30" rows="3"></textarea>
 			</div>
 		</div>
 		<div class="form-holder">
@@ -117,7 +88,7 @@
 				<label>Mother Maiden Name</label>
 			</div>
 			<div class="col-md-10 form-content">
-				<input type="text" name="member_mother_maiden_name" id="member_mother_maiden_name" class="form-control"/>
+				<input type="text" name="member_mother_maiden_name" id="member_mother_maiden_name" class="form-control "/>
 			</div>
 		</div>
 	</div>
@@ -129,14 +100,16 @@
 						<th>Dependent Full Name</th>
 						<th>Birthdate</th>
 						<th>Relationship</th>
+						<th><button type="button" data-ref="first" data-number="2" class="btn btn-primary btn-sm add-row"><i class="fa fa-plus-circle"></i></button></th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td><input type="text" name="dependent_full_name[]" id="dependent_full_name" class="form-control"/></td>
-						<td><input type="text" name="dependent_birthdate[]" id="dependent_birthdate[]" class="form-control datepicker"/></td>
+					<tr class="table-row">
+						<td><input type="text" name="dependent_full_name[]" id="dependent_full_name" class="form-control "/></td>
+						<td><input type="text" name="dependent_birthdate[]" id="dependent_birthdate[]" class="form-control  datepicker"/></td>
 						<td>
-							<select  name="dependent_relationship[]" id="dependent_relationship[]" class="form-control">
+							<select  name="dependent_relationship[]" id="dependent_relationship[]" class="form-control ">
+								<option value="">SELECT RELATION</option>
 								<option>FATHER</option>
 								<option>MOTHER</option>
 								<option>CHILD</option>
@@ -152,18 +125,16 @@
 								<option>COUSIN</option>
 							</select>
 						</td>
+						<td>
+							<div class="btn-group" role="group" aria-label="Basic example">
+								<button type="button" data-number="2" class="btn btn-danger btn-sm remove-row"><i class="fa fa-minus-circle"></i></button>
+							</div>
+						</td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
-		<div class="form-holder">
-			<div class="form-content" style="text-align: center;margin-top:3px;">
-				<div class="btn-group">
-					<button type="button" class="btn btn-primary addDependent"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>
-					<button type="button" class="btn btn-danger removeDependent"><i class="fa fa-minus-circle" aria-hidden="true"></i></button>
-				</div>
-			</div>
-		</div>
+		
 	</div>
 	<div class="row box-globals">
 		<div class="form-holder">
@@ -171,13 +142,13 @@
 				<label>Phil-Health Number</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="text" name="government_card_philhealth" id="government_card_philhealth" class="form-control"/>
+				<input type="text" name="government_card_philhealth" id="government_card_philhealth" class="form-control "/>
 			</div>
 			<div class="col-md-2 form-content">
 				<label>SSS Number</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="text" name="government_card_sss" id="government_card_sss" class="form-control"/>
+				<input type="text" name="government_card_sss" id="government_card_sss" class="form-control "/>
 			</div>
 		</div>
 		<div class="form-holder">
@@ -185,13 +156,13 @@
 				<label>Tin Number</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="text" name="government_card_tin" id="government_card_tin" class="form-control"/>
+				<input type="text" name="government_card_tin" id="government_card_tin" class="form-control "/>
 			</div>
 			<div class="col-md-2 form-content">
 				<label>HDMF</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="text" name="government_card_hdmf" id="government_card_hdmf" class="form-control"/>
+				<input type="text" name="government_card_hdmf" id="government_card_hdmf" class="form-control "/>
 			</div>
 		</div>
 	</div>
@@ -201,8 +172,8 @@
 				<label>Company</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<select name="company_id" id="company_id" class="form-control select2 select_company">.
-					<option value="0">SELECT COMPANY</option>
+				<select name="company_id" id="company_id" class="form-control required select2 select_company">.
+					<option value="">SELECT COMPANY</option>
 					@foreach($_company as $company)
 					<option value="{{$company->company_id}}">{{$company->company_name}}</option>
 					@endforeach
@@ -212,8 +183,8 @@
 				<label>Coverage Plan</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<select name="coverage_plan_id" id="coverage_plan_id" class="form-control select2 coverageList">
-					<option>COVERAGE PLAN</option>
+				<select name="coverage_plan_id" id="coverage_plan_id" class="form-control required coverageList">
+					<option value="">COVERAGE PLAN</option>
 				</select>
 			</div>
 		</div>
@@ -222,8 +193,8 @@
 				<label>Deployment</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<select name="deployment_id" id="deployment_id" class="form-control select2 deploymentList">
-					<option >DEPLOYMENT</option>
+				<select name="deployment_id" id="deployment_id" class="form-control required deploymentList">
+					<option value="">DEPLOYMENT</option>
 				</select>
 			</div>
 			
@@ -231,7 +202,7 @@
 				<label>Company ID</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<input type="text"  name="member_employee_number" id="member_employee_number" class="form-control"/>
+				<input type="text"  name="member_employee_number" id="member_employee_number" class="form-control required"/>
 			</div>
 		</div>
 		<div class="form-holder">
@@ -239,8 +210,8 @@
 				<label>Mode of Payment</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<select name="member_payment_mode" id="member_payment_mode" class="form-control">
-					<option >MODE OF PAYMENT</option>
+				<select name="member_payment_mode" id="member_payment_mode" class="form-control required">
+					<option value="">MODE OF PAYMENT</option>
 					@foreach($_payment_mode as $payment_mode)
 					<option>{{$payment_mode->payment_mode_name}}</option>
 					@endforeach

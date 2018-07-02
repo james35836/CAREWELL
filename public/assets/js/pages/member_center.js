@@ -49,7 +49,7 @@ function member_center()
 			var modalAction 	= 'create-member-confirm';
 			var modalSize 		= 'modal-lg';
 			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
-          });
+        });
 
 		$('body').on('change','.select_company',function() 
 		{
@@ -63,28 +63,11 @@ function member_center()
 	{
 		$('body').on('click','.create-member-confirm',function()
 		{
-			
-			if(globals.checking_null_validation(document.getElementById('member_first_name').value,"FIRST NAME")=="")
-			{}
-		    	else if(globals.checking_null_validation(document.getElementById('member_middle_name').value,"MIDDLE NAME")=="")
-			{}
-			else if(globals.checking_null_validation(document.getElementById('member_last_name').value,"LAST NAME")=="")
-			{}
-			else if(globals.checking_null_validation(document.getElementById('member_birthdate').value,"BIRTHDATE")=="")
-			{}
-		    	else if(globals.checking_null_validation(document.getElementById('member_employee_number').value,"EMPLOYEE NUMBER")=="")
-			{}
-			else if(document.getElementById('company_id').value=="0")
+			var validator 	= [];
+			validator 		= globals.validators('form.member-submit-form .required');
+			if(validator.length!=0)
 			{
-				globals.global_tostr('COMPANY');
-			}
-			else if(document.getElementById('coverage_plan_id').value=="0")
-			{
-				globals.global_tostr('COVERAGE PLAN');
-			}
-			else if(document.getElementById('deployment_id').value=="0")
-			{
-				globals.global_tostr('DEPLOYMENT');
+				toastr.error('All form with red border is required.', 'Something went wrong!', {timeOut: 3000})
 			}
 			else
 			{
@@ -261,21 +244,11 @@ function member_center()
 	{
 		$('body').on('click','.member-adjustment-confirm',function() 
 		{
-			if(document.getElementById('company_id_adjustment').value=="0")
+			var validator 	= [];
+			validator 		= globals.validators('form.member-adjustment-form-submit .required');
+			if(validator.length!=0)
 			{
-				globals.global_tostr('COMPANY');
-			}
-			else if(document.getElementById('coverage_plan_id_adjustment').value=="0")
-			{
-				globals.global_tostr('COVERAGE PLAN');
-			}
-			else if(document.getElementById('deployment_id_adjustment').value=="0")
-			{
-				globals.global_tostr('DEPLOYMENT');
-			}
-			else if(document.getElementById('employee_number_adjustment').value=="")
-			{
-				globals.global_tostr('EMPLOYEE NUMBER');
+				toastr.error('All form with red border is required.', 'Something went wrong!', {timeOut: 3000})
 			}
 			else
 			{
@@ -283,21 +256,15 @@ function member_center()
 				var confirmModalAction = 'member-adjustment-submit';
 				globals.confirm_modals(confirmModalMessage,confirmModalAction);
 
-
-				adjustmentData.append("company_id_adjustment", 			document.getElementById('company_id_adjustment').value);
-	            adjustmentData.append("coverage_plan_id_adjustment",	document.getElementById('coverage_plan_id_adjustment').value);
-	            adjustmentData.append("deployment_id_adjustment", 		document.getElementById('deployment_id_adjustment').value);
-	            adjustmentData.append("employee_number_adjustment", 	document.getElementById('employee_number_adjustment').value);
-	            adjustmentData.append("member_id_adjustment", 			document.getElementById('member_id_adjustment').value);
-	            adjustmentData.append("member_payment_mode_adjustment", document.getElementById('member_payment_mode_adjustment').value);
-			}
-		});
+				serializeData = $("form.member-adjustment-form-submit").serialize(); 
+	   		}
+	   	});
 	}
 	function member_adjustment_submit()
 	{
 		$('body').on('click','.member-adjustment-submit',function() 
 		{
-			globals.global_submit('member-adjustment','/member/member_adjustment/submit',adjustmentData);
+			globals.global_serialize_submit('member-adjustment','/member/member_adjustment/submit',serializeData);
         });
 	}
 }

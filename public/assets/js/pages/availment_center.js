@@ -553,12 +553,12 @@ function availment_center()
 			}
 		});
   	}
-     function remove_approval_details_submit()
-     {
+    function remove_approval_details_submit()
+    {
      	var $this = thisElement.element;
      	if($this)
      	{
-
+     		
      	}
      	$('body').on('click','.remove-approval-details-submit',function() 
 		{
