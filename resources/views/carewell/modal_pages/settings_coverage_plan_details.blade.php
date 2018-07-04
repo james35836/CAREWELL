@@ -2,13 +2,15 @@
 <form class="coverage-plan-form" method="POST">
 	<div class="row box-globals">
 		<input  type="hidden" value="{{$coverage_plan_details->coverage_plan_id}}"  name="coverage_plan_id" id="coverage_plan_id" class="form-control">
-		<div class="row form-holder col-md-12 col-xs-12">
-		    <div class=" col-md-1 col-xs-6 pull-right no-padding">
-		      <button class="btn btn-default top-element enable-element" type="button" ><i class="fa fa-pencil-square-o btn-icon "></i>EDIT</button>
-		    </div>
-		     <div class=" col-md-1 col-xs-6 pull-right no-padding">
-		      <a href="/settings/coverage/plan_details/{{$coverage_plan_details->coverage_plan_id}}/print" target="print_coverage"><button class="btn btn-primary top-element" type="button" ><i class="fa fa-print btn-icon " aria-hidden="true"></i>PRINT</button></a>
-		    </div>
+		<div class="row form-holder">
+			<div class="pull-right col-md-4">
+				<div class=" col-md-6 col-xs-6">
+			      	<a href="/settings/coverage/plan_details/pdf/{{$coverage_plan_details->coverage_plan_id}}" target="print_coverage"><button class="btn btn-primary top-element" type="button" ><i class="fa fa-print btn-icon " aria-hidden="true"></i>PRINT</button></a>
+			    </div>
+			    <div class="col-md-6 col-xs-6">
+			      	<button class="btn btn-default top-element enable-element" type="button" ><i class="fa fa-pencil-square-o btn-icon "></i>EDIT</button>
+			    </div>
+			</div>
 		</div>
 		<div class="row form-holder ">
 			<div class="col-md-2 form-content">

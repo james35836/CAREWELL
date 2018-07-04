@@ -3735,11 +3735,9 @@ class CarewellController extends ActiveAuthController
 		{       
 			return StaticFunctionController::returnMessage('danger','PLEASE CHECK DETAILS'); 
 		}
-
-
 	}
 
-	public function settings_coverage_plan_details_print($coverage_plan_id)
+	public function settings_coverage_plan_details_pdf($coverage_plan_id)
 	{
 		$data['coverage_plan_details']  = TblCoveragePlanModel::where('coverage_plan_id',$coverage_plan_id)->first();     
 		$data['_coverage_plan_covered'] = TblCoveragePlanProcedureModel::where('coverage_plan_id',$coverage_plan_id)->CoveragePlan()->get();
