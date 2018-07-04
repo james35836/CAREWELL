@@ -41,6 +41,7 @@ Route::any('/get/provider_info', 							'StaticFunctionController@getProviderInf
 Route::any('/get/availment_info', 							'StaticFunctionController@getAvailmentInfo');
 Route::any('/get/check_procedure_amount', 					'StaticFunctionController@getCheckProcedureAmount');
 
+Route::any('/get_all_procedures',                           'StaticFunctionController@get_all_procedures');
 Route::any('/get/export/warning',                   		'StaticFunctionController@getExportWarning');
 Route::get('/forgetSession',                       			'StaticFunctionController@forgetSession');
 
@@ -160,7 +161,7 @@ Route::get('/availment/approval_export_pdf/{approval_id}', 	'CarewellController@
 Route::post('/availment/update_approval/submit',			'CarewellController@availment_update_approval_submit');
 Route::post('/availment/remove_approval_details/submit',	'CarewellController@availment_remove_approval_details_submit');
 
-Route::post('/availment/approval_action',			'CarewellController@availment_update_approval_submit');
+Route::post('/availment/approval_action',					'CarewellController@availment_approval_action');
 
 
 
@@ -253,6 +254,12 @@ Route::get('/settings/coverage/plan_details/{coverage_plan_id}/print', 'Carewell
 Route::POST('/archived/submit', 							'CarewellController@archived_submit');
 /*RESTORE*/
 Route::POST('/restore/submit', 								'CarewellController@restore_submit');
+
+
+
+/*PAGE ACTION*/
+
+Route::POST('/page-action/submit', 							'CarewellController@page_action_submit');
 
 /*MAINTENANCE*/
 Route::get('/developer/maintenance', 				    	'MaintenanceController@developer_maintenance');

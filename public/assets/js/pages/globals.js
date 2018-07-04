@@ -20,6 +20,8 @@ var userProfileData = new FormData();
 var passwordData 	= new FormData();
 var userData 		= new FormData();
 
+var pageAction      = new FormData();
+
 var archivedData 	= new FormData();
 var restoreData 	= new FormData();
 
@@ -797,6 +799,70 @@ function globals()
 	
 	function archived_data()
 	{
+		$('body').on('click','button.page-action',function()
+		{
+			pageAction.append("id", 			$(this).data('id'));
+			pageAction.append("action_name", 	$(this).data('name'));
+			pageAction.append("status", 		$(this).data('status'));
+			pageAction.append("alert", 			$(this).data('alert'));
+			ajaxData.tdCloser  					= $(this).closest('tr');
+			ajaxData.name 						= $(this).data('name');
+			ajaxData.alert 						= $(this).data('alert');
+
+
+			var	confirmModalMessage = 'Are you sure you want to '+$(this).data('alert')+" "+$(this).data('name')+'?';
+			var confirmModalAction 	= 'page-action-submit';
+			globals.confirm_modals(confirmModalMessage,confirmModalAction);
+
+
+		});
+		$('body').on('click','button.page-action-submit',function() 
+		{
+			$(".confirm-modal-body").html('<h1 style="text-align:center;"><i class="fa fa-spinner fa-pulse fa-fw"></i></h1>');
+	        $(".confirm-ajax-loader").show();
+	        $('.confirm-modal-title').html("MESSAGE");
+
+	        var name = ajaxData.name;
+	        if(ajaxData.alert=="cancel")
+			{
+				var alert = "CANCELLED";
+			}
+			else if(ajaxData.alert=="disapprove")
+			{
+				var alert = "DISAPPROVED";
+			}
+			else if(ajaxData.alert=="restore")
+			{
+				var alert = "RESTORED";
+			}
+	        $.ajax({
+				headers: {
+					      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				},
+				url 		: '/page-action/submit',
+				method 		: "POST",
+	        	data 		: pageAction,
+	        	contentType : false,
+	        	cache 		: false,
+	        	processData : false,
+				success 	: function(data)
+	            {
+					setTimeout(function()
+					{
+						
+						$(".confirm-ajax-loader").remove();
+						ajaxData.tdCloser.remove();
+						$(".confirm-modal-body").html('<center><b><span> '+ name +' '+alert+' '+data+'!</span></b></center>');
+						$(".confirm-modal-footer").html(successButton);
+	                    
+					}, 800);
+				}
+			});
+		});
+
+
+
+
 		$('body').on('click','.archived',function()
 		{
 			var	confirmModalMessage = 'Are you sure you want to archived '+$(this).data('name')+'?';
@@ -811,20 +877,20 @@ function globals()
 		$('body').on('click','.archived-submit',function() 
 		{
 			$(".confirm-modal-body").html('<h1 style="text-align:center;"><i class="fa fa-spinner fa-pulse fa-fw"></i></h1>');
-	          $(".confirm-ajax-loader").show();
-	        	$('.confirm-modal-title').html("MESSAGE");
-	        	$.ajax({
+	        $(".confirm-ajax-loader").show();
+	        $('.confirm-modal-title').html("MESSAGE");
+	        $.ajax({
 				headers: {
-				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+					      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 				},
 				url:'/archived/submit',
 				method: "POST",
 	        	data: archivedData,
 	        	contentType:false,
-            	cache:false,
-            	processData:false,
+	        	cache:false,
+	        	processData:false,
 				success: function(data)
-	            	{
+	            {
 					setTimeout(function()
 					{
 						$(".confirm-ajax-loader").remove();

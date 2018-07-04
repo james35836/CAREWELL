@@ -37,11 +37,7 @@ function availment_center()
         	remove_approval_details_confirm();
             remove_approval_details_submit();
 
-            cancel_approval_confirm();
-            cancel_approval_submit();
-
-            disapproved_approval_confirm();
-            disapproved_approval_submit();
+            
         });
 	}
 
@@ -339,29 +335,20 @@ function availment_center()
 
 		$('body').on('change','select.getAvailmentInfo',function() 
 		{
-
-			if($(this).val()==4)
+			if($(this).data('warning')=="show")
 			{
-				$(this).closest('.modal').find('div#minorOps').remove();
+				var	confirmModalMessage = 'You are required to change all the information in description, please reload if you do not want to continue!<br><br>Do you want to proceed?';
+				var confirmModalAction = 'getAvailmentInfo';
+				globals.confirm_modals(confirmModalMessage,confirmModalAction);
 			}
 			else
 			{
-				if($(this).data('warning')=="show")
-				{
-					var	confirmModalMessage = 'You are required to change all the information in description, please reload if you do not want to continue!<br><br>Do you want to proceed?';
-					var confirmModalAction = 'getAvailmentInfo';
-					globals.confirm_modals(confirmModalMessage,confirmModalAction);
-				}
-				else
-				{
-					var ajaxCallData 	= new FormData();
-		        	ajaxCallData.append('availment_id',		$(this).val());
-		        	ajaxCallData.append('member_id',		$('#member_id').val());
-		        	ajaxCallData.append('warning',			$(this).data('warning'));
-					globals.global_ajax_call_submit('/get/availment_info',ajaxCallData,availment_center,'availment');
-				}
+				var ajaxCallData 	= new FormData();
+	        	ajaxCallData.append('availment_id',		$(this).val());
+	        	ajaxCallData.append('member_id',		$('#member_id').val());
+	        	ajaxCallData.append('warning',			$(this).data('warning'));
+				globals.global_ajax_call_submit('/get/availment_info',ajaxCallData,availment_center,'availment');
 			}
-			
 		});
 		$('body').on('click','button.getAvailmentInfo',function() 
 		{
@@ -544,42 +531,6 @@ function availment_center()
 			globals.global_single_submit('/availment/remove_approval_details/submit',removeApprovalData,ajaxData.tdCloser);
 		});
     }
-    function cancel_approval_confirm()
-    {
-    	$('body').on('click','.cancel-approval-confirm',function() 
-		{
-			var	confirmModalMessage = 'Are you sure you want to mark  this approval as cancelled?<br>';
-			var confirmModalAction = 'cancel-approval-submit';
-			globals.confirm_modals(confirmModalMessage,confirmModalAction);
-			singleData.append("approval_id", 					$(this).data('approval_id'));
-            ajaxData.tdCloser = $(this).closest('tr');
-	    });
-    }
-    function cancel_approval_submit()
-    {
-    	$('body').on('click','.cancel-approval-submit',function() 
-		{
-			globals.global_single_submit('/billing/cal_pending_submit',singleData,ajaxData.tdCloser);
-        });		
-    }
-
-    function disapproved_approval_confirm()
-    {
-    	$('body').on('click','.disapprove-approval-confirm',function() 
-		{
-			var	confirmModalMessage = 'Are you sure you want to mark  this approval as disapproved?<br>';
-			var confirmModalAction = 'disapprove-approval-submit';
-			globals.confirm_modals(confirmModalMessage,confirmModalAction);
-            singleData.append("approval_id", 					$(this).data('approval_id'));
-            ajaxData.tdCloser = $(this).closest('tr');
-	    });
-    }
-    function disapproved_approval_submit()
-    {
-		$('body').on('click','.disapprove-approval-submit',function() 
-		{
-			globals.global_single_submit('/availment/approval_action/disapproved',singleData,ajaxData.tdCloser);
-        });
-    }
+    
 
 }

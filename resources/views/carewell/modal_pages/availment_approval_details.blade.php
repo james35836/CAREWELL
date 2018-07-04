@@ -318,7 +318,6 @@ $(document).ready(function()
 		<div class="row form-holder">
 		</div>
 	</div>
-	@if($approval_details->availment_id!=4)
 	<div class="row box-globals">
 		<div class="row form-holder">
 			<center>
@@ -401,7 +400,6 @@ $(document).ready(function()
 			</div>
 		</div>
 	</div>
-	@endif
 	<div class="row box-globals">
 		<div class="row form-holder">
 			<center>

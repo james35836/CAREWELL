@@ -2205,16 +2205,16 @@ class CarewellController extends ActiveAuthController
 			$message = StaticFunctionController::customMessage("danger","Transaction Failed");
 		}
 		return $message;
-     }
-     public function availment_create_new_provider($warning)
-     {
+    }
+    public function availment_create_new_provider($warning)
+    {
      	$data['warning']         = $warning;
      	$data['user']            = StaticFunctionController::global();
      	$data['_provider']       = TblProviderModel::where('archived',0)->get();
      	return view('carewell.modal_pages.availment_new_provider_doctor',$data);
      }
-     public function availment_create_new_provider_submit(Request $request)
-     {
+    public function availment_create_new_provider_submit(Request $request)
+    {
      	if(StaticFunctionController::get_numeric($request->provider_id)=="integer")
      	{
      		$inserted 			= StaticFunctionController::provider_add_tag_doctor($request->doctor_full_name,$request->provider_id);
@@ -2279,7 +2279,6 @@ class CarewellController extends ActiveAuthController
 		}
 		return view('carewell.modal_pages.availment_approval_add_details',$data);
 	}
-
 	public function availment_add_approval_details_submit(Request $request)
 	{
 		switch ($request->ref)
@@ -2306,6 +2305,7 @@ class CarewellController extends ActiveAuthController
 		}
 		return $message;
 	}
+	
 	/*PAYABLE*/
 	public function payable()
 	{
@@ -3762,5 +3762,51 @@ class CarewellController extends ActiveAuthController
 	public function restore_submit(Request $request)
 	{
 		return StaticFunctionController::restore_data($request->restore_id,$request->restore_name);
+	}
+	/*PAGE ACTION SUBMIT*/
+	public function page_action_submit(Request $request)
+	{
+		$message              = "";
+		$id                   = $request->id;
+        $archived['archived'] = $request->status;
+        $status               = $request->status;
+        $action_name          = $request->action_name;
+        $action_alert         = $request->alert; 
+
+        switch ($action_name) 
+        {
+	        case 'USER':
+	            $check = TblUserModel::where('user_id', $id)->update($archived);
+	        break;
+	        case 'COMPANY':
+	            $check = TblCompanyModel::where('company_id',$id)->update($archived);
+	        break;
+	        case 'MEMBER':
+	            $check = TblMemberModel::where('member_id',$id)->update($archived);
+	        break;
+	        case 'PROVIDER':
+	            $check = TblProviderModel::where('provider_id',$id)->update($archived);
+	            $check_doctor_provider = TblDoctorProviderModel::where('provider_id',$id)->update($archived);
+	        break;
+	        case 'DOCTOR':
+	            $check = TblDoctorModel::where('doctor_id',$id)->update($archived);
+	        break;
+	        case 'APPROVAL':
+	            $check 			= TblApprovalModel::where('approval_id',$id)->update($archived);
+				$procedure_status['procedure_status'] = $status;
+			    $procedure 		= TblApprovalProcedureModel::where('approval_id',$id)->update($procedure_status);
+			break;
+        }
+
+        if($check)
+        {
+        	$message = "SUCCESSFULLY";
+        }
+        else
+        {
+        	$message = "FAILED";
+        }
+        
+        return   $message;
 	}
 }

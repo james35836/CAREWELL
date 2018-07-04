@@ -1,13 +1,4 @@
-<script>
-$(document).ready(function()
-{
-$('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
-checkboxClass: 'icheckbox_minimal-blue',
-radioClass   : 'iradio_minimal-blue'
-})
 
-});
-</script>
 <form class="coverage-plan-form" method="POST">
 	<div class="row box-globals">
 		<input  type="hidden" value="{{$coverage_plan_details->coverage_plan_id}}"  name="coverage_plan_id" id="coverage_plan_id" class="form-control">
@@ -116,10 +107,10 @@ radioClass   : 'iradio_minimal-blue'
 		<div class="row form-holder ">
 			<div class="col-md-4 form-content col-xs-12 pull-right">
 				<div class="col-md-6 col-xs-12 form-content no-padding">
-					<input type="checkbox" class="minimal"  value="{{$coverage_plan_details->coverage_plan_mbl_year}}" name="coverage_plan_mbl_year" id="coverage_plan_mbl_year"> <label> Year</label>
+					<input type="checkbox" name="coverage_plan_mbl_year" id="coverage_plan_mbl_year" @if($coverage_plan_details->coverage_plan_mbl_year=="on") checked @endif> <label> Year</label>
 				</div>
 				<div class="col-md-6 col-xs-12 form-content no-padding">
-					<input type="checkbox" class="minimal"  value="{{$coverage_plan_details->coverage_plan_mbl_illness}}" name="coverage_plan_mbl_illness" id="coverage_plan_mbl_illness"> <label> Illness/Disease</label>
+					<input type="checkbox" name="coverage_plan_mbl_illness" id="coverage_plan_mbl_illness" @if($coverage_plan_details->coverage_plan_mbl_illness=="on") checked @endif> <label> Illness/Disease</label>
 				</div>
 			</div>
 		</div>
@@ -145,9 +136,8 @@ radioClass   : 'iradio_minimal-blue'
 							<table class="table table-bordered availed-table">
 								<thead>
 									<tr>
-										@if($coverage_plan_covered->availment_id!=4)
+										
 										<th class="col-md-5">PROCEDURE</th>
-										@endif
 										<th class="col-md-5" >CHARGE</th>
 										<th class="col-md-2">AMOUNT COVERED</th>
 										<th class="col-md-2">LIMIT</th>
@@ -157,11 +147,9 @@ radioClass   : 'iradio_minimal-blue'
 								<tbody>
 									@foreach($coverage_plan_covered->procedure as $procedure)
 									<tr class="table-row">
-										@if($coverage_plan_covered->availment_id!=4)
 										<td class="col-md-5">
 											{{$procedure->procedure_name}}
 										</td>
-										@endif
 										<td class="col-md-4">
 											{{$procedure->plan_charges}}
 										</td>

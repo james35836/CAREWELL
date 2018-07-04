@@ -997,7 +997,30 @@ class StaticFunctionController extends Controller
                 });
             })->download('xlsx');
         }
-        
+    }
+    public function get_all_procedures()
+    {
+        $excels['_member'] = TblProcedureModel::get();
+        $excels['data']  =   ['PROCEDURE NAME','PROCEDURE AMOUNT','TYPE'];
+        Excel::create('CAREWELL PROCEDURES', function($excel) use ($excels) 
+        {
+            $excel->sheet('template', function($sheet) use ($excels) 
+            {
+                $data = $excels['data'];
+                $sheet->fromArray($data, null, 'A1', false, false);
+                $sheet->freezeFirstRow();
+                $_member = $excels['_member'];
+                foreach($excels['_member'] as  $key => $member)
+                {
+                    $key = $key+=2;
+                    $sheet->setCellValue('A'.$key, $member['procedure_name']);
+                    $sheet->setCellValue('B'.$key, $member['procedure_amount']);
+                    $sheet->setCellValue('C'.$key, $member['type']);
+                           
+                }
+
+            });
+        })->download('xlsx');
     }
     public function forgetSession(Request $request)
     {

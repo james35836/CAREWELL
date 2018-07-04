@@ -14,13 +14,13 @@ $(document).ready(function()
 
 	$('body').on('change','.procedureList,.gross-amount,.philhealth,.charge-patient',function()
 	{
-				var $carewell 		= $(this).parents('tr').find('.charge-carewell').val();
-			var $procedure 	    = $(this).parents('tr').find('.procedureList').val();
-				var $amount 		= $(this).parents('tr').find('.gross-amount').val();
-			var $philhealth 	= $(this).parents('tr').find('.philhealth').val();
-				var $patient 		= $(this).parents('tr').find('.charge-patient').val();
-var new_carewell    = 0;
-			var $member_id    	= $('#member_id').val();
+		var $carewell 		= $(this).parents('tr').find('.charge-carewell').val();
+		var $procedure 	    = $(this).parents('tr').find('.procedureList').val();
+		var $amount 		= $(this).parents('tr').find('.gross-amount').val();
+		var $philhealth 	= $(this).parents('tr').find('.philhealth').val();
+		var $patient 		= $(this).parents('tr').find('.charge-patient').val();
+		var new_carewell    = 0;
+		var $member_id    	= $('#member_id').val();
 		var $availment_id   = $('#availment_id').val();
 		if($(this).hasClass('procedureList'))
 		{
