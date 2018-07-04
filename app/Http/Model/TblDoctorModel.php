@@ -16,6 +16,11 @@ class TblDoctorModel extends Model
     	$query->join('tbl_provider','tbl_provider.provider_id','=','tbl_doctor_provider.provider_id');
     	return $query;
     }
+    public function scopeSearch($query,$key)
+    {
+    	$query ->where('tbl_doctor.doctor_full_name','like','%'.$key.'%');
+    	return $query;
+    }
     
 }
 

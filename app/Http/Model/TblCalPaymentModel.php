@@ -13,8 +13,18 @@ class TblCalPaymentModel extends Model
     public function scopeCalInfo($query)
     {
     		$query 	->join('tbl_cal_member','tbl_cal_member.cal_member_id','tbl_cal_payment.cal_member_id')
-    		          ->join('tbl_cal','tbl_cal.cal_id','=','tbl_cal_member.cal_id');
-    		       	return $query;
+    		        ->join('tbl_cal','tbl_cal.cal_id','=','tbl_cal_member.cal_id');
+    		return $query;
+    }
+    public function scopeCalStatus($query)
+    {
+    	$query 	->where(function($query)
+				{
+					$query->where('archived',1);
+					$query->orWhere('archived',2);
+					
+				});
+    	return $query;
     }
     
 }

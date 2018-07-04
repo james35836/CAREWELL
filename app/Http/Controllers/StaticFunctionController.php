@@ -194,8 +194,9 @@ class StaticFunctionController extends Controller
             $_procedure_doctor                  = TblDoctorProcedureModel::where('archived',0)->get();
             $provider                           = TblProviderModel::where('provider_id',$request->provider_id)->first();
             $data['_provider_doctor']           = TblDoctorProviderModel::where('tbl_doctor_provider.provider_id',$request->provider_id)->where('tbl_doctor_provider.archived',0)->DoctorProvider()->get();
-            $data['_procedure_doctors']          = '<option value="">-SELECT PROCEDURE-';
+            $data['_procedure_doctors']         = '<option value="">-SELECT PROCEDURE-';
             $data['_provider_doctors']          = '<option value="">-SELECT DOCTOR-';
+            $data['_payeeList']                 = '<option>'.$provider->provider_name;
             $data['_specialization_doctors']    = '<option value="">-SELECT SPECIALIZATION-';
             foreach($_procedure_doctor as $procedure_doctor)
             {
@@ -204,6 +205,7 @@ class StaticFunctionController extends Controller
             foreach($data['_provider_doctor'] as $provider_doctor)
             {
                 $data['_provider_doctors']     .= '<option value='.$provider_doctor->doctor_id.'>'.$provider_doctor->doctor_full_name;
+                $data['_payeeList']     .= '<option value='.$provider_doctor->doctor_id.'>'.$provider_doctor->doctor_full_name;
             }
             foreach($_specialization as $specialization)
             {
@@ -213,6 +215,7 @@ class StaticFunctionController extends Controller
             $first              = $data['_provider_doctors'];
             $second             = $provider->provider_rvs;
             $third              = $provider->provider_name;
+            $payeeList          = $data['_payeeList'];
             $specialization     = $data['_specialization_doctors'];
             $doctorprocedure    = $data['_procedure_doctors'];
 
@@ -224,8 +227,20 @@ class StaticFunctionController extends Controller
             {
                 $view               = 'none';
             }
-            return response()->json(array('first' => $first,'second'=>$second,'third'=>$third,'view'=>$view,'specialization'=>$specialization,'doctorprocedure'=>$doctorprocedure));
+            return response()->json(array('first' => $first,'second'=>$second,'third'=>$third,'view'=>$view,'payeeList'=>$payeeList,'specialization'=>$specialization,'doctorprocedure'=>$doctorprocedure));
         }
+    }
+    public static function get_numeric($data)
+    {
+        if(is_numeric($data))
+        { 
+            $result = "integer"; 
+        }
+        else
+        {
+             $result = "string"; 
+        }
+        return $result;
     }
     public function getAvailmentInfo(Request $request)
     {

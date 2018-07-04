@@ -35,7 +35,7 @@ function payable_center()
         $('body').on('click','.create-payable',function() 
 		{
 			var modalName 		= 'CREATE PAYABLE';
-			var modalClass 	= 'payable';
+			var modalClass 		= 'payable';
 			var modalLink 		= '/payable/create_payable';
 			var modalActionName = 'CREATE PAYABLE';
 			var modalAction 	= 'create-payable-confirm';

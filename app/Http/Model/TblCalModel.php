@@ -23,5 +23,16 @@ class TblCalModel extends Model
         }
         return $query;
     }
+    public function scopeSearch($query,$key)
+    {
+        $query  ->join('tbl_company','tbl_company.company_id','=','tbl_cal.company_id')
+                ->where(function($query)use($key)
+                {
+                    $query->where('tbl_cal.cal_number','like','%'.$key.'%');
+                    $query->orWhere('tbl_company.company_name','like','%'.$key.'%');
+                });
+
+        return $query;
+    }
 }
 

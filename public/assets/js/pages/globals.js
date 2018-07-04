@@ -36,6 +36,8 @@ var approvalprocedureData = new FormData();
 
 var removeApprovalData = new FormData();
 
+var singleData         = new FormData();
+
 var coverageItemData	= [];
 var doctorProviderData	= [];
 var specialData 		= [];
@@ -73,11 +75,12 @@ var confirmModals 			= '<div  class="modal fade modal-top confirm-modal" id="" t
 						      +'<div class="modal-header">'
 						        +'<button type="button" class="close" data-dismiss="modal" aria-label="Close">'
 						        +'<span aria-hidden="true">&times;</span></button>'
-						        +'<h4 class="modal-title confirm-modal-title"></h4>'
+						        +'<h4 class="modal-title confirm-modal-title"><i class="fa fa-warning btn-icon" style="color:#FBA015"></i>ALERT!</h4>'
 						      +'</div>'
 						      
 						      +'<div class="modal-body modal-body-sm confirm-modal-body">'
 						        +'<input type="hidden" class="link"/>'
+						        +'<h4 class="modal-title confirm-modal-body-content"></h4>'
 						      +'</div>'
 						      +'<div class="modal-footer confirm-modal-footer">'
 						        +'<button type="button" class="close-btn btn btn-default pull-left" data-dismiss="modal">Cancel</button>'
@@ -188,7 +191,7 @@ function globals()
 		$('.confirm-modal').remove();
 		$('.append-modal').append(confirmModals);
         $('.confirm-modal-dialog').removeClass().addClass('modal-dialog modal-sm');
-		$('.confirm-modal-title').html(confirmModalMessage);
+		$('.confirm-modal-body-content').html(confirmModalMessage);
 		$('.confirm-submit').addClass(confirmModalAction);
 		$('.confirm-modal').modal('show');
 	}
@@ -668,8 +671,17 @@ function globals()
     		$(this).closest('div.modal-body').find('select').removeAttr('disabled');
     		$(this).closest('div.modal-body').find('button').removeAttr('disabled');
     		$(this).closest('div.modal').find('button.confirm-btn').removeAttr('disabled');
+    		/*AVAILMENT*/
+    		$(this).closest('div.modal-body').find('input.procedure_disapproved').each(function()
+    		{
+    			if($(this).is(':checked'))
+    			{
+    				$(this).closest('tr').find('select').attr('disabled',true);
+    			}
+    		})
 
 
+    		
     		$(this).closest('div.modal').find('input.total_gross_amount').attr('readonly',true);
     		$(this).closest('div.modal').find('input.total_philhealth').attr('readonly',true);
     		$(this).closest('div.modal').find('input.total_charge_patient').attr('readonly',true);

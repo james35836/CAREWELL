@@ -36,6 +36,12 @@ function availment_center()
 
         	remove_approval_details_confirm();
             remove_approval_details_submit();
+
+            cancel_approval_confirm();
+            cancel_approval_submit();
+
+            disapproved_approval_confirm();
+            disapproved_approval_submit();
         });
 	}
 
@@ -122,7 +128,7 @@ function availment_center()
 
 			}
 			$('.doctorList').html(data.first);
-			$('.doctor-payee').html(data.first);
+			$('.payeeList').html(data.payeeList);
 			$('.rateRvs').val(data.second);
 			$('.other-payee').val(data.third);
 			$('.specializationList').html(data.specialization);
@@ -217,7 +223,7 @@ function availment_center()
 			{
 				var warning     = "hidden";
 			}
-			var modalName 		= 'CREATE NEW PROVIDER';
+			var modalName 		= 'NEW PROVIDER/DOCTOR';
 			var modalClass 		= 'approval-new-provider';
 			var modalLink 		= '/availment/create_new_provider/'+warning;
 			var modalActionName = 'CREATE NEW PROVIDER';
@@ -230,41 +236,19 @@ function availment_center()
     {
      	$('body').on('click','.create-new-provider-confirm',function() 
 		{
-			
-            if(document.getElementById('provider_name').value==0)
-			{
-				globals.global_tostr('NAME');
-			}	
-			else if(document.getElementById('provider_rvs').value==0)
-			{
-				globals.global_tostr('RVS');
-			}
-			else 
-			{
-				$('input[name="doctor_full_name[]"]').each(function(i, doctor)
-            	{
-            		if($(doctor).val()!="")
-            		{
-            			doctorProviderData.push(this.value);
-            		}
-            	});
-            	if(doctorProviderData==null||doctorProviderData=="")
-				{
-					toastr.error('Please add DOCTOR at least one.', 'Something went wrong!', {timeOut: 3000})
-				}
-				else
-				{
-					var	confirmModalMessage = 'Are you sure you want to add this provider?';
-					var confirmModalAction = 'create-new-provider-submit';
-					globals.confirm_modals(confirmModalMessage,confirmModalAction);
 
-					providerData.append("provider_name", 			document.getElementById('provider_name').value);
-					providerData.append("provider_rvs", 			document.getElementById('provider_rvs').value);
-		            for (var i = 0; i < doctorProviderData.length; i++) 
-					{
-					    providerData.append('doctorProviderData[]', doctorProviderData[i]);
-					}
-				}
+			var validator 	= [];
+			validator 		= globals.validators('form.new-provider-submit-form .required');
+			if(validator.length!=0)
+			{
+				toastr.error('All form with red border is required.', 'Something went wrong!', {timeOut: 3000})
+			}
+			else
+			{
+				var	confirmModalMessage = 'Are you sure you want to add this provider?';
+				var confirmModalAction = 'create-new-provider-submit';
+				globals.confirm_modals(confirmModalMessage,confirmModalAction);
+				doctorProviderData  = $("form.new-provider-submit-form").serialize();
 			}
 		});
 
@@ -276,39 +260,35 @@ function availment_center()
 			var successButton	= '<button type="button" class="btn btn-default pull-right reload-btn" data-dismiss="modal">RELOAD</button><button type="button" class="btn btn-default pull-left" data-dismiss="modal">CLOSE</button>';
             var submitLink 		= '/availment/create_new_provider/submit';
 			var modalName  		= 'approval-new-provider';
-			var submitData    	= providerData;
+			var submitData    	= doctorProviderData;
 			$('.confirm-modal').remove();
 	        $("."+modalName+"-modal-body").html("<div class='"+modalName+"-ajax-loader' style='display:none;text-align: center; padding:50px;'><img src='/assets/loader/loading.gif'/></div");
 	        $("."+modalName+"-ajax-loader").show();
-	        
 	        $.ajax({
 				headers: {
 				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 				},
-				url:submitLink,
+				url:'/availment/create_new_provider/submit',
 				method: "POST",
-            	data: submitData,
-            	contentType:false,
-            	cache:false,
-            	processData:false,
-            	success: function(data)
+	        	data: doctorProviderData,
+	        	dataType:"json",
+	        	success: function(data)
 				{
 					setTimeout(function()
 					{
 						$('.'+modalName+'-ajax-loader').hide();
 						$('.'+modalName+'-modal-dialog').removeClass().addClass('modal-sm modal-dialog')
-						$('.'+modalName+'-modal-body').html(data.message);
+						$("."+modalName+"-modal-body").html(data.message);
 						$('.'+modalName+'-modal-footer').html(successButton);
 
 						$('#provider_id').append('<option value="'+data.provider_id+'" selected="selected">'+data.provider_name+'</option>');
-						$('.other-payee').val(data.provider_name);
-						$('.other-payee').val(data.provider_name);
+						$('.payeeList').html(data.payeeList);
 						$('.doctorList').html(data.doctor_list);
-						$('.doctor-payee').html(data.doctor_list);
+						
 					}, 1000);
 				}
 			});
-		});
+	    });
     }
 	function create_approval()
 	{
@@ -564,6 +544,43 @@ function availment_center()
 		{
 			globals.global_single_submit('/availment/remove_approval_details/submit',removeApprovalData,ajaxData.tdCloser);
 		});
-     }
+    }
+    function cancel_approval_confirm()
+    {
+    	$('body').on('click','.cancel-approval-confirm',function() 
+		{
+			var	confirmModalMessage = 'Are you sure you want to mark  this approval as cancelled?<br>';
+			var confirmModalAction = 'cancel-approval-submit';
+			globals.confirm_modals(confirmModalMessage,confirmModalAction);
+			singleData.append("approval_id", 					$(this).data('approval_id'));
+            ajaxData.tdCloser = $(this).closest('tr');
+	    });
+    }
+    function cancel_approval_submit()
+    {
+    	$('body').on('click','.cancel-approval-submit',function() 
+		{
+			globals.global_single_submit('/billing/cal_pending_submit',singleData,ajaxData.tdCloser);
+        });		
+    }
+
+    function disapproved_approval_confirm()
+    {
+    	$('body').on('click','.disapprove-approval-confirm',function() 
+		{
+			var	confirmModalMessage = 'Are you sure you want to mark  this approval as disapproved?<br>';
+			var confirmModalAction = 'disapprove-approval-submit';
+			globals.confirm_modals(confirmModalMessage,confirmModalAction);
+            singleData.append("approval_id", 					$(this).data('approval_id'));
+            ajaxData.tdCloser = $(this).closest('tr');
+	    });
+    }
+    function disapproved_approval_submit()
+    {
+		$('body').on('click','.disapprove-approval-submit',function() 
+		{
+			globals.global_single_submit('/availment/approval_action/disapproved',singleData,ajaxData.tdCloser);
+        });
+    }
 
 }

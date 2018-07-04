@@ -8,66 +8,8 @@
 			/*size: Legal landscape;*/
 			margin: 0.4in;
 		}
-		body
-		{
-			font-family:sans-serif;
-		}
-		div.header-container
-		{
-			padding-right: 15px;
-			padding-left: 15px;
-			margin-right: auto;
-			margin-left: auto;
-
-		}
-		div.header-text
-		{
-			text-align: center;
-			font-size: 15px;
-			font-weight: bold;
-		}
-		div.box-content-id
-		{
-			padding-right: 15px;
-			padding-left: 15px;
-			margin-right: auto;
-			margin-left: auto;
-		}
-		div.header-id
-		{
-			position: absolute;
-			right: 5px;
-
-		}
-		div.box-border
-		{
-			border:1px solid black;
-		}
-		table, th, td
-		{
-			text-align: center;
-			border: 1px solid gray;
-			border-collapse: collapse;
-			width:100%;
-		}
-		div.table-container table th
-		{
-			font-size:13px !important;
-			font-weight: bold !important;
-		}
-		div.table-container table td
-		{
-			font-size:13px !important;
-		}
-		div.pdf-footer
-		{
-			font-size:13px !important;
-			font-weight: bold !important;
-			text-align: center;
-			margin-top:30px;
-		}
 		</style>
-
+		<link href="{{ public_path('assets/css/export_pdf.css') }}" rel="stylesheet" type="text/css" />
 	</head>
 	<body>
 		<div class="header-container">
@@ -223,7 +165,6 @@
 								<th>CHARGE TO CAREWELL</th>
 								<th>REMARKS</th>
 							</tr>
-							
 							@foreach($payable_approval->_availed as $availed)
 							<tr >
 								<td>{{$availed->procedure_name}}</td>
@@ -245,15 +186,15 @@
 						<table >
 							<tr>
 								<td>Total Gross Amount:</td>
-								<td>{{$payable_approval->total_procedure->total_gross_amount}}</td>
+								<td>{{$payable_approval->procedure_gross_amount}}</td>
 								<td>Total Philhealth Charity:</td>
-								<td>{{$payable_approval->total_procedure->total_philhealth}}</td>
+								<td>{{$payable_approval->procedure_philhealth}}</td>
 							</tr>
 							<tr>
 								<td>Total Charge to Patient:</td>
-								<td>{{$payable_approval->total_procedure->total_charge_patient}}</td>
+								<td>{{$payable_approval->procedure_charge_patient}}</td>
 								<td>Total Charge to Carewell:</td>
-								<td>{{$payable_approval->total_procedure->total_charge_carewell}}</td>
+								<td>{{$payable_approval->procedure_charge_carewell}}</td>
 							</tr>
 						</table>
 					</div>
@@ -297,15 +238,15 @@
 						<table >
 							<tr>
 								<td >Total Gross Amount:</td>
-								<td >{{$payable_approval->total_doctor->total_gross_amount}}</td>
+								<td >{{$payable_approval->approval_doctor_actual_pf}}</td>
 								<td >Total Charge to Patient:</td>
-								<td >{{$payable_approval->total_doctor->total_charge_patient}}</td>
+								<td >{{$payable_approval->approval_doctor_phil_charity}}</td>
 							</tr>
 							<tr>
 								<td >Total Philhealth Charity:</td>
-								<td >{{$payable_approval->total_doctor->total_philhealth}}</td>
+								<td >{{$payable_approval->approval_doctor_charge_patient}}</td>
 								<td >Total Charge to Carewell:</td>
-								<td >{{$payable_approval->total_doctor->total_charge_carewell}}</td>
+								<td >{{$payable_approval->approval_doctor_charge_carewell}}</td>
 							</tr>
 						</table>
 					</div>
@@ -317,29 +258,39 @@
 					<div class="table-container">
 						<table >
 							<tr>
-								<td colspan="1" >Doctor Payee:</td>
-								<td colspan="3">
-									@foreach($payable_approval->_payee_doctor as $payee_doctor)
-									{{$payee_doctor->doctor_full_name}}<br>
-									@endforeach
-								</td>
+								<th>PAYEE NAME</th>
+								<th>AMOUNT</th>
 							</tr>
+							@foreach($payable_approval->_doctor_assigned as $doctor_assigned)
 							<tr>
-								<td colspan="1" >Other Payee:</td>
-								<td colspan="3">
-									@foreach($payable_approval->_payee_other as $payee_other)
-									{{$payee_other->payee_name}}<br>
-									@endforeach
-								</td>
+								<td>{{$doctor_assigned->doctor_full_name}}</td>
+								<td>{{$doctor_assigned->approval_doctor_charge_carewell}}</td>
+							</tr>
+							@endforeach
+							<tr>
+								<td colspan="1" >{{$payable_approval->provider_name}}</td>
+								<td colspan="1" >{{$payable_approval->payee_company}}</td>
 							</tr>
 						</table>
 					</div>
 				</div>
-				
+				<div class="box-border-content">
+					<div class="header-text">
+						GRAND TOTAL  = {{$payable_approval->grand_total}}
+					</div>
+					
+				</div>
 			</div>
 		</div>
 		<br>
 		@endforeach
+		<br><br><br>
+		<div class="box-border-content">
+			<div class="header-text">
+				PAYABLE TOTAL  = {{$payable_total}}
+			</div>
+		</div>
+		<br><br><br><br><br><br>
 		<div class="pdf-footer">PDF GENERATED : {{date("F j, Y",strtotime(date('Y-m-d')))}}</div>
 	</body>
 </html>

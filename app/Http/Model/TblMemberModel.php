@@ -35,5 +35,16 @@ class TblMemberModel extends Model
         $query->join('tbl_member_company','tbl_member_company.member_id','=','tbl_member.member_id');
         return $query;
     }
+    public function scopeSearch($query,$key)
+    {
+        $query  ->where('tbl_member_company.archived',0)->where(function($query)use($key)
+                {
+                    $query->where('tbl_member.member_last_name','like','%'.$key.'%');
+                    $query->orWhere('tbl_member.member_first_name','like','%'.$key.'%');
+                    $query->orWhere('tbl_member_company.member_carewell_id','like','%'.$key.'%');
+                    $query->orWhere('tbl_member.member_universal_id','like','%'.$key.'%');
+                });
+        return $query;
+    }
     
 }

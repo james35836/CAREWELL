@@ -158,11 +158,9 @@ Route::get('/availment/approval_export_pdf/{approval_id}', 	'CarewellController@
 
 
 Route::post('/availment/update_approval/submit',			'CarewellController@availment_update_approval_submit');
-
-
-
 Route::post('/availment/remove_approval_details/submit',	'CarewellController@availment_remove_approval_details_submit');
 
+Route::post('/availment/approval_action',			'CarewellController@availment_update_approval_submit');
 
 
 

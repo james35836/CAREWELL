@@ -34,5 +34,14 @@ class TblCompanyModel extends Model
         $query->join('tbl_cal','tbl_cal.company_id','=','tbl_company.company_id');
         return $query;
     }
+    public function scopeSearch($query,$key)
+    {
+        $query  ->where(function($query)use($key)
+                {
+                    $query->where('tbl_company.company_name','like','%'.$key.'%');
+                    $query->orWhere('tbl_company.company_code','like','%'.$key.'%');
+                });
+        return $query;
+    }
 }
 
