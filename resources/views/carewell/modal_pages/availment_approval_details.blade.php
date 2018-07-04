@@ -83,7 +83,7 @@ $(document).ready(function()
 });
 </script>
 
-<form class="approval-update-form" method="post">
+<form class="approval-update-form-submit">
 	<input type="hidden" id="member_id" value="{{$approval_details->member_id}}">
 	<input type="hidden" id="approval_id" name="approval_id" value="{{$approval_details->approval_id}}">
 	<div class="row box-globals">
@@ -243,7 +243,7 @@ $(document).ready(function()
 			</div>
 			<div class="col-md-4 form-content">
 				<div class="input-group">
-					<select disabled class="form-control getProviderInfo" data-warning="show" id="provider_id" name="provider_id">
+					<select readonly class="form-control getProviderInfo" data-warning="show" id="provider_id" name="provider_id">
 						<option value="{{$approval_details->provider_id}}">{{$approval_details->provider_name}}</option>
 						@foreach($_provider as $provider)
 						<option value="{{$provider->provider_id}}">{{$provider->provider_name}}</option>
@@ -258,7 +258,7 @@ $(document).ready(function()
 				<label>Type of availment</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<select  disabled data-name="availment" class="form-control getAvailmentInfo" data-warning="show" name="availment_id" id="availment_id">
+				<select  readonly data-name="availment" class="form-control getAvailmentInfo" data-warning="show" name="availment_id" id="availment_id">
 					<option value="{{$approval_details->availment_id}}">{{$approval_details->availment_name}}</option>
 					@foreach($_availment as $availment)
 					<option value="{{$availment->availment_id}}">{{$availment->availment_name}}</option>
@@ -307,7 +307,7 @@ $(document).ready(function()
 				<label>Charge</label>
 			</div>
 			<div class="col-md-10 form-content">
-				<select disabled class="form-control charge_diagnosis" id="charge_diagnosis" name="charge_diagnosis_id" >
+				<select readonly class="form-control charge_diagnosis" id="charge_diagnosis" name="charge_diagnosis_id" >
 					<option value="{{$final_diagnosis->diagnosis_id}}">{{$charge_diagnosis->diagnosis_name}}</option>
 					@foreach($_final_diagnosis as $final_diagnosis)
 					<option value="{{$final_diagnosis->diagnosis_id}}">{{$final_diagnosis->diagnosis_name}}</option>
@@ -345,7 +345,7 @@ $(document).ready(function()
 					@foreach($_availed as $availed)
 					<tr>
 						<td>
-							<select disabled class="form-control approval-select procedureList" name="procedure_id[]">
+							<select readonly class="form-control approval-select procedureList" name="procedure_id[]">
 								<option value="{{$availed->procedure_id}}">{{$availed->procedure_name}}</option>
 								@foreach($_procedure as $procedure)
 								<option value="{{$procedure->procedure_id}}">{{$procedure->procedure_name}}</option>
@@ -429,7 +429,7 @@ $(document).ready(function()
 					@foreach($_doctor_assigned as $doctor_assigned)
 					<tr>
 						<td>
-							<select disabled class="form-control approval-select doctorList" name="doctor_id[]">
+							<select readonly class="form-control approval-select doctorList" name="doctor_id[]">
 								<option  value="{{$doctor_assigned->doctor_id}}">{{$doctor_assigned->doctor_full_name}}</option>
 								@foreach($_doctor as $doctor)
 								<option  value="{{$doctor->doctor_id}}">{{$doctor->doctor_full_name}}</option>
@@ -438,7 +438,7 @@ $(document).ready(function()
 						</td>
 						<td>
 							<div class="input-group">
-								<select disabled class="form-control approval-select" name="specialization_name[]">
+								<select readonly class="form-control approval-select" name="specialization_name[]">
 									<option>{{$doctor_assigned->specialization_name}}</option>
 									@foreach($_specialization as $specialization)
 									<option>{{$specialization->specialization_name}}</option>
@@ -451,7 +451,7 @@ $(document).ready(function()
 						</td>
 						<td><input type="text" readonly class="form-control" value="{{$approval_details->provider_rvs}}" /></td>
 						<td>
-							<select disabled class="form-control approval-select" name="doctor_procedure_id[]">
+							<select readonly class="form-control approval-select" name="doctor_procedure_id[]">
 								<option value="{{$doctor_assigned->doctor_procedure_id}}">{{$doctor_assigned->doctor_procedure_descriptive}}</option>
 								@foreach($_procedure_doctor as $procedure_doctor)
 								<option value="{{$procedure_doctor->doctor_procedure_id}}">{{$procedure_doctor->doctor_procedure_descriptive}}</option>

@@ -2024,6 +2024,7 @@ class CarewellController extends ActiveAuthController
 	}
 	public function availment_update_approval_submit(Request $request)
 	{
+		
 	    /*AJUDICATED HERE*/
 	    $user       						= StaticFunctionController::global();
 	    $ajudicate['user_id'] 				= $user->user_id;
@@ -2042,12 +2043,14 @@ class CarewellController extends ActiveAuthController
 
 
 		$approval = TblApprovalModel::where('approval_id',$request->approval_id)->first();
+        
         if($approval->availment_id==$request->availment_id)
 		{
 			Self::update_insert_procedure($request->all());
 		}
 		else
 		{
+			
 			TblApprovalProcedureModel::where('approval_id',$request->approval_id)->delete();
 			
 			if($request->procedure_id!=null||$request->procedure_id!="")
@@ -2074,6 +2077,7 @@ class CarewellController extends ActiveAuthController
 		}
 		else
 		{
+			dd("doc");
 			TblApprovalDoctorModel::where('approval_id',$request->approval_id)->delete();
 			
 			foreach($request->doctor_id as $key=>$data)

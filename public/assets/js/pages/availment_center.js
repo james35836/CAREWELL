@@ -441,7 +441,7 @@ function availment_center()
 				var	confirmModalMessage = 'Are you sure you want to update this approval?';
 				var confirmModalAction = 'update-approval-submit';
 				globals.confirm_modals(confirmModalMessage,confirmModalAction);
-				ajaxData = $("form.approval-update-form").serialize();
+				serializeData = $("form.approval-update-form-submit").serialize();
 			}
 		});
 	}
@@ -450,9 +450,8 @@ function availment_center()
 	{
 		$('body').on('click','.update-approval-submit',function() 
     	{
-    		globals.global_serialize_submit('approval-details','/availment/update_approval/submit',ajaxData);
+    		globals.global_serialize_submit('approval-details','/availment/update_approval/submit',serializeData);
 	    });
-
 	}
 
 
