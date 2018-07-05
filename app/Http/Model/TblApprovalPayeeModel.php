@@ -12,7 +12,12 @@ class TblApprovalPayeeModel extends Model
 
     public function scopePayeeDoctor($query)
     {
-    		$query->where('type','doctor')->join('tbl_doctor','tbl_doctor.doctor_id','=','tbl_approval_payee.payee_id');
+    		$query  ->join('tbl_doctor','tbl_doctor.doctor_id','=','tbl_approval_payee.doctor_id');
+    		return $query;
+    }
+    public function scopePayeeProvider($query)
+    {
+    		$query  ->join('tbl_provider','tbl_provider.provider_id','=','tbl_approval_payee.provider_id');
     		return $query;
     }
     

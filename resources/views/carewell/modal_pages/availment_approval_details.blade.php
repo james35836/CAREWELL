@@ -38,7 +38,7 @@ $(document).ready(function()
 		if (new_carewell >=0)
 		{
 			$carewell.val(new_carewell);
-									var $this 		= $(this).closest('div.box-globals');
+			var $this 		= $(this).closest('div.box-globals');
 			availment_center.get_total($this);
 		}
 		else
@@ -51,9 +51,9 @@ $(document).ready(function()
 		var new_carewell = 0;
 		var value = $(this).val();
 		
-					var $amount 	= $(this).parents('tr').find('.gross-amount');
+		var $amount 	= $(this).parents('tr').find('.gross-amount');
 		var $philhealth = $(this).parents('tr').find('.philhealth');
-					var $carewell 	= $(this).parents('tr').find('.charge-carewell');
+		var $carewell 	= $(this).parents('tr').find('.charge-carewell');
 		new_carewell = parseInt($amount.val())-(parseInt(value)+parseInt($philhealth.val()));
 		if (new_carewell >= 0)
 		{
@@ -67,13 +67,7 @@ $(document).ready(function()
 		}
 			
 	});
-	$('body').on('click','.reimbursementBtn',function()
-	{
-		$('.reemburse-provider').html('<input type="text" class="form-control" name="state_d" id="state_d">');
-		$('.doctorList').replaceWith('<input type="text" class="form-control" name="state_d" id="state_d">');
-		$('.payeeList').replaceWith('<input type="text" class="form-control" name="state_d" id="state_d">');
 	
-	});
 	$('body').on('change','.final_diagnosis_id',function()
 	{
 		var value = $(this).val();
@@ -89,7 +83,7 @@ $(document).ready(function()
 });
 </script>
 
-<form class="approval-update-form" method="post">
+<form class="approval-update-form-submit">
 	<input type="hidden" id="member_id" value="{{$approval_details->member_id}}">
 	<input type="hidden" id="approval_id" name="approval_id" value="{{$approval_details->approval_id}}">
 	<div class="row box-globals">
@@ -151,29 +145,23 @@ $(document).ready(function()
 		</div>
 	</div>
 	<div class="row box-globals" >
-		<div class="form-holder">
-			<div class="col-md-2 form-content">
-				<label>Name</label>
-			</div>
-			<div class="col-md-4 form-content form-group">
-				<input type="text" disabled class="form-control" value="{{$ajudication->user_first_name." ".$ajudication->user_last_name}}"  />
-			</div>
-			<div class="col-md-2 form-content">
-				<label>ID Number</label>
-			</div>
-			<div class="col-md-4 form-content">
-				<input type="text" disabled class="form-control" value="{{$ajudication->user_number}}"  />
-			</div>
-		</div>
-		<div class="form-holder">
-			<div class="col-md-2 form-content">
-				<label>Date Ajudicate</label>
-			</div>
-			<div class="col-md-4 form-content">
-				<input type="text" disabled class="form-control" value="{{date("F j, Y",strtotime($ajudication->ajudication_created))}}" />
-			</div>
-			<div class="col-md-6 form-content">
-			</div>
+		<div class="table-responsive no-padding">
+			<table class="table table-hover table-bordered procedure-form">
+				<thead>
+					<tr>
+						<th>NAME</th>
+						<th>DATE AJUDICATED</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach($ajudication as $ajudicated)
+					<tr>
+						<td>{{$ajudicated->user_first_name." ".$ajudicated->user_last_name}}</td>
+						<td>{{date("F j, Y",strtotime($ajudicated->ajudication_created))}}</td>
+					</tr>
+					@endforeach
+				</tbody>
+			</table>
 		</div>
 	</div>
 	@endif
@@ -255,7 +243,7 @@ $(document).ready(function()
 			</div>
 			<div class="col-md-4 form-content">
 				<div class="input-group">
-					<select disabled class="form-control getProviderInfo" data-warning="show" id="provider_id" name="provider_id">
+					<select readonly class="form-control getProviderInfo" data-warning="show" id="provider_id" name="provider_id">
 						<option value="{{$approval_details->provider_id}}">{{$approval_details->provider_name}}</option>
 						@foreach($_provider as $provider)
 						<option value="{{$provider->provider_id}}">{{$provider->provider_name}}</option>
@@ -270,7 +258,7 @@ $(document).ready(function()
 				<label>Type of availment</label>
 			</div>
 			<div class="col-md-4 form-content">
-				<select  disabled data-name="availment" class="form-control getAvailmentInfo" data-warning="show" name="availment_id" id="availment_id">
+				<select  readonly data-name="availment" class="form-control getAvailmentInfo" data-warning="show" name="availment_id" id="availment_id">
 					<option value="{{$approval_details->availment_id}}">{{$approval_details->availment_name}}</option>
 					@foreach($_availment as $availment)
 					<option value="{{$availment->availment_id}}">{{$availment->availment_name}}</option>
@@ -319,7 +307,7 @@ $(document).ready(function()
 				<label>Charge</label>
 			</div>
 			<div class="col-md-10 form-content">
-				<select disabled class="form-control charge_diagnosis" id="charge_diagnosis" name="charge_diagnosis_id" >
+				<select readonly class="form-control charge_diagnosis" id="charge_diagnosis" name="charge_diagnosis_id" >
 					<option value="{{$final_diagnosis->diagnosis_id}}">{{$charge_diagnosis->diagnosis_name}}</option>
 					@foreach($_final_diagnosis as $final_diagnosis)
 					<option value="{{$final_diagnosis->diagnosis_id}}">{{$final_diagnosis->diagnosis_name}}</option>
@@ -330,7 +318,6 @@ $(document).ready(function()
 		<div class="row form-holder">
 		</div>
 	</div>
-	@if($approval_details->availment_id!=4)
 	<div class="row box-globals">
 		<div class="row form-holder">
 			<center>
@@ -339,7 +326,6 @@ $(document).ready(function()
 		</div>
 	</div>
 	<div class="row box-globals" id="changeAvailmentInfo" data-id="procedure">
-		
 		<div class="table-responsive no-padding">
 			<table class="table table-hover table-bordered procedure-form">
 				<thead>
@@ -349,6 +335,7 @@ $(document).ready(function()
 						<th>PHILHEALTH CHARITY/SWA</th>
 						<th>CHARGE TO PATIENT</th>
 						<th>CHARGE TO CAREWELL</th>
+						<th>DISAPPROVED</th>
 						<th>REMARKS</th>
 						<th><button type="button" data-ref="first" data-number="2" class="btn btn-primary btn-sm add-row"><i class="fa fa-plus-circle"></i></button></th>
 					</tr>
@@ -357,7 +344,7 @@ $(document).ready(function()
 					@foreach($_availed as $availed)
 					<tr>
 						<td>
-							<select disabled class="form-control approval-select procedureList" name="procedure_id[]">
+							<select readonly class="form-control approval-select procedureList" name="procedure_id[]">
 								<option value="{{$availed->procedure_id}}">{{$availed->procedure_name}}</option>
 								@foreach($_procedure as $procedure)
 								<option value="{{$procedure->procedure_id}}">{{$procedure->procedure_name}}</option>
@@ -413,7 +400,6 @@ $(document).ready(function()
 			</div>
 		</div>
 	</div>
-	@endif
 	<div class="row box-globals">
 		<div class="row form-holder">
 			<center>
@@ -441,7 +427,7 @@ $(document).ready(function()
 					@foreach($_doctor_assigned as $doctor_assigned)
 					<tr>
 						<td>
-							<select disabled class="form-control approval-select doctorList" name="doctor_id[]">
+							<select readonly class="form-control approval-select doctorList" name="doctor_id[]">
 								<option  value="{{$doctor_assigned->doctor_id}}">{{$doctor_assigned->doctor_full_name}}</option>
 								@foreach($_doctor as $doctor)
 								<option  value="{{$doctor->doctor_id}}">{{$doctor->doctor_full_name}}</option>
@@ -450,7 +436,7 @@ $(document).ready(function()
 						</td>
 						<td>
 							<div class="input-group">
-								<select disabled class="form-control approval-select" name="specialization_name[]">
+								<select readonly class="form-control approval-select" name="specialization_name[]">
 									<option>{{$doctor_assigned->specialization_name}}</option>
 									@foreach($_specialization as $specialization)
 									<option>{{$specialization->specialization_name}}</option>
@@ -463,7 +449,7 @@ $(document).ready(function()
 						</td>
 						<td><input type="text" readonly class="form-control" value="{{$approval_details->provider_rvs}}" /></td>
 						<td>
-							<select disabled class="form-control approval-select" name="doctor_procedure_id[]">
+							<select readonly class="form-control approval-select" name="doctor_procedure_id[]">
 								<option value="{{$doctor_assigned->doctor_procedure_id}}">{{$doctor_assigned->doctor_procedure_descriptive}}</option>
 								@foreach($_procedure_doctor as $procedure_doctor)
 								<option value="{{$procedure_doctor->doctor_procedure_id}}">{{$procedure_doctor->doctor_procedure_descriptive}}</option>
@@ -526,89 +512,49 @@ $(document).ready(function()
 		</div>
 	</div>
 	<div class="row box-globals">
-
-		<div class="table-responsive no-padding">
-			<table class="table table-hover table-bordered procedure-form">
-				<thead>
-					<tr>
-						<th>PAYEE NAME</th>
-						<th>AMOUNT</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>{{$approval_details->provider_name}}</td>
-						<td>{{$payee_company}}</td>
-					</tr>
-					@foreach($_doctor_assigned as $doctor_assigned)
-					<tr>
-						<td>{{$doctor_assigned->doctor_full_name}}</td>
-						<td>{{$doctor_assigned->approval_doctor_charge_carewell}}</td>
-					</tr>
-					@endforeach
-
-				</tbody>
-			</table>
+		<div class="col-md-6  col-xs-12">
+			<div class="col-md-4 form-holder">
+				<label>Hospital Fee</label>
+			</div>
+			<div class="col-md-8 form-holder">
+				<input type="text" disabled class="form-control " name="" id="" value="{{$approval_payee}}">
+			</div>
 		</div>
+		<div class="col-md-6  col-xs-12">
+			<div class="col-md-4 form-holder">
+				<label>Amount</label>
+			</div>
+			<div class="col-md-8 form-holder">
+				<input type="number" disabled class="form-control " name="" id=""  value="{{$payee_company}}">
+			</div>
+		</div>
+		@foreach($_doctor_assigned as $doctor_assigned)
+		<div class="col-md-6  col-xs-12">
+			<div class="col-md-4 form-holder">
+				<label>Professional Fee</label>
+			</div>
+			<div class="col-md-8 form-holder">
+				<input type="text" disabled class="form-control" name="" id=""  value="{{$doctor_assigned->doctor_full_name}}">
+			</div>
+		</div>
+		<div class="col-md-6  col-xs-12">
+			<div class="col-md-4 form-holder">
+				<label>Amount</label>
+			</div>
+			<div class="col-md-8 form-holder">
+				<input type="number" disabled class="form-control " name="" id=""  value="{{$doctor_assigned->approval_doctor_charge_carewell}}">
+			</div>
+		</div>
+		@endforeach
 		
-	</div>
-	{{-- <div class="row box-globals">
-
-		<div class="table-responsive no-padding">
-			<table class="table table-hover table-bordered procedure-form">
-				<thead>
-					<tr>
-						<th>PAYEE NAME</th>
-						<th>PAYEE TYPE</th>
-						<th><button type="button" data-ref="first" data-number="2" class="btn btn-primary btn-sm add-row"><i class="fa fa-plus-circle"></i></button></th>
-					</tr>
-				</thead>
-				<tbody>
-					@foreach($_payee_doctor as $payee_doctor)
-					<tr>
-						<td><input type="hidden" id="doctor_approval_payee_id" name="doctor_approval_payee_id" value="{{$payee_doctor->approval_payee_id}}"/>
-							<select disabled style="width:450px;" class="form-control" name="doctor_payee_id[]">
-								<option value="{{$payee_doctor->doctor_id}}">{{$payee_doctor->doctor_full_name}}</option>
-								@foreach($_doctor as $doctor)
-								<option  value="{{$doctor->doctor_id}}">{{$doctor->doctor_full_name}}</option>
-								@endforeach
-							</select>
-						</td>
-						<td>DOCTOR</td>
-						<td><button type="button" data-ref="PAYEE" data-id="{{$payee_doctor->approval_doctor_id}}" class="remove-approval-details-confirm btn btn-danger btn-sm"><i class="fa fa-minus-circle"></i></button></td>
-					</tr>
-					@endforeach
-				</tbody>
-			</table>
-		</div>
-		<div class="table-responsive no-padding">
-			<table class="table table-hover table-bordered">
-				<thead>
-					<tr>
-						<th>PAYEE NAME</th>
-						<th>PAYEE TYPE</th>
-						<th><button type="button" data-ref="first" data-number="2" class="btn btn-primary btn-sm add-row"><i class="fa fa-plus-circle"></i></button></th>
-					</tr>
-				</thead>
-				<tbody>
-					
-					@foreach($_payee_other as $payee_other)
-					<tr>
-						<td><input  type="hidden" id="payee_approval_payee_id" name="payee_approval_payee_id" value="{{$payee_other->approval_payee_id}}"/><input style="width:450px;" readonly type="text" name="payee_name[]" class="form-control" value="{{$payee_other->payee_name}}"/></td>
-						<td>PAYEE</td>
-						<td><button type="button" data-ref="PAYEE" data-id="{{$payee_other->approval_doctor_id}}" class="remove-approval-details-confirm btn btn-danger btn-sm"><i class="fa fa-minus-circle"></i></button></td>
-					</tr>
-					@endforeach
-				</tbody>
-			</table>
-
-		</div>
-	</div> --}}
-	<div class="row box-globals">
-		<div class="row form-holder">
-			<center>
-				<p class="show-money">GRAND TOTAL  =  <span class="show-money">&#8369;</span><span class="show-money" id="grand_total">{{$grand_total}}</span></p>
-			</center>
+		<div class="col-md-6  pull-right col-xs-12">
+			<div class="col-md-4 form-holder">
+				<label>Grand Total</label>
+			</div>
+			<div class="col-md-8 form-holder">
+				<input type="number" disabled class="form-control total_charge_carewell" name="grand_total" id="grand_total"  value="{{$grand_total}}">
+			</div>
 		</div>
 	</div>
+	
 </form>

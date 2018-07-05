@@ -45,16 +45,27 @@ class TblApprovalModel extends Model
     public function scopeGetAvailment($query, $company_id,$availment_id,$date)
     {
         $query  ->join('tbl_member_company','tbl_member_company.member_id','=','tbl_approval.member_id')
-            ->where('tbl_member_company.company_id',$company_id)
-            ->where('tbl_approval.availment_id',$availment_id)
-            ->where('tbl_member_company.archived',0)
-            ->where('tbl_approval.approval_created','LIKE','%'.$date.'%');
-            // ->groupby('tbl_approval.approval_id');
+                ->where('tbl_member_company.company_id',$company_id)
+                ->where('tbl_approval.availment_id',$availment_id)
+                ->where('tbl_member_company.archived',0)
+                ->where('tbl_approval.approval_created','LIKE','%'.$date.'%');
         return $query;
     }
     public function scopeProcedure($query)
     {
         $query ->join('tbl_approval_procedure','tbl_approval_procedure.approval_id','tbl_approval.approval_id');
+        return $query;
+    }
+    public function scopeSearch($query,$key)
+    {
+        $query  ->where('tbl_member_company.archived',0)
+                ->where(function($query)use($key)
+                {
+                    $query->where('tbl_approval.approval_number','like','%'.$key.'%');
+                    $query->orWhere('tbl_member.member_first_name','like','%'.$key.'%');
+                    $query->orWhere('tbl_company.company_name','like','%'.$key.'%');
+                    $query->orWhere('tbl_provider.provider_name','like','%'.$key.'%');
+                });
         return $query;
     }
 

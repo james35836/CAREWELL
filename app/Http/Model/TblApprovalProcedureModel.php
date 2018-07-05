@@ -12,8 +12,7 @@ class TblApprovalProcedureModel extends Model
 
     public function scopeProcedureDiagnosis($query)
     {
-    	$query->join('tbl_procedure','tbl_procedure.procedure_id','=','tbl_approval_procedure.procedure_id')
-               ->join('tbl_diagnosis','tbl_diagnosis.diagnosis_id','=','tbl_approval_procedure.diagnosis_id');
+    	$query->join('tbl_procedure','tbl_procedure.procedure_id','=','tbl_approval_procedure.procedure_id');
         return $query;
     }
     public function scopeProcedure($query)

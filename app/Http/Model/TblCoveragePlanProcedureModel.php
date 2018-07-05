@@ -37,6 +37,12 @@ class TblCoveragePlanProcedureModel extends Model
                 ->join('tbl_availment','tbl_availment.availment_id','=','tbl_coverage_plan_procedure.availment_id');
         return $query;
     }
+    public function scopeMemberInfo($query)
+    {
+        $query  ->join('tbl_availment','tbl_availment.availment_id','=','tbl_coverage_plan_procedure.availment_id')
+                ->select([DB::RAW('DISTINCT(tbl_coverage_plan_procedure.availment_id)'),'tbl_availment.availment_name','tbl_availment.availment_id']);
+        return $query;
+    }
     
 }
 

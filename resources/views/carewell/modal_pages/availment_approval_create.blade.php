@@ -11,8 +11,6 @@ $(document).ready(function()
 	$('body').find('.getProviderInfo').select2();
 	$('body').find('.default-select2').select2();
 	$('body').find('.my-select').select2();
-    
-
 
 	$('body').on('change','.procedureList,.gross-amount,.philhealth,.charge-patient',function()
 	{
@@ -21,8 +19,7 @@ $(document).ready(function()
 		var $amount 		= $(this).parents('tr').find('.gross-amount').val();
 		var $philhealth 	= $(this).parents('tr').find('.philhealth').val();
 		var $patient 		= $(this).parents('tr').find('.charge-patient').val();
-
-        var new_carewell    = 0;
+		var new_carewell    = 0;
 		var $member_id    	= $('#member_id').val();
 		var $availment_id   = $('#availment_id').val();
 		if($(this).hasClass('procedureList'))
@@ -34,16 +31,14 @@ $(document).ready(function()
 		}
 		else
 		{
-
 			if($(this).hasClass('philhealth'))
 			{
-				new_carewell 		= parseInt($amount)-(parseInt($philhealth)+parseInt($patient));
+						new_carewell 		= parseInt($amount)-(parseInt($philhealth)+parseInt($patient));
 			}
 			else if($(this).hasClass('charge-patient'))
-			{ 
+			{
 				new_carewell = parseInt($amount)-(parseInt($patient)+parseInt($philhealth));
 			}
-
 			if (new_carewell >=0)
 			{
 				if($(this).hasClass('gross-amount'))
@@ -63,7 +58,7 @@ $(document).ready(function()
 					$(this).parents('tr').find('.charge-carewell').val(new_carewell);
 				}
 				
-				var $this 		= $(this).closest('div.box-globals');
+						var $this 		= $(this).closest('div.box-globals');
 				availment_center.get_total($this);
 			}
 			else
@@ -80,21 +75,18 @@ $(document).ready(function()
 	});
 	$('body').on('click','.procedure_disapproved',function()
 	{
-		var $this 			= $(this).closest('div.box-globals');
+					var $this 			= $(this).closest('div.box-globals');
 		availment_center.get_total($this);
 	});
 	
-
-
 });
 </script>
-
 <form class="approval-submit-form" method="post">
 	<div  id="insertMember">
 		<div class="row box-globals">
 			<div class="row form-holder">
 				<center>
-					<p style="font-size:20px;">MEMBER INFO</p>
+				<p style="font-size:20px;">MEMBER INFO</p>
 				</center>
 			</div>
 		</div>
@@ -156,7 +148,7 @@ $(document).ready(function()
 	<div class="row box-globals">
 		<div class="row form-holder">
 			<center>
-				<p style="font-size:20px;">AVAILMENT INFO</p>
+			<p style="font-size:20px;">AVAILMENT INFO</p>
 			</center>
 		</div>
 	</div>
@@ -265,7 +257,7 @@ $(document).ready(function()
 		<div class="row box-globals">
 			<div class="row form-holder">
 				<center>
-					<p style="font-size:20px;">PROCEDURE</p>
+				<p style="font-size:20px;">PROCEDURE</p>
 				</center>
 			</div>
 		</div>
@@ -285,7 +277,7 @@ $(document).ready(function()
 					<tr class="table-row">
 						<td>
 							<select class="form-control required approval-select procedureList" name="procedure_id[]">
-								<option value="">-Select Description-</option>
+								<option value="">SELECT AVAILMENT</option>
 							</select>
 						</td>
 						<td><input type="number"  value="0" name="procedure_gross_amount[]" id="" class="gross-amount form-control required"/></td>
@@ -337,11 +329,10 @@ $(document).ready(function()
 		</div>
 	</div>
 	
-
 	<div class="row box-globals">
 		<div class="row form-holder">
 			<center>
-				<p style="font-size:20px;">PHYSICIAN</p>
+			<p style="font-size:20px;">PHYSICIAN</p>
 			</center>
 		</div>
 	</div>
@@ -436,9 +427,25 @@ $(document).ready(function()
 	<div class="row box-globals">
 		<div class="row form-holder">
 			<center>
-				<p class="show-money">GRAND TOTAL  =  <span class="show-money">&#8369;</span><span class="show-money" id="grand_total">0</span></p>
+			<p style="font-size:20px;">PAYEE INFO</p>
 			</center>
 		</div>
 	</div>
-	
+	<div class="row box-globals"  data-id="procedure">
+		
+		<div class="form-holder ">
+			<div class="col-md-2 form-content">
+				<label>PAYEE</label>
+			</div>
+			<div class="input-group">
+				<select class="form-control required payeeList" name="approval_payee" id="approval_payee">
+					<option value="">SELECT PROVIDER</option>
+					
+				</select>
+				<span class="input-group-btn">
+					<button class="btn btn-secondary add-option" data-ref="string" data-size="md" type="button" tabindex="-1"><span class="fa fa-plus-circle" aria-hidden="true"></span></button>
+				</span>
+			</div>
+		</div>
+	</div>
 </form>

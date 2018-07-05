@@ -16,7 +16,7 @@
                 <div class="tab-pane active" id="open">
                     <div class="row">
                         <div class=" col-md-3 col-xs-12 pull-left">
-                            <select class="form-control filtering">
+                            <select class="form-control top-element filtering" data-archived="0" data-name="payable">
                                 <option >SELECT PROVIDER</option>
                                 @foreach($_provider as $provider)
                                 <option value="{{$provider->provider_id}}">{{$provider->provider_name}}</option>
@@ -27,7 +27,7 @@
                             <div class="input-group top-element">
                                 <input type="text" class="form-control search-key">
                                 <span class="input-group-btn">
-                                    <button type="button" class="btn btn-default searching" data-name="member" data-archived="0"><i class="fa fa-search"></i></button>
+                                    <button type="button" class="btn btn-default searching" data-name="payable" data-archived="0"><i class="fa fa-search"></i></button>
                                 </span>
                             </div>
                         </div>
@@ -88,7 +88,7 @@
                 <div class="tab-pane " id="close">
                     <div class="row">
                         <div class=" col-md-3 col-xs-12 pull-left">
-                            <select class="form-control filtering">
+                            <select class="form-control top-element filtering" data-archived="1" data-name="payable">
                                 <option >SELECT PROVIDER</option>
                                 @foreach($_provider as $provider)
                                 <option value="{{$provider->provider_id}}">{{$provider->provider_name}}</option>
@@ -99,7 +99,7 @@
                             <div class="input-group top-element">
                                 <input type="text" class="form-control search-key">
                                 <span class="input-group-btn">
-                                    <button type="button" class="btn btn-default searching" data-name="member" data-archived="0"><i class="fa fa-search"></i></button>
+                                    <button type="button" class="btn btn-default searching" data-name="payable" data-archived="1"><i class="fa fa-search"></i></button>
                                 </span>
                             </div>
                         </div>
