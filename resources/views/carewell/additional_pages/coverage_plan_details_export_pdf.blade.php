@@ -18,7 +18,6 @@
 			<div class="header-text">{{$coverage_plan_details->coverage_plan_name}}</div>
 		</div>
 		<br><br><br><br>
-		
 		<div class="box-border">
 			<div class="box-border-content">
 				
@@ -59,10 +58,10 @@
 				
 			</div>
 			<div class="checkbox-info" >
-				<label><input type="checkbox" checked/>&nbsp;&nbsp;PER ILLNESS/DESEASE</label>
+				<label><input type="checkbox" @if($coverage_plan_details->coverage_plan_mbl_illness=="on") checked @endif/>&nbsp;&nbsp;PER ILLNESS/DESEASE</label>
 			</div>
 			<div class="checkbox-info" >
-				<label><input type="checkbox" checked/>&nbsp;&nbsp;PER YEAR</label>
+				<label><input type="checkbox" @if($coverage_plan_details->coverage_plan_mbl_year=="on") checked @endif/>&nbsp;&nbsp;PER YEAR</label>
 			</div>
 		</div>
 		<br>

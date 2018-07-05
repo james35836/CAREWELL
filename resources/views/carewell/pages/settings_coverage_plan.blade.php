@@ -69,7 +69,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- /.tab-pane -->
                 <div class="tab-pane" id="inActiveCompany">
                     <div class="row">
                         <div class="col-md-3 col-xs-12 pull-right">

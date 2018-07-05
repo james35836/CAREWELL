@@ -85,6 +85,14 @@ class TblMemberCompanyModel extends Model
                 ->where('coverage_plan_id',$parameter[0])
                 ->where('company_id',$parameter[1])
                 ->where('tbl_approval.approval_created','LIKE','%'.$date.'%');
-                return $query;
+        return $query;
+    }
+    public function scopeCalTemplate($query,$company_id,$cal_payment_mode)
+    {
+        $query  ->where('tbl_member_company.archived',0)
+                ->where('tbl_member_company.company_id',$company_id)
+                ->where('tbl_member_company.member_payment_mode',$cal_payment_mode);
+        return $query;
+                                
     }
 }

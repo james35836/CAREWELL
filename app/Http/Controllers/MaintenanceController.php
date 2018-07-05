@@ -27,7 +27,7 @@ class MaintenanceController extends Controller
     }
     public function developer_truncate()
     {
-        // dd('SORRY YOU ARE NOT ALLOWED HERE!');
+        dd('SORRY YOU ARE NOT ALLOWED HERE!');
         DB::table('tbl_approval')->truncate();
         DB::table('tbl_approval_availed')->truncate();
         DB::table('tbl_approval_diagnosis')->truncate();

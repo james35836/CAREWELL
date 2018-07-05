@@ -835,6 +835,14 @@ function globals()
 			{
 				var alert = "RESTORED";
 			}
+			else if(ajaxData.alert=="archive")
+			{
+				var alert = "ARCHIVED";
+			}
+			else if(ajaxData.alert=="terminate")
+			{
+				var alert = "TERMINATED";
+			}
 	        $.ajax({
 				headers: {
 					      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

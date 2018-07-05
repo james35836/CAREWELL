@@ -110,9 +110,7 @@ class CarewellController extends ActiveAuthController
 		$data['member_inactive']  = TblMemberModel::where('archived',1)->count();
 		$data['provider_active']  = TblProviderModel::where('archived',0)->count();
 		
-		$data['_approval']        = TblApprovalModel::where('tbl_approval.archived',0)
-		->join('tbl_member','tbl_member.member_id','=','tbl_approval.member_id')
-		->orderBy('approval_created','DESC')->get();
+		$data['_approval']        = TblApprovalModel::ApprovalDashboard()->get();
 		$data['total_approval'] =  count($data['_approval']);
 
 		$data['sum_approval'] = TblApprovalModel::join('tbl_approval_total','tbl_approval_total.approval_id','=','tbl_approval.approval_id')
@@ -1162,22 +1160,22 @@ class CarewellController extends ActiveAuthController
 		$data['_company']         = TblCompanyModel::where('archived',0)->get();
 
 
-		foreach ($data['_cal_open'] as $key => $cal_open) 
+		foreach ($data['_cal_open'] as $key => $cal) 
 		{
-			$data['_cal_open'][$key]['new_member']= TblNewMemberModel::where('cal_id',$cal_open->cal_id)->count();
-			$data['_cal_open'][$key]['members']   = TblCalMemberModel::where('cal_id',$cal_open->cal_id)->where('archived',0)->count();
+			$data['_cal_open'][$key]['new_member']= TblNewMemberModel::where('cal_id',$cal->cal_id)->count();
+			$data['_cal_open'][$key]['members']   = TblCalMemberModel::where('cal_id',$cal->cal_id)->where('archived',0)->count();
 			$data['_cal_open'][$key]['reference'] = 'show';
 		}
-		foreach ($data['_cal_close'] as $key => $cal_close) 
+		foreach ($data['_cal_close'] as $key => $cal) 
 		{
-			$data['_cal_close'][$key]['new_member']= TblNewMemberModel::where('cal_id',$cal_close->cal_id)->count();
-			$data['_cal_close'][$key]['members']   =  TblCalMemberModel::where('cal_id',$cal_close->cal_id)->where('archived',0)->count();
+			$data['_cal_close'][$key]['new_member']= TblNewMemberModel::where('cal_id',$cal->cal_id)->count();
+			$data['_cal_close'][$key]['members']   =  TblCalMemberModel::where('cal_id',$cal->cal_id)->where('archived',0)->count();
 			$data['_cal_close'][$key]['reference'] = 'none';
 		}
-		foreach ($data['_cal_pending'] as $key => $cal_pending) 
+		foreach ($data['_cal_pending'] as $key => $cal) 
 		{
-			$data['_cal_pending'][$key]['new_member']= TblNewMemberModel::where('cal_id',$cal_pending->cal_id)->count();
-			$data['_cal_pending'][$key]['members']   =  TblCalMemberModel::where('cal_id',$cal_pending->cal_id)->where('archived',0)->count();
+			$data['_cal_pending'][$key]['new_member']= TblNewMemberModel::where('cal_id',$cal->cal_id)->count();
+			$data['_cal_pending'][$key]['members']   =  TblCalMemberModel::where('cal_id',$cal->cal_id)->where('archived',0)->count();
 			$data['_cal_pending'][$key]['reference'] = 'show';
 		}
 		return view('carewell.pages.billing_center',$data);
@@ -1316,9 +1314,7 @@ class CarewellController extends ActiveAuthController
 	{
 		$excels['number_of_rows'] 	= 10;
 		$excels['company_id']     	= $company_id;
-		$cal_template             	= TblCalModel::where('cal_id',$cal_id)
-								->join('tbl_company','tbl_company.company_id','=','tbl_cal.company_id')
-								->first();
+		$cal_template             	= TblCalModel::where('cal_id',$cal_id)->CalInfo(0)->first();
 		$excels['company_name']   	= $cal_template->company_name;
 		$excels['company_id']     	= $cal_template->company_id;
 		$excels['cal_number']     	= $cal_template->cal_number;
@@ -1326,11 +1322,7 @@ class CarewellController extends ActiveAuthController
 		$excels['_payment']       	= TblPaymentModeModel::where('archived',0)->get();
 		$excels['_deployment']    	= TblCompanyDeploymentModel::where('tbl_company_deployment.company_id',$company_id)->get();
 		$excels['_coverage']      	= TblCompanyCoveragePlanModel::where('tbl_company_coverage_plan.company_id',$company_id)->CoveragePlan()->get();
-		$excels['_member']        	= TblMemberCompanyModel::where('tbl_member_company.archived',0)
-								->where('tbl_member_company.company_id',$company_id)
-								->where('tbl_member_company.member_payment_mode',$cal_template->cal_payment_mode)
-								->MemberCompany()
-		->get();
+		$excels['_member']        	= TblMemberCompanyModel::CalTemplate($company_id,$cal_template->cal_payment_mode)->MemberCompany()->get();
 		$excels['count_member']   =   count($excels['_member'])+10;
 		$excels['data'] = ['LAST NAME','FIRST NAME','MIDDLE NAME','BIRTHDATE','COVERAGE PLAN','DEPLOYMENT','MODE OF PAYMENT','PAYMENT AMOUNT'];
 		Excel::create('CAL - '.$excels['company_name'].' - TEMPLATE', function($excel) use ($excels) 
@@ -3764,6 +3756,7 @@ class CarewellController extends ActiveAuthController
 	/*PAGE ACTION SUBMIT*/
 	public function page_action_submit(Request $request)
 	{
+		// dd($request->all());
 		$message              = "";
 		$id                   = $request->id;
         $archived['archived'] = $request->status;

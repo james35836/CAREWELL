@@ -41,11 +41,11 @@
                                     <th>DATE ADDED</th>
                                     <th>ACTION</th>
                                 </tr>
-                                @foreach($_provider_active as $provider_active)
+                                @foreach($_provider_active as $provider)
                                 <tr>
-                                    <td>{{sprintf("%05d",$provider_active->provider_id)}}</td>
-                                    <td>{{$provider_active->provider_name}}</td>
-                                    <td>{{date("F j, Y",strtotime($provider_active->provider_created))}}</td>
+                                    <td>{{sprintf("%05d",$provider->provider_id)}}</td>
+                                    <td>{{$provider->provider_name}}</td>
+                                    <td>{{date("F j, Y",strtotime($provider->provider_created))}}</td>
                                     <td>
                                         <div class="btn-group">
                                             <button type="button" class="btn btn-danger">Action</button>
@@ -54,8 +54,8 @@
                                             <span class="sr-only">Toggle Dropdown</span>
                                             </button>
                                             <ul class="dropdown-menu" role="menu" style="position: absolute !important;">
-                                                <li><button type="button" data-provider_id="{{$provider_active->provider_id}}" class="btn btn-link view-provider-details"><i class="fa fa-eye btn-icon"></i>  View Provider</button></li>
-                                                <li><button type="button" data-id="{{$provider_active->provider_id}}" data-name="PROVIDER" class="btn btn-link archived"><i class="fa fa-trash btn-icon"></i> Archived Provider</button></li>
+                                                <li><button type="button" data-provider_id="{{$provider->provider_id}}" class="btn btn-link view-provider-details"><i class="fa fa-eye btn-icon"></i>  View Provider</button></li>
+                                                <li><button type="button" data-id="{{$provider->provider_id}}" class="btn btn-link page-action" data-status="1" data-alert = "archive" data-name="PROVIDER"><i class="fa fa-trash btn-icon"></i> Archive Provider</button></li>
                                             </ul>
                                         </div>
                                     </td>
@@ -89,11 +89,11 @@
                                     <th>DATE ADDED</th>
                                     <th>ACTION</th>
                                 </tr>
-                                @foreach($_provider_inactive as $provider_inactive)
+                                @foreach($_provider_inactive as $provider)
                                 <tr>
-                                    <td>{{sprintf("%05d",$provider_inactive->provider_id)}}</td>
-                                    <td>{{$provider_inactive->provider_name}}</td>
-                                    <td>{{date("F j, Y",strtotime($provider_inactive->provider_created))}}</td>
+                                    <td>{{sprintf("%05d",$provider->provider_id)}}</td>
+                                    <td>{{$provider->provider_name}}</td>
+                                    <td>{{date("F j, Y",strtotime($provider->provider_created))}}</td>
                                     <td>
                                         <div class="btn-group">
                                             <button type="button" class="btn btn-danger">Action</button>
@@ -102,8 +102,8 @@
                                             <span class="sr-only">Toggle Dropdown</span>
                                             </button>
                                             <ul class="dropdown-menu" role="menu" style="position: absolute !important;">
-                                                <li><button type="button" data-provider_id="{{$provider_inactive->provider_id}}" class="btn btn-link view-provider-details"><i class="fa fa-eye btn-icon"></i>  View Provider</button></li>
-                                                <li><button type="button" class="btn btn-link restore" data-id="{{$provider_inactive->provider_id}}" data-name="PROVIDER" ><i class="fa fa-undo btn-icon"></i> Restore Provider</button></li>
+                                                <li><button type="button" data-provider_id="{{$provider->provider_id}}" class="btn btn-link view-provider-details"><i class="fa fa-eye btn-icon"></i>  View Provider</button></li>
+                                                <li><button type="button" data-id="{{$provider->provider_id}}" class="btn btn-link page-action" data-status="0" data-alert = "restore" data-name="PROVIDER"><i class="fa fa-trash btn-icon"></i> Restore Provider</button></li>
                                             </ul>
                                         </div>
                                     </td>
