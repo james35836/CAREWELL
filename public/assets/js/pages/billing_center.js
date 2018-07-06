@@ -22,7 +22,6 @@ function billing_center()
 			cal_details_update_confirm();
 			cal_details_update_submit();
 
-			download_cal_template();
 			import_cal_members();
 			import_cal_member_confirm();
 			import_cal_member_submit();
@@ -239,13 +238,11 @@ function billing_center()
 		{
 			globals.global_serialize_submit('cal','/billing/create_cal/sumbit',serializeData);
 		});
-		
 	}
 	function cal_view_details()
 	{
 		$("body").on('click','.cal-view-details',function()
 		{
-
 			var cal_id 			= $(this).data('cal_id');
 			var modalName 		= 'CAL DETAILS';
 			var modalClass 		= 'cal-details';
@@ -289,20 +286,12 @@ function billing_center()
 			globals.global_serialize_submit('cal-details','/billing/update_cal_details/submit',serializeData);
 		});
 	}
-    function download_cal_template()
-	{
-		$(document).on('change','.download-cal-select',function()
-		{
-			var company_id = $(this).val();
-			$('.download-link').attr('href', '/member/download_template/'+company_id);
-		});
-	}
-	function import_cal_members()
+    function import_cal_members()
 	{
 		$("body").on('click','.import-cal-members',function() 
 		{
-			var company_id 	= $(this).data('member_company_id');
-			var cal_id 		= $(this).data('member_cal_id');
+			var company_id 		= $(this).data('member_company_id');
+			var cal_id 			= $(this).data('member_cal_id');
 			var modalName 		= 'IMPORT MEMBER';
 			var modalClass 		= 'cal-member';
 			var modalLink 		= '/billing/import_cal_members/'+cal_id+'/'+company_id;

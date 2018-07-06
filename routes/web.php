@@ -42,9 +42,10 @@ Route::any('/get/availment_info', 							'StaticFunctionController@getAvailmentI
 Route::any('/get/check_procedure_amount', 					'StaticFunctionController@getCheckProcedureAmount');
 
 Route::any('/get_all_procedures',                           'StaticFunctionController@get_all_procedures');
-Route::any('/get/export/warning',                   		'StaticFunctionController@getExportWarning');
-Route::get('/forgetSession',                       			'StaticFunctionController@forgetSession');
+Route::any('/get/export/warning/{ref}',                   	'StaticFunctionController@getExportWarning');
 
+
+Route::post('/availment/get_member_info',					'StaticFunctionController@getMemberInfo');
 /*FILETERING*/
 Route::post('/page/filtering', 								'SearchController@pageFiltering');
 Route::post('/page/searching', 								'SearchController@pageSearching');
@@ -152,7 +153,7 @@ Route::post('/billing/cal_close/sumbit',					'CarewellController@billing_cal_clo
 /*MEDICAL*/
 Route::get('/availment', 									'CarewellController@availment');
 Route::get('/availment/create_approval', 					'CarewellController@availment_create_approval');
-Route::post('/availment/get_member_info',					'CarewellController@availment_get_member_info');
+
 Route::post('/availment/create_approval/submit',			'CarewellController@availment_create_approval_submit');
 Route::get('/availment/approval_details/{approval_id}', 	'CarewellController@availment_view_approval_details');
 Route::get('/availment/approval_export_pdf/{approval_id}', 	'CarewellController@approval_export_pdf');
@@ -249,13 +250,6 @@ Route::get('/settings/coverage/plan_details/{coverage_plan_id}', 'CarewellContro
 Route::post('/settings/coverage/mark_new_submit', 			'CarewellController@settings_coverage_plan_mark_new_submit');
 
 Route::get('/settings/coverage/plan_details/pdf/{coverage_plan_id}', 'CarewellController@settings_coverage_plan_details_pdf');
-
-/*ARCHIVED*/
-Route::POST('/archived/submit', 							'CarewellController@archived_submit');
-/*RESTORE*/
-Route::POST('/restore/submit', 								'CarewellController@restore_submit');
-
-
 
 /*PAGE ACTION*/
 
