@@ -914,6 +914,13 @@ class StaticFunctionController extends Controller
         }
         return $new_date;
     }
+    public static function session_putter($exportArray)
+    {
+        if(count($exportArray)>0)
+        {
+            Session::put('exportWarning',$exportArray);
+        }
+    } 
     public function getExportWarning($ref)
     {
         switch ($ref)

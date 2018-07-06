@@ -75,6 +75,9 @@ Route::get('/settings/access/create_position', 				'AdminController@access_cente
 Route::post('/settings/access/create_position/submit', 		'AdminController@access_center_create_position_submit');
 
 Route::get('/settings/terminated', 							'AdminController@terminated_member');
+Route::get('/settings/terminated/import', 				    'AdminController@terminated_member_import');
+Route::get('/settings/terminated/import/template', 			'AdminController@terminated_member_import_template');
+Route::post('/settings/terminated/import/submit', 			'AdminController@terminated_member_import_submit');
 
 /*DASHBOARD*/
 Route::get('/dashboard', 						     		'CarewellController@dashboard');

@@ -441,8 +441,6 @@ class CarewellController extends ActiveAuthController
 
 		return view('carewell.modal_pages.member_details',$data);
 	}
-
-  //edrich
 	public function member_update_member_submit(Request $request)
 	{
 		$update['member_first_name']          = $request->member_first_name;
@@ -471,8 +469,7 @@ class CarewellController extends ActiveAuthController
 			return StaticFunctionController::returnMessage('danger','MEMBER');
 		}
 	}
-  //edrich
-	public function member_transaction_details($member_id)
+    public function member_transaction_details($member_id)
 	{
 
 		$coverage                       = TblMemberCompanyModel::where('archived',0)->where('member_id',$member_id)->first();
@@ -837,10 +834,6 @@ class CarewellController extends ActiveAuthController
 	{
 		return view('carewell.modal_pages.provider_create');
 	}
-
-
-	
-
 	public function provider_create_submit(Request $request)
 	{
 	     $provider_id = StaticFunctionController::getIdNorName($request->provider_name,'provider');

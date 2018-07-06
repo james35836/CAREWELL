@@ -197,7 +197,7 @@
                             </table>
                         </div>
                         <div class="box-footer clearfix">
-                            @include('globals.pagination_v2', ['paginator' => $_member_inactive])
+                            @include('globals.pagination_v2', ['paginator' => $_member_terminated])
                         </div>
                     </div>
                 </div>

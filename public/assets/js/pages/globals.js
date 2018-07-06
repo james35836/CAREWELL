@@ -4,6 +4,7 @@ var doctorData		= new FormData();
 var doctorFileData  = new FormData();
 var adjustmentData	= new FormData();
 var memberFileData	= new FormData();
+var importTerminatedMemberFile = new FormData();
 var companyData     = new FormData();
 var providerData 	= new FormData();
 
