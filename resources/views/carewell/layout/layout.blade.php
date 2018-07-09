@@ -284,10 +284,10 @@
                 </div>
                 <div class="col-xs-12 col-md-7">
                     <div class="btn-group">
-                        <a href="/get/export/warning">
+                        <a href="/get/export/warning/get">
                             <button type="button" class="btn btn-primary btn-sm">EXPORT LIST</button>
                         </a>
-                        <a href="/forgetSession">
+                        <a href="/get/export/warning/forget">
                             <button type="button" class="btn btn-danger btn-sm">FORGET LIST</button>
                         </a>
                     </div>

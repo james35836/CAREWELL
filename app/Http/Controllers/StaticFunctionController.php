@@ -96,6 +96,10 @@ class StaticFunctionController extends Controller
     {
         return "<div class='alert alert-".$class."' style='text-align: center;'>".$message."!</div>";
     }
+    public static function spanMessage($message)
+    {
+        return '<center><b><span class="color-red">'.$message.'</span></b></center>';
+    } 
     public static function checkboxValue($input)
     {
         if($input=="on")
@@ -135,7 +139,6 @@ class StaticFunctionController extends Controller
         $balance    = $procedure_covered-$actual;
 
         $current_balance = $procedure_covered-$sum;
-        // dd($procedure_limit);
         if($procedure_limit=="OPEN"||count($_approval) < $procedure_limit)
         {
             if($balance < 0)
@@ -168,15 +171,15 @@ class StaticFunctionController extends Controller
     {
         if($request->ajax())
         {
-            $data['_coverage']  = TblCompanyCoveragePlanModel::where('tbl_company_coverage_plan.company_id',$request->value)->CoveragePlan()->get();
-            $data['_coverage_list'] = '<option value="">-SELECT COVERAGE PLAN-';
+            $data['_coverage']          = TblCompanyCoveragePlanModel::where('tbl_company_coverage_plan.company_id',$request->value)->CoveragePlan()->get();
+            $data['_coverage_list']     = '<option value="">-SELECT COVERAGE PLAN-';
             foreach($data['_coverage'] as $coverage)
             {
                 $data['_coverage_list']     .= '<option value='.$coverage->coverage_plan_id.'>'.$coverage->coverage_plan_name;
             }
 
-            $data['_deployment'] = TblCompanyDeploymentModel::where('company_id',$request->value)->get();
-            $data['_deployment_list'] = '<option value="">-SELECT DEPLOYMENT-';
+            $data['_deployment']        = TblCompanyDeploymentModel::where('company_id',$request->value)->get();
+            $data['_deployment_list']   = '<option value="">-SELECT DEPLOYMENT-';
             foreach($data['_deployment'] as $deployment)
             {
                 $data['_deployment_list']     .= '<option value='.$deployment->deployment_id.'>'.$deployment->deployment_name;
@@ -230,6 +233,61 @@ class StaticFunctionController extends Controller
             return response()->json(array('first' => $first,'second'=>$second,'third'=>$third,'view'=>$view,'payeeList'=>$payeeList,'specialization'=>$specialization,'doctorprocedure'=>$doctorprocedure));
         }
     }
+    public function  getMemberInfo(Request $request)
+    {
+        if($request->ajax())
+        {
+            $today                  = date('Y-m-d');
+            $mem_cal                = TblCalPaymentModel::where('member_id',$request->member_id)->CalStatus()->orderBy('cal_payment_end','DESC')->first();
+            $data['member_info']    = TblMemberModel::where('tbl_member.member_id',$request->member_id)->where('tbl_member_company.archived',0)->Member()->first();
+            $data['_member']        = TblMemberModel::where('tbl_member.archived',0)->where('tbl_member_company.archived',0)->Member()->get();
+            $data['_availment']     = TblCoveragePlanProcedureModel::where('coverage_plan_id',$data['member_info']->coverage_plan_id)->MemberInfo()->get();
+            $data['_availment_list']  = '<option value="0">-SELECT AVAILMENT-';
+            foreach($data['_availment'] as $availment)
+            {
+                $data['_availment_list'].= '<option value='.$availment->availment_id.'>'.$availment->availment_name;
+            }
+
+            $data['_member_list']     = '<option value="0">-SELECT AVAILMENT-';
+            foreach($data['_member'] as $member)
+            {
+                $data['_member_list']    .= "<option value=".$member->member_id.">".$member->member_carewell_id."-".$member->member_first_name." ".$member->member_last_name;
+            }
+            if($mem_cal==null)
+            {
+                return  response()->json(array('ref' => 'not_yet_paid','member_list' => $data['_member_list']));
+            }
+            else
+            {
+                $checkPayment = StaticFunctionController::checkIfMemberCanAvailed($data['member_info']->member_payment_mode,$mem_cal->cal_payment_end);
+                if($checkPayment=="not_updated")
+                {
+                    return  response()->json(array('ref' => 'not_updated','member_list' => $data['_member_list']));
+                }
+                else if(strtotime($checkPayment)  < strtotime($today))
+                {
+                    return  response()->json(array('ref' => 'not_yet_paid','member_list' => $data['_member_list']));
+                }
+                else 
+                {
+                    return  response()->json(array(
+                        'member_name'         => $data['member_info']->member_first_name." ".$data['member_info']->member_middle_name." ".$data['member_info']->member_last_name,
+                        'company_name'        => $data['member_info']->company_name,
+                        'member_universal_id' => $data['member_info']->member_universal_id,
+                        'member_carewell_id'  => $data['member_info']->member_carewell_id,
+                        'member_employee_number'  => $data['member_info']->member_employee_number,
+                        'member_birthdate'    => $data['member_info']->member_birthdate,
+                        'member_age'          => date_create($data['member_info']->member_birthdate)->diff(date_create('today'))->y,
+                        'member_id'           => $data['member_info']->member_id,
+                        'availment_list'      => $data['_availment_list'],
+                        'member_list'         => $data['_member_list'],
+                        'ref'                 => 'already_paid',
+                    ));
+                }
+            }
+        }
+    }
+
     public static function get_numeric($data)
     {
         if(is_numeric($data))
@@ -265,39 +323,76 @@ class StaticFunctionController extends Controller
             return response()->json(array('procedure_list'=>$procedure_list,'view'=>$view));
         }
     }
-    public static function generateUniversalId($display_name,$birthdate)
-    {
     
-        $member_count = TblMemberModel::count();
-        if($member_count==null||$member_count==0)
-        {
-          $member_data = sprintf("%08d",1);
-        }
-        else
-        {
-          $member = TblMemberModel::orderBy('member_id','DESC')->first();
-          $member_data = sprintf("%08d",$member->member_id + 1);
-        }
-        $universal_id = Self::initials($display_name)."-".Self::birthdate($birthdate)."-".$member_data;
-
-        return $universal_id;
-    }
-
-    public static function generateCarewellId($company_code)
+    public static function check_unpaid($coverage_plan_premium,$member_id,$payment_mode)
     {
-        $member_company_count = TblMemberCompanyModel::count();
-        if($member_company_count==null||$member_company_count==0)
+        $today          = date('Y-m-d');
+        $last_paid      = TblCalPaymentModel::where('cal_payment_status',0)->where('member_id',$member_id)->orderBy('cal_payment_end','DESC')->first();
+        $last_paid_date = $last_paid == null ? date('Y-m-d') : $last_paid->cal_payment_end=="end" ? date('Y-m-d') : $last_paid->cal_payment_end;
+        switch ($payment_mode)
         {
-          $member_company_data = sprintf("%05d",1);
+            case 'SEMI-MONTHLY':
+               $result    = date_create($last_paid_date)->diff(date_create('today'))->d;
+               $final     = round($result/15);
+               if($final > 0 )
+               {
+                    $data = $final*$coverage_plan_premium;
+               }
+               else
+               {
+                    $data = $coverage_plan_premium;
+               }
+            break;
+            case 'MONTHLY':
+            $result    = date_create($last_paid_date)->diff(date_create('today'))->m;
+               $final     = round($result);
+               if($final>0)
+               {
+                    $data = $final*$coverage_plan_premium;
+               }
+               else
+               {
+                    $data = $coverage_plan_premium;
+               }
+            break;
+            case 'QUARTERLY':
+               $result    = date_create($last_paid_date)->diff(date_create('today'))->m;
+               $final     = round($result/3);
+               if($final>0)
+               {
+                    $data = $final*$coverage_plan_premium;
+               }
+               else
+               {
+                    $data = $coverage_plan_premium;
+               }
+            break;
+            case 'SEMESTRAL':
+            $result    = date_create($last_paid_date)->diff(date_create('today'))->d;
+               $final     = round($result/6);
+               if($final>0)
+               {
+                    $data = $final*$coverage_plan_premium;
+               }
+               else
+               {
+                    $data = $coverage_plan_premium;
+               }
+            break;
+            case 'ANNUAL':
+            $result    = date_create($last_paid_date)->diff(date_create('today'))->d;
+               $final     = round($result);
+               if($final>0)
+               {
+                    $data = $final*$coverage_plan_premium;
+               }
+               else
+               {
+                    $data = $coverage_plan_premium;
+               }
+            break;
         }
-        else
-        {
-          $member_company = TblMemberCompanyModel::orderBy('member_company_id','DESC')->first();
-          $member_company_data = sprintf("%05d",$member_company->member_company_id + 1);
-        }
-        $carewell_id = $company_code."-".date("my")."-".$member_company_data;
-
-        return $carewell_id;
+        return $data; 
     }
     public static function updateReferenceNumber($str_name = '')
     {
@@ -394,7 +489,7 @@ class StaticFunctionController extends Controller
                 $cal_count        =  TblCalModel::count();
                 if($cal_count==null||$cal_count==0)
                 {
-                  $refrenceNumber = 'CAL-'.sprintf("%05d",1);
+                    $refrenceNumber = 'CAL-'.sprintf("%05d",1);
                 }
                 else
                 {
@@ -402,9 +497,37 @@ class StaticFunctionController extends Controller
                   $refrenceNumber =  'CAL-'.sprintf("%05d",$cal->cal_id+1);
                 }
             break;
+            case 'carewell_id':
+                $member_company_count = TblMemberCompanyModel::count();
+                if($member_company_count==null||$member_company_count==0)
+                {
+                    $refrenceNumber = sprintf("%05d",1);
+                }
+                else
+                {
+                    $member_company = TblMemberCompanyModel::orderBy('member_company_id','DESC')->first();
+                    $refrenceNumber = date("my")."-".sprintf("%05d",$member_company->member_company_id + 1);
+                }
+            break;
+            case 'universal_id':
+                $member_count = TblMemberModel::count();
+                if($member_count==null||$member_count==0)
+                {
+                  $refrenceNumber = sprintf("%08d",1);
+                }
+                else
+                {
+                  $member = TblMemberModel::orderBy('member_id','DESC')->first();
+                  $refrenceNumber = sprintf("%08d",$member->member_id + 1);
+                }
+            break;
         }
-         
         return $refrenceNumber; 
+    }
+    public static function generateUniversalId($display_name,$birthdate)
+    {
+        $universal_id = Self::initials($display_name)."-".Self::birthdate($birthdate)."-".Self::updateReferenceNumber('universal_id');
+        return $universal_id;
     }
     public static function  transformText($string)
     {
@@ -466,25 +589,19 @@ class StaticFunctionController extends Controller
     }
     public static function getIdNorName($name="",$str_param)
     {
-        $ref = "";
-        $refer = "";
+        $ref    = "";
+        $refer  = "";
         switch ($str_param) 
         {
             case 'provider':
-            $ref = TblProviderModel::where('provider_name', $name)->value('provider_id');
+                $ref = TblProviderModel::where('provider_name', $name)->value('provider_id');
             break;
             case 'doctor':
-            $ref = TblDoctorModel::where('doctor_full_name', $name)->value('doctor_id');
+                $ref = TblDoctorModel::where('doctor_full_name', $name)->value('doctor_id');
             break;
         }
-        if($ref == null||$ref=="")
-        {    
-          $refer = $name;
-        }
-        else
-        {
-          $refer = $ref;
-        }
+        $refer = $ref == null? $name : $ref; 
+        
         return $refer; 
     }
     public static function getid($str_name = '', $str_param = '')
@@ -492,51 +609,24 @@ class StaticFunctionController extends Controller
         $id = 0;
         switch ($str_param) 
         {
-          case 'deployment':
-            $id = TblCompanyDeploymentModel::where('deployment_name', $str_name)->value('deployment_id');
-            if($id == null)
-            {
-              $id = 1;
-            }
+            case 'deployment':
+                $id = TblCompanyDeploymentModel::where('deployment_name', $str_name)->value('deployment_id');
             break;
-
-          case 'coverage':
-            $id = TblCoveragePlanModel::where('coverage_plan_name', $str_name)->value('coverage_plan_id');
-            if($id == null)
-            {
-              $id = 1;
-            }
+            case 'coverage':
+                $id = TblCoveragePlanModel::where('coverage_plan_name', $str_name)->value('coverage_plan_id');
             break;
-
-          case 'company':
-            $id = TblCompanyModel::where('company_code', $str_name)->value('company_id');
-            if($id == null)
-            {
-              $id = 1;
-            }
+            case 'company':
+                $id = TblCompanyModel::where('company_code', $str_name)->value('company_id');
             break;
-
-          case 'provider':
-            $id = TblProviderModel::where('provider_name', $str_name)->value('provider_id');
-            if($id == null)
-            {
-              $id = 1;
-            }
+            case 'provider':
+                $id = TblProviderModel::where('provider_name', $str_name)->value('provider_id');
             break;
-
-          case 'specialization':
-            $id = TblSpecializationModel::where('specialization_name', $str_name)->value('specialization_id');
-            if($id == null)
-            {
-              $id = 1;
-            }
+            case 'specialization':
+                $id = TblSpecializationModel::where('specialization_name', $str_name)->value('specialization_id');
+            
             break;
-          case 'member':
-            $id = TblMemberModel::where('member_universal_id', $str_name)->value('member_id');
-            if($id == null)
-            {
-              $id = 1;
-            }
+            case 'member':
+                $id = TblMemberModel::where('member_universal_id', $str_name)->value('member_id');
             break;
         }
         if($id == null)
@@ -550,108 +640,42 @@ class StaticFunctionController extends Controller
         $age    = date_create($birthdate)->diff(date_create('today'))->y;
         return  $age;
     }
-    public static function archived_data($archived_id,$archived_name)
-    {
-        $message              = "";
-        $archived['archived'] = '1';
-        switch ($archived_name) 
-        {
-          case 'USER':
-            $check = TblUserModel::where('user_id', $archived_id)->update($archived);
-            break;
-          case 'COMPANY':
-            $check = TblCompanyModel::where('company_id',$archived_id)->update($archived);
-            break;
-          case 'MEMBER':
-            $check = TblMemberModel::where('member_id',$archived_id)->update($archived);
-            break;
-          case 'PROVIDER':
-            $check = TblProviderModel::where('provider_id',$archived_id)->update($archived);
-            $check_doctor_provider = TblDoctorProviderModel::where('provider_id',$archived_id)->update($archived);
-            break;
-          case 'DOCTOR':
-            $check = TblDoctorModel::where('doctor_id',$archived_id)->update($archived);
-            break;
-        }
-
-        if($check==true)
-        {    
-          $message = "SUCCESSFULLY";
-        }
-        else
-        {
-          $message = "FAILED";
-        }
-        return $message; 
-    }
+    
     public static function archivedCurrentCompany($member_id,$ref_id,$ref)
     {
         $member_company = TblMemberCompanyModel::where('member_id',$member_id)->where('archived',0)->first();
         
         switch ($ref) 
         {
-          case 'coverage_plan':
-            $company['member_carewell_id']        =   $member_company->member_carewell_id;
-            $company['member_employee_number']    =   $member_company->member_employee_number;
-            $company['member_company_status']     =   $member_company->member_company_status;
-            $company['member_transaction_date']   =   Carbon::now();
-            $company['member_id']                 =   $member_company->member_id;
-            $company['company_id']                =   $member_company->company_id;
-            $company['member_payment_mode']       =   $member_company->member_payment_mode;
-            $company['deployment_id']             =   $member_company->deployment_id;
-            $company['coverage_plan_id']          =   $ref_id;
-            $member_company_id = TblMemberCompanyModel::insertGetId($company);
+            case 'coverage_plan':
+                $company['member_carewell_id']        =   $member_company->member_carewell_id;
+                $company['member_employee_number']    =   $member_company->member_employee_number;
+                $company['member_company_status']     =   $member_company->member_company_status;
+                $company['member_transaction_date']   =   Carbon::now();
+                $company['member_id']                 =   $member_company->member_id;
+                $company['company_id']                =   $member_company->company_id;
+                $company['member_payment_mode']       =   $member_company->member_payment_mode;
+                $company['deployment_id']             =   $member_company->deployment_id;
+                $company['coverage_plan_id']          =   $ref_id;
+                $member_company_id = TblMemberCompanyModel::insertGetId($company);
             break;
-          case 'deployment':
-            $company['member_carewell_id']        =   $member_company->member_carewell_id;
-            $company['member_employee_number']    =   $member_company->member_employee_number;
-            $company['member_company_status']     =   $member_company->member_company_status;
-            $company['member_transaction_date']   =   Carbon::now();
-            $company['member_id']                 =   $member_company->member_id;
-            $company['company_id']                =   $member_company->company_id;
-            $company['member_payment_mode']       =   $member_company->member_payment_mode;
-            $company['coverage_plan_id']          =   $member_company->coverage_plan_id;
-            $company['deployment_id']             =   $ref_id;
-            $member_company_id = TblMemberCompanyModel::insertGetId($company);
+            case 'deployment':
+                $company['member_carewell_id']        =   $member_company->member_carewell_id;
+                $company['member_employee_number']    =   $member_company->member_employee_number;
+                $company['member_company_status']     =   $member_company->member_company_status;
+                $company['member_transaction_date']   =   Carbon::now();
+                $company['member_id']                 =   $member_company->member_id;
+                $company['company_id']                =   $member_company->company_id;
+                $company['member_payment_mode']       =   $member_company->member_payment_mode;
+                $company['coverage_plan_id']          =   $member_company->coverage_plan_id;
+                $company['deployment_id']             =   $ref_id;
+                $member_company_id = TblMemberCompanyModel::insertGetId($company);
             break;
         }
         $update['archived'] = 1;
         TblMemberCompanyModel::where('member_id',$member_id)->where('member_company_id','!=',$member_company_id)->update($update);
     }
-    public static function restore_data($restore_id,$restore_name)
-    {
-        $message             = "";
-        $restore['archived'] = '0';
-        switch ($restore_name) 
-        {
-          case 'USER':
-            $check = TblUserModel::where('user_id', $restore_id)->update($restore);
-            break;
-          case 'COMPANY':
-            $check = TblCompanyModel::where('company_id',$restore_id)->update($restore);
-            break;
-          case 'MEMBER':
-            $check = TblMemberModel::where('member_id',$restore_id)->update($restore);
-            break;
-          case 'DOCTOR':
-            $check = TblDoctorModel::where('doctor_id',$restore_id)->update($restore);
-            break;
-          case 'PROVIDER':
-            $check = TblProviderModel::where('provider_id',$restore_id)->update($restore);
-            $check_doctor_provider = TblDoctorProviderModel::where('provider_id',$restore_id)->update($restore);
-            break;
-        }
-
-        if($check==true)
-        {    
-          $message = "SUCCESSFULLY";
-        }
-        else
-        {
-          $message = "FAILED";
-        }
-        return $message; 
-    }
+    
     public static function provider_doctor_insert($provider_name,$provider_id,$doctor_name,$doctor_id)
     {
         $countPayee = 0;
@@ -675,12 +699,12 @@ class StaticFunctionController extends Controller
             }
             else
             {
-                if(TblDoctorProviderModel::where('doctor_id',$doctor_id)->where('provider_id',$provider_id)->count()==0)
+                $count =TblDoctorProviderModel::where('doctor_id',$doctor_id)->where('provider_id',$provider_id)->count();
+                if($count == 0)
                 {
                     $insert['doctor_id']   = $doctor_id;
                     $insert['provider_id'] = $provider_id;
                     TblDoctorProviderModel::insert($insert);
-
                     $countPayee++;
                 }
             }
@@ -730,14 +754,10 @@ class StaticFunctionController extends Controller
         }
         return $doctorInsert;
     }
-  
     public static function getNewMember($cal_id,$status)
     {
-    
         $data['new_member'] = TblNewMemberModel::where('cal_id',$cal_id)->get();
-        $companyData        = TblCompanyModel::join('tbl_cal','tbl_cal.company_id','=','tbl_company.company_id')
-                            ->where('tbl_cal.cal_id',$cal_id)
-                            ->first();
+        $companyData        = TblCompanyModel::where('tbl_cal.cal_id',$cal_id)->CompanyCal()->first();
 
         foreach($data['new_member'] as $new_member)
         {
@@ -769,7 +789,7 @@ class StaticFunctionController extends Controller
             $government['member_id']                  =   $member_id;
             TblMemberGovernmentCardModel::insert($government);
           
-            $company['member_carewell_id']        =   StaticFunctionController::generateCarewellId($companyData->company_code);
+            $company['member_carewell_id']        =   $companyData->company_code.'-'.StaticFunctionController::updateReferenceNumber('carewell_id');
             $company['member_employee_number']    =   "000000";
             $company['member_company_status']     =   "N/A";
             $company['member_transaction_date']   =   Carbon::now();
@@ -805,47 +825,6 @@ class StaticFunctionController extends Controller
             TblNewCalMemberModel::where('new_member_id',$new_member->new_member_id)->delete();
         }
     }
-    public static function getModeOfPayment($member_id,$cal_member_id,$premium,$payment_count,$cal_id)
-    {
-        $cal              = TblCalModel::where('cal_id',$cal_id)->first();
-        $payment          = TblCalPaymentModel::where('member_id',$member_id)->orderBy('cal_payment_end','DESC')->first();
-        for($i = 1; $i<=$payment_count;  $i++)
-        {
-            if($i==1)
-            {
-                if($payment!=null)
-                {                           
-                    if(strtotime($payment->cal_last_payment) >= strtotime($cal->cal_start))
-                    {
-                        Self::insertMemberPayment($cal_member_id,$member_id);
-                    }
-                    else
-                    {
-                        $member_cut['cal_payment_start']  = $cal->cal_start;
-                        $member_cut['cal_payment_end']    = $cal->cal_end;
-                        $member_cut['cal_payment_type']   = 'ORIGINAL';
-                        $member_cut['cal_member_id']      = $cal_member_id;
-                        $member_cut['member_id']          = $member_id;
-                        TblCalPaymentModel::insert($member_cut);
-                    }
-                }
-                else
-                {
-                    $member_cut['cal_payment_start']  = $cal->cal_start;
-                    $member_cut['cal_payment_end']    = $cal->cal_end;
-                    $member_cut['cal_payment_type']   = 'ORIGINAL';
-                    $member_cut['cal_member_id']      = $cal_member_id;
-                    $member_cut['member_id']          = $member_id;
-                    TblCalPaymentModel::insert($member_cut);
-                }
-            }
-            else
-            {
-                Self::insertMemberPayment($cal_member_id,$member_id);
-            }
-        }
-        return 0;
-    }
     public static function moth_reference($date)
     {
         $month     = date('m',strtotime($date));
@@ -868,38 +847,8 @@ class StaticFunctionController extends Controller
         }
         return $colspan;
     }
-    public static function insertMemberPayment($cal_member_id,$member_id)
-    {
-        $member_cut['cal_payment_start']  = 'start';
-        $member_cut['cal_payment_end']    = 'end';
-        $member_cut['cal_payment_type']   = 'ORIGINAL';
-        $member_cut['cal_member_id']      = $cal_member_id;
-        $member_cut['member_id']          = $member_id;
-        TblCalPaymentModel::insert($member_cut);
-    }
-    public static function newMemberModeOfPayment($member_id,$payment_count,$cal_id)
-    {
-        $cal              = TblCalModel::where('cal_id',$cal_id)->first();
-        for($i = 1; $i<=$payment_count;  $i++)
-        {
-            if($i==1)
-            {
-            
-                $member_cut['cal_payment_start']  = $cal->cal_start;
-                $member_cut['cal_payment_end']    = $cal->cal_end;
-                $member_cut['new_member_id']      = $member_id;
-                TblNewCalMemberModel::insert($member_cut);
-            }
-            else
-            {
-                $member_cut['cal_payment_start']  = 'start';
-                $member_cut['cal_payment_end']    = 'end';
-                $member_cut['new_member_id']      = $member_id;
-                TblNewCalMemberModel::insert($member_cut);
-            }
-        }
-        return 0;
-    }
+    
+    
     public static function checkPaymentUpdate($date_start,$date_end,$member_id,$ref)
     {
         $start         = strtotime($date_start);
@@ -907,12 +856,7 @@ class StaticFunctionController extends Controller
         $count         = 0;
         if($ref=="old")
         {
-            $_payment  = TblCalPaymentModel::where('member_id',$member_id)
-                    ->where(function($query)
-                      {
-                        $query->where('archived',1)->orWhere('archived',2);
-                      })
-                    ->get();
+            $_payment  = TblCalPaymentModel::where('member_id',$member_id)->CalStatus()->get();
             foreach($_payment as $key=>$payment)
             {
                 if($payment->cal_payment_start!=="start"&&$payment->cal_payment_start!="end")
@@ -970,32 +914,47 @@ class StaticFunctionController extends Controller
         }
         return $new_date;
     }
-    public function getExportWarning()
+    public static function session_putter($exportArray)
     {
-        $session = Session::get('exportWarning');
-        if($session!=null)
+        if(count($exportArray)>0)
         {
-            $excels['_member'] = $session;
-            $excels['data']  =   ['LAST NAME','FIRST NAME','MIDDLE NAME','TYPE'];
-            Excel::create('CAREWELL WARNING DATA', function($excel) use ($excels) 
-            {
-                $excel->sheet('template', function($sheet) use ($excels) 
+            Session::put('exportWarning',$exportArray);
+        }
+    } 
+    public function getExportWarning($ref)
+    {
+        switch ($ref)
+        {
+            case 'forget':
+                Session::forget('exportWarning');
+                return redirect()->back();
+            break;
+            case 'get':
+                $session = Session::get('exportWarning');
+                if($session!=null)
                 {
-                    $data = $excels['data'];
-                    $sheet->fromArray($data, null, 'A1', false, false);
-                    $sheet->freezeFirstRow();
-                    $_member = $excels['_member'];
-                    foreach($excels['_member'] as  $key => $member)
+                    $excels['_member'] = $session;
+                    $excels['data']  =   ['LAST NAME','FIRST NAME','MIDDLE NAME','TYPE'];
+                    Excel::create('CAREWELL WARNING DATA', function($excel) use ($excels) 
                     {
-                        $key = $key+=2;
-                        $sheet->setCellValue('A'.$key, $member['last']);
-                        $sheet->setCellValue('B'.$key, $member['first']);
-                        $sheet->setCellValue('C'.$key, $member['middle']);
-                        $sheet->setCellValue('D'.$key, $member['type']);
-                    }
-
-                });
-            })->download('xlsx');
+                        $excel->sheet('template', function($sheet) use ($excels) 
+                        {
+                            $data = $excels['data'];
+                            $sheet->fromArray($data, null, 'A1', false, false);
+                            $sheet->freezeFirstRow();
+                            $_member = $excels['_member'];
+                            foreach($excels['_member'] as  $key => $member)
+                            {
+                                $key = $key+=2;
+                                $sheet->setCellValue('A'.$key, $member['last']);
+                                $sheet->setCellValue('B'.$key, $member['first']);
+                                $sheet->setCellValue('C'.$key, $member['middle']);
+                                $sheet->setCellValue('D'.$key, $member['type']);
+                            }
+                        });
+                    })->download('xlsx');
+                }
+            break;
         }
     }
     public function get_all_procedures()
@@ -1022,115 +981,125 @@ class StaticFunctionController extends Controller
             });
         })->download('xlsx');
     }
-    public function forgetSession(Request $request)
+    public static function paymentDateComputation($reference,$member_id,$payment_count,$cal_id,$cal_member_id,$payment_mode)
     {
-        Session::forget('exportWarning');
-        return redirect()->back();   
+        switch ($reference)
+        {
+            case 'NEW_MEMBER':
+                $cal_start        = TblCalModel::where('cal_id',$cal_id)->value('cal_start');
+                $date             = date('Y-m-d',strtotime("-1 day",strtotime($cal_start)));
+                Self::payment_distribution($reference,$member_id,$cal_member_id,$date,$payment_mode,$payment_count);
+            break;
+            case 'OLD_MEMBER':
+                $payment          = TblCalPaymentModel::where('member_id',$member_id)->where('cal_payment_status',0)->where('archived',0)->orderBy('cal_payment_end','DESC')->first();
+                $cal              = TblCalMemberModel::where('cal_member_id',$cal_member_id)->join('tbl_cal','tbl_cal.cal_id','=','tbl_cal_member.cal_id')->first();
+                $date             = $payment == null ? date('Y-m-d') : $payment->cal_payment_end;
+                Self::payment_distribution($reference,$member_id,$cal_member_id,$date,$payment_mode,$payment_count);
+            break;
+        }
     }
-    public static function paymentDateComputation($member_id,$cal_member_id,$payment_count,$payment_mode)
+    public static function payment_distribution($reference,$member_id,$cal_member_id,$date,$payment_mode,$payment_count)
     {
-        $payment          = TblCalPaymentModel::where('member_id',$member_id)->where('archived',0)->orderBy('cal_payment_end','DESC')->first();
-        $cal              = TblCalMemberModel::where('cal_member_id',$cal_member_id)->join('tbl_cal','tbl_cal.cal_id','=','tbl_cal_member.cal_id')->first();
-
-        if($payment)
-        {
-            $date           = $payment->cal_payment_end;
-        }
-        else
-        {
-            $date           = $cal->cal_start;
-        }
         $count            = 0;
-        if($payment_mode  == "SEMI-MONTHLY")
+        switch ($payment_mode)
         {
-            for($i = 1; $i <= $payment_count; $i++)
-            {
-                $day = date('d',strtotime($date));
-                if($day>=15)
+            case 'SEMI-MONTHLY':
+                for($i = 1; $i <= $payment_count; $i++)
                 {
-                    $result = date('Y-m-d',strtotime("+1 months",strtotime($date)));
-                    $start  = date('Y-m-26',strtotime($date));
-                    $end    = date('Y-m-10',strtotime($result));
-                    $date   = $end;
-                    $count++;
+                    $day = date('d',strtotime($date));
+                    if($day>=15)
+                    {
+                        $result = date('Y-m-d',strtotime("+1 months",strtotime($date)));
+                        $start  = date('Y-m-26',strtotime($date));
+                        $end    = date('Y-m-10',strtotime($result));
+                        $date   = $end;
+                        $count++;
+                    }
+                    else
+                    {
+                        $result = date('Y-m-d',strtotime("+1 months",strtotime($date)));
+                        $start  = date('Y-m-11',strtotime($result));
+                        $end    = date('Y-m-25',strtotime($result));
+                        $date   = $end;
+                        $count++;
+                    }
+                    StaticFunctionController::insertMemberPayment_v2($reference,$member_id,$cal_member_id,$start,$end);
                 }
-                else
+            break;
+            case 'MONTHLY':
+                for($i = 1; $i <= $payment_count; $i++)
                 {
-                    $result = date('Y-m-d',strtotime("+1 months",strtotime($date)));
-                    $start  = date('Y-m-11',strtotime($result));
-                    $end    = date('Y-m-25',strtotime($result));
-                    $date   = $end;
+                    $day      = date('d',strtotime($date));
+                    $new_day  = $day+1;
+                    $result   = date('Y-m-d',strtotime("+1 months",strtotime($date)));
+                    $start    = date('Y-m-'.$new_day,strtotime($date));
+                    $end      = date('Y-m-'.$day,strtotime($result));
+                    $date     = $end;
                     $count++;
+                    StaticFunctionController::insertMemberPayment_v2($reference,$member_id,$cal_member_id,$start,$end);
                 }
-                StaticFunctionController::insertMemberPayment_v2($cal_member_id,$member_id,$start,$end);
-            }
+            break;
+            case 'QUARTERLY':
+                for($i = 1; $i <= $payment_count; $i++)
+                {
+                    $day      = date('d',strtotime($date));
+                    $new_day  = $day+1;
+                    $result   = date('Y-m-d',strtotime("+3 months",strtotime($date)));
+                    $start    = date('Y-m-'.$new_day,strtotime($date));
+                    $end      = date('Y-m-'.$day,strtotime($result));
+                    $date     = $end;
+                    $count++;
+                    StaticFunctionController::insertMemberPayment_v2($reference,$member_id,$cal_member_id,$start,$end);
+                }
+            break;
+            case 'SEMESTRAL':
+                for($i = 1; $i <= $payment_count; $i++)
+                {
+                    $day      = date('d',strtotime($date));
+                    $new_day  = $day+1;
+                    $result   = date('Y-m-d',strtotime("+6 months",strtotime($date)));
+                    $start    = date('Y-m-'.$new_day,strtotime($date));
+                    $end      = date('Y-m-'.$day,strtotime($result));
+                    $date     = $end;
+                    $count++;
+                    StaticFunctionController::insertMemberPayment_v2($reference,$member_id,$cal_member_id,$start,$end);
+                }
+            break;
+            case 'ANNUAL':
+                for($i = 1; $i <= $payment_count; $i++)
+                {
+                    $day      = date('d',strtotime($date));
+                    $new_day  = $day+1;
+                    $result   = date('Y-m-d',strtotime("+1 years",strtotime($date)));
+                    $start    = date('Y-m-'.$new_day,strtotime($date));
+                    $end      = date('Y-m-'.$day,strtotime($result));
+                    $date     = $end;
+                    $count++;
+                    StaticFunctionController::insertMemberPayment_v2($reference,$member_id,$cal_member_id,$start,$end);
+                }
+            break;
         }
-        else if($payment_mode == "MONTHLY")
-        {
-            for($i = 1; $i <= $payment_count; $i++)
-            {
-                $day      = date('d',strtotime($date));
-                $new_day  = $day+1;
-                $result   = date('Y-m-d',strtotime("+1 months",strtotime($date)));
-                $start    = date('Y-m-'.$new_day,strtotime($date));
-                $end      = date('Y-m-'.$day,strtotime($result));
-                $date     = $end;
-                $count++;
-                StaticFunctionController::insertMemberPayment_v2($cal_member_id,$member_id,$start,$end);
-            }
-        }
-        else if($payment_mode == "QUARTERLY")
-        {
-            for($i = 1; $i <= $payment_count; $i++)
-            {
-                $day      = date('d',strtotime($date));
-                $new_day  = $day+1;
-                $result   = date('Y-m-d',strtotime("+3 months",strtotime($date)));
-                $start    = date('Y-m-'.$new_day,strtotime($date));
-                $end      = date('Y-m-'.$day,strtotime($result));
-                $date     = $end;
-                $count++;
-                StaticFunctionController::insertMemberPayment_v2($cal_member_id,$member_id,$start,$end);
-            }
-        }
-        else if($payment_mode == "SEMESTRAL")
-        {
-            for($i = 1; $i <= $payment_count; $i++)
-            {
-                $day      = date('d',strtotime($date));
-                $new_day  = $day+1;
-                $result   = date('Y-m-d',strtotime("+6 months",strtotime($date)));
-                $start    = date('Y-m-'.$new_day,strtotime($date));
-                $end      = date('Y-m-'.$day,strtotime($result));
-                $date     = $end;
-                $count++;
-                StaticFunctionController::insertMemberPayment_v2($cal_member_id,$member_id,$start,$end);
-            }
-        }
-        else if($payment_mode == "ANNUAL")
-        {
-            for($i = 1; $i <= $payment_count; $i++)
-            {
-                $day      = date('d',strtotime($date));
-                $new_day  = $day+1;
-                $result   = date('Y-m-d',strtotime("+1 years",strtotime($date)));
-                $start    = date('Y-m-'.$new_day,strtotime($date));
-                $end      = date('Y-m-'.$day,strtotime($result));
-                $date     = $end;
-                $count++;
-                StaticFunctionController::insertMemberPayment_v2($cal_member_id,$member_id,$start,$end);
-            }
-        }
-    
     }
-    public static function insertMemberPayment_v2($cal_member_id,$member_id,$start,$end)
+    public static function insertMemberPayment_v2($reference,$member_id,$cal_member_id,$start,$end)
     {
-        $member_cut['cal_payment_start']  = $start;
-        $member_cut['cal_payment_end']    = $end;
-        $member_cut['cal_payment_type']   = 'ORIGINAL';
-        $member_cut['cal_member_id']      = $cal_member_id;
-        $member_cut['member_id']          = $member_id;
-        TblCalPaymentModel::insert($member_cut);
+        switch ($reference)
+        {
+            case 'NEW_MEMBER':
+                $member_cut['cal_payment_start']  = $start;
+                $member_cut['cal_payment_end']    = $end;
+                $member_cut['new_member_id']      = $member_id;
+                TblNewCalMemberModel::insert($member_cut);
+            break;
+            case 'OLD_MEMBER':
+                $member_cut['cal_payment_start']  = $start;
+                $member_cut['cal_payment_end']    = $end;
+                $member_cut['cal_payment_type']   = 'ORIGINAL';
+                $member_cut['cal_member_id']      = $cal_member_id;
+                $member_cut['member_id']          = $member_id;
+                TblCalPaymentModel::insert($member_cut);
+            break;
+        }
+        
     }
     public static function coverage_plan_mark_new($new_coverage_plan_id,$coverage_plan_id)
     {
@@ -1145,5 +1114,9 @@ class StaticFunctionController extends Controller
             $insert['coverage_plan_id']     = $new_coverage_plan_id;
             TblCoveragePlanProcedureModel::insert($insert);
         }
+    }
+    public static function excel_with_validation()
+    {
+
     }
 }

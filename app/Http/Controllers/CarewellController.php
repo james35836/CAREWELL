@@ -110,9 +110,7 @@ class CarewellController extends ActiveAuthController
 		$data['member_inactive']  = TblMemberModel::where('archived',1)->count();
 		$data['provider_active']  = TblProviderModel::where('archived',0)->count();
 		
-		$data['_approval']        = TblApprovalModel::where('tbl_approval.archived',0)
-		->join('tbl_member','tbl_member.member_id','=','tbl_approval.member_id')
-		->orderBy('approval_created','DESC')->get();
+		$data['_approval']        = TblApprovalModel::ApprovalDashboard()->get();
 		$data['total_approval'] =  count($data['_approval']);
 
 		$data['sum_approval'] = TblApprovalModel::join('tbl_approval_total','tbl_approval_total.approval_id','=','tbl_approval.approval_id')
@@ -415,7 +413,7 @@ class CarewellController extends ActiveAuthController
 		$governmentData->save();
 		
 		$companyMemberData = new TblMemberCompanyModel;
-		$companyMemberData->member_carewell_id      = StaticFunctionController::generateCarewellId($companyData->company_code);
+		$companyMemberData->member_carewell_id      = $companyData->company_code.'-'.StaticFunctionController::updateReferenceNumber('carewell_id');
 		$companyMemberData->member_employee_number  = $request->member_employee_number;
 		$companyMemberData->member_company_status   = "active";
 		$companyMemberData->member_transaction_date = Carbon::now();
@@ -443,8 +441,6 @@ class CarewellController extends ActiveAuthController
 
 		return view('carewell.modal_pages.member_details',$data);
 	}
-
-  //edrich
 	public function member_update_member_submit(Request $request)
 	{
 		$update['member_first_name']          = $request->member_first_name;
@@ -473,8 +469,7 @@ class CarewellController extends ActiveAuthController
 			return StaticFunctionController::returnMessage('danger','MEMBER');
 		}
 	}
-  //edrich
-	public function member_transaction_details($member_id)
+    public function member_transaction_details($member_id)
 	{
 
 		$coverage                       = TblMemberCompanyModel::where('archived',0)->where('member_id',$member_id)->first();
@@ -801,7 +796,7 @@ class CarewellController extends ActiveAuthController
 
 		$companyData       = TblCompanyModel::where('company_id',$request->company_id_adjustment)->first();
 		$companyMemberData = new TblMemberCompanyModel;
-		$companyMemberData->member_carewell_id      = StaticFunctionController::generateCarewellId($companyData->company_code);
+		$companyMemberData->member_carewell_id      = $companyData->company_code.'-'.StaticFunctionController::updateReferenceNumber('carewell_id');
 		$companyMemberData->member_employee_number  = $request->employee_number_adjustment;
 		$companyMemberData->member_company_status   = "active";
 		$companyMemberData->member_payment_mode     = $request->member_payment_mode_adjustment;
@@ -839,10 +834,6 @@ class CarewellController extends ActiveAuthController
 	{
 		return view('carewell.modal_pages.provider_create');
 	}
-
-
-	
-
 	public function provider_create_submit(Request $request)
 	{
 	     $provider_id = StaticFunctionController::getIdNorName($request->provider_name,'provider');
@@ -1162,22 +1153,22 @@ class CarewellController extends ActiveAuthController
 		$data['_company']         = TblCompanyModel::where('archived',0)->get();
 
 
-		foreach ($data['_cal_open'] as $key => $cal_open) 
+		foreach ($data['_cal_open'] as $key => $cal) 
 		{
-			$data['_cal_open'][$key]['new_member']= TblNewMemberModel::where('cal_id',$cal_open->cal_id)->count();
-			$data['_cal_open'][$key]['members']   = TblCalMemberModel::where('cal_id',$cal_open->cal_id)->where('archived',0)->count();
+			$data['_cal_open'][$key]['new_member']= TblNewMemberModel::where('cal_id',$cal->cal_id)->count();
+			$data['_cal_open'][$key]['members']   = TblCalMemberModel::where('cal_id',$cal->cal_id)->where('archived',0)->count();
 			$data['_cal_open'][$key]['reference'] = 'show';
 		}
-		foreach ($data['_cal_close'] as $key => $cal_close) 
+		foreach ($data['_cal_close'] as $key => $cal) 
 		{
-			$data['_cal_close'][$key]['new_member']= TblNewMemberModel::where('cal_id',$cal_close->cal_id)->count();
-			$data['_cal_close'][$key]['members']   =  TblCalMemberModel::where('cal_id',$cal_close->cal_id)->where('archived',0)->count();
+			$data['_cal_close'][$key]['new_member']= TblNewMemberModel::where('cal_id',$cal->cal_id)->count();
+			$data['_cal_close'][$key]['members']   =  TblCalMemberModel::where('cal_id',$cal->cal_id)->where('archived',0)->count();
 			$data['_cal_close'][$key]['reference'] = 'none';
 		}
-		foreach ($data['_cal_pending'] as $key => $cal_pending) 
+		foreach ($data['_cal_pending'] as $key => $cal) 
 		{
-			$data['_cal_pending'][$key]['new_member']= TblNewMemberModel::where('cal_id',$cal_pending->cal_id)->count();
-			$data['_cal_pending'][$key]['members']   =  TblCalMemberModel::where('cal_id',$cal_pending->cal_id)->where('archived',0)->count();
+			$data['_cal_pending'][$key]['new_member']= TblNewMemberModel::where('cal_id',$cal->cal_id)->count();
+			$data['_cal_pending'][$key]['members']   =  TblCalMemberModel::where('cal_id',$cal->cal_id)->where('archived',0)->count();
 			$data['_cal_pending'][$key]['reference'] = 'show';
 		}
 		return view('carewell.pages.billing_center',$data);
@@ -1316,35 +1307,27 @@ class CarewellController extends ActiveAuthController
 	{
 		$excels['number_of_rows'] 	= 10;
 		$excels['company_id']     	= $company_id;
-		$cal_template             	= TblCalModel::where('cal_id',$cal_id)
-								->join('tbl_company','tbl_company.company_id','=','tbl_cal.company_id')
-								->first();
+		$cal_template             	= TblCalModel::where('cal_id',$cal_id)->CalInfo(0)->first();
 		$excels['company_name']   	= $cal_template->company_name;
 		$excels['company_id']     	= $cal_template->company_id;
 		$excels['cal_number']     	= $cal_template->cal_number;
-
 		$excels['_payment']       	= TblPaymentModeModel::where('archived',0)->get();
 		$excels['_deployment']    	= TblCompanyDeploymentModel::where('tbl_company_deployment.company_id',$company_id)->get();
 		$excels['_coverage']      	= TblCompanyCoveragePlanModel::where('tbl_company_coverage_plan.company_id',$company_id)->CoveragePlan()->get();
-		$excels['_member']        	= TblMemberCompanyModel::where('tbl_member_company.archived',0)
-								->where('tbl_member_company.company_id',$company_id)
-								->where('tbl_member_company.member_payment_mode',$cal_template->cal_payment_mode)
-								->MemberCompany()
-		->get();
-		$excels['count_member']   =   count($excels['_member'])+10;
-		$excels['data'] = ['LAST NAME','FIRST NAME','MIDDLE NAME','BIRTHDATE','COVERAGE PLAN','DEPLOYMENT','MODE OF PAYMENT','PAYMENT AMOUNT'];
+		$excels['_member']        	= TblMemberCompanyModel::where('tbl_member.archived','!=',1)->CalTemplate($company_id,$cal_template->cal_payment_mode)->MemberCompany()->get();
+		$excels['count_member']   	=   count($excels['_member'])+10;
+		$excels['data'] 			= ['LAST NAME','FIRST NAME','MIDDLE NAME','BIRTHDATE','COVERAGE PLAN','DEPLOYMENT','MODE OF PAYMENT','PAYMENT AMOUNT','STATUS'];
 		Excel::create('CAL - '.$excels['company_name'].' - TEMPLATE', function($excel) use ($excels) 
 		{
 			$excel->sheet('template', function($sheet) use ($excels) 
 			{
-				$data   = $excels['data'];
-				$_member = $excels['_member'];
-				$number_of_rows = $excels['number_of_rows'];
+				$data   			= $excels['data'];
+				$_member 			= $excels['_member'];
+				$number_of_rows 	= $excels['number_of_rows'];
 				$sheet->fromArray($data, null, 'A1', false, false);
 				$sheet->freezeFirstRow();
 				for($row = 1, $rowcell = 2; $row <= $excels['count_member']; $row++, $rowcell++)
 				{
-
 					$coverage_cell = $sheet->getCell('E'.$rowcell)->getDataValidation();
 					$coverage_cell->setType(\PHPExcel_Cell_DataValidation::TYPE_LIST);
 					$coverage_cell->setErrorStyle(\PHPExcel_Cell_DataValidation::STYLE_INFORMATION);
@@ -1373,7 +1356,15 @@ class CarewellController extends ActiveAuthController
 				foreach($_member as  $key => $member)
 				{
 					$key = $key+=2;
-
+					if($member->member_inactive==0)
+					{
+						$stats = "ACTIVE";
+					}
+					else
+					{
+						$stats = "INACTIVE";
+					}
+					$payment_to_be_paid = StaticFunctionController::check_unpaid($member->coverage_plan_premium,$member->member_id,$member->member_payment_mode);
 					$sheet->setCellValue('A'.$key, $member->member_last_name);
 					$sheet->setCellValue('B'.$key, $member->member_first_name);
 					$sheet->setCellValue('C'.$key, $member->member_middle_name);
@@ -1381,8 +1372,8 @@ class CarewellController extends ActiveAuthController
 					$sheet->setCellValue('E'.$key, $member->coverage_plan_name);
 					$sheet->setCellValue('F'.$key, $member->deployment_name);
 					$sheet->setCellValue('G'.$key, $member->member_payment_mode);
-					$sheet->setCellValue('H'.$key, $member->coverage_plan_premium);
-					
+					$sheet->setCellValue('H'.$key, $payment_to_be_paid);
+					$sheet->setCellValue('I'.$key, $stats);
 				}
 			});
 			/* DATA VALIDATION (REFERENCE FOR DROPDOWN LIST) */
@@ -1420,9 +1411,6 @@ class CarewellController extends ActiveAuthController
 					$payment_number++;
 				}
 				$payment_number--;
-				
-				
-
 				/*COVERAGE*/
 				$sheet->_parent->addNamedRange(
 					new \PHPExcel_NamedRange(
@@ -1441,12 +1429,9 @@ class CarewellController extends ActiveAuthController
 						'payment', $sheet, 'G2:G'.$payment_number
 					)
 				);
-				
 			});
-			
 		})->download('xlsx');
 	}
-
 	public function billing_cal_import_template(Request $request)
 	{
 		Session::forget('exportWarning');
@@ -1455,14 +1440,12 @@ class CarewellController extends ActiveAuthController
 		$_data              = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->all();
 		$companyData        = TblCompanyModel::CompanyCal()->where('tbl_company.company_id',$request->company_id)->where('tbl_cal.cal_id',$request->cal_id)->first();
 		$first              = $_data[0]; 
-		
 		if(isset($first['last_name'])&&isset($first['first_name'])&&isset($first['middle_name'])&&isset($first['birthdate']))
 		{    
-			$count            = 0;
-			$countBdate       = 0;
-			$countExist       = 0;
-			$countNew         = 0;
-			$exportArray        = array();
+			$count          = 0;
+			$countExist     = 0;
+			$countNew       = 0;
+			$exportArray    = array();
 			foreach($_data as $data)
 			{
 				if($data['first_name']!=""&&$data['last_name']!=""&&$data['middle_name']!=""&&$data['birthdate']!="")
@@ -1510,7 +1493,8 @@ class CarewellController extends ActiveAuthController
 								$cal_member['member_id']            =   $checkingMember->member_id;
 								$cal_member['cal_id']               =   $companyData->cal_id;
 								$cal_member_id                      =   TblCalMemberModel::insertGetId($cal_member);
-								$payment_ref                        =   StaticFunctionController::paymentDateComputation($member_id,$cal_member_id,$payment_count,$payment_mode);
+								$payment_ref                        =   StaticFunctionController::paymentDateComputation('OLD_MEMBER',$member_id,$payment_count,$cal_id,$cal_member_id,$payment_mode);
+
 								if($coverage_plan_id!=$member_data->coverage_plan_id)
 								{
 									StaticFunctionController::archivedCurrentCompany($checkingMember->member_id,$coverage_plan_id,'coverage_plan');
@@ -1550,14 +1534,11 @@ class CarewellController extends ActiveAuthController
 						$new_member['coverage_plan_id']       =   StaticFunctionController::getid($data['coverage_plan'], 'coverage');
 						$new_member['cal_id']                 =   $companyData->cal_id;
 						$new_member['cal_payment_amount']     =   $payment_amount;
-						$new_member['cal_payment_date']       =   Carbon::now();
 						$new_member['cal_payment_count']      =   $payment_count;
-						$new_member['cal_payment_start']      =   'start';
-						$new_member['cal_payment_end']        =   'end';
 						$new_member_id  = TblNewMemberModel::insertGetId($new_member);
 						
-						$payment_ref   = StaticFunctionController::newMemberModeOfPayment($new_member_id,$payment_count,$cal_id);
-						
+						$payment_ref   = StaticFunctionController::paymentDateComputation('NEW_MEMBER',$new_member_id,$payment_count,$cal_id,0,$data['mode_of_payment']);
+															
 						$countNew++;
 					}
 				}
@@ -1588,34 +1569,26 @@ class CarewellController extends ActiveAuthController
 			return '<center><b><span class="color-red">Wrong file Format</span></b></center>';
 		}
 	}
-
 	public function billing_cal_member_remove(Request $request)
 	{
-		if($request->ref=="old")
+		switch ($request->ref)
 		{
-			$archived['archived'] = 1;
-			$remove = TblCalMemberModel::where('cal_member_id',$request->cal_member_id)->update($archived);
+			case 'old':
+				$archived['archived'] = 1;
+				$remove = TblCalMemberModel::where('cal_member_id',$request->cal_member_id)->update($archived);
+			break;
+			case 'new':
+				$remove = TblNewMemberModel::where('new_member_id',$request->cal_member_id)->delete();
+				TblNewCalMemberModel::where('new_member_id',$request->cal_member_id)->delete();
+			break;
 		}
-		else
-		{
-			$remove = TblNewMemberModel::where('new_member_id',$request->cal_member_id)->delete();
-			TblNewCalMemberModel::where('new_member_id',$request->cal_member_id)->delete();
-		}
-		if($remove)
-		{
-			return '<center><b><span class="color-red">Member Successfully Removed!</span></b></center>';
-		}
-		else
-		{
-			return "james";
-		}
-
+		return StaticFunctionController::spanMessage('Member Successfully Removed!');
 	}
 	public function billing_cal_member_restore(Request $request)
 	{
 		$archived['archived'] = 0;
 		$remove               = TblCalMemberModel::where('cal_member_id',$request->cal_member_id)->update($archived);
-		return '<center><b><span class="color-red">Member Successfully Restored!</span></b></center>';
+		return StaticFunctionController::spanMessage('Member Successfully Restored!');
 	}
 	public function billing_cal_pending_submit(Request $request)
 	{
@@ -1631,11 +1604,11 @@ class CarewellController extends ActiveAuthController
     	}
     	if($pending)
     	{
-    		return '<center><b><span class="color-red">CAL successfully mark as Pending!</span></b></center>';
+    		return StaticFunctionController::spanMessage('CAL successfully mark as Pending!');
     	}
     	else
     	{
-    		return "error";
+    		return StaticFunctionController::spanMessage('ERROR 404!');
     	}
 	}
 	public function billing_cal_close($cal_id)
@@ -3754,20 +3727,11 @@ class CarewellController extends ActiveAuthController
 	    $pdf = PDF::loadView('carewell.additional_pages.coverage_plan_details_export_pdf', $data, [], $format);
 	    return $pdf->stream('document.pdf');
 	}
-	/*ARCHIVED*/
-	public function archived_submit(Request $request)
-	{
-		return StaticFunctionController::archived_data($request->archived_id,$request->archived_name);
-	}
-	/*RESTORE*/
-	public function restore_submit(Request $request)
-	{
-		return StaticFunctionController::restore_data($request->restore_id,$request->restore_name);
-	}
 	/*PAGE ACTION SUBMIT*/
 	public function page_action_submit(Request $request)
 	{
-		$message              = "";
+		// dd($request->all());
+		$message              = "SOMETHING WENT WRONG";
 		$id                   = $request->id;
         $archived['archived'] = $request->status;
         $status               = $request->status;

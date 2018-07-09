@@ -49,7 +49,7 @@ use App\Http\Model\TblPositionAccessModel;
 
 use Excel;
 use Input;
-// use Request;
+use Session;
 use DB;
 use Carbon\Carbon;
 use Paginate;
@@ -297,10 +297,89 @@ class AdminController extends ActiveAuthController
     }
     public function terminated_member()
     {
-        $data['page'] = 'Terminated Member';
-        $data['user'] = StaticFunctionController::global();
-        $data['_position'] = TblPositionModel::where('archived',0)->paginate(10);
+        $data['page']               = 'Terminated Member';
+        $data['user']               = StaticFunctionController::global();
+        $data['_company']           = TblCompanyModel::where('archived',0)->get();
+        $data['_member_terminated'] = TblMemberModel::where('tbl_member.archived',1)->where('tbl_member_company.archived',0)->Member()->orderBy('tbl_member.member_id','ASC')->paginate(10, ['*'], 'inactive');
         return view('carewell.pages.terminated_member',$data);
     }
+
+    public function terminated_member_import()
+    {
+        $data['link'] = "/settings/terminated/import/template";
+        return view('carewell.modal_pages.terminated_member_import',$data);
+    }
+    public function terminated_member_import_template()
+    {
+        $excels['data']  =   ['LAST NAME','FIRST NAME','MIDDLE NAME'];
+        Excel::create('CAREWELL TERMINATED MEMBER TEMPLATE', function($excel) use ($excels) 
+        {
+            $excel->sheet('template', function($sheet) use ($excels) 
+            {
+                $data = $excels['data'];
+                $sheet->fromArray($data, null, 'A1', false, false);
+                $sheet->freezeFirstRow();
+            });
+            
+        })->download('xlsx');
+    }
+    public function terminated_member_import_submit(Request $request)
+    {
+        Session::forget('exportWarning');
+
+        $file                           = $request->file('importTerminatedMemberFile')->getRealPath();
+        $_data                          = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->all();
+        $first                          = $_data[0]; 
+        $countSuccess                   = 0;
+        $countError                     = 0;
+        $exportArray                    = array();
+        $member_archived['archived']    = 1;
+        if(isset($first['last_name'])&&isset($first['first_name'])&&isset($first['middle_name']))
+        {
+            foreach($_data as $data)
+            {
+                if($data['last_name']!=null&&$data['first_name']!=null&&$data['middle_name']!=null)
+                {
+                    $TblMemberModel = TblMemberModel::MemberExist($data['first_name'],$data['middle_name'],$data['last_name']);
+                    if($TblMemberModel->count()>0)
+                    {
+                        $TblMemberModel->update($member_archived);
+                        $countSuccess++;
+                    }
+                    else
+                    {
+                        $name['first']  = $data['first_name'];
+                        $name['middle'] = $data['middle_name'];
+                        $name['last']   = $data['last_name'];
+                        $name['type']   = 'MEMBER ARE NOT ON THE MEMBER LIST PLEASE CHECK SPELLING';
+                        array_push($exportArray,$name);
+                        $countError++;
+                    }
+                } 
+                else
+                {
+                    $name['first']  = $data['first_name'];
+                    $name['middle'] = $data['middle_name'];
+                    $name['last']   = $data['last_name'];
+                    $name['type']   = 'SOME FIELDS HAS NULL VALUES';
+                    array_push($exportArray,$name);
+                    $countError++;
+                }           
+            }  
+
+        }
+        StaticFunctionController::session_putter($exportArray);
+            
+        if($countSuccess == 0)
+        {
+            $message = '<center><b><span class="color-gray">There is nothing to insert</span></b></center>';
+        }
+        else
+        {
+            $message = '<center><b><span class="color-green">'.$countSuccess.' member/s has been terminated and '.$countError.' error.</span></b></center>';
+        }
+        return $message;
+    }
+
 
 }

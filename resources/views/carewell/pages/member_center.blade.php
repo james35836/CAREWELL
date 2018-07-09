@@ -53,13 +53,13 @@
                                     <th class="live-search">DATE ADDED</th>
                                     <th class="live-search">ACTION</th>
                                 </tr>
-                                @foreach($_member_active as $member_active)
+                                @foreach($_member_active as $member)
                                 <tr>
-                                    <td>{{$member_active->member_universal_id}}</td>
-                                    <td>{{$member_active->member_first_name}} {{$member_active->member_last_name}}</td>
-                                    <td>{{$member_active->member_carewell_id}}</td>
-                                    <td>{{$member_active->company_name}}</td>
-                                    <td>{{date("F j, Y",strtotime($member_active->member_created))}}</td>
+                                    <td>{{$member->member_universal_id}}</td>
+                                    <td>{{$member->member_first_name}} {{$member->member_last_name}}</td>
+                                    <td>{{$member->member_carewell_id}}</td>
+                                    <td>{{$member->company_name}}</td>
+                                    <td>{{date("F j, Y",strtotime($member->member_created))}}</td>
                                     <td>
                                         <div class="btn-group">
                                             <button type="button" class="btn btn-danger">Action</button>
@@ -68,8 +68,9 @@
                                             <span class="sr-only">Toggle Dropdown</span>
                                             </button>
                                             <ul class="dropdown-menu" role="menu" style="position: absolute !important;">
-                                                <li><button type="button" data-member_id="{{$member_active->member_id}}" class="btn btn-link view-member-details"><i class="fa fa-eye btn-icon"></i>  View Member</button></li>
-                                                <li><button type="button" data-id="{{$member_active->member_id}}" data-name="MEMBER" class="btn btn-link archived"><i class="fa fa-trash btn-icon"></i> Archived Member</button></li>
+                                                <li><button type="button" data-member_id="{{$member->member_id}}" class="btn btn-link view-member-details"><i class="fa fa-eye btn-icon"></i>  View Member</button></li>
+                                                <li><button type="button" data-id="{{$member->member_id}}" class="btn btn-link page-action" data-status="2" data-alert = "archive" data-name="MEMBER"><i class="fa fa-trash btn-icon"></i> Archive Member</button></li>
+                                                <li><button type="button" data-id="{{$member->member_id}}" class="btn btn-link page-action" data-status="1" data-alert = "terminate" data-name="MEMBER"><i class="fa fa-trash btn-icon"></i> Terminate Member</button></li>
                                             </ul>
                                         </div>
                                     </td>
@@ -112,13 +113,13 @@
                                     <th>DATE ADDED</th>
                                     <th>ACTION</th>
                                 </tr>
-                                @foreach($_member_inactive as $member_inactive)
+                                @foreach($_member_inactive as $member)
                                 <tr>
-                                    <td>{{$member_inactive->member_universal_id}}</td>
-                                    <td>{{$member_inactive->member_first_name}} {{$member_inactive->member_last_name}}</td>
-                                    <td>{{$member_inactive->member_carewell_id}}</td>
-                                    <td>{{$member_inactive->company_name}}</td>
-                                    <td>{{date("F j, Y",strtotime($member_inactive->member_created))}}</td>
+                                    <td>{{$member->member_universal_id}}</td>
+                                    <td>{{$member->member_first_name}} {{$member->member_last_name}}</td>
+                                    <td>{{$member->member_carewell_id}}</td>
+                                    <td>{{$member->company_name}}</td>
+                                    <td>{{date("F j, Y",strtotime($member->member_created))}}</td>
                                     <td>
                                         <div class="btn-group">
                                             <button type="button" class="btn btn-danger">Action</button>
@@ -127,8 +128,8 @@
                                             <span class="sr-only">Toggle Dropdown</span>
                                             </button>
                                             <ul class="dropdown-menu" role="menu" style="position: absolute !important;">
-                                                <li><button type="button" data-member_id="{{$member_inactive->member_id}}" class="btn btn-link view-member-details"><i class="fa fa-eye btn-icon"></i>  View Member</button></li>
-                                                <li><button type="button" class="btn btn-link restore" data-id="{{$member_inactive->member_id}}" data-name="MEMBER"><i class="fa fa-trash btn-icon"></i> Restore Member</button></li>
+                                                <li><button type="button" data-member_id="{{$member->member_id}}" class="btn btn-link view-member-details"><i class="fa fa-eye btn-icon"></i>  View Member</button></li>
+                                                <li><button type="button" data-id="{{$member->member_id}}" class="btn btn-link page-action" data-status="0" data-alert = "restore" data-name="MEMBER"><i class="fa fa-trash btn-icon"></i> Restore Member</button></li>
                                             </ul>
                                         </div>
                                     </td>
@@ -171,13 +172,13 @@
                                     <th>DATE ADDED</th>
                                     <th>ACTION</th>
                                 </tr>
-                                @foreach($_member_terminated as $member_terminated)
+                                @foreach($_member_terminated as $member)
                                 <tr>
-                                    <td>{{$member_terminated->member_universal_id}}</td>
-                                    <td>{{$member_terminated->member_first_name}} {{$member_terminated->member_last_name}}</td>
-                                    <td>{{$member_terminated->member_carewell_id}}</td>
-                                    <td>{{$member_terminated->company_name}}</td>
-                                    <td>{{date("F j, Y",strtotime($member_terminated->member_created))}}</td>
+                                    <td>{{$member->member_universal_id}}</td>
+                                    <td>{{$member->member_first_name}} {{$member->member_last_name}}</td>
+                                    <td>{{$member->member_carewell_id}}</td>
+                                    <td>{{$member->company_name}}</td>
+                                    <td>{{date("F j, Y",strtotime($member->member_created))}}</td>
                                     <td>
                                         <div class="btn-group">
                                             <button type="button" class="btn btn-danger">Action</button>
@@ -186,7 +187,8 @@
                                             <span class="sr-only">Toggle Dropdown</span>
                                             </button>
                                             <ul class="dropdown-menu" role="menu" style="position: absolute !important;">
-                                                <li><button type="button"  class="btn btn-link member-adjustment" data-member_id="{{$member_terminated->member_id}}"><i class="fa fa-plus btn-icon"></i>  Make Adjustment</button></li>
+                                                <li><button type="button" data-member_id="{{$member->member_id}}" class="btn btn-link view-member-details"><i class="fa fa-eye btn-icon"></i>  View Member</button></li>
+                                                <li><button type="button"  class="btn btn-link member-adjustment" data-member_id="{{$member->member_id}}"><i class="fa fa-plus btn-icon"></i>  Make Adjustment</button></li>
                                             </ul>
                                         </div>
                                     </td>
@@ -195,7 +197,7 @@
                             </table>
                         </div>
                         <div class="box-footer clearfix">
-                            @include('globals.pagination_v2', ['paginator' => $_member_inactive])
+                            @include('globals.pagination_v2', ['paginator' => $_member_terminated])
                         </div>
                     </div>
                 </div>

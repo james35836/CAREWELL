@@ -4,6 +4,7 @@ var doctorData		= new FormData();
 var doctorFileData  = new FormData();
 var adjustmentData	= new FormData();
 var memberFileData	= new FormData();
+var importTerminatedMemberFile = new FormData();
 var companyData     = new FormData();
 var providerData 	= new FormData();
 
@@ -300,7 +301,7 @@ function globals()
 		$('.confirm-modal').remove();
         	$("."+modalName+"-modal-body").html("<div class='"+modalName+"-ajax-loader' style='display:none;text-align: center; padding:50px;'><img src='/assets/loader/loading.gif'/></div");
         	$("."+modalName+"-ajax-loader").show();
-        
+        	$('.'+modalName+'-modal-footer').html("");
         	$.ajax({
 			headers: {
 			      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -363,6 +364,7 @@ function globals()
 		$('.confirm-modal').remove();
         $("."+modalName+"-modal-body").html("<div class='"+modalName+"-ajax-loader' style='display:none;text-align: center; padding:50px;'><img src='/assets/loader/loading.gif'/></div");
         $("."+modalName+"-ajax-loader").show();
+        $('.'+modalName+'-modal-footer').html("");
         	
        	$.ajax({
 			headers: {
@@ -420,6 +422,7 @@ function globals()
 		$('.confirm-modal').remove();
     	$("."+modalName+"-modal-body").html("<div class='"+modalName+"-ajax-loader' style='display:none;text-align: center; padding:50px;'><img src='/assets/loader/loading.gif'/></div");
     	$("."+modalName+"-ajax-loader").show();
+    	$('.'+modalName+'-modal-footer').html("");
     
     	$.ajax({
 			headers: {
@@ -444,9 +447,10 @@ function globals()
 	this.global_archived_data = function(archived_param,string_param)
 	{
 		$(".confirm-modal-body").html('<h1 style="text-align:center;"><i class="fa fa-spinner fa-pulse fa-fw"></i></h1>');
-        	$(".confirm-ajax-loader").show();
-        	$('.confirm-modal-title').html("Message");
-        	$.ajax({
+    	$(".confirm-ajax-loader").show();
+    	$('.confirm-modal-title').html("Message");
+    	$(".confirm-modal-footer").html("");
+    	$.ajax({
 			headers: {
 			      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 			},
@@ -473,20 +477,21 @@ function globals()
 	this.global_restore_data = function(restore_param,string_param)
 	{
 		$(".confirm-modal-body").html('<h1 style="text-align:center;"><i class="fa fa-spinner fa-pulse fa-fw"></i></h1>');
-        	$(".confirm-ajax-loader").show();
-        	$('.confirm-modal-title').html("Message");
-        	$.ajax({
+    	$(".confirm-ajax-loader").show();
+    	$('.confirm-modal-title').html("Message");
+    	$(".confirm-modal-footer").html("");
+    	$.ajax({
 			headers: {
 			      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 			},
 			url:'/restore/submit',
 			method: "POST",
-	        	data: restore_param,
-	        	contentType:false,
-            	cache:false,
-            	processData:false,
+        	data: restore_param,
+        	contentType:false,
+        	cache:false,
+        	processData:false,
 			success: function(data)
-            	{
+        	{
 				setTimeout(function()
 				{
 					$(".confirm-ajax-loader").remove();
@@ -611,8 +616,8 @@ function globals()
 		add_select_option();
 		reload_page();
 
-		archived_data();
-    	restore_data();
+		page_action();
+    	
 
     	add_remove_element();
 
@@ -797,7 +802,7 @@ function globals()
 
 	}
 	
-	function archived_data()
+	function page_action()
 	{
 		$('body').on('click','button.page-action',function()
 		{
@@ -835,6 +840,14 @@ function globals()
 			{
 				var alert = "RESTORED";
 			}
+			else if(ajaxData.alert=="archive")
+			{
+				var alert = "ARCHIVED";
+			}
+			else if(ajaxData.alert=="terminate")
+			{
+				var alert = "TERMINATED";
+			}
 	        $.ajax({
 				headers: {
 					      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -859,94 +872,7 @@ function globals()
 				}
 			});
 		});
-
-
-
-
-		$('body').on('click','.archived',function()
-		{
-			var	confirmModalMessage = 'Are you sure you want to archived '+$(this).data('name')+'?';
-			var confirmModalAction 	= 'archived-submit';
-			globals.confirm_modals(confirmModalMessage,confirmModalAction);
-
-			archivedData.append("archived_id", 		$(this).data('id'));
-			archivedData.append("archived_name", 	$(this).data('name'));
-			ajaxData.tdCloser  	= $(this).closest('tr');
-			ajaxData.name 		= $(this).data('name');
-		});
-		$('body').on('click','.archived-submit',function() 
-		{
-			$(".confirm-modal-body").html('<h1 style="text-align:center;"><i class="fa fa-spinner fa-pulse fa-fw"></i></h1>');
-	        $(".confirm-ajax-loader").show();
-	        $('.confirm-modal-title').html("MESSAGE");
-	        $.ajax({
-				headers: {
-					      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-				},
-				url:'/archived/submit',
-				method: "POST",
-	        	data: archivedData,
-	        	contentType:false,
-	        	cache:false,
-	        	processData:false,
-				success: function(data)
-	            {
-					setTimeout(function()
-					{
-						$(".confirm-ajax-loader").remove();
-						ajaxData.tdCloser.remove();
-						$(".confirm-modal-body").html('<center><b><span class="color-red"> '+ ajaxData.name +' ARCHIVED '+data+'!</span></b></center>');
-						$(".confirm-modal-footer").html(successButton);
-	                    
-					}, 800);
-				}
-			});
-		});
 	}
-	function restore_data()
-	{
-		$('body').on('click','.restore',function()
-		{
-			var	confirmModalMessage = 'Are you sure you want to proceed to restore?';
-			var confirmModalAction = 'restore-submit';
-			globals.confirm_modals(confirmModalMessage,confirmModalAction);
-
-			restoreData.append("restore_id", 	$(this).data('id'));;
-			restoreData.append("restore_name", 	$(this).data('name'));
-			ajaxData.tdCloser  	= $(this).closest('tr');
-			ajaxData.name 		= $(this).data('name');
-		});
-		$('body').on('click','.restore-submit',function() 
-		{
-			$(".confirm-modal-body").html('<h1 style="text-align:center;"><i class="fa fa-spinner fa-pulse fa-fw"></i></h1>');
-	        	$(".confirm-ajax-loader").show();
-	        	$('.confirm-modal-title').html("MESSAGE");
-	        	$.ajax({
-				headers: {
-				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-				},
-				url:'/restore/submit',
-				method: "POST",
-		        data: restoreData,
-		       	contentType:false,
-	            cache:false,
-	            processData:false,
-				success: function(data)
-	            	{
-					setTimeout(function()
-					{
-						$(".confirm-ajax-loader").remove();
-						ajaxData.tdCloser.remove();
-						
-						$(".confirm-modal-body").html('<center><b><span class="color-red"> '+ ajaxData.name +' RESTORE '+data+'!</span></b></center>');
-						$(".confirm-modal-footer").html(successButton);
-	                    
-					}, 800);
-				}
-			});
-		});
-	}
-	
 	function reload_page()
 	{
     	$('body').on('click','.reload-btn',function()

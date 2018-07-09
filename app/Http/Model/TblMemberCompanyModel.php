@@ -12,7 +12,7 @@ class TblMemberCompanyModel extends Model
 
     public function scopeMemberCompany($query)
     {
-    	$query  ->select(DB::raw('tbl_member_company.archived as inactive,tbl_member_company.*,tbl_coverage_plan.*,tbl_member.*,tbl_company.*,tbl_company_deployment.*'))
+    	$query  ->select(DB::raw('tbl_member_company.archived as inactive,tbl_member.archived as member_inactive,tbl_member_company.*,tbl_coverage_plan.*,tbl_member.*,tbl_company.*,tbl_company_deployment.*'))
                 ->join('tbl_member','tbl_member.member_id','=','tbl_member_company.member_id')
                 ->join('tbl_coverage_plan','tbl_coverage_plan.coverage_plan_id','=','tbl_member_company.coverage_plan_id')
                 ->join('tbl_company','tbl_company.company_id','=','tbl_member_company.company_id')
@@ -85,6 +85,14 @@ class TblMemberCompanyModel extends Model
                 ->where('coverage_plan_id',$parameter[0])
                 ->where('company_id',$parameter[1])
                 ->where('tbl_approval.approval_created','LIKE','%'.$date.'%');
-                return $query;
+        return $query;
     }
+    public function scopeCalTemplate($query,$company_id,$cal_payment_mode)
+    {
+        $query  ->where('tbl_member_company.archived',0)
+                ->where('tbl_member_company.company_id',$company_id)
+                ->where('tbl_member_company.member_payment_mode',$cal_payment_mode);
+        return $query;
+    }
+    
 }

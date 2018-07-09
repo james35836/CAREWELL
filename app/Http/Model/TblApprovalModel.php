@@ -68,5 +68,12 @@ class TblApprovalModel extends Model
                 });
         return $query;
     }
+    public function scopeApprovalDashboard($query)
+    {
+        $query  ->where('tbl_approval.archived',0)
+                ->join('tbl_member','tbl_member.member_id','=','tbl_approval.member_id')
+                ->orderBy('approval_created','DESC');
+        return $query;
+    }
 
 }

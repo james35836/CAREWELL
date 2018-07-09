@@ -62,8 +62,8 @@
 	<div class="nav-tabs-custom">
 		<ul class="nav nav-tabs">
 			<li class="active my-tab"><a data-toggle="tab" href="#doctors">List of Doctors</a></li>
-			<li class="my-tab"><a href="#open" data-toggle="tab">OPEN</a></li>
-			<li class="my-tab"><a href="#close" data-toggle="tab">CLOSE</a></li>
+			<li class="my-tab"><a href="#open" data-toggle="tab">OPEN PAYABLE</a></li>
+			<li class="my-tab"><a href="#close" data-toggle="tab">CLOSED PAYABLE</a></li>
 		</ul>
 		<div class="tab-content">
 			<div id="doctors" class="row tab-pane fade in active   table-min-height">
@@ -163,9 +163,6 @@
 										<td>{{$provider_payable_close->approval_number}}</td>
 										<td>{{$provider_payable_close->user_first_name." ".$provider_payable_close->user_last_name}}</td>
 										<td>{{date("F j, Y",strtotime($provider_payable_close->payable_created))}}</td>
-										<th class="live-search">STATUS</th>
-										<th class="live-search">PREPARED BY</th>
-										<th class="live-search">PREPARATION DATE</th>
 									</tr>
 									@endforeach
 								</table>

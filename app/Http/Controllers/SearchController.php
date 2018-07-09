@@ -318,17 +318,17 @@ class SearchController extends ActiveAuthController
 		if($request->ajax())
 		{
 			$reference 	= $request->val_name;
-			$key  		= $request->val_key;
+			$id  		= $request->val_id;
 			$archived   = $request->val_archived;
 			$output 	= "";
 			switch ($reference)
 			{
 				case 'member':
-					$result = TblMemberCompanyModel::where('tbl_member.archived',0)->where('tbl_member_company.company_id', $id)->MemberCompany()->paginate(10);
+					$result = TblMemberCompanyModel::where('tbl_member.archived',$archived)->where('tbl_member_company.company_id', $id)->MemberCompany()->paginate(10);
 					
 				break;
 				case 'doctor':
-					$result    = TblDoctorProviderModel::where('tbl_doctor.archived',0)->where('tbl_doctor_provider.archived',0)->where('tbl_doctor_provider.provider_id',$id)->DoctorProvider()->paginate(10);
+					$result    = TblDoctorProviderModel::where('tbl_doctor.archived',$archived)->where('tbl_doctor_provider.archived',0)->where('tbl_doctor_provider.provider_id',$id)->DoctorProvider()->paginate(10);
 					foreach ($result as $key => $doctor_provider)
 					{
 						$result[$key]['provider']        =  TblDoctorProviderModel::where('doctor_id',$doctor_provider->doctor_id)->Provider()->get();
@@ -336,20 +336,20 @@ class SearchController extends ActiveAuthController
 					
 				break;
 				case 'billing':
-					$result  =  TblCalModel::where('tbl_cal.archived',0)->where('tbl_cal.company_id', $id)->join('tbl_company','tbl_company.company_id','=','tbl_cal.company_id')->paginate(10);
-					foreach ($result as $key => $cal_open)
+					$result  =  TblCalModel::where('tbl_cal.archived',$archived)->where('tbl_cal.company_id', $id)->join('tbl_company','tbl_company.company_id','=','tbl_cal.company_id')->paginate(10);
+					foreach ($result as $key => $cal)
 					{
-					$result[$key]['new_member']= TblNewMemberModel::where('cal_id',$cal_open->cal_id)->count();
-					$result[$key]['members']   =  TblCalMemberModel::where('cal_id',$cal_open->cal_id)->count();
+					$result[$key]['new_member']= TblNewMemberModel::where('cal_id',$cal->cal_id)->count();
+					$result[$key]['members']   =  TblCalMemberModel::where('cal_id',$cal->cal_id)->count();
 					}
 					
 				break;
 				case 'availment':
-					$result  	= TblApprovalModel::where('tbl_approval.archived',0)->where('tbl_provider.provider_id',$id)->where('tbl_member_company.archived',0)->ApprovalInfo()->paginate(10);
+					$result  	= TblApprovalModel::where('tbl_approval.archived',$archived)->where('tbl_provider.provider_id',$id)->where('tbl_member_company.archived',0)->ApprovalInfo()->paginate(10);
 					
 				break;
 				case 'payable':
-					$result   = TblPayableModel::where('tbl_payable.archived',0)->where('tbl_payable.provider_id',$id)->PayableInfo()->paginate(10);
+					$result   = TblPayableModel::where('tbl_payable.archived',$archived)->where('tbl_payable.provider_id',$id)->PayableInfo()->paginate(10);
 					foreach ($result as $key => $payable) 
 					{
 						$result[$key]['payable_age']   		= date_create($payable->payable_due)->diff(date_create('today'))->m.' Months and '.date_create($payable->payable_due)->diff(date_create('today'))->d.' Days';
@@ -393,16 +393,16 @@ class SearchController extends ActiveAuthController
 					$result = TblDoctorModel::where('tbl_doctor.archived',$archived)->Search($key)->paginate(10);
 					foreach ($result as $key => $doctor)
 					{
-						$doctor[$key]['provider']        =  TblDoctorProviderModel::where('doctor_id',$doctor->doctor_id)->Provider()->get();
+						$result[$key]['provider']        =  TblDoctorProviderModel::where('doctor_id',$doctor->doctor_id)->Provider()->get();
 					}
 					
 				break;
 				case 'billing':
 					$result 	= TblCalModel::where('tbl_cal.archived',$archived)->Search($key)->paginate(10);
-					foreach ($result as $key => $cal_open)
+					foreach ($result as $key => $cal)
 					{
-					$result[$key]['new_member']= TblNewMemberModel::where('cal_id',$cal_open->cal_id)->count();
-					$result[$key]['members']   =  TblCalMemberModel::where('cal_id',$cal_open->cal_id)->count();
+					$result[$key]['new_member']= TblNewMemberModel::where('cal_id',$cal->cal_id)->count();
+					$result[$key]['members']   =  TblCalMemberModel::where('cal_id',$cal->cal_id)->count();
 					}
 					
 				break;
@@ -426,103 +426,44 @@ class SearchController extends ActiveAuthController
 		switch ($reference)
 		{
 			case 'company':
-				if($archived==0)
-				{
-					$data['_company_active'] = $returnData;
-					$output = view('carewell.filtering.company_filtering_active',$data);
-				}
-				else
-				{
-					$data['_company_inactive'] = $returnData;
-					$output = view('carewell.filtering.company_filtering_inactive',$data);
-				}
+				$data['archived']  		= $archived;
+				$data['_return_data'] 	= $returnData;
+				$output = view('carewell.filtering.company_filtering_searching',$data);
 			break;
 			case 'member':
-				if($archived==0)
-				{
-					$data['_member_active'] = $returnData                                                                      ;
-					$output = view('carewell.filtering.member_filtering_active',$data);
-				}
-				else
-				{
-					$data['_member_inactive'] = $returnData;
-					$output = view('carewell.filtering.member_filtering_inactive',$data);
-				}
+				$data['archived']  		= $archived;
+				$data['_return_data'] 	= $returnData;
+				$output = view('carewell.filtering.member_filtering_searching',$data);
+				
 			break;
 			case 'provider':
-				if($archived==0)
-				{
-					$data['_provider_active'] = $returnData;
-					$output = view('carewell.filtering.provider_filtering_active',$data);
-				}
-				else
-				{
-					$data['_provider_inactive'] = $returnData;
-					$output = view('carewell.filtering.provider_filtering_inactive',$data);
-				}
+				$data['archived']  		= $archived;
+				$data['_return_data'] 	= $returnData;
+				$output = view('carewell.filtering.provider_filtering_searching',$data);
 			break;
 			case 'doctor':
-				if($archived==0)
-				{
-					$data['_doctor_active'] = $returnData;
-					$output = view('carewell.filtering.doctor_filtering_active',$data);
-				}
-				else
-				{
-					$data['_doctor_inactive'] = $returnData;
-					$output = view('carewell.filtering.doctor_filtering_inactive',$data);
-				}
+				$data['archived']  		= $archived;
+				$data['_return_data'] 	= $returnData;
+				$output = view('carewell.filtering.doctor_filtering_searching',$data);	
 			break;
 			case 'billing':
-				if($archived==0)
-				{
-					$data['_cal_open'] = $returnData;
-					$output = view('carewell.filtering.billing_filtering_active',$data);
-				}
-				else if($archived==2)
-				{
-					$data['_cal_pending'] = $returnData;
-					$output = view('carewell.filtering.billing_filtering_pending',$data);
-				}
-				else
-				{
-					$data['_cal_close'] = $returnData;
-					$output = view('carewell.filtering.billing_filtering_inactive',$data);
-				}
+				$data['archived']  		= $archived;
+				$data['_return_data'] 	= $returnData;
+				$output = view('carewell.filtering.billing_filtering_searching',$data);
 			break;
 			case 'availment':
-				
-				if($archived==0)
-				{
-					$data['_approval_active'] = $returnData;
-					$output = view('carewell.filtering.availment_filtering_active',$data);
-				}
-				else if($archived==2)
-				{
-					$data['_approval_pending'] = $returnData;
-					$output = view('carewell.filtering.availment_filtering_pending',$data);
-				}
-				else
-				{
-					$data['_approval_inactive'] = $returnData;
-					$output = view('carewell.filtering.availment_filtering_inactive',$data);
-				}
+				$data['archived']  	= $archived;
+				$data['_return_data'] = $returnData;
+				$output = view('carewell.filtering.availment_filtering_searching',$data);
 			break;
 			case 'payable':
 				$data['_payable_open'] = $returnData;
 				$output = view('carewell.filtering.payable_filtering_active',$data);
 			break;
 			case 'coverage_plan':
-				if($archived==0)
-				{
-					$data['_active_coverage_plan'] = $returnData;
-					$output = view('carewell.filtering.coverage_filtering_active',$data);
-				}
-				else
-				{
-					$data['_inactive_coverage_plan'] = $returnData;
-					$output = view('carewell.filtering.coverage_filtering_inactive',$data);
-				}
+				$data['archived']  	= $archived;
+				$data['_return_data'] = $returnData;
+				$output = view('carewell.filtering.coverage_filtering_searching',$data);
 			break;
 			case 'payment-member-report':
 				$data['_member'] = $returnData;
