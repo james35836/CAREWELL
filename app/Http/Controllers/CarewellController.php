@@ -2644,11 +2644,13 @@ class CarewellController extends ActiveAuthController
 			$param_name_key = array_combine($_param_key, $_param_name);
 			$param_val_key = array_combine($_param_key, $_param_val);
 
+			//total availment
 			$data['total_count'] = TblMemberCompanyModel::where('tbl_member_company.archived',0)
 				                                        ->join('tbl_approval','tbl_approval.member_id','=','tbl_member_company.member_id')
 				                                        ->where('tbl_approval.approval_created','LIKE','%'.$date.'%')
-				                                        ->count();     
+				                                        ->count();  
 
+			//total availment per month	                                        
 			foreach ($param_name_key as $key => $_param_key) 
 			{
 				$data['total'][$key] = TblMemberCompanyModel::where('tbl_member_company.archived',0)
@@ -2669,10 +2671,11 @@ class CarewellController extends ActiveAuthController
 
 				$data['_company'][$key]['count'] 			= TblMemberCompanyModel::CountAvailment($parameter,$date)->count();
 
+				//jan, feb , mar, apr, may, jun, jul, aug, sep, oct, nov ,dec	per company
 				foreach($_param_name as $param=>$param_name)
 	            {
 	            	$data['_company'][$key][''.$_param_name[$param].''] 	= TblMemberCompanyModel::CountAvailment($parameter,$date.'-'.$_param_val[$param].'%')->count(); 
-	            }	
+				}	
 			}
 
 			return view('carewell.pages.reports_availment_per_month',$data);
