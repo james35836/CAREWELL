@@ -1,12 +1,4 @@
-<script>
-	$(function ()
-	{
-		$('.select2').select2()
-		$('.datepicker').datepicker({
-		autoclose: true
-		})
-	})
-</script>
+@include('carewell.additional_pages.script_function')
 <div class="row box-globals">
 	<div class="col-md-8 pull-left top-label" style="">
 		<p>PV #  : {{$payable_details->payable_number}}</p>
@@ -108,16 +100,22 @@
 							<span class="label label-default">{{$availed->procedure_name }}</span>
 							@endforeach
 						</td>
-						<td>{{$payable_approval->member_carewell_id}}</td>
+						<td>{{$payable_approval->procedure_amount}}</td>
 						<td>
 							@foreach($payable_approval->doctor as $doctor)
 							<span class="label label-default">{{$doctor->doctor_full_name}}</span>
 							@endforeach
 						</td>
-						<td>{{$payable_approval->doctor_fee}}</td>
-						<td>{{$payable_approval->provider_name}}</td>
-						<td>{{$payable_approval->charge_carewell}}</td>
-						<td>{{$payable_approval->charge_carewell}}</td>
+
+
+						<td>{{$payable_approval->doctor_amount}}</td>
+						<td>{{$payable_approval->disapproved}}</td>
+						<td>{{$payable_approval->grand_total}}</td>
+						<td>
+							@foreach($payable_approval->availed as $availed)
+							<span class="label label-default">{{$availed->procedure_remarks }}</span>
+							@endforeach
+						</td>
 					</tr>
 					@endforeach
 					

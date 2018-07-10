@@ -40,12 +40,9 @@ Route::any('/get/company_info', 							'StaticFunctionController@getCompanyInfo'
 Route::any('/get/provider_info', 							'StaticFunctionController@getProviderInfo');
 Route::any('/get/availment_info', 							'StaticFunctionController@getAvailmentInfo');
 Route::any('/get/check_procedure_amount', 					'StaticFunctionController@getCheckProcedureAmount');
-
 Route::any('/get_all_procedures',                           'StaticFunctionController@get_all_procedures');
 Route::any('/get/export/warning/{ref}',                   	'StaticFunctionController@getExportWarning');
-
-
-Route::post('/availment/get_member_info',					'StaticFunctionController@getMemberInfo');
+Route::post('/get_member_info',								'StaticFunctionController@getMemberInfo');
 /*FILETERING*/
 Route::post('/page/filtering', 								'SearchController@pageFiltering');
 Route::post('/page/searching', 								'SearchController@pageSearching');
@@ -53,13 +50,9 @@ Route::post('/page/searching', 								'SearchController@pageSearching');
 
 /*USER*/
 Route::get('/user/view_profile', 							'UserController@user_view_profile');
-
 Route::POST('/user/save_profile', 							'UserController@user_save_profile');
-
 Route::get('/user/change_password', 						'UserController@user_change_password');
 Route::POST('/user/change_password/submit', 				'UserController@user_change_password_submit');
-
-
 /*ADMIN*/
 Route::get('/settings/admin', 								'AdminController@admin_center');
 Route::get('/admin/create_user', 							'AdminController@admin_create_user');

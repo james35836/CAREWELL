@@ -3,7 +3,7 @@
 namespace App\Http\Model;
 
 use Illuminate\Database\Eloquent\Model;
-
+use DB;
 class TblApprovalPayeeModel extends Model
 {
     protected $table = 'tbl_approval_payee';
@@ -19,6 +19,14 @@ class TblApprovalPayeeModel extends Model
     {
     		$query  ->join('tbl_provider','tbl_provider.provider_id','=','tbl_approval_payee.provider_id');
     		return $query;
+    }
+    public function scopeDistinctProvider($query)
+    {
+
+    }
+    public function scopeDistinctDoctor($query)
+    {
+        
     }
     
 }

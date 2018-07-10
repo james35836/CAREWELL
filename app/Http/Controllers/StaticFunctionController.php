@@ -104,7 +104,7 @@ class StaticFunctionController extends Controller
     {
         if($input=="on")
         {
-            $val = $input;
+            $val = "on";
         }
         else
         {

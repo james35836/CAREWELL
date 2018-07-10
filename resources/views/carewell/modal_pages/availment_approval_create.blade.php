@@ -73,9 +73,15 @@ $(document).ready(function()
 		var text  = $(this).find(":selected").text();
 		$('select.charge_diagnosis').append('<option value="'+value+'" selected="selected">'+text+'</option>');
 	});
-	$('body').on('click','.procedure_disapproved',function()
+	$('body').on('click','.disapproved_checkbox',function()
 	{
-					var $this 			= $(this).closest('div.box-globals');
+		var $this 			= $(this).closest('div.box-globals');
+		var value           = "off";		
+		if($(this).is(':checked'))
+		{
+			value = "on";
+		}
+		$(this).closest('tr').find('.procedure_disapproved').val(value);
 		availment_center.get_total($this);
 	});
 	
@@ -285,7 +291,7 @@ $(document).ready(function()
 						<td><input type="number" value="0" name="procedure_charge_patient[]" id="" class="charge-patient form-control required"/></td>
 						<td><input type="number" value="0" name="procedure_charge_carewell[]" id="" class="charge-carewell form-control required"/></td>
 						<td><textarea name="procedure_remarks[]"  cols="2" rows="1"  id="procedure_remarks[]" class="form-control required" placeholder="REMARKS"></textarea></td>
-						<td><input type="checkbox" value="disapproved" name="procedure_disapproved[]" id="" class="procedure_disapproved"/></td>
+						<td><input type="checkbox" class="disapproved_checkbox"/><input type="hidden" value="off" class="procedure_disapproved" name="procedure_disapproved[]"/></td>
 						<td>
 							<div class="btn-group" role="group" aria-label="Basic example">
 								<button type="button" data-number="2" class="btn btn-danger btn-sm remove-row"><i class="fa fa-minus-circle"></i></button>

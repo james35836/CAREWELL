@@ -74,20 +74,24 @@
 					<td>{{date("F j, Y",strtotime($payable_approval->approval_created))}}</td>
 					<td>{{$payable_approval->diagnosis_name}}</td>
 					<td>
-						@foreach($payable_approval->_availed as $availed)
+						@foreach($payable_approval->availed as $availed)
 						{{$availed->procedure_name}},
 						@endforeach
 					</td>
-					<td>{{$payable_approval->procedure_charge_carewell}}</td>
+					<td>{{$payable_approval->procedure_amount}}</td>
 					<td>
-						@foreach($payable_approval->_doctor_assigned as $doctor_assigned)
-						{{$doctor_assigned->doctor_full_name}},
+						@foreach($payable_approval->doctor as $doctor)
+						{{$doctor->doctor_full_name}},
 						@endforeach
 					</td>
-					<td>{{$payable_approval->approval_doctor_charge_carewell}}</td>
+					<td>{{$payable_approval->doctor_amount}}</td>
 					<td>{{$payable_approval->disapproved}}</td>
 					<td>{{$payable_approval->grand_total}}</td>
-					<td>{{$payable_approval->procedure_remarks}}</td>
+					<td>
+						@foreach($payable_approval->availed as $availed)
+						{{$availed->procedure_remarks}},
+						@endforeach
+					</td>
 					
 				</tr>
 				@endforeach

@@ -1694,60 +1694,7 @@ class CarewellController extends ActiveAuthController
 		$data['_specialization']  = TblSpecializationModel::get();
 		return view('carewell.modal_pages.availment_approval_create',$data);
 	}
-	public function  availment_get_member_info(Request $request)
-	{
-		if($request->ajax())
-		{
-			$today      			= date('Y-m-d');
-			$mem_cal    			= TblCalPaymentModel::where('member_id',$request->member_id)->CalStatus()->orderBy('cal_payment_end','DESC')->first();
-			$data['member_info']  	= TblMemberModel::where('tbl_member.member_id',$request->member_id)->where('tbl_member_company.archived',0)->Member()->first();
-			$data['_member']     	= TblMemberModel::where('tbl_member.archived',0)->where('tbl_member_company.archived',0)->Member()->get();
-			$data['_availment']   	= TblCoveragePlanProcedureModel::where('coverage_plan_id',$data['member_info']->coverage_plan_id)->MemberInfo()->get();
-			$data['_availment_list']  = '<option value="0">-SELECT AVAILMENT-';
-			foreach($data['_availment'] as $availment)
-			{
-				$data['_availment_list'].= '<option value='.$availment->availment_id.'>'.$availment->availment_name;
-			}
-
-			$data['_member_list']     = '<option value="0">-SELECT AVAILMENT-';
-			foreach($data['_member'] as $member)
-			{
-				$data['_member_list']    .= "<option value=".$member->member_id.">".$member->member_carewell_id."-".$member->member_first_name." ".$member->member_last_name;
-			}
-			if($mem_cal==null)
-			{
-				return  response()->json(array('ref' => 'not_yet_paid','member_list' => $data['_member_list']));
-			}
-			else
-			{
-				$checkPayment = StaticFunctionController::checkIfMemberCanAvailed($data['member_info']->member_payment_mode,$mem_cal->cal_payment_end);
-				if($checkPayment=="not_updated")
-				{
-					return  response()->json(array('ref' => 'not_updated','member_list' => $data['_member_list']));
-				}
-				else if(strtotime($checkPayment)  < strtotime($today))
-				{
-					return  response()->json(array('ref' => 'not_yet_paid','member_list' => $data['_member_list']));
-				}
-				else 
-				{
-					return  response()->json(array(
-						'member_name'         => $data['member_info']->member_first_name." ".$data['member_info']->member_middle_name." ".$data['member_info']->member_last_name,
-						'company_name'        => $data['member_info']->company_name,
-						'member_universal_id' => $data['member_info']->member_universal_id,
-						'member_carewell_id'  => $data['member_info']->member_carewell_id,
-						'member_employee_number'  => $data['member_info']->member_employee_number,
-						'member_birthdate'    => $data['member_info']->member_birthdate,
-						'member_age'          => date_create($data['member_info']->member_birthdate)->diff(date_create('today'))->y,
-						'member_id'           => $data['member_info']->member_id,
-						'availment_list'      => $data['_availment_list'],
-						'member_list'         => $data['_member_list'],
-						'ref'                 => 'already_paid',
-					));
-				}
-			}
-		}
-	}
+	
 
 	public function availment_create_approval_submit(Request $request)
 	{
@@ -1771,28 +1718,28 @@ class CarewellController extends ActiveAuthController
 		
 		foreach($request->final_diagnosis_id as $final_diagnosis_id)
 		{
-			$diagnosisData = new TblApprovalDiagnosisModel;
+			$diagnosisData 					= new TblApprovalDiagnosisModel;
 			$diagnosisData->approval_diagnosis_type = '0';
-			$diagnosisData->diagnosis_id = $final_diagnosis_id;
-			$diagnosisData->approval_id = $approvalData->approval_id;
+			$diagnosisData->diagnosis_id 	= $final_diagnosis_id;
+			$diagnosisData->approval_id 	= $approvalData->approval_id;
 			$diagnosisData->save();
 		}
-		if($request->procedure_id!=null)
+		
+		foreach($request->procedure_id as $procedure_key=>$procedure)
 		{
-			foreach($request->procedure_id as $key=>$datas)
-			{
-				$procedureData = new TblApprovalProcedureModel;
-				$procedureData->procedure_id              = $request->procedure_id[$key];
-				$procedureData->procedure_gross_amount    = $request->procedure_gross_amount[$key];
-				$procedureData->procedure_philhealth      = $request->procedure_philhealth[$key];
-				$procedureData->procedure_charge_patient  = $request->procedure_charge_patient[$key];
-				$procedureData->procedure_charge_carewell = $request->procedure_charge_carewell[$key];
-				$procedureData->procedure_remarks         = StaticFunctionController::nullableToString($request->procedure_remarks[$key],'string');
-				$procedureData->procedure_disapproved     = StaticFunctionController::checkboxValue($request->procedure_disapproved[$key]);
-				$procedureData->approval_id               = $approvalData->approval_id;
-				$procedureData->save();
-			}
+
+			$procedureData = new TblApprovalProcedureModel;
+			$procedureData->procedure_id              = $request->procedure_id[$procedure_key];
+			$procedureData->procedure_gross_amount    = $request->procedure_gross_amount[$procedure_key];
+			$procedureData->procedure_philhealth      = $request->procedure_philhealth[$procedure_key];
+			$procedureData->procedure_charge_patient  = $request->procedure_charge_patient[$procedure_key];
+			$procedureData->procedure_charge_carewell = $request->procedure_charge_carewell[$procedure_key];
+			$procedureData->procedure_remarks         = StaticFunctionController::nullableToString($request->procedure_remarks[$procedure_key],'string');
+			$procedureData->procedure_disapproved     = StaticFunctionController::checkboxValue($request->procedure_disapproved[$procedure_key]);
+			$procedureData->approval_id               = $approvalData->approval_id;
+			$procedureData->save();
 		}
+		
 		foreach($request->doctor_id as $key=>$data)
 		{
 			$doctorData = new TblApprovalDoctorModel;
@@ -2351,13 +2298,15 @@ class CarewellController extends ActiveAuthController
 		$data['payable_details']    = TblPayableModel::where('tbl_payable.payable_id',$payable_id)->PayableInfo()->first();
 		$data['_payable_approval']  = TblPayableApprovalModel::where('payable_id',$payable_id)->where('tbl_member_company.archived',0)->PayableApproval()->get();
 	    $data['link']               = "payable/payable_details/export_excel/".$payable_id;
+		$doctor_sum                 = 0;
 		foreach ($data['_payable_approval'] as $key => $payable_approval) 
 		{
-			$TblApprovalDoctorModel                             = TblApprovalDoctorModel::where('tbl_approval_doctor.approval_id',$payable_approval->approval_id);
+			$data['_payable_approval'][$key]['doctor']          = TblApprovalDoctorModel::where('tbl_approval_doctor.approval_id',$payable_approval->approval_id)->join('tbl_doctor','tbl_doctor.doctor_id','=','tbl_approval_doctor.doctor_id')->get();
+			$data['_payable_approval'][$key]['doctor_amount']   = TblApprovalDoctorModel::where('tbl_approval_doctor.approval_id',$payable_approval->approval_id)->sum('approval_doctor_charge_carewell');
 			$data['_payable_approval'][$key]['availed']         = TblApprovalProcedureModel::where('tbl_approval_procedure.approval_id',$payable_approval->approval_id)->Procedure()->get();
-			$data['_payable_approval'][$key]['doctor']          = $TblApprovalDoctorModel->join('tbl_doctor','tbl_doctor.doctor_id','=','tbl_approval_doctor.doctor_id')->get();
-			$data['_payable_approval'][$key]['doctor_fee']      = $TblApprovalDoctorModel->sum('approval_doctor_charge_carewell');
-			$data['_payable_approval'][$key]['charge_carewell'] = $TblApprovalDoctorModel->sum('approval_doctor_charge_carewell');                                          
+			$data['_payable_approval'][$key]['procedure_amount']= TblApprovalProcedureModel::where('tbl_approval_procedure.approval_id',$payable_approval->approval_id)->where('procedure_disapproved','off')->sum('procedure_charge_carewell');                                          
+			$data['_payable_approval'][$key]['disapproved']     = TblApprovalProcedureModel::where('tbl_approval_procedure.approval_id',$payable_approval->approval_id)->where('procedure_disapproved','on')->sum('procedure_charge_carewell');
+			$data['_payable_approval'][$key]['grand_total']  = $data['_payable_approval'][$key]['procedure_amount'] + $data['_payable_approval'][$key]['doctor_amount'];
 		}
 		return view('carewell.modal_pages.payable_details',$data);
 	}
@@ -2379,25 +2328,100 @@ class CarewellController extends ActiveAuthController
 	}
 	public function payable_mark_close($payable_id)
 	{
+		Session::forget('session_payee');
+		$arr                     = array();
+		Session::put('session_payee',$arr);
 		$approval_doctor_charge_carewell    = 0;
 		$procedure_charge_carewell  		= 0;
+		$data['payable_details']			= TblPayableModel::where('payable_id',$payable_id)->PayableInfo()->first();
 		$data['_payable_approval']   		= TblPayableApprovalModel::where('payable_id',$payable_id)->PayableStatus()->get();
         foreach($data['_payable_approval'] as $keys=> $approval)
         {
-        	$data['_availed']         = TblApprovalProcedureModel::where('tbl_approval_procedure.approval_id',$approval->approval_id)->ProcedureDiagnosis()->get();
-			$data['_payable_approval'][$keys]['doctor_assigned'] = $data['_doctor_assigned']= TblApprovalDoctorModel::where('tbl_approval_doctor.approval_id',$approval->approval_id)->ApprovalDoctor()->get();
-			
-			foreach($data['_availed'] as $key=>$availed)
-			{
-				$procedure_charge_carewell 	= $procedure_charge_carewell 	+ $availed->procedure_charge_carewell;
-			}
-			foreach($data['_doctor_assigned'] as $key=>$doctor_assigned)
-			{
-				$approval_doctor_charge_carewell 	= $approval_doctor_charge_carewell 	+ $doctor_assigned->approval_doctor_charge_carewell;
-			}
-			$data['_payable_approval'][$keys]['procedure_charge_carewell']  = $procedure_charge_carewell;
-	    }
-	    return view('carewell.modal_pages.payable_mark_close',$data);
+        	$payee = TblApprovalPayeeModel::where('approval_id',$approval->approval_id)->first();
+        	if($payee->doctor_id!=0)
+        	{
+        		$session['approval_payee_id'] 			= $payee->approval_payee_id;
+        		$session['hospital_payee_amount'] 		= TblApprovalProcedureModel::where('approval_id',$approval->approval_id)->where('procedure_disapproved','off')->sum('procedure_charge_carewell'); 
+        		$session['hospital_payee_name']			= TblDoctorModel::where('doctor_id',$payee->doctor_id)->value('doctor_full_name');
+        		$session['provider_id'] 				= $payee->provider_id;
+        		$session['doctor_id'] 					= $payee->doctor_id;
+        	}
+        	else
+        	{
+        		$session['approval_payee_id'] 			= $payee->approval_payee_id;
+        		$session['hospital_payee_amount'] 		= TblApprovalProcedureModel::where('approval_id',$approval->approval_id)->where('procedure_disapproved','off')->sum('procedure_charge_carewell'); 
+        		$session['hospital_payee_name']			= TblProviderModel::where('provider_id',$payee->provider_id)->value('provider_name');
+        		$session['provider_id'] 				= $payee->provider_id;
+        		$session['doctor_id'] 					= $payee->doctor_id;
+        	}
+        	if(count(Session::get('session_payee'))==0)
+        	{
+        		Session::put('session_payee',$session);
+        	}
+        	else
+        	{
+        		foreach(Session::get('session_payee') as $session_key=>$session_payee)
+	        	{
+	        		dd("jams");
+	        		if(isset($session_payee['approval_payee_id']))
+	        		{
+	        			dd("close");
+	        			if($session_payee['doctor_id']==$session['doctor_id']&&$session_payee['provider_id']==0)
+	        			{
+	        				$arr['approval_payee_id'] 			= $session['approval_payee_id'];
+			        		$arr['hospital_payee_amount'] 		= $session_payee['hospital_payee_amount'] + $session['hospital_payee_amount'];
+			        		$arr['hospital_payee_name']			= $session['hospital_payee_name'];
+			        		$arr['provider_id'] 				= $session['provider_id'];
+			        		$arr['doctor_id'] 					= $session['doctor_id'];
+	        				unset($session_payee[$session_key]);
+	        				Session::put('session_payee',$arr);
+
+	        			}
+	        			else if($session_payee['provider_id']==$session['provider_id']&&$session_payee['doctor_id']==0)
+	        			{
+	        				$arr['approval_payee_id'] 			= $session['approval_payee_id'];
+			        		$arr['hospital_payee_amount'] 		= $session_payee['hospital_payee_amount'] + $session['hospital_payee_amount'];
+			        		$arr['hospital_payee_name']			= $session['hospital_payee_name'];
+			        		$arr['provider_id'] 				= $session['provider_id'];
+			        		$arr['doctor_id'] 					= $session['doctor_id'];
+	        				unset($session_payee[$session_key]);
+	        				Session::put('session_payee',$arr);
+	        			}
+	        			else
+	        			{
+	        				Session::put('session_payee',$session);
+	        			}
+	        		}
+	        		else
+	        		{
+	        			dd("james");
+	        			Session::put('session_payee',$session);
+	        		}
+	        	}
+	        }
+
+
+      //   	$data['_payable_approval'][$keys]['hospital_payee']         = TblApprovalPayeeModel::where('approval_id',$approval->approval_id)->first();
+      //   	if($data['_payable_approval'][$keys]['hospital_payee']->doctor_id!=0)
+    		// {
+    		// 	$data['_payable_approval'][$keys]['hospital_payee']['hospital_payee_name']		= TblDoctorModel::where('doctor_id',$data['_payable_approval'][$keys]['hospital_payee']->doctor_id)->value('doctor_full_name');
+    		// 	$data['_payable_approval'][$keys]['hospital_payee']['hospital_payee_amount']  	= TblApprovalProcedureModel::where('approval_id',$approval->approval_id)->where('procedure_disapproved','off')->sum('procedure_charge_carewell'); 
+    		// }
+    		// else
+    		// {
+    		// 	$data['_payable_approval'][$keys]['hospital_payee']['hospital_payee_name']		= TblProviderModel::where('provider_id',$data['_payable_approval'][$keys]['hospital_payee']->provider_id)->value('provider_name');
+    		// 	$data['_payable_approval'][$keys]['hospital_payee']['hospital_payee_amount']  	= TblApprovalProcedureModel::where('approval_id',$approval->approval_id)->where('procedure_disapproved','off')->sum('procedure_charge_carewell'); 
+    		// }
+    		$data['_payable_approval'][$keys]['payee_list'] = TblApprovalDoctorModel::where('approval_id',$approval->approval_id)->DistinctDoctor()->get();
+        	foreach($data['_payable_approval'][$keys]['payee_list'] as $key=>$payee_list)
+        	{
+        		$data['_payable_approval'][$keys]['payee_list'][$key]['doctor_amount'] 		= TblApprovalDoctorModel::where('doctor_id',$payee_list->doctor_id)->sum('approval_doctor_charge_carewell');
+        		$data['_payable_approval'][$keys]['payee_list'][$key]['reference_number'] 	= TblApprovalDoctorModel::where('doctor_id',$payee_list->doctor_id)->get();
+        	}
+        	$data['_payable_approval'][$keys]['procedure_amount'] = TblApprovalProcedureModel::where('approval_id',$approval->approval_id)->where('procedure_disapproved','off')->sum('procedure_charge_carewell');
+		}
+		
+		return view('carewell.modal_pages.payable_mark_close',$data);
     }
     public function payable_mark_close_submit(Request $request)
     {
@@ -2429,58 +2453,27 @@ class CarewellController extends ActiveAuthController
 	}
 	public function payable_details_export_excel($payable_id)
 	{
-		$approval_doctor_actual_pf 			= 0;
-		$approval_doctor_phil_charity    	= 0;
-		$approval_doctor_charge_patient 	= 0;
-		$approval_doctor_charge_carewell    = 0;
-
-		$procedure_gross_amount 	= 0;
-		$procedure_philhealth    	= 0;
-		$procedure_charge_patient 	= 0;
-		$procedure_charge_carewell  = 0;
-
-		$payable_total = 0;
-		$procedure_total = 0;
-		$doctor_total = 0;
-
-		$data['_provider']          = TblProviderModel::where('archived',0)->get();
 		$data['payable_details']    = TblPayableModel::where('tbl_payable.payable_id',$payable_id)->PayableInfo()->first();
-		$data['_payable_approval']  = TblPayableApprovalModel::where('payable_id',$payable_id)->where('tbl_member_company.archived',0)->ApprovalDetails()->get();
-	    foreach ($data['_payable_approval'] as $key => $payable_approval) 
+		$data['_payable_approval']  = TblPayableApprovalModel::where('payable_id',$payable_id)->where('tbl_member_company.archived',0)->PayableApproval()->get();
+	    $sum_doctor                 = 0;
+	    $sum_procedure              = 0;
+		foreach ($data['_payable_approval'] as $key => $payable_approval) 
 		{
-
-
-			$data['_payable_approval'][$key]['approval_details'] 	= TblApprovalModel::where('tbl_approval.approval_id',$payable_approval->approval_id)->ApprovalDetails()->first();
-			$data['_payable_approval'][$key]['charge_diagnosis'] 	= TblApprovalModel::where('tbl_approval.approval_id',$payable_approval->approval_id)->Diagnosis()->first();
-			$data['_payable_approval'][$key]['_final_diagnosis'] 	= TblApprovalDiagnosisModel::where('approval_id',$payable_approval->approval_id)->Diagnosis()->get();
-			$data['_payable_approval'][$key]['_availed']         	= TblApprovalProcedureModel::where('tbl_approval_procedure.approval_id',$payable_approval->approval_id)->Procedure()->get();
-			$data['_payable_approval'][$key]['_doctor_assigned'] 	= TblApprovalDoctorModel::where('tbl_approval_doctor.approval_id',$payable_approval->approval_id)->ApprovalDoctor()->get();
-			$data['_payable_approval'][$key]['charge_carewell'] 	= TblApprovalDoctorModel::where('tbl_approval_doctor.approval_id',$payable_approval->approval_id)->sum('approval_doctor_charge_carewell');    
-
-
-			$data['_payable_approval'][$key]['approval_doctor_actual_pf'] 		= TblApprovalDoctorModel::where('tbl_approval_doctor.approval_id',$payable_approval->approval_id)->sum('approval_doctor_actual_pf');                                                                                
-			$data['_payable_approval'][$key]['approval_doctor_phil_charity'] 	= TblApprovalDoctorModel::where('tbl_approval_doctor.approval_id',$payable_approval->approval_id)->sum('approval_doctor_phil_charity');                                          
-			$data['_payable_approval'][$key]['approval_doctor_charge_patient'] 	= TblApprovalDoctorModel::where('tbl_approval_doctor.approval_id',$payable_approval->approval_id)->sum('approval_doctor_charge_patient');                                          
-			$data['_payable_approval'][$key]['approval_doctor_charge_carewell'] = $approval_doctor_charge_carewell = TblApprovalDoctorModel::where('tbl_approval_doctor.approval_id',$payable_approval->approval_id)->sum('approval_doctor_charge_carewell');                                          
-
-
-			$data['_payable_approval'][$key]['procedure_gross_amount']      = TblApprovalProcedureModel::where('tbl_approval_procedure.approval_id',$payable_approval->approval_id)->sum('procedure_gross_amount');
-			$data['_payable_approval'][$key]['procedure_philhealth']        = TblApprovalProcedureModel::where('tbl_approval_procedure.approval_id',$payable_approval->approval_id)->sum('procedure_philhealth');
-			$data['_payable_approval'][$key]['procedure_charge_patient']    = TblApprovalProcedureModel::where('tbl_approval_procedure.approval_id',$payable_approval->approval_id)->sum('procedure_charge_patient');
-			$data['_payable_approval'][$key]['procedure_charge_carewell'] 	= $procedure_charge_carewell         = TblApprovalProcedureModel::where('tbl_approval_procedure.approval_id',$payable_approval->approval_id)->sum('procedure_charge_carewell');
-
-			$data['_payable_approval'][$key]['grand_total']     = $data['_payable_approval'][$key]['approval_doctor_charge_carewell'] + $data['_payable_approval'][$key]['procedure_charge_carewell'];
-	        $data['_payable_approval'][$key]['payee_company']   = $procedure_charge_carewell;
-
-	        $procedure_total 	= $procedure_total + $procedure_charge_carewell;
-	        $doctor_total 		= $doctor_total + $approval_doctor_charge_carewell;
-
-	        $payable_total  	= $payable_total + $data['_payable_approval'][$key]['grand_total'];
-
+			$TblApprovalDoctorModel                             = TblApprovalDoctorModel::where('tbl_approval_doctor.approval_id',$payable_approval->approval_id);
+			$TblApprovalProcedureModel                          = TblApprovalProcedureModel::where('tbl_approval_procedure.approval_id',$payable_approval->approval_id);
+			$data['_payable_approval'][$key]['availed']         = $TblApprovalProcedureModel->Procedure()->get();
+			$data['_payable_approval'][$key]['doctor']          = $TblApprovalDoctorModel->join('tbl_doctor','tbl_doctor.doctor_id','=','tbl_approval_doctor.doctor_id')->get();
+			$data['_payable_approval'][$key]['doctor_amount']   = $sum_doctors    =  $TblApprovalDoctorModel->sum('approval_doctor_charge_carewell');
+			$data['_payable_approval'][$key]['procedure_amount']= $sum_procedures =  $TblApprovalProcedureModel->where('procedure_disapproved','off')->sum('procedure_charge_carewell');             
+			$data['_payable_approval'][$key]['diagnosis_name']  = TblDiagnosisModel::where('diagnosis_id',$payable_approval->charge_diagnosis_id)->value('diagnosis_name');                                                                       
+			$data['_payable_approval'][$key]['disapproved']     = $TblApprovalProcedureModel->where('procedure_disapproved','on')->sum('procedure_charge_carewell');
+			$data['_payable_approval'][$key]['grand_total']  	= $data['_payable_approval'][$key]['procedure_amount'] + $data['_payable_approval'][$key]['doctor_amount'];
+			$sum_doctor                 = $sum_doctor 		+ $sum_doctors;
+	    	$sum_procedure              = $sum_procedure 	+ $sum_procedures;
 		}
-		$data['procedure_total'] = $procedure_total;
-		$data['doctor_total']    = $doctor_total;
-		$data['payable_total']   = $payable_total;
+		$data['procedure_total'] 		= $sum_doctor;
+		$data['doctor_total'] 			= $sum_procedure;
+		$data['payable_total']          = $sum_doctor + $sum_procedure;
 		$data['title']           = "PAYABLE - ".$data['payable_details']->provider_name;
 		Excel::create("PAYABLE - ".$data['payable_details']->provider_name,function($excel) use ($data)
 		{
