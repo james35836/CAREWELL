@@ -2357,7 +2357,10 @@ class CarewellController extends ActiveAuthController
 			$data['_payable_approval'][$key]['availed']         = TblApprovalProcedureModel::where('tbl_approval_procedure.approval_id',$payable_approval->approval_id)->Procedure()->get();
 			$data['_payable_approval'][$key]['doctor']          = $TblApprovalDoctorModel->join('tbl_doctor','tbl_doctor.doctor_id','=','tbl_approval_doctor.doctor_id')->get();
 			$data['_payable_approval'][$key]['doctor_fee']      = $TblApprovalDoctorModel->sum('approval_doctor_charge_carewell');
-			$data['_payable_approval'][$key]['charge_carewell'] = $TblApprovalDoctorModel->sum('approval_doctor_charge_carewell');                                          
+			$data['_payable_approval'][$key]['charge_carewell'] = $TblApprovalDoctorModel->sum('approval_doctor_charge_carewell');
+			
+			$data['_payable_approval'][$key]['total_charge_carewell'] =  $TblApprovalDoctorModel->join('tbl_approval_procedure','tbl_approval_procedure.approval_id','=','tbl_approval_doctor.approval_id')->sum('procedure_charge_carewell');
+			$data['_payable_approval'][$key]['remarks'] =  TblApprovalProcedureModel::where('approval_id',$payable_approval->approval_id)->value('procedure_remarks');                                         
 		}
 		return view('carewell.modal_pages.payable_details',$data);
 	}
@@ -3717,6 +3720,8 @@ class CarewellController extends ActiveAuthController
 	{
 		$data['coverage_plan_details']  = TblCoveragePlanModel::where('coverage_plan_id',$coverage_plan_id)->first();     
 		$data['_coverage_plan_covered'] = TblCoveragePlanProcedureModel::where('coverage_plan_id',$coverage_plan_id)->CoveragePlan()->get();
+		$data['_coverage_plan_company'] = TblCompanyCoveragePlanModel::where('coverage_plan_id',$coverage_plan_id )
+		                                 ->join('tbl_company','tbl_company_coverage_plan.company_id','=','tbl_company.company_id')->get();
 		foreach($data['_coverage_plan_covered'] as $key=>$availment)
 		{
 			$data['_coverage_plan_covered'][$key]['procedure']   = TblCoveragePlanProcedureModel::where('availment_id',$availment->availment_id)->where('coverage_plan_id',$coverage_plan_id)->Procedure()->get();

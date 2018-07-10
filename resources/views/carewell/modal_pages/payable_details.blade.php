@@ -108,7 +108,8 @@
 							<span class="label label-default">{{$availed->procedure_name }}</span>
 							@endforeach
 						</td>
-						<td>{{$payable_approval->member_carewell_id}}</td>
+						<!-- <td>{{$payable_approval->member_carewell_id}}</td> -->
+						<td>{{$payable_approval->total_charge_carewell}}</td>
 						<td>
 							@foreach($payable_approval->doctor as $doctor)
 							<span class="label label-default">{{$doctor->doctor_full_name}}</span>
@@ -117,7 +118,7 @@
 						<td>{{$payable_approval->doctor_fee}}</td>
 						<td>{{$payable_approval->provider_name}}</td>
 						<td>{{$payable_approval->charge_carewell}}</td>
-						<td>{{$payable_approval->charge_carewell}}</td>
+						<td>{{$payable_approval->remarks}}</td>
 					</tr>
 					@endforeach
 					

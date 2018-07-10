@@ -107,7 +107,15 @@
 			</div>
 			@endforeach
 		</div>
-		<br>
+		<br><br>
+		<div>
+			<div class="list-info">Company/companies under this coverage plan:</div>
+			<ul class="list-info">
+				@foreach($_coverage_plan_company as $coverage_plan_company)
+				<li class="list-info">{{$coverage_plan_company->company_name}}</li>
+				@endforeach
+			</ul>
+		</div>
 		
 		<br><br><br><br><br><br>
 		<div class="pdf-footer">PDF GENERATED : {{date("F j, Y",strtotime(date('Y-m-d')))}}</div>

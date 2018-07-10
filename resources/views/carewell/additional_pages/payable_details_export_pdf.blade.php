@@ -55,9 +55,9 @@
 			
 		</div>
 		<br>
-		<div class="header-container">
+		<span class="header-container">
 			<div class="header-text">APPROVAL LIST</div>
-		</div>
+		</span>
 		<br>
 		<div>
 			@foreach($_payable_approval as $payable_approval)
