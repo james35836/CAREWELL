@@ -413,6 +413,14 @@ class SearchController extends ActiveAuthController
 				case 'coverage_plan':
 					$result    = TblCoveragePlanModel::where('archived',$archived)->where('coverage_plan_name','like','%'.$key.'%')->paginate(10);
 				break;
+				case 'payable':
+					$result    = TblPayableModel::where('archived',$archived)->where('payable_number','like','%'.$key.'%')->PayableInfo()->paginate(10);
+					foreach ($result as $key => $payable) 
+					{
+						$result[$key]['payable_age']   		= date_create($payable->payable_due)->diff(date_create('today'))->m.' Months and '.date_create($payable->payable_due)->diff(date_create('today'))->d.' Days';
+						$result[$key]['approval_number']    	=  TblPayableApprovalModel::where('payable_id',$payable->payable_id)->PayableStatus()->get();
+					}
+				break;
 				case 'payment-member-report':
 					$result    = TblMemberModel::where('tbl_member.archived',$archived)->Search($key)->Member()->paginate(10);
 				break;
@@ -457,8 +465,9 @@ class SearchController extends ActiveAuthController
 				$output = view('carewell.filtering.availment_filtering_searching',$data);
 			break;
 			case 'payable':
-				$data['_payable_open'] = $returnData;
-				$output = view('carewell.filtering.payable_filtering_active',$data);
+				$data['archived']  	= $archived;
+				$data['_return_data'] = $returnData;
+				$output = view('carewell.filtering.payable_filtering_searching',$data);
 			break;
 			case 'coverage_plan':
 				$data['archived']  	= $archived;

@@ -305,7 +305,7 @@ function availment_center()
 		{
 			var ajaxCallData = new FormData();
         	ajaxCallData.append('member_id',		$(this).val());
-			globals.global_ajax_call_submit('/availment/get_member_info',ajaxCallData,availment_center,'member');
+			globals.global_ajax_call_submit('/get_member_info',ajaxCallData,availment_center,'member');
 			
 		});
 		$('body').on('change','select.getProviderInfo',function() 
