@@ -2360,7 +2360,8 @@ class CarewellController extends ActiveAuthController
 			$data['_payable_approval'][$key]['charge_carewell'] = $TblApprovalDoctorModel->sum('approval_doctor_charge_carewell');
 			
 			$data['_payable_approval'][$key]['total_charge_carewell'] =  $TblApprovalDoctorModel->join('tbl_approval_procedure','tbl_approval_procedure.approval_id','=','tbl_approval_doctor.approval_id')->sum('procedure_charge_carewell');
-			$data['_payable_approval'][$key]['remarks'] =  TblApprovalProcedureModel::where('approval_id',$payable_approval->approval_id)->value('procedure_remarks');                                         
+			$data['_payable_approval'][$key]['remarks'] =  TblApprovalProcedureModel::where('approval_id',$payable_approval->approval_id)->get();                                         
+
 		}
 		return view('carewell.modal_pages.payable_details',$data);
 	}

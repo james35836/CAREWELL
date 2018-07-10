@@ -118,7 +118,11 @@
 						<td>{{$payable_approval->doctor_fee}}</td>
 						<td>{{$payable_approval->provider_name}}</td>
 						<td>{{$payable_approval->charge_carewell}}</td>
-						<td>{{$payable_approval->remarks}}</td>
+						<td>
+							@foreach($payable_approval->remarks as $remarks)
+							<span class="label label-default">{{$remarks->procedure_remarks}}</span>
+							@endforeach
+						</td>
 					</tr>
 					@endforeach
 					
