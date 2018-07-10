@@ -1,11 +1,11 @@
 <form class="payable-payee-submit">
+	<input type="hidden" value="{{$payable_details->payable_id}}" class="form-control"/>
 	<div class="row box-globals">
 		<div class="col-md-8 pull-left top-label" style="">
 			<p>PV #  : {{$payable_details->payable_number}}</p>
 		</div>
 	</div>
 	<div class="row box-globals">
-		<input type="hidden" value="{{$payable_details->payable_id}}" class="form-control" id="payable_id"/>
 		<div class="form-holder">
 			<div class="col-md-2 form-content">
 				<label>PROVIDER</label>
@@ -52,24 +52,166 @@
 	<div class="row box-globals">
 		<div class="form-holder">
 			<center>
-			<p style="font-size:20px;">PAYEE LIST</p>
+			<p style="font-size:20px;">HOSPITAL FEE</p>
 			</center>
 		</div>
 	</div>
-	@foreach($_payable_approval as $payable_approval)
+	
 	<div class="row box-globals">
-		<input type="hidden" name="payable_id"  value="{{$payable_approval->payable_id}}"/>
-		<input type="hidden" name="approval_id" value="{{$payable_approval->approval_id}}"/>
 		<div class="payee-container">
-			@foreach($payable_approval->payee_list as $payee_list)
-			<input type="hidden" name="doctor_approval_id[]" value="{{$payee_list->approval_doctor_id}}"/>
-			<input type="hidden" name="provider_id[]" value="0"/>
+			@foreach($_payable_hospital_provider as $key=>$payable_hospital_provider)
+			<input type="hidden" name="reference_id[]" 			readonly class="form-control" value="{{$payable_hospital_provider->reference_id}}"/>
+			<input type="hidden" name="doctor_id[]" 			readonly class="form-control" value="0"/>
+			<input type="hidden" name="provider_id[]" 			readonly class="form-control" value="{{$payable_hospital_provider->provider_id}}"/>
+			<input type="hidden" name="payable_payee_type[]" 	readonly class="form-control" value="PROVIDER_PAYEE"/>
+			@if($key!=0)
+			<div class="devider col-md-12" style="border: 1px solid #afaaaa;"></div>
+			@endif
+			<div class="form-holder col-md-12">
+				<div class="form-content col-md-2">
+					<label>PAYEE(P)</label>
+				</div>
+				<div class="form-content col-md-4">
+					<input type="text" name="reference_payee[]" readonly class="form-control required" value="{{$payable_hospital_provider->hospital_payee_name}}"/>
+				</div>
+				<div class="form-content col-md-2">
+					<label>CHECK NUMBER</label>
+				</div>
+				<div class="form-content col-md-4">
+					<input type="text" name="payable_check_number[]" class="form-control required"/>
+				</div>
+			</div>
+			<div class="form-holder col-md-12">
+				<div class="form-content col-md-2">
+					<label>RELEASE DATE</label>
+				</div>
+				<div class="form-content col-md-4">
+					<input type="date" name="payable_release_date[]" class="form-control required" value="{{date('Y-m-d')}}"/>
+				</div>
+				<div class="form-content col-md-2">
+					<label>CHECK DATE</label>
+				</div>
+				<div class="form-content col-md-4">
+					<input type="date" name="payable_check_date[]" class="form-control required" value="{{date('Y-m-d')}}"/>
+				</div>
+			</div>
+			<div class="form-holder col-md-12">
+				<div class="form-content col-md-2">
+					<label>CV NUMBER</label>
+				</div>
+				<div class="form-content col-md-4">
+					<input type="text" name="payable_cv_number[]" class="form-control required"/>
+				</div>
+				<div class="form-content col-md-2">
+					<label>AMOUNT</label>
+				</div>
+				<div class="form-content col-md-4">
+					<input type="number" readonly name="payable_amount[]" class="form-control required" value="{{$payable_hospital_provider->hospital_payee_amount}}"/>
+				</div>
+			</div>
+			<div class="form-holder col-md-12">
+				<div class="form-content col-md-2">
+					<label>BANK NAME</label>
+				</div>
+				<div class="form-content col-md-4">
+					<input type="text" name="payable_bank_name[]" class="form-control required"/>
+				</div>
+				<div class="form-content col-md-2">
+					<label>REFERENCE NUMBER</label>
+				</div>
+				<div class="form-content col-md-4">
+					<input type="text" readonly name="payable_refrence_number[]" class="form-control required" value="{{$payable_hospital_provider->hospital_payee_approval_number}}"/>
+				</div>
+			</div>
+			@endforeach
+			@foreach($_payable_hospital_doctor as $key=>$payable_hospital_doctor)
+			<div class="devider col-md-12" style="border: 1px solid #afaaaa;"></div>
+			<input type="hidden" name="reference_id[]" 			readonly class="form-control" value="{{$payable_hospital_doctor->reference_id}}"/>
+			<input type="hidden" name="doctor_id[]" 			readonly class="form-control" value="{{$payable_hospital_doctor->doctor_id}}"/>
+			<input type="hidden" name="provider_id[]" 			readonly class="form-control" value="0"/>
+			<input type="hidden" name="payable_payee_type[]" 	readonly class="form-control" value="DOCTOR_PAYEE"/>
+			<div class="form-holder col-md-12">
+				<div class="form-content col-md-2">
+					<label>PAYEE(D)</label>
+				</div>
+				<div class="form-content col-md-4">
+					<input type="text" name="reference_payee[]" readonly class="form-control required" value="{{$payable_hospital_doctor->hospital_payee_name}}"/>
+				</div>
+				<div class="form-content col-md-2">
+					<label>CHECK NUMBER</label>
+				</div>
+				<div class="form-content col-md-4">
+					<input type="text" name="payable_check_number[]" class="form-control required"/>
+				</div>
+			</div>
+			<div class="form-holder col-md-12">
+				<div class="form-content col-md-2">
+					<label>RELEASE DATE</label>
+				</div>
+				<div class="form-content col-md-4">
+					<input type="date" name="payable_release_date[]" class="form-control required" value="{{date('Y-m-d')}}"/>
+				</div>
+				<div class="form-content col-md-2">
+					<label>CHECK DATE</label>
+				</div>
+				<div class="form-content col-md-4">
+					<input type="date" name="payable_check_date[]" class="form-control required" value="{{date('Y-m-d')}}"/>
+				</div>
+			</div>
+			<div class="form-holder col-md-12">
+				<div class="form-content col-md-2">
+					<label>CV NUMBER</label>
+				</div>
+				<div class="form-content col-md-4">
+					<input type="text" name="payable_cv_number[]" class="form-control required"/>
+				</div>
+				<div class="form-content col-md-2">
+					<label>AMOUNT</label>
+				</div>
+				<div class="form-content col-md-4">
+					<input type="number" readonly name="payable_amount[]" class="form-control required" value="{{$payable_hospital_doctor->hospital_payee_amount}}"/>
+				</div>
+			</div>
+			<div class="form-holder col-md-12">
+				<div class="form-content col-md-2">
+					<label>BANK NAME</label>
+				</div>
+				<div class="form-content col-md-4">
+					<input type="text" name="payable_bank_name[]" class="form-control required"/>
+				</div>
+				<div class="form-content col-md-2">
+					<label>REFERENCE NUMBER</label>
+				</div>
+				<div class="form-content col-md-4">
+					<input type="text" readonly name="payable_refrence_number[]" class="form-control required" value="{{$payable_hospital_doctor->hospital_payee_approval_number}}"/>
+				</div>
+			</div>
+			@endforeach
+		</div>
+	</div>
+	<div class="row box-globals">
+		<div class="form-holder">
+			<center>
+			<p style="font-size:20px;">PHYSICIAN FEE</p>
+			</center>
+		</div>
+	</div>
+	<div class="row box-globals">
+		<div class="payee-container">
+			@foreach($_payable_doctor as $key=>$payable_doctor)
+			@if($key!=0)
+			<div class="devider col-md-12" style="border: 1px solid #afaaaa;"></div>
+			@endif
+			<input type="hidden" name="reference_id[]" 			readonly class="form-control" value="{{$payable_doctor->reference_id}}"/>
+			<input type="hidden" name="doctor_id[]" 			readonly class="form-control" value="{{$payable_doctor->doctor_id}}"/>
+			<input type="hidden" name="provider_id[]" 			readonly class="form-control" value="0"/>
+			<input type="hidden" name="payable_payee_type[]" 	readonly class="form-control" value="PHYSICIAN_PAYEE"/>
 			<div class="form-holder col-md-12">
 				<div class="form-content col-md-2">
 					<label>PAYEE</label>
 				</div>
 				<div class="form-content col-md-4">
-					<input type="text" name="approval_doctor_id[]" readonly class="form-control required" value="{{$payee_list->doctor_full_name}}"/>
+					<input type="text" name="reference_payee[]" readonly class="form-control required" value="{{$payable_doctor->doctor_full_name}}"/>
 				</div>
 				<div class="form-content col-md-2">
 					<label>CHECK NUMBER</label>
@@ -103,7 +245,7 @@
 					<label>AMOUNT</label>
 				</div>
 				<div class="form-content col-md-4">
-					<input type="number" readonly name="payable_amount[]" class="form-control required" value="{{$payee_list->approval_doctor_charge_carewell}}"/>
+					<input type="number" readonly name="payable_amount[]" class="form-control required" value="{{$payable_doctor->doctor_amount}}"/>
 				</div>
 			</div>
 			<div class="form-holder col-md-12">
@@ -117,74 +259,10 @@
 					<label>REFERENCE NUMBER</label>
 				</div>
 				<div class="form-content col-md-4">
-					<input type="text" name="payable_refrence_number[]" class="form-control required"/>
+					<input type="text" readonly name="payable_refrence_number[]" class="form-control required" value="{{$payable_doctor->reference_number}}"/>
 				</div>
 			</div>
-			<div class="devider col-md-12" style="border: 1px solid #afaaaa;"></div>
 			@endforeach
 		</div>
-		<div class="payee-container">
-			<input type="hidden" name="doctor_approval_id[]" value="0"/>
-			<input type="hidden" name="provider_id[]" value="{{$payable_approval->approval_payee_id}}"/>
-			{{-- @foreach($payable_approval->hospital_fee as $hospital_fee) --}}
-			<div class="form-holder col-md-12">
-				<div class="form-content col-md-2">
-					<label>HOSPITAL FEE</label>
-				</div>
-				<div class="form-content col-md-4">
-					<input type="text" name="approval_doctor_id[]" readonly class="form-control required" value=""/>
-				</div>
-				<div class="form-content col-md-2">
-					<label>CHECK NUMBER</label>
-				</div>
-				<div class="form-content col-md-4">
-					<input type="text" name="payable_check_number[]" class="form-control required"/>
-				</div>
-			</div>
-			<div class="form-holder col-md-12">
-				<div class="form-content col-md-2">
-					<label>RELEASE DATE</label>
-				</div>
-				<div class="form-content col-md-4">
-					<input type="date" name="payable_release_date[]" class="form-control required" value="{{date('Y-m-d')}}"/>
-				</div>
-				<div class="form-content col-md-2">
-					<label>CHECK DATE</label>
-				</div>
-				<div class="form-content col-md-4">
-					<input type="date" name="payable_check_date[]" class="form-control required" value="{{date('Y-m-d')}}"/>
-				</div>
-			</div>
-			<div class="form-holder col-md-12">
-				<div class="form-content col-md-2">
-					<label>CV NUMBER</label>
-				</div>
-				<div class="form-content col-md-4">
-					<input type="text" name="payable_cv_number[]" class="form-control required"/>
-				</div>
-				<div class="form-content col-md-2">
-					<label>AMOUNT</label>
-				</div>
-				<div class="form-content col-md-4">
-					<input type="number" readonly name="payable_amount[]" class="form-control required" value="{{$payable_approval->procedure_charge_carewell}}"/>
-				</div>
-			</div>
-			<div class="form-holder col-md-12">
-				<div class="form-content col-md-2">
-					<label>BANK NAME</label>
-				</div>
-				<div class="form-content col-md-4">
-					<input type="text" name="payable_bank_name[]" class="form-control required"/>
-				</div>
-				<div class="form-content col-md-2">
-					<label>REFERENCE NUMBER</label>
-				</div>
-				<div class="form-content col-md-4">
-					<input type="text" name="payable_refrence_number[]" class="form-control required"/>
-				</div>
-			</div>
-			{{-- @endforeach --}}
-		</div>
-	</div>
-	@endforeach
+    </div>
 </form>

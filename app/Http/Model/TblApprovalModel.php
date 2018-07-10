@@ -75,5 +75,10 @@ class TblApprovalModel extends Model
                 ->orderBy('approval_created','DESC');
         return $query;
     }
+    public function scopePayeeDistinct($query)
+    {
+        $query  ->join('tbl_approval_payee','tbl_approval_payee.approval_id','=','tbl_approval.approval_id');
+        return $query;
+    }
 
 }

@@ -158,7 +158,7 @@ function payable_center()
 			var modalLink 		= '/payable/mark_close/'+payable_id;
 			var modalActionName = 'MARK AS CLOSED';
 			var modalAction 	= 'payable-mark-close-confirm';
-			var modalSize 		= 'modal-md';
+			var modalSize 		= 'modal-lg';
 			globals.global_modals(modalName,modalClass,modalLink,modalActionName,modalAction,modalSize);
 		});
 	}
