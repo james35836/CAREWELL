@@ -3,8 +3,8 @@
 		<ul class="nav nav-tabs">
 			<li class="active my-tab "><a data-toggle="tab" href="#payment">PAYMENT HISTORY</a></li>
 			<li class="my-tab "><a data-toggle="tab" href="#availment">AVAILMENT HISTORY</a></li>
-			<li class="my-tab "><a data-toggle="tab" href="#availment_balance">AVAILMENT BALANCE</a></li>
 			<li class="my-tab "><a data-toggle="tab" href="#schedule">SCHEDULE OF BENEFITS</a></li>
+			<li class="my-tab "><a data-toggle="tab" href="#diagnosis_balance">DIAGNOSIS BALANCE</a></li>
 		</ul>
 		<div class="tab-content">
 			<div id="payment" class="tab-pane fade in active">
@@ -81,63 +81,13 @@
 					</div>
 				</div>
 			</div>
-			<div id="availment_balance" class="tab-pane fade">
-				<div class="table-responsive no-padding">
-					<table class="table table-hover table-bordered">
-						<thead>
-							<tr>
-								<th>Approval ID</th>
-								<th>Availment</th>
-								<th>Charge to Carewell(PROCEDURE)</th>
-								<th>Charge to Carewell(PF)</th>
-								<th>Provider</th>
-								<th>Charge to Diagnosis</th>
-								<th>Balance</th>
-								<th>Date Availed</th>
-							</tr>
-						</thead>
-						<tbody>
-							@foreach($_availment_history as $availment_history)
-							<tr>
-								<td>{{$availment_history->approval_number}}</td>
-								<td>{{$availment_history->availment_name}}</td>
-								<td><span class="label label-warning">{{$availment_history->charge_carewell_procedure}}</span></td>
-								<td><span class="label label-info">{{$availment_history->charge_carewell_doctor}}</span></td>
-								<td>{{$availment_history->provider_name}}</td>
-								<td>{{$availment_history->diagnosis_name}}</td>
-								<td>10000</td>
-								<td>{{date("F j, Y",strtotime($availment_history->approval_created))}}</td>
-							</tr>
-							@endforeach
-						</tbody>
-					</table>
-				</div>
-				<div class="row box-globals" style="border:none !important;">
-					<div class=" form-holder ">
-						<div class="col-md-3 form-content">
-							<label>REMAINING BALANCE</label>
-						</div>
-						<div class="col-md-3  form-content">
-							<span class="show-money">500</span>
-						</div>
-						<div class="col-md-3 form-content">
-							<label>TOTAL AVAILED</label>
-						</div>
-						<div class="col-md-3  form-content">
-							<span class="show-money">500</span>
-						</div>
-					</div>
-				</div>
-			</div>
 			<div id="schedule" class="tab-pane fade">
-				<div class="row box-globals">
-					<div class="row form-holder">
-						<center>
+				<div class="box-globals" style="border:none;">
+					<center>
 						<p style="font-size:20px;">COVERAGE PLAN</p>
-						</center>
-					</div>
+					</center>
 				</div>
-				<div class="row box-globals">
+				<div class="box-globals" style="border:none;">
 					<div class="table-responsive no-padding">
 						<table class="table table-hover table-bordered">
 							<thead>
@@ -185,57 +135,80 @@
 						</div>
 					</div>
 				</div>
-				<div class="row box-globals">
-					<div class="row form-holder">
-						<center>
+				<div class="row box-globals" style="border:none;">
+					<center>
 						<p style="font-size:20px;">TYPE OF BENEFITS</p>
-						</center>
+					</center>
+				</div>
+				<div class="box-globals" style="border:none;">
+					<div class="availment-container">
+						@foreach($_coverage_plan_covered as $coverage_plan_covered)
+						<div class="parent-availment ">
+							<p style="font-size: 20px;font-weight: bold;">
+								{{$coverage_plan_covered->availment_name}}
+							</p>
+							<table class="table table-bordered availed-table">
+								<thead>
+									<tr>
+										<th class="col-md-5">PROCEDURE</th>
+										<th class="col-md-3" >CHARGE</th>
+										<th class="col-md-1"> AMOUNT</th>
+										<th class="col-md-1"> BALANCE</th>
+										<th class="col-md-2">AVBAILABLE LIMIT</th>
+									</tr>
+								</thead>
+								<tbody>
+									@foreach($coverage_plan_covered->procedure as $procedure)
+									<tr class="table-row">
+										<td class="col-md-5">{{$procedure->procedure_name}}</td>
+										<td class="col-md-4">{{$procedure->plan_charges}}</td>
+										<td class="col-md-4">{{$procedure->plan_covered_amount}}</td>
+										<td class="col-md-4"><span class="{{$procedure->class}}">{{$procedure->balance}}</span></td>
+										<td class="col-md-4">{{$procedure->plan_limit}}</td>
+									</tr>
+									@endforeach
+								</tbody>
+							</table>
+						</div>
+						@endforeach
 					</div>
 				</div>
-				<div class="row box-globals">
-					<div class="form-holder">
-						<div class="row type-of-availment-padding">
-							<div class="row availment-container">
-								@foreach($_coverage_plan_covered as $coverage_plan_covered)
-								<div class=" availment-box">
-									<div class="parent-availment ">
-										<p style="font-size: 20px;font-weight: bold;">
-											{{-- <input type="checkbox" class="minimal" name="parent_availment[]" value="{{$coverage_plan_covered->availment_id}}"/> --}}
-											{{$coverage_plan_covered->availment_name}}
-										</p>
-										<table class="table table-bordered availed-table">
-											<thead>
-												<tr>
-													<th class="col-md-5">PROCEDURE</th>
-													<th class="col-md-5" >CHARGE</th>
-													<th class="col-md-2">AMOUNT COVERED</th>
-													<th class="col-md-2">LIMIT</th>
-													
-												</tr>
-											</thead>
-											<tbody>
-												@foreach($coverage_plan_covered->procedure as $procedure)
-												<tr class="table-row">
-													<td class="col-md-5">
-														{{$procedure->procedure_name}}
-													</td>
-													<td class="col-md-4">
-														{{$procedure->plan_charges}}
-													</td>
-													<td class="col-md-4">
-														{{$procedure->plan_covered_amount}}
-													</td>
-													<td class="col-md-4">
-														{{$procedure->plan_limit}}
-													</td>
-												</tr>
-												@endforeach
-											</tbody>
-										</table>
-									</div>
-								</div>
+			</div>
+			<div id="diagnosis_balance" class="tab-pane fade">
+				<div class="box-globals" style="border:none;">
+					<div class="availment-container">
+						<table class="table table-bordered availed-table">
+							<thead>
+								<tr>
+									<th class="col-md-5">DIAGNOSIS NAME</th>
+									<th class="col-md-3" >BALANCE</th>
+								</tr>
+							</thead>
+							<tbody>
+								@foreach($_dianosis_balance as $dianosis_balance)
+								<tr class="table-row">
+									<td class="col-md-5">{{$dianosis_balance->diagnosis_name}}</td>
+									<td class="col-md-4">{{$dianosis_balance->balance}}</td>
+									
+								</tr>
 								@endforeach
-							</div>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="row box-globals" style="border:none !important;">
+					<div class=" form-holder ">
+						<div class="col-md-3 form-content">
+							<label>REMAINING BALANCE</label>
+						</div>
+						<div class="col-md-3  form-content">
+							<span class="show-money">500</span>
+						</div>
+						<div class="col-md-3 form-content">
+							<label>TOTAL AVAILED</label>
+						</div>
+						<div class="col-md-3  form-content">
+							<span class="show-money">500</span>
 						</div>
 					</div>
 				</div>

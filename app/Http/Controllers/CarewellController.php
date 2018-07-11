@@ -472,15 +472,30 @@ class CarewellController extends ActiveAuthController
 	}
     public function member_transaction_details($member_id)
 	{
-
 		$coverage                       = TblMemberCompanyModel::where('archived',0)->where('member_id',$member_id)->first();
 		$data['_payment_history']       = TblCalMemberModel::where('tbl_cal_member.member_id',$member_id)->PaymentHistory()->get();
 		$data['_availment_history']     = TblApprovalModel::where('tbl_approval.member_id',$member_id)->AvailmentHistory()->get();
 		$data['coverage_plan_details']  = TblCoveragePlanModel::where('coverage_plan_id',$coverage->coverage_plan_id)->first();     
 		$data['_coverage_plan_covered'] = TblCoveragePlanProcedureModel::where('coverage_plan_id',$coverage->coverage_plan_id)->CoveragePlan()->get();
+		$data['_dianosis_balance']      = TblApprovalModel::where('member_id',$member_id)->where('approval_status',0)->Diagnosis()->get();
+		
+		foreach($data['_dianosis_balance'] as $diagnosis_key=>$diagnosis_balance)
+		{
+			$procedure_total            = TblApprovalProcedureModel::where('approval_id',$diagnosis_balance->approval_id)->where('procedure_disapproved','off')->where('procedure_status',0)->sum('procedure_charge_carewell');
+			$data['_dianosis_balance'][$diagnosis_key]['balance'] = $procedure_total;
+		}
 		foreach($data['_coverage_plan_covered'] as $key=>$availment)
 		{
 			$data['_coverage_plan_covered'][$key]['procedure']   = TblCoveragePlanProcedureModel::where('availment_id',$availment->availment_id)->Procedure()->get();
+			foreach($data['_coverage_plan_covered'][$key]['procedure'] as $procedure_key=>$procedure)
+			{
+				$covered_amount 	    = $procedure->plan_covered_amount;
+				$procedure_amount 	    = TblApprovalModel::where('member_id',$member_id)->where('procedure_id',$procedure->procedure_id)->Procedure()->where('procedure_disapproved','off')->where('procedure_status',0)->sum('procedure_charge_carewell');
+				$balance 			    = $covered_amount - $procedure_amount;
+				$class 					= $balance==$covered_amount ? "" : "label label-warning";
+				$data['_coverage_plan_covered'][$key]['procedure'][$procedure_key]['balance'] = $balance;
+				$data['_coverage_plan_covered'][$key]['procedure'][$procedure_key]['class']   = $class;
+			}
 		}
 		foreach($data['_payment_history'] as $key=>$payment)
 		{
@@ -2439,7 +2454,6 @@ class CarewellController extends ActiveAuthController
 		$data['_payable_hospital_provider'] = TblPayablePayeeModel::where('payable_id',$payable_id)->PayablePayee('PROVIDER_PAYEE')->get();
 		$data['_payable_hospital_doctor'] 	= TblPayablePayeeModel::where('payable_id',$payable_id)->PayablePayee('DOCTOR_PAYEE')->get();
 		$data['_payable_doctor'] 			= TblPayablePayeeModel::where('payable_id',$payable_id)->PayablePayee('PHYSICIAN_PAYEE')->get();
-		
 		return view('carewell.modal_pages.payable_payee_details',$data);	
 	}
 	public function payable_details_export_excel($payable_id)
