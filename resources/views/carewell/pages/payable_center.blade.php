@@ -10,7 +10,7 @@
         <div class="nav-tabs-custom">
             <ul class="nav nav-tabs">
                 <li class="active"><a href="#open" data-toggle="tab">OPEN</a></li>
-                <li><a href="#close" data-toggle="tab">CLOSE</a></li>
+                <li><a href="#close" data-toggle="tab">CLOSED</a></li>
             </ul>
             <div class="tab-content">
                 <div class="tab-pane active" id="open">
@@ -143,8 +143,8 @@
                                             <span class="sr-only">Toggle Dropdown</span>
                                             </button>
                                             <ul class="dropdown-menu" role="menu" style="position: absolute !important;">
-                                                <li><button type="button" data-payable_id="{{$payable->payable_id}}" class="btn btn-link view-payable-details"><i class="fa fa-eye btn-icon"></i>  View Payable</button></li>
-                                                <li><button type="button" data-payable_id="{{$payable->payable_id}}" class="btn btn-link payable-mark-close"><i class="fa fa-trash btn-icon"></i> Mark as Close</button></li>
+                                                <li><button type="button" data-payable_id="{{$payable->payable_id}}" class="btn btn-link view-payable-details"><i class="fa fa-eye btn-icon"></i>View Payable</button></li>
+                                                <li><button type="button" data-payable_id="{{$payable->payable_id}}" class="btn btn-link payable-payee-details"><i class="fa fa-trash btn-icon"></i>View Payee</button></li>
                                             </ul>
                                         </div>
                                     </td>

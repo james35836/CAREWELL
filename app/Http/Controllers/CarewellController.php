@@ -2410,7 +2410,7 @@ class CarewellController extends ActiveAuthController
 	    	$payablePayee->doctor_id 				= $request->doctor_id[$key];
 		    $payablePayee->payable_id 				= $request->payable_id;
 	    	$payablePayee->save();
-	    	
+
 	    	$reference_id = explode("-",$request->reference_id[$key]);
 	    	foreach($reference_id as $approval_id)
 	    	{
@@ -2432,6 +2432,15 @@ class CarewellController extends ActiveAuthController
 	    	$approval = TblApprovalModel::where('approval_id',$payable_approval->approval_id)->update($archived);
 	    }
 	    return   StaticFunctionController::customMessage('success','PAYABLE CLOSED'); 
+	}
+	public function payable_payee_details($payable_id)
+	{
+		$data['payable_details']    		= TblPayableModel::where('tbl_payable.payable_id',$payable_id)->PayableInfo()->first();
+		$data['_payable_hospital_provider'] = TblPayablePayeeModel::where('payable_id',$payable_id)->PayablePayee('PROVIDER_PAYEE')->get();
+		$data['_payable_hospital_doctor'] 	= TblPayablePayeeModel::where('payable_id',$payable_id)->PayablePayee('DOCTOR_PAYEE')->get();
+		$data['_payable_doctor'] 			= TblPayablePayeeModel::where('payable_id',$payable_id)->PayablePayee('PHYSICIAN_PAYEE')->get();
+		
+		return view('carewell.modal_pages.payable_payee_details',$data);	
 	}
 	public function payable_details_export_excel($payable_id)
 	{

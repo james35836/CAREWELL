@@ -179,6 +179,9 @@ Route::get('/payable/payable_details/export_excel/{payable_id}', 'CarewellContro
 Route::post('/payable/update_payable/submit', 				'CarewellController@payable_update_submit');
 Route::get('/payable/mark_close/{payable_id}', 				'CarewellController@payable_mark_close');
 Route::post('/payable/mark_close/submit', 					'CarewellController@payable_mark_close_submit');
+Route::get('/payable/payee_details/{payable_id}', 			'CarewellController@payable_payee_details');
+
+
 Route::get('/payable/payable_export_pdf/{approval_id}', 	'CarewellController@payable_export_pdf');
 
 /*REPORTS*/
