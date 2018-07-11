@@ -55,6 +55,7 @@ use App\Http\Model\TblDoctorSpecializationModel;
 use App\Http\Model\TblPayableModel;
 use App\Http\Model\TblPayableApprovalModel;
 use App\Http\Model\TblPayablePayeeModel;
+use App\Http\Model\TblPayableReferenceModel;
 
 use App\Http\Model\TblSpecializationModel;
 
@@ -2393,7 +2394,6 @@ class CarewellController extends ActiveAuthController
     }
     public function payable_mark_close_submit(Request $request)
     {
-    	dd($request->reference_id);
     	foreach($request->reference_payee as $key=>$payee)
     	{
     		$payablePayee = new TblPayablePayeeModel;
@@ -2406,13 +2406,23 @@ class CarewellController extends ActiveAuthController
 	    	$payablePayee->payable_payee_type 		= $request->payable_payee_type[$key];
 	    	$payablePayee->payable_refrence_number 	= $request->payable_refrence_number[$key];
 	    	$payablePayee->payable_payee_created 	= Carbon::now();
-
-	    	$payablePayee->doctor_approval_id 		= $request->doctor_approval_id[$key];
-	    	$payablePayee->provider_id 				= $request->provider_id[$key];
+			$payablePayee->provider_id 				= $request->provider_id[$key];
 	    	$payablePayee->doctor_id 				= $request->doctor_id[$key];
-
-	    	$payablePayee->payable_id 				= $request->payable_id;
+		    $payablePayee->payable_id 				= $request->payable_id;
 	    	$payablePayee->save();
+	    	
+	    	$reference_id = explode("-",$request->reference_id[$key]);
+	    	foreach($reference_id as $approval_id)
+	    	{
+	    		if($approval_id!="")
+	    		{
+	    			$payableReference = new TblPayableReferenceModel;
+			    	$payableReference->payable_payee_id = $payablePayee->payable_payee_id;
+			    	$payableReference->payable_id 		= $request->payable_id;
+			    	$payableReference->approval_id 		= $approval_id;
+			    	$payableReference->save();
+	    		}
+	    	}
 	    }
 	    $archived['archived'] 	= 1; 
 	    $payable 				= TblPayableModel::where('payable_id',$request->payable_id)->update($archived);

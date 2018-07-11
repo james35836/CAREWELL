@@ -1,5 +1,5 @@
 <form class="payable-payee-submit">
-	<input type="hidden" value="{{$payable_details->payable_id}}" class="form-control"/>
+	<input type="hidden" value="{{$payable_details->payable_id}}" name="payable_id" class="form-control"/>
 	<div class="row box-globals">
 		<div class="col-md-8 pull-left top-label" style="">
 			<p>PV #  : {{$payable_details->payable_number}}</p>
